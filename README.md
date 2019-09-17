@@ -1,2 +1,2 @@
 # PollBuddy
-Welcome to Poll Buddy
+Welcome to Poll Buddy! :)
