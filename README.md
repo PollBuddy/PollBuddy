@@ -1,5 +1,5 @@
-# PollBuddy
-Welcome to Poll Buddy! :)
+# qPal
+Welcome to qPal! :)
 
 Proposal: https://docs.google.com/document/d/1wp2vGtrof0U05jTpSWWiZdXLh2OPzXcVmdZi1mkNAvs/edit
 
