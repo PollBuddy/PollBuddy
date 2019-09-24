@@ -9,4 +9,3 @@ What you should work on until next Friday:
 -Front end people: learn JS and think of the pages and designs
 -Back end people: cry
 -PM: organize notes
--Everyone: think of a new name~!
