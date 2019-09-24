@@ -5,7 +5,13 @@ services:
       - "5000:5000"
     image: "node"
   
-  database:
+  db:
+    image: "mongo"
     ports:
       - "27017:27017"
-    image: "mongo"
+    volumes:
+      - mongodata:/data/db
+
+volumes:
+  mongodata:
+    external: false
