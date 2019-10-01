@@ -21,13 +21,19 @@ Open command prompt to the github folder
 Run `docker-compose up -d`
 
 ### Shutting down the app
-`docker-compose down`
+```
+docker-compose down
+```
 
 ### Building the container manually
 ```
 docker build -t (username)/pollbuddy .
 ```
 
+### Rebuilding the container (needed after making code changes)
+```
+docker-compose up --build
+```
 
 ## Bootstrap things:
 
