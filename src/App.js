@@ -5,9 +5,9 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <p>
+        <h1>
           Welcome to pollbuddy!
-        </p>
+        </h1>
       </header>
     </div>
   );
