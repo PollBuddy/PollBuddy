@@ -1,5 +1,6 @@
 # Poll Buddy
 Welcome to Poll Buddy! :D
+An affordable and compatible in-class quizzing platform.
 
 Proposal: https://docs.google.com/document/d/1wp2vGtrof0U05jTpSWWiZdXLh2OPzXcVmdZi1mkNAvs/edit
 
@@ -12,7 +13,7 @@ RCOS/Project Google Drive: https://drive.google.com/drive/folders/1lCov3Guqql_E-
 git clone (repo url)
 cd PollBuddy
 sudo docker-compose up -d
-``` 
+```
 #### Windows:
 Clone in github desktop or something
 
