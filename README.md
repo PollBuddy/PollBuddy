@@ -12,7 +12,7 @@ RCOS/Project Google Drive: https://drive.google.com/drive/folders/1lCov3Guqql_E-
 ```
 git clone (repo url)
 cd PollBuddy
-sudo docker-compose up -d
+docker-compose up -d
 ```
 #### Windows:
 Clone in github desktop or something
