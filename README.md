@@ -1,5 +1,5 @@
-# Poll Buddy
-Welcome to Poll Buddy! :D
+# PollBuddy
+Welcome to PollBuddy! :D
 An affordable and compatible in-class quizzing platform.
 
 Proposal: https://docs.google.com/document/d/1wp2vGtrof0U05jTpSWWiZdXLh2OPzXcVmdZi1mkNAvs/edit
