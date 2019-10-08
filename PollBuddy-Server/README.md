@@ -12,7 +12,11 @@ Appears to be the router
 
 Proxies requests to express backend
 
+Run by entering folder and running `npm start`
+
 ### Backend
 Runs express
 
 Serves the API calls
+
+Run by entering folder and running `node bin/www`
