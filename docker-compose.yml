@@ -1,9 +1,14 @@
 version: '3'
 services:
-  web:
+  frontend:
     ports:
       - "3000:3000"
-    build: .
+    build: PollBuddy-Server/frontend
+
+  backend:
+    ports:
+      - "3001:3001"
+    build: PollBuddy-Server/backend
   
   db:
     image: "mongo"
