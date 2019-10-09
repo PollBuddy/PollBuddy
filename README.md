@@ -7,19 +7,29 @@ Proposal: https://docs.google.com/document/d/1wp2vGtrof0U05jTpSWWiZdXLh2OPzXcVmd
 RCOS/Project Google Drive: https://drive.google.com/drive/folders/1lCov3Guqql_E-tnq5hascXrdLEYA7Pn6
 
 ## Docker Things
-### How to run the app (what you want in most cases)
-#### Linux:
+### How to run the app
+#### Linux
+##### Production
 ```
 git clone (repo url)
 cd PollBuddy
 docker-compose up -d
 ```
-#### Windows:
+##### Development
+
+Unknown yet
+
+#### Windows
+##### Production
 Clone in github desktop or something
 
 Open command prompt to the github folder
 
 Run `docker-compose up -d`
+
+##### Development
+
+Unknown yet
 
 ### Shutting down the app
 ```
