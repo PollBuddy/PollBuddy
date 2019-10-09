@@ -31,6 +31,13 @@ Run `docker-compose up -d`
 
 Unknown yet
 
+### Accessing the app
+Frontend available at `http://localhost:3000`
+
+Backend available at `http://localhost:3001`
+
+Database available at `localhost:27017`
+
 ### Shutting down the app
 ```
 docker-compose down
@@ -38,7 +45,7 @@ docker-compose down
 
 ### Building the container manually
 ```
-docker build -t (username)/pollbuddy .
+docker build -t (username)/(container name) .
 ```
 
 ### Rebuilding the container (needed after making code changes)
