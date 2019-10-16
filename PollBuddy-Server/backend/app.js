@@ -30,6 +30,11 @@ app.use('/api/classes', classesRouter);
 app.use('/api/polls', pollsRouter);
 app.use('/api/users', usersRouter);
 
+// Root page (aka its working)
+app.use('/', function(req, res, next) {
+  next(createError(200));
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
