@@ -3,6 +3,14 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
+
+  function toBlue() {
+    document.body.style = 'background: blue;';
+  }
+  function toRed() {
+    document.body.style = 'background: red;';
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -21,7 +29,23 @@ function App() {
         >
           Learn React
         </a>
-      </header>
+
+        </header>
+
+      <body>
+      <p>
+        hey yall.
+      </p>
+
+      <button onClick={toBlue}>
+        Click me!
+      </button>
+
+      <button onClick={toRed}>
+        No, click me!
+      </button>
+
+      </body>
     </div>
   );
 }
