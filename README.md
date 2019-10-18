@@ -28,7 +28,7 @@ Backend available at `http://localhost:3001`
 
 Database available at `localhost:27017`
 
-### Rebuilding the container (needed after making code changes)
+### Rebuilding the container (do this after making code changes)
 ```
 docker-compose up -d --build
 ```
