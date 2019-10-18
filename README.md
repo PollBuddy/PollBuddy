@@ -12,14 +12,14 @@ RCOS/Project Google Drive: https://drive.google.com/drive/folders/1lCov3Guqql_E-
 ```
 git clone (repo url)
 cd PollBuddy
-docker-compose up -d
+docker-compose up -d --build
 ```
 #### Windows:
 Clone in github desktop or something
 
 Open command prompt to the github folder
 
-Run `docker-compose up -d`
+Run `docker-compose up -d  --build`
 
 ### Accessing the app
 Frontend available at `http://localhost:3000`
@@ -27,11 +27,6 @@ Frontend available at `http://localhost:3000`
 Backend available at `http://localhost:3001`
 
 Database available at `localhost:27017`
-
-### Rebuilding the container (do this after making code changes)
-```
-docker-compose up -d --build
-```
 
 ### Shutting down the app
 ```
