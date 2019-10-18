@@ -28,6 +28,11 @@ Backend available at `http://localhost:3001`
 
 Database available at `localhost:27017`
 
+### Rebuilding the container (needed after making code changes)
+```
+docker-compose up -d --build
+```
+
 ### Shutting down the app
 ```
 docker-compose down
@@ -36,9 +41,4 @@ docker-compose down
 ### Building the container manually
 ```
 docker build -t (username)/(container name) .
-```
-
-### Rebuilding the container (needed after making code changes)
-```
-docker-compose up --build
 ```
