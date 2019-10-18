@@ -31,7 +31,7 @@ app.use('/api/polls', pollsRouter);
 app.use('/api/users', usersRouter);
 
 // Root page (aka its working)
-app.use('/', function(req, res, next) {
+app.get('/', function(req, res, next) {
   next(createError(200));
 });
 
