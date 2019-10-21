@@ -13,6 +13,7 @@
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "mongodb": "^3.3.3",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "promise-retry": "^1.1.1"
   }
 }

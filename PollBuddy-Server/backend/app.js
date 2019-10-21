@@ -21,14 +21,12 @@ const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const url = 'mongodb://db:27017';
 const dbName = 'pollbuddy';
-// Create a new MongoClient
+var db;
 const client = new MongoClient(url);
-// Use connect method to connect to the Server
-client.connect(function(err) {
-  assert.equal(null, err);
-  console.log("Connected successfully to the MongoDB database server");
-  const db = client.db(dbName);
-  client.close();
+client.connect((err) => {
+  if (err) return console.log(err);
+  db = client.db(dbName);
+  console.log("Database connected");
 });
 
 // view engine setup
@@ -44,6 +42,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/classes', classesRouter);
 app.use('/api/polls', pollsRouter);
 app.use('/api/users', usersRouter);
+
+
+// When visiting /test, the database connection finds all documents in the test
+// collection, and returns them.
+app.get('/test', (req, res) => {
+  db.collection("test").findOne({}, function(err, document) {
+    res.send(document);
+  });
+});
 
 
 // Root page (aka its working)
@@ -67,3 +74,4 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+
