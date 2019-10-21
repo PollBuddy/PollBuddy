@@ -16,6 +16,21 @@ var app = express();
 // Cors: https://daveceddia.com/access-control-allow-origin-cors-errors-in-react-express/
 app.use(cors());
 
+// MongoDB Database Connection Setup
+const MongoClient = require('mongodb').MongoClient;
+const assert = require('assert');
+const url = 'mongodb://db:27017';
+const dbName = 'pollbuddy';
+// Create a new MongoClient
+const client = new MongoClient(url);
+// Use connect method to connect to the Server
+client.connect(function(err) {
+  assert.equal(null, err);
+  console.log("Connected successfully to the MongoDB database server");
+  const db = client.db(dbName);
+  client.close();
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
