@@ -3,8 +3,10 @@ import { Router, Link } from "@reach/router";
 
 
 import './App.css';
-import Myclasses from './pages/myclasses'
 import Homepage from './pages/homepage'
+import Myclasses from './pages/myclasses'
+import Lessons from './pages/lessons';
+import Lesson from './pages/lesson';
 
 function App() {
 
@@ -16,8 +18,10 @@ function App() {
         Link to them with link tags
       */}  
       <Router>
-        <Myclasses path="/myclasses" />
         <Homepage path="/" />
+        <Myclasses path="/myclasses" />
+        <Lessons path="/lessons" />
+        <Lesson path="/lesson" />
       </Router>
     </React.Fragment>
   );
