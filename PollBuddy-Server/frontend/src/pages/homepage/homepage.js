@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Router, Link } from '@reach/router';
+import { Link } from '@reach/router';
 
 import Myclasses from '../myclasses'
 
@@ -28,7 +28,6 @@ export default class homepage extends Component {
               <p>
                 Edit <code>src/App.js</code> and save to reload.
               </p>
-              <Myclasses></Myclasses>
               {/* <a
                 className="App-link"
                 href="https://reactjs.org"
