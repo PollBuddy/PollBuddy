@@ -1,53 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Router, Link } from "@reach/router";
+
+
 import './App.css';
+import Myclasses from './pages/myclasses'
+import Homepage from './pages/homepage'
 
 function App() {
 
-  function toBlue() {
-    document.body.style = 'background: blue;';
-  }
-  function toRed() {
-    document.body.style = 'background: red;';
-  }
-
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>
-          Welcome to PollBuddy!!!!
-        </h1>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-
-        </header>
-
-      <body>
-      <p>
-        hey yall.
-      </p>
-
-      <button onClick={toBlue}>
-        Click me!
-      </button>
-
-      <button onClick={toRed}>
-        No, click me!
-      </button>
-
-      </body>
-    </div>
+    <React.Fragment>
+      {/* 
+        Reach Router implementation.
+        Each page/component with a path has its own route defined below.
+        Link to them with link tags
+      */}  
+      <Router>
+        <Myclasses path="/myclasses" />
+        <Homepage path="/" />
+      </Router>
+    </React.Fragment>
   );
 }
+
 
 export default App;
