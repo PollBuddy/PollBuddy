@@ -21,6 +21,12 @@ const getDataFromJSON = () =>{
 };
 
 export default class question extends Component {
+
+    state = {
+        
+    };
+
+
     constructor(props) {
         super(props);
     }
@@ -29,7 +35,7 @@ export default class question extends Component {
         let data = getDataFromJSON();
         return (
             <MDBCol>
-                <MDBCard style={{ width: "22rem" }}>
+                <MDBCard>
                     <MDBCardImage className="img-fluid" src={data.img} waves />
                     <MDBCardBody>
                         <MDBCardTitle>{data.title}</MDBCardTitle>
