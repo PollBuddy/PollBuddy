@@ -47,8 +47,9 @@ app.use('/api/users', usersRouter);
 // When visiting /test, the database connection finds all documents in the test
 // collection, and returns them.
 app.get('/test', (req, res) => {
-  db.collection("test").findOne({}, function(err, document) {
-    res.send(document);
+  db.collection("test").find({}).toArray(function(err, document) {
+    res.set('Content-Type', 'application/json');
+    res.send(JSON.stringify(document));
   });
 });
 
