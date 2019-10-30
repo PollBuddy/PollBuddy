@@ -10,57 +10,41 @@ client.connect((err) => {
   db = client.db(dbName);
   console.log("Database connected");
 
-  //db.collection("test").findOne({}, function(err, document) {
-  //  console.log(document);
-  //});
+  var completes = [];
+  var elements = [
+    ["test", { SIS: "Man" }],
+    ["users", { FirstName: "Bill", LastName: "Cheese", Username: "cheb", email: "cheb@rpi.edu", password: "password1", RCS: "cheb" }],
+    ["users", { FirstName: "Suzy", LastName: "Stevenson", Username: "stevs3!", email: "fuzzytesting@rpi.edu", password: "password2!", RCS: "stev3" }],
+    ["classes", { Name: "RCOS", instructors: ["Turner (should be ID later)"], AssociatedPolls: [] }],
+    ["classes", { Name: "Chemistry", instructors: ["Kirover-Snover (should be ID later)"], AssociatedPolls: [] }],
+    ["polls", { Name: "Chem 1 Poll 1", Questions: ["What is your name?", "What grade are you in?"], Answers: ["OpenEnded", [10, 11, 12]] }],
+    ["polls", { Name: "RCOS Poll 1", Questions: ["What project are you on?", "True/False: RCOS Sux"], Answers: ["", [10, 11, 12]] }],
+  ]; // format: ["collection, { obj: "value"} ],
 
   db.dropDatabase(function() {
 
-    var test = { SIS: "Man" };
-    db.collection("test").insertOne(test, function(err, res) {
-      if (err) throw err;
-      console.log("test document inserted");
+    console.log("Dropping DB");
+
+    elements.forEach(function (element) {
+      addObj(element)
     });
-
-    var user1 = { FirstName: "Bill", LastName: "Cheese", Username: "cheb", email: "cheb@rpi.edu", password: "password1", RCS: "cheb" };
-    db.collection("users").insertOne(user1, function(err, res) {
-      if (err) throw err;
-      console.log("user1 document inserted");
-    });
-
-    var user2 = { FirstName: "Suzy", LastName: "Stevenson", Username: "stevs3!", email: "fuzzytesting@rpi.edu", password: "password2!", RCS: "stev3" };
-    db.collection("users").insertOne(user2, function(err, res) {
-      if (err) throw err;
-      console.log("user2 document inserted");
-    });
-
-    var class1 = { Name: "RCOS", instructors: ["Turner (should be ID later)"], AssociatedPolls: [] };
-    db.collection("classes").insertOne(class1, function(err, res) {
-      if (err) throw err;
-      console.log("class1 document inserted");
-    });
-
-    var class2 = { Name: "Chemistry", instructors: ["Kirover-Snover (should be ID later)"], AssociatedPolls: [] };
-    db.collection("classes").insertOne(class2, function(err, res) {
-      if (err) throw err;
-      console.log("class2 document inserted");
-    });
-
-    var poll1 = { Name: "Chem 1 Poll 1", Questions: ["What is your name?", "What grade are you in?"], Answers: ["OpenEnded", [10, 11, 12]]};
-    db.collection("polls").insertOne(poll1, function(err, res) {
-      if (err) throw err;
-      console.log("poll1 document inserted");
-    });
-
-    var poll2 = { Name: "RCOS Poll 1", Questions: ["What project are you on?", "True/False: RCOS Sux"], Answers: ["", [10, 11, 12]]};
-    db.collection("polls").insertOne(poll2, function(err, res) {
-      if (err) throw err;
-      console.log("poll2 document inserted");
-    });
-
-    setTimeout(function() {
-      client.close();
-    }, 2000);
-
   });
+
+  var checkClose = setInterval(function() {
+    if(completes.length === elements.length) {
+      client.close();
+      clearInterval(checkClose);
+    }
+  }, 1000);
+
+  function addObj(element) {
+    console.log("Inserting: " + JSON.stringify(element[1]));
+    db.collection(element[0]).insertOne(element[1], function(err, res) {
+      if (err) throw err;
+      console.log("Inserted: " + JSON.stringify(element[1]));
+      completes.push(element[1]);
+    });
+  }
+
 });
+
