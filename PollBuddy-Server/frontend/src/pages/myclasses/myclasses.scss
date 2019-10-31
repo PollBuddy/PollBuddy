@@ -1,3 +1,40 @@
 .page-my-classes{
-    
+  text-align: center;
+  background-color: #f3e1ff;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+}
+#header-content {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-size: 10px;
+}
+.blue-color{
+  text-align: center;
+  background-color: blue;
+}
+
+.home_button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+.settings_button {
+  position: absolute;
+  top: 0px;
+  right: 65px;
+  font-size: 10px;
+}
+
+.top_left_logo {
+  position: absolute;
+  width: 10%;
+  height: auto;
+  top: 0px;
+  left: 0px;
 }
