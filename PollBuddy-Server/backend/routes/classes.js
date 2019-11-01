@@ -19,6 +19,11 @@ router.get('/:id/', function(req, res, next) {
 });
 
 router.get('/:id/polls', function(req, res, next) {
+	var id = req.params.id;
+	db.collection("classes").find(ObjectID(id),{_id: 0, Polls: 1}).toArray(function(err,result){
+		if(err)throw err;
+		res.send(result);
+	});
 	res.send('i am getting class things based on class ID: '+ id);
 });
 

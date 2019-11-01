@@ -22,8 +22,13 @@ router.get('/:id/', function(req, res, next) {
 	res.send('i am getting user ID: ' + id);
 });
 
-router.get('/login/', function(req, res, next) {
-	res.send('i am a user ID classes processor');
+router.get('/:id/classes', function(req, res, next) {
+	var id = req.params.id;
+	db.collection("users").find(ObjectID(id),{_id: 0, Classes: 1}).toArray(function(err,result){
+		if(err)throw err;
+		res.send(result);
+	});
+	res.send('i am getting user ' + id + ' classes');
 });
 
 module.exports = router;
