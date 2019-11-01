@@ -50,11 +50,24 @@ app.use('/api/polls', pollsRouter);
 app.use('/api/users', usersRouter);
 
 
-// When visiting /test, the database connection finds all documents in the test
-// collection, and returns them.
+// When visiting /test, the database connection finds all documents in all collections, and returns them in JSON.
 app.get('/test', (req, res) => {
-  db.collection("test").findOne({}, function(err, document) {
-    res.send(document);
+  var documents = [];
+  db.listCollections().toArray().then((data) => {
+    // Here you can do something with your data
+    var itemsProcessed = 0;
+    data.forEach(function (c) {
+      db.collection(c["name"]).find({}).toArray(function (err, document) {
+        documents.push(document);
+        itemsProcessed++;
+        if(itemsProcessed === data.length) {
+          callback();
+        }
+      });
+    });
+    function callback() {
+      res.json(documents);
+    }
   });
 });
 
