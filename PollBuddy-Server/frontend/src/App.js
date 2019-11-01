@@ -21,7 +21,7 @@ function App() {
         <Homepage path="/" />
         <Myclasses path="/myclasses" />
         <Lessons path="/lessons" />
-        <Lesson path="/lesson" />
+        <Lesson path="/lesson/:lessonId" />
       </Router>
     </React.Fragment>
   );
