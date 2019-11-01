@@ -9,14 +9,17 @@ router.get('/', function(req, res, next) {
 		res.send(result);
 	});
 });
-
-router.get('/classID/', function(req, res, next) {//classID to be replaced somehow
-	
-	res.send('i am getting class ID things');
+router.get('/:id/', function(req, res, next) {
+	var id = req.params.id;
+	db.collection("classes").find(ObjectID(id)).toArray(function(err,result){
+		if(err)throw err;
+		res.send(result);
+	});
+	res.send('i am getting class ID: ' + id);
 });
 
-router.get('/classID/polls', function(req, res, next) {
-	res.send('i am getting class things based on class ID');
+router.get('/:id/polls', function(req, res, next) {
+	res.send('i am getting class things based on class ID: '+ id);
 });
 
 module.exports = router;
