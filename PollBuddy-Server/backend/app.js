@@ -17,7 +17,7 @@ var app = express();
 app.use(cors());
 
 // MongoDB Database Connection Setup
-const MongoClient = require('mongodb').MongoClient;
+/*const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const url = 'mongodb://db:27017';
 const dbName = 'pollbuddy';
@@ -27,7 +27,13 @@ client.connect((err) => {
   if (err) return console.log(err);
   db = client.db(dbName);
   console.log("Database connected");
+});*/
+
+var mongoConnection = require('./modules/mongoConnection.js');
+mongoConnection.connect(function(err, client){
+  if(err) console.error(err);
 });
+var db = mongoConnection.getDB();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
