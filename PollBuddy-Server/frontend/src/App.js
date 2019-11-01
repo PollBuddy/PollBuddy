@@ -1,10 +1,11 @@
 import React from 'react';
-import { Router, Link } from "@reach/router";
+import { Router } from "@reach/router";
 
 
 import './App.css';
 import Myclasses from './pages/myclasses'
 import Homepage from './pages/homepage'
+import Notfound from './pages/notfound'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
       <Router>
         <Myclasses path="/myclasses" />
         <Homepage path="/" />
+        <Notfound default />
       </Router>
     </React.Fragment>
   );
