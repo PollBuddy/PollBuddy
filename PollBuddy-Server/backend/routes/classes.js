@@ -1,8 +1,11 @@
 var createError = require('http-errors');
 var express = require('express');
 var router = express.Router();
-var mongoUtil = require( './mongoConnection.js' );
-var db = mongoUtil.getDb();
+var mongoConnection = require('../modules/mongoConnection.js');
+mongoConnection.connect(function(err, client){
+	if(err) console.error(err);
+});
+var db = mongoConnection.getDB();
 
 router.get('/', function(req, res, next) {
 	db.collection("classes").find({}).toArray(function(err, result){
