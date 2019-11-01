@@ -1,0 +1,30 @@
+.page-login{
+
+}
+
+div[class^="About Us"],
+div[class*="About Us"]
+{
+    display: inline-block;
+    padding: 1% 5%;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 1px;
+    background: #d0ead6;
+}
+.page-login-header
+{
+    background-color: #ab7ec6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.float-right
+{
+    float: right;
+}
