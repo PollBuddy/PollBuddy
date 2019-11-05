@@ -1,4 +1,5 @@
-const MongoClient = require('mongodb').MongoClient;
+const mongo = require('mongodb');
+const MongoClient = mongo.MongoClient;
 const url = 'mongodb://db:27017';
 const database = 'pollbuddy';
 
@@ -15,5 +16,8 @@ module.exports = {
 	},
 	getDB: function(){
 		return db;
+	},
+	getMongo: function(){
+		return mongo;
 	}
 };
