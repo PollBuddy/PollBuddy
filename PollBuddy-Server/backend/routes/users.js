@@ -2,13 +2,10 @@ var createError = require('http-errors');
 var express = require('express');
 var router = express.Router();
 var mongoConnection = require('../modules/mongoConnection.js');
-mongoConnection.connect(function(err, client){
-	if(err) console.error(err);
-});
-var db = mongoConnection.getDB();
-// GET users listing. 
+
+// GET users listing.
 router.get('/', function(req, res, next) {
-	db.collection("users").find({}).toArray(function(err, result){
+	mongoConnection.getDB().collection("users").find({}).toArray(function(err, result){
 		res.send(result);
 	});
 });
@@ -18,7 +15,7 @@ router.get('/login/', function(req, res, next) {
 
 router.get('/:id/', function(req, res, next) {
 	var id = req.params.id;
-	db.collection("users").find(ObjectID(id)).toArray(function(err,result){
+	mongoConnection.getDB().collection("users").find(ObjectID(id)).toArray(function(err,result){
 		if(err)throw err;
 		res.send(result);
 	});
@@ -27,7 +24,7 @@ router.get('/:id/', function(req, res, next) {
 
 router.get('/:id/classes', function(req, res, next) {
 	var id = req.params.id;
-	db.collection("users").find(ObjectID(id),{_id: 0, Classes: 1}).toArray(function(err,result){
+	mongoConnection.getDB().collection("users").find(ObjectID(id),{_id: 0, Classes: 1}).toArray(function(err,result){
 		if(err)throw err;
 		res.send(result);
 	});

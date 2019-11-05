@@ -6,9 +6,11 @@ var db;
 
 module.exports = {
 	connect: function(callback){
-		MongoClient.connect(url, function(err, client){
+		const client = new MongoClient(url);
+		client.connect((err) => {
+			if(err) return console.error(err);
 			db = client.db(database);
-			return callback(err);
+			console.log('Database connected from module');
 		});
 	},
 	getDB: function(){

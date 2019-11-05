@@ -33,7 +33,6 @@ var mongoConnection = require('./modules/mongoConnection.js');
 mongoConnection.connect(function(err, client){
   if(err) console.error(err);
 });
-var db = mongoConnection.getDB();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -53,11 +52,11 @@ app.use('/api/users', usersRouter);
 // When visiting /test, the database connection finds all documents in all collections, and returns them in JSON.
 app.get('/test', (req, res) => {
   var documents = [];
-  db.listCollections().toArray().then((data) => {
+  mongoConnection.getDB().listCollections().toArray().then((data) => {
     // Here you can do something with your data
     var itemsProcessed = 0;
     data.forEach(function (c) {
-      db.collection(c["name"]).find({}).toArray(function (err, document) {
+      mongoConnection.getDB().collection(c["name"]).find({}).toArray(function (err, document) {
         documents.push(document);
         itemsProcessed++;
         if(itemsProcessed === data.length) {
