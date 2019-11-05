@@ -7,7 +7,7 @@ import {
     MDBCardTitle,
     MDBCardText,
     MDBCol,
-    MDBContainer,
+    MDBContainer, MDBBtn,
 } from 'mdbreact';
 // import { connect } from "react-redux";
 // import { bindActionCreators } from "redux";
@@ -20,32 +20,83 @@ const getDataFromJSON = () =>{
     return data;
 };
 
+
 export default class question extends Component {
-
-    state = {
-        
-    };
-
-
     constructor(props) {
         super(props);
+        this.deselectChoice = this.deselectChoice.bind(this);
+        this.selectChoice = this.selectChoice.bind(this);
+        let data = getDataFromJSON();
+        let tempArray = [];
+        for(let i = 0; i < data.choices.length; i++){
+            tempArray.push(false);
+        }
+        this.state = {
+            data: data,
+            studentChoices: tempArray,
+        }
+    }
+
+    deselectChoice(index){
+        let tempChoices = this.state.studentChoices;
+        tempChoices[index] = false;
+        this.setState(prevState => ({
+                    ...prevState,
+                    studentChoices: tempChoices,
+                }
+            )
+        )
+    }
+
+    selectChoice(index){
+        let tempChoices = this.state.studentChoices;
+        let count = 0;
+        for(let i = 0; i < this.state.studentChoices.length; i++){
+            if(this.state.studentChoices[i]){
+                count++;
+            }
+        }
+        if(count >= this.state.data.maxAllowedChoices){
+            for(let i = 0; i < this.state.studentChoices.length; i++){
+                if(this.state.studentChoices[i]){
+                    tempChoices[i] = false;
+                    break;
+                }
+            }
+        }
+        tempChoices[index] = true;
+        this.setState(prevState => ({
+            ...prevState,
+            studentChoices: tempChoices,
+        }))
     }
 
     render() {
-        let data = getDataFromJSON();
         return (
             <MDBCol>
                 <MDBCard>
-                    <MDBCardImage className="img-fluid" src={data.img} waves />
+                    <MDBCardImage className="img-fluid" src={this.state.data.img} waves />
                     <MDBCardBody>
-                        <MDBCardTitle>{data.title}</MDBCardTitle>
-                        <MDBCardText>{data.question}</MDBCardText>
+                        <MDBCardTitle>{this.state.data.title}</MDBCardTitle>
+                        <MDBCardText>{this.state.data.question}</MDBCardText>
                         <MDBCardText>
-                            {data.choices.map((choice, index) => (
-                                <MDBContainer>
-                                    <button className="choiceButton">{data.choices[index]}</button>
-                                </MDBContainer>
-                            ))}
+                            {this.state.data.choices.map((choice, index) => {
+                                if(this.state.studentChoices[index]){
+                                    return (
+                                        <MDBBtn onClick={() => {return this.deselectChoice(index)}}>
+                                            {choice}
+                                        </MDBBtn>
+                                    )
+                                }else{
+                                    return (
+                                        <MDBBtn
+                                            outline
+                                            onClick={() => {return this.selectChoice(index)}}>
+                                            {choice}
+                                        </MDBBtn>
+                                    )
+                                }
+                            })}
                         </MDBCardText>
                     </MDBCardBody>
                 </MDBCard>

@@ -8,6 +8,6 @@
     "C: 3",
     "D: 4"
   ],
-  "correctChoice": 3,
-  "points": 2
+  "points": 2,
+  "maxAllowedChoices": 2
 }
