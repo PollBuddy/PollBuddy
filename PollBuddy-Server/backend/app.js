@@ -70,6 +70,46 @@ app.get('/test', (req, res) => {
   });
 });
 
+app.get('/gendata', (req, res) => {
+  var log = "";
+  var completes = [];
+  var elements = [
+    ["test", { SIS: "Man" }],
+    ["users", { FirstName: "Bill", LastName: "Cheese", Username: "cheb", email: "cheb@rpi.edu", password: "password1", RCS: "cheb" }],
+    ["users", { FirstName: "Suzy", LastName: "Stevenson", Username: "stevs3!", email: "fuzzytesting@rpi.edu", password: "password2!", RCS: "stev3" }],
+    ["groups", { Name: "RCOS", instructors: ["Turner (should be ID later)"], AssociatedPolls: [] }],
+    ["groups", { Name: "Chemistry", instructors: ["Kirover-Snover (should be ID later)"], AssociatedPolls: [] }],
+    ["polls", { Name: "Chem 1 Poll 1", Questions: ["What is your name?", "What grade are you in?"], Answers: ["OpenEnded", [10, 11, 12]] }],
+    ["polls", { Name: "RCOS Poll 1", Questions: ["What project are you on?", "True/False: RCOS Sux"], Answers: ["", [10, 11, 12]] }],
+  ]; // format: ["collection, { obj: "value"} ],
+
+  mongoConnection.getDB().dropDatabase(function() {
+
+    log += "Dropping DB\n";
+
+    elements.forEach(function (element) {
+      addObj(element)
+    });
+  });
+
+  var checkClose = setInterval(function() {
+    if(completes.length === elements.length) {
+      clearInterval(checkClose);
+      res.send(log);
+    }
+  }, 1000);
+
+  function addObj(element) {
+    log += "Inserting: " + JSON.stringify(element[1]) + "\n";
+    mongoConnection.getDB().collection(element[0]).insertOne(element[1], function(err, res) {
+      if (err) throw err;
+      log += "Inserted: " + JSON.stringify(element[1]) + "\n";
+      completes.push(element[1]);
+    });
+  }
+
+});
+
 
 // Root page (aka its working)
 app.get('/', function(req, res, next) {
