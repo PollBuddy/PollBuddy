@@ -85,12 +85,14 @@ export default class question extends Component {
     render() {
         return (
             <MDBCol>
-                <MDBCard>
+                <MDBCard style={{ width: "22rem" }}>
                     <MDBCardImage className="img-fluid" src={this.state.data.img} waves />
                     <MDBCardBody>
                         <MDBCardTitle>{this.state.data.title}</MDBCardTitle>
-                        <MDBCardText>{this.state.data.question}</MDBCardText>
                         <MDBCardText>
+                            {this.state.data.question}
+                        </MDBCardText>
+                        {/*<MDBCardText>*/}
                             {this.state.data.choices.map((choice, index) => {
                                 if(this.state.studentChoices[index]){
                                     return (
@@ -108,11 +110,11 @@ export default class question extends Component {
                                     )
                                 }
                             })}
-                        </MDBCardText>
+                        {/*</MDBCardText>*/}
                     </MDBCardBody>
                 </MDBCard>
             </MDBCol>
-        );
+        )
     }
   }
 // export default connect(
