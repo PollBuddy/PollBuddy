@@ -26,8 +26,9 @@ export default class question extends Component {
     //binding helper functions
     this.deselectChoice = this.deselectChoice.bind(this);
     this.selectChoice = this.selectChoice.bind(this);
-    //get the data from the json and store it as an object
-    let data = props.questionObj
+    //get props
+    let data = props.questionObj;
+
     //set up an array of booleans (representing the student's answer choices)
     //and initialize it to all false
     let tempArray = [];
@@ -36,6 +37,7 @@ export default class question extends Component {
     }
     //add the data and the array to state
     this.state = {
+      key: props.number,
       data: data,
       studentChoices: tempArray,
     }
@@ -110,7 +112,7 @@ export default class question extends Component {
               
               <MDBCardBody>
                 
-                <MDBCardTitle>{this.state.data.title}: </MDBCardTitle>
+                <MDBCardTitle>Q{this.state.key+1}: {this.state.data.title} </MDBCardTitle>
                 
                 <MDBCardText>
                   {this.state.data.question}
@@ -121,7 +123,7 @@ export default class question extends Component {
 
                     if (this.state.studentChoices[index]) {
                       return (
-                        <MDBContainer>
+                        <MDBContainer key={index}>
                           <MDBRow>
                             <MDBCol small="2">
                               <MDBBtn className="btn-choice" onClick={() => { return this.deselectChoice(index) }}>
@@ -136,7 +138,7 @@ export default class question extends Component {
                       )
                     } else {
                       return (
-                        <MDBContainer>
+                        <MDBContainer key={index}>
                           <MDBRow>
                             <MDBCol small="2">
                               <MDBBtn className="btn-choice" outline onClick={() => { return this.selectChoice(index) }}>
