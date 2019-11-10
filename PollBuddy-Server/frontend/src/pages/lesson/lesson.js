@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import './lesson.scss'
 
 import { MDBContainer, MDBRow, MDBCol } from 'mdbreact'
+
+import Question from './components/question'
+
 export default class lesson extends Component {
 
   
@@ -19,9 +22,8 @@ export default class lesson extends Component {
         <MDBContainer>
           {questions.map((value, index) => {
             return (
-            <MDBRow key={index}>
-              <MDBCol>{value}</MDBCol>
-            </MDBRow>)
+                <Question key={index}/ >
+            )
           })}
         </MDBContainer>
       </MDBContainer>
