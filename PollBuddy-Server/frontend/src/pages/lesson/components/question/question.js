@@ -10,6 +10,8 @@ import {
   MDBContainer, MDBBtn, MDBRow,
   MDBIcon
 } from 'mdbreact';
+
+import Countdown, { zeroPad } from 'react-countdown-now';
 // import { connect } from "react-redux";
 // import { bindActionCreators } from "redux";
 // import * as questionActions from "../../store/question/actions";
@@ -83,7 +85,12 @@ export default class question extends Component {
     }))
   }
 
+  
+
   render() {
+    const clockFormat = ({ minutes, seconds, completed }) => {
+        return <span>{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
+    };
     return (
       <MDBContainer>
         <MDBRow>
@@ -92,10 +99,9 @@ export default class question extends Component {
               { // only display image if there is one
                 this.state.data.img &&
                 <MDBCardImage
-                
-                className="img-fluid"
-                src={this.state.data.img}
-                waves
+                  className="img-fluid"
+                  src={this.state.data.img}
+                  waves
                 />
               }
               
@@ -147,12 +153,14 @@ export default class question extends Component {
               <div className='rounded-bottom mdb-color lighten-3 text-center pt-3'>
                 <ul className='list-unstyled list-inline font-small'>
                   <li className='list-inline-item pr-2 white-text'>
-                  <MDBIcon far icon="star" /> 12
-                        </li>
+                    <MDBIcon far icon="star" /> 12
+                  </li>
                     <li className='list-inline-item'>
-                    <a href='#!' className='white-text'>
-                    <MDBIcon far icon="clock" /> 00:10
-                            </a>
+                      <a href='#!' className='white-text'>
+                        <MDBIcon far icon="clock" /> <Countdown renderer={clockFormat} date={Date.now() + this.state.data.timeLimit*1000}>
+                            <span>Question closed!</span>
+                        </Countdown>
+                      </a>
                   </li>
                 </ul>
               </div>
