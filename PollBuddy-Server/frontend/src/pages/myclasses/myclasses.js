@@ -3,8 +3,7 @@ import { MDBBtn, MDBIcon } from "mdbreact";
 import 'mdbreact/dist/css/mdb.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-import logo from '../../logo.svg';
-
+import new_logo from '../../new_logo.jpg';
 import './myclasses.scss'
 
 export default class Myclasses extends Component {
@@ -12,9 +11,9 @@ export default class Myclasses extends Component {
 
     return (
       <div className="page-my-classes">
-          <img src={logo} className="top_left_logo" alt="logo"/>
+          <img src={new_logo} className="top_left_logo" alt="logo"/>
 
-          <font size="+3">My Classes</font>
+          <font size="+3">CSCI 1200</font>
 
           <MDBBtn
             size="sm"
@@ -22,9 +21,8 @@ export default class Myclasses extends Component {
             href="/"
             color="secondary"
           >
-            <MDBIcon icon="home" />
+            <MDBIcon icon="question" />
           </MDBBtn>
-
 
           <MDBBtn
               size="sm"
@@ -37,16 +35,45 @@ export default class Myclasses extends Component {
 
         <hr></hr>
 
-
-
         <body>
-        CSCI 1200
+        Questions will be displayed here.
         </body>
 
 
-        <div id="header-content">
-          You have joined CSCI 1200
+
+        <div id="header-content" className="info_text">
+          You have joined CSCI 1200.
         </div>
+
+          <MDBBtn
+              href="https://rcos.io/"
+              className="rcos_button"
+              target="_blank"
+              size="sm"
+              color="secondary"
+          >
+              An RCOS Project
+          </MDBBtn>
+
+          <MDBBtn
+              href="https://info.rpi.edu/statement-of-accessibility"
+              className="accessibility_button"
+              target="_blank"
+              size="sm"
+              color="secondary"
+          >
+              Statement of Accessibility
+          </MDBBtn>
+
+          <MDBBtn
+              href="https://github.com/neha-deshpande001/PollBuddy"
+              className="github_button"
+              target="_blank"
+              size="sm"
+              color="secondary"
+          >
+              Github
+          </MDBBtn>
 
       </div>
     )

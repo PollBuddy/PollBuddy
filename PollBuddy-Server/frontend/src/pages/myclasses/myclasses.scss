@@ -5,6 +5,7 @@
   position: absolute;
   left: 0;
   width: 100%;
+  color: black;
   overflow: hidden;
 }
 #header-content {
@@ -13,28 +14,45 @@
   left: 10px;
   font-size: 10px;
 }
-.blue-color{
-  text-align: center;
-  background-color: blue;
-}
 
+.info_text{
+  position: absolute;
+  top: 200px;
+  left: 20px;
+}
 .home_button {
   position: absolute;
   top: 0px;
   right: 0px;
 }
-
 .settings_button {
   position: absolute;
   top: 0px;
   right: 65px;
-  font-size: 10px;
+}
+.github_button {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+}
+.rcos_button {
+  position: absolute;
+  bottom: 0px;
+  right: 206px;
+}
+
+.accessibility_button {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
 }
 
 .top_left_logo {
   position: absolute;
-  width: 10%;
+  width: 26%;
   height: auto;
   top: 0px;
-  left: 0px;
+  left: 10px;
 }
+
+
