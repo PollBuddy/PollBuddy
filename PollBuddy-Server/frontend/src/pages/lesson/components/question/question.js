@@ -99,7 +99,7 @@ export default class question extends Component {
         }
     };
     return (
-      <MDBContainer>
+      <MDBContainer className="component-question">
         <MDBRow>
           <MDBCol md="8">
             <MDBCard >
