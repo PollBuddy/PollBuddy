@@ -89,7 +89,14 @@ export default class question extends Component {
 
   render() {
     const clockFormat = ({ minutes, seconds, completed }) => {
-        return <span>{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
+        
+        if (completed) {
+          // Render a completed state
+          return <span>Question closed!</span>
+        } else {
+          // Render a countdown
+          return <span>{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
+        }
     };
     return (
       <MDBContainer>
@@ -152,14 +159,12 @@ export default class question extends Component {
               </MDBCardBody>
               <div className='rounded-bottom mdb-color lighten-3 text-center pt-3'>
                 <ul className='list-unstyled list-inline font-small'>
-                  <li className='list-inline-item pr-2 white-text'>
+                  <li className='list-inline-item white-text'>
                     <MDBIcon far icon="star" /> 12
                   </li>
                     <li className='list-inline-item'>
                       <a href='#!' className='white-text'>
-                        <MDBIcon far icon="clock" /> <Countdown renderer={clockFormat} date={Date.now() + this.state.data.timeLimit*1000}>
-                            <span>Question closed!</span>
-                        </Countdown>
+                        <MDBIcon far icon="clock" /> <Countdown renderer={clockFormat} date={Date.now() + this.state.data.timeLimit*1000} />
                       </a>
                   </li>
                 </ul>
