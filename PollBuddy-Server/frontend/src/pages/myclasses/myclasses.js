@@ -13,7 +13,7 @@ export default class Myclasses extends Component {
       <div className="page-my-classes">
           <img src={new_logo} className="top_left_logo" alt="logo"/>
 
-          <font size="+3">CSCI 1200</font>
+          {/*<font size="+1">CSCI 1200</font>*/}
 
           <MDBBtn
             size="sm"
@@ -21,7 +21,16 @@ export default class Myclasses extends Component {
             href="/"
             color="secondary"
           >
-            <MDBIcon icon="question" />
+            <MDBIcon icon="home" />
+          </MDBBtn>
+
+          <MDBBtn
+              size="sm"
+              className="about_button"
+              href="/"
+              color="secondary"
+          >
+              <MDBIcon icon="question" />
           </MDBBtn>
 
           <MDBBtn
@@ -33,10 +42,17 @@ export default class Myclasses extends Component {
             <MDBIcon icon="tools" />
           </MDBBtn>
 
-        <hr></hr>
+        <hr class="line_style"></hr>
 
-        <body>
-        Questions will be displayed here.
+        <header>
+            CSCI 1200
+        </header>
+        <body className="body_style">
+        <br />
+        Lorem ipsum dolor sit amet, vel detracto scriptorem id, iudico menandri ei eum. Et duis augue utamur usu. At rebum semper mei. Cu laudem salutandi pro, assum persecuti vis cu. Quo ei cetero prompta, ad summo altera labores per.
+
+        Ut nam wisi dolor menandri. In eligendi atomorum praesent est, blandit copiosae iudicabit usu an, in est etiam reprimique. Ea nostrud eripuit usu. Mea elitr oporteat instructior ex, usu alterum equidem ex. In etiam affert vel, ignota populo cu mel. Omnis sapientem eloquentiam et sea, detracto appareat dignissim est ei, est deseruisse persequeris definitiones ad.
+
         </body>
 
 
