@@ -18,10 +18,6 @@ import Countdown, { zeroPad } from 'react-countdown-now';
 
 //this is a placeholder funcion, it will eventually be used
 //to get information about the question from the database
-const getDataFromJSON = () => {
-  let data = require('./dummyInfo');
-  return data;
-};
 
 
 export default class question extends Component {
@@ -31,7 +27,7 @@ export default class question extends Component {
     this.deselectChoice = this.deselectChoice.bind(this);
     this.selectChoice = this.selectChoice.bind(this);
     //get the data from the json and store it as an object
-    let data = getDataFromJSON();
+    let data = props.questionObj
     //set up an array of booleans (representing the student's answer choices)
     //and initialize it to all false
     let tempArray = [];

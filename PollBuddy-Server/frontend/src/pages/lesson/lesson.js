@@ -5,14 +5,23 @@ import { MDBContainer, MDBRow, MDBCol } from 'mdbreact'
 
 import Question from './components/question'
 
-export default class lesson extends Component {
 
+
+export default class lesson extends Component {
+  
+  constructor(props) {
+    super(props);
+
+    // Add questions to state
+    let questions = require('./placeholder');
+
+    this.state = {
+      questions: questions.questions
+    }
+  }
   
   render() {
-    const questions = [1,2,3,4,5];
-    function addq() {
-      questions.concat(1);
-    }
+    
     
     return (
       <MDBContainer>
@@ -20,9 +29,11 @@ export default class lesson extends Component {
           Hello lesson {this.props.lessonId}
         </div>
         <MDBContainer>
-          {questions.map((value, index) => {
+          {this.state.questions.map((value, index) => {
             return (
-                <Question key={index}/ >
+                <Question questionObj={value} key={index}>
+                  
+                </Question>
             )
           })}
         </MDBContainer>
