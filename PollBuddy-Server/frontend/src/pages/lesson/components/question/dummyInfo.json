@@ -9,10 +9,10 @@
     "D"
   ],
   "choicesText": [
-    "First choice",
-    "Second choice",
-    "Third choice",
-    "Fourth choice"
+    "1",
+    "2",
+    "3",
+    "4"
   ],
   "points": 2,
   "maxAllowedChoices": 1,
