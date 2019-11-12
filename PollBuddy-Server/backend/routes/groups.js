@@ -52,6 +52,13 @@ router.post('/:id/edit/', function(req,res){
 	return res.sendStatus(400);
   return res.sendStatus(200); // TODO: Ensure this is true
 });
+router.post('/:id/delete/', function(req,res){//use router.delete??
+	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+	mongoConnection.getDB().collection("groups").deleteOne({"_id" : id}, function(err,res){
+		if(err)return res.sendStatus(500);
+	});
+	res.sendStatus(200);
+});
 router.get('/', function(req, res, next) {
 	mongoConnection.getDB().collection("groups").find({}).toArray(function(err, result){
 		res.send(result);

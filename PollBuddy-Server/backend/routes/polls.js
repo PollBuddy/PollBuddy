@@ -6,7 +6,7 @@ var mongoConnection = require('../modules/mongoConnection.js');
 router.post('/new/', function(req,res){
 	var jsonContent = req.body;
 	mongoConnection.getDB().collection("polls").insertOne({Name: jsonContent.Name});
-	res.sendStatus(200); // TODO: Ensure this is true
+	return res.sendStatus(200); // TODO: Ensure this is true
 });
 router.post('/:id/edit/', function(req,res){
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
@@ -25,9 +25,15 @@ router.post('/:id/edit/', function(req,res){
 			});
 		else 
 			return res.sendStatus(400);
-	}else
-	return res.sendStatus(400);
-	res.sendStatus(200); // TODO: Ensure this is true
+	}else return res.sendStatus(400);
+	return res.sendStatus(200); // TODO: Ensure this is true
+});
+router.post('/:id/delete/', function(req,res){//use router.delete??
+	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+	mongoConnection.getDB().collection("polls").deleteOne({"_id" : id}, function(err,res){
+		if(err)return res.sendStatus(500);
+	});
+	return res.sendStatus(200);
 });
 // GET users listing.
 router.get('/', function(req, res, next) {
