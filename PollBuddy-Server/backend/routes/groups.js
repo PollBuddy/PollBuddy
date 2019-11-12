@@ -10,19 +10,19 @@ router.post('/new/', function(req,res){
 router.post('/:id/edit/', function(req,res){
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
 	var jsonContent = JSON.parse(req);
-	if(jsonContent.Action == "Add"){
-		if(jsonContent.Instructor != undefined)
+	if(jsonContent.Action === "Add"){
+		if(jsonContent.Instructor !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{$set:{Instructor: jsonContent.Instructor}});
-		if(jsonContent.PollID != undefined)
+		if(jsonContent.PollID !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{$set:{PollID: jsonContent.PollID}});
-		if(jsonContent.UserID != undefined)
+		if(jsonContent.UserID !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{$set:{UserID: jsonContent.UserID}});
-	}else if(jsonContent.Action == "Remove"){
-		if(jsonContent.Instructor != undefined)
+	}else if(jsonContent.Action === "Remove"){
+		if(jsonContent.Instructor !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{$unset:{Instructor: ""}});
-		if(jsonContent.PollID != undefined)
+		if(jsonContent.PollID !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{$unset:{PollID: ""}});
-		if(jsonContent.UserID != undefined)
+		if(jsonContent.UserID !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{$unset:{UserID: ""}});
 	}
 });

@@ -10,11 +10,11 @@ router.post('/new/', function(req,res){
 router.post('/:id/edit/', function(req,res){
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
 	var jsonContent = JSON.parse(req);
-	if(jsonContent.Action == "Add"){
-		if(jsonContent.Question != undefined)
+	if(jsonContent.Action === "Add"){
+		if(jsonContent.Question !== undefined)
 			mongoConnection.getDB().collection("polls").updateOne({"_id" : id},{$set:{Question: jsonContent.Question}});
-	}else if(jsonContent.Action == "Remove"){
-		if(jsonContent.Question != undefined)
+	}else if(jsonContent.Action === "Remove"){
+		if(jsonContent.Question !== undefined)
 			mongoConnection.getDB().collection("polls").updateOne({"_id" : id},{$unset:{Question: ""}});
 	}
 });
