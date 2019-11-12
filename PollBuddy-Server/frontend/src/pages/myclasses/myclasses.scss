@@ -8,6 +8,7 @@
   color: black;
   overflow: hidden;
 }
+
 #header-content {
   position: absolute;
   bottom: 10px;
@@ -17,18 +18,21 @@
 
 .body_style{
   line-height:15px;
-  font-size:10px;
+  font-size:7px;
 }
+
 .info_text{
   position: absolute;
   top: 200px;
   left: 20px;
 }
+
 .home_button {
   position: absolute;
   top: 3px;
   right: 3px;
 }
+
 .settings_button {
   position: absolute;
   top: 3px;
@@ -40,21 +44,23 @@
   top: 3px;
   right: 138px;
 }
+
 .github_button {
   position: absolute;
   bottom: 0px;
   left: 0px;
 }
+
 .rcos_button {
   position: absolute;
   bottom: 0px;
   right: 206px;
 }
+
 .line_style{
   margin-top: 46px;
   border: 1px solid #AA65CF;
   border-radius: 10px;
-
 }
 
 .accessibility_button {
@@ -70,5 +76,3 @@
   top: 0px;
   left: 20px;
 }
-
-

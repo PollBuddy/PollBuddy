@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { MDBBtn, MDBIcon } from "mdbreact";
+import { MDBBtn, MDBIcon, MDBContainer } from "mdbreact";
 import 'mdbreact/dist/css/mdb.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
@@ -10,10 +10,8 @@ export default class Myclasses extends Component {
   render() {
 
     return (
-      <div className="page-my-classes">
+      <MDBContainer className="page-my-classes">
           <img src={new_logo} className="top_left_logo" alt="logo"/>
-
-          {/*<font size="+1">CSCI 1200</font>*/}
 
           <MDBBtn
             size="sm"
@@ -49,17 +47,14 @@ export default class Myclasses extends Component {
         </header>
         <body className="body_style">
         <br />
-        Lorem ipsum dolor sit amet, vel detracto scriptorem id, iudico menandri ei eum. Et duis augue utamur usu. At rebum semper mei. Cu laudem salutandi pro, assum persecuti vis cu. Quo ei cetero prompta, ad summo altera labores per.
-
-        Ut nam wisi dolor menandri. In eligendi atomorum praesent est, blandit copiosae iudicabit usu an, in est etiam reprimique. Ea nostrud eripuit usu. Mea elitr oporteat instructior ex, usu alterum equidem ex. In etiam affert vel, ignota populo cu mel. Omnis sapientem eloquentiam et sea, detracto appareat dignissim est ei, est deseruisse persequeris definitiones ad.
-
+        The questions will go here.
         </body>
 
 
 
-        <div id="header-content" className="info_text">
+        <MDBContainer id="header-content" className="info_text">
           You have joined CSCI 1200.
-        </div>
+        </MDBContainer>
 
           <MDBBtn
               href="https://rcos.io/"
@@ -91,7 +86,7 @@ export default class Myclasses extends Component {
               Github
           </MDBBtn>
 
-      </div>
+      </MDBContainer>
     )
   }
 }
