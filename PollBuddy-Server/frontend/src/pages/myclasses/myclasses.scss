@@ -1,3 +1,78 @@
 .page-my-classes{
-    
+  text-align: center;
+  background-color: #f3e1ff;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  color: black;
+  overflow: hidden;
+}
+
+#header-content {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-size: 10px;
+}
+
+.body_style{
+  line-height:15px;
+  font-size:7px;
+}
+
+.info_text{
+  position: absolute;
+  top: 200px;
+  left: 20px;
+}
+
+.home_button {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+}
+
+.settings_button {
+  position: absolute;
+  top: 3px;
+  right: 71px;
+}
+
+.about_button {
+  position: absolute;
+  top: 3px;
+  right: 138px;
+}
+
+.github_button {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+}
+
+.rcos_button {
+  position: absolute;
+  bottom: 0px;
+  right: 206px;
+}
+
+.line_style{
+  margin-top: 46px;
+  border: 1px solid #AA65CF;
+  border-radius: 10px;
+}
+
+.accessibility_button {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+
+.top_left_logo {
+  position: absolute;
+  width: 26%;
+  height: auto;
+  top: 0px;
+  left: 20px;
 }
