@@ -24,7 +24,7 @@ router.get('/:id/', function(req, res, next) {
 
 router.get('/:id/classes', function(req, res, next) {
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-	mongoConnection.getDB().collection("users").find({"_id" : id},{_id: 0, Classes: 1}).toArray(function(err,result){
+	mongoConnection.getDB().collection("users").find({"_id" : id},{projection: {_id: 0, Classes: 1}}).toArray(function(err,result){
 		if(err)throw err;
 		res.send(result);
 	});
