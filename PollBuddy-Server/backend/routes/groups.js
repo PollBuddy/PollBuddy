@@ -6,7 +6,7 @@ var mongoConnection = require('../modules/mongoConnection.js');
 router.post('/new/', function(req,res){
 	var jsonContent = req;
 	mongoConnection.getDB().collection("groups").insertOne({Name: jsonContent.Name});
-	res.send(200);
+	res.send(200); // TODO: Ensure this is true
 });
 router.post('/:id/edit/', function(req,res){
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
@@ -26,6 +26,7 @@ router.post('/:id/edit/', function(req,res){
 		if(jsonContent.UserID !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{$unset:{UserID: ""}});
 	}
+  res.send(200); // TODO: Ensure this is true
 });
 router.get('/', function(req, res, next) {
 	mongoConnection.getDB().collection("groups").find({}).toArray(function(err, result){

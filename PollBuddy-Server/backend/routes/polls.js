@@ -6,6 +6,7 @@ var mongoConnection = require('../modules/mongoConnection.js');
 router.post('/new/', function(req,res){
 	var jsonContent = req;
 	mongoConnection.getDB().collection("polls").insertOne({Name: jsonContent.Name});
+	res.send(200); // TODO: Ensure this is true
 });
 router.post('/:id/edit/', function(req,res){
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
@@ -17,6 +18,7 @@ router.post('/:id/edit/', function(req,res){
 		if(jsonContent.Question !== undefined)
 			mongoConnection.getDB().collection("polls").updateOne({"_id" : id},{$unset:{Question: ""}});
 	}
+	res.send(200); // TODO: Ensure this is true
 });
 // GET users listing.
 router.get('/', function(req, res, next) {
