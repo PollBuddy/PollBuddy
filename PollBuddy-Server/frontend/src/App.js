@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Link } from "@reach/router";
+import { Router } from "@reach/router";
 
 // ---- MDBReact ----
 import '@fortawesome/fontawesome-free/css/all.min.css';
@@ -11,6 +11,7 @@ import Homepage from './pages/homepage'
 import Myclasses from './pages/myclasses'
 import Lessons from './pages/lessons';
 import Lesson from './pages/lesson';
+import Notfound from './pages/notfound'
 
 function App() {
 
@@ -26,6 +27,7 @@ function App() {
         <Myclasses path="/myclasses" />
         <Lessons path="/lessons" />
         <Lesson path="/lesson/:lessonId" />
+        <Notfound default />
       </Router>
     </React.Fragment>
   );

@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import { Link } from '@reach/router';
 
-import Myclasses from '../myclasses'
-
 import logo from '../../logo.svg';
 
 import './homepage.scss'
@@ -28,14 +26,6 @@ export default class homepage extends Component {
               <p>
                 Edit <code>src/App.js</code> and save to reload.
               </p>
-              {/* <a
-                className="App-link"
-                href="https://reactjs.org"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learn React
-              </a> */}
               <Link to="myclasses">Go to my MyClasses</Link>
               <Link to="/">Go to my home</Link>
 
@@ -43,19 +33,6 @@ export default class homepage extends Component {
 
         
           <body>
-            
-            <p>
-              hey yall.
-            </p>
-
-            <button onClick={toBlue}>
-              Click me!
-            </button>
-
-            <button onClick={toRed}>
-              No, click me!
-            </button>
-
           </body>
       </div>
       </div>
