@@ -4,13 +4,14 @@ var router = express.Router();
 var mongoConnection = require('../modules/mongoConnection.js');
 
 router.post('/new/', function(req,res){
-	var jsonContent = req;
+	var jsonContent = req.body;
+	console.log(jsonContent);
 	mongoConnection.getDB().collection("groups").insertOne({Name: jsonContent.Name});
 	res.send(200); // TODO: Ensure this is true
 });
 router.post('/:id/edit/', function(req,res){
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-	var jsonContent = req;
+	var jsonContent = req.body;
 	if(jsonContent.Action === "Add"){
 		if(jsonContent.Instructor !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{$set:{Instructor: jsonContent.Instructor}});
