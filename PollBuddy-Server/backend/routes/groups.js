@@ -5,11 +5,13 @@ var mongoConnection = require('../modules/mongoConnection.js');
 
 router.post('/new/', function(req,res){
 	var jsonContent = req.body;
-	if(jsonContent.Name == null||jsonContent.Name === "")return res.sendStatus(400);
+	if(jsonContent.Name == null||jsonContent.Name === "") {
+		return res.sendStatus(400);
+	}
 	mongoConnection.getDB().collection("groups").insertOne({Name: jsonContent.Name}, function(err,res){
 		if(err)return res.sendStatus(500);
 	});
-	return res.sendStatus(200); // TODO: Ensure this is true
+	return res.sendStatus(200);
 });
 router.post('/:id/edit/', function(req,res){
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
@@ -17,40 +19,40 @@ router.post('/:id/edit/', function(req,res){
 	if(jsonContent.Action === "Add"){
 		if(jsonContent.Name !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{"$set":{Name: jsonContent.Name}}, function(err,res){
-				if(err)return res.sendStatus(500);
+				if(err) return res.sendStatus(500);
 			});
 		else if(jsonContent.InstructorID !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{"$set":{InstructorID: jsonContent.InstructorID}}, function(err,res){
-				if(err)return res.sendStatus(500);
+				if(err) return res.sendStatus(500);
 			});
 		else if(jsonContent.PollID !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{"$set":{PollID: jsonContent.PollID}}, function(err,res){
-				if(err)return res.sendStatus(500);
+				if(err) return res.sendStatus(500);
 			});
 		else if(jsonContent.UserID !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{"$set":{UserID: jsonContent.UserID}}, function(err,res){
-				if(err)return res.sendStatus(500);
+				if(err) return res.sendStatus(500);
 			});
 		else
 			return res.sendStatus(400);
 	}else if(jsonContent.Action === "Remove"){
 		if(jsonContent.InstructorID !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{"$unset":{InstructorID: ""}}, function(err,res){
-				if(err)return res.sendStatus(500);
+				if(err) return res.sendStatus(500);
 			});
 		else if(jsonContent.PollID !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{"$unset":{PollID: ""}}, function(err,res){
-				if(err)return res.sendStatus(500);
+				if(err) return res.sendStatus(500);
 			});
 		else if(jsonContent.UserID !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{"$unset":{UserID: ""}}, function(err,res){
-				if(err)return res.sendStatus(500);
+				if(err) return res.sendStatus(500);
 			});
 		else
 			return res.sendStatus(400);
-	}else
-	return res.sendStatus(400);
-  return res.sendStatus(200); // TODO: Ensure this is true
+	} else {
+		return res.sendStatus(400);
+	}
 });
 router.get('/', function(req, res, next) {
 	mongoConnection.getDB().collection("groups").find({}).toArray(function(err, result){
