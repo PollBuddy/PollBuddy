@@ -21,58 +21,83 @@
   font-size:7px;
 }
 
-.info_text{
-  position: absolute;
-  top: 200px;
-  left: 20px;
-}
 
 .home_button {
   position: absolute;
-  top: 3px;
-  right: 3px;
+  top: 25px;
+  right: 35px;
+  transform: scale(1.5);
 }
 
 .settings_button {
   position: absolute;
-  top: 3px;
-  right: 71px;
+  top: 25px;
+  right: 200px;
+  transform: scale(1.5);
 }
 
 .about_button {
   position: absolute;
-  top: 3px;
-  right: 138px;
+  top: 25px;
+  right: 362px;
+  transform: scale(1.5);
 }
 
 .github_button {
   position: absolute;
   bottom: 0px;
-  left: 0px;
+  right: 451px;
 }
 
 .rcos_button {
   position: absolute;
   bottom: 0px;
-  right: 206px;
+  right: 0px;
 }
 
 .line_style{
-  margin-top: 46px;
-  border: 1px solid #AA65CF;
+  margin-top: 120px;
+  border: 3px solid #AA65CF;
   border-radius: 10px;
 }
-
+.buttons{
+  display:block;
+  width: 40%;
+  margin-left: 30%;
+  margin-right: 30%;
+}
+.class1{
+  display: flex;
+  justify-content: center;
+  top: 35px;
+}
+.class2{
+  display: flex;
+  justify-content: center;
+  top: 95px;
+}
+.class3{
+  display: flex;
+  justify-content: center;
+  top: 155px;}
+.class4{
+  display: flex;
+  justify-content: center;
+  top: 215px;
+}
+.header{
+  font-size: 40px;
+}
 .accessibility_button {
   position: absolute;
   bottom: 0px;
-  right: 0px;
+  right: 190px;
 }
 
 .top_left_logo {
   position: absolute;
-  width: 26%;
+  width: 20%;
   height: auto;
-  top: 0px;
-  left: 20px;
+  top: 10px;
+  left: 10px;
 }
