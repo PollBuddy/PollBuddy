@@ -5,7 +5,7 @@ var mongoConnection = require('../modules/mongoConnection.js');
 
 router.post('/new/', function(req,res){
 	var jsonContent = req.body;
-	if(jsonContent.Name == null||jsonContent.Name == "")return res.sendStatus(400);
+	if(jsonContent.Name == null||jsonContent.Name === "")return res.sendStatus(400);
 	mongoConnection.getDB().collection("groups").insertOne({Name: jsonContent.Name}, function(err,res){
 		if(err)return res.sendStatus(500);
 	});
