@@ -12,12 +12,6 @@ import {
 } from 'mdbreact';
 
 import Countdown, { zeroPad } from 'react-countdown-now';
-// import { connect } from "react-redux";
-// import { bindActionCreators } from "redux";
-// import * as questionActions from "../../store/question/actions";
-
-//this is a placeholder funcion, it will eventually be used
-//to get information about the question from the database
 
 
 export default class question extends Component {
@@ -177,7 +171,3 @@ export default class question extends Component {
     )
   }
 }
-// export default connect(
-//     ({ question }) => ({ ...question }),
-//     dispatch => bindActionCreators({ ...questionActions }, dispatch)
-//   )( question );
