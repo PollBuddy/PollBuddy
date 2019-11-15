@@ -77,17 +77,17 @@ router.get('/:id/', function(req, res, next) {
 });
 router.get('/:id/polls', function(req, res, next) {
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-	mongoConnection.getDB().collection("groups").find({"_id" : id},{projection:{_id: 0, Polls: 1}}).toArray(function(err,result){
+	mongoConnection.getDB().collection("groups").find({"_id" : id},{projection:{_id: 0, Polls: 1}}).map(function(item){return res.send(item.Polls);}).toArray(function(err,result){
 		if(err)return res.sendStatus(500);
-		return res.send(result);
+		return res.send(result[0]);
 	});
 	//res.sendStatus('i am getting group things based on group ID: '+ id);
 });
 router.get('/:id/users', function(req, res, next) {
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-	mongoConnection.getDB().collection("groups").find({"_id" : id},{projection:{_id: 0, Users: 1}}).toArray(function(err,result){
+	mongoConnection.getDB().collection("groups").find({"_id" : id},{projection:{_id: 0, Users: 1}}).map(function(item){return item.Users;}).toArray(function(err,result){
 		if(err)return res.sendStatus(500);
-		return res.send(result);
+		return res.send(result[0]);
 	});
 	//res.sendStatus('i am getting group things based on group ID: '+ id);
 });
