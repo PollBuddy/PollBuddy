@@ -11,14 +11,14 @@ router.post('/new/', function(req,res){
 router.post('/:id/edit/', function(req,res){
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
 	var jsonContent = req.body;
-	if(jsonContent.Action === "Add"){
+	if(jsonContent.Action === "Add") {
 		if(jsonContent.Question !== undefined)
 			mongoConnection.getDB().collection("polls").updateOne({"_id" : id},{"$set":{Question: jsonContent.Question}}, function(err,res){
 				if(err)return res.sendStatus(500);
 			});
 		else
 			return res.sendStatus(400);
-	}else if(jsonContent.Action === "Remove"){
+	} else if(jsonContent.Action === "Remove") {
 		if(jsonContent.Question !== undefined)
 			mongoConnection.getDB().collection("polls").updateOne({"_id" : id},{"$unset":{Question: ""}}, function(err,res){
 				if(err)return res.sendStatus(500);
@@ -35,7 +35,7 @@ router.post('/:id/delete/', function(req,res){//use router.delete??
 	});
 	return res.sendStatus(200);
 });
-// GET users listing.
+// GET polls listing.
 router.get('/', function(req, res, next) {
 	mongoConnection.getDB().collection("polls").find({}).toArray(function(err, result){
 		res.send(result);
@@ -47,7 +47,6 @@ router.get('/:id/', function(req, res, next) {
 		if(err)return res.sendStatus(500);
 		res.send(result);
 	});
-	//res.sendStatus('i am getting poll ID: ' + id);
 });
 
 module.exports = router;
