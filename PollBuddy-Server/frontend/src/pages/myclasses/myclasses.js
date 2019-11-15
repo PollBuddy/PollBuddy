@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Link } from '@reach/router';
 import { MDBBtn, MDBIcon, MDBContainer } from "mdbreact";
 import 'mdbreact/dist/css/mdb.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -41,7 +42,6 @@ export default class Myclasses extends Component {
           </MDBBtn>
 
         <hr class="line_style"></hr>
-
         <header className="header">
             <br></br> SELECT A CLASS:
         </header>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Router, Link } from '@reach/router';
+import { Link } from '@reach/router';
 
 import logo from '../../logo.svg';
 
@@ -26,7 +26,6 @@ export default class homepage extends Component {
               <p>
                 Edit <code>src/App.js</code> and save to reload.
               </p>
-
               <Link to="myclasses">Go to my MyClasses</Link>
               <Link to="/">Go to my home</Link>
 
@@ -34,19 +33,6 @@ export default class homepage extends Component {
 
         
           <body>
-            
-            <p>
-              hey yall.
-            </p>
-
-            <button onClick={toBlue}>
-              Click me!
-            </button>
-
-            <button onClick={toRed}>
-              No, click me!
-            </button>
-
           </body>
       </div>
       </div>
