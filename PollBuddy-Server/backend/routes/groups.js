@@ -53,6 +53,7 @@ router.post('/:id/edit/', function(req,res){
 	} else {
 		return res.sendStatus(400);
 	}
+	return res.sendStatus(200);
 });
 router.post('/:id/delete/', function(req,res){//use router.delete??
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
@@ -76,7 +77,7 @@ router.get('/:id/', function(req, res, next) {
 });
 router.get('/:id/polls', function(req, res, next) {
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-	mongoConnection.getDB().collection("groups").find({"_id" : id},{projection:{_id: 0, Polls: 1}}).toArray(function(err,result){
+	mongoConnection.getDB().collection("groups").find({"_id" : id},{projection:{_id: 0, PollID: 1}}).toArray(function(err,result){
 		if(err)return res.sendStatus(500);
 		return res.send(result);
 	});
@@ -84,7 +85,7 @@ router.get('/:id/polls', function(req, res, next) {
 });
 router.get('/:id/users', function(req, res, next) {
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-	mongoConnection.getDB().collection("groups").find({"_id" : id},{projection:{_id: 0, Users: 1}}).toArray(function(err,result){
+	mongoConnection.getDB().collection("groups").find({"_id" : id},{projection:{_id: 0, UserID: 1}}).toArray(function(err,result){
 		if(err)return res.sendStatus(500);
 		return res.send(result);
 	});
