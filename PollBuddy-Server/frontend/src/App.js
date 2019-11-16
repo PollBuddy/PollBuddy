@@ -12,6 +12,7 @@ import Myclasses from './pages/myclasses'
 import Lessons from './pages/lessons';
 import Lesson from './pages/lesson';
 import Notfound from './pages/notfound'
+import Login from './pages/Login Page/login'
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
         <Myclasses path="/myclasses" />
         <Lessons path="/lessons" />
         <Lesson path="/lesson/:lessonId" />
+        <Login path="/login"/>
         <Notfound default />
       </Router>
     </React.Fragment>
