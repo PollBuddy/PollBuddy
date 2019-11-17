@@ -18,7 +18,13 @@ COPY public ./public
 COPY routes ./routes
 COPY views ./views
 COPY app.js ./
+COPY modules ./modules
 
 EXPOSE 3000
 
-CMD [ "node", "bin/www" ]
+# Wait for database to come up
+# See https://dev.to/hugodias/wait-for-mongodb-to-start-on-docker-3h8b
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
+RUN chmod +x /wait
+
+CMD /wait && node bin/www

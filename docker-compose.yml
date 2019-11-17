@@ -9,6 +9,10 @@ services:
     ports:
       - "3001:3001"
     build: PollBuddy-Server/backend
+    depends_on:
+      - db
+    environment:
+      WAIT_HOSTS: db:27017
   
   db:
     image: "mongo"
