@@ -22,9 +22,4 @@ COPY modules ./modules
 
 EXPOSE 3000
 
-# Wait for database to come up
-# See https://dev.to/hugodias/wait-for-mongodb-to-start-on-docker-3h8b
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.2.1/wait /wait
-RUN chmod +x /wait
-
-CMD /wait && node bin/www
+CMD node bin/www
