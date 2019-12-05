@@ -5,29 +5,27 @@ import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
 import { Router, Link } from '@reach/router';
 
 export default class homepage extends Component {
-    render() {
-        return (
-            <div className="page-homepage">
+  render() {
+    return (
+        <MDBContainer className="page-homepage">
             <header className="Homepage-header">
 
-            <h1>
-            Welcome to PollBuddy!
-            </h1>
+                <h1>
+                    Welcome to PollBuddy!
+                </h1>
 
-        <div className="d-flex p-2 Homepage-box">
-            <h1>
-            PollBuddy is an interactive platform for educators to connect with their students in a virtual classroom, where
-            educators can ask questions during class.
-            </h1>
-        </div>
+                <MDBContainer className="d-flex p-2 Homepage-box">
+                    PollBuddy is an interactive platform for educators to connect with their students in a virtual classroom, where
+                    educators can ask questions during class.
+                </MDBContainer>
 
-        <div className="text-right">
-            <MDBBtn size = "lg"  color = "secondary">Sign In</MDBBtn>
-            <MDBBtn size = "lg"  color = "secondary">Sign Up</MDBBtn>
-        </div>
+                <MDBContainer className="text-right">
+                    <MDBBtn size = "lg"  color = "secondary">Sign In</MDBBtn>
+                    <MDBBtn size = "lg"  color = "secondary">Sign Up</MDBBtn>
+                </MDBContainer>
 
-        </header>
-        </div>
+            </header>
+        </MDBContainer>
     )
-    }
+  }
 }
