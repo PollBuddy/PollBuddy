@@ -47,42 +47,43 @@ export default class Myclasses extends Component {
         </header>
 
           <MDBContainer className="buttons">
+              <Link to="/lessons">
+                  <MDBBtn
+                      size="lg"
+                      className="class1"
+                      href="/"
+                      color="secondary"
+                  >
+                      CSCI 1200
+                  </MDBBtn>
 
-          <MDBBtn
-              size="lg"
-              className="class1"
-              href="/"
-              color="secondary"
-          >
-              CSCI 1200
-          </MDBBtn>
+                  <MDBBtn
+                      size="lg"
+                      className="class2"
+                      href="/"
+                      color="secondary"
+                  >
+                      MATH 2010
+                  </MDBBtn>
 
-          <MDBBtn
-              size="lg"
-              className="class2"
-              href="/"
-              color="secondary"
-          >
-              MATH 2010
-          </MDBBtn>
+                  <MDBBtn
+                      size="lg"
+                      className="class3"
+                      href="/"
+                      color="secondary"
+                  >
+                      MGMT 1010
+                  </MDBBtn>
 
-          <MDBBtn
-              size="lg"
-              className="class3"
-              href="/"
-              color="secondary"
-          >
-              MGMT 1010
-          </MDBBtn>
-
-          <MDBBtn
-              size="lg"
-              className="class4"
-              href="/"
-              color="secondary"
-          >
-              ARTS 2020
-          </MDBBtn>
+                  <MDBBtn
+                      size="lg"
+                      className="class4"
+                      href="/"
+                      color="secondary"
+                  >
+                      ARTS 2020
+                  </MDBBtn>
+              </Link>
 
           </MDBContainer>
           <MDBBtn
