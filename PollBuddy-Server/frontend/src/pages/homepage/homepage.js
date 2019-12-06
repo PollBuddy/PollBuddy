@@ -20,7 +20,9 @@ export default class homepage extends Component {
                 </MDBContainer>
 
                 <MDBContainer className="text-right">
-                    <MDBBtn size = "lg"  color = "secondary">Sign In</MDBBtn>
+                    <Link to={"/login"}>
+                        <MDBBtn size = "lg"  color = "secondary">Sign In</MDBBtn>
+                    </Link>
                     <MDBBtn size = "lg"  color = "secondary">Sign Up</MDBBtn>
                 </MDBContainer>
 
