@@ -1,0 +1,25 @@
+.page-classcreation{
+    background-color: #e8ceff;
+}
+//old pink: #f3e1ff
+.Classcreation-header{
+        background-color: #e8ceff;
+        min-height: 40vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: calc(10px + 10vmin);
+        color: white;
+}
+
+.Classcreation-Box{
+    padding: 3rem;
+    background-color: #c274e5;
+    min-height: 48vh;
+    border: 2px solid #fff;
+    color: #fff;
+    text-align: center;
+    font-size: calc(10px + 2vmin);
+    color:white
+}
