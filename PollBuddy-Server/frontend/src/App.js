@@ -5,8 +5,8 @@ import { Router, Link } from "@reach/router";
 import './App.css';
 import Myclasses from './pages/myclasses'
 import Homepage from './pages/homepage'
-import Login from './pages/login'
-import Classcreation from './pages/classcreation'
+import Login from './pages/Login Page/login'
+import Classcreation from './pages/classcreation/classcreation'
 
 function App() {
 
