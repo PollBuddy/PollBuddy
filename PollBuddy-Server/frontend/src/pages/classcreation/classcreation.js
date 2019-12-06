@@ -6,7 +6,7 @@ import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
 export default class classcreation extends Component {
   render() {    
     return (
-     <div className="page-classcreation">
+     <MDBContainer className="page-classcreation">
 
         <header className="Classcreation-header">
             <h>
@@ -14,7 +14,7 @@ export default class classcreation extends Component {
             </h>
         </header>
 
-        <div className="d-flex p-2 Classcreation-Box">
+        <MDBContainer className="d-flex p-2 Classcreation-Box">
 
             <header Classcreation = "ClasscreationElements">
 
@@ -23,7 +23,7 @@ export default class classcreation extends Component {
                         <MDBCol md="6">
                             <form>
                                 <p className="h5 text-center mb-4">Enter Your Classroom Name Below</p>
-                                <div className="white-text">
+                                <MDBContainer className="white-text">
                                     <MDBInput
                                         label="Enter name"
                                         icon="envelope"
@@ -42,7 +42,7 @@ export default class classcreation extends Component {
                                         type="password"
                                         validate
                                     />
-                                </div>
+                                </MDBContainer>
                                 <MDBBtn size = "sm" color = "secondary">Create Classroom</MDBBtn>
                         </form>
                     </MDBCol>
@@ -51,9 +51,9 @@ export default class classcreation extends Component {
 
              </header>
 
-         </div>
+         </MDBContainer>
 
-        </div>
+        </MDBContainer>
     )
   }
 }
