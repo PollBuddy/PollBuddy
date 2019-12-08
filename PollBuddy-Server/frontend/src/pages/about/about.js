@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { Link } from '@reach/router';
 import { MDBBtn, MDBIcon, MDBContainer,MDBSwitch } from "mdbreact";
 import 'mdbreact/dist/css/mdb.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
