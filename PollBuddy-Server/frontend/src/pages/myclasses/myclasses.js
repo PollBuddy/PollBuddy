@@ -26,7 +26,7 @@ export default class Myclasses extends Component {
           <MDBBtn
               size="lg"
               className="about_button"
-              href="/"
+              href="/about"
               color="secondary"
           >
               <MDBIcon icon="question" />
@@ -35,7 +35,7 @@ export default class Myclasses extends Component {
           <MDBBtn
               size="lg"
               className="settings_button"
-              href="/"
+              href="/settings_page"
               color="secondary"
           >
             <MDBIcon icon="tools" />

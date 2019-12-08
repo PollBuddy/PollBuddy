@@ -8,6 +8,7 @@ import 'mdbreact/dist/css/mdb.css';
 
 import './App.css';
 import Homepage from './pages/homepage'
+import About from './pages/about/about.js'
 import Myclasses from './pages/myclasses'
 import Settings_page from './pages/settings_page'
 import Lessons from './pages/lessons';
@@ -25,6 +26,7 @@ function App() {
       */}  
       <Router>
         <Homepage path="/" />
+        <About path="/about" />
         <Myclasses path="/myclasses" />
         <Settings_page path="/settings_page" />
         <Lessons path="/lessons" />

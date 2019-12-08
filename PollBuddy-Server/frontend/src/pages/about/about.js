@@ -5,22 +5,14 @@ import 'mdbreact/dist/css/mdb.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import new_logo from '../../Poll_Buddy_Logo_v4.png';
-import './settings_page.scss'
+import './about.scss'
 
-export default class settings_page extends Component {
-    state = {
-        dark_mode_switch: true,
-    }
-    handleSwitchChange = nr => () => {
-        let switchNumber = `switch${nr}`;
-        this.setState({
-            [switchNumber]: !this.state[switchNumber]
-        });
-    }
+export default class about extends Component {
+
     render() {
 
         return (
-            <MDBContainer className="page-settings-page">
+            <MDBContainer className="page-about">
                 <img src={new_logo} className="top_left_logo" alt="logo"/>
 
                 <MDBBtn
@@ -52,38 +44,12 @@ export default class settings_page extends Component {
 
                 <hr class="line_style"></hr>
                 <header className="header">
-                    <br></br> SETTINGS
+                    <br></br> About PollBuddy
                 </header>
 
-                <MDBContainer className='custom-control custom-switch'>
-                    <input
-                        type='checkbox'
-                        className='custom-control-input'
-                        id='customSwitches'
-                        checked={this.state.switch1}
-                        onChange={this.handleSwitchChange(1)}
-                        readOnly
-                    />
-                    <label className='custom-control-label' htmlFor='customSwitches'>
-                        Dark Mode
-                    </label>
-                </MDBContainer>
-                <MDBBtn
-                    size="lg"
-                    className="change_password"
-                    href="/"
-                    color="secondary"
-                >
-                    Change your password
-                </MDBBtn>
-                <MDBBtn
-                    size="lg"
-                    className="change_username"
-                    href="/"
-                    color="secondary"
-                >
-                    Change your username
-                </MDBBtn>
+                <body className="body">
+                    <br></br> PollBuddy is an RCOS project designed to replace the iClicker. It was created in the fall 2019 semester.
+                </body>
 
                 <MDBBtn
                     href="https://rcos.io/"
