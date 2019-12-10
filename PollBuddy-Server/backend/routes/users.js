@@ -2,6 +2,7 @@ var createError = require('http-errors');
 var express = require('express');
 var router = express.Router();
 var mongoConnection = require('../modules/mongoConnection.js');
+var bcrypt = require('bcrypt');
 
 // GET users listing.
 router.get('/', function(req, res, next) {
@@ -11,6 +12,19 @@ router.get('/', function(req, res, next) {
 });
 router.get('/login/', function(req, res, next) {
 	res.send('i am a login processor');
+});
+
+router.post('/register', function(req, res, next){
+	var requestBody = req.body;
+
+	mongoConnection.getDB().collection('users').insertOne({
+		FirstName: requestBody.firstName,
+		LastName: requestBody.lastName,
+		Username: requestBody.username,
+		Email: requestBody.email,
+		Password: bcrypt.hashSync(requestBody.password, 10)
+	});
+	res.send(200);
 });
 
 router.get('/:id/', function(req, res, next) {
