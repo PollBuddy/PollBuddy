@@ -1,65 +1,33 @@
 import React, {Component} from 'react';
+import './homepage.scss'
+import 'mdbreact/dist/css/mdb.css';
+import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
 import { Router, Link } from '@reach/router';
 
-import Myclasses from '../myclasses'
-
-import logo from '../../logo.svg';
-
-import './homepage.scss'
 export default class homepage extends Component {
-
-  
-  render() { 
-    
-    function toBlue() {
-      document.body.style = 'background: blue;';
-    }
-    function toRed() {
-      document.body.style = 'background: red;';
-    }   
+  render() {
     return (
-        <div className="page-homepage">
-          <div className="App">
-            <header className="App-header">
-              <h1>
-                Welcome to PollBuddy!!!!
-              </h1>
-              <img src={logo} className="App-logo" alt="logo" />
-              <p>
-                Edit <code>src/App.js</code> and save to reload.
-              </p>
-              <Myclasses></Myclasses>
-              {/* <a
-                className="App-link"
-                href="https://reactjs.org"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Learn React
-              </a> */}
-              <Link to="myclasses">Go to my MyClasses</Link>
-              <Link to="/">Go to my home</Link>
+        <MDBContainer className="page-homepage">
+            <header className="Homepage-header">
+
+                <h1>
+                    Welcome to PollBuddy!
+                </h1>
+
+                <MDBContainer className="d-flex p-2 Homepage-box">
+                    PollBuddy is an interactive platform for educators to connect with their students in a virtual classroom, where
+                    educators can ask questions during class.
+                </MDBContainer>
+
+                <MDBContainer className="text-right">
+                    <Link to={"/login"}>
+                        <MDBBtn size = "lg"  color = "secondary">Sign In</MDBBtn>
+                    </Link>
+                    <MDBBtn size = "lg"  color = "secondary">Sign Up</MDBBtn>
+                </MDBContainer>
 
             </header>
-
-        
-          <body>
-            
-            <p>
-              hey yall.
-            </p>
-
-            <button onClick={toBlue}>
-              Click me!
-            </button>
-
-            <button onClick={toRed}>
-              No, click me!
-            </button>
-
-          </body>
-      </div>
-      </div>
+        </MDBContainer>
     )
   }
 }
