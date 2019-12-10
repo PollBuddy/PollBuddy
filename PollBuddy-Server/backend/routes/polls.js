@@ -51,6 +51,13 @@ router.post('/:id/submit/', function(req,res){//todo
 	}
 	return res.sendStatus(400);
 });
+router.get('/pollAnswers/', function(req,res,next){
+	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+	mongoConnection.getDB().collection("poll_answers").deleteOne({"_id" : id}, function(err,res){
+		if(err)return res.sendStatus(500);
+	});
+	return res.sendStatus(200);
+});
 router.post('/:id/delete/', function(req,res){//use router.delete??
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
 	mongoConnection.getDB().collection("polls").deleteOne({"_id" : id}, function(err,res){
