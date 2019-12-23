@@ -32,7 +32,7 @@ router.post('/:id/submit/', function(req,res){//todo
 	var jsonContent = req.body;
 	var pollId = new mongoConnection.getMongo().ObjectID(req.params.id);
 	var count = 0;
-	if(pollId!=undefined&&UserID!=undefined){
+	if(pollId!=undefined&&jsonContent.UserID!=undefined){
 		mongoConnection.getDB().collection("poll_answers").find({"$and" :[{"PollID" : pollId}, {"UserID" : jsonContent.UserID}]}).toArray(function(err, result){
 			if(err)count = 0;
 			count = result.length;
