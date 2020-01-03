@@ -14,7 +14,8 @@ export default class lesson extends Component {
     this.askQuestion = this.askQuestion.bind(this);
 
     // Add questions to state
-    let questions = require('./placeholder');
+    //fetch(http://localhost:3001/<pollID>/) //this should return the correct information on that specific pollID
+    let questions = require('./placeholder');//./placeholder will need to be changed into the json file in the get call or something
 
     this.state = {
       questions: questions.questions,
