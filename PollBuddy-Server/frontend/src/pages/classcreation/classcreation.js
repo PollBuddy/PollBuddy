@@ -12,16 +12,17 @@ export default class classcreation extends Component {//this class will likely n
         };
     }
     handleClick = () => {
-        console.log(JSON.stringify({
-            Name: this.state.name
-        }));
-        fetch('http://localhost:3001/api/groups/new/', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
-            body: JSON.stringify({
-                Name: this.state.name
-            })
-        });
+        if (this.state.name != "")
+            fetch('http://localhost:3001/api/groups/new/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+                body: JSON.stringify({
+                    Name: this.state.name
+                })
+            });/*note that this does not contain the trailing stuffs 
+            as template class does due to the backend route not returning
+             anything for this endpoint... also no need for error checking 
+             because should always work... but probably should put in later maybe*/
     }
     handleInput = e => {
         this.setState({
