@@ -27,7 +27,32 @@ export default class Template extends Component {//this class is an example of h
                 })
             }
         })
-        console.log(this.state.groups);
+        this.stringifyGroups();
+        console.log(this.state.groups);//this is working... this sends the data to the console. Instead needs to be dynamically shown in the render function....
+        console.log(this.state.text);
+    }
+    stringifyGroups(){//THIS IS NONFUNCTIONAL BUT THE IDEA IS TO HAVE IT BE ABLE TO BE READ ON AN COMPONENT OR SOMETHING...
+        //really this all could have been one var but i did this to demonstrate if one were to do this properly
+        let t = "";
+        for (let i = 0; i < this.state.groups.length; i++) {
+            t += "Name: " + this.state.groups[i].Name + "\n";
+            t += "\t_id: " + this.state.groups[i]._id + "\n";
+            if (this.state.groups[i].InstructorID !== undefined)
+                for (let j = 0; j < this.state.groups[i].PollID.length; j++)//because pollID is an array of pollIDs. Refer to backend documentation
+                    fetch('http://localhost:3001/api/users/' + this.state.groups[i].PollID[j] + '/').then(res => {
+                        return res.json();
+                    }).then(myJson => {
+                        t += "\tInstructorName" + myJson.Name + "\n";
+                    })
+            if (this.state.groups[i].PollID !== undefined)//this is necessary due to some fields being uninitiated. Name and ID should be initiated for all else
+                for (let j = 0; j < this.state.groups[i].PollID.length; j++)//because pollID is an array of pollIDs. Refer to backend documentation
+                    fetch('http://localhost:3001/api/polls/' + this.state.groups[i].PollID[j] + '/').then(res => {
+                        return res.json();
+                    }).then(myJson => {
+                        t += "\tPollName" + myJson.Name + "\n";
+                    })
+        }
+        this.state.text = t;//or return t
     }
     /*backend users routes isn't completely finished i think so 
     cannot start working on a completely functional users page 
@@ -42,7 +67,7 @@ export default class Template extends Component {//this class is an example of h
         </header>
 
                 <MDBContainer className="buttons">
-
+                    //refer to console to see that the gets return the correct information.
                 </MDBContainer>
                 <MDBBtn
                     href="https://rcos.io/"
