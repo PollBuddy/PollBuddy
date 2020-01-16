@@ -24,7 +24,7 @@ router.post('/register', function(req, res, next){
 		Email: requestBody.email,
 		Password: bcrypt.hashSync(requestBody.password, 10)
 	});
-	res.send(200);
+	return res.sendStatus(200);
 });
 
 router.get('/:id/', function(req, res, next) {
