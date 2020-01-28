@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Link } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 import { MDBBtn, MDBIcon, MDBContainer } from "mdbreact";
 import 'mdbreact/dist/css/mdb.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -8,8 +8,18 @@ import new_logo from '../../Poll_Buddy_Logo_v4.png';
 import './myclasses.scss'
 
 export default class Myclasses extends Component {
-  render() {
-
+  constructor(){
+    super();
+            console.log(localStorage.getItem('loggedIn'));//todo remove
+    if(!localStorage.getItem('loggedIn'))navigate('/login');//HEY FRONTEND WHY DON'T YOU PPL IMPLEMENT A LOGOUT/SIGNOUT BUTTON PLEASE. FOR NOW AM PUTTING THAT FUNCTIONALITY IN SETTINGS BUTTON
+  }
+  signout(){
+    //todo make sure this shit works
+    console.log("reached");
+    localStorage.removeItem('loggedIn');//todo if admin and shit
+    navigate('/login');
+  }
+  render() { 
     return (
       <MDBContainer className="page-my-classes">
           <img src={new_logo} className="top_left_logo" alt="logo"/>
@@ -34,8 +44,8 @@ export default class Myclasses extends Component {
 
           <MDBBtn
               size="lg"
-              className="settings_button"
-              href="/"
+              className="settings_button"//ACTUALLY SIGNOUT BUTTON FOR NOW
+              onClick ={this.signout}
               color="secondary"
           >
             <MDBIcon icon="tools" />
