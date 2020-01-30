@@ -107,7 +107,7 @@ export default class Myclasses extends Component {
           </MDBBtn>
 
           <MDBBtn
-              href="https://github.com/neha-deshpande001/PollBuddy"
+              href="https://github.com/PollBuddy/PollBuddy"
               className="github_button"
               target="_blank"
               size="m"
