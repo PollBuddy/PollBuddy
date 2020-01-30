@@ -11,7 +11,10 @@ export default class Myclasses extends Component {
   constructor(){
     super();
             console.log(localStorage.getItem('loggedIn'));//todo remove
-    if(!localStorage.getItem('loggedIn'))navigate('/login');//HEY FRONTEND WHY DON'T YOU PPL IMPLEMENT A LOGOUT/SIGNOUT BUTTON PLEASE. FOR NOW AM PUTTING THAT FUNCTIONALITY IN SETTINGS BUTTON
+    if(!localStorage.getItem('loggedIn')){
+      navigate('/login');//HEY FRONTEND WHY DON'T YOU PPL IMPLEMENT A LOGOUT/SIGNOUT BUTTON PLEASE. FOR NOW AM PUTTING THAT FUNCTIONALITY IN SETTINGS BUTTON
+      window.location.reload(false);//this forces a reload so this will make the user go to the login page. A little barbaric but it works. If frontend wants to make it better by all means
+    }
   }
   signout(){
     //todo make sure this shit works

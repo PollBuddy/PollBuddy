@@ -7,7 +7,10 @@ export default class login extends Component {
     constructor(){
         super();
         console.log(localStorage.getItem('loggedIn'));//todo remove if this works
-        if(localStorage.getItem('loggedIn'))navigate('/myclasses');//todo test if this works
+        if(localStorage.getItem('loggedIn')){
+            navigate('/myclasses');//todo test if this works
+            window.location.reload(false);//this forces a reload... a little barbaric i am aware
+        }
     }
     handleLogin() {
         //needs some authentication before and if authentication passes then set local storage and such
