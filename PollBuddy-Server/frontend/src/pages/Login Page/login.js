@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 import './login.scss'
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
+import {Link} from "@reach/router";
 
 export default class login extends Component {
   render() {    
     return (
-     <div className="page-login">
-
+     <MDBContainer className="page-login">
           <MDBBtn size = "lg"  color = "secondary">About Us</MDBBtn>
 
         <header className="Login-header">
@@ -15,9 +15,7 @@ export default class login extends Component {
               PollBuddy
             </h2>
         </header>
-
-        <div className="d-flex p-2 Login-Box">
-
+        <MDBContainer className="d-flex p-2 Login-Box">
             <header Login = "LoginElements">
 
                 <MDBContainer>
@@ -25,7 +23,7 @@ export default class login extends Component {
                         <MDBCol md="6">
                             <form>
                                 <p className="h5 text-center mb-4">Sign in</p>
-                                <div className="white-text">
+                                <MDBContainer className="white-text">
                                     <MDBInput
                                         label="Type your email"
                                         icon="envelope"
@@ -42,11 +40,13 @@ export default class login extends Component {
                                         type="password"
                                         validate
                                     />
-                                </div>
-                            <div className="text-right">
-                                <MDBBtn size = "lg" color = "secondary">Sign In</MDBBtn>
+                                </MDBContainer>
+                            <MDBContainer className="text-right">
+                                <Link to={"/myclasses"}>
+                                    <MDBBtn size = "lg" color = "secondary">Sign In</MDBBtn>
+                                </Link>
                                 <MDBBtn size = "lg" color = "secondary">Forgot Your Password</MDBBtn>
-                            </div>
+                            </MDBContainer>
                         </form>
                     </MDBCol>
                     </MDBRow>
@@ -54,9 +54,9 @@ export default class login extends Component {
 
              </header>
 
-         </div>
+         </MDBContainer>
 
-        </div>
+        </MDBContainer>
     )
   }
 }

@@ -1,18 +1,17 @@
 import React from 'react';
-import { Router } from "@reach/router";
+import { Router, Link } from "@reach/router";
 
-// ---- MDBReact ----
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import 'bootstrap-css-only/css/bootstrap.min.css';
-import 'mdbreact/dist/css/mdb.css';
 
 import './App.css';
-import Homepage from './pages/homepage'
 import Myclasses from './pages/myclasses'
-import Lessons from './pages/lessons';
+
+import Homepage from './pages/homepage'
+import Login from './pages/Login Page/login'
+import Classcreation from './pages/classcreation/classcreation'
+import Lessons from './pages/lessons/lessons'
 import Lesson from './pages/lesson';
 import Notfound from './pages/notfound'
-import Login from './pages/Login Page/login'
+import Template from './pages/template/template'
 
 function App() {
 
@@ -22,14 +21,16 @@ function App() {
         Reach Router implementation.
         Each page/component with a path has its own route defined below.
         Link to them with link tags
-      */}  
+      */}
       <Router>
-        <Homepage path="/" />
         <Myclasses path="/myclasses" />
+        <Homepage path="/" />
         <Lessons path="/lessons" />
-        <Lesson path="/lesson/:lessonId" />
-        <Login path="/login"/>
         <Notfound default />
+        <Lesson path="/lesson/:lessonId" />
+        <Login path="/login" />
+        <Classcreation path="/classcreation" />
+        <Template path="/template" />
       </Router>
     </React.Fragment>
   );

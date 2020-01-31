@@ -1,41 +1,33 @@
 import React, {Component} from 'react';
-import { Link } from '@reach/router';
-
-import logo from '../../logo.svg';
-
 import './homepage.scss'
-export default class homepage extends Component {
+import 'mdbreact/dist/css/mdb.css';
+import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
+import { Router, Link } from '@reach/router';
 
-  
-  render() { 
-    
-    function toBlue() {
-      document.body.style = 'background: blue;';
-    }
-    function toRed() {
-      document.body.style = 'background: red;';
-    }   
+export default class homepage extends Component {
+  render() {
     return (
-        <div className="page-homepage">
-          <div className="App">
-            <header className="App-header">
-              <h1>
-                Welcome to PollBuddy!!!!
-              </h1>
-              <img src={logo} className="App-logo" alt="logo" />
-              <p>
-                Edit <code>src/App.js</code> and save to reload.
-              </p>
-              <Link to="myclasses">Go to my MyClasses</Link>
-              <Link to="/">Go to my home</Link>
+        <MDBContainer className="page-homepage">
+            <header className="Homepage-header">
+
+                <h1>
+                    Welcome to PollBuddy!
+                </h1>
+
+                <MDBContainer className="d-flex p-2 Homepage-box">
+                    PollBuddy is an interactive platform for educators to connect with their students in a virtual classroom, where
+                    educators can ask questions during class.
+                </MDBContainer>
+
+                <MDBContainer className="text-right">
+                    <Link to={"/login"}>
+                        <MDBBtn size = "lg"  color = "secondary">Sign In</MDBBtn>
+                    </Link>
+                    <MDBBtn size = "lg"  color = "secondary">Sign Up</MDBBtn>
+                </MDBContainer>
 
             </header>
-
-        
-          <body>
-          </body>
-      </div>
-      </div>
+        </MDBContainer>
     )
   }
 }
