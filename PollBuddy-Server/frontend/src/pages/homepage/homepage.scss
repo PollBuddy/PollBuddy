@@ -1,10 +1,10 @@
 .page-homepage{
-  background-color: #e8ceff;
+  background-color: #6200EE;
 }
 
 .Homepage-header{
-  background-color: #e8ceff;
-  min-height: 100vh;
+  background-color: wheat;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -32,4 +32,85 @@
   text-align: center;
   font-size: calc(20px + 0.3vmin);
   color:white
+}
+.gradient {
+  position: relative;
+  height: 100vh;
+  background-image: linear-gradient(
+    to right,
+    hsl(31, 100%, 40%),
+    hsl(248, 39%, 39%)
+  );
+  z-index: 1;
+}
+
+.gradient::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: linear-gradient(
+    to bottom,
+    hsl(248, 39%, 39%),
+    hsl(31, 100%, 40%)
+  );
+  z-index: -1;
+  transition: opacity 0.5s linear;
+  opacity: 0;
+}
+.gradient:hover::before {
+  opacity: 1;
+}
+.center {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
+.signup-login{
+  position: fixed;
+  top: 3%;
+  left: 5%;
+  transform: translate(-50%, -50%);
+  height: 2.375rem;
+  width: 3rem;
+  line-height: 2.375rem;
+  text-align: center;
+  max-width: 18.75rem;
+  min-width: 10.25rem;
+  color: rgb(51, 51, 51);
+  font-size: 1.25rem;
+  outline: white;
+}
+.poll-pin {
+  position: fixed;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 2.375rem;
+  line-height: 2.375rem;
+  text-align: center;
+  max-width: 18.75rem;
+  min-width: 15.25rem;
+  color: rgb(51, 51, 51);
+  font-size: 1.25rem;
+  outline: white;
+}
+.enter-code{
+  position: fixed;
+  top: 65%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 2.7rem;
+  line-height: 2.375rem;
+  text-align: center;
+  max-width: 18.75rem;
+  min-width: 15.65rem;
+  color: white;
+  font-size: 1.25rem;
+  border-color: black;
+  background-color: black;
 }
