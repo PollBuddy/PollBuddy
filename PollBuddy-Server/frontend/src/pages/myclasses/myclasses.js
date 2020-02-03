@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Link } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 import { MDBBtn, MDBIcon, MDBContainer } from "mdbreact";
 import 'mdbreact/dist/css/mdb.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -7,9 +7,19 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import new_logo from '../../Poll_Buddy_Logo_v4.png';
 import './myclasses.scss'
 
-export default class Myclasses extends Component {
-  render() {
-
+export default class Myclasses extends Component {//TODO IMPLEMENT A LOGOUT/SIGNOUT BUTTON PLEASE. FOR NOW AM PUTTING THAT FUNCTIONALITY IN SETTINGS BUTTON
+  constructor(){
+    super();
+    if(!localStorage.getItem('loggedIn')){
+      navigate('/login');//this is a way to redirect the user to the page
+      window.location.reload(false);//this forces a reload so this will make the user go to the login page. A little barbaric but it works. If frontend wants to make it better by all means
+    }
+  }
+  signout(){
+    localStorage.removeItem('loggedIn');//todo if admin and shit -- more specifically make diff states if the user who logged in is an admin... or teacher. wouldn't want teacher accessing user things or vice versa...
+    navigate('/login');
+  }
+  render() { 
     return (
       <MDBContainer className="page-my-classes">
           <img src={new_logo} className="top_left_logo" alt="logo"/>
@@ -34,8 +44,8 @@ export default class Myclasses extends Component {
 
           <MDBBtn
               size="lg"
-              className="settings_button"
-              href="/"
+              className="settings_button"//ACTUALLY SIGNOUT BUTTON FOR NOW
+              onClick ={this.signout}
               color="secondary"
           >
             <MDBIcon icon="tools" />
@@ -47,42 +57,43 @@ export default class Myclasses extends Component {
         </header>
 
           <MDBContainer className="buttons">
+              <Link to="/lessons">
+                  <MDBBtn
+                      size="lg"
+                      className="class1"
+                      href="/"
+                      color="secondary"
+                  >
+                      CSCI 1200
+                  </MDBBtn>
 
-          <MDBBtn
-              size="lg"
-              className="class1"
-              href="/"
-              color="secondary"
-          >
-              CSCI 1200
-          </MDBBtn>
+                  <MDBBtn
+                      size="lg"
+                      className="class2"
+                      href="/"
+                      color="secondary"
+                  >
+                      MATH 2010
+                  </MDBBtn>
 
-          <MDBBtn
-              size="lg"
-              className="class2"
-              href="/"
-              color="secondary"
-          >
-              MATH 2010
-          </MDBBtn>
+                  <MDBBtn
+                      size="lg"
+                      className="class3"
+                      href="/"
+                      color="secondary"
+                  >
+                      MGMT 1010
+                  </MDBBtn>
 
-          <MDBBtn
-              size="lg"
-              className="class3"
-              href="/"
-              color="secondary"
-          >
-              MGMT 1010
-          </MDBBtn>
-
-          <MDBBtn
-              size="lg"
-              className="class4"
-              href="/"
-              color="secondary"
-          >
-              ARTS 2020
-          </MDBBtn>
+                  <MDBBtn
+                      size="lg"
+                      className="class4"
+                      href="/"
+                      color="secondary"
+                  >
+                      ARTS 2020
+                  </MDBBtn>
+              </Link>
 
           </MDBContainer>
           <MDBBtn
@@ -106,7 +117,7 @@ export default class Myclasses extends Component {
           </MDBBtn>
 
           <MDBBtn
-              href="https://github.com/neha-deshpande001/PollBuddy"
+              href="https://github.com/PollBuddy/PollBuddy"
               className="github_button"
               target="_blank"
               size="m"

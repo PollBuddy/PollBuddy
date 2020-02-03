@@ -14,7 +14,6 @@ export default class homepage extends Component {
                 <img src={Logo} alt="Hello" className="center"></img>
                 <input  placeholder="Poll Code" className="poll-pin" aria-expanded="false"></input>
                 <button type="submit" class="enter-code"><span>Enter</span></button>               
-
             </header>
         </MDBContainer>
     )

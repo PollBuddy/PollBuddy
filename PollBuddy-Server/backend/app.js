@@ -16,19 +16,6 @@ var app = express();
 // Cors: https://daveceddia.com/access-control-allow-origin-cors-errors-in-react-express/
 app.use(cors());
 
-// MongoDB Database Connection Setup
-/*const MongoClient = require('mongodb').MongoClient;
-const assert = require('assert');
-const url = 'mongodb://db:27017';
-const dbName = 'pollbuddy';
-var db;
-const client = new MongoClient(url);
-client.connect((err) => {
-  if (err) return console.log(err);
-  db = client.db(dbName);
-  console.log("Database connected");
-});*/
-
 var mongoConnection = require('./modules/mongoConnection.js');
 mongoConnection.connect(function(err, client){
   if(err) console.error(err);
@@ -43,7 +30,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/groups', groupsRouter);
 app.use('/api/polls', pollsRouter);
 app.use('/api/users', usersRouter);
-
 
 // When visiting /test, the database connection finds all documents in all collections, and returns them in JSON.
 app.get('/test', (req, res) => {
