@@ -1,9 +1,18 @@
 .page-homepage{
-  background-color: #e8ceff;
+  background-color: #25292A;
+}
+.arrow{
+  align-items: center;
+  color: #707070;
+  margin-top: 3%;
+  transform: scale(4)
 }
 
+html{
+  scroll-behavior: smooth;
+}
 .Homepage-header{
-  background-color: #e8ceff;
+  background-color: #25292A;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -13,8 +22,30 @@
   color: white;
 }
 
+.Homepage-top{
+  background-color: #25292A;
+  min-height: 200vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 6vmin);
+  color: white;
+//  margin-top: 10%;
+
+}
+body {
+  font-family: 'MoolBoran', sans-serif;
+  font-weight: 900;
+}
+button {
+  font-family: 'MoolBoran', sans-serif;
+  font-weight: 900;
+}
+
 .Homepage-buttons{
-  background-color: #e8ceff;
+
+  background-color: #56156F;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -26,10 +57,12 @@
 
 .Homepage-box{
   padding: 1rem;
-  background-color: #c274e5;
-  border: 2px solid #fff;
-  color: #fff;
+  background-color: #8e24aa   ;
+  border: 2px solid #25292A;
   text-align: center;
   font-size: calc(20px + 0.3vmin);
-  color:white
+  color:white;
+  margin-top: 7%;
+
+
 }
