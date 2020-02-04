@@ -1,15 +1,20 @@
 .page-homepage{
   background-color: #25292A;
 }
-.arrow{
-  align-items: center;
-  color: #707070;
-  margin-top: 3%;
-  transform: scale(4)
+.top_left_logo {
+  position: absolute;
+  width: 20%;
+  height: auto;
+  top: 50px;
+  left: 10px;
+  transform: scale(0.8);
 }
-
-html{
-  scroll-behavior: smooth;
+.top_right_button{
+  position: absolute;
+  width: 20%;
+  height: auto;
+  top: 50px;
+  right: 10px;
 }
 .Homepage-header{
   background-color: #25292A;
@@ -24,14 +29,14 @@ html{
 
 .Homepage-top{
   background-color: #25292A;
-  min-height: 200vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 6vmin);
+  top: 50px;
+  font-size: calc(3px + 3vmin);
   color: white;
-//  margin-top: 10%;
 
 }
 body {
@@ -57,12 +62,20 @@ button {
 
 .Homepage-box{
   padding: 1rem;
-  background-color: #8e24aa   ;
+  background-color: #8e24aa;
   border: 2px solid #25292A;
   text-align: center;
   font-size: calc(20px + 0.3vmin);
   color:white;
-  margin-top: 7%;
+  margin-top: 15%;
+  margin-bottom: 25%
+}
 
-
+.poll-code{
+  position: absolute;
+  margin-top: 10%;
+  padding: 10px;
+}
+.form-control:focus {
+  color: #8e24aa;
 }
