@@ -33,7 +33,6 @@ router.get('/:id/', function(req, res, next) {
 		if(err)throw err;
 		res.send(result);
 	});
-	//res.send('i am getting user ID: ' + id);
 });
 
 router.get('/:id/classes', function(req, res, next) {
@@ -42,7 +41,6 @@ router.get('/:id/classes', function(req, res, next) {
 		if(err)throw err;
 		res.send(result);
 	});
-	//res.send('i am getting user ' + id + ' classes');
 });
 
 module.exports = router;

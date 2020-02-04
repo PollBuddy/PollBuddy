@@ -73,7 +73,6 @@ router.get('/:id/', function(req, res, next) {
 		if(err)return res.sendStatus(500);
 		return res.send(result);
 	});
-	//res.sendStatus('i am getting group ID: ' + id);
 });
 router.get('/:id/polls', function(req, res, next) {
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
@@ -81,7 +80,6 @@ router.get('/:id/polls', function(req, res, next) {
 		if(err)return res.sendStatus(500);
 		return res.send(result[0]);
 	});
-	//res.sendStatus('i am getting group things based on group ID: '+ id);
 });
 router.get('/:id/users', function(req, res, next) {
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
@@ -89,7 +87,6 @@ router.get('/:id/users', function(req, res, next) {
 		if(err)return res.sendStatus(500);
 		return res.send(result[0]);
 	});
-	//res.sendStatus('i am getting group things based on group ID: '+ id);
 });
 
 module.exports = router;
