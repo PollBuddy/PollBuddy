@@ -10,20 +10,18 @@ export default class homepage extends Component {
         <MDBContainer className="page-homepage">
             <header className="Homepage-header">
 
-                <h1>
-                    Welcome to PollBuddy!
-                </h1>
+                <img src="logo.svg" class="img-fluid animated bounce infinite logo">
+                </img>
 
-                <MDBContainer className="d-flex p-2 Homepage-box">
-                    PollBuddy is an interactive platform for educators to connect with their students in a virtual classroom, where
-                    educators can ask questions during class.
-                </MDBContainer>
+                <p className = "blurb"> An interactive questionnaire platform made by students, for 
+                students, to strengthen lecture material and class attentiveness.
+                </p>
 
                 <MDBContainer className="text-right">
                     <Link to={"/login"}>
-                        <MDBBtn size = "lg"  color = "secondary">Sign In</MDBBtn>
+                        <button class = "btn button">Sign In</button>
                     </Link>
-                    <MDBBtn size = "lg"  color = "secondary">Sign Up</MDBBtn>
+                    <button class = "btn button">Sign Up</button>
                 </MDBContainer>
 
             </header>
