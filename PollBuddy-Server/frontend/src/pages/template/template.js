@@ -23,7 +23,13 @@ export default class Template extends Component {//this class is an example of h
                 fetch('http://localhost:3001/api/groups/' + myJson[i] + '/').then(res => {//this is how one calls a get request (backend specifically made one for finding a specific group)
                     return res.json();
                 }).then(myJson => {
-                    this.state.groups[i] = myJson;
+                    let tempGroups = this.state.groups;
+                    tempGroups[i] = myJson;
+                    this.setState(prevState => ({
+                                groups: tempGroups
+                            }
+                        )
+                    )
                 })
             }
         })
@@ -67,7 +73,9 @@ export default class Template extends Component {//this class is an example of h
         </header>
 
                 <MDBContainer className="buttons">
-                    {this.state.groups.map((value, index, array) => {console.log(value + index + array)})}
+                    {this.state.groups.map((value, index) => {
+                        return <MDBBtn>{value.id}</MDBBtn>
+                    })}
                 </MDBContainer>
 
             </MDBContainer>
