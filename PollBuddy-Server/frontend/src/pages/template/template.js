@@ -67,9 +67,7 @@ export default class Template extends Component {//this class is an example of h
         </header>
 
                 <MDBContainer className="buttons">
-                    {this.state.groups.map((group, index) => {
-                        console.log(group);
-                    })}
+                    {this.state.groups.map((value, index, array) => {console.log(value + index + array)})}
                 </MDBContainer>
 
             </MDBContainer>
