@@ -9,13 +9,6 @@
   left: 10px;
   transform: scale(0.8);
 }
-.top_right_button{
-  position: absolute;
-  width: 20%;
-  height: auto;
-  top: 50px;
-  right: 10px;
-}
 .Homepage-header{
   background-color: #25292A;
   min-height: 100vh;
@@ -43,10 +36,7 @@ body {
   font-family: 'MoolBoran', sans-serif;
   font-weight: 900;
 }
-button {
-  font-family: 'MoolBoran', sans-serif;
-  font-weight: 900;
-}
+
 
 .Homepage-buttons{
 
@@ -64,6 +54,7 @@ button {
   padding: 1rem;
   background-color: #8e24aa;
   border: 2px solid #25292A;
+  border-radius: 20px;
   text-align: center;
   font-size: calc(20px + 0.3vmin);
   color:white;
@@ -75,7 +66,27 @@ button {
   position: absolute;
   margin-top: 10%;
   padding: 10px;
+  transform: scale(2);
 }
 .form-control:focus {
   color: #8e24aa;
+}
+
+.button {
+  border-radius: 30px;
+  background-color: #8e24aa;
+  color: white;
+  transition-duration: 0.2s;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: calc(13px + 0.3vmin);
+  position: absolute;
+  height: auto;
+  top: 50px;
+  right: 10px;
+}
+
+.button:hover {
+  color: black;
+  transition-duration: 0.2s;
 }
