@@ -74,7 +74,8 @@ export default class Template extends Component {//this class is an example of h
 
                 <MDBContainer className="buttons">
                     {this.state.groups.map((value, index) => {
-                        return <MDBBtn>{value.id}</MDBBtn>
+                        console.log(value);
+                        return <MDBBtn>{value[0]._id}</MDBBtn>//todo maybe fix this so this workaround is unnecessary
                     })}
                 </MDBContainer>
 
