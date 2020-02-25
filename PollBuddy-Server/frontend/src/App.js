@@ -12,6 +12,7 @@ import Lessons from './pages/lessons/lessons'
 import Lesson from './pages/lesson';
 import Notfound from './pages/notfound'
 import Template from './pages/template/template'
+import ClassEditor from "./components/classEditor/classEditor";
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
         <Lesson path="/lesson/:lessonId" />
         <Login path="/login" />
         <Classcreation path="/classcreation" />
+        <ClassEditor path="/classeditor"/>
         <Template path="/template" />
       </Router>
     </React.Fragment>
