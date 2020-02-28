@@ -31,7 +31,6 @@ function App() {
         <Lesson path="/lesson/:lessonId" />
         <Login path="/login" />
         <Classcreation path="/classcreation" />
-        <ClassEditor path="/classeditor"/>
         <Template path="/template" />
       </Router>
     </React.Fragment>

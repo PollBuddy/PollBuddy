@@ -6,6 +6,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import new_logo from '../../Poll_Buddy_Logo_v4.png';
 import './template.scss'
+import ClassEditor from "../../components/classEditor/classEditor";
 
 export default class Template extends Component {//this class is an example of how to use get requests so frontend team can eventually connect to backend refer to class creation for post requests
     constructor() {
@@ -73,10 +74,11 @@ export default class Template extends Component {//this class is an example of h
         </header>
 
                 <MDBContainer className="buttons">
-                    {this.state.groups.map((value, index) => {
-                        console.log(value);
-                        return <MDBBtn>{value[0]._id}</MDBBtn>//todo maybe fix this so this workaround is unnecessary
-                    })}
+                    <ClassEditor id={this.state.groups[0][0]._id}/>
+                    {/*{this.state.groups.map((value, index) => {*/}
+                    {/*    console.log(value);*/}
+                    {/*    return <MDBBtn>{value[0]._id}</MDBBtn>//todo maybe fix this so this workaround is unnecessary*/}
+                    {/*})}*/}
                 </MDBContainer>
 
             </MDBContainer>
