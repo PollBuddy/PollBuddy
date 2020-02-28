@@ -74,7 +74,13 @@ export default class Template extends Component {//this class is an example of h
         </header>
 
                 <MDBContainer className="buttons">
-                    <ClassEditor id={this.state.groups[0][0]._id}/>
+                    <ClassEditor id={()=>{
+                        if(this.state.groups === []){
+                            return -1;
+                        }else{
+                            return this.state.groups[0][0]._id;
+                        }
+                    }}/>
                     {/*{this.state.groups.map((value, index) => {*/}
                     {/*    console.log(value);*/}
                     {/*    return <MDBBtn>{value[0]._id}</MDBBtn>//todo maybe fix this so this workaround is unnecessary*/}

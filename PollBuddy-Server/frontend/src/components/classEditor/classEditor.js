@@ -43,6 +43,9 @@ export default class ClassEditor extends Component {
         console.log("polls: " + this.state.polls);
         console.log("users: " + this.state.users);
         console.log("instructors: " + this.state.instructors);
+        if(this.props.id === -1){
+            return <MDBContainer/>
+        }
         return <MDBContainer>
             <p>{this.state.name}</p>
         </MDBContainer>
