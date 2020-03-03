@@ -14,9 +14,9 @@ export default class accountinfo extends Component {
                   Account Info
               </div>
             </div>
-            <p className="main-body">
-              Hello 
-            </p>
+              <div className="main-body">
+                
+              </div>
           </header>
 
         </MDBContainer>
