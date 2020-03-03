@@ -6,9 +6,20 @@ import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
 export default class accountinfo extends Component {
     render() {
       return (
+        <MDBContainer>
+          <header>
+            <div className="top-bar">
+              <img src="./img/Poll_Buddy_Logo_v4.png" alt="logo"></img>
+              <div className="middle-text">
+                  Account Info
+              </div>
+            </div>
+            <p className="main-body">
+              Hello 
+            </p>
+          </header>
 
-
-
+        </MDBContainer>
       )
     }
 }
