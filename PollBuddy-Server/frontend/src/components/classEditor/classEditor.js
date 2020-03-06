@@ -4,6 +4,8 @@ import {MDBContainer} from "mdbreact";
 
 export default class ClassEditor extends Component {
     constructor(props){
+        console.log(props);
+        console.log(props.id);
         super(props);
         //holds a variable for each piece of information that the backend
         //has
@@ -28,6 +30,7 @@ export default class ClassEditor extends Component {
                 //set the state with the proper information
                 this.setState(
                     {
+                        id: this.props.id,
                         name: obj.name,
                         polls: obj.polls,
                         users: obj.users,
@@ -40,6 +43,8 @@ export default class ClassEditor extends Component {
 
 
     render() {
+        console.log("id: " + this.state.id);
+        console.log("name: " + this.state.name);
         console.log("polls: " + this.state.polls);
         console.log("users: " + this.state.users);
         console.log("instructors: " + this.state.instructors);

@@ -12,10 +12,11 @@ export default class Template extends Component {//this class is an example of h
     constructor() {
         super();
         this.state = {
-            groups: []
+            groups: null
         }
     }
     componentWillMount() {//this function is called before the components are mounted
+        this.state.groups = [];
         fetch('http://localhost:3001/api/groups/').then(res => {//this is how one calls a get request (backend specifically made a method for finding all groups)
             return res.json();
         }).then(myJson => {
@@ -34,7 +35,7 @@ export default class Template extends Component {//this class is an example of h
                 })
             }
         })
-        this.stringifyGroups();
+        //this.stringifyGroups();
         console.log(this.state.groups);//this is working... this sends the data to the console. Instead needs to be dynamically shown in the render function....
         // console.log(this.state.text);
     }
@@ -61,6 +62,16 @@ export default class Template extends Component {//this class is an example of h
         }
         this.state.text = t;//or return t
     }
+    isArrowBorked(){
+        if(this.state.groups === null){
+            return -1;
+        }else{
+            console.log(this.state.groups);
+            console.log(this.state.groups[0]);
+            console.log(this.state.groups[0][0]);
+            return this.state.groups[0][0]._id;
+        }
+    }
     /*backend users routes isn't completely finished i think so 
     cannot start working on a completely functional users page 
     so this is gonna be a mock page that just gets all classes and displays all their info*/
@@ -74,17 +85,12 @@ export default class Template extends Component {//this class is an example of h
         </header>
 
                 <MDBContainer className="buttons">
-                    <ClassEditor id={()=>{
-                        if(this.state.groups === []){
-                            return -1;
-                        }else{
-                            return this.state.groups[0][0]._id;
-                        }
-                    }}/>
+                    <ClassEditor id = {this.isArrowBorked()}/>//don't know exactly why arrow was borked but if you call by reference or without () then it will not return right
                     {/*{this.state.groups.map((value, index) => {*/}
                     {/*    console.log(value);*/}
                     {/*    return <MDBBtn>{value[0]._id}</MDBBtn>//todo maybe fix this so this workaround is unnecessary*/}
                     {/*})}*/}
+                    }
                 </MDBContainer>
 
             </MDBContainer>
