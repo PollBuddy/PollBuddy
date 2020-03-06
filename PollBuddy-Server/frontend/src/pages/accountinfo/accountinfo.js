@@ -9,7 +9,8 @@ export default class accountinfo extends Component {
         <MDBContainer>
           <header>
             <div className="top-bar">
-              <img src="./img/Poll_Buddy_Logo_v4.png" alt="logo"></img>
+            <img src="Poll-Buddy-Logo.png" alt="logo" className="logo">
+                </img>              
               <div className="middle-text">
                   Account Info
               </div>
