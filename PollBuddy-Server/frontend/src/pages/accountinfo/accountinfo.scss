@@ -2,17 +2,26 @@
     background-color: #25162c;
     padding: 50px;
 }
-.middle-text{
+.header-text{
     color: white;
     text-align: center;
-    font-size: 25px;
+    font-size: 50px;
+    font-family: 'Fredoka One', cursive;
+    margin-left: -30px;
 }
-
+.logo {
+    height: 120px;
+    width: 90;
+    float: left;
+    margin-top: -30px;
+}
+.home {
+    height: 120px;
+    width: 90;
+    float: right;
+    margin-top: -30px;
+}
 .main-body {
     background-color: #4d3658;
     padding-bottom: 1000px;
 } 
-.logo {
-    height: 120px;
-    width: 90;
-}

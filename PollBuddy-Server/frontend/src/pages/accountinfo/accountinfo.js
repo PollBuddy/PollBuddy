@@ -8,15 +8,15 @@ export default class accountinfo extends Component {
       return (
         <MDBContainer>
           <header>
+          <link href="https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel="stylesheet"></link>
             <div className="top-bar">
-            <img src="Poll-Buddy-Logo.png" alt="logo" className="logo">
-                </img>              
-              <div className="middle-text">
+              <div className="header-text">
+                <img src="Poll-Buddy-Logo.png" alt="logo" className="logo img-fluid"></img>
                   Account Info
-              </div>
+                <img src="homeicon.png" alt="home" className="home img-fluid"></img>
+              </div>              
             </div>
               <div className="main-body">
-                
               </div>
           </header>
 
