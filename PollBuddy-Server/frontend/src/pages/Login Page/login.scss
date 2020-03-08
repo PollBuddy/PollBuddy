@@ -1,25 +1,49 @@
 .page-login{
-    background-color: #7f6491;
-}
 
+}
+.purple{
+  background: #4d3658ff !important;
+}
+.sign_up{
+  width: 425px;
+  background: #4d3658ff !important;
+}
+.Login_btn{
+  background: #7f6491ff !important;
+  position: absolute;
+  height: auto;
+  top: 6%;
+  right: 10px;
+
+}
+.left_logo {
+  transform: scale(0.5);
+  position: absolute;
+  width: 20%;
+  left: 0;
+  height: auto;
+}
+.text_boxes{
+  color: #dfcfeaff;
+  width: 50%;
+  display: inline-block;
+  padding: 2.8rem;
+}
 .Login-header{
-        background-color: #7f6491;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-size: calc(10px + 10vmin);
-        color: white;
+  border: white;
+  background-color: #4d3658ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(20px + 2vmin);
+  color: white;
 }
 
 .Login-Box{
-    padding: 5rem;
-    background-color: #611d80;
-    border: 2px solid #fff;
-    color: #fff;
-    text-align: center;
-    font-size: calc(10px + 3vmin);
-    color:white
+  padding: 5rem;
+  background-color: #25162cff;
+  text-align: center;
+  font-size: calc(10px + 3vmin);
 }
 

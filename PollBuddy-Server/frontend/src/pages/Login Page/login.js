@@ -3,6 +3,7 @@ import './login.scss'
 import { navigate } from "@reach/router"
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
+import new_logo from "../../Poll_buddy_logo_v5.png";
 export default class login extends Component {
     constructor(){
         super();
@@ -21,12 +22,13 @@ export default class login extends Component {
         return (
             <MDBContainer className="page-login">
 
-                <MDBBtn size="lg" color="secondary">About Us</MDBBtn>
 
                 <header className="Login-header">
+                    <img src={new_logo} className="left_logo" alt="logo"/>
                     <h2>
-                        PollBuddy
-            </h2>
+                        Login
+                    </h2>
+                    <MDBBtn size="lg" className="Login_btn" href="\login" color="black">Login</MDBBtn>
                 </header>
 
                 <MDBContainer className="d-flex p-2 Login-Box">
@@ -37,8 +39,7 @@ export default class login extends Component {
                             <MDBRow>
                                 <MDBCol md="6">
                                     <form>
-                                        <p className="h5 text-center mb-4">Sign in</p>
-                                        <MDBContainer className="white-text">
+                                        <MDBContainer className="text_boxes">
                                             <MDBInput
                                                 label="Type your email"
                                                 icon="envelope"
@@ -57,8 +58,14 @@ export default class login extends Component {
                                             />
                                         </MDBContainer>
                                         <MDBContainer className="text-right">
-                                            <MDBBtn size="lg" color="secondary" onClick={this.handleLogin}>Sign In</MDBBtn>
-                                            <MDBBtn size="lg" color="secondary">Forgot Your Password</MDBBtn>
+                                            <MDBBtn size="lg" color="black" className="purple">Forgot Your Password</MDBBtn>
+                                            <MDBBtn size="lg" color="black" className="purple" onClick={this.handleLogin} >Submit</MDBBtn>
+
+                                        </MDBContainer>
+                                        <MDBContainer className="text-right">
+
+                                            <MDBBtn size="lg" color="black" className="sign_up">No account? Sign up</MDBBtn>
+
                                         </MDBContainer>
                                     </form>
                                 </MDBCol>
