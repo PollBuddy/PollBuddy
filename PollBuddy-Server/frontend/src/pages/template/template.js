@@ -36,7 +36,7 @@ export default class Template extends Component {//this class is an example of h
             }
         })
         //this.stringifyGroups();
-        console.log(this.state.groups);//this is working... this sends the data to the console. Instead needs to be dynamically shown in the render function....
+        console.log(JSON.stringify(this.state.groups));//this is working... this sends the data to the console. Instead needs to be dynamically shown in the render function....
         // console.log(this.state.text);
     }
     stringifyGroups(){//THIS IS NONFUNCTIONAL BUT THE IDEA IS TO HAVE IT BE ABLE TO BE READ ON AN COMPONENT OR SOMETHING...
@@ -62,13 +62,13 @@ export default class Template extends Component {//this class is an example of h
         }
         this.state.text = t;//or return t
     }
-    isArrowBorked(){
-        if(this.state.groups === null){
+    isArrowBorked(){//don't know exactly why arrow was borked but if you call by reference or without () then it will not return right
+        if(this.state.groups === null||this.state.groups[0]===undefined){//this is necessary
             return -1;
         }else{
-            console.log(this.state.groups);
+            console.log(JSON.stringify(this.state.groups));
             console.log(this.state.groups[0]);
-            console.log(this.state.groups[0][0]);
+            console.log(this.state.groups[0][0]._id);
             return this.state.groups[0][0]._id;
         }
     }
@@ -85,7 +85,7 @@ export default class Template extends Component {//this class is an example of h
         </header>
 
                 <MDBContainer className="buttons">
-                    <ClassEditor id = {this.isArrowBorked()}/>//don't know exactly why arrow was borked but if you call by reference or without () then it will not return right
+                    <ClassEditor id = {this.isArrowBorked()}/>
                     {/*{this.state.groups.map((value, index) => {*/}
                     {/*    console.log(value);*/}
                     {/*    return <MDBBtn>{value[0]._id}</MDBBtn>//todo maybe fix this so this workaround is unnecessary*/}
