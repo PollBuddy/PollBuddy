@@ -17,6 +17,37 @@ export default class accountinfo extends Component {
               </div>              
             </div>
               <div className="main-body">
+              <br></br>
+              <br></br>
+              <form>
+                <label>
+                    Name: &nbsp;    
+                    <input type="text" name="name" placeholder="John Doe"/>
+                </label>
+                <br></br> <br></br>
+                <label>
+                    Email: &nbsp;           
+                    <input type="text" name="email" placeholder="name@gmail.com"/>
+                </label>
+                <br></br> <br></br>
+                <label>
+                    Current Password: &nbsp;             
+                    <input type="password" name="current" placeholder="Current Password"/>
+                </label>
+                <br></br> <br></br>
+                <label>
+                    New Password: &nbsp;           
+                    <input type="password" name="new" placeholder="New Password"/>
+                </label>
+                <br></br> <br></br>
+                <label>
+                    Confirm Password: &nbsp;            
+                    <input type="password" name="confirm" placeholder= "New Password"/>
+                </label>
+              </form>
+                  <div className= "button1">
+                      <button type="button" onclick="New password successfully set">Submit</button>
+                  </div>      
               </div>
           </header>
 
