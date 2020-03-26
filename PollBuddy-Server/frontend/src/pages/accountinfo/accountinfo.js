@@ -13,42 +13,49 @@ export default class accountinfo extends Component {
               <div className="header-text">
                 <img src="Poll-Buddy-Logo.png" alt="logo" className="logo img-fluid"></img>
                   Account Info
-                <img src="homeicon.png" alt="home" className="home img-fluid"></img>
+                {/* <img src="homeicon.png" alt="home" className="home img-fluid"></img> */}
               </div>              
             </div>
               <div className="main-body">
               <br></br>
               <br></br>
+              <div>
               <form>
                 <label>
                     Name: &nbsp;    
+                    <br></br>
                     <input type="text" name="name" placeholder="John Doe"/>
                 </label>
                 <br></br> <br></br>
                 <label>
-                    Email: &nbsp;           
+                    Email: &nbsp;     
+                    <br></br>      
                     <input type="text" name="email" placeholder="name@gmail.com"/>
                 </label>
                 <br></br> <br></br>
                 <label>
-                    Current Password: &nbsp;             
+                    Current Password: &nbsp;   
+                    <br></br>          
                     <input type="password" name="current" placeholder="Current Password"/>
                 </label>
                 <br></br> <br></br>
                 <label>
-                    New Password: &nbsp;           
+                    New Password: &nbsp;    
+                    <br></br>       
                     <input type="password" name="new" placeholder="New Password"/>
                 </label>
                 <br></br> <br></br>
                 <label>
-                    Confirm Password: &nbsp;            
-                    <input type="password" name="confirm" placeholder= "New Password"/>
+                    Confirm Password: &nbsp;  
+                    <br></br>          
+                    <input type="password" name="confirm" placeholder= "Confirm Password"/>
                 </label>
+                <br></br> <br></br>
+                <input type="submit" value="Submit"></input>
               </form>
-                  <div className= "button1">
-                      <button type="button" onclick="New password successfully set">Submit</button>
-                  </div>      
+                     
               </div>
+            </div>
           </header>
 
         </MDBContainer>
