@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from '@reach/router';
-import { MDBBtn, MDBIcon, MDBContainer } from "mdbreact";
+import { MDBContainer } from "mdbreact";
 import 'mdbreact/dist/css/mdb.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
@@ -12,11 +11,8 @@ export default class Template extends Component {//this class is an example of h
     constructor() {
         super();
         this.state = {
-            groups: null
+            groups: []
         }
-    }
-    componentWillMount() {//this function is called before the components are mounted
-        this.state.groups = [];
         fetch('http://localhost:3001/api/groups/').then(res => {//this is how one calls a get request (backend specifically made a method for finding all groups)
             return res.json();
         }).then(myJson => {
@@ -35,11 +31,8 @@ export default class Template extends Component {//this class is an example of h
                 })
             }
         })
-        //this.stringifyGroups();
-        console.log(JSON.stringify(this.state.groups));//this is working... this sends the data to the console. Instead needs to be dynamically shown in the render function....
-        // console.log(this.state.text);
     }
-    stringifyGroups(){//THIS IS NONFUNCTIONAL BUT THE IDEA IS TO HAVE IT BE ABLE TO BE READ ON AN COMPONENT OR SOMETHING...
+    /*stringifyGroups(){//THIS IS NONFUNCTIONAL BUT THE IDEA IS TO HAVE IT BE ABLE TO BE READ ON AN COMPONENT OR SOMETHING...
         //really this all could have been one var but i did this to demonstrate if one were to do this properly
         let t = "";
         for (let i = 0; i < this.state.groups.length; i++) {
@@ -61,8 +54,8 @@ export default class Template extends Component {//this class is an example of h
                     })
         }
         this.state.text = t;//or return t
-    }
-    isArrowBorked(){//don't know exactly why arrow was borked but if you call by reference or without () then it will not return right
+    }*/
+    getID(){//don't know exactly why arrow was borked but if you call by reference or without () then it will not return right
         if(this.state.groups === null||this.state.groups[0]===undefined){//this is necessary
             return -1;
         }else{
@@ -85,11 +78,10 @@ export default class Template extends Component {//this class is an example of h
         </header>
 
                 <MDBContainer className="buttons">
-                    <ClassEditor id = {this.isArrowBorked()}/>
+                    <ClassEditor id = {this.getID()}/>
                     {/*{this.state.groups.map((value, index) => {*/}
                     {/*    console.log(value);*/}
                     {/*    return <MDBBtn>{value[0]._id}</MDBBtn>//todo maybe fix this so this workaround is unnecessary*/}
-                    {/*})}*/}
                     }
                 </MDBContainer>
 
