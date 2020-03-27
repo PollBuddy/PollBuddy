@@ -17,6 +17,21 @@ services:
     volumes:
       - mongodata:/data/db
 
+  grafana:
+    build: PollBuddy-Server/reporting/grafana
+    image: "grafana/grafana"
+    ports:
+      - "3002:3000"
+
+  influxdb:
+    build: PollBuddy-Server/reporting/influxdb
+
 volumes:
   mongodata:
+    external: false
+
+  grafanadata:
+    external: false
+
+  influxdata:
     external: false
