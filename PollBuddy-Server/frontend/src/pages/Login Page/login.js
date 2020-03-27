@@ -3,7 +3,7 @@ import './login.scss'
 import { navigate } from "@reach/router"
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
-import new_logo from "../../Poll_buddy_logo_v5.png";
+import new_logo from "../../Poll_Buddy_Logo_v6.png";
 export default class login extends Component {
     constructor(){
         super();
@@ -28,7 +28,7 @@ export default class login extends Component {
                     <h2>
                         Login
                     </h2>
-                    <MDBBtn size="lg" className="Login_btn" href="\login" color="black">Login</MDBBtn>
+                    <MDBBtn size="lg" className="Login_btn" href="\sign_up" color="black">Sign Up</MDBBtn>
                 </header>
 
                 <MDBContainer className="d-flex p-2 Login-Box">
