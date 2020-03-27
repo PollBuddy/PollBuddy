@@ -13,57 +13,24 @@ export default class Template extends Component {//this class is an example of h
         this.state = {
             groups: []
         }
-        fetch('http://localhost:3001/api/groups/').then(res => {//this is how one calls a get request (backend specifically made a method for finding all groups)
-            return res.json();
-        }).then(myJson => {
-            console.log(myJson);
-            for (let i = 0; i < myJson.length; i++) {
-                fetch('http://localhost:3001/api/groups/' + myJson[i] + '/').then(res => {//this is how one calls a get request (backend specifically made one for finding a specific group)
-                    return res.json();
-                }).then(myJson => {
-                    let tempGroups = this.state.groups;
-                    tempGroups[i] = myJson;
-                    this.setState(prevState => ({
-                                groups: tempGroups
-                            }
-                        )
-                    )
-                })
-            }
-        })
     }
-    /*stringifyGroups(){//THIS IS NONFUNCTIONAL BUT THE IDEA IS TO HAVE IT BE ABLE TO BE READ ON AN COMPONENT OR SOMETHING...
-        //really this all could have been one var but i did this to demonstrate if one were to do this properly
-        let t = "";
-        for (let i = 0; i < this.state.groups.length; i++) {
-            t += "Name: " + this.state.groups[i].Name + "\n";
-            t += "\t_id: " + this.state.groups[i]._id + "\n";
-            if (this.state.groups[i].InstructorID !== undefined)
-                for (let j = 0; j < this.state.groups[i].PollID.length; j++)//because pollID is an array of pollIDs. Refer to backend documentation
-                    fetch('http://localhost:3001/api/users/' + this.state.groups[i].PollID[j] + '/').then(res => {
-                        return res.json();
-                    }).then(myJson => {
-                        t += "\tInstructorName" + myJson.Name + "\n";
-                    })
-            if (this.state.groups[i].PollID !== undefined)//this is necessary due to some fields being uninitiated. Name and ID should be initiated for all else
-                for (let j = 0; j < this.state.groups[i].PollID.length; j++)//because pollID is an array of pollIDs. Refer to backend documentation
-                    fetch('http://localhost:3001/api/polls/' + this.state.groups[i].PollID[j] + '/').then(res => {
-                        return res.json();
-                    }).then(myJson => {
-                        t += "\tPollName" + myJson.Name + "\n";
-                    })
+    async componentDidMount(){
+        let groups = []
+        const response = await fetch('http://localhost:3001/api/groups/');//this is alternative to .then's and all that
+        const json = await response.json();
+        for(let i = 0; i < json.length; i++){
+            const r = await fetch('http://localhost:3001/api/groups/' + json[i] + '/');
+            const rjson = await r.json();
+            groups[i] = rjson[0];
         }
-        this.state.text = t;//or return t
-    }*/
-    getID(){//don't know exactly why arrow was borked but if you call by reference or without () then it will not return right
-        if(this.state.groups === null||this.state.groups[0]===undefined){//this is necessary
-            return -1;
-        }else{
-            console.log(JSON.stringify(this.state.groups));
-            console.log(this.state.groups[0]);
-            console.log(this.state.groups[0][0]._id);
-            return this.state.groups[0][0]._id;
+        this.setState({groups: groups});
+    }
+    getID(){//don't know exactly why arrow was borked but if you call by reference or without () then it will not return right    
+        let result = null;
+        if(this.state.groups[0]!==undefined){//this is necessary. Checking the first index of groups but could do a more rigorous check in future
+            result = this.state.groups[0]._id;//groups[0] is temporary
         }
+        return result;
     }
     /*backend users routes isn't completely finished i think so 
     cannot start working on a completely functional users page 
