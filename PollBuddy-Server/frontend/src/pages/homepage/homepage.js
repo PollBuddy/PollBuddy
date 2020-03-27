@@ -13,19 +13,19 @@ export default class homepage extends Component {
             <header className="Homepage-top">
                 <img src={new_logo} className="top_left_logo" alt="logo"/>
 
-                <MDBContainer className="Welcome-box">
-                        Welcome to PollBuddy!
-                </MDBContainer>
+                <img src="logo.svg" class="img-fluid animated bounce infinite logo">
+                </img>
 
-                <MDBContainer className="d-flex p-2 Homepage-box">
-                    PollBuddy is an interactive platform for educators to connect with students in a virtual classroom.
-                </MDBContainer>
+                <p className = "blurb"> An interactive questionnaire platform made by students, for 
+                students, to strengthen lecture material and class attentiveness.
+                </p>
 
-                {/*for some reason, the href to /login below is not working*/}
-                <button onClick="location.href = '/login';" className="btn button" >Login/Register</button>
-
-                <MDBContainer className="poll-code">
-                    <MDBInput label="Enter Poll Code" size="sm" class="poll-code"/>
+                <MDBContainer className="text-right">
+                    <Link to={"/login"}>
+                        <button class = "btn button">Sign In</button>
+                    </Link>
+                    <button class = "btn button">Sign Up</button>
+      
                 </MDBContainer>
 
 
