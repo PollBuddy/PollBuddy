@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Link } from "@reach/router";
+import { Router } from "@reach/router";
 
 
 import './App.css';
@@ -12,7 +12,6 @@ import Lessons from './pages/lessons/lessons'
 import Lesson from './pages/lesson';
 import Notfound from './pages/notfound'
 import Template from './pages/template/template'
-import ClassEditor from "./components/classEditor/classEditor";
 
 function App() {
 

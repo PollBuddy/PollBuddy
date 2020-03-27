@@ -12,7 +12,7 @@ export default class classcreation extends Component {//this class will likely n
         };
     }
     handleClick = () => {
-        if (this.state.name != "")
+        if (this.state.name !== "")
             fetch('http://localhost:3001/api/groups/new/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
