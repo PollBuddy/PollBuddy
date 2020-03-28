@@ -2,22 +2,28 @@
 
 }
 .purple{
-  background: #4d3658ff !important;
+  background: #25162cff !important;
+  border-radius: 5px;
+
 }
 .sign_up{
   width: 425px;
-  background: #4d3658ff !important;
+  background: #25162cff !important;
+  border-radius: 5px;
+
 }
 .Login_btn{
-  background: #7f6491ff !important;
+  background: #4d3658ff !important;
   position: absolute;
   height: auto;
   top: 6%;
   right: 10px;
+  border-radius: 5px;
+
 
 }
 .left_logo {
-  transform: scale(0.5);
+  transform: scale(0.7);
   position: absolute;
   width: 20%;
   left: 0;
@@ -31,7 +37,7 @@
 }
 .Login-header{
   border: white;
-  background-color: #4d3658ff;
+  background-color: #25162cff;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -39,11 +45,15 @@
   font-size: calc(20px + 2vmin);
   color: white;
 }
-
+.form-control {
+  color: white;
+}
+.form-control:focus {
+  color: #777777;
+}
 .Login-Box{
   padding: 5rem;
-  background-color: #25162cff;
+  background-color: #4d3658ff;
   text-align: center;
   font-size: calc(10px + 3vmin);
 }
-
