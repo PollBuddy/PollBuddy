@@ -1,15 +1,15 @@
 version: '3'
 services:
   frontend:
+    build: PollBuddy-Server/frontend
     ports:
       - "3000:3000"
-    build: PollBuddy-Server/frontend
 
   backend:
+    build: PollBuddy-Server/backend
     ports:
       - "3001:3001"
-    build: PollBuddy-Server/backend
-  
+
   db:
     image: "mongo"
     ports:
@@ -19,18 +19,16 @@ services:
 
   grafana:
     build: PollBuddy-Server/reporting/grafana
-    image: "grafana/grafana"
     ports:
       - "3002:3000"
 
   influxdb:
     build: PollBuddy-Server/reporting/influxdb
+    volumes:
+      - influxdata:/var/lib/influxdb
 
 volumes:
   mongodata:
-    external: false
-
-  grafanadata:
     external: false
 
   influxdata:
