@@ -1,5 +1,5 @@
 .page-homepage{
-  background-color: #25292A;
+  background-color: #4D3656;
 }
 .top_left_logo {
   position: absolute;
@@ -10,7 +10,7 @@
   transform: scale(0.8);
 }
 .Homepage-header{
-  background-color: #25292A;
+  background-color: #25162c;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -20,70 +20,25 @@
   color: white;
 }
 
-.Homepage-top{
-  background-color: #25292A;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  top: 50px;
-  font-size: calc(3px + 3vmin);
-  color: white;
-
-}
-body {
-  font-family: 'MoolBoran', sans-serif;
-  font-weight: 900;
+.logo {
+  animation-duration: 2s;
 }
 
-
-.Homepage-buttons{
-
-  background-color: #56156F;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 6vmin);
-  color: white;
-}
-
-.Homepage-box{
-  padding: 1rem;
-  background-color: #8e24aa;
-  border: 2px solid #25292A;
-  border-radius: 20px;
-  text-align: center;
+.blurb {
   font-size: calc(20px + 0.3vmin);
-  color:white;
-  margin-top: 15%;
-  margin-bottom: 25%
-}
-
-.poll-code{
-  position: absolute;
-  margin-top: 10%;
-  padding: 10px;
-  transform: scale(2);
-}
-.form-control:focus {
-  color: #8e24aa;
+  font-family: monospace;
+  width: 45%;
+  text-align: center;
 }
 
 .button {
   border-radius: 30px;
-  background-color: #8e24aa;
+  background-color: #7F648F;
   color: white;
   transition-duration: 0.2s;
   font-family: monospace;
   font-weight: 700;
   font-size: calc(13px + 0.3vmin);
-  position: absolute;
-  height: auto;
-  top: 50px;
-  right: 10px;
 }
 
 .button:hover {

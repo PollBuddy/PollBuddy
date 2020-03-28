@@ -23,13 +23,19 @@ export default class Template extends Component {//this class is an example of h
                 fetch('http://localhost:3001/api/groups/' + myJson[i] + '/').then(res => {//this is how one calls a get request (backend specifically made one for finding a specific group)
                     return res.json();
                 }).then(myJson => {
-                    this.state.groups[i] = myJson;
+                    let tempGroups = this.state.groups;
+                    tempGroups[i] = myJson;
+                    this.setState(prevState => ({
+                                groups: tempGroups
+                            }
+                        )
+                    )
                 })
             }
         })
         this.stringifyGroups();
         console.log(this.state.groups);//this is working... this sends the data to the console. Instead needs to be dynamically shown in the render function....
-        console.log(this.state.text);
+        // console.log(this.state.text);
     }
     stringifyGroups(){//THIS IS NONFUNCTIONAL BUT THE IDEA IS TO HAVE IT BE ABLE TO BE READ ON AN COMPONENT OR SOMETHING...
         //really this all could have been one var but i did this to demonstrate if one were to do this properly
@@ -61,43 +67,17 @@ export default class Template extends Component {//this class is an example of h
         return (
             <MDBContainer className="page-my-classes">
                 <img src={new_logo} className="top_left_logo" alt="logo" />
-                <hr class="line_style"></hr>
+                <hr className="line_style"></hr>
                 <header className="header">
                     <br></br> TEST:
         </header>
 
                 <MDBContainer className="buttons">
-                    //refer to console to see that the gets return the correct information.
+                    {this.state.groups.map((value, index) => {
+                        console.log(value);
+                        return <MDBBtn>{value[0]._id}</MDBBtn>//todo maybe fix this so this workaround is unnecessary
+                    })}
                 </MDBContainer>
-                <MDBBtn
-                    href="https://rcos.io/"
-                    className="rcos_button"
-                    target="_blank"
-                    size="m"
-                    color="secondary"
-                >
-                    An RCOS Project
-          </MDBBtn>
-
-                <MDBBtn
-                    href="https://info.rpi.edu/statement-of-accessibility"
-                    className="accessibility_button"
-                    target="_blank"
-                    size="m"
-                    color="secondary"
-                >
-                    Statement of Accessibility
-          </MDBBtn>
-
-                <MDBBtn
-                    href="https://github.com/neha-deshpande001/PollBuddy"
-                    className="github_button"
-                    target="_blank"
-                    size="m"
-                    color="secondary"
-                >
-                    Github
-          </MDBBtn>
 
             </MDBContainer>
         )
