@@ -15,7 +15,7 @@ datasources:
     # <string> url
     url: http://influxdb:8086
     # <string> database user, if used
-    user: grafana
+    user: pollbuddy
     # <string> database name, if used
     database: pollbuddy
     # <bool> mark as default datasource. Max one per org
