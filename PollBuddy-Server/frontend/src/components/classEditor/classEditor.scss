@@ -51,17 +51,61 @@ input[type=submit]:hover {
 
 .submit-button {
   position: absolute;
-  right:    2vh;
-  bottom:   2vh;
+  right: 2vh;
+  bottom: 2vh;
   justify-content: center;
   text-align: center;
   border: none;
   border-radius: 10vh;
   padding: 16px;
-  background-color: #7F648F;
+  background-color: #7F648F !important;
   color: #dfcfea;
   //transition-duration: 0.2s;
   font-weight: 700;
   font-size: 2vh;
   min-width: 20vw;
+  overflow: hidden;
+}
+
+.submit-button:hover{
+  color: white;
+  cursor: pointer;
+}
+
+//.submit-button:active{
+//  background: #AA65CF !important;
+//}
+
+.submit-button::after {
+  display: none;
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.3);
+
+  width: 100px;
+  height: 100px;
+  margin-top: -50px;
+  margin-left: -50px;
+
+  /* Center the ripple */
+  top: 50%;
+  left: 50%;
+
+  animation: ripple 1s;
+  opacity: 0;
+}
+.submit-button:focus:not(:active)::after {
+  display: block;
+}
+
+@keyframes ripple {
+  from {
+    opacity: 1;
+    transform: scale(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(10);
+  }
 }

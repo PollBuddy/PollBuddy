@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './classEditor.scss'
-import {MDBContainer} from "mdbreact";
+import {MDBBtn, MDBContainer, MDBInput} from "mdbreact";
 
 export default class ClassEditor extends Component {
     constructor(props){
@@ -48,8 +48,6 @@ export default class ClassEditor extends Component {
     }
 
     onSubmit = e =>{
-        console.log(e);
-        console.log(this.state.name);
         //fetch groups/this.props.id so that we can target the correct data
         fetch('http://localhost:3001/api/groups/' + this.props.id + '/edit', {
             method: 'POST',
@@ -74,9 +72,9 @@ export default class ClassEditor extends Component {
             return (
                     <MDBContainer fluid className="editor-box">
                         <label className="field-label">Class Name:</label>
-                        <div className="form-group">
+                        <MDBContainer className="form-group">
                             <input type="text" name="name" id="className" className="form-control" value={this.state.name} onInput={this.onInput} />
-                        </div>
+                        </MDBContainer>
                         <button className="submit-button" onClick={this.onSubmit}>Save Changes</button>
                     </MDBContainer>
             )
