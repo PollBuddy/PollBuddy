@@ -6,7 +6,13 @@
   left: 0;
   width: 100%;
   color: black;
-  overflow: hidden;
+  overflow: auto;
+}
+
+.class-editor{
+  margin: auto;
+  width: 50%;
+  padding: 10px;
 }
 
 #header-content {

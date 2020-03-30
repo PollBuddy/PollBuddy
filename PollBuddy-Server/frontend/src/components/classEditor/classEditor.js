@@ -6,8 +6,8 @@ export default class ClassEditor extends Component {
     constructor(props){
         super(props);
 
+        //the id of the component is not stored in state because it will never change
         this.state = {
-            id: this.props.id,
             name: "",
             polls: null,
             users: null,
@@ -27,7 +27,6 @@ export default class ClassEditor extends Component {
                             //call setState so the component updates once the data comes in
                             this.setState(
                                 {
-                                    id: this.props.id,
                                     name: obj.Name,
                                     polls: obj.polls,
                                     users: obj.users,
@@ -40,12 +39,17 @@ export default class ClassEditor extends Component {
     
     render() {
         if(this.state === null){
+            //show nothing (or loading wheel) if the data has not come in yet
             return null;//loading todo ui
         }else{
             return (
-                <MDBContainer>
-                    <p>{this.state.name}</p>
-                </MDBContainer>
+                    <MDBContainer fluid className="editor-box">
+                        <label className="field-label">Class Name:</label>
+                        <div className="form-group">
+                            <input type="text" id="className" className="form-control" value={this.state.name} />
+                        </div>
+                        <button className="submit-button">Save Changes</button>
+                    </MDBContainer>
             )
         }
     }

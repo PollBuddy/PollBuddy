@@ -43,15 +43,18 @@ export default class Template extends Component {//this class is an example of h
                 <header className="header">
                     <br></br>TEST:
                 </header>
-                {
-                    //display each class in the backend by mapping the groups to class editor components
-                    this.state.groups.map(
-                        (group, index) => {
-                            console.log(group._id);
-                            return <ClassEditor key={group._id} id={group._id}/>//the key is needed because each child of a list must have a unique key
-                        }
+                <MDBContainer className="class-editor">
+                    {
+                        //display each class in the backend by mapping the groups to class editor components
+                        this.state.groups.map(
+                            (group, index) => {
+                                console.log(group._id);
+                                return <ClassEditor key={group._id} id={group._id}/>//the key is needed because each child of a list must have a unique key
+                            }
                         )
-                }
+                    }
+                </MDBContainer>
+
             </MDBContainer>
         )
                     }
