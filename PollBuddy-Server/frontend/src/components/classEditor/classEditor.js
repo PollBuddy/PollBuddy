@@ -6,6 +6,9 @@ export default class ClassEditor extends Component {
     constructor(props){
         super(props);
 
+        this.onInput = this.onInput.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+
         //the id of the component is not stored in state because it will never change
         this.state = {
             name: "",
@@ -36,6 +39,32 @@ export default class ClassEditor extends Component {
                         })
                     });
     }
+
+    onInput = e => {
+        //update state to include the data that was changed from the form
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
+
+    onSubmit = e =>{
+        console.log(e);
+        console.log(this.state.name);
+        //fetch groups/this.props.id so that we can target the correct data
+        fetch('http://localhost:3001/api/groups/' + this.props.id + '/edit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+            body: JSON.stringify({
+                //edit the data to include the values inputted
+                Action: "Add",
+                Name: this.state.name,
+                //TODO: add functionality
+                InstructorID: this.state.instructors,
+                PollID: this.state.polls,
+                UserID: this.state.users,
+            })
+        });
+    }
     
     render() {
         if(this.state === null){
@@ -46,9 +75,9 @@ export default class ClassEditor extends Component {
                     <MDBContainer fluid className="editor-box">
                         <label className="field-label">Class Name:</label>
                         <div className="form-group">
-                            <input type="text" id="className" className="form-control" value={this.state.name} />
+                            <input type="text" name="name" id="className" className="form-control" value={this.state.name} onInput={this.onInput} />
                         </div>
-                        <button className="submit-button">Save Changes</button>
+                        <button className="submit-button" onClick={this.onSubmit}>Save Changes</button>
                     </MDBContainer>
             )
         }

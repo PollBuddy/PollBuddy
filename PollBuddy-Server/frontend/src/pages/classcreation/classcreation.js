@@ -19,7 +19,6 @@ export default class classcreation extends Component {//this class will likely n
                 headers: { 'Content-Type': 'application/json' },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
                 body: JSON.stringify({
                     Name: this.state.name,
-                    Description: this.state.description,
                 })
             });/*note that this does not contain the trailing stuffs
             as template class does due to the backend route not returning
