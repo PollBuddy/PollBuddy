@@ -41,7 +41,8 @@ export default class Template extends Component {//this class is an example of h
                 <img src={new_logo} className="top_left_logo" alt="logo" />
                 <hr className="line_style"></hr>
                 <header className="header">
-                    <br></br>TEST:
+                    <br/>
+                    TEST:
                 </header>
                 <MDBContainer className="class-editor">
                     {
