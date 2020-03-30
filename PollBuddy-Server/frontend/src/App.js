@@ -12,6 +12,7 @@ import Lessons from './pages/lessons/lessons'
 import Lesson from './pages/lesson';
 import Notfound from './pages/notfound'
 import Template from './pages/template/template'
+import ForgotPassword from './pages/forgotPassword'
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
         <Login path="/login" />
         <Classcreation path="/classcreation" />
         <Template path="/template" />
+        <ForgotPassword path="/forgotPassword" />
       </Router>
     </React.Fragment>
   );
