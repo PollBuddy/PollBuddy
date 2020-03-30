@@ -4,12 +4,13 @@
   "private": true,
   "dependencies": {
     "@reach/router": "^1.2.1",
+    "cors": "^2.8.5",
     "mdbreact": "^4.21.1",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "react": "^16.10.2",
     "react-countdown-now": "^2.1.2",
     "react-dom": "^16.10.2",
-    "react-scripts": "3.2.0"
+    "react-scripts": "^3.4.1"
   },
   "scripts": {
     "start": "react-scripts start",

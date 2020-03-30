@@ -41,18 +41,18 @@ export default class Template extends Component {//this class is an example of h
                 <img src={new_logo} className="top_left_logo" alt="logo" />
                 <hr className="line_style"></hr>
                 <header className="header">
-                    <br></br> TEST:
-        </header>
-
-                <MDBContainer className="buttons">
-                    <ClassEditor id = {this.getID()}/>
-                    {/*{this.state.groups.map((value, index) => {*/}
-                    {/*    console.log(value);*/}
-                    {/*    return <MDBBtn>{value[0]._id}</MDBBtn>//todo maybe fix this so this workaround is unnecessary*/}
-                    }
-                </MDBContainer>
-
+                    <br></br>TEST:
+                </header>
+                {
+                    //display each class in the backend by mapping the groups to class editor components
+                    this.state.groups.map(
+                        (group, index) => {
+                            console.log(group._id);
+                            return <ClassEditor key={group._id} id={group._id}/>//the key is needed because each child of a list must have a unique key
+                        }
+                        )
+                }
             </MDBContainer>
         )
-    }
+                    }
 }

@@ -12,19 +12,23 @@ export default class classcreation extends Component {//this class will likely n
         };
     }
     handleClick = () => {
-        if (this.state.name !== "")
+        console.log(this.state);
+        if (this.state.name !== ""){
             fetch('http://localhost:3001/api/groups/new/', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
                 body: JSON.stringify({
-                    Name: this.state.name
+                    Name: this.state.name,
+                    Description: this.state.description,
                 })
-            });/*note that this does not contain the trailing stuffs 
+            });/*note that this does not contain the trailing stuffs
             as template class does due to the backend route not returning
-             anything for this endpoint... also no need for error checking 
+             anything for this endpoint... also no need for error checking
              because should always work... but probably should put in later maybe*/
+        }
     }
     handleInput = e => {
+        console.log(e.target.name);
         this.setState({
             [e.target.name]: e.target.value
         })
@@ -53,7 +57,6 @@ export default class classcreation extends Component {//this class will likely n
                                                 label="Enter name"
                                                 icon="envelope"
                                                 group
-                                                type="email"
                                                 validate
                                                 error="wrong"
                                                 success="right"
@@ -67,7 +70,6 @@ export default class classcreation extends Component {//this class will likely n
                                                 label="Enter classroom description"//no functionality for classroom description in backend as of 1-02-2020
                                                 icon="lock"
                                                 group
-                                                type="password"
                                                 validate
                                                 name="description"
                                                 value={this.state.description}//simply following documentation at https://mdbootstrap.com/docs/react/forms/inputs/
