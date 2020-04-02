@@ -13,6 +13,7 @@ import Notfound from './pages/notfound'
 import Template from './pages/template/template'
 import ForgotPassword from './pages/forgotPassword'
 import RegisterDefault from "./pages/registerDefault";
+import RegisterWithSchool from "./pages/registerWithSchool";
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
         <Template path="/template" />
         <ForgotPassword path="/forgotPassword" />
         <RegisterDefault path="/registerDefault" />
+        <RegisterWithSchool path="/registerWithSchool" />
       </Router>
     </React.Fragment>
   );

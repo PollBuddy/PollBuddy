@@ -11,11 +11,10 @@ export default class registerDefault extends Component {
     		<MDBContainer fluid className="register-homepage">
     			<MDBContainer fluid className="header">
                     <img src={new_logo} alt="logo" className="poll-logo"/>
-
 	    			<form>
                         <button className = "btn sign-button" formAction="/login" >Sign in</button>
                     </form>
-                    </MDBContainer>
+    			</MDBContainer>
                 <MDBContainer fluid className="box">
                     <h1 className="register-text">
                         Register for Poll Buddy
@@ -23,8 +22,13 @@ export default class registerDefault extends Component {
                     <p className="register-blurb">
                         Click on one of the following buttons to register.
                     </p>
-                    <button className="btn school-button">Register with School</button>
-                    <button className="btn poll-buddy-button">Register with Poll Buddy</button>
+                    <form>
+                        <button className="btn school-button" formAction="/register_with_school" >Register with School</button>
+                    </form>
+                    <form>
+                        <button className="btn poll-buddy-button" formAction="/register_with_poll_buddy" >Register with PollBuddy</button>
+                    </form>
+
                 </MDBContainer>
     		</MDBContainer>
     	)
