@@ -4,7 +4,6 @@ import { Router, Link } from "@reach/router";
 
 import './App.css';
 import Myclasses from './pages/myclasses'
-
 import Homepage from './pages/homepage'
 import Login from './pages/Login Page/login'
 import Classcreation from './pages/classcreation/classcreation'
@@ -13,6 +12,7 @@ import Lesson from './pages/lesson';
 import Notfound from './pages/notfound'
 import Template from './pages/template/template'
 import ForgotPassword from './pages/forgotPassword'
+import RegisterDefault from "./pages/registerDefault";
 
 function App() {
 
@@ -33,6 +33,7 @@ function App() {
         <Classcreation path="/classcreation" />
         <Template path="/template" />
         <ForgotPassword path="/forgotPassword" />
+        <RegisterDefault path="/registerDefault" />
       </Router>
     </React.Fragment>
   );
