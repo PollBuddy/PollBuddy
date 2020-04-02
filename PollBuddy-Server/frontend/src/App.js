@@ -8,10 +8,12 @@ import Homepage from './pages/homepage'
 import Login from './pages/Login Page/login'
 import Classcreation from './pages/classcreation/classcreation'
 import Lessons from './pages/lessons/lessons'
-import Lesson from './pages/lesson';
+import Lesson from './pages/lesson'
 import Notfound from './pages/notfound'
 import Template from './pages/template/template'
 import AccountInfo from './pages/accountinfo/accountinfo'
+import PollCode from './pages/pollCode'
+import ForgotPassword from './pages/forgotPassword'
 
 function App() {
 
@@ -32,6 +34,8 @@ function App() {
         <Classcreation path="/classcreation" />
         <Template path="/template" />
         <AccountInfo path="/accountinfo"/>
+        <PollCode path="/pollCode" /> 
+        <ForgotPassword path="/forgotPassword" />
       </Router>
     </React.Fragment>
   );
