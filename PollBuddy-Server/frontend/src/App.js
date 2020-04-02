@@ -13,6 +13,7 @@ import Lesson from './pages/lesson'
 import Notfound from './pages/notfound'
 import Template from './pages/template/template'
 import PollCode from './pages/pollCode'
+import ForgotPassword from './pages/forgotPassword'
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
         <Classcreation path="/classcreation" />
         <Template path="/template" />
         <PollCode path="/pollCode" /> 
+        <ForgotPassword path="/forgotPassword" />
       </Router>
     </React.Fragment>
   );
