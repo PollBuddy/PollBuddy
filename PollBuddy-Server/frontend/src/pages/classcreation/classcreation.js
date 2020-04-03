@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './classcreation.scss'
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
+import ClassEditor from "../../components/classEditor/classEditor";
 
 export default class classcreation extends Component {//this class will likely need to call groups/new and do more with that...
     constructor() {
@@ -38,12 +39,14 @@ export default class classcreation extends Component {//this class will likely n
                 <h className="create-class-text">
                     Create Your Classroom
                 </h>
-                {/*<MDBContainer>*/}
-                {/*    <MDBRow>*/}
-                {/*        <MDBCol md="6">*/}
-                {/*        </MDBCol>*/}
-                {/*    </MDBRow>*/}
-                {/*</MDBContainer>*/}
+                <MDBContainer>
+                    <MDBRow>
+                        <MDBCol md="6">
+                            {/*set new to true so we can use the creation version of the class editor component*/}
+                            <ClassEditor new={true}/>
+                        </MDBCol>
+                    </MDBRow>
+                </MDBContainer>
             </MDBContainer>
         )
     }
