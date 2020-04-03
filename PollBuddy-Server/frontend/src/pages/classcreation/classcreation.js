@@ -35,56 +35,15 @@ export default class classcreation extends Component {//this class will likely n
     render() {
         return (
             <MDBContainer className="page-classcreation">
-
-                <header className="Classcreation-header">
-                    <h>
-                        Create Your Classroom
-            </h>
-                </header>
-
-                <MDBContainer className="d-flex p-2 Classcreation-Box">
-
-                    <header Classcreation="ClasscreationElements">
-
-                        <MDBContainer>
-                            <MDBRow>
-                                <MDBCol md="6">
-                                    <form>
-                                        <p className="h5 text-center mb-4">Enter Your Classroom Name Below</p>
-                                        <MDBContainer className="white-text">
-                                            <MDBInput
-                                                label="Enter name"
-                                                icon="envelope"
-                                                group
-                                                validate
-                                                error="wrong"
-                                                success="right"
-                                                name="name"
-                                                value={this.state.name}//simply following documentation at https://mdbootstrap.com/docs/react/forms/inputs/
-                                                onInput={this.handleInput}
-                                            />
-
-                                            <p className="h5 text-center mb-4">Enter Your Classroom Description Below </p>
-                                            <MDBInput
-                                                label="Enter classroom description"//no functionality for classroom description in backend as of 1-02-2020
-                                                icon="lock"
-                                                group
-                                                validate
-                                                name="description"
-                                                value={this.state.description}//simply following documentation at https://mdbootstrap.com/docs/react/forms/inputs/
-                                                onInput={this.handleInput}
-                                            />
-                                        </MDBContainer>
-                                        <MDBBtn size="sm" color="secondary" onClick={this.handleClick}>Create Classroom</MDBBtn>
-                                    </form>
-                                </MDBCol>
-                            </MDBRow>
-                        </MDBContainer>
-
-                    </header>
-
-                </MDBContainer>
-
+                <h className="create-class-text">
+                    Create Your Classroom
+                </h>
+                {/*<MDBContainer>*/}
+                {/*    <MDBRow>*/}
+                {/*        <MDBCol md="6">*/}
+                {/*        </MDBCol>*/}
+                {/*    </MDBRow>*/}
+                {/*</MDBContainer>*/}
             </MDBContainer>
         )
     }
