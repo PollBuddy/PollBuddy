@@ -22,10 +22,10 @@ export default class registerWithSchool extends Component {
                     <p className="register-blurb">
                         To create an account, enter your school name or login using RPI's CAS.
                     </p>
-                    <div className="form-group">
+                    <MDBContainer className="form-group">
                         {/*TODO: make this a dropdown with all the schools instead of a text box*/}
                         <input type="email" className="form-control" placeholder="Enter School Name" className="enterEmail"/>
-                    </div>
+                    </MDBContainer>
                         <form>{/*make sure that the link works with the account info page or any other school login page*/}
                             <button className="btn submit-button" formAction="/accountinfo" >Submit School Name</button>
                         </form>
