@@ -23,10 +23,10 @@ export default class registerDefault extends Component {
                         Click on one of the following buttons to register.
                     </p>
                     <form>
-                        <button className="btn school-button" formAction="/register_with_school" >Register with School</button>
+                        <button className="btn school-button" formAction="/registerWithSchool" >Register with School</button>
                     </form>
                     <form>
-                        <button className="btn poll-buddy-button" formAction="/register_with_poll_buddy" >Register with PollBuddy</button>
+                        <button className="btn poll-buddy-button" formAction="/registerWithPollBuddy" >Register with PollBuddy</button>
                     </form>
 
                 </MDBContainer>
