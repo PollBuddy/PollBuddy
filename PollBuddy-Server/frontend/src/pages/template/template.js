@@ -50,7 +50,7 @@ export default class Template extends Component {//this class is an example of h
                         this.state.groups.map(
                             (group, index) => {
                                 console.log(group._id);
-                                return <ClassEditor key={group._id} id={group._id}/>//the key is needed because each child of a list must have a unique key
+                                return <ClassEditor key={group._id} id={group._id} new={false}/>//the key is needed because each child of a list must have a unique key
                             }
                         )
                     }
