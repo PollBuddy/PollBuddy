@@ -11,6 +11,8 @@ export default class ClassEditor extends Component {
 
         this.onInput = this.onInput.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.getAPIURL = this.getAPIURL.bind(this);
+        this.getAPIJSON = this.getAPIJSON.bind(this);
 
         //the id of the component is not stored in state because it will never change
         this.state = {
@@ -58,37 +60,42 @@ export default class ClassEditor extends Component {
     }
 
     onSubmit = e =>{
-        //if the component is in creation mode, we want to create a new entry in the backend however if it is not, we
-        //just want to access the correct class from the backend and edit it
-        if(this.props.new){
-            fetch('http://localhost:3001/api/groups/new', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
-                body: JSON.stringify({
-                    //edit the data to include the values inputted
-                    Name: this.state.name,
-                    //TODO: add functionality
-                    InstructorID: this.state.instructors,
-                    PollID: this.state.polls,
-                    UserID: this.state.users,
-                })
-            });
-        }else{
-            //fetch groups/this.props.id so that we can target the correct data
-            fetch('http://localhost:3001/api/groups/' + this.props.id + '/edit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
-                body: JSON.stringify({
-                    //edit the data to include the values inputted
-                    Action: "Add",
-                    Name: this.state.name,
-                    //TODO: add functionality
-                    InstructorID: this.state.instructors,
-                    PollID: this.state.polls,
-                    UserID: this.state.users,
-                })
-            });
-        }
+        //create new class or edit class based on the given mode and data in state
+        fetch(this.getAPIURL(), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+            body: JSON.stringify(this.getAPIJSON())
+        });
+    }
+
+    //get the correct api url based on whether we're in create mode or not
+    getAPIURL(){
+        return this.props.new ?
+            //api/groups/new allows us to create a new entry
+            'http://localhost:3001/api/groups/new' :
+            //api/groups/groupID/edit allows us to edit an entry
+            'http://localhost:3001/api/groups/' + this.props.id + '/edit';
+    }
+
+    //get the correct api json based on whether we're in create mode or not
+    getAPIJSON(){
+        return this.props.new ?
+            {
+                Name: this.state.name,
+                //TODO: add functionality
+                InstructorID: this.state.instructors,
+                PollID: this.state.polls,
+                UserID: this.state.users,
+            } :
+            {
+                //edit the data to include the values inputted
+                Action: "Add",
+                Name: this.state.name,
+                //TODO: add functionality
+                InstructorID: this.state.instructors,
+                PollID: this.state.polls,
+                UserID: this.state.users,
+            }
     }
     
     render() {
