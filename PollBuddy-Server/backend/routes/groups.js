@@ -16,39 +16,47 @@ router.post('/new/', function(req,res){
 router.post('/:id/edit/', function(req,res){
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
 	var jsonContent = req.body;
+	success = false;
 	if(jsonContent.Action === "Add"){
 		if(jsonContent.Name !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{"$set":{Name: jsonContent.Name}}, function(err,res){
 				if(err) return res.sendStatus(500);
+				else success = true;
 			});
-		else if(jsonContent.Instructors !== undefined)
+		if(jsonContent.Instructors !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{"$addToSet":{Instructors: jsonContent.Instructors}}, function(err,res){
 				if(err)return res.sendStatus(500);
+				else success = true;
 			});
-		else if(jsonContent.Polls !== undefined)
+		if(jsonContent.Polls !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{"$addToSet":{Polls: jsonContent.Polls}}, function(err,res){
 				if(err)return res.sendStatus(500);
+				else success = true;
 			});
-		else if(jsonContent.Users !== undefined)
+		if(jsonContent.Users !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{"$addToSet":{Users: jsonContent.Users}}, function(err,res){
 				if(err)return res.sendStatus(500);
+				else success = true;
 			});
-		else
+		if(success === false)
 			return res.sendStatus(400);
 	}else if(jsonContent.Action === "Remove"){
 		if(jsonContent.Instructors !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{"$pull":{Instructors: jsonContent.Instructors}}, function(err,res){
 				if(err)return res.sendStatus(500);
+				else success = true;
 			});
-		else if(jsonContent.Polls !== undefined)
+		if(jsonContent.Polls !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{"$pull":{Polls: jsonContent.Polls}}, function(err,res){
 				if(err)return res.sendStatus(500);
+				else success = true;
 			});
-		else if(jsonContent.Users !== undefined)
+		if(jsonContent.Users !== undefined)
 			mongoConnection.getDB().collection("groups").updateOne({"_id" : id},{"$pull":{Users: jsonContent.Users}}, function(err,res){
 				if(err)return res.sendStatus(500);
+				else success = true;
 			});
-		else
+		if(success === false)
 			return res.sendStatus(400);
 	} else {
 		return res.sendStatus(400);
@@ -73,7 +81,6 @@ router.get('/:id/', function(req, res, next) {
 		if(err)return res.sendStatus(500);
 		return res.send(result);
 	});
-	//res.sendStatus('i am getting group ID: ' + id);
 });
 router.get('/:id/polls', function(req, res, next) {
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
@@ -81,7 +88,6 @@ router.get('/:id/polls', function(req, res, next) {
 		if(err)return res.sendStatus(500);
 		return res.send(result[0]);
 	});
-	//res.sendStatus('i am getting group things based on group ID: '+ id);
 });
 router.get('/:id/users', function(req, res, next) {
 	var id = new mongoConnection.getMongo().ObjectID(req.params.id);
@@ -89,7 +95,6 @@ router.get('/:id/users', function(req, res, next) {
 		if(err)return res.sendStatus(500);
 		return res.send(result[0]);
 	});
-	//res.sendStatus('i am getting group things based on group ID: '+ id);
 });
 
 module.exports = router;
