@@ -2,9 +2,7 @@
 Welcome to PollBuddy! :D
 An affordable and compatible in-class quizzing platform.
 
-Proposal: https://docs.google.com/document/d/1wp2vGtrof0U05jTpSWWiZdXLh2OPzXcVmdZi1mkNAvs/edit
-
-RCOS/Project Google Drive: https://drive.google.com/drive/folders/1lCov3Guqql_E-tnq5hascXrdLEYA7Pn6
+RCOS/Project Google Drive (proposal, other project resources): https://drive.google.com/drive/folders/1lCov3Guqql_E-tnq5hascXrdLEYA7Pn6
 
 ## Docker Things
 ### How to run the app (what you want in most cases)
