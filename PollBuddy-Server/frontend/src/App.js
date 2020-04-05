@@ -14,6 +14,9 @@ import Template from './pages/template/template'
 import AccountInfo from './pages/accountinfo/accountinfo'
 import PollCode from './pages/pollCode'
 import ForgotPassword from './pages/forgotPassword'
+import RegisterDefault from "./pages/registerDefault";
+import RegisterWithSchool from "./pages/registerWithSchool";
+import RegisterWithPollBuddy from "./pages/registerWithPollBuddy";
 
 function App() {
 
@@ -36,6 +39,9 @@ function App() {
         <AccountInfo path="/accountinfo"/>
         <PollCode path="/pollCode" /> 
         <ForgotPassword path="/forgotPassword" />
+        <RegisterDefault path="/registerDefault" />
+        <RegisterWithSchool path="/registerWithSchool" />
+        <RegisterWithPollBuddy path="/registerWithPollBuddy" />
       </Router>
     </React.Fragment>
   );
