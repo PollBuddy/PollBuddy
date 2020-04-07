@@ -4,6 +4,9 @@ import { navigate } from "@reach/router"
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
 import new_logo from "../../Poll_Buddy_Logo_v6.png";
+
+import Header from "../../components/header/header.js"
+
 export default class login extends Component {
     constructor(){
         super();
@@ -23,13 +26,7 @@ export default class login extends Component {
             <MDBContainer className="page-login">
 
 
-                <header className="Login-header">
-                    <img src={new_logo} className="left_logo" alt="logo"/>
-                    <h2>
-                        Login
-                    </h2>
-                    <MDBBtn size="lg" className="Login_btn" href="\sign_up" color="black">Sign Up</MDBBtn>
-                </header>
+                <Header title = "login" btn = "up" />
 
                 <MDBContainer className="d-flex p-2 Login-Box">
 

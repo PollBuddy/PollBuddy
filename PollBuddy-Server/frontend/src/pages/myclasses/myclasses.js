@@ -7,6 +7,8 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import new_logo from '../../Poll_Buddy_Logo_v4.png';
 import './myclasses.scss'
 
+import Header from "../../components/header/header.js"
+
 export default class Myclasses extends Component {//TODO IMPLEMENT A LOGOUT/SIGNOUT BUTTON PLEASE. FOR NOW AM PUTTING THAT FUNCTIONALITY IN SETTINGS BUTTON
   constructor(){
     super();
@@ -21,7 +23,9 @@ export default class Myclasses extends Component {//TODO IMPLEMENT A LOGOUT/SIGN
   }
   render() { 
     return (
-      <MDBContainer className="page-my-classes">
+        <MDBContainer> // only way i could get it to compile and still look ok ??
+        <Header title = "my classes" btn = "info" />
+        <MDBContainer className="page-my-classes">
           <img src={new_logo} className="top_left_logo" alt="logo"/>
 
           <MDBBtn
@@ -126,6 +130,7 @@ export default class Myclasses extends Component {//TODO IMPLEMENT A LOGOUT/SIGN
               Github
           </MDBBtn>
 
+      </MDBContainer>
       </MDBContainer>
     )
   }
