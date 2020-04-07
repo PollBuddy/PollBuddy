@@ -10,7 +10,7 @@ export default class registerWithPollBuddy extends Component {
   render() {
     return (
     		<MDBContainer fluid className="register-with-school">
-    	        <Header title = "Register with us" type = "in" />
+    	        <Header title = "Register with us" btn = "in" />
                 <MDBContainer fluid className="p-b-box">
                     <h1 className="register-text">
                         Register with Poll Buddy

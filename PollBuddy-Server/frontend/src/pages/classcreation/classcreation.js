@@ -3,6 +3,8 @@ import './classcreation.scss'
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
 
+import Header from "../../components/header/header.js"
+
 export default class classcreation extends Component {//this class will likely need to call groups/new and do more with that...
     constructor() {
         super();
@@ -33,11 +35,7 @@ export default class classcreation extends Component {//this class will likely n
         return (
             <MDBContainer className="page-classcreation">
 
-                <header className="Classcreation-header">
-                    <h>
-                        Create Your Classroom
-            </h>
-                </header>
+                <Header title = "create your classroom" btn = "info" />
 
                 <MDBContainer className="d-flex p-2 Classcreation-Box">
 
