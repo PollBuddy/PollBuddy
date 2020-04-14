@@ -3,7 +3,7 @@ import './lesson.scss'
 
 import { MDBContainer, MDBRow, MDBCol, MDBDropdownToggle, MDBDropdown, MDBDropdownItem, MDBDropdownMenu, MDBBtn } from 'mdbreact'
 
-import Question from './components/question'
+import Question from '../../components/question'
 
 
 
