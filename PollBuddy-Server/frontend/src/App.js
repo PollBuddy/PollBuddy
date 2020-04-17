@@ -12,6 +12,7 @@ import Lesson from './pages/lesson'
 import Notfound from './pages/notfound'
 import Template from './pages/template/template'
 import AccountInfo from './pages/accountinfo/accountinfo'
+import Privacy from './pages/privacy/privacy'
 import PollCode from './pages/pollCode'
 import ForgotPassword from './pages/forgotPassword'
 import RegisterDefault from "./pages/registerDefault";
@@ -42,6 +43,7 @@ function App() {
         <RegisterDefault path="/registerDefault" />
         <RegisterWithSchool path="/registerWithSchool" />
         <RegisterWithPollBuddy path="/registerWithPollBuddy" />
+        <Privacy path="/privacy"/>
       </Router>
     </React.Fragment>
   );
