@@ -6,17 +6,17 @@ import logo from "../../Poll_Buddy_Logo.png";
 export default class Header extends Component {
 	constructor(props) {
 		super(props);
-		if(this.props.btn === "in")		// login, signup, account info, etc
+		if(this.props.btn === "login")		// login, signup, account info, etc
 			this.state = {				// respectively in, up, info for rn
 				link: "/login",
-				text: "sign in"
+				text: "login"
 			};
-		else if(this.props.btn === "up")
+		else if(this.props.btn === "register")
 			this.state = {
 				link: "/registerDefault",
-				text: "sign up"
+				text: "register"
 			};
-		else if(this.props.btn === "info")
+		else if(this.props.btn === "account")
 			this.state = {
 				link: "/accountinfo",
 				text: "account"

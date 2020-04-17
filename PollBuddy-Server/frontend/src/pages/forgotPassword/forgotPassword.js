@@ -10,7 +10,7 @@ export default class pollCode extends Component {
   render() {
     return (
     		<MDBContainer fluid className="forgot-homepage">
-    			<Header title = "forgot password" btn = "in" />
+    			<Header title = "forgot password" btn = "login" />
                 <MDBContainer fluid className="forgot-box">
                     <h1 class="forgot-text">
                         Forgot Password?

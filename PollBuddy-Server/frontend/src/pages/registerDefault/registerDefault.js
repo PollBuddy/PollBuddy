@@ -10,7 +10,7 @@ export default class registerDefault extends Component {
   render() {
     return (
     		<MDBContainer fluid className="register-homepage">
-    			<Header title = "Register" btn = "in" />
+    			<Header title = "Register" btn = "login" />
                 <MDBContainer fluid className="box">
                     <h1 className="register-text">
                         Register for Poll Buddy

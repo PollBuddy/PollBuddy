@@ -8,6 +8,7 @@ export default class homepage extends Component {
     render() {
         return (
             <MDBContainer className="page-homepage">
+                <Header title = "" btn = "login" />
                 <header className="Homepage-header">
 
                     <img src="logo.svg" class="img-fluid animated bounce infinite logo">

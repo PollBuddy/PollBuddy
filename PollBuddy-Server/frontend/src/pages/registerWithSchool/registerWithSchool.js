@@ -9,7 +9,7 @@ export default class registerWithSchool extends Component {
   render() {
     return (
     		<MDBContainer fluid className="register-with-school">
-    			<Header title = "Register with school" btn = "in" />
+    			<Header title = "Register with school" btn = "login" />
                 <MDBContainer fluid className="box">
                     <h1 className="register-text">
                         Register with School

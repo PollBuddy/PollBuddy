@@ -23,7 +23,7 @@ export default class Myclasses extends Component {//TODO IMPLEMENT A LOGOUT/SIGN
   render() { 
     return (
         <MDBContainer> {/* only way i could get it to compile and still look ok ?? */}
-        <Header title = "my classes" btn = "info" />
+        <Header title = "my classes" btn = "account" />
         <MDBContainer className="page-my-classes">
           {/* 
           <MDBBtn

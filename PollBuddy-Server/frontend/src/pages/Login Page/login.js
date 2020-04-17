@@ -25,7 +25,7 @@ export default class login extends Component {
             <MDBContainer className="page-login">
 
 
-                <Header title = "login" btn = "up" />
+                <Header title = "login" btn = "register" />
 
                 <MDBContainer className="d-flex p-2 Login-Box">
 

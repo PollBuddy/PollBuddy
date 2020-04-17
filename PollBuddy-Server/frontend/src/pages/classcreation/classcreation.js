@@ -38,7 +38,7 @@ export default class classcreation extends Component {//this class will likely n
     render() {
         return (
             <MDBContainer>
-                <Header title = "create your classroom" btn = "info" />
+                <Header title = "create your classroom" btn = "account" />
                 <MDBContainer className="page-classcreation">
                     <MDBContainer>
                         <MDBRow>

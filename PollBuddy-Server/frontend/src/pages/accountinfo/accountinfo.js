@@ -10,7 +10,7 @@ export default class accountinfo extends Component {
       return (
         <MDBContainer>
           <header>
-            <Header title = "account information" btn = "info" />
+            <Header title = "account information" btn = "account" />
               <div className="main-body">
               <br></br>
               <br></br>
