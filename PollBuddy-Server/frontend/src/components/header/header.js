@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import 'mdbreact/dist/css/mdb.css';
 import './header.scss';
-import logo from "../../Poll_Buddy_Logo_v6.png";
+import logo from "../../Poll_Buddy_Logo.png";
 
 export default class Header extends Component {
 	constructor(props) {

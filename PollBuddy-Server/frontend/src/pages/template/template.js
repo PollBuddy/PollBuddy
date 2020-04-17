@@ -3,7 +3,7 @@ import { MDBContainer } from "mdbreact";
 import 'mdbreact/dist/css/mdb.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-import new_logo from '../../Poll_Buddy_Logo_v4.png';
+import new_logo from '../../Poll_Buddy_Logo.png';
 import './template.scss'
 import ClassEditor from "../../components/classEditor/classEditor";
 

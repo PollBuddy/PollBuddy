@@ -3,7 +3,6 @@ import './login.scss'
 import { navigate } from "@reach/router"
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
-import new_logo from "../../Poll_Buddy_Logo_v6.png";
 
 import Header from "../../components/header/header.js"
 
