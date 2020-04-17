@@ -1,0 +1,34 @@
+.bar {
+	color: #fff;
+	padding: 20px;
+	font: 30px / 32px 'Fredoka One';
+	text-align: center;
+	background: #25162c;
+	width: 100%;
+	height: 72px;
+	box-sizing: border-box;
+	text-transform: capitalize;
+}
+.bar_logo {
+	position: absolute;
+	left: 0;
+	height: 52px;
+	width: auto;
+	margin: -10px 0 0 40px;
+}
+.bar_btn {
+	position: absolute;
+	right: 0;
+	font: 16px / 18px 'Fredoka One';
+	padding: 12px 20px;
+	background: #7f648f;
+	margin: -5px 40px 0 0;
+	text-transform: uppercase;
+	border-radius: 999px;
+}
+.bar_btn, .bar_btn:hover, .bar_btn:active, .bar_btn:visited {
+	color: #dfcfea;
+}
+body {
+	background: #4d3658;
+}

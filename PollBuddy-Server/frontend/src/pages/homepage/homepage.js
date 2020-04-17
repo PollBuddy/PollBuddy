@@ -4,10 +4,13 @@ import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
 import { Router, Link } from '@reach/router';
 
+import Header from "../../components/header/header.js"
+
 export default class homepage extends Component {
     render() {
         return (
             <MDBContainer className="page-homepage">
+                <Header title = "" btn = "login" />
                 <header className="Homepage-header">
 
                     <img src="logo.svg" class="img-fluid animated bounce infinite logo">
