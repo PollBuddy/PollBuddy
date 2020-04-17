@@ -23,10 +23,10 @@ export default class Myclasses extends Component {//TODO IMPLEMENT A LOGOUT/SIGN
   }
   render() { 
     return (
-        <MDBContainer> // only way i could get it to compile and still look ok ??
+        <MDBContainer> {/* only way i could get it to compile and still look ok ?? */}
         <Header title = "my classes" btn = "info" />
         <MDBContainer className="page-my-classes">
-          <img src={new_logo} className="top_left_logo" alt="logo"/>
+        {/* <img src={new_logo} className="top_left_logo" alt="logo"/>
 
           <MDBBtn
             size="lg"
@@ -53,12 +53,7 @@ export default class Myclasses extends Component {//TODO IMPLEMENT A LOGOUT/SIGN
               color="secondary"
           >
             <MDBIcon icon="tools" />
-          </MDBBtn>
-
-        <hr class="line_style"></hr>
-        <header className="header">
-            <br></br> SELECT A CLASS:
-        </header>
+          </MDBBtn> */}
 
           <MDBContainer className="buttons">
               <Link to="/lessons">
