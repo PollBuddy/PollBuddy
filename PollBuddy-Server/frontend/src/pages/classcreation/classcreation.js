@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './classcreation.scss'
 import 'mdbreact/dist/css/mdb.css';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol } from 'mdbreact';
 import ClassEditor from "../../components/classEditor/classEditor";
 
 import Header from "../../components/header/header.js"

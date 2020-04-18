@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './forgotPassword.scss'
-import { Router, Link } from '@reach/router';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
+import { MDBContainer } from 'mdbreact';
 import 'mdbreact/dist/css/mdb.css';
 
 import Header from "../../components/header/header.js"

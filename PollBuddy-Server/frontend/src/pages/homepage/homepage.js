@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import './homepage.scss'
 import 'mdbreact/dist/css/mdb.css';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
-import { Router, Link } from '@reach/router';
+import { MDBContainer } from 'mdbreact';
+import { Link } from '@reach/router';
 
 import Header from "../../components/header/header.js"
 
@@ -10,10 +10,10 @@ export default class homepage extends Component {
     render() {
         return (
             <MDBContainer className="page-homepage">
-                <Header title = "" btn = "login" />
+                <Header btn = "login" />
                 <header className="Homepage-header">
 
-                    <img src="logo.svg" class="img-fluid animated bounce infinite logo">
+                    <img src="Poll-Buddy-Logo.png" alt="logo" class="img-fluid animated bounce infinite logo">
                     </img>
 
                     <p className = "blurb"> An interactive questionnaire platform made by students, for
@@ -24,7 +24,9 @@ export default class homepage extends Component {
                         <Link to={"/login"}>
                             <button class = "btn button">Sign In</button>
                         </Link>
-                        <button class = "btn button">Sign Up</button>
+                        <Link to={"/registerDefault"}>
+                            <button class = "btn button">Sign Up</button>
+                        </Link>
                     </MDBContainer>
 
                 </header>

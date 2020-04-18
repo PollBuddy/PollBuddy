@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './login.scss'
-import { navigate } from "@reach/router"
+import {Link, navigate} from "@reach/router"
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
 
@@ -54,14 +54,17 @@ export default class login extends Component {
                                             />
                                         </MDBContainer>
                                         <MDBContainer className="text-right">
-                                            <MDBBtn size="lg" color="black" className="purple">Forgot Your Password</MDBBtn>
+                                            <Link to={"/forgotPassword"}>
+                                                <MDBBtn size="lg" color="black" className="purple">Forgot Your Password</MDBBtn>
+                                            </Link>
+
                                             <MDBBtn size="lg" color="black" className="purple" onClick={this.handleLogin} >Submit</MDBBtn>
-
                                         </MDBContainer>
+
                                         <MDBContainer className="text-right">
-
-                                            <MDBBtn size="lg" color="black" className="sign_up">No account? Sign up</MDBBtn>
-
+                                            <Link to={"/registerDefault"}>
+                                                <MDBBtn size="lg" color="black" className="sign_up">No account? Sign up</MDBBtn>
+                                            </Link>
                                         </MDBContainer>
                                     </form>
                                 </MDBCol>

@@ -18,13 +18,13 @@ export default class registerWithPollBuddy extends Component {
                         To create an account, fill in the text boxes, then press submit.
                     </p>
                     <MDBContainer className="form-group">
-                        <input type="email" className="form-control" placeholder="Enter your name" className="enterName"/>
+                        <input type="email" className={`${"enterName"} ${"form-control"}`} placeholder="Enter your name"/>
                     </MDBContainer>
                     <MDBContainer className="form-group">
-                        <input type="email" className="form-control" placeholder="Enter your email" className="enterEmail"/>
+                        <input type="email" className={`${"enterEmail"} ${"form-control"}`} placeholder="Enter your email"/>
                     </MDBContainer>
                     <MDBContainer className="form-group">
-                        <input type="email" className="form-control" placeholder="Enter your password" className="enterPassword"/>
+                        <input type="email" className={`${"enterPassword"} ${"form-control"}`} placeholder="Enter your password"/>
                     </MDBContainer>
                     <form>
                         <button className="btn submit-button" formAction="/accountinfo" >Submit</button>
