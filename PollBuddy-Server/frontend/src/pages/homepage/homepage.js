@@ -7,6 +7,11 @@ import { Link } from '@reach/router';
 import Header from "../../components/header/header.js"
 
 export default class homepage extends Component {
+
+    componentDidMount(){
+        document.title = "Home - " + document.title;
+    }
+
     render() {
         return (
             <MDBContainer className="page-homepage">
