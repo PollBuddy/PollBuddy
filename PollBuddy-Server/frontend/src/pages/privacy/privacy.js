@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import "./privacy.scss"
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer } from 'mdbreact';
+import logo from '../../images/logo.png';
 
 export default class accountinfo extends Component {
     componentDidMount(){
@@ -14,7 +15,7 @@ export default class accountinfo extends Component {
           <link href="https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel="stylesheet"></link>
             <div className="top-bar">
               <div className="header-text">
-                <img src="logo.png" alt="logo" className="logo img-fluid"></img>
+                <img src={logo} alt="logo" className="logo img-fluid"/>
                   Privacy
               </div>              
             </div>

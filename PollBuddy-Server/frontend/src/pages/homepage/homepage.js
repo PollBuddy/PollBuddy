@@ -3,6 +3,7 @@ import './homepage.scss'
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer } from 'mdbreact';
 import { Link } from '@reach/router';
+import logo from '../../images/logo.png';
 
 import Header from "../../components/header/header.js"
 
@@ -17,8 +18,7 @@ export default class homepage extends Component {
             <MDBContainer className="page-homepage">
                 <Header btn = "login" />
                 <header className="Homepage-header">
-
-                    <img src="logo.png" alt="logo" class="img-fluid animated bounce infinite logo" />
+                    <img src={logo} className="img-fluid animated bounce infinite logo" alt="logo" />
 
                     <p className = "blurb"> An interactive questionnaire platform made by students, for
                         students, to strengthen lecture material and class attentiveness.

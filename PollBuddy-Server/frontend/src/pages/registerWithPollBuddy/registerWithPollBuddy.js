@@ -7,7 +7,7 @@ import Header from "../../components/header/header.js"
 
 export default class registerWithPollBuddy extends Component {
     componentDidMount(){
-        document.title = "Register With Poll Buddy - " + document.title;
+        document.title = "Register With Us - " + document.title;
     }
   render() {
     return (

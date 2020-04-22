@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './pollCode.scss'
 import { MDBContainer } from 'mdbreact';
 import 'mdbreact/dist/css/mdb.css';
+import logo from '../../images/logo.png';
 
 export default class pollCode extends Component {
 	componentDidMount(){
@@ -10,7 +11,7 @@ export default class pollCode extends Component {
   render() {
     return (
     		<MDBContainer fluid className="poll-homepage">
-    			<img src="logo.png" alt="logo" class="img-fluid animated bounce infinite logo poll-logo"/>
+				<img src={logo} className="img-fluid animated bounce infinite logo" alt="logo" />
 
 	    		<div className="form-group">
 			      <input type="email" className="form-control" placeholder="Poll Code" class="enterCode"/>
