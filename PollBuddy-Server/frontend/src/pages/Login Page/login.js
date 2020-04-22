@@ -20,6 +20,9 @@ export default class login extends Component {
         //TODO MAYBE IN THE FUTURE USE COOKIES TO REMEMBER PAST SESSION
         navigate('/myclasses');//this is how one navigates to another page from reach router
     }
+    componentDidMount(){
+        document.title = "Login - " + document.title;
+    }
     render() {
         return (
             <MDBContainer className="page-login">

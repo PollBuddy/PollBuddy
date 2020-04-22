@@ -6,6 +6,10 @@ import { MDBContainer } from 'mdbreact';
 import Header from "../../components/header/header.js"
 
 export default class accountinfo extends Component {
+    componentDidMount(){
+        document.title = "Account Info - " + document.title;
+    }
+
     render() {
       return (
         <MDBContainer>

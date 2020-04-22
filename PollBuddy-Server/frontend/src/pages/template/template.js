@@ -15,6 +15,7 @@ export default class Template extends Component {//this class is an example of h
         }
     }
     async componentDidMount(){
+        document.title = "Template - " + document.title;
         let groups = []
         const response = await fetch('http://localhost:3001/api/groups/');//this is alternative to .then's and all that
         const json = await response.json();
@@ -25,7 +26,7 @@ export default class Template extends Component {//this class is an example of h
         }
         this.setState({groups: groups});
     }
-    getID(){//don't know exactly why arrow was borked but if you call by reference or without () then it will not return right    
+    getID(){//don't know exactly why arrow was borked but if you call by reference or without () then it will not return right
         let result = null;
         if(this.state.groups[0]!==undefined){//this is necessary. Checking the first index of groups but could do a more rigorous check in future
             result = this.state.groups[0]._id;//groups[0] is temporary

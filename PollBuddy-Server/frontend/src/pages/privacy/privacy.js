@@ -4,6 +4,9 @@ import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer } from 'mdbreact';
 
 export default class accountinfo extends Component {
+    componentDidMount(){
+        document.title = "Privacy - " + document.title;
+    }
     render() {
       return (
         <MDBContainer>
@@ -11,7 +14,7 @@ export default class accountinfo extends Component {
           <link href="https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel="stylesheet"></link>
             <div className="top-bar">
               <div className="header-text">
-                <img src="Poll-Buddy-Logo.png" alt="logo" className="logo img-fluid"></img>
+                <img src="logo.png" alt="logo" className="logo img-fluid"></img>
                   Privacy
               </div>              
             </div>

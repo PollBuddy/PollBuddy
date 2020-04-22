@@ -6,6 +6,9 @@ import 'mdbreact/dist/css/mdb.css';
 import Header from "../../components/header/header.js"
 
 export default class registerWithPollBuddy extends Component {
+    componentDidMount(){
+        document.title = "Register With Poll Buddy - " + document.title;
+    }
   render() {
     return (
     		<MDBContainer fluid className="register-with-school">

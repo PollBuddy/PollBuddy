@@ -6,8 +6,13 @@ import 'mdbreact/dist/css/mdb.css';
 import Header from "../../components/header/header.js"
 
 export default class pollCode extends Component {
-  render() {
-    return (
+
+    componentDidMount(){
+        document.title = "Forgot Password - " + document.title;
+    }
+
+    render() {
+        return (
     		<MDBContainer fluid className="forgot-homepage">
     			<Header title = "forgot password" btn = "login" />
                 <MDBContainer fluid className="forgot-box">

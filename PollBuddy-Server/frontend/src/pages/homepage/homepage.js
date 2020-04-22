@@ -18,8 +18,7 @@ export default class homepage extends Component {
                 <Header btn = "login" />
                 <header className="Homepage-header">
 
-                    <img src="Poll-Buddy-Logo.png" alt="logo" class="img-fluid animated bounce infinite logo">
-                    </img>
+                    <img src="logo.png" alt="logo" class="img-fluid animated bounce infinite logo" />
 
                     <p className = "blurb"> An interactive questionnaire platform made by students, for
                         students, to strengthen lecture material and class attentiveness.

@@ -20,6 +20,9 @@ export default class Myclasses extends Component {
     localStorage.removeItem('loggedIn');//todo if admin -- more specifically make diff states if the user who logged in is an admin... or teacher. wouldn't want teacher accessing user things or vice versa...
     navigate('/login');
   }
+    componentDidMount(){
+        document.title = "My Classes - " + document.title;
+    }
   render() { 
     return (
         <MDBContainer> {/* only way i could get it to compile and still look ok ?? */}
