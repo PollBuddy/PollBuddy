@@ -3,6 +3,7 @@ import './pollCode.scss'
 import { MDBContainer } from 'mdbreact';
 import 'mdbreact/dist/css/mdb.css';
 import logo from '../../images/logo.png';
+import Header from "../../components/header/header.js"
 
 export default class pollCode extends Component {
 	componentDidMount(){
@@ -10,6 +11,8 @@ export default class pollCode extends Component {
 	}
   render() {
     return (
+		<MDBContainer>
+			<Header title = "Poll Code" btn = "login" />
     		<MDBContainer fluid className="poll-homepage">
 				<img src={logo} className="img-fluid animated bounce infinite logo" alt="logo" />
 
@@ -18,7 +21,7 @@ export default class pollCode extends Component {
 			    </div>
 			    <button class = "btn poll-button">Join Poll</button>
     		</MDBContainer>
-    		
-    	)
-	}
+		</MDBContainer>
+	)
+  }
 }
