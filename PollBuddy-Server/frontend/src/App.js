@@ -18,6 +18,7 @@ import ForgotPassword from './pages/forgotPassword'
 import RegisterDefault from "./pages/registerDefault";
 import RegisterWithSchool from "./pages/registerWithSchool";
 import RegisterWithPollBuddy from "./pages/registerWithPollBuddy";
+import ResetPassword from "./pages/resetPassword";
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
         <RegisterWithSchool path="/registerWithSchool" />
         <RegisterWithPollBuddy path="/registerWithPollBuddy" />
         <Privacy path="/privacy"/>
+        <ResetPassword path="/resetPassword"/>
       </Router>
     </React.Fragment>
   );
