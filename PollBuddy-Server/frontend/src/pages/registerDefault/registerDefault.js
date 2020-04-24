@@ -4,7 +4,7 @@ import { MDBContainer } from 'mdbreact';
 import 'mdbreact/dist/css/mdb.css';
 
 import Header from "../../components/header/header.js"
-
+import Footer from "../../components/footer/footer.js"
 
 export default class registerDefault extends Component {
   render() {
@@ -26,6 +26,7 @@ export default class registerDefault extends Component {
                     </form>
 
                 </MDBContainer>
+                <Footer />
     		</MDBContainer>
     	)
 	}

@@ -1,0 +1,28 @@
+.foot {
+	color: #fff;
+	box-sizing: border-box;
+	width: 100%;
+	height: 56px;
+	padding: 20px 40px;
+	font: 14px / 16px 'Open Sans';
+	text-align: left;
+	margin: 30px 0 0;
+}
+.foot a, a:active, a:hover, a:visited {
+	color: #dfcfea;
+	margin: 0 40px 0 0;
+	text-decoration: none;
+}
+.logo_links {
+	position: absolute;
+	right: 0;
+	margin: -10px 40px 0 0;
+}
+.logo_links img {
+	height: 36px;
+	width: auto;
+	margin: 0 40px 0 0;
+}
+.logo_links:last-of-type {
+	margin: 0;
+}

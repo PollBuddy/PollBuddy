@@ -25,7 +25,7 @@ export default class Header extends Component {
 	render() {
 		return (
 			<div className = "bar">
-				<link href="https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel="stylesheet" />
+				<link href = "https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel = "stylesheet" />
 				<a href = "/">
 					<img src = {logo} className = "bar_logo" alt = "logo" />
 				</a>
