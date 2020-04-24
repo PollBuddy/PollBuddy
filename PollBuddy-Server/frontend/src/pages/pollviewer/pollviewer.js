@@ -5,7 +5,7 @@ import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
 
 import Header from "../../components/header/header.js"
 
-export default class accountinfo extends Component {
+export default class pollviewer extends Component {
     render() {
       return (
         <MDBContainer>
