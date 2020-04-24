@@ -16,6 +16,7 @@ services:
       - "27017:27017"
     volumes:
       - mongodata:/data/db
+      - mongoconfig:/data/configdb
 
   grafana:
     build: PollBuddy-Server/reporting/grafana
@@ -28,6 +29,9 @@ services:
       - influxdata:/var/lib/influxdb
 
 volumes:
+  mongoconfig:
+    external: false
+
   mongodata:
     external: false
 
