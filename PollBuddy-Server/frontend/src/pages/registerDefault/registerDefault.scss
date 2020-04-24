@@ -1,45 +1,16 @@
 .register-homepage{
   	background-color: #4d3658;
-  	height: 100vh;
-  	width: 100vw;
+  	// height: 100vh;
+  	// width: 100vw;
  	display: flex;
   	flex-direction: column;
   	align-items: center;
 }
 
-.sign-button {
-	position: absolute;
-	text-align: center;
-	border-radius: 10vh;
-	background-color: #7F648F;
-	top: 6%;
-	right: 5%;
-	transform: translateY(-70%);
-	height: 6vh;
-	min-width: 8vw;
-	color: white;
-	transition-duration: 0.2s;
-	font-weight: 700;
-	font-size: 2vh;
-}
-
-.sign-button:hover {
-    color: black;
-    transition-duration: 0.2s;
-}
-.poll-logo {
-	position: relative;
-	top: 7%;
-	left: 2%;
-	height: 10vh;
-	width: auto;
-	max-width: 40vw;
-	transform: scale(0.7);
-}
-
 .box {
-	position: relative;
-	top: 20vh;
+	// position: relative;
+	// top: 20vh;
+	margin: 15vh auto;
 	height: 40vh;
 	width: 50vw;
 	border-radius: 4vh;

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import 'mdbreact/dist/css/mdb.css';
 import './footer.scss';
-import rcos_logo from '/images/rcos.png';
-import github_logo from '/images/github.png'
+import rcos_logo from '../../rcos.png';
+import github_logo from '../../github.png'
 
 export default class Footer extends Component {
 	render() {

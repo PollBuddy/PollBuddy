@@ -16,13 +16,12 @@
 .logo_links {
 	position: absolute;
 	right: 0;
-	margin: -10px 40px 0 0;
+	margin: -5px 40px 0 0;
 }
 .logo_links img {
-	height: 36px;
+	height: 26px;
 	width: auto;
-	margin: 0 40px 0 0;
 }
-.logo_links:last-of-type {
+.logo_links a:last-of-type {
 	margin: 0;
 }
