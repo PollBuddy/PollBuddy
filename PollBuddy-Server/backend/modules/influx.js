@@ -6,12 +6,6 @@ let influx = new Influx.InfluxDB({
     password: "pollbuddy"
 });
 
-function getDatestamp() {
-    let d = new Date();
-    return d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate() + " " +
-        d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
-}
-
 module.exports = {
 
     log: function(data) {
