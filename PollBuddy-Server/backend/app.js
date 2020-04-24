@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const os = require('os');
 
 var groupsRouter = require('./routes/groups');
 var pollsRouter = require('./routes/polls');
@@ -20,6 +21,36 @@ var mongoConnection = require('./modules/mongoConnection.js');
 mongoConnection.connect(function(err, client){
   if(err) console.error(err);
 });
+
+// InfluxDB
+var influxConnection = require('./modules/influx.js');
+
+// Response Time Logging to InfluxDB
+app.use((req, res, next) => {
+  const start = Date.now();
+
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    console.log(`Request to ${req.path} took ${duration}ms`);
+
+    influxConnection.log([
+      {
+        measurement: 'response_times',
+        tags: {
+          host: os.hostname(),
+          platform: "backend",
+          path: req.path
+        },
+        fields: {
+          duration: duration
+        },
+        timestamp: new Date()
+      }
+    ])
+  });
+  return next();
+});
+
 
 app.use(logger('dev'));
 app.use(express.json());

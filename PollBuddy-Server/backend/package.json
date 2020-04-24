@@ -12,6 +12,7 @@
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "http-errors": "~1.6.3",
+    "influx": "^5.5.1",
     "mongodb": "^3.3.3",
     "morgan": "~1.9.1",
     "promise-retry": "^1.1.1"
