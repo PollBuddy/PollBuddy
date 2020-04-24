@@ -28,6 +28,16 @@ services:
     volumes:
       - influxdata:/var/lib/influxdb
 
+  grafana:
+    build: PollBuddy-Server/reporting/grafana
+    ports:
+      - "3002:3000"
+
+  influxdb:
+    build: PollBuddy-Server/reporting/influxdb
+    volumes:
+      - influxdata:/var/lib/influxdb
+
 volumes:
   mongoconfig:
     external: false
