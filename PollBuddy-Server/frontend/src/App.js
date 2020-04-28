@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router, Link } from "@reach/router";
+import { Router } from "@reach/router";
 
 
 import './App.css';
@@ -12,12 +12,14 @@ import Lesson from './pages/lesson'
 import Notfound from './pages/notfound'
 import Template from './pages/template/template'
 import AccountInfo from './pages/accountinfo/accountinfo'
+import Privacy from './pages/privacy/privacy'
 import PollCode from './pages/pollCode'
 import ForgotPassword from './pages/forgotPassword'
 import RegisterDefault from "./pages/registerDefault";
 import RegisterWithSchool from "./pages/registerWithSchool";
 import RegisterWithPollBuddy from "./pages/registerWithPollBuddy";
-
+import ResetPassword from "./pages/resetPassword";
+import PollDataView from "./pages/pollDataView";
 function App() {
 
   return (
@@ -38,10 +40,13 @@ function App() {
         <Template path="/template" />
         <AccountInfo path="/accountinfo"/>
         <PollCode path="/pollCode" /> 
-        <ForgotPassword path="/forgotPassword" />
-        <RegisterDefault path="/registerDefault" />
-        <RegisterWithSchool path="/registerWithSchool" />
-        <RegisterWithPollBuddy path="/registerWithPollBuddy" />
+        <ForgotPassword path="/forgotPassword"/>
+        <RegisterDefault path="/registerDefault"/>
+        <RegisterWithSchool path="/registerWithSchool"/>
+        <RegisterWithPollBuddy path="/registerWithPollBuddy"/>
+        <Privacy path="/privacy"/>
+        <ResetPassword path="/resetPassword"/>
+        <PollDataView path="/pollDataView"/>
       </Router>
     </React.Fragment>
   );

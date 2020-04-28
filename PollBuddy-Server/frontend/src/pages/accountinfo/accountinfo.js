@@ -1,21 +1,20 @@
 import React, { Component } from 'react';
 import "./accountinfo.scss"
 import 'mdbreact/dist/css/mdb.css';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
+import { MDBContainer } from 'mdbreact';
+
+import Header from "../../components/header/header.js"
 
 export default class accountinfo extends Component {
+    componentDidMount(){
+        document.title = "Account Info - " + document.title;
+    }
+
     render() {
       return (
         <MDBContainer>
           <header>
-          <link href="https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel="stylesheet"></link>
-            <div className="top-bar">
-              <div className="header-text">
-                <img src="Poll-Buddy-Logo.png" alt="logo" className="logo img-fluid"></img>
-                  Account Info
-                {/* <img src="homeicon.png" alt="home" className="home img-fluid"></img> */}
-              </div>              
-            </div>
+            <Header title = "account information" btn = "account" />
               <div className="main-body">
               <br></br>
               <br></br>

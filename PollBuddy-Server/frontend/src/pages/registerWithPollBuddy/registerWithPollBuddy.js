@@ -2,19 +2,17 @@ import React, { Component } from 'react';
 import './registerWithPollBuddy.scss'
 import { MDBContainer } from 'mdbreact';
 import 'mdbreact/dist/css/mdb.css';
-import new_logo from "../../Poll_Buddy_Logo_v6.png";
 
+import Header from "../../components/header/header.js"
 
 export default class registerWithPollBuddy extends Component {
+    componentDidMount(){
+        document.title = "Register With Us - " + document.title;
+    }
   render() {
     return (
     		<MDBContainer fluid className="register-with-school">
-    			<MDBContainer fluid className="header">
-                    <img src={new_logo} alt="logo" className="poll-logo"/>
-	    			<form>
-                        <button className = "btn sign-button" formAction="/login" >Sign in</button>
-                    </form>
-    			</MDBContainer>
+    	        <Header title = "Register with us" btn = "login" />
                 <MDBContainer fluid className="p-b-box">
                     <h1 className="register-text">
                         Register with Poll Buddy
@@ -23,13 +21,13 @@ export default class registerWithPollBuddy extends Component {
                         To create an account, fill in the text boxes, then press submit.
                     </p>
                     <MDBContainer className="form-group">
-                        <input type="email" className="form-control" placeholder="Enter your name" className="enterName"/>
+                        <input type="email" className={`${"enterName"} ${"form-control"}`} placeholder="Enter your name"/>
                     </MDBContainer>
                     <MDBContainer className="form-group">
-                        <input type="email" className="form-control" placeholder="Enter your email" className="enterEmail"/>
+                        <input type="email" className={`${"enterEmail"} ${"form-control"}`} placeholder="Enter your email"/>
                     </MDBContainer>
                     <MDBContainer className="form-group">
-                        <input type="email" className="form-control" placeholder="Enter your password" className="enterPassword"/>
+                        <input type="email" className={`${"enterPassword"} ${"form-control"}`} placeholder="Enter your password"/>
                     </MDBContainer>
                     <form>
                         <button className="btn submit-button" formAction="/accountinfo" >Submit</button>

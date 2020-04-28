@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import './login.scss'
-import { navigate } from "@reach/router"
+import {Link, navigate} from "@reach/router"
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
-import new_logo from "../../Poll_Buddy_Logo_v6.png";
+
+import Header from "../../components/header/header.js"
+
 export default class login extends Component {
     constructor(){
         super();
@@ -18,18 +20,15 @@ export default class login extends Component {
         //TODO MAYBE IN THE FUTURE USE COOKIES TO REMEMBER PAST SESSION
         navigate('/myclasses');//this is how one navigates to another page from reach router
     }
+    componentDidMount(){
+        document.title = "Login - " + document.title;
+    }
     render() {
         return (
             <MDBContainer className="page-login">
 
 
-                <header className="Login-header">
-                    <img src={new_logo} className="left_logo" alt="logo"/>
-                    <h2>
-                        Login
-                    </h2>
-                    <MDBBtn size="lg" className="Login_btn" href="\sign_up" color="black">Sign Up</MDBBtn>
-                </header>
+                <Header title = "login" btn = "register" />
 
                 <MDBContainer className="d-flex p-2 Login-Box">
 
@@ -58,14 +57,17 @@ export default class login extends Component {
                                             />
                                         </MDBContainer>
                                         <MDBContainer className="text-right">
-                                            <MDBBtn size="lg" color="black" className="purple">Forgot Your Password</MDBBtn>
+                                            <Link to={"/forgotPassword"}>
+                                                <MDBBtn size="lg" color="black" className="purple">Forgot Your Password</MDBBtn>
+                                            </Link>
+
                                             <MDBBtn size="lg" color="black" className="purple" onClick={this.handleLogin} >Submit</MDBBtn>
-
                                         </MDBContainer>
+
                                         <MDBContainer className="text-right">
-
-                                            <MDBBtn size="lg" color="black" className="sign_up">No account? Sign up</MDBBtn>
-
+                                            <Link to={"/registerDefault"}>
+                                                <MDBBtn size="lg" color="black" className="sign_up">No account? Sign up</MDBBtn>
+                                            </Link>
                                         </MDBContainer>
                                     </form>
                                 </MDBCol>
