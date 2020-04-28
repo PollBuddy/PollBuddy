@@ -14,12 +14,15 @@ export default class privacy extends Component {
             <Header title = "privacy" btn = "login" />
 
 
+          <header>
+          <link href="https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel="stylesheet"></link>
+
+          <Header title = "Privacy" btn = "account" />
+            <div className="main-body text-center">
             <br></br>
-
-            <p className="placeholder-text">
-            From the contributors of Poll Buddy,<br/>
-
-            Our promise is to keep your data safe, protected and far from anyone that could use it in a harmful way.
+            <MDBRow>  
+              <MDBCol sm="10">
+Our promise is to keep your data safe, protected and far from anyone that could use it in a harmful way.
             The purpose of this app is and always will be
             for educational purposes <i>only</i>.
             <br/>
@@ -39,8 +42,13 @@ export default class privacy extends Component {
             Regular text on this .js file is very difficult to update and maintain.
             <br/><br/>
             </p>
+              </MDBCol>
 
+            </MDBRow>                  
 
+            </div>
+             
+          </header>
 
         </MDBContainer>
       )
