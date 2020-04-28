@@ -7,20 +7,22 @@
 	font: 14px / 16px 'Open Sans';
 	text-align: left;
 	margin: 30px 0 0;
+	background: #25162c;
 }
-.foot a, a:active, a:hover, a:visited {
+.foot a {
 	color: #dfcfea;
-	margin: 0 40px 0 0;
 	text-decoration: none;
+	margin: 0 20px 0 0;
 }
 .logo_links {
 	position: absolute;
 	right: 0;
-	margin: -5px 40px 0 0;
+	margin: 0 40px 0 0;
 }
 .logo_links img {
-	height: 26px;
+	height: 16px;
 	width: auto;
+	filter: invert(1);
 }
 .logo_links a:last-of-type {
 	margin: 0;
