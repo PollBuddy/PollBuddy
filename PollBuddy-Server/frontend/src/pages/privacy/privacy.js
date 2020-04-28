@@ -1,56 +1,50 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import "./privacy.scss"
 import 'mdbreact/dist/css/mdb.css';
-import { MDBContainer } from 'mdbreact';
+import {MDBRow, MDBCol, MDBContainer} from 'mdbreact';
 import Header from "../../components/header/header.js"
 
 export default class privacy extends Component {
-    componentDidMount(){
-        document.title = "Privacy - " + document.title;
-    }
-    render() {
+   componentDidMount() {
+      document.title = "Privacy - " + document.title;
+   }
+
+   render() {
       return (
-        <MDBContainer>
-            <Header title = "privacy" btn = "login" />
+         <MDBContainer>
+            <link href="https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel="stylesheet"></link>
 
-
-          <header>
-          <link href="https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel="stylesheet"></link>
-
-          <Header title = "Privacy" btn = "account" />
+            <Header title="Privacy" btn="account"/>
             <div className="main-body text-center">
-            <br></br>
-            <MDBRow>  
-              <MDBCol sm="10">
-Our promise is to keep your data safe, protected and far from anyone that could use it in a harmful way.
-            The purpose of this app is and always will be
-            for educational purposes <i>only</i>.
-            <br/>
-            etc. etc.
-            <br/>
-            (We will definitely need to rewrite the above text)
-            <br/><br/>
-            Here's some information about privacy policies. Pretty much, we need to talk about what info we will take,
-            how we will use it, how we will store/protect it, cookies, etc. At one point in the near future, we should gather together and write a privacy policy.
-            <br/><br/>
-            https://www.privacypolicytemplate.net/
-            <br/>
-            https://www.opentracker.net/article/how-write-website-privacy-policy
-            <br/><br/>
-            After developing our privacy policy, it would be cool to write it all in a google doc/markdown/whatever file
-            and then just display it on this page. I'm not sure how plausible that would be, but editing would be much easier.
-            Regular text on this .js file is very difficult to update and maintain.
-            <br/><br/>
-            </p>
-              </MDBCol>
-
-            </MDBRow>                  
-
+               <br/>
+                     <p className="placeholder-text">
+                     Our promise is to keep your data safe, protected and far from anyone that could use it in a harmful
+                     way.
+                     The purpose of this app is and always will be
+                     for educational purposes <i>only</i>.
+                     <br/>
+                     etc. etc.
+                     <br/>
+                     (We will definitely need to rewrite the above text)
+                     <br/><br/>
+                     Here's some information about privacy policies. Pretty much, we need to talk about what info we
+                     will take,
+                     how we will use it, how we will store/protect it, cookies, etc. At one point in the near future, we
+                     should gather together and write a privacy policy.
+                     <br/><br/>
+                     https://www.privacypolicytemplate.net/
+                     <br/>
+                     https://www.opentracker.net/article/how-write-website-privacy-policy
+                     <br/><br/>
+                     After developing our privacy policy, it would be cool to write it all in a google
+                     doc/markdown/whatever file
+                     and then just display it on this page. I'm not sure how plausible that would be, but editing would
+                     be much easier.
+                     Regular text on this .js file is very difficult to update and maintain.
+                     <br/><br/>
+                     </p>
             </div>
-             
-          </header>
-
-        </MDBContainer>
+         </MDBContainer>
       )
-    }
+   }
 }
