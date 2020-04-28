@@ -10,8 +10,7 @@ export default class homepage extends Component {
             <MDBContainer className="page-homepage">
                 <header className="Homepage-header">
 
-                    <img src="logo.svg" class="img-fluid animated bounce infinite logo">
-                    </img>
+                    <img src="Poll-Buddy-Logo.png" alt="logo" className="logo img-fluid"></img>
 
                     <p className = "blurb"> An interactive questionnaire platform made by students, for
                         students, to strengthen lecture material and class attentiveness.
