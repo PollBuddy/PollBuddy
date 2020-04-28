@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import "./privacy.scss"
 import 'mdbreact/dist/css/mdb.css';
-import {MDBRow, MDBCol, MDBContainer} from 'mdbreact';
+import {MDBContainer} from 'mdbreact';
 import Header from "../../components/header/header.js"
 
 export default class privacy extends Component {

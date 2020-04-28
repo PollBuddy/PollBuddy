@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Bar } from "react-chartjs-2";
 import './pollDataView.scss'
-import { MDBContainer, MDBListGroup, MDBListGroupItem } from 'mdbreact';
+import { MDBContainer } from 'mdbreact';
 import 'mdbreact/dist/css/mdb.css';
 import Header from "../../components/header/header.js"
 
