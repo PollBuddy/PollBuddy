@@ -23,7 +23,7 @@
 	font-size: 2vh;
 }
 
-.enterEmail {
+.schoolName {
 	background-color: white;
 	position: relative;
 	font-family: helvetica;
@@ -52,7 +52,6 @@
 	max-width: 40vw;
 	transform: scale(0.7);
 }
-
 .box {
 	position: relative;
 	top: 20vh;
@@ -109,17 +108,13 @@
 	text-align: center;
 	border-radius: 10vh;
 	top: -8%;
+	left: 0%;
 	background-color: #7F648F;
 	color: #dfcfea;
 	transition-duration: 0.2s;
 	font-weight: 700;
 	font-size: 2vh;
 	min-width: 20vw;
-}
-
-.school-button:hover {
-    color: black;
-    transition-duration: 0.2s;
 }
 
 .cas-button {
@@ -134,6 +129,10 @@
 	font-weight: 700;
 	font-size: 2vh;
 	min-width: 20vw;
+}
+.school-button:hover {
+	color: black;
+	transition-duration: 0.2s;
 }
 
 .poll-buddy-button:hover {

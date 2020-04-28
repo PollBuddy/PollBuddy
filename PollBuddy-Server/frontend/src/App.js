@@ -39,10 +39,10 @@ function App() {
         <Template path="/template" />
         <AccountInfo path="/accountinfo"/>
         <PollCode path="/pollCode" /> 
-        <ForgotPassword path="/forgotPassword" />
-        <RegisterDefault path="/registerDefault" />
-        <RegisterWithSchool path="/registerWithSchool" />
-        <RegisterWithPollBuddy path="/registerWithPollBuddy" />
+        <ForgotPassword path="/forgotPassword"/>
+        <RegisterDefault path="/registerDefault"/>
+        <RegisterWithSchool path="/registerWithSchool"/>
+        <RegisterWithPollBuddy path="/registerWithPollBuddy"/>
         <Privacy path="/privacy"/>
       </Router>
     </React.Fragment>

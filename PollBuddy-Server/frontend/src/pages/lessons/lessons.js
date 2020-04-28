@@ -12,6 +12,9 @@ constructor(props){//shouldn't this be dependent on the class???? thats why i in
       //need to get other shit like pollIDs and their respective information...
     }
   }
+  componentDidMount(){
+    document.title = "Lessons - " + document.title;
+  }
   render() {    
     return (
         <div className="page-lessons">

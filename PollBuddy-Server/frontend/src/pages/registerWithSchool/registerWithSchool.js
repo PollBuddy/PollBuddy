@@ -6,6 +6,9 @@ import 'mdbreact/dist/css/mdb.css';
 import Header from "../../components/header/header.js"
 
 export default class registerWithSchool extends Component {
+    componentDidMount(){
+        document.title = "Register With School - " + document.title;
+    }
   render() {
     return (
     		<MDBContainer fluid className="register-with-school">
@@ -19,14 +22,16 @@ export default class registerWithSchool extends Component {
                     </p>
                     <MDBContainer className="form-group">
                         {/*TODO: make this a dropdown with all the schools instead of a text box*/}
-                        <input type="email" className="form-control" placeholder="Enter School Name" className="enterEmail"/>
+                        {/*If you have two different classNames, the compiler will give a warning. To get over this, concatenate their names, and the warning goes away.*/}
+                        <input type="schoolName" className={`${"schoolName"} ${"form-control"}`} placeholder="Enter School Name"/>
                     </MDBContainer>
-                        <form>{/*make sure that the link works with the account info page or any other school login page*/}
-                            <button className="btn submit-button" formAction="/accountinfo" >Submit School Name</button>
-                        </form>
-                        <form>
-                            <button className="btn cas-button" formAction="https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Fcms.union.rpi.edu%2Flogin%2Fcas%2F%3Fnext%3Dhttps%253A%252F%252Fwww.google.com%252F" >CAS (I'm an RPI student)</button>
-                        </form>
+
+                    <form>{/*make sure that the link works with the account info page or any other school login page*/}
+                        <button className="btn submit-button" formAction="/accountinfo" >Submit School Name</button>
+                    </form>
+                    <form>
+                        <button className="btn cas-button" formAction="https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Fcms.union.rpi.edu%2Flogin%2Fcas%2F%3Fnext%3Dhttps%253A%252F%252Fwww.google.com%252F" >CAS (I'm an RPI student)</button>
+                    </form>
                 </MDBContainer>
     		</MDBContainer>
     	)

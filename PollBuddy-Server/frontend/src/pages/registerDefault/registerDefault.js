@@ -7,6 +7,9 @@ import Header from "../../components/header/header.js"
 
 
 export default class registerDefault extends Component {
+    componentDidMount(){
+        document.title = "Register - " + document.title;
+    }
   render() {
     return (
     		<MDBContainer fluid className="register-homepage">
