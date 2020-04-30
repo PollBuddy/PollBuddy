@@ -25,8 +25,11 @@
 }
 .foot a {
 	color: #dfcfea;
-	text-decoration: none;
 	margin: 0 20px 0 0;
+}
+.foot a:hover {
+	text-decoration: underline;
+	color: #fff;
 }
 .logo_links {
 	position: absolute;
