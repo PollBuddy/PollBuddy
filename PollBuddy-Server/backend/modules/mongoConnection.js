@@ -1,7 +1,5 @@
 const mongo = require('mongodb');
 const MongoClient = mongo.MongoClient;
-const url = 'mongodb://db:27017';
-const database = 'pollbuddy';
 
 var db;
 
@@ -11,7 +9,7 @@ module.exports = {
 		con();
 
 		function con() {
-			const client = new MongoClient(url);
+			const client = new MongoClient(process.env['MONGO_URL']);
 			client.connect((err) => {
 				if (err) {
 					console.error("Seems the database isn't up yet, retrying in 1 second");
@@ -19,7 +17,7 @@ module.exports = {
 						con();
 					}, 1000);
 				} else {
-					db = client.db(database);
+					db = client.db(process.env['MONGO_DB']);
 					console.log('Database connected from module');
 				}
 			});
