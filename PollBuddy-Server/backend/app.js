@@ -16,6 +16,21 @@ var cors = require('cors');
 
 var app = express();
 
+// Express Session
+const express_session = require('express-session');
+const MongoStore = require('connect-mongo')(express_session);
+app.use(express_session({
+	cookie: {
+		maxAge: 3600000
+	},
+	name: "pb_session",
+	secret: "s3cr3t",// TODO: Move this out of the code and make it secure
+	store: new MongoStore({
+		url: process.env['MONGO_URL'],
+		dbName: process.env['MONGO_DB']
+	})
+}));
+
 // Cors: https://daveceddia.com/access-control-allow-origin-cors-errors-in-react-express/
 app.use(cors());
 
