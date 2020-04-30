@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './classEditor.scss'
-import {MDBBtn, MDBContainer, MDBInput} from "mdbreact";
+import { MDBContainer } from "mdbreact";
 
 //this component has 2 modes, edit and new. The new version allows the user to create a new class while the edit version
 //allows the user to edit an existing class. Pass new=true into props if you want to use the new version of the component

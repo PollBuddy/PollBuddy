@@ -18,7 +18,8 @@ import ForgotPassword from './pages/forgotPassword'
 import RegisterDefault from "./pages/registerDefault";
 import RegisterWithSchool from "./pages/registerWithSchool";
 import RegisterWithPollBuddy from "./pages/registerWithPollBuddy";
-
+import ResetPassword from "./pages/resetPassword";
+import PollDataView from "./pages/pollDataView";
 function App() {
 
   return (
@@ -39,11 +40,13 @@ function App() {
         <Template path="/template" />
         <AccountInfo path="/accountinfo"/>
         <PollCode path="/pollCode" /> 
-        <ForgotPassword path="/forgotPassword" />
-        <RegisterDefault path="/registerDefault" />
-        <RegisterWithSchool path="/registerWithSchool" />
-        <RegisterWithPollBuddy path="/registerWithPollBuddy" />
+        <ForgotPassword path="/forgotPassword"/>
+        <RegisterDefault path="/registerDefault"/>
+        <RegisterWithSchool path="/registerWithSchool"/>
+        <RegisterWithPollBuddy path="/registerWithPollBuddy"/>
         <Privacy path="/privacy"/>
+        <ResetPassword path="/resetPassword"/>
+        <PollDataView path="/pollDataView"/>
       </Router>
     </React.Fragment>
   );

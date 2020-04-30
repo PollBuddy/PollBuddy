@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import './classcreation.scss'
 import 'mdbreact/dist/css/mdb.css';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol } from 'mdbreact';
 import ClassEditor from "../../components/classEditor/classEditor";
 
 import Header from "../../components/header/header.js"
 
 export default class classcreation extends Component {//this class will likely need to call groups/new and do more with that...
+    componentDidMount(){
+        document.title = "Class Creation - " + document.title;
+    }
+
     constructor() {
         super();
         this.state = {

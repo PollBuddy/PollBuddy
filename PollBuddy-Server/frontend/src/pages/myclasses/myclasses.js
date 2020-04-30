@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { Link, navigate } from '@reach/router';
-import { MDBBtn, MDBIcon, MDBContainer } from "mdbreact";
+import { MDBBtn, MDBContainer } from "mdbreact";
 import 'mdbreact/dist/css/mdb.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
@@ -8,7 +8,7 @@ import './myclasses.scss'
 
 import Header from "../../components/header/header.js"
 
-export default class Myclasses extends Component {//TODO IMPLEMENT A LOGOUT/SIGNOUT BUTTON PLEASE. FOR NOW AM PUTTING THAT FUNCTIONALITY IN SETTINGS BUTTON
+export default class Myclasses extends Component {
   constructor(){
     super();
     if(!localStorage.getItem('loggedIn')){
@@ -17,15 +17,19 @@ export default class Myclasses extends Component {//TODO IMPLEMENT A LOGOUT/SIGN
     }
   }
   signout(){
-    localStorage.removeItem('loggedIn');//todo if admin and shit -- more specifically make diff states if the user who logged in is an admin... or teacher. wouldn't want teacher accessing user things or vice versa...
+    localStorage.removeItem('loggedIn');//todo if admin -- more specifically make diff states if the user who logged in is an admin... or teacher. wouldn't want teacher accessing user things or vice versa...
     navigate('/login');
   }
+    componentDidMount(){
+        document.title = "My Classes - " + document.title;
+    }
   render() { 
     return (
         <MDBContainer> {/* only way i could get it to compile and still look ok ?? */}
         <Header title = "my classes" btn = "account" />
         <MDBContainer className="page-my-classes">
-          {/* 
+          {/*
+          The format of this page will change based on our designs earlier this semester.
           <MDBBtn
             size="lg"
             className="home_button"
@@ -43,16 +47,15 @@ export default class Myclasses extends Component {//TODO IMPLEMENT A LOGOUT/SIGN
           >
               <MDBIcon icon="question" />
           </MDBBtn>
-
+          */}
           <MDBBtn
-              size="lg"
+              size="md"
               className="settings_button"//ACTUALLY SIGNOUT BUTTON FOR NOW
               onClick ={this.signout}
               color="secondary"
-          >
-            <MDBIcon icon="tools" />
+          > sign out
           </MDBBtn>
-          */}
+
 
           <MDBContainer className="buttons">
               <Link to="/lessons">
