@@ -17,14 +17,19 @@ export default class Footer extends Component {
 						<img src = {github_logo} alt = "Github" />
 					</a>
 				</div>
-				<div className = "foot_text">
+				<div className = "foot_links">
 					<a href = "/">
-						About Us
+						About
 					</a>
 					<a href = "https://info.rpi.edu/statement-of-accessibility" target = "_blank" rel = "noopener noreferrer">
-						Statement of Accessibility
+						Accessibility
 					</a>
-					Questions, comments, etc? Email us: someemail@yeah.com
+					<a href = "mailto:someemail@yeah.com">
+						Contact
+					</a>
+					<a href = "/privacy">
+						Privacy
+					</a>
 				</div>
 			</footer>
 		)
