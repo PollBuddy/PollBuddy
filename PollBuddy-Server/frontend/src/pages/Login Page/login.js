@@ -5,6 +5,7 @@ import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
 
 import Header from "../../components/header/header.js"
+import Footer from "../../components/footer/footer.js"
 
 export default class login extends Component {
     constructor(){
@@ -77,6 +78,8 @@ export default class login extends Component {
                     </header>
 
                 </MDBContainer>
+
+                <Footer />
 
             </MDBContainer>
         )

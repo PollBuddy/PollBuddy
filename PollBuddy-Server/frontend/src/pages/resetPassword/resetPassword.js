@@ -6,6 +6,7 @@ import {Link } from "@reach/router"
 import 'mdbreact/dist/css/mdb.css';
 
 import Header from "../../components/header/header.js"
+import Footer from "../../components/footer/footer.js"
 
 export default class resetPassword extends Component {
 
@@ -15,7 +16,7 @@ export default class resetPassword extends Component {
 
     render() {
         return (
-    		<MDBContainer fluid className="reset-homepage">
+    		<MDBContainer fluid>
     			<Header title = "Reset password" btn = "login" />
                 <MDBContainer fluid className="reset-box">
                     <p className="reset-blurb">
@@ -35,9 +36,10 @@ export default class resetPassword extends Component {
 
                     {/*Should this link to the myclasses page? Submitting your new password means you are logging in*/}
                     <Link to={"/accountinfo"}>
-                        <button className = "btn submit-button">Submit</button>
+                        <button className = "btn submit-button2">Submit</button>
                     </Link>
                 </MDBContainer>
+                <Footer />
     		</MDBContainer>
     	)
 	}

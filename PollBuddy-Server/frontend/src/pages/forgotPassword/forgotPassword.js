@@ -4,6 +4,7 @@ import { MDBContainer } from 'mdbreact';
 import 'mdbreact/dist/css/mdb.css';
 
 import Header from "../../components/header/header.js"
+import Footer from "../../components/footer/footer.js"
 
 export default class pollCode extends Component {
 
@@ -16,17 +17,16 @@ export default class pollCode extends Component {
     		<MDBContainer fluid className="forgot-homepage">
     			<Header title = "forgot password" btn = "login" />
                 <MDBContainer fluid className="forgot-box">
-                    <h1 class="forgot-text">
+                    <div className="forgot-text">
                         Forgot Password?
-                    </h1>
-                    <p class="forgot-blurb">
-                        Enter your email and we will send you a reset.
-                    </p>
-                    <div className="form-group">
-                        <input type="email" className="form-control" placeholder="Enter Email" class="enterEmail"/>
                     </div>
-                    <button class = "btn email-button">Reset Password</button>
+                    <div className="forgot-blurb">
+                        Enter your email and we will send you a reset.
+                    </div>
+                    <input type="email" className="form-control" placeholder="Enter Email" className="enterEmail"/>
+                    <button className = "btn email-button">Reset Password</button>
                 </MDBContainer>
+                <Footer />
     		</MDBContainer>
     	)
 	}

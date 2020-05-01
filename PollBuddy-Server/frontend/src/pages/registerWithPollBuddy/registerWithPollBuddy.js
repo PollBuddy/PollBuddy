@@ -4,6 +4,7 @@ import { MDBContainer } from 'mdbreact';
 import 'mdbreact/dist/css/mdb.css';
 
 import Header from "../../components/header/header.js"
+import Footer from "../../components/footer/footer.js"
 
 export default class registerWithPollBuddy extends Component {
     componentDidMount(){
@@ -11,7 +12,7 @@ export default class registerWithPollBuddy extends Component {
     }
   render() {
     return (
-    		<MDBContainer fluid className="register-with-school">
+    		<MDBContainer fluid>
     	        <Header title = "Register with us" btn = "login" />
                 <MDBContainer fluid className="p-b-box">
                     <h1 className="register-text">
@@ -33,6 +34,7 @@ export default class registerWithPollBuddy extends Component {
                         <button className="btn submit-button" formAction="/accountinfo" >Submit</button>
                     </form>
                 </MDBContainer>
+                <Footer />
     		</MDBContainer>
     	)
 	}

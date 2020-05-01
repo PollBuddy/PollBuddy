@@ -5,6 +5,7 @@ import { MDBContainer, MDBRow, MDBCol } from 'mdbreact';
 import ClassEditor from "../../components/classEditor/classEditor";
 
 import Header from "../../components/header/header.js"
+import Footer from "../../components/footer/footer.js"
 
 export default class classcreation extends Component {//this class will likely need to call groups/new and do more with that...
     componentDidMount(){
@@ -53,6 +54,7 @@ export default class classcreation extends Component {//this class will likely n
                         </MDBRow>
                     </MDBContainer>
                 </MDBContainer>
+                <Footer />
             </MDBContainer>
         )
     }

@@ -1,31 +1,5 @@
-.register-with-school{
-  	background-color: #4d3658;
-  	height: 100vh;
-  	width: 100vw;
- 	display: flex;
-  	flex-direction: column;
-  	align-items: center;
-}
-
-.sign-button {
-	position: absolute;
-	text-align: center;
-	border-radius: 10vh;
-	background-color: #7F648F;
-	top: 6%;
-	right: 5%;
-	transform: translateY(-70%);
-	height: 6vh;
-	min-width: 8vw;
-	color: white;
-	transition-duration: 0.2s;
-	font-weight: 700;
-	font-size: 2vh;
-}
-
 .schoolName {
 	background-color: white;
-	position: relative;
 	font-family: helvetica;
 	font-weight: 500;
 	color: black;
@@ -34,28 +8,13 @@
 	outline-width: 0px;
 	text-align: center;
 	justify-content: center;
-	top: -40%;
 	border-radius: 10vh;
 	font-size: 4vh;
 	max-width: 40vw;
 }
-.sign-button:hover {
-    color: black;
-    transition-duration: 0.2s;
-}
-.poll-logo {
-	position: relative;
-	top: 7%;
-	left: 2%;
-	height: 10vh;
-	width: auto;
-	max-width: 40vw;
-	transform: scale(0.7);
-}
 .box {
-	// position: relative;
-	// top: 20vh;
-	height: 40vh;
+	margin: 100px auto;
+	height: 50vh;
 	width: 50vw;
 	border-radius: 4vh;
 	border-style: solid;
@@ -74,26 +33,19 @@
 }
 
 .register-text {
-	position: relative;
-	top: 0%;
 	font-weight: 700;
 	font-size: 3vh;
 	color: #dfcfea;
 }
 
 .register-blurb {
-	position: relative;
 	text-align: center;
-	top: -5%;
-	padding-left: 3px;
-	padding-right: 3px;
 	font-weight: 200;
 	font-size: 2.7vh;
 	color: #dfcfea;
 }
 
 ::placeholder {
-	position: relative;
 	color: gray;
 	opacity: 50%;
 	font-weight: 500;
@@ -103,12 +55,9 @@
 }
 
 .submit-button {
-	position: relative;
 	justify-content: center;
 	text-align: center;
 	border-radius: 10vh;
-	top: -8%;
-	left: 0%;
 	background-color: #7F648F;
 	color: #dfcfea;
 	transition-duration: 0.2s;
@@ -118,11 +67,9 @@
 }
 
 .cas-button {
-	position: relative;
 	justify-content: center;
 	text-align: center;
 	border-radius: 10vh;
-	top: 0%;
 	background-color: #7F648F;
 	color: #dfcfea;
 	transition-duration: 0.2s;
