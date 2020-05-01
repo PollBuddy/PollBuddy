@@ -2,7 +2,36 @@ var createError = require('http-errors');
 var express = require('express');
 var router = express.Router();
 var mongoConnection = require('../modules/mongoConnection.js');
+const bson = require('bson');
 var bcrypt = require('bcrypt');
+
+// Middleware for getting user information
+module.exports.user_middleware = function(req, res, next){
+
+	req.isLoggedIn = function(){
+		return req.session['UserID'] !== undefined;
+	}
+
+	// If the current user is logged in, a user object will be returned, otherwise a 401 will be sent
+	// Callback takes two parameters: err and user
+	req.getCurrentUser = function(callback){
+		if(!req.isLoggedIn()){
+			res.status(401).send({
+				error: "Not logged in"
+			});
+			if(typeof callback == 'function') callback(new Error("Not logged in"));
+		}else{
+			mongoConnection.getDB().collection('users').findOne({_id:bson.ObjectId(req.session['UserID'])}, {projection: {Password: false}}, (err, result) => {
+				if(err) return callback(err);
+				else{
+					if(typeof callback == 'function') callback(null, result);
+				}
+			});
+		}
+	}
+
+	next();
+};
 
 // GET users listing.
 router.get('/', function(req, res, next) {
@@ -161,4 +190,4 @@ router.get('/:id/groups', function(req, res, next) {
 	});
 });
 
-module.exports = router;
+module.exports.users_router = router;
