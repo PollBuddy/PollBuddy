@@ -10,8 +10,66 @@ router.get('/', function(req, res, next) {
 		res.send(result);
 	});
 });
-router.get('/login/', function(req, res, next) {
-	res.send('i am a login processor');//TODO
+router.post('/login', function(req, res){
+
+	// Get email and password from request in JSON form
+	var email = req.body['email'];
+	var password = req.body['password'];
+
+	// Check if email is present
+	if(email === undefined){
+		res.status(400).send({
+			error: "Missing email"
+		});
+	}
+	// Check if password is present
+	else if(password === undefined){
+		res.status(400).send({
+			error: "Missing password"
+		});
+	}
+
+	else{
+		mongoConnection.getDB().collection('users').findOne({Email:email}, {_id: true, Password: true}, (err_db, result_db) => {
+			if(err_db){
+				console.error(err_db);
+				res.status(500).send({
+					error: "Database error"
+				});
+			}
+			else if(result_db === null){
+				res.status(401).send({
+					error: "Invalid credentials"
+				});
+			}else{
+				bcrypt.compare(password, result_db['Password'], (err_compare, result_compare) => {
+					if(err_compare){
+						console.error(err_compare);
+						res.status(500).send({
+							error: "Hash comparison error"
+						});
+					}else if(result_compare){
+						req.session.regenerate((err_regen) => {
+							if(err_regen){
+								console.error(err_regen);
+								res.status(500).send({
+									error: "Error regenerating session"
+								});
+							}else{
+								req.session['UserID'] = result_db['_id'];
+								res.sendStatus(200);
+							}
+						});
+					}else{
+						res.status(401).send({
+							error: "Invalid credentials"
+						});
+					}
+				});
+			}
+		});
+	}
+
 });
 
 router.post('/register', function(req, res, next){
