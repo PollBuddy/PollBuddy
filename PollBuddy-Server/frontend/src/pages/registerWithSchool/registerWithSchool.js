@@ -28,7 +28,7 @@ export default class registerWithSchool extends Component {
                     </MDBContainer>
 
                     <form>{/*make sure that the link works with the account info page or any other school login page*/}
-                        <button className="btn submit-button" formAction="/accountinfo" >Submit School Name</button>
+                        <button className="btn submit-button2" formAction="/accountinfo" >Submit School Name</button>
                     </form>
                     <form>
                         <button className="btn cas-button" formAction="https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Fcms.union.rpi.edu%2Flogin%2Fcas%2F%3Fnext%3Dhttps%253A%252F%252Fwww.google.com%252F" >CAS (I'm an RPI student)</button>

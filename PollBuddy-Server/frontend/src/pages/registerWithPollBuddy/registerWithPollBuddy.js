@@ -31,7 +31,7 @@ export default class registerWithPollBuddy extends Component {
                         <input type="email" className={`${"enterPassword"} ${"form-control"}`} placeholder="Enter your password"/>
                     </MDBContainer>
                     <form>
-                        <button className="btn submit-button" formAction="/accountinfo" >Submit</button>
+                        <button className="btn submit-button2" formAction="/accountinfo" >Submit</button>
                     </form>
                 </MDBContainer>
                 <Footer />
