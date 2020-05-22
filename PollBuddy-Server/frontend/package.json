@@ -5,7 +5,7 @@
   "dependencies": {
     "@reach/router": "^1.2.1",
     "mdbreact": "^4.21.1",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.14.1",
     "react": "^16.10.2",
     "react-countdown-now": "^2.1.2",
     "react-dom": "^16.10.2",
