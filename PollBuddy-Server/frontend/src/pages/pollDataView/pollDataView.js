@@ -3,8 +3,6 @@ import { Bar } from "react-chartjs-2";
 import './pollDataView.scss'
 import { MDBContainer } from 'mdbreact';
 import 'mdbreact/dist/css/mdb.css';
-import Header from "../../components/header/header.js"
-import Footer from "../../components/footer/footer.js"
 
 export default class pollDataView extends Component {
     componentDidMount(){
@@ -78,7 +76,6 @@ export default class pollDataView extends Component {
         return (
 
             <MDBContainer fluid>
-                <Header title = "poll data view" btn = "account" />
                 <MDBContainer className = "data_contain">
                     <MDBContainer className="questions">
                         <h1 className="question_text">1200 Data Structures, Lesson #10</h1>
@@ -99,7 +96,6 @@ export default class pollDataView extends Component {
                         <Bar data={this.state.dataBar} options={this.state.barChartOptions}/>
                     </MDBContainer>
                 </MDBContainer>
-                <Footer />
             </MDBContainer>
 
         );

@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 import './login.scss'
-import {Link, navigate} from "@reach/router"
+import {Link, Redirect} from "react-router-dom";
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
-
-import Header from "../../components/header/header.js"
-import Footer from "../../components/footer/footer.js"
 
 export default class login extends Component {
     constructor(){
         super();
         if(localStorage.getItem('loggedIn')){
-            navigate('/myclasses');//this redirects users to the route absolute specified.
+            Redirect('/myclasses');//this redirects users to the route absolute specified.
             window.location.reload(false);//this forces a reload... a little barbaric i am aware
         }
     }
@@ -19,7 +16,7 @@ export default class login extends Component {
         //needs some authentication before and if authentication passes then set local storage and such refer to classcreation page to see the way to make POST requests to the backend
         localStorage.setItem('loggedIn', true);//maybe have an admin/teacher var instead of just true
         //TODO MAYBE IN THE FUTURE USE COOKIES TO REMEMBER PAST SESSION
-        navigate('/myclasses');//this is how one navigates to another page from reach router
+        Redirect('/myclasses');//this is how one navigates to another page from reach router
     }
     componentDidMount(){
         document.title = "Login - " + document.title;
@@ -28,12 +25,7 @@ export default class login extends Component {
         return (
             <MDBContainer className="page-login">
 
-
-                <Header title = "login" btn = "register" />
-
                 <MDBContainer className="d-flex p-2 Login-Box">
-
-                    <header Login="LoginElements">
 
                         <MDBContainer>
                             <MDBRow>
@@ -75,11 +67,7 @@ export default class login extends Component {
                             </MDBRow>
                         </MDBContainer>
 
-                    </header>
-
                 </MDBContainer>
-
-                <Footer />
 
             </MDBContainer>
         )

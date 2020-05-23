@@ -3,9 +3,6 @@ import './registerWithSchool.scss'
 import { MDBContainer } from 'mdbreact';
 import 'mdbreact/dist/css/mdb.css';
 
-import Header from "../../components/header/header.js"
-import Footer from "../../components/footer/footer.js"
-
 export default class registerWithSchool extends Component {
     componentDidMount(){
         document.title = "Register With School - " + document.title;
@@ -13,7 +10,6 @@ export default class registerWithSchool extends Component {
   render() {
     return (
     		<MDBContainer fluid>
-    			<Header title = "Register with school" btn = "login" />
                 <MDBContainer fluid className="box">
                     <h1 className="register-text">
                         Register with School
@@ -34,7 +30,6 @@ export default class registerWithSchool extends Component {
                         <button className="btn cas-button" formAction="https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Fcms.union.rpi.edu%2Flogin%2Fcas%2F%3Fnext%3Dhttps%253A%252F%252Fwww.google.com%252F" >CAS (I'm an RPI student)</button>
                     </form>
                 </MDBContainer>
-                <Footer />
     		</MDBContainer>
     	)
 	}

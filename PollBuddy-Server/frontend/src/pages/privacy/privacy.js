@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import "./privacy.scss"
 import 'mdbreact/dist/css/mdb.css';
 import {MDBContainer} from 'mdbreact';
-import Header from "../../components/header/header.js"
-import Footer from "../../components/footer/footer.js"
 
 export default class privacy extends Component {
    componentDidMount() {
@@ -13,7 +11,6 @@ export default class privacy extends Component {
    render() {
       return (
          <MDBContainer>
-            <Header title="privacy" btn="login"/>
             {/* We should look into incorporating a markdown/google doc onto this page rather than typing directly on the page.
                It's much easier to update and maintain. */}
 
@@ -48,7 +45,6 @@ export default class privacy extends Component {
                   Regular text on this .js file is very difficult to update and maintain.
                </p>
             </div>
-            <Footer />
 
          </MDBContainer>
       )

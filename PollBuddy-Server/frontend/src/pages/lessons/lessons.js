@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Link } from '@reach/router';
+import {Link} from "react-router-dom";
 
 import './lessons.scss'
 export default class lessons extends Component {
