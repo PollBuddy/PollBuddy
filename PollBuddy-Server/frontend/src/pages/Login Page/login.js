@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import './login.scss'
-import { navigate } from "@reach/router"
+import {Link, navigate} from "@reach/router"
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
 
 import Header from "../../components/header/header.js"
+import Footer from "../../components/footer/footer.js"
 
 export default class login extends Component {
     constructor(){
@@ -19,6 +20,9 @@ export default class login extends Component {
         localStorage.setItem('loggedIn', true);//maybe have an admin/teacher var instead of just true
         //TODO MAYBE IN THE FUTURE USE COOKIES TO REMEMBER PAST SESSION
         navigate('/myclasses');//this is how one navigates to another page from reach router
+    }
+    componentDidMount(){
+        document.title = "Login - " + document.title;
     }
     render() {
         return (
@@ -54,14 +58,17 @@ export default class login extends Component {
                                             />
                                         </MDBContainer>
                                         <MDBContainer className="text-right">
-                                            <MDBBtn size="lg" color="black" className="purple">Forgot Your Password</MDBBtn>
+                                            <Link to={"/forgotPassword"}>
+                                                <MDBBtn size="lg" color="black" className="purple">Forgot Your Password</MDBBtn>
+                                            </Link>
+
                                             <MDBBtn size="lg" color="black" className="purple" onClick={this.handleLogin} >Submit</MDBBtn>
-
                                         </MDBContainer>
+
                                         <MDBContainer className="text-right">
-
-                                            <MDBBtn size="lg" color="black" className="sign_up">No account? Sign up</MDBBtn>
-
+                                            <Link to={"/registerDefault"}>
+                                                <MDBBtn size="lg" color="black" className="sign_up">No account? Sign up</MDBBtn>
+                                            </Link>
                                         </MDBContainer>
                                     </form>
                                 </MDBCol>
@@ -71,6 +78,8 @@ export default class login extends Component {
                     </header>
 
                 </MDBContainer>
+
+                <Footer />
 
             </MDBContainer>
         )

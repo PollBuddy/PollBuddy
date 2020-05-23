@@ -50,9 +50,6 @@ input[type=submit]:hover {
 }
 
 .submit-button {
-  position: absolute;
-  right: 2vh;
-  bottom: 2vh;
   justify-content: center;
   text-align: center;
   border: none;
@@ -60,11 +57,11 @@ input[type=submit]:hover {
   padding: 16px;
   background-color: #7F648F !important;
   color: #dfcfea;
-  //transition-duration: 0.2s;
   font-weight: 700;
   font-size: 2vh;
   min-width: 20vw;
   overflow: hidden;
+  margin: 10px 0 0;
 }
 
 .submit-button:hover{

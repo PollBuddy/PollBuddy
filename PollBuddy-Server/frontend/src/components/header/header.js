@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import 'mdbreact/dist/css/mdb.css';
 import './header.scss';
-import logo from "../../Poll_Buddy_Logo.png";
+import logo from "../../images/logo.png";
 
 export default class Header extends Component {
 	constructor(props) {
@@ -24,8 +24,7 @@ export default class Header extends Component {
 	}
 	render() {
 		return (
-			<div className = "bar">
-				<link href="https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel="stylesheet" />
+			<header className = "bar">
 				<a href = "/">
 					<img src = {logo} className = "bar_logo" alt = "logo" />
 				</a>
@@ -33,7 +32,7 @@ export default class Header extends Component {
 				<a href = {this.state.link} className = "bar_btn">
 					{this.state.text}
 				</a>
-			</div>
+			</header>
 		);
 	}
 }

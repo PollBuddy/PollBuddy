@@ -57,7 +57,7 @@ export default class lesson extends Component {
                 <MDBDropdownMenu basic>
                   {this.state.questions.map((value, index) => {
                     let tag;
-                    if(index == this.state.questionDispatcherIndex) {
+                    if(index === this.state.questionDispatcherIndex) {
                       tag = <MDBDropdownItem key={index} active href="#">
                         {index+1}: {value.title}
                       </MDBDropdownItem>;
