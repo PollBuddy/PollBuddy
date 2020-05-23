@@ -11,15 +11,15 @@ export default class pollviewer extends Component {
         <MDBContainer>
           <header>
             <Header title = "Poll Viewer" btn = "account" />
-              <div className="main-body">
+              <MDBContainer className="main-body">
                 <MDBRow>
                     <MDBCol xs="12">
-                        <div className="question-number">
+                        <MDBContainer className="question-number">
                             Question 3 of 28:
-                        </div>
-                        <div className="question">
+                        </MDBContainer>
+                        <MDBContainer className="question">
                             Why does the tooth fairy collect teeth?
-                        </div>
+                        </MDBContainer>
 
                         <ul className="answers">
                             <li>She grinds them into the fairy dust she needs to fly</li>
@@ -31,7 +31,7 @@ export default class pollviewer extends Component {
                 </MDBRow>
                 
 
-            </div>
+            </MDBContainer>
           </header>
 
         </MDBContainer>
