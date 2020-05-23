@@ -6,7 +6,7 @@ import ClassEditor from "../../components/classEditor/classEditor";
 
 export default class classcreation extends Component {//this class will likely need to call groups/new and do more with that...
     componentDidMount(){
-        document.title = "Class Creation - " + document.title;
+        this.props.updateTitle("Class Creation");
     }
 
     constructor() {

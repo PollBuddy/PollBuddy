@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 
 export default class registerDefault extends Component {
     componentDidMount(){
-        document.title = "Register - " + document.title;
+       this.props.updateTitle("Register");
     }
   render() {
     return (

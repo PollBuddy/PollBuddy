@@ -5,12 +5,10 @@ import { MDBContainer } from 'mdbreact';
 import logo from '../../images/logo.png';
 import {Link} from "react-router-dom";
 
-
-
 export default class homepage extends Component {
 
     componentDidMount(){
-        document.title = "Home - " + document.title;
+        this.props.updateTitle("Home");
     }
 
     render() {

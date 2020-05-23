@@ -5,7 +5,7 @@ import 'mdbreact/dist/css/mdb.css';
 
 export default class registerWithPollBuddy extends Component {
     componentDidMount(){
-        document.title = "Register With Us - " + document.title;
+        this.props.updateTitle("Register with Poll Buddy");
     }
   render() {
     return (

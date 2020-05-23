@@ -8,7 +8,7 @@ import 'mdbreact/dist/css/mdb.css';
 export default class resetPassword extends Component {
 
     componentDidMount(){
-        document.title = "Reset Password - " + document.title;
+        this.props.updateTitle("Reset Password");
     }
 
     render() {

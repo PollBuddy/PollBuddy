@@ -5,7 +5,7 @@ import { MDBContainer } from 'mdbreact';
 
 export default class accountinfo extends Component {
 	componentDidMount(){
-		document.title = "Account Info - " + document.title;
+		this.props.updateTitle("Account Info");
 	}
 
 	render() {

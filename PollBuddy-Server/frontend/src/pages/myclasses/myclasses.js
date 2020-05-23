@@ -19,7 +19,7 @@ export default class Myclasses extends Component {
 		Redirect('/login');
 	}
 		componentDidMount(){
-				document.title = "My Classes - " + document.title;
+			this.props.updateTitle("My Classes");
 		}
 	render() { 
 		return (

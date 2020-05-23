@@ -18,7 +18,7 @@ export default class login extends Component {
         Redirect('/myclasses');//this is how one navigates to another page from reach router
     }
     componentDidMount(){
-        document.title = "Login - " + document.title;
+        this.props.updateTitle("Log in");
     }
     render() {
         return (

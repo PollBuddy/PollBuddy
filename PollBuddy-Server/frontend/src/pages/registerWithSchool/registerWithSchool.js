@@ -5,7 +5,7 @@ import 'mdbreact/dist/css/mdb.css';
 
 export default class registerWithSchool extends Component {
     componentDidMount(){
-        document.title = "Register With School - " + document.title;
+        this.props.updateTitle("Register with School");
     }
   render() {
     return (

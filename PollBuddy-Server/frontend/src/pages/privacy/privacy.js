@@ -5,7 +5,7 @@ import {MDBContainer} from 'mdbreact';
 
 export default class privacy extends Component {
    componentDidMount() {
-      document.title = "Privacy - " + document.title;
+      this.props.updateTitle("Privacy");
    }
 
    render() {

@@ -13,7 +13,7 @@ constructor(props){//shouldn't this be dependent on the class???? thats why i in
     }
   }
   componentDidMount(){
-    document.title = "Lessons - " + document.title;
+     this.props.updateTitle("Lessons");
   }
   render() {    
     return (

@@ -34,7 +34,7 @@ export default class App extends React.Component {
 
   updateTitle(t) {
     this.setState({pageTitle: t});
-    document.title = t;
+    document.title = t + " - Poll Buddy";
   }
 
   render() {
@@ -53,52 +53,52 @@ export default class App extends React.Component {
 
             <Switch>
               <Route exact path="/">
-                <Homepage/>
+                <Homepage updateTitle={this.updateTitle} />
               </Route>
               <Route exact path="/myclasses">
-                <Myclasses/>
+                <Myclasses updateTitle={this.updateTitle} />
               </Route>
               <Route exact path="/lessons">
-                <Lessons/>
+                <Lessons updateTitle={this.updateTitle} />
               </Route>
               <Route exact path="/lesson/:lessonId">
-                <Lesson/>
+                <Lesson updateTitle={this.updateTitle} />
               </Route>
               <Route exact path="/login">
-                <Login/>
+                <Login updateTitle={this.updateTitle} />
               </Route>
               <Route exact path="/classcreation">
-                <Classcreation/>
+                <Classcreation updateTitle={this.updateTitle} />
               </Route>
               <Route exact path="/template">
-                <Template/>
+                <Template updateTitle={this.updateTitle} />
               </Route>
               <Route exact path="/accountinfo">
-                <AccountInfo/>
+                <AccountInfo updateTitle={this.updateTitle} />
               </Route>
               <Route exact path="/pollCode">
-                <PollCode/>
+                <PollCode updateTitle={this.updateTitle} />
               </Route>
               <Route exact path="/forgotPassword">
-                <ForgotPassword/>
+                <ForgotPassword updateTitle={this.updateTitle} />
               </Route>
               <Route exact path="/registerDefault">
-                <RegisterDefault/>
+                <RegisterDefault updateTitle={this.updateTitle} />
               </Route>
               <Route exact path="/registerWithSchool">
-                <RegisterWithSchool/>
+                <RegisterWithSchool updateTitle={this.updateTitle} />
               </Route>
               <Route exact path="/registerWithPollBuddy">
-                <RegisterWithPollBuddy/>
+                <RegisterWithPollBuddy updateTitle={this.updateTitle} />
               </Route>
               <Route exact path="/privacy">
-                <Privacy/>
+                <Privacy updateTitle={this.updateTitle} />
               </Route>
               <Route exact path="/resetPassword">
-                <ResetPassword/>
+                <ResetPassword updateTitle={this.updateTitle} />
               </Route>
               <Route exact path="/pollDataView">
-                <PollDataView/>
+                <PollDataView updateTitle={this.updateTitle} />
               </Route>
               {/* Default route/error page */}
               <Route component={Notfound}/>

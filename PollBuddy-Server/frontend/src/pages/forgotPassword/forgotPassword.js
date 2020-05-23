@@ -6,7 +6,7 @@ import 'mdbreact/dist/css/mdb.css';
 export default class pollCode extends Component {
 
     componentDidMount(){
-        document.title = "Forgot Password - " + document.title;
+       this.props.updateTitle("Forgot Password");
     }
 
     render() {

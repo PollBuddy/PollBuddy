@@ -6,7 +6,7 @@ import logo from '../../images/logo.png';
 
 export default class pollCode extends Component {
 	componentDidMount(){
-		document.title = "Poll Code - " + document.title;
+		this.props.updateTitle("Poll Code");
 	}
   render() {
     return (

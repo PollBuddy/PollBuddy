@@ -6,7 +6,7 @@ import 'mdbreact/dist/css/mdb.css';
 
 export default class pollDataView extends Component {
     componentDidMount(){
-        document.title = "Poll Data View - " + document.title;
+        this.props.updateTitle("Poll Data View");
     }
 
     state = {
