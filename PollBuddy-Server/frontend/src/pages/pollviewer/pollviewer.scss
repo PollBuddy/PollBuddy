@@ -12,7 +12,34 @@
 .answers {
     text-align: left;
     margin-left: 3rem;
-    list-style-type: upper-alpha;
+    list-style-type: none;
     line-height: 4rem;
     
+}
+
+.answers a {
+    color: #FFFFFF;
+}
+
+.answers a:hover {
+    /* This needs tweaking */
+    color: #dfcfea;
+}
+
+.answers .answerNumber {
+
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+
+    background: #25162c;
+    border: 2px solid #25162c;
+    color: #fff;
+    text-align: center;
+
+    display: inline-block;
+
+    font: 32px Arial, sans-serif;
+
 }
