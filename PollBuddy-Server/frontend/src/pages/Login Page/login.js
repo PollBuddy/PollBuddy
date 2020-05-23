@@ -9,7 +9,6 @@ export default class login extends Component {
         super();
         if(localStorage.getItem('loggedIn')){
             Redirect('/myclasses');//this redirects users to the route absolute specified.
-            window.location.reload(false);//this forces a reload... a little barbaric i am aware
         }
     }
     handleLogin() {
