@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './registerDefault.scss'
-import { MDBContainer } from 'mdbreact';
+import {MDBBtn, MDBContainer} from 'mdbreact';
 import 'mdbreact/dist/css/mdb.css';
+import {Link} from "react-router-dom";
 
 export default class registerDefault extends Component {
     componentDidMount(){
@@ -17,12 +18,14 @@ export default class registerDefault extends Component {
                     <p className="register-blurb">
                         Click on one of the following buttons to register.
                     </p>
-                    <form>
-                        <button className="btn school-button" formAction="/registerWithSchool" >Register with School</button>
-                    </form>
-                    <form>
-                        <button className="btn poll-buddy-button" formAction="/registerWithPollBuddy" >Register with PollBuddy</button>
-                    </form>
+
+                   <Link to={"/registerWithSchool"}>
+                      <MDBBtn size="lg" color="black" className="btn school-button">Register with School</MDBBtn>
+                   </Link>
+
+                   <Link to={"/registerWithPollBuddy"}>
+                      <MDBBtn size="lg" color="black" className="btn poll-buddy-button">Register with PollBuddy</MDBBtn>
+                   </Link>
 
                 </MDBContainer>
     		</MDBContainer>
