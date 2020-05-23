@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter, Route} from 'react-router-dom'
+import {BrowserRouter, Route, Switch} from 'react-router-dom'
 
 import './App.css';
 import Myclasses from './pages/myclasses'
@@ -45,15 +45,13 @@ export default class App extends React.Component {
             <Header title={this.state.pageTitle} userInfo={this.state.userInfo} />
 
             {/*
-            Reach Router implementation.
-            Each page/component with a path has its own route defined below.
-            Link to them with link tags
+            Using React BrowserRouter now
 
             See https://codeburst.io/getting-started-with-react-router-5c978f70df91
             We will likely want to nest a lot of these later, this link has some details how
           */}
 
-            <switch>
+            <Switch>
               <Route exact path="/">
                 <Homepage/>
               </Route>
@@ -104,7 +102,7 @@ export default class App extends React.Component {
               </Route>
               {/* Default route/error page */}
               <Route component={Notfound}/>
-            </switch>
+            </Switch>
 
             <Footer/>
 

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './homepage.scss'
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer } from 'mdbreact';
-import { Link } from '@reach/router';
+import { Link } from 'maybe @reach/router';
 import logo from '../../images/logo.png';
 
 
@@ -24,11 +24,11 @@ export default class homepage extends Component {
                     </p>
 
                     <MDBContainer className="text-right">
-                        <Link to={"/login"}>
-                            <button class = "btn button">Sign In</button>
+                        <Link to="/login">
+                            <button className = "btn button">Sign In</button>
                         </Link>
-                        <Link to={"/registerDefault"}>
-                            <button class = "btn button">Sign Up</button>
+                        <Link to="/registerDefault">
+                            <button className = "btn button">Sign Up</button>
                         </Link>
                     </MDBContainer>
 

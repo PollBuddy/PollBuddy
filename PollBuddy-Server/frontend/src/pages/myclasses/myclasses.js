@@ -6,9 +6,6 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import './myclasses.scss'
 
-import Header from "../../components/header/header.js"
-import Footer from "../../components/footer/footer.js"
-
 export default class Myclasses extends Component {
 	constructor(){
 		super();
@@ -27,7 +24,6 @@ export default class Myclasses extends Component {
 	render() { 
 		return (
 			<MDBContainer>
-				<Header title = "my classes" btn = "account" />
 				<MDBContainer className="page-my-classes2">
 					{/*
 					The format of this page will change based on our designs earlier this semester.
@@ -127,7 +123,6 @@ export default class Myclasses extends Component {
 							Github
 					</MDBBtn> */}
 				</MDBContainer>
-				<Footer />
 			</MDBContainer>
 		)
 	}
