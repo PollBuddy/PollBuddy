@@ -20,10 +20,18 @@ import RegisterWithSchool from "./pages/registerWithSchool";
 import RegisterWithPollBuddy from "./pages/registerWithPollBuddy";
 import ResetPassword from "./pages/resetPassword";
 import PollDataView from "./pages/pollDataView";
+
+import Header from "./components/header/header.js"
+import Footer from "./components/footer/footer.js"
+import {MDBContainer} from "mdbreact";
+
 function App() {
 
   return (
     <React.Fragment>
+
+      <Header btn = "login" />
+
       {/* 
         Reach Router implementation.
         Each page/component with a path has its own route defined below.
@@ -48,6 +56,9 @@ function App() {
         <ResetPassword path="/resetPassword"/>
         <PollDataView path="/pollDataView"/>
       </Router>
+
+      <Footer />
+
     </React.Fragment>
   );
 }

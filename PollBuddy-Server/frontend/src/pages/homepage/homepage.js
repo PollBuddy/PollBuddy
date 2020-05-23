@@ -5,8 +5,7 @@ import { MDBContainer } from 'mdbreact';
 import { Link } from '@reach/router';
 import logo from '../../images/logo.png';
 
-import Header from "../../components/header/header.js"
-import Footer from "../../components/footer/footer.js"
+
 
 export default class homepage extends Component {
 
@@ -17,7 +16,6 @@ export default class homepage extends Component {
     render() {
         return (
             <MDBContainer>
-                <Header btn = "login" />
                 <header className="Homepage-header">
                     <img src={logo} className="img-fluid animated bounce infinite logo" alt="logo" />
 
@@ -35,7 +33,6 @@ export default class homepage extends Component {
                     </MDBContainer>
 
                 </header>
-                <Footer />
             </MDBContainer>
         )
     }
