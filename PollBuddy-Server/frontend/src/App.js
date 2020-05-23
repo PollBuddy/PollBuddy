@@ -1,6 +1,5 @@
 import React from 'react';
-import { Router } from "@reach/router";
-
+import {BrowserRouter, Route} from 'react-router-dom'
 
 import './App.css';
 import Myclasses from './pages/myclasses'
@@ -23,45 +22,95 @@ import PollDataView from "./pages/pollDataView";
 
 import Header from "./components/header/header.js"
 import Footer from "./components/footer/footer.js"
-import {MDBContainer} from "mdbreact";
 
-function App() {
+export default class App extends React.Component {
 
-  return (
-    <React.Fragment>
+  state = {
+    pageTitle: "",
+    userInfo: {
+      sessionIdentifier: ""
+    }
+  };
 
-      <Header btn = "login" />
+  updateTitle(t) {
+    this.setState({pageTitle: t});
+    document.title = t;
+  }
 
-      {/* 
-        Reach Router implementation.
-        Each page/component with a path has its own route defined below.
-        Link to them with link tags
-      */}
-      <Router>
-        <Myclasses path="/myclasses" />
-        <Homepage path="/" />
-        <Lessons path="/lessons" />
-        <Notfound default />
-        <Lesson path="/lesson/:lessonId" />
-        <Login path="/login" />
-        <Classcreation path="/classcreation" />
-        <Template path="/template" />
-        <AccountInfo path="/accountinfo"/>
-        <PollCode path="/pollCode" /> 
-        <ForgotPassword path="/forgotPassword"/>
-        <RegisterDefault path="/registerDefault"/>
-        <RegisterWithSchool path="/registerWithSchool"/>
-        <RegisterWithPollBuddy path="/registerWithPollBuddy"/>
-        <Privacy path="/privacy"/>
-        <ResetPassword path="/resetPassword"/>
-        <PollDataView path="/pollDataView"/>
-      </Router>
+  render() {
+    this.updateTitle = this.updateTitle.bind(this);
+     return (
+          <BrowserRouter>
 
-      <Footer />
+            <Header title={this.state.pageTitle} userInfo={this.state.userInfo} />
 
-    </React.Fragment>
-  );
+            {/*
+            Reach Router implementation.
+            Each page/component with a path has its own route defined below.
+            Link to them with link tags
+
+            See https://codeburst.io/getting-started-with-react-router-5c978f70df91
+            We will likely want to nest a lot of these later, this link has some details how
+          */}
+
+            <switch>
+              <Route exact path="/">
+                <Homepage/>
+              </Route>
+              <Route exact path="/myclasses">
+                <Myclasses/>
+              </Route>
+              <Route exact path="/lessons">
+                <Lessons/>
+              </Route>
+              <Route exact path="/lesson/:lessonId">
+                <Lesson/>
+              </Route>
+              <Route exact path="/login">
+                <Login/>
+              </Route>
+              <Route exact path="/classcreation">
+                <Classcreation/>
+              </Route>
+              <Route exact path="/template">
+                <Template/>
+              </Route>
+              <Route exact path="/accountinfo">
+                <AccountInfo/>
+              </Route>
+              <Route exact path="/pollCode">
+                <PollCode/>
+              </Route>
+              <Route exact path="/forgotPassword">
+                <ForgotPassword/>
+              </Route>
+              <Route exact path="/registerDefault">
+                <RegisterDefault/>
+              </Route>
+              <Route exact path="/registerWithSchool">
+                <RegisterWithSchool/>
+              </Route>
+              <Route exact path="/registerWithPollBuddy">
+                <RegisterWithPollBuddy/>
+              </Route>
+              <Route exact path="/privacy">
+                <Privacy/>
+              </Route>
+              <Route exact path="/resetPassword">
+                <ResetPassword/>
+              </Route>
+              <Route exact path="/pollDataView">
+                <PollDataView/>
+              </Route>
+              {/* Default route/error page */}
+              <Route component={Notfound}/>
+            </switch>
+
+            <Footer/>
+
+          </BrowserRouter>
+
+    )
+  }
 }
 
-
-export default App;
