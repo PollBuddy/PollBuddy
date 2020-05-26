@@ -17,6 +17,7 @@ import ForgotPassword from './pages/forgotPassword'
 import RegisterDefault from "./pages/registerDefault";
 import RegisterWithSchool from "./pages/registerWithSchool";
 import RegisterWithPollBuddy from "./pages/registerWithPollBuddy";
+import PollViewer from "./pages/pollviewer/pollviewer";
 import ResetPassword from "./pages/resetPassword";
 import PollDataView from "./pages/pollDataView";
 
@@ -100,6 +101,10 @@ export default class App extends React.Component {
               <Route exact path="/pollDataView">
                 <PollDataView updateTitle={this.updateTitle} />
               </Route>
+              <Route exact path="/pollviewer">
+                <PollViewer updateTitle={this.updateTitle} />
+              </Route>
+       
               {/* Default route/error page */}
               <Route component={Notfound}/>
             </Switch>
