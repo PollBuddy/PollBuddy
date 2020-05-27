@@ -1,45 +1,12 @@
 .register-homepage{
   	background-color: #4d3658;
-  	height: 100vh;
-  	width: 100vw;
  	display: flex;
   	flex-direction: column;
   	align-items: center;
 }
 
-.sign-button {
-	position: absolute;
-	text-align: center;
-	border-radius: 10vh;
-	background-color: #7F648F;
-	top: 6%;
-	right: 5%;
-	transform: translateY(-70%);
-	height: 6vh;
-	min-width: 8vw;
-	color: white;
-	transition-duration: 0.2s;
-	font-weight: 700;
-	font-size: 2vh;
-}
-
-.sign-button:hover {
-    color: black;
-    transition-duration: 0.2s;
-}
-.poll-logo {
-	position: relative;
-	top: 7%;
-	left: 2%;
-	height: 10vh;
-	width: auto;
-	max-width: 40vw;
-	transform: scale(0.7);
-}
-
-.box {
-	position: relative;
-	top: 20vh;
+.register-homepage .box {
+	margin: 100px auto;
 	height: 40vh;
 	width: 50vw;
 	border-radius: 4vh;
@@ -59,17 +26,13 @@
 }
 
 .register-text {
-	position: relative;
-	top: -10%;
 	font-weight: 700;
 	font-size: 3vh;
 	color: #dfcfea;
 }
 
 .register-blurb {
-	position: relative;
 	text-align: center;
-	top: -10%;
 	padding-left: 3px;
 	padding-right: 3px;
 	font-weight: 200;
@@ -78,7 +41,6 @@
 }
 
 ::placeholder {
-	position: relative;
 	color: gray;
 	opacity: 50%;
 	font-weight: 500;
@@ -88,11 +50,9 @@
 }
 
 .school-button {
-	position: relative;
 	justify-content: center;
 	text-align: center;
 	border-radius: 10vh;
-	top: -8%;
 	background-color: #7F648F;
 	color: #dfcfea;
 	transition-duration: 0.2s;
@@ -107,11 +67,9 @@
 }
 
 .poll-buddy-button {
-	position: relative;
 	justify-content: center;
 	text-align: center;
 	border-radius: 10vh;
-	top: 0%;
 	background-color: #7F648F;
 	color: #dfcfea;
 	transition-duration: 0.2s;

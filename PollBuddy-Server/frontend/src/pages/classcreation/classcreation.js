@@ -4,11 +4,9 @@ import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol } from 'mdbreact';
 import ClassEditor from "../../components/classEditor/classEditor";
 
-import Header from "../../components/header/header.js"
-
 export default class classcreation extends Component {//this class will likely need to call groups/new and do more with that...
     componentDidMount(){
-        document.title = "Class Creation - " + document.title;
+        this.props.updateTitle("Class Creation");
     }
 
     constructor() {
@@ -42,7 +40,6 @@ export default class classcreation extends Component {//this class will likely n
     render() {
         return (
             <MDBContainer>
-                <Header title = "create your classroom" btn = "account" />
                 <MDBContainer className="page-classcreation">
                     <MDBContainer>
                         <MDBRow>

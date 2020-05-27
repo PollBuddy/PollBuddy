@@ -1,22 +1,19 @@
 import React, { Component } from 'react';
 import './resetPassword.scss'
 import { MDBContainer } from 'mdbreact';
-import {Link } from "@reach/router"
+import {Link} from "react-router-dom";
 
 import 'mdbreact/dist/css/mdb.css';
-
-import Header from "../../components/header/header.js"
 
 export default class resetPassword extends Component {
 
     componentDidMount(){
-        document.title = "Reset Password - " + document.title;
+        this.props.updateTitle("Reset Password");
     }
 
     render() {
         return (
-    		<MDBContainer fluid className="reset-homepage">
-    			<Header title = "Reset password" btn = "login" />
+    		<MDBContainer fluid>
                 <MDBContainer fluid className="reset-box">
                     <p className="reset-blurb">
                         Enter the security code from your inbox and your new password.
@@ -35,7 +32,7 @@ export default class resetPassword extends Component {
 
                     {/*Should this link to the myclasses page? Submitting your new password means you are logging in*/}
                     <Link to={"/accountinfo"}>
-                        <button className = "btn submit-button">Submit</button>
+                        <button className = "btn submit-button2">Submit</button>
                     </Link>
                 </MDBContainer>
     		</MDBContainer>

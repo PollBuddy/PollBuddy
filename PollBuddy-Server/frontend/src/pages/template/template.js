@@ -15,7 +15,7 @@ export default class Template extends Component {//this class is an example of h
         }
     }
     async componentDidMount(){
-        document.title = "Template - " + document.title;
+        this.props.updateTitle("Template");
         let groups = []
         const response = await fetch('http://localhost:3001/api/groups/');//this is alternative to .then's and all that
         const json = await response.json();
