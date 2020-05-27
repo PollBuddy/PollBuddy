@@ -3,18 +3,14 @@ import "./accountinfo.scss"
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer } from 'mdbreact';
 
-import Header from "../../components/header/header.js"
-import Footer from "../../components/footer/footer.js"
-
 export default class accountinfo extends Component {
 	componentDidMount(){
-		document.title = "Account Info - " + document.title;
+		this.props.updateTitle("Account Info");
 	}
 
 	render() {
 		return (
 		<MDBContainer>
-			<Header title = "account information" btn = "account" />
 			<div className="main-body">
 				<form>
 					<label>
@@ -40,7 +36,6 @@ export default class accountinfo extends Component {
 					<input type="submit" value="Submit" />
 				</form>
 			</div>
-			<Footer />
 		</MDBContainer>
 		)
 	}

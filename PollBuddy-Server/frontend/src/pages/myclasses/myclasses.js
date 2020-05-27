@@ -1,33 +1,29 @@
 import React, {Component} from 'react';
-import { Link, navigate } from '@reach/router';
+import {Link, Redirect} from "react-router-dom";
 import { MDBBtn, MDBContainer } from "mdbreact";
 import 'mdbreact/dist/css/mdb.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import './myclasses.scss'
 
-import Header from "../../components/header/header.js"
-import Footer from "../../components/footer/footer.js"
-
 export default class Myclasses extends Component {
 	constructor(){
 		super();
 		if(!localStorage.getItem('loggedIn')){
-			navigate('/login');//this is a way to redirect the user to the page
+			Redirect('/login');//this is a way to redirect the user to the page
 			window.location.reload(false);//this forces a reload so this will make the user go to the login page. A little barbaric but it works. If frontend wants to make it better by all means
 		}
 	}
 	signout(){
 		localStorage.removeItem('loggedIn');//todo if admin -- more specifically make diff states if the user who logged in is an admin... or teacher. wouldn't want teacher accessing user things or vice versa...
-		navigate('/login');
+		Redirect('/login');
 	}
 		componentDidMount(){
-				document.title = "My Classes - " + document.title;
+			this.props.updateTitle("My Classes");
 		}
 	render() { 
 		return (
 			<MDBContainer>
-				<Header title = "my classes" btn = "account" />
 				<MDBContainer className="page-my-classes2">
 					{/*
 					The format of this page will change based on our designs earlier this semester.
@@ -127,7 +123,6 @@ export default class Myclasses extends Component {
 							Github
 					</MDBBtn> */}
 				</MDBContainer>
-				<Footer />
 			</MDBContainer>
 		)
 	}

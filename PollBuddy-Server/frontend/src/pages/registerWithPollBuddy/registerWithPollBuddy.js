@@ -3,17 +3,13 @@ import './registerWithPollBuddy.scss'
 import { MDBContainer } from 'mdbreact';
 import 'mdbreact/dist/css/mdb.css';
 
-import Header from "../../components/header/header.js"
-import Footer from "../../components/footer/footer.js"
-
 export default class registerWithPollBuddy extends Component {
     componentDidMount(){
-        document.title = "Register With Us - " + document.title;
+        this.props.updateTitle("Register with Poll Buddy");
     }
   render() {
     return (
     		<MDBContainer fluid>
-    	        <Header title = "Register with us" btn = "login" />
                 <MDBContainer fluid className="p-b-box">
                     <h1 className="register-text">
                         Register with Poll Buddy
@@ -34,7 +30,6 @@ export default class registerWithPollBuddy extends Component {
                         <button className="btn submit-button2" formAction="/accountinfo" >Submit</button>
                     </form>
                 </MDBContainer>
-                <Footer />
     		</MDBContainer>
     	)
 	}
