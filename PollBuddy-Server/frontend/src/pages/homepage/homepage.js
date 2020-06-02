@@ -3,6 +3,7 @@ import './homepage.scss'
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer } from 'mdbreact';
 import { Link } from '@reach/router';
+import logo from "../../images/logo.png";
 
 export default class homepage extends Component {
 
@@ -13,7 +14,7 @@ export default class homepage extends Component {
     render() {
         return (
             <MDBContainer fluid className="page-homepage">
-                <img src="Poll-Buddy-Logo.png" alt="logo" className="logo img-fluid"></img>
+                <img src={logo} alt="logo" className="logo img-fluid" />
 
                 <p className = "blurb"> An interactive questionnaire platform made by students, for
                     students, to strengthen lecture material and class attentiveness.</p>
