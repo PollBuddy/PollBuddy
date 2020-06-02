@@ -1,30 +1,37 @@
 import React, {Component} from 'react';
 import './homepage.scss'
 import 'mdbreact/dist/css/mdb.css';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
-import { Router, Link } from '@reach/router';
+import { MDBContainer } from 'mdbreact';
+import { Link } from '@reach/router';
 
 export default class homepage extends Component {
     render() {
         return (
-            <MDBContainer className="page-homepage">
-                <header className="Homepage-header">
+            <MDBContainer fluid className="page-homepage">
+                <img src="Poll-Buddy-Logo.png" alt="logo" className="logo img-fluid"></img>
 
-                    <img src="Poll-Buddy-Logo.png" alt="logo" className="logo img-fluid"></img>
+                <p className = "blurb"> An interactive questionnaire platform made by students, for
+                    students, to strengthen lecture material and class attentiveness.</p>
+                <MDBContainer>
+                    <Link to={"/login"}>
+                        <button className = "btn button">Login</button>
+                    </Link>
+                    <Link to={"/registerDefault"}>
+                        <button className = "btn button">Register</button>
+                    </Link>
+                </MDBContainer>
 
-                    <p className = "blurb"> An interactive questionnaire platform made by students, for
-                        students, to strengthen lecture material and class attentiveness.
-                    </p>
+                <p className = "blurb2" > Already have a Poll Code? Enter it here.</p>
+                <MDBContainer className="form-group">
+                    <input placeholder="Poll Code" className="enterCode"/>
+                </MDBContainer>
+                <Link to={"/pollviewer"}>
+                    <button className = "btn poll-button">Join Poll</button>
+                </Link>
 
-                    <MDBContainer className="text-right">
-                        <Link to={"/login"}>
-                            <button class = "btn button">Sign In</button>
-                        </Link>
-                        <button class = "btn button">Sign Up</button>
-                    </MDBContainer>
-
-                </header>
             </MDBContainer>
+
+
         )
     }
 }

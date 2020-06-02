@@ -12,7 +12,6 @@ import Lesson from './pages/lesson'
 import Notfound from './pages/notfound'
 import Template from './pages/template/template'
 import AccountInfo from './pages/accountinfo/accountinfo'
-import PollCode from './pages/pollCode'
 import ForgotPassword from './pages/forgotPassword'
 import RegisterDefault from "./pages/registerDefault";
 import RegisterWithSchool from "./pages/registerWithSchool";
@@ -37,7 +36,6 @@ function App() {
         <Classcreation path="/classcreation" />
         <Template path="/template" />
         <AccountInfo path="/accountinfo"/>
-        <PollCode path="/pollCode" /> 
         <ForgotPassword path="/forgotPassword" />
         <RegisterDefault path="/registerDefault" />
         <RegisterWithSchool path="/registerWithSchool" />

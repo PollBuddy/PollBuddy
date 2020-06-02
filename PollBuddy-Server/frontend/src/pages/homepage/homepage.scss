@@ -1,27 +1,30 @@
 .page-homepage{
-  background-color: #4d3658;
-}
-
-.Homepage-header{
-  background-color: #4d3658;
-  min-height: 100vh;
+  background-color: #4D3656;
+  height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 6vmin);
-  color: white;
 }
 
-.logo {
-  animation-duration: 2s;
-}
 
 .blurb {
+  color:white;
   font-size: calc(20px + 0.3vmin);
   font-family: monospace;
   width: 45%;
   text-align: center;
+
+}
+.blurb2 {
+  padding-top: 30px;
+  color:white;
+  font-size: calc(20px + 0.3vmin);
+  font-family: monospace;
+  width: 45%;
+  text-align: center;
+
 }
 
 .button {
@@ -33,9 +36,41 @@
   font-weight: 700;
   font-size: calc(13px + 0.3vmin);
 }
+.poll-button {
+  position: relative;
+  justify-content: center;
+  text-align: center;
+  border-radius: 10vh;
+  background-color: #7F648F;
+  color: white;
+  transition-duration: 0.2s;
+  font-weight: 700;
+  font-family: monospace;
+  font-size: 3vh;
+  min-width: 25vw;
+  top: 20%;
+
+}
 
 .button:hover {
   color: black;
   transition-duration: 0.2s;
 }
 
+.enterCode {
+  background-color: white;
+  position: relative;
+  font-weight: 700;
+  color: black;
+  border-color: transparent;
+  outline-color: transparent;
+  outline-width: 0px;
+  text-transform: uppercase;
+  text-align: center;
+  justify-content: center;
+  border-radius: 10vh;
+  font-family: monospace;
+  font-size: 5vh;
+  max-width: 40vw;
+  top: 0%;
+}
