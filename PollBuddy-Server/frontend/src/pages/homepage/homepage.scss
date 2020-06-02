@@ -5,16 +5,19 @@
 .Homepage-header{
   background-color: #4d3658;
   min-height: 100vh;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 6vmin);
   color: white;
+  margin: 100px auto;
 }
 
 .logo {
   animation-duration: 2s;
+  width: 30vw;
 }
 
 .blurb {

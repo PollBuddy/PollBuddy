@@ -18,6 +18,7 @@ COPY public ./public
 COPY routes ./routes
 COPY app.js ./
 COPY modules ./modules
+COPY .env ./
 
 EXPOSE 3000
 

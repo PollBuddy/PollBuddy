@@ -6,17 +6,11 @@ https://daveceddia.com/create-react-app-express-backend/
 ## How it works
 
 ### Frontend
-Runs react
+React based
 
-Appears to be the router
-
-Proxies requests to express backend
-
-Run by entering folder and running `npm start`
+The pretty UI you see when you open your browser to Poll Buddy
 
 ### Backend
-Runs express
+Express based
 
-Serves the API calls
-
-Run by entering folder and running `node bin/www`
+Serves the API requests made by the frontend

@@ -1,13 +1,19 @@
 import React, {Component} from 'react';
 import './homepage.scss'
 import 'mdbreact/dist/css/mdb.css';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
-import { Router, Link } from '@reach/router';
+import { MDBContainer } from 'mdbreact';
+import logo from '../../images/logo.png';
+import {Link} from "react-router-dom";
 
 export default class homepage extends Component {
+
+    componentDidMount(){
+        this.props.updateTitle("Home");
+    }
+
     render() {
         return (
-            <MDBContainer className="page-homepage">
+            <MDBContainer>
                 <header className="Homepage-header">
 
                     <img src="Poll-Buddy-Logo.png" alt="logo" className="logo img-fluid"></img>
@@ -17,10 +23,12 @@ export default class homepage extends Component {
                     </p>
 
                     <MDBContainer className="text-right">
-                        <Link to={"/login"}>
-                            <button class = "btn button">Sign In</button>
+                        <Link to="/login">
+                            <button className = "btn button">Sign In</button>
                         </Link>
-                        <button class = "btn button">Sign Up</button>
+                        <Link to="/registerDefault">
+                            <button className = "btn button">Sign Up</button>
+                        </Link>
                     </MDBContainer>
 
                 </header>

@@ -1,21 +1,25 @@
 import React, { Component } from 'react';
 import './pollCode.scss'
-import { Router, Link } from '@reach/router';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
+import { MDBContainer } from 'mdbreact';
 import 'mdbreact/dist/css/mdb.css';
+import logo from '../../images/logo.png';
 
 export default class pollCode extends Component {
+	componentDidMount(){
+		this.props.updateTitle("Poll Code");
+	}
   render() {
     return (
+		<MDBContainer>
     		<MDBContainer fluid className="poll-homepage">
-    			<img src="logo.svg" class="img-fluid animated bounce infinite logo poll-logo">
-                </img>
+				<img src={logo} className="img-fluid animated bounce infinite logo" alt="logo" />
+
 	    		<div className="form-group">
-			      <input type="email" className="form-control" placeholder="Poll Code" class="enterCode"/>
+			      <input type="email" className="form-control enterCode" placeholder="Poll Code" />
 			    </div>
-			    <button class = "btn poll-button">Join Poll</button>
+			    <button className = "btn poll-button">Join Poll</button>
     		</MDBContainer>
-    		
-    	)
-	}
+		</MDBContainer>
+	)
+  }
 }
