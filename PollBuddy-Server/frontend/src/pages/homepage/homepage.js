@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import './homepage.scss'
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer } from 'mdbreact';
-import { Link } from '@reach/router';
-import logo from "../../images/logo.png";
+import logo from '../../images/logo.png';
+import {Link} from "react-router-dom";
 
 export default class homepage extends Component {
 
