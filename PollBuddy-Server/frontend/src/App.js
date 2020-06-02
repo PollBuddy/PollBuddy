@@ -1,6 +1,5 @@
 import React from 'react';
-import { Router, Link } from "@reach/router";
-
+import {BrowserRouter, Route, Switch} from 'react-router-dom'
 
 import './App.css';
 import Myclasses from './pages/myclasses'
@@ -12,12 +11,17 @@ import Lesson from './pages/lesson'
 import Notfound from './pages/notfound'
 import Template from './pages/template/template'
 import AccountInfo from './pages/accountinfo/accountinfo'
+import Privacy from './pages/privacy/privacy'
 import ForgotPassword from './pages/forgotPassword'
 import RegisterDefault from "./pages/registerDefault";
 import RegisterWithSchool from "./pages/registerWithSchool";
 import RegisterWithPollBuddy from "./pages/registerWithPollBuddy";
+import PollViewer from "./pages/pollviewer/pollviewer";
+import ResetPassword from "./pages/resetPassword";
+import PollDataView from "./pages/pollDataView";
 
-function App() {
+import Header from "./components/header/header.js"
+import Footer from "./components/footer/footer.js"
 
   return (
     <React.Fragment>
@@ -45,5 +49,3 @@ function App() {
   );
 }
 
-
-export default App;

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Link } from '@reach/router';
+import {Link} from "react-router-dom";
 
 import './lessons.scss'
 export default class lessons extends Component {
@@ -11,6 +11,9 @@ constructor(props){//shouldn't this be dependent on the class???? thats why i in
       //need to put in groupID from backend
       //need to get other shit like pollIDs and their respective information...
     }
+  }
+  componentDidMount(){
+     this.props.updateTitle("Lessons");
   }
   render() {    
     return (

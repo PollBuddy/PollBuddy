@@ -5,6 +5,11 @@ import { MDBContainer } from 'mdbreact';
 import { Link } from '@reach/router';
 
 export default class homepage extends Component {
+
+    componentDidMount(){
+        this.props.updateTitle("Home");
+    }
+
     render() {
         return (
             <MDBContainer fluid className="page-homepage">
