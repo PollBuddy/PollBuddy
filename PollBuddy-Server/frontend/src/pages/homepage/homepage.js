@@ -13,25 +13,31 @@ export default class homepage extends Component {
 
     render() {
         return (
-            <MDBContainer>
-                <header className="Homepage-header">
-                    <img src={logo} className="img-fluid animated bounce infinite logo" alt="logo" />
+            <MDBContainer fluid className="page-homepage">
+                <img src={logo} alt="logo" className="logo img-fluid" />
 
-                    <p className = "blurb"> An interactive questionnaire platform made by students, for
-                        students, to strengthen lecture material and class attentiveness.
-                    </p>
+                <p className = "blurb"> An interactive questionnaire platform made by students, for
+                    students, to strengthen lecture material and class attentiveness.</p>
+                <MDBContainer>
+                    <Link to={"/login"}>
+                        <button className = "btn button">Login</button>
+                    </Link>
+                    <Link to={"/registerDefault"}>
+                        <button className = "btn button">Register</button>
+                    </Link>
+                </MDBContainer>
 
-                    <MDBContainer className="text-right">
-                        <Link to="/login">
-                            <button className = "btn button">Sign In</button>
-                        </Link>
-                        <Link to="/registerDefault">
-                            <button className = "btn button">Sign Up</button>
-                        </Link>
-                    </MDBContainer>
+                <p className = "blurb2" > Already have a Poll Code? Enter it here.</p>
+                <MDBContainer className="form-group">
+                    <input placeholder="Poll Code" className="enterCode"/>
+                </MDBContainer>
+                <Link to={"/pollviewer"}>
+                    <button className = "btn poll-button">Join Poll</button>
+                </Link>
 
-                </header>
             </MDBContainer>
+
+
         )
     }
 }

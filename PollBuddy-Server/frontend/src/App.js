@@ -12,7 +12,6 @@ import Notfound from './pages/notfound'
 import Template from './pages/template/template'
 import AccountInfo from './pages/accountinfo/accountinfo'
 import Privacy from './pages/privacy/privacy'
-import PollCode from './pages/pollCode'
 import ForgotPassword from './pages/forgotPassword'
 import RegisterDefault from "./pages/registerDefault";
 import RegisterWithSchool from "./pages/registerWithSchool";
@@ -77,9 +76,6 @@ export default class App extends React.Component {
               <Route exact path="/accountinfo">
                 <AccountInfo updateTitle={this.updateTitle} />
               </Route>
-              <Route exact path="/pollCode">
-                <PollCode updateTitle={this.updateTitle} />
-              </Route>
               <Route exact path="/forgotPassword">
                 <ForgotPassword updateTitle={this.updateTitle} />
               </Route>
@@ -104,7 +100,7 @@ export default class App extends React.Component {
               <Route exact path="/pollviewer">
                 <PollViewer updateTitle={this.updateTitle} />
               </Route>
-       
+
               {/* Default route/error page */}
               <Route component={Notfound}/>
             </Switch>
