@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import "./pollviewer.scss"
 import 'mdbreact/dist/css/mdb.css';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
+import { MDBContainer, MDBRow, MDBCol, } from 'mdbreact';
 
 import Header from "../../components/header/header.js"
 
@@ -22,10 +22,10 @@ export default class pollviewer extends Component {
                         </MDBContainer>
 
                         <ul className="answers">
-                            <li id="answerElement0"><a href={"#"}><span className={"answerNumber"}>A</span><span className={"answerText"}> She grinds them into the fairy dust she needs to fly</span></a></li>
-                            <li id="answerElement1"><a href={"#"}><span className={"answerNumber"}>B</span><span className={"answerText"}> She gives them to new babies who are ready to grow teeth</span></a></li>
-                            <li id="answerElement2"><a href={"#"}><span className={"answerNumber"}>C</span><span className={"answerText"}> She gives the good teeth to dentists to make false teeth</span></a></li>
-                            <li id="answerElement3"><a href={"#"}><span className={"answerNumber"}>D</span><span className={"answerText"}> She grinds them up and makes sand for the beach</span></a></li>
+                            <li id="answerElement0"><a href={"#1"}><span className={"answerNumber"}>A</span><span className={"answerText"}> She grinds them into the fairy dust she needs to fly</span></a></li>
+                            <li id="answerElement1"><a href={"#2"}><span className={"answerNumber"}>B</span><span className={"answerText"}> She gives them to new babies who are ready to grow teeth</span></a></li>
+                            <li id="answerElement2"><a href={"#3"}><span className={"answerNumber"}>C</span><span className={"answerText"}> She gives the good teeth to dentists to make false teeth</span></a></li>
+                            <li id="answerElement3"><a href={"#4"}><span className={"answerNumber"}>D</span><span className={"answerText"}> She grinds them up and makes sand for the beach</span></a></li>
                         </ul>
                     </MDBCol>
                 </MDBRow>

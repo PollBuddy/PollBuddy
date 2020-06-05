@@ -1,7 +1,7 @@
 import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
 
-import './App.css';
+import './styles/App.css';
 import Myclasses from './pages/myclasses'
 import Homepage from './pages/homepage'
 import Login from './pages/Login Page/login'
