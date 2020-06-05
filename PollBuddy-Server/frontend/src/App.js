@@ -1,10 +1,9 @@
 import React from 'react';
 import {BrowserRouter, Route, Switch} from 'react-router-dom'
 
-import './styles/App.css';
 import Myclasses from './pages/myclasses'
 import Homepage from './pages/homepage'
-import Login from './pages/Login Page/login'
+import Login from './pages/loginPage'
 import Classcreation from './pages/classcreation/classcreation'
 import Lessons from './pages/lessons/lessons'
 import Lesson from './pages/lesson'
@@ -22,6 +21,8 @@ import PollDataView from "./pages/pollDataView";
 
 import Header from "./components/header/header.js"
 import Footer from "./components/footer/footer.js"
+
+import './styles/main.scss';
 
 export default class App extends React.Component {
 

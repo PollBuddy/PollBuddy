@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import './homepage.scss'
+// import './homepage.scss'
+import '../../styles/main.scss';
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer } from 'mdbreact';
 import logo from '../../images/logo.png';
