@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import "./accountinfo.scss"
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer } from 'mdbreact';
+import {Link} from "react-router-dom";
 
 export default class accountinfo extends Component {
 	componentDidMount(){
@@ -10,33 +10,38 @@ export default class accountinfo extends Component {
 
 	render() {
 		return (
-		<MDBContainer>
-			<div className="main-body">
-				<form>
-					<label>
-						Name
-						<input type="text" name="name" placeholder="John Doe" />
-					</label>
-					<label>
-						Email
-						<input type="text" name="email" placeholder="name@gmail.com" />
-					</label>
-					<label>
-						Current Password
-						<input type="password" name="current" placeholder="Current Password" />
-					</label>
-					<label>
-						New Password
-						<input type="password" name="new" placeholder="New Password" />
-					</label>
-					<label>
-						Confirm Password
-						<input type="password" name="confirm" placeholder= "Confirm Password" />
-					</label>
-					<input type="submit" value="Submit" />
-				</form>
-			</div>
-		</MDBContainer>
+			<MDBContainer className="page">
+				<p className="fontSizeSmall">
+					Name
+				</p>
+				<MDBContainer className="form-group">
+					<input placeholder="SIS Man" className="form-control textBox"/>
+				</MDBContainer>
+
+				<p className="fontSizeSmall">
+					Email
+				</p>
+				<MDBContainer className="form-group">
+					<input placeholder="mans@rpi.edu" className="form-control textBox"/>
+				</MDBContainer>
+
+				<p className="fontSizeSmall">
+					Current password
+				</p>
+				<MDBContainer className="form-group">
+					<input placeholder="shir1ey-is-my-gir1y" className="form-control textBox"/>
+				</MDBContainer>
+
+				<p className="fontSizeSmall">
+					Confirm password
+				</p>
+				<MDBContainer className="form-group">
+					<input placeholder="shir1ey-is-my-gir1y" className="form-control textBox"/>
+				</MDBContainer>
+				<Link to={"/myclasses"}>
+					<button className="btn button">Submit</button>
+				</Link>
+			</MDBContainer>
 		)
 	}
 }

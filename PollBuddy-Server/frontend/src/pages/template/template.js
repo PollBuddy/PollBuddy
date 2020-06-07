@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { MDBContainer } from "mdbreact";
 import 'mdbreact/dist/css/mdb.css';
 import "@fortawesome/fontawesome-free/css/all.min.css";
-
-import logo from '../../images/logo.png';
-import './template.scss'
 import ClassEditor from "../../components/classEditor/classEditor";
 
 export default class Template extends Component {//this class is an example of how to use get requests so frontend team can eventually connect to backend refer to class creation for post requests
@@ -38,13 +35,11 @@ export default class Template extends Component {//this class is an example of h
     so this is gonna be a mock page that just gets all classes and displays all their info*/
     render() {
         return (
-            <MDBContainer className="page-my-classes">
-                <img src={logo} className="top_left_logo" alt="logo" />
-                <hr className="line_style"></hr>
-                <header className="header">
-                    <br/>
-                    TEST:
-                </header>
+            <MDBContainer className="page">
+
+                <p className="bold fontSizeLarge">
+                    Test:
+                </p>
                 <MDBContainer className="class-editor">
                     {
                         //display each class in the backend by mapping the groups to class editor components

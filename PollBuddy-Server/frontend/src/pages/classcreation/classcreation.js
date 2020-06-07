@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import './classcreation.scss'
 import 'mdbreact/dist/css/mdb.css';
-import { MDBContainer, MDBRow, MDBCol } from 'mdbreact';
+import { MDBContainer } from 'mdbreact';
 import ClassEditor from "../../components/classEditor/classEditor";
 
 export default class classcreation extends Component {//this class will likely need to call groups/new and do more with that...
@@ -40,15 +39,9 @@ export default class classcreation extends Component {//this class will likely n
     render() {
         return (
             <MDBContainer>
-                <MDBContainer className="page-classcreation">
-                    <MDBContainer>
-                        <MDBRow>
-                            <MDBCol md="6">
-                                {/*set new to true so we can use the creation version of the class editor component*/}
-                                <ClassEditor new={true}/>
-                            </MDBCol>
-                        </MDBRow>
-                    </MDBContainer>
+                <MDBContainer className="page">
+                    {/*set new to true so we can use the creation version of the class editor component*/}
+                    <ClassEditor new={true}/>
                 </MDBContainer>
             </MDBContainer>
         )
