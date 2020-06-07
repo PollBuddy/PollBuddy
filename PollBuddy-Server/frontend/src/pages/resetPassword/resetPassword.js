@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './resetPassword.scss'
 import { MDBContainer } from 'mdbreact';
 import {Link} from "react-router-dom";
 
@@ -13,26 +12,25 @@ export default class resetPassword extends Component {
 
     render() {
         return (
-    		<MDBContainer fluid>
-                <MDBContainer fluid className="reset-box">
-                    <p className="reset-blurb">
+    		<MDBContainer fluid className="page">
+                <MDBContainer fluid className="box">
+                    <p className="width-90 fontSizeSmall">
                         Enter the security code from your inbox and your new password.
                     </p>
 
-                    {/*TODO: autofill the security code*/}
                     <MDBContainer className="form-group">
-                        <input type="securityCode" className={`${"form-control"} ${"enterSecurityCode"}`} placeholder="Autofilled security code"/>
+                        <input placeholder="Security code" className="form-control textBox"/>
                     </MDBContainer>
                     <MDBContainer className="form-group">
-                        <input type="newPassword" className={`${"form-control"} ${"enterPassword"}`} placeholder="Enter new password"/>
-                    </MDBContainer>
-                    <MDBContainer className="form-group">
-                        <input type="confirmPassword" className={`${"form-control"} ${"confirmPassword"}`} placeholder="Confirm new password"/>
+                        <input placeholder="Enter new password" className="form-control textBox"/>
                     </MDBContainer>
 
-                    {/*Should this link to the myclasses page? Submitting your new password means you are logging in*/}
-                    <Link to={"/accountinfo"}>
-                        <button className = "btn submit-button2">Submit</button>
+                    <MDBContainer className="form-group">
+                        <input placeholder="Confirm new password" className="form-control textBox"/>
+                    </MDBContainer>
+
+                    <Link to={"/myclasses"}>
+                        <button className="btn button">Submit</button>
                     </Link>
                 </MDBContainer>
     		</MDBContainer>

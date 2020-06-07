@@ -1,5 +1,23 @@
+:root {
+  // colors defined in the Style Guide doc
+  --darkest-purple-header-color: #25162c; // 0 uses
+  --dark-purple-main-background: #4d3658; // 2 uses
+  --base-purple-logo-bg: #7f6491; // 1 use
+  --light-purple-logo-text: #dfcfea; // 0 uses
+  --dark-gray-near-black: #25292A; // 0 uses
+  --white-most-text: #FFFFFF; // 0 uses
+  --light-gray: #EEEEEE; // 0 uses
+  --gray-placeholder-text: #707070; // 1 use
+
+  // other colors used
+  --box-border-top-left-color: #4f3860; // 2 uses
+  --box-border-bottom-right-color: #493254; // 2 uses
+  --box-shadow-a: #412e4b; // 1 use
+  --box-shadow-b: #593e65; // 1 use
+}
+
 .page{
-  background-color: #4D3656;
+  background-color: var(--dark-purple-main-background);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,7 +43,7 @@
 
 
 p{
-  color:white;
+  color: var(--white-most-text);
   font-family: monospace;
   text-align: center;
   margin-top: 10px;
@@ -35,15 +53,15 @@ p{
 
 .button {
   border-radius: 30px;
-  background-color: #7f6491;
-  color: white;
+  background-color: var(--base-purple-logo-bg);
+  color: var(--white-most-text);
   transition-duration: 0.2s;
   font-family: monospace;
   font-weight: 700;
   font-size: calc(13px + 0.3vmin);
   margin-top: 10px;
   margin-bottom: 10px;
-  height:45px;
+  height: 45px;
 }
 
 .button:hover {
@@ -52,10 +70,10 @@ p{
 }
 
 .textBox {
-  height:45px;
+  height: 45px;
   margin-top: 10px;
   margin-bottom: 10px;
-  background-color: white;
+  background-color: var(--white-most-text);
   position: relative;
   font-weight: 700;
   color: black;
@@ -66,17 +84,17 @@ p{
   justify-content: center;
   border-radius: 30px;
   font-family: monospace;
-  font-size: calc(20px + 0.3vmin);
+  font-size: calc(21px + 0.3vmin);
   top: 0;
 }
 
 ::placeholder{
-  color:black;
+  color: var(--gray-placeholder-text);
   font-size: calc(20px + 0.3vmin);
   text-align: center;
   justify-content: center;
   font-family: monospace;
-  top:2px;
+  top: 2px;
 }
 
 .logo {
@@ -89,18 +107,18 @@ p{
 .box {
   padding: 30px 30px 30px 30px;
   margin: 100px auto;
-  width:50%;
-  height:100%;
-  border-radius: 4vh;
+  width: 50%;
+  height: 100%;
+  border-radius: 35px;
   border-style: solid;
   border-width: 4px;
-  border-top-color: #4f3860;
-  border-left-color: #4f3860;
-  border-right-color: #493254;
-  border-bottom-color: #493254;
-  background: #4d3658;
-  box-shadow:  41px 41px 82px #412e4b,
-  -41px -41px 82px #593e65;
+  border-top-color: var(--box-border-top-left-color);
+  border-left-color: var(--box-border-top-left-color);
+  border-right-color: var(--box-border-bottom-right-color);
+  border-bottom-color: var(--box-border-bottom-right-color);
+  background: var(--dark-purple-main-background);
+  box-shadow: 41px 41px 82px var(box-shadow-a),
+            -41px -41px 82px var(box-shadow-b);
   display: flex;
   flex-direction: column;
   align-items: center;

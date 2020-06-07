@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './registerWithPollBuddy.scss'
 import { MDBContainer } from 'mdbreact';
 import 'mdbreact/dist/css/mdb.css';
 
@@ -7,27 +6,28 @@ export default class registerWithPollBuddy extends Component {
     componentDidMount(){
         this.props.updateTitle("Register with Poll Buddy");
     }
-  render() {
-    return (
-    		<MDBContainer fluid>
-                <MDBContainer fluid className="p-b-box">
-                    <h1 className="register-text">
+    render() {
+        return (
+    		<MDBContainer fluid className="page">
+                <MDBContainer fluid className="box">
+                    <p className="bold fontSizeLarge">
                         Register with Poll Buddy
-                    </h1>
-                    <p className="register-blurb">
+                    </p>
+                    <p className="width-90 fontSizeSmall">
                         To create an account, fill in the text boxes, then press submit.
                     </p>
                     <MDBContainer className="form-group">
-                        <input type="email" className={`${"enterName"} ${"form-control"}`} placeholder="Enter your name"/>
+                        <input placeholder="Enter your name" className="form-control textBox"/>
                     </MDBContainer>
                     <MDBContainer className="form-group">
-                        <input type="email" className={`${"enterEmail"} ${"form-control"}`} placeholder="Enter your email"/>
+                        <input placeholder="Enter your email" className="form-control textBox"/>
                     </MDBContainer>
                     <MDBContainer className="form-group">
-                        <input type="email" className={`${"enterPassword"} ${"form-control"}`} placeholder="Enter your password"/>
+                        <input placeholder="Enter your password" className="form-control textBox"/>
                     </MDBContainer>
+
                     <form>
-                        <button className="btn submit-button2" formAction="/accountinfo" >Submit</button>
+                        <button className="btn button" formAction="/accountinfo" >Submit</button>
                     </form>
                 </MDBContainer>
     		</MDBContainer>
