@@ -51,6 +51,47 @@ p{
   line-height: 26px;
 }
 
+ul {
+  text-align: left;
+  list-style-type: none;
+}
+
+
+li{
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.answerText{
+  color: var(--white-most-text);
+  font-family: monospace;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  line-height: 26px;
+}
+.answerText:hover {
+  color: var(--light-purple-logo-text);
+}
+
+.answerBubble {
+  color: var(--white-most-text);
+  font: 32px monospace;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  line-height: 36px;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  padding: 10px;
+  background: #25162c;
+  display: inline-block;
+}
+.answerBubble:hover {
+  color: var(--light-purple-logo-text);
+}
+
 .button {
   border-radius: 30px;
   background-color: var(--base-purple-logo-bg);
