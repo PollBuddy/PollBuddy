@@ -1,4 +1,4 @@
-.page-homepage{
+.page{
   background-color: #4D3656;
   display: flex;
   flex-direction: column;
@@ -6,23 +6,31 @@
   justify-content: center;
 }
 
-
-.blurb {
-  color:white;
+// singular attributes
+.fontSizeSmall{
   font-size: calc(20px + 0.3vmin);
-  font-family: monospace;
-  width: 45%;
-  text-align: center;
-
 }
-.blurb2 {
-  padding-top: 30px;
-  color:white;
-  font-size: calc(20px + 0.3vmin);
-  font-family: monospace;
+.fontSizeLarge{
+  font-size: calc(25px + 0.3vmin);
+}
+.width-45{
   width: 45%;
-  text-align: center;
+}
+.width-90{
+  width: 90%;
+}
+.bold{
+  font-weight: bold;
+}
 
+
+p{
+  color:white;
+  font-family: monospace;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  line-height: 26px;
 }
 
 .button {
@@ -33,46 +41,68 @@
   font-family: monospace;
   font-weight: 700;
   font-size: calc(13px + 0.3vmin);
-}
-.poll-button {
-  position: relative;
-  justify-content: center;
-  text-align: center;
-  border-radius: 10vh;
-  background-color: #7F648F;
-  color: white;
-  transition-duration: 0.2s;
-  font-weight: 700;
-  font-family: monospace;
-  font-size: 3vh;
-  min-width: 25vw;
-  top: 20%;
-
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height:45px;
 }
 
 .button:hover {
   color: black;
-  transition-duration: 0.2s;
+  transition-duration: 0.3s;
 }
 
-.enterCode {
+.textBox {
+  height:45px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   background-color: white;
   position: relative;
   font-weight: 700;
   color: black;
   border-color: transparent;
   outline-color: transparent;
-  outline-width: 0px;
-  text-transform: uppercase;
+  outline-width: 0;
   text-align: center;
   justify-content: center;
-  border-radius: 10vh;
+  border-radius: 30px;
   font-family: monospace;
-  font-size: 5vh;
-  max-width: 40vw;
+  font-size: calc(20px + 0.3vmin);
   top: 0;
+}
+
+::placeholder{
+  color:black;
+  font-size: calc(20px + 0.3vmin);
+  text-align: center;
+  justify-content: center;
+  font-family: monospace;
+  top:2px;
 }
 
 .logo {
   height: 200px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+}
+
+.box {
+  padding: 30px 30px 30px 30px;
+  margin: 100px auto;
+  width:50%;
+  height:100%;
+  border-radius: 4vh;
+  border-style: solid;
+  border-width: 4px;
+  border-top-color: #4f3860;
+  border-left-color: #4f3860;
+  border-right-color: #493254;
+  border-bottom-color: #493254;
+  background: #4d3658;
+  box-shadow:  41px 41px 82px #412e4b,
+  -41px -41px 82px #593e65;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }

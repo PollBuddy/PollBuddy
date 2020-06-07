@@ -10,21 +10,20 @@ export default class registerDefault extends Component {
     }
   render() {
     return (
-    		<MDBContainer fluid className="register-homepage">
-                <MDBContainer fluid className="box">
-                    <h1 className="register-text">
+    		<MDBContainer fluid className="page">
+                <MDBContainer className="box">
+                    <p className="bold fontSizeLarge">
                         Register for Poll Buddy
-                    </h1>
-                    <p className="register-blurb">
+                    </p>
+                    <p className="width-90 fontSizeSmall">
                         Click on one of the following buttons to register.
                     </p>
-
                    <Link to={"/registerWithSchool"}>
-                      <MDBBtn size="lg" color="black" className="btn school-button">Register with School</MDBBtn>
+                       <button className = "btn button">Register with School</button>
                    </Link>
 
                    <Link to={"/registerWithPollBuddy"}>
-                      <MDBBtn size="lg" color="black" className="btn poll-buddy-button">Register with PollBuddy</MDBBtn>
+                       <button className = "btn button">Register with Poll Buddy</button>
                    </Link>
 
                 </MDBContainer>
