@@ -11,6 +11,10 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1"
   },
+  "devDependencies": {
+    "eslint": "^7.1.0",
+    "eslint-plugin-react": "^7.20.0"
+  },
   "scripts": {
     "start": "react-scripts start",
     "docker-start": "CI=true react-scripts start",
@@ -19,9 +23,6 @@
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:3001",
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "browserslist": {
     "production": [
       ">0.2%",

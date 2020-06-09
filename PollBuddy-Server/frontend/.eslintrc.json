@@ -1,0 +1,37 @@
+{
+  "extends": ["eslint:recommended", "react-app"],
+  "rules": {
+    "no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "all"
+      }],
+
+    // enable additional rules
+
+    "indent": [
+      "error",
+      2
+    ],
+    /*"linebreak-style": [
+      "error",
+      "unix"
+    ],*/
+    "quotes": [
+      "error",
+      "double"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    // override default options for rules from base configurations
+    "no-cond-assign": [
+      "error",
+      "always"
+    ],
+    // disable rules from base configurations
+    "no-console": "off"
+  }
+}
