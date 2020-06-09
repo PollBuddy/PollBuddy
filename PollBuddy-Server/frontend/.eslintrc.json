@@ -22,6 +22,16 @@
       "error",
       "double"
     ],
+    "curly": [
+      "error",
+      "all"
+    ],
+    "default-case": "warn",
+    "eqeqeq": "warn",
+    "no-self-compare": "warn",
+    "no-sequences": "warn",
+    "no-unmodified-loop-condition": "warn",
+    "no-shadow": "warn",
     "semi": [
       "error",
       "always"
