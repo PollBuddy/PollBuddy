@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Bar } from "react-chartjs-2";
-import './pollDataView.scss'
 import { MDBContainer } from 'mdbreact';
 import 'mdbreact/dist/css/mdb.css';
+import {Link} from "react-router-dom";
 
 export default class pollDataView extends Component {
     componentDidMount(){
@@ -75,21 +75,43 @@ export default class pollDataView extends Component {
     render() {
         return (
 
-            <MDBContainer fluid>
-                <MDBContainer className = "data_contain">
-                    <MDBContainer className="questions">
-                        <h1 className="question_text">1200 Data Structures, Lesson #10</h1>
+            <MDBContainer fluid className="page">
+                <MDBContainer fluid className="poll-Data-View-page-container">
+                    <MDBContainer className="poll-Data-View-questions-container">
+                        <p className="width-90 fontSizeSmall">
+                            CSCI 1200 - Data Structures
+                        </p>
+                        <p className="width-90 fontSizeSmall">
+                            Lesson #10
+                        </p>
 
-                        <button className="btn q1">Question 1</button>
-                        <button className="btn q2">Question 2</button>
-                        <button className="btn q3">Question 3</button>
-                        <button className="btn q4">Question 4</button>
+                        <Link to={"/pollDataView"}>
+                            <button className="btn button">Question 1</button>
+                        </Link>
+                        <Link to={"/pollDataView"}>
+                            <button className="btn button">Question 2</button>
+                        </Link>
+                        <Link to={"/pollDataView"}>
+                            <button className="btn button">Question 3</button>
+                        </Link>
+                        <Link to={"/pollDataView"}>
+                            <button className="btn button">Question 4</button>
+                        </Link>
+                        <Link to={"/pollDataView"}>
+                            <button className="btn button">Question 5</button>
+                        </Link>
 
                     </MDBContainer>
-                    <MDBContainer fluid className="graph">
-                        <h1 className="text">Question 1: Who is the bestest boi?</h1>
-                        <h1 className="text">Correct Answer: Pupper</h1>
-                        <h1 className="text">Total Number of Answers: 296</h1>
+                    <MDBContainer fluid className="poll-Data-View-graph-container">
+                        <p className="width-90 fontSizeSmall">
+                            Question 1: Who is the bestest boi?
+                        </p>
+                        <p className="width-90 fontSizeSmall">
+                            Correct Answer: Pupper
+                        </p>
+                        <p className="width-90 fontSizeSmall">
+                            Total Number of Answers: 296
+                        </p>
 
                         {/*The MDBReact Bar component was built on top of chart.js.
                         Look at https://www.chartjs.org/docs/latest/ for more info*/}
@@ -97,7 +119,6 @@ export default class pollDataView extends Component {
                     </MDBContainer>
                 </MDBContainer>
             </MDBContainer>
-
         );
     }
 }
