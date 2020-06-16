@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import './lesson.scss'
+import React, {Component} from "react";
+import "./lesson.scss"
 
-import { MDBContainer, MDBRow, MDBCol, MDBDropdownToggle, MDBDropdown, MDBDropdownItem, MDBDropdownMenu, MDBBtn } from 'mdbreact'
+import { MDBContainer, MDBRow, MDBCol, MDBDropdownToggle, MDBDropdown, MDBDropdownItem, MDBDropdownMenu, MDBBtn } from "mdbreact"
 
-import Question from '../../components/question'
+import Question from "../../components/question"
 
 
 
@@ -15,7 +15,7 @@ export default class lesson extends Component {
 
     // Add questions to state
     //fetch(http://localhost:3001/<pollID>/) //this should return the correct information on that specific pollID
-    let questions = require('./placeholder');//./placeholder will need to be changed into the json file in the get call or something
+    let questions = require("./placeholder");//./placeholder will need to be changed into the json file in the get call or something
 
     this.state = {
       questions: questions.questions,
@@ -45,7 +45,7 @@ export default class lesson extends Component {
         <MDBContainer>
           {this.state.askedQuestions.map((value, index) => {
             return (
-                <Question questionObj={value} key={index} number={index} />
+              <Question questionObj={value} key={index} number={index} />
             )
           })}
           <MDBRow>
@@ -63,19 +63,21 @@ export default class lesson extends Component {
                       </MDBDropdownItem>;
                     } else {
                       tag = <MDBDropdownItem 
-                        onClick={() => {this.setState({questionDispatcherIndex: index});} } 
+                        onClick={() => {
+                          this.setState({questionDispatcherIndex: index});
+                        } } 
                         key={index} 
                         href="#">
-                          {index+1}: {value.title}
+                        {index+1}: {value.title}
                       </MDBDropdownItem>;
                     }
                     return tag;
                   })}
                 </MDBDropdownMenu>
-             </MDBDropdown>
+              </MDBDropdown>
             </MDBCol>
             <MDBCol size="4">
-                <MDBBtn onClick={this.askQuestion}>Ask!</MDBBtn>
+              <MDBBtn onClick={this.askQuestion}>Ask!</MDBBtn>
             </MDBCol>
           </MDBRow>
         </MDBContainer>

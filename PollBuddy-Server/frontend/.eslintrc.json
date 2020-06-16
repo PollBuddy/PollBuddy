@@ -2,7 +2,7 @@
   "extends": ["eslint:recommended", "react-app"],
   "rules": {
     "no-unused-vars": [
-      "error",
+      "warn",
       {
         "vars": "all",
         "args": "all"
@@ -12,7 +12,7 @@
       2
     ],
     "quotes": [
-      "error",
+      "warn",
       "double"
     ],
     "curly": [
