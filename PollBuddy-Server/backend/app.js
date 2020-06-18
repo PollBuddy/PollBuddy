@@ -16,6 +16,21 @@ var cors = require('cors');
 
 var app = express();
 
+// Express Session
+const express_session = require('express-session');
+const MongoStore = require('connect-mongo')(express_session);
+app.use(express_session({
+	cookie: {
+		maxAge: 3600000
+	},
+	name: "pb_session",
+	secret: "s3cr3t",// TODO: Move this out of the code and make it secure
+	store: new MongoStore({
+		url: process.env['MONGO_URL'],
+		dbName: process.env['MONGO_DB']
+	})
+}));
+
 // Cors: https://daveceddia.com/access-control-allow-origin-cors-errors-in-react-express/
 app.use(cors());
 
@@ -29,10 +44,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(usersRouter.user_middleware);
 
 app.use('/api/groups', groupsRouter);
 app.use('/api/polls', pollsRouter);
-app.use('/api/users', usersRouter);
+app.use('/api/users', usersRouter.users_router);
 
 // When visiting /test, the database connection finds all documents in all collections, and returns them in JSON.
 app.get('/test', (req, res) => {
