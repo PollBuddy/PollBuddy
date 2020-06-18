@@ -1,36 +1,37 @@
-import React, { Component } from 'react';
-import './registerWithPollBuddy.scss'
-import { MDBContainer } from 'mdbreact';
-import 'mdbreact/dist/css/mdb.css';
+import React, {Component} from "react";
+import "./registerWithPollBuddy.scss"
+import {MDBContainer} from "mdbreact";
+import "mdbreact/dist/css/mdb.css";
 
 export default class registerWithPollBuddy extends Component {
-    componentDidMount(){
-        this.props.updateTitle("Register with Poll Buddy");
-    }
+  componentDidMount() {
+    this.props.updateTitle("Register with Poll Buddy");
+  }
+
   render() {
     return (
-    		<MDBContainer fluid>
-                <MDBContainer fluid className="p-b-box">
-                    <h1 className="register-text">
-                        Register with Poll Buddy
-                    </h1>
-                    <p className="register-blurb">
-                        To create an account, fill in the text boxes, then press submit.
-                    </p>
-                    <MDBContainer className="form-group">
-                        <input type="email" className={`${"enterName"} ${"form-control"}`} placeholder="Enter your name"/>
-                    </MDBContainer>
-                    <MDBContainer className="form-group">
-                        <input type="email" className={`${"enterEmail"} ${"form-control"}`} placeholder="Enter your email"/>
-                    </MDBContainer>
-                    <MDBContainer className="form-group">
-                        <input type="email" className={`${"enterPassword"} ${"form-control"}`} placeholder="Enter your password"/>
-                    </MDBContainer>
-                    <form>
-                        <button className="btn submit-button2" formAction="/accountinfo" >Submit</button>
-                    </form>
-                </MDBContainer>
-    		</MDBContainer>
-    	)
-	}
+      <MDBContainer fluid>
+        <MDBContainer fluid className="p-b-box">
+          <h1 className="register-text">
+            Register with Poll Buddy
+          </h1>
+          <p className="register-blurb">
+            To create an account, fill in the text boxes, then press submit.
+          </p>
+          <MDBContainer className="form-group">
+            <input type="email" className={`${"enterName"} ${"form-control"}`} placeholder="Enter your name"/>
+          </MDBContainer>
+          <MDBContainer className="form-group">
+            <input type="email" className={`${"enterEmail"} ${"form-control"}`} placeholder="Enter your email"/>
+          </MDBContainer>
+          <MDBContainer className="form-group">
+            <input type="email" className={`${"enterPassword"} ${"form-control"}`} placeholder="Enter your password"/>
+          </MDBContainer>
+          <form>
+            <button className="btn submit-button2" formAction="/accountinfo">Submit</button>
+          </form>
+        </MDBContainer>
+      </MDBContainer>
+    )
+  }
 }

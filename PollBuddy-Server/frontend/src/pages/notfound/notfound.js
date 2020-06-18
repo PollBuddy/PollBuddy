@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import './notfound.scss'
+import React, {Component} from "react";
+import "./notfound.scss"
 export default class notfound extends Component {
   componentDidMount(){
     this.props.updateTitle("Page Not Found");
