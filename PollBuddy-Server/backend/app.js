@@ -26,8 +26,8 @@ app.use(express_session({
   name: "pb_session",
   secret: "s3cr3t",// TODO: Move this out of the code and make it secure
   store: new MongoStore({
-    url: process.env["MONGO_URL"],
-    dbName: process.env["MONGO_DB"]
+    url: process.env["DB_URL"],
+    dbName: process.env["DB_NAME"]
   })
 }));
 
