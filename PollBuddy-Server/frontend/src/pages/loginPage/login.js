@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Link, Redirect} from "react-router-dom";
 import 'mdbreact/dist/css/mdb.css';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
+import { MDBContainer } from 'mdbreact';
 
 export default class login extends Component {
     constructor(){
