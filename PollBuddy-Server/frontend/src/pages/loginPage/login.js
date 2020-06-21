@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './login.scss'
 import {Link, Redirect} from "react-router-dom";
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn } from 'mdbreact';
@@ -22,51 +21,32 @@ export default class login extends Component {
     }
     render() {
         return (
-            <MDBContainer className="page-login">
+            <MDBContainer className="page">
 
-                <MDBContainer className="d-flex p-2 Login-Box">
+                <p className="bold fontSizeSmall">
+                    Email:
+                </p>
 
-                        <MDBContainer>
-                            <MDBRow>
-                                <MDBCol md="6">
-                                    <form>
-                                        <MDBContainer className="text_boxes">
-                                            <MDBInput
-                                                label="Type your email"
-                                                icon="envelope"
-                                                group
-                                                type="email"
-                                                validate
-                                                error="wrong"
-                                                success="right"
-                                            />
-                                            <MDBInput
-                                                label="Type your password"
-                                                icon="lock"
-                                                group
-                                                type="password"
-                                                validate
-                                            />
-                                        </MDBContainer>
-                                        <MDBContainer className="text-right">
-                                            <Link to={"/forgotPassword"}>
-                                                <MDBBtn size="lg" color="black" className="purple">Forgot Your Password</MDBBtn>
-                                            </Link>
-
-                                            <MDBBtn size="lg" color="black" className="purple" onClick={this.handleLogin} >Submit</MDBBtn>
-                                        </MDBContainer>
-
-                                        <MDBContainer className="text-right">
-                                            <Link to={"/registerDefault"}>
-                                                <MDBBtn size="lg" color="black" className="sign_up">No account? Sign up</MDBBtn>
-                                            </Link>
-                                        </MDBContainer>
-                                    </form>
-                                </MDBCol>
-                            </MDBRow>
-                        </MDBContainer>
-
+                <MDBContainer className="form-group">
+                    <input placeholder="📧 Enter email" className="form-control textBox"/>
                 </MDBContainer>
+                <p className="bold fontSizeSmall">
+                    Password:
+                </p>
+                <MDBContainer className="form-group">
+                    <input placeholder="🔒 Enter password" className="form-control textBox"/>
+                </MDBContainer>
+
+                <Link to={"/myclasses"}>
+                    <button className = "btn button">Submit</button>
+                </Link>
+
+                <a className="link-button" href = "/registerDefault">
+                    Register
+                </a>
+                <a className="link-button" href = "/forgotPassword">
+                    Forgot Password
+                </a>
 
             </MDBContainer>
         )

@@ -1,6 +1,6 @@
 :root {
   // colors defined in the Style Guide doc
-  --darkest-purple-header-color: #25162c; // 0 uses
+  --darkest-purple-header-color: #25162c; // 1 use
   --dark-purple-main-background: #4d3658; // 2 uses
   --base-purple-logo-bg: #7f6491; // 1 use
   --light-purple-logo-text: #dfcfea; // 0 uses
@@ -16,7 +16,17 @@
   --box-shadow-b: #593e65; // 1 use
 }
 
-
+.link-button{
+  color: #fff;
+  opacity: 0.8;
+  font-family: monospace;
+  margin: 7px 0 7px 0;
+}
+.link-button:hover {
+  text-decoration: underline;
+  opacity: 1;
+  color: #fff;
+}
 .page{
   background-color: var(--dark-purple-main-background);
   display: flex;
@@ -66,7 +76,6 @@
   font-weight: bold;
 }
 
-
 p{
   color: var(--white-most-text);
   font-family: monospace;
@@ -81,40 +90,39 @@ ul {
   list-style-type: none;
 }
 
-
 li{
   padding-top: 5px;
   padding-bottom: 5px;
 }
 
-.answerText{
-  color: var(--white-most-text);
-  font-family: monospace;
-  text-align: center;
+.answer{
   margin-top: 10px;
   margin-bottom: 10px;
-  line-height: 26px;
 }
-.answerText:hover {
+.answer:hover .answerBubble{
+  color: var(--light-purple-logo-text);
+}
+.answer:hover .answerText{
   color: var(--light-purple-logo-text);
 }
 
+.answerText{
+  color: var(--white-most-text);
+  font-family: monospace;
+  line-height: 26px;
+}
+
 .answerBubble {
+  text-align: center;
   color: var(--white-most-text);
   font: 32px monospace;
-  text-align: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
   line-height: 36px;
   border-radius: 50%;
   width: 36px;
   height: 36px;
   padding: 10px;
-  background: #25162c;
+  background: var(--darkest-purple-header-color);
   display: inline-block;
-}
-.answerBubble:hover {
-  color: var(--light-purple-logo-text);
 }
 
 .button {
@@ -135,8 +143,9 @@ li{
   transition-duration: 0.3s;
 }
 
+
 .textBox {
-  height: 45px;
+  height: 35px;
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: var(--white-most-text);
@@ -153,7 +162,6 @@ li{
   font-size: calc(21px + 0.3vmin);
   top: 0;
 }
-
 ::placeholder{
   color: var(--gray-placeholder-text);
   font-size: calc(20px + 0.3vmin);

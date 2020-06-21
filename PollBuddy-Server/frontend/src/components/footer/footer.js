@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import 'mdbreact/dist/css/mdb.css';
-import './footer.scss';
+import '../../styles/footer.scss';
 import rcos_logo from '../../images/rcos.png';
 import github_logo from '../../images/github.png'
 import {MDBContainer} from "mdbreact";
