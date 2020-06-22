@@ -1,0 +1,23 @@
+//pollDataView page needs 3 different containers
+.poll-Data-View-graph-container{
+  position: absolute;
+  right: 0;
+  margin: 0 5vw 0 0;
+  height: 70vh;
+  width: 60vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.poll-Data-View-questions-container{
+  position: absolute;
+  left: 0;
+  height: 70vh;
+  width: 35vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.poll-Data-View-page-container{
+  min-height: 80vh;
+}

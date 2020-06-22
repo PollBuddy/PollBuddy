@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import 'mdbreact/dist/css/mdb.css';
+import "./homepage.scss";
 import { MDBContainer } from 'mdbreact';
 import logo from '../../images/logo.png';
 import {Link} from "react-router-dom";

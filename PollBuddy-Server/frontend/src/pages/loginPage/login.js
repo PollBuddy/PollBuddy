@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Link, Redirect} from "react-router-dom";
 import 'mdbreact/dist/css/mdb.css';
+import './login.scss'
 import { MDBContainer } from 'mdbreact';
 
 export default class login extends Component {

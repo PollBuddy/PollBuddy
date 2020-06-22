@@ -1,62 +1,27 @@
 :root {
   // colors defined in the Style Guide doc
-  --darkest-purple-header-color: #25162c; // 1 use
-  --dark-purple-main-background: #4d3658; // 2 uses
-  --base-purple-logo-bg: #7f6491; // 1 use
-  --light-purple-logo-text: #dfcfea; // 0 uses
-  --dark-gray-near-black: #25292A; // 0 uses
-  --white-most-text: #FFFFFF; // 0 uses
-  --light-gray: #EEEEEE; // 0 uses
-  --gray-placeholder-text: #707070; // 1 use
+  --darkest-purple-header-color: #25162c;
+  --dark-purple-main-background: #4d3658;
+  --base-purple-logo-bg: #7f6491;
+  --light-purple-logo-text: #dfcfea;
+  --dark-gray-near-black: #25292A;
+  --white-most-text: #FFFFFF;
+  --light-gray: #EEEEEE;
+  --gray-placeholder-text: #707070;
 
   // other colors used
-  --box-border-top-left-color: #4f3860; // 2 uses
-  --box-border-bottom-right-color: #493254; // 2 uses
-  --box-shadow-a: #412e4b; // 1 use
-  --box-shadow-b: #593e65; // 1 use
+  --box-border-top-left-color: #4f3860;
+  --box-border-bottom-right-color: #493254;
+  --box-shadow-a: #412e4b;
+  --box-shadow-b: #593e65;
 }
 
-.link-button{
-  color: #fff;
-  opacity: 0.8;
-  font-family: monospace;
-  margin: 7px 0 7px 0;
-}
-.link-button:hover {
-  text-decoration: underline;
-  opacity: 1;
-  color: #fff;
-}
 .page{
   background-color: var(--dark-purple-main-background);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-}
-
-//pollDataView page needs 3 different containers
-.poll-Data-View-graph-container{
-  position: absolute;
-  right: 0;
-  margin: 0 5vw 0 0;
-  height: 70vh;
-  width: 60vw;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.poll-Data-View-questions-container{
-  position: absolute;
-  left: 0;
-  height: 70vh;
-  width: 35vw;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.poll-Data-View-page-container{
-  min-height: 80vh;
 }
 
 // singular attributes
@@ -85,46 +50,6 @@ p{
   line-height: 26px;
 }
 
-ul {
-  text-align: left;
-  list-style-type: none;
-}
-
-li{
-  padding-top: 5px;
-  padding-bottom: 5px;
-}
-
-.answer{
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-.answer:hover .answerBubble{
-  color: var(--light-purple-logo-text);
-}
-.answer:hover .answerText{
-  color: var(--light-purple-logo-text);
-}
-
-.answerText{
-  color: var(--white-most-text);
-  font-family: monospace;
-  line-height: 26px;
-}
-
-.answerBubble {
-  text-align: center;
-  color: var(--white-most-text);
-  font: 32px monospace;
-  line-height: 36px;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  padding: 10px;
-  background: var(--darkest-purple-header-color);
-  display: inline-block;
-}
-
 .button {
   border-radius: 30px;
   background-color: var(--base-purple-logo-bg);
@@ -142,7 +67,6 @@ li{
   color: black;
   transition-duration: 0.3s;
 }
-
 
 .textBox {
   height: 35px;
@@ -169,13 +93,6 @@ li{
   justify-content: center;
   font-family: monospace;
   top: 2px;
-}
-
-.logo {
-  height: 200px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-
 }
 
 .box {

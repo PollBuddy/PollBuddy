@@ -3,7 +3,7 @@ import { Bar } from "react-chartjs-2";
 import { MDBContainer } from 'mdbreact';
 import 'mdbreact/dist/css/mdb.css';
 import {Link} from "react-router-dom";
-
+import "./pollDataView.scss";
 export default class pollDataView extends Component {
     componentDidMount(){
         this.props.updateTitle("Poll Data View");
