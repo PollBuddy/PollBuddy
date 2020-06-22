@@ -76,8 +76,8 @@ export default class pollDataView extends Component {
         return (
 
             <MDBContainer fluid className="page">
-                <MDBContainer fluid className="poll-Data-View-page-container">
-                    <MDBContainer className="poll-Data-View-questions-container">
+                <MDBContainer fluid className="pollDataView-page">
+                    <MDBContainer className="pollDataView-questions">
                         <p className="width-90 fontSizeSmall">
                             CSCI 1200 - Data Structures
                         </p>
@@ -102,7 +102,7 @@ export default class pollDataView extends Component {
                         </Link>
 
                     </MDBContainer>
-                    <MDBContainer fluid className="poll-Data-View-graph-container">
+                    <MDBContainer fluid className="pollDataView-graph">
                         <p className="width-90 fontSizeSmall">
                             Question 1: Who is the bestest boi?
                         </p>

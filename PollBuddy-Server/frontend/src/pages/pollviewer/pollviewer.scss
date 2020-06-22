@@ -8,26 +8,26 @@ li{
   padding-bottom: 5px;
 }
 
-.answer{
+.pollviewer_answer{
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
 //two answer:hover to change the color of answerBubble and answerText at the same time
-.answer:hover .answerBubble{
+.pollviewer_answer:hover .pollviewer_bubble{
   color: var(--light-purple-logo-text);
 }
-.answer:hover .answerText{
+.pollviewer_answer:hover .pollviewer_text{
   color: var(--light-purple-logo-text);
 }
 
-.answerText{
+.pollviewer_text{
   color: var(--white-most-text);
   font-family: monospace;
   line-height: 26px;
 }
 
-.answerBubble {
+.pollviewer_bubble {
   text-align: center;
   color: var(--white-most-text);
   font: 32px monospace;
