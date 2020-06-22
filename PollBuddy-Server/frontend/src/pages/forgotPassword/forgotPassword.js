@@ -19,6 +19,9 @@ export default class pollCode extends Component {
                     <p className="width-90 fontSizeSmall">
                         Enter your email and we will send you a reset.
                     </p>
+                    <p className="width-90 fontSizeSmall">
+                        Email:
+                    </p>
 
                     <MDBContainer className="form-group">
                         <input placeholder="Enter email" className="form-control textBox"/>
