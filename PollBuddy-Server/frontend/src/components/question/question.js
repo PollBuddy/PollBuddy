@@ -91,14 +91,14 @@ export default class question extends Component {
         }
     };
     return (
-      <MDBContainer className="component-question">
+      <MDBContainer className="question_component-question">
         <MDBRow>
           <MDBCol md="8">
             <MDBCard >
               { // only display image if there is one
                 this.state.data.img &&
                 <MDBCardImage
-                  className="img-fluid"
+                  className="question_img-fluid"
                   src={this.state.data.img}
                   waves
                 />
@@ -120,7 +120,7 @@ export default class question extends Component {
                         <MDBContainer key={index}>
                           <MDBRow>
                             <MDBCol small="2">
-                              <MDBBtn className="btn-choice" onClick={() => { return this.deselectChoice(index) }}>
+                              <MDBBtn className="question_btn-choice" onClick={() => { return this.deselectChoice(index) }}>
                                 {choice}
                               </MDBBtn>
                             </MDBCol>
@@ -135,7 +135,7 @@ export default class question extends Component {
                         <MDBContainer key={index}>
                           <MDBRow>
                             <MDBCol small="2">
-                              <MDBBtn className="btn-choice" outline onClick={() => { return this.selectChoice(index) }}>
+                              <MDBBtn className="question_btn-choice" outline onClick={() => { return this.selectChoice(index) }}>
                                 {choice}
                               </MDBBtn>
                             </MDBCol>

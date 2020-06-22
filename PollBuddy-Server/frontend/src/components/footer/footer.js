@@ -8,9 +8,9 @@ import {MDBContainer} from "mdbreact";
 export default class Footer extends Component {
 	render() {
 		return (
-			<footer className = "foot">
-				<MDBContainer className = "linethru"/>
-				<MDBContainer className = "logo_links">
+			<footer className = "footer_foot">
+				<MDBContainer className = "footer_linethru"/>
+				<MDBContainer className = "footer_logo_links">
 					<a href = "https://rcos.io/" target = "_blank" rel="noopener noreferrer">
 						<img src = {rcos_logo} alt = "RCOS" />
 					</a>
@@ -18,7 +18,7 @@ export default class Footer extends Component {
 						<img src = {github_logo} alt = "Github" />
 					</a>
 				</MDBContainer>
-				<MDBContainer className = "foot_links">
+				<MDBContainer className = "footer_foot_links">
 					<a href = "/">
 						About
 					</a>
