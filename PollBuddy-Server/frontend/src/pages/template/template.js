@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import { MDBContainer } from "mdbreact";
-import 'mdbreact/dist/css/mdb.css';
+import "mdbreact/dist/css/mdb.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import ClassEditor from "../../components/classEditor/classEditor";
 
@@ -14,10 +14,10 @@ export default class Template extends Component {//this class is an example of h
   async componentDidMount(){
     this.props.updateTitle("Template");
     let groups = []
-    const response = await fetch('http://localhost:3001/api/groups/');//this is alternative to .then's and all that
+    const response = await fetch("http://localhost:3001/api/groups/");//this is alternative to .then's and all that
     const json = await response.json();
     for(let i = 0; i < json.length; i++){
-      const r = await fetch('http://localhost:3001/api/groups/' + json[i] + '/');
+      const r = await fetch("http://localhost:3001/api/groups/" + json[i] + "/");
       const rjson = await r.json();
       groups[i] = rjson[0];
     }

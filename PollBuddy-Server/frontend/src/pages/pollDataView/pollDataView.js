@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import { Bar } from "react-chartjs-2";
-import { MDBContainer } from 'mdbreact';
-import 'mdbreact/dist/css/mdb.css';
+import { MDBContainer } from "mdbreact";
+import "mdbreact/dist/css/mdb.css";
 import {Link} from "react-router-dom";
 import "./pollDataView.scss";
 export default class pollDataView extends Component {

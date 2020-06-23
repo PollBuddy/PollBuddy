@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import 'mdbreact/dist/css/mdb.css';
-import { MDBContainer } from 'mdbreact';
+import React, { Component } from "react";
+import "mdbreact/dist/css/mdb.css";
+import { MDBContainer } from "mdbreact";
 import ClassEditor from "../../components/classEditor/classEditor";
 
 export default class classcreation extends Component {//this class will likely need to call groups/new and do more with that...
@@ -41,10 +41,10 @@ export default class classcreation extends Component {//this class will likely n
         <MDBContainer>
           <MDBContainer className="page-classcreation">
             <MDBContainer>
-                <MDBContainer className="page">
-                    {/*set new to true so we can use the creation version of the class editor component*/}
-                    <ClassEditor new={true}/>
-                </MDBContainer>
+              <MDBContainer className="page">
+                {/*set new to true so we can use the creation version of the class editor component*/}
+                <ClassEditor new={true}/>
+              </MDBContainer>
             </MDBContainer>
           </MDBContainer>
         </MDBContainer>

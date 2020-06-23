@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 // import './classEditor.scss'
 import { MDBContainer } from "mdbreact";
 
@@ -99,30 +99,30 @@ export default class ClassEditor extends Component {
     }
     
     render() {
-        if(this.state === null){
-            //show nothing (or loading wheel) if the data has not come in yet
-            return null;//loading todo ui
-        }else{
-            return (
-                <MDBContainer fluid className="box">
-                    <p className="bold fontSizeLarge">
+      if(this.state === null){
+        //show nothing (or loading wheel) if the data has not come in yet
+        return null;//loading todo ui
+      }else{
+        return (
+          <MDBContainer fluid className="box">
+            <p className="bold fontSizeLarge">
                         Class Name:
-                    </p>
+            </p>
 
-                    <MDBContainer className="form-group">
-                        <input
-                            name="name"
-                            id="className"
-                            className="form-control textBox"
-                            value={this.props.new ? null: this.state.name}
-                            onInput={this.onInput} />
-                    </MDBContainer>
+            <MDBContainer className="form-group">
+              <input
+                name="name"
+                id="className"
+                className="form-control textBox"
+                value={this.props.new ? null: this.state.name}
+                onInput={this.onInput} />
+            </MDBContainer>
 
-                    <button className="btn button" onClick={this.onSubmit}>
-                        {this.props.new ? "Create Class": "Save Changes"}
-                    </button>
-                </MDBContainer>
-            )
-        }
+            <button className="btn button" onClick={this.onSubmit}>
+              {this.props.new ? "Create Class": "Save Changes"}
+            </button>
+          </MDBContainer>
+        )
+      }
     }
 }
