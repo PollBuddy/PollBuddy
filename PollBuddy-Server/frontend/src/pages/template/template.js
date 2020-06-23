@@ -2,9 +2,6 @@ import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-
-import logo from "../../images/logo.png";
-import "./template.scss"
 import ClassEditor from "../../components/classEditor/classEditor";
 
 export default class Template extends Component {//this class is an example of how to use get requests so frontend team can eventually connect to backend refer to class creation for post requests
@@ -33,8 +30,27 @@ export default class Template extends Component {//this class is an example of h
     if (this.state.groups[0] !== undefined) {//this is necessary. Checking the first index of groups but could do a more rigorous check in future
       result = this.state.groups[0]._id;//groups[0] is temporary
     }
-    return result;
-  }
+    /*backend users routes isn't completely finished i think so 
+    cannot start working on a completely functional users page 
+    so this is gonna be a mock page that just gets all classes and displays all their info*/
+    render() {
+        return (
+            <MDBContainer className="page">
+
+                <p className="bold fontSizeLarge">
+                    Test:
+                </p>
+                <MDBContainer className="class-editor">
+                    {
+                        //display each class in the backend by mapping the groups to class editor components
+                        this.state.groups.map(
+                            (group, index) => {
+                                console.log(group._id);
+                                return <ClassEditor key={group._id} id={group._id} new={false}/>//the key is needed because each child of a list must have a unique key
+                            }
+                        )
+                    }
+                </MDBContainer>
 
   /*backend users routes isn't completely finished i think so
   cannot start working on a completely functional users page

@@ -1,35 +1,31 @@
-import React, {Component} from "react";
-import "./registerDefault.scss"
-import {MDBBtn, MDBContainer} from "mdbreact";
-import "mdbreact/dist/css/mdb.css";
+import React, { Component } from 'react';
+import {MDBContainer} from 'mdbreact';
+import 'mdbreact/dist/css/mdb.css';
 import {Link} from "react-router-dom";
 
 export default class registerDefault extends Component {
-  componentDidMount() {
-    this.props.updateTitle("Register");
-  }
+    componentDidMount(){
+        this.props.updateTitle("Register");
+    }
+    render() {
+        return (
+    		<MDBContainer fluid className="page">
+                <MDBContainer fluid className="box">
+                    <p className="bold fontSizeLarge">
+                        Register for Poll Buddy
+                    </p>
+                    <p className="width-90 fontSizeSmall">
+                        Click on one of the following buttons to register.
+                    </p>
+                    <Link to={"/registerWithSchool"}>
+                        <button className = "btn button">Register with School</button>
+                    </Link>
 
-  render() {
-    return (
-      <MDBContainer fluid className="register-homepage">
-        <MDBContainer fluid className="box">
-          <h1 className="register-text">
-            Register for Poll Buddy
-          </h1>
-          <p className="register-blurb">
-            Click on one of the following buttons to register.
-          </p>
-
-          <Link to={"/registerWithSchool"}>
-            <MDBBtn size="lg" color="black" className="btn school-button">Register with School</MDBBtn>
-          </Link>
-
-          <Link to={"/registerWithPollBuddy"}>
-            <MDBBtn size="lg" color="black" className="btn poll-buddy-button">Register with PollBuddy</MDBBtn>
-          </Link>
-
-        </MDBContainer>
-      </MDBContainer>
-    )
-  }
+                    <Link to={"/registerWithPollBuddy"}>
+                        <button className = "btn button">Register with Poll Buddy</button>
+                    </Link>
+                </MDBContainer>
+    		</MDBContainer>
+    	)
+	}
 }

@@ -1,0 +1,120 @@
+:root {
+  // colors defined in the Style Guide doc
+  --darkest-purple-header-color: #25162c;
+  --dark-purple-main-background: #4d3658;
+  --base-purple-logo-bg: #7f6491;
+  --light-purple-logo-text: #dfcfea;
+  --dark-gray-near-black: #25292A;
+  --white-most-text: #FFFFFF;
+  --light-gray: #EEEEEE;
+  --gray-placeholder-text: #707070;
+
+  // other colors used
+  --box-border-top-left-color: #4f3860;
+  --box-border-bottom-right-color: #493254;
+  --box-shadow-a: #412e4b;
+  --box-shadow-b: #593e65;
+}
+
+.page{
+  background-color: var(--dark-purple-main-background);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+// singular attributes
+.fontSizeSmall{
+  font-size: calc(20px + 0.3vmin);
+}
+.fontSizeLarge{
+  font-size: calc(25px + 0.3vmin);
+}
+.width-45{
+  width: 45%;
+}
+.width-90{
+  width: 90%;
+}
+.width-320px{
+    width: 320px;
+}
+.bold{
+  font-weight: bold;
+}
+
+p{
+  color: var(--white-most-text);
+  font-family: monospace;
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  line-height: 26px;
+}
+
+.button {
+  border-radius: 30px;
+  background-color: var(--base-purple-logo-bg);
+  color: var(--white-most-text);
+  transition-duration: 0.2s;
+  font-family: monospace;
+  font-weight: 700;
+  font-size: calc(13px + 0.3vmin);
+  margin-top: 10px;
+  margin-bottom: 10px;
+  height: 45px;
+}
+
+.button:hover {
+  color: black;
+  transition-duration: 0.3s;
+}
+
+.textBox {
+  height: 35px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: var(--white-most-text);
+  position: relative;
+  font-weight: 700;
+  color: black;
+  border-color: transparent;
+  outline-color: transparent;
+  outline-width: 0;
+  text-align: center;
+  justify-content: center;
+  border-radius: 30px;
+  font-family: monospace;
+  font-size: calc(21px + 0.3vmin);
+  top: 0;
+}
+::placeholder{
+  color: var(--gray-placeholder-text);
+  font-size: calc(20px + 0.3vmin);
+  text-align: center;
+  justify-content: center;
+  font-family: monospace;
+  top: 2px;
+}
+
+.box {
+  padding: 30px 30px 30px 30px;
+  margin: 100px auto;
+  width: 50%;
+  height: 100%;
+  border-radius: 35px;
+  border-style: solid;
+  border-width: 4px;
+  border-top-color: var(--box-border-top-left-color);
+  border-left-color: var(--box-border-top-left-color);
+  border-right-color: var(--box-border-bottom-right-color);
+  border-bottom-color: var(--box-border-bottom-right-color);
+  background: var(--dark-purple-main-background);
+  box-shadow: 41px 41px 82px var(box-shadow-a),
+            -41px -41px 82px var(box-shadow-b);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

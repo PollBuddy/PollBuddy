@@ -1,7 +1,7 @@
-import React, {Component} from "react";
-import "./forgotPassword.scss"
-import {MDBContainer} from "mdbreact";
-import "mdbreact/dist/css/mdb.css";
+import React, { Component } from 'react';
+import { MDBContainer } from 'mdbreact';
+import 'mdbreact/dist/css/mdb.css';
+import {Link} from "react-router-dom";
 
 export default class pollCode extends Component {
 
@@ -9,20 +9,29 @@ export default class pollCode extends Component {
     this.props.updateTitle("Forgot Password");
   }
 
-  render() {
-    return (
-      <MDBContainer fluid className="forgot-homepage">
-        <MDBContainer fluid className="forgot-box">
-          <div className="forgot-text">
-            Forgot Password?
-          </div>
-          <div className="forgot-blurb">
-            Enter your email and we will send you a reset.
-          </div>
-          <input type="email" className="form-control enterEmail" placeholder="Enter Email"/>
-          <button className="btn email-button">Reset Password</button>
-        </MDBContainer>
-      </MDBContainer>
-    )
-  }
+    render() {
+        return (
+    		<MDBContainer fluid className="page">
+                <MDBContainer fluid className="box">
+                    <p className="bold fontSizeLarge">
+                        Forgot Password?
+                    </p>
+                    <p className="width-90 fontSizeSmall">
+                        Enter your email and we will send you a reset.
+                    </p>
+                    <p className="width-90 fontSizeSmall">
+                        Email:
+                    </p>
+
+                    <MDBContainer className="form-group">
+                        <input placeholder="Enter email" className="form-control textBox"/>
+                    </MDBContainer>
+                    <Link to={"/resetPassword"}>
+                        <button className="btn button">Reset Password</button>
+                    </Link>
+
+                </MDBContainer>
+    		</MDBContainer>
+    	)
+	}
 }
