@@ -1,10 +1,6 @@
 import React, {Component} from "react";
 import {Link, Redirect} from "react-router-dom";
-import { MDBBtn, MDBContainer } from "mdbreact";
-import "mdbreact/dist/css/mdb.css";
-import "@fortawesome/fontawesome-free/css/all.min.css";
-
-import "./myclasses.scss"
+import { MDBContainer } from "mdbreact";
 
 export default class Myclasses extends Component {
   constructor(){
@@ -23,106 +19,36 @@ export default class Myclasses extends Component {
   }
   render() { 
     return (
-      <MDBContainer>
-        <MDBContainer className="page-my-classes2">
-          {/*
-					The format of this page will change based on our designs earlier this semester.
-					<MDBBtn
-						size="lg"
-						className="home_button"
-						href="/"
-						color="secondary"
-					>
-						<MDBIcon icon="home" />
-					</MDBBtn>
 
-					<MDBBtn
-							size="lg"
-							className="about_button"
-							href="/"
-							color="secondary"
-					>
-							<MDBIcon icon="question" />
-					</MDBBtn>
-					*/}
-          <MDBBtn
-            size="md"
-            className="settings_button"//ACTUALLY SIGNOUT BUTTON FOR NOW
-            onClick ={this.signout}
-            color="secondary"
-          > sign out
-          </MDBBtn>
+      <MDBContainer className="page">
+        <p className="width-90 fontSizeLarge">
+					As Instructor:
+        </p>
+        <Link to={"/lessons"}>
+          <button className="btn button">CSCI 1200 - Data Structures</button>
+        </Link>
+        <Link to={"/lessons"}>
+          <button className="btn button">CSCI 2200 - Foundations of Computer Science</button>
+        </Link>
+
+        <p className="width-90 fontSizeLarge">
+					As Student:
+        </p>
+        <Link to={"/lessons"}>
+          <button className="btn button">CSCI 2300 - Intro to Algorithms</button>
+        </Link>
+        <Link to={"/lessons"}>
+          <button className="btn button">CSCI 2500 - Computer Organization</button>
+        </Link>
+        <Link to={"/lessons"}>
+          <button className="btn button">CSCI 2960 - RCOS</button>
+        </Link>
+
+        <Link to={"/login"}>
+          <button className="btn button">logout</button>
+        </Link>
 
 
-          <MDBContainer className="buttons">
-            <Link to="/lessons">
-              <MDBBtn
-                size="lg"
-                className="class1"
-                href="/"
-                color="secondary"
-              >
-										CSCI 1200
-              </MDBBtn>
-
-              <MDBBtn
-                size="lg"
-                className="class2"
-                href="/"
-                color="secondary"
-              >
-										MATH 2010
-              </MDBBtn>
-
-              <MDBBtn
-                size="lg"
-                className="class3"
-                href="/"
-                color="secondary"
-              >
-										MGMT 1010
-              </MDBBtn>
-
-              <MDBBtn
-                size="lg"
-                className="class4"
-                href="/"
-                color="secondary"
-              >
-										ARTS 2020
-              </MDBBtn>
-            </Link>
-          </MDBContainer>
-          {/* <MDBBtn
-							href="https://rcos.io/"
-							className="rcos_button"
-							target="_blank"
-							size="m"
-							color="secondary"
-					>
-							An RCOS Project
-					</MDBBtn>
-
-					<MDBBtn
-							href="https://info.rpi.edu/statement-of-accessibility"
-							className="accessibility_button"
-							target="_blank"
-							size="m"
-							color="secondary"
-					>
-							Statement of Accessibility
-					</MDBBtn>
-
-					<MDBBtn
-							href="https://github.com/PollBuddy/PollBuddy"
-							className="github_button"
-							target="_blank"
-							size="m"
-							color="secondary"
-					>
-							Github
-					</MDBBtn> */}
-        </MDBContainer>
       </MDBContainer>
     )
   }

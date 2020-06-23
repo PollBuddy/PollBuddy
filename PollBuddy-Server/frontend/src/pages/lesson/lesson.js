@@ -1,14 +1,8 @@
 import React, {Component} from "react";
-import "./lesson.scss"
-
-import { MDBContainer, MDBRow, MDBCol, MDBDropdownToggle, MDBDropdown, MDBDropdownItem, MDBDropdownMenu, MDBBtn } from "mdbreact"
-
+import { MDBContainer, MDBDropdownToggle, MDBDropdown, MDBDropdownItem, MDBDropdownMenu } from "mdbreact"
 import Question from "../../components/question"
 
-
-
 export default class lesson extends Component {
-  
   constructor(props) {
     super(props);
     this.askQuestion = this.askQuestion.bind(this);
@@ -33,53 +27,49 @@ export default class lesson extends Component {
       ]
     }))
   }
-  
   render() {
-    
-    
+
     return (
       <MDBContainer>
-        <div className="page-lesson">
-          Hello lesson {this.props.lessonId}
-        </div>
-        <MDBContainer>
+        <MDBContainer className="page">
+          <p className="width-90 fontSizeSmall">
+                        Hello lesson {this.props.lessonId}
+          </p>
+
+
           {this.state.askedQuestions.map((value, index) => {
             return (
               <Question questionObj={value} key={index} number={index} />
             )
           })}
-          <MDBRow>
-            <MDBCol size="4">
-              <MDBDropdown>
-                <MDBDropdownToggle caret color="primary">
-                  {this.state.questions[this.state.questionDispatcherIndex].title}
-                </MDBDropdownToggle>
-                <MDBDropdownMenu basic>
-                  {this.state.questions.map((value, index) => {
-                    let tag;
-                    if(index === this.state.questionDispatcherIndex) {
-                      tag = <MDBDropdownItem key={index} active href="#">
-                        {index+1}: {value.title}
-                      </MDBDropdownItem>;
-                    } else {
-                      tag = <MDBDropdownItem 
-                        onClick={() => {
-                          this.setState({questionDispatcherIndex: index});
-                        } } 
-                        key={index} 
-                        href="#">
-                        {index+1}: {value.title}
-                      </MDBDropdownItem>;
-                    }
-                    return tag;
-                  })}
-                </MDBDropdownMenu>
-              </MDBDropdown>
-            </MDBCol>
-            <MDBCol size="4">
-              <MDBBtn onClick={this.askQuestion}>Ask!</MDBBtn>
-            </MDBCol>
-          </MDBRow>
+
+          <MDBDropdown>
+            <MDBDropdownToggle caret className="button">
+              {this.state.questions[this.state.questionDispatcherIndex].title}
+            </MDBDropdownToggle>
+            <MDBDropdownMenu basic>
+              {this.state.questions.map((value, index) => {
+                let tag;
+                if(index === this.state.questionDispatcherIndex) {
+                  tag = <MDBDropdownItem key={index} active href="#">
+                    {index+1}: {value.title}
+                  </MDBDropdownItem>;
+                } else {
+                  tag = <MDBDropdownItem
+                    onClick={() => {
+                      this.setState({questionDispatcherIndex: index});
+                    } }
+                    key={index}
+                    href="#">
+                    {index+1}: {value.title}
+                  </MDBDropdownItem>;
+                }
+                return tag;
+              })}
+            </MDBDropdownMenu>
+          </MDBDropdown>
+
+          <button className="btn button" onClick={this.askQuestion}>Ask!</button>
         </MDBContainer>
       </MDBContainer>
     )

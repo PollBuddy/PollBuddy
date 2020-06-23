@@ -1,45 +1,41 @@
-.question-number {
-    text-align: center;
-    margin-left: -17rem;
-    font-size: 20px;
-    font-weight: lighter;
-}
-.question {
-    text-align: center;
-    margin-left: -17rem;
-    font-size: 30px;
-}
-.answers {
-    text-align: left;
-    margin-left: 3rem;
-    list-style-type: none;
-    line-height: 4rem;
-    
+ul {
+  text-align: left;
+  list-style-type: none;
 }
 
-.answers a {
-    color: #FFFFFF;
+li{
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
-.answers a:hover {
-    /* This needs tweaking */
-    color: #dfcfea;
+.pollviewer_answer{
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
-.answers .answerNumber {
+//two answer:hover to change the color of answerBubble and answerText at the same time
+.pollviewer_answer:hover .pollviewer_bubble{
+  color: var(--light-purple-logo-text);
+}
+.pollviewer_answer:hover .pollviewer_text{
+  color: var(--light-purple-logo-text);
+}
 
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    padding: 8px;
+.pollviewer_text{
+  color: var(--white-most-text);
+  font-family: monospace;
+  line-height: 26px;
+}
 
-    background: #25162c;
-    border: 2px solid #25162c;
-    color: #fff;
-    text-align: center;
-
-    display: inline-block;
-
-    font: 32px Arial, sans-serif;
-
+.pollviewer_bubble {
+  text-align: center;
+  color: var(--white-most-text);
+  font: 32px monospace;
+  line-height: 36px;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  padding: 10px;
+  background: var(--darkest-purple-header-color);
+  display: inline-block;
 }
