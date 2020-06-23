@@ -103,7 +103,9 @@ export default class App extends React.Component {
           </Route>
        
           {/* Default route/error page */}
-          <Route component={Notfound}/>
+          <Route>
+            <Notfound updateTitle={this.updateTitle} />
+              </Route>
         </Switch>
 
         <Footer/>

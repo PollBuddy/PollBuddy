@@ -112,6 +112,8 @@ export default class pollDataView extends Component {
                         <p className="width-90 fontSizeSmall">
                             Total Number of Answers: 296
                         </p>
+                    </MDBContainer>
+                </MDBContainer>
 
               {/*The MDBReact Bar component was built on top of chart.js.
                         Look at https://www.chartjs.org/docs/latest/ for more info*/}
