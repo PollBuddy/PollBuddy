@@ -15,7 +15,7 @@ export default class login extends Component {
     if(localStorage.getItem("loggedIn")){
       this.setState({successfulLogin: true}) // Tell it to redirect to the next page if already logged in
     }
-    fetch("http://localhost:3001/api/groups", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "/groups", {
       method: "GET",
       headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
     }).then(response => response.json())
