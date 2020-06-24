@@ -1,4 +1,5 @@
 import React, {Component} from "react";
+import Autocomplete from "react-autocomplete";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import {Link} from "react-router-dom";
@@ -23,6 +24,22 @@ export default class registerWithSchool extends Component {
           </p>
           <MDBContainer className="form-group">
             <input placeholder="Enter school name" className="form-control textBox"/>
+            <Autocomplete
+              getItemValue={(item) => item.label}
+              items={[
+                { label: 'apple' },
+                { label: 'banana' },
+                { label: 'pear' }
+              ]}
+              renderItem={(item, isHighlighted) =>
+                <div style={{ background: isHighlighted ? 'lightgray' : 'white' }}>
+                  {item.label}
+                </div>
+              }
+              // value={value}
+              // onChange={(e) => value = e.target.value}
+              // onSelect={(val) => value = val}
+            />
           </MDBContainer>
 
           <Link to={"/accountinfo"}>
