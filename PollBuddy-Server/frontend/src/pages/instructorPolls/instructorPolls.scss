@@ -1,0 +1,24 @@
+.instructorView_element{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.instructorView_element:hover .arrow{
+  margin-left: 100px;
+}
+.instructorView_element:hover .instructorView_text{
+  color: var(--light-purple-logo-text);
+}
+
+.instructorView_text{
+  color: var(--white-most-text);
+  font-family: monospace;
+  line-height: 26px;
+}
+.arrow{
+  color: var(--darkest-purple-header-color);
+  border-color: var(--darkest-purple-header-color);
+  margin-left: 60px;
+  transform: scale(3.5);
+  transition: margin-left 0.6s;
+}

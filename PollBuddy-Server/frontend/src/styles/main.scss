@@ -43,6 +43,13 @@
 .bold{
   font-weight: bold;
 }
+.text-align-left{
+  text-align: left;
+}
+.text-align-center{
+  text-align: center;
+}
+
 
 p{
   color: var(--white-most-text);
@@ -51,6 +58,14 @@ p{
   margin-top: 10px;
   margin-bottom: 10px;
   line-height: 26px;
+}
+ul {
+  list-style-type: none;
+}
+
+li{
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .button {
