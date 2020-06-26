@@ -48,7 +48,7 @@ export default class App extends React.Component {
 
           <Header title={this.state.pageTitle} userInfo={this.state.userInfo} />
 
-        {/*
+          {/*
             Using React BrowserRouter now
 
             See https://codeburst.io/getting-started-with-react-router-5c978f70df91
