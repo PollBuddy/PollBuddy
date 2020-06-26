@@ -14,6 +14,8 @@
   --box-border-bottom-right-color: #493254;
   --box-shadow-a: #412e4b;
   --box-shadow-b: #593e65;
+
+  --main-font: monospace;
 }
 
 .page{
@@ -46,7 +48,7 @@
 
 p{
   color: var(--white-most-text);
-  font-family: monospace;
+  font-family: var(--main-font);
   text-align: center;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -58,7 +60,7 @@ p{
   background-color: var(--base-purple-logo-bg);
   color: var(--white-most-text);
   transition-duration: 0.2s;
-  font-family: monospace;
+  font-family: var(--main-font);
   font-weight: 700;
   font-size: calc(13px + 0.3vmin);
   margin-top: 10px;
@@ -85,7 +87,7 @@ p{
   text-align: center;
   justify-content: center;
   border-radius: 30px;
-  font-family: monospace;
+  font-family: var(--main-font);
   font-size: calc(21px + 0.3vmin);
   top: 0;
 }
@@ -94,7 +96,7 @@ p{
   font-size: calc(20px + 0.3vmin);
   text-align: center;
   justify-content: center;
-  font-family: monospace;
+  font-family: var(--main-font);
   top: 2px;
 }
 
