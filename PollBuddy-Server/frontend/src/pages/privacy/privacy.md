@@ -1,7 +1,7 @@
 From the contributors of Poll Buddy,
 
 Our promise is to keep your data safe, protected and far from anyone that could use it in a harmful way.
-The purpose of this app is and always will be for educational purposes <i>only</i>.
+The purpose of this app is and always will be for educational purposes only.
 etc. etc.
 
 (We will definitely need to rewrite the above text)
