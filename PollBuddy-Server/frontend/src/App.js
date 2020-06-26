@@ -1,5 +1,6 @@
 import React from "react";
 import {BrowserRouter, Route, Switch} from "react-router-dom"
+import {MDBContainer} from "mdbreact"
 
 import Myclasses from "./pages/myclasses/myclasses"
 import Homepage from "./pages/homepage/homepage"
@@ -43,7 +44,9 @@ export default class App extends React.Component {
     return (
       <BrowserRouter>
 
-        <Header title={this.state.pageTitle} userInfo={this.state.userInfo} />
+        <MDBContainer id="wrapper">
+
+          <Header title={this.state.pageTitle} userInfo={this.state.userInfo} />
 
         {/*
             Using React BrowserRouter now
@@ -52,67 +55,68 @@ export default class App extends React.Component {
             We will likely want to nest a lot of these later, this link has some details how
           */}
 
-        <Switch>
-          <Route exact path="/">
-            <Homepage updateTitle={this.updateTitle} />
-          </Route>
-          <Route exact path="/myclasses">
-            <Myclasses updateTitle={this.updateTitle} />
-          </Route>
-          <Route exact path="/lessons">
-            <Lessons updateTitle={this.updateTitle} />
-          </Route>
-          <Route exact path="/lesson/:lessonId">
-            <Lesson updateTitle={this.updateTitle} />
-          </Route>
-          <Route exact path="/login">
-            <Login updateTitle={this.updateTitle} />
-          </Route>
-          <Route exact path="/classcreation">
-            <Classcreation updateTitle={this.updateTitle} />
-          </Route>
-          <Route exact path="/template">
-            <Template updateTitle={this.updateTitle} />
-          </Route>
-          <Route exact path="/accountinfo">
-            <AccountInfo updateTitle={this.updateTitle} />
-          </Route>
-          <Route exact path="/forgotPassword">
-            <ForgotPassword updateTitle={this.updateTitle} />
-          </Route>
-          <Route exact path="/registerDefault">
-            <RegisterDefault updateTitle={this.updateTitle} />
-          </Route>
-          <Route exact path="/registerWithSchool">
-            <RegisterWithSchool updateTitle={this.updateTitle} />
-          </Route>
-          <Route exact path="/registerWithPollBuddy">
-            <RegisterWithPollBuddy updateTitle={this.updateTitle} />
-          </Route>
-          <Route exact path="/privacy">
-            <Privacy updateTitle={this.updateTitle} />
-          </Route>
-          <Route exact path="/resetPassword">
-            <ResetPassword updateTitle={this.updateTitle} />
-          </Route>
-          <Route exact path="/pollDataView">
-            <PollDataView updateTitle={this.updateTitle} />
-          </Route>
-          <Route exact path="/pollviewer">
-            <PollViewer updateTitle={this.updateTitle} />
-          </Route>
-       
-          {/* Default route/error page */}
-          <Route>
-            <Notfound updateTitle={this.updateTitle} />
-          </Route>
-        </Switch>
+          <Switch>
+            <Route exact path="/">
+              <Homepage updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/myclasses">
+              <Myclasses updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/lessons">
+              <Lessons updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/lesson/:lessonId">
+              <Lesson updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/login">
+              <Login updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/classcreation">
+              <Classcreation updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/template">
+              <Template updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/accountinfo">
+              <AccountInfo updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/forgotPassword">
+              <ForgotPassword updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/registerDefault">
+              <RegisterDefault updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/registerWithSchool">
+              <RegisterWithSchool updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/registerWithPollBuddy">
+              <RegisterWithPollBuddy updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/privacy">
+              <Privacy updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/resetPassword">
+              <ResetPassword updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/pollDataView">
+              <PollDataView updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/pollviewer">
+              <PollViewer updateTitle={this.updateTitle} />
+            </Route>
 
-        <Footer/>
+            {/* Default route/error page */}
+            <Route>
+              <Notfound updateTitle={this.updateTitle} />
+            </Route>
+          </Switch>
+
+          <Footer/>
+
+        </MDBContainer>
 
       </BrowserRouter>
 
     )
   }
 }
-

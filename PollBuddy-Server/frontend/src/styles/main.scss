@@ -18,12 +18,18 @@
   --main-font: monospace;
 }
 
+#wrapper {
+  min-height: 100vh;
+  position: relative;
+}
+
 .page{
   background-color: var(--dark-purple-main-background);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding-bottom: 85px;
 }
 
 // singular attributes
