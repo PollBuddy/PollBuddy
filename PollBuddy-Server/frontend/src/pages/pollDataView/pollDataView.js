@@ -78,12 +78,24 @@ export default class pollDataView extends Component {
       <MDBContainer fluid className="page">
         <MDBContainer fluid className="pollDataView-page">
           <MDBContainer className="pollDataView-questions">
-            <p className="width-90 fontSizeSmall">
-              CSCI 1200 - Data Structures
-            </p>
-            <p className="width-90 fontSizeSmall">
-              Lesson #10
-            </p>
+
+            <MDBContainer>
+              <select className="btn button">
+                <option>Choose a Group</option>
+                <option value="1">Data Structures</option>
+                <option value="2">FOCS</option>
+                <option value="3">Algorithms</option>
+              </select>
+            </MDBContainer>
+
+            <MDBContainer>
+              <select className="btn button">
+                <option>Choose a Poll</option>
+                <option value="1">Poll 1 - Vectors</option>
+                <option value="2">Poll 2 - Lists</option>
+                <option value="3">Poll 3 - Maps</option>
+              </select>
+            </MDBContainer>
 
             <Link to={"/pollDataView"}>
               <button className="btn button">Question 1</button>

@@ -9,6 +9,7 @@
   flex-direction: column;
   align-items: center;
 }
+
 .pollDataView-questions{
   position: absolute;
   left: 0;
@@ -20,4 +21,31 @@
 }
 .pollDataView-page{
   min-height: 80vh;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: var(--light-gray);
+  min-width: 160px;
+  z-index: 1;
+}
+
+.dropdown-content a {
+  font-family: monospace;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: var(--gray-placeholder-text)}
+
+.dropdown:hover .dropdown-content {
+  display: block;
 }
