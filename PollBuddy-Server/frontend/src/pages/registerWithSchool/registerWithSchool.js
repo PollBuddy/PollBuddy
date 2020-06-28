@@ -23,14 +23,21 @@ export default class registerWithSchool extends Component {
             School Name:
           </p>
           <MDBContainer className="form-group">
-            <input placeholder="Enter school name" className="form-control textBox"/>
             <Autocomplete
               getItemValue={(item) => item.label}
               items={[
-                { label: 'apple' },
-                { label: 'banana' },
-                { label: 'pear' }
+                { label: "Rensselaer Polytechnic Institute" },
+                { label: "Worcester Polytechnic Institute" },
+                { label: "Massachusetts Institute of Technology" },
+                { label: "Rochester Institute of Technology" },
+                { label: "University of Rochester" },
+                { label: "SUNY Polytechnic Institute" },
+                { label: "SUNY Albany" },
+                { label: "Albany Medical College" }
               ]}
+              renderInput={function(props) {
+                return <input placeholder="Enter school name" className="form-control textBox"/>
+              }}
               renderItem={(item, isHighlighted) =>
                 <div style={{ background: isHighlighted ? 'lightgray' : 'white' }}>
                   {item.label}
