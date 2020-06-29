@@ -31,7 +31,7 @@ export default class homepage extends Component {
         <p className="width-45 fontSizeSmall"> Poll Code:</p>
 
         <MDBContainer className="form-group">
-          <input placeholder="K30SW8" className="form-control textBox"/>
+          <input placeholder="K30SW8" className="form-control textBox" aria-label="Poll Code"/>
         </MDBContainer>
 
         <Link to={"/pollviewer"}>
