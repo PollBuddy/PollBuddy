@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import "./registerWithPollBuddy.scss"
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 
@@ -10,25 +9,35 @@ export default class registerWithPollBuddy extends Component {
 
   render() {
     return (
-      <MDBContainer fluid>
-        <MDBContainer fluid className="p-b-box">
-          <h1 className="register-text">
+      <MDBContainer fluid className="page">
+        <MDBContainer fluid className="box">
+          <p className="bold fontSizeLarge">
             Register with Poll Buddy
-          </h1>
-          <p className="register-blurb">
+          </p>
+          <p className="width-90 fontSizeSmall">
             To create an account, fill in the text boxes, then press submit.
           </p>
+          <p className="width-90 fontSizeSmall">
+            Name:
+          </p>
           <MDBContainer className="form-group">
-            <input type="email" className={`${"enterName"} ${"form-control"}`} placeholder="Enter your name"/>
+            <input placeholder="SIS Man" className="form-control textBox"/>
           </MDBContainer>
+          <p className="width-90 fontSizeSmall">
+            Email:
+          </p>
           <MDBContainer className="form-group">
-            <input type="email" className={`${"enterEmail"} ${"form-control"}`} placeholder="Enter your email"/>
+            <input placeholder="mans@rpi.edu" className="form-control textBox"/>
           </MDBContainer>
+          <p className="width-90 fontSizeSmall">
+            Password:
+          </p>
           <MDBContainer className="form-group">
-            <input type="email" className={`${"enterPassword"} ${"form-control"}`} placeholder="Enter your password"/>
+            <input placeholder="******************" className="form-control textBox"/>
           </MDBContainer>
+
           <form>
-            <button className="btn submit-button2" formAction="/accountinfo">Submit</button>
+            <button className="btn button" formAction="/accountinfo">Submit</button>
           </form>
         </MDBContainer>
       </MDBContainer>

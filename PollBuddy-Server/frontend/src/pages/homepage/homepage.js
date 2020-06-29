@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import "./homepage.scss"
 import "mdbreact/dist/css/mdb.css";
+import "./homepage.scss";
 import { MDBContainer } from "mdbreact";
 import logo from "../../images/logo.png";
 import {Link} from "react-router-dom";
@@ -13,10 +13,10 @@ export default class homepage extends Component {
 
   render() {
     return (
-      <MDBContainer fluid className="page-homepage">
-        <img src={logo} alt="logo" className="logo img-fluid" />
+      <MDBContainer fluid className="page">
+        <img src={logo} alt="logo" className="homepage_logo img-fluid" />
 
-        <p className = "blurb"> An interactive questionnaire platform made by students, for
+        <p className="width-45 fontSizeSmall"> An interactive questionnaire platform made by students, for
                     students, to strengthen lecture material and class attentiveness.</p>
         <MDBContainer>
           <Link to={"/login"}>
@@ -27,17 +27,18 @@ export default class homepage extends Component {
           </Link>
         </MDBContainer>
 
-        <p className = "blurb2" > Already have a Poll Code? Enter it here.</p>
+        <p className="width-45 fontSizeSmall"> Already have a Poll Code? Enter it here.</p>
+        <p className="width-45 fontSizeSmall"> Poll Code:</p>
+
         <MDBContainer className="form-group">
-          <input placeholder="Poll Code" className="enterCode"/>
+          <input placeholder="K30SW8" className="form-control textBox"/>
         </MDBContainer>
+
         <Link to={"/pollviewer"}>
-          <button className = "btn poll-button">Join Poll</button>
+          <button className = "btn button">Join Poll</button>
         </Link>
 
       </MDBContainer>
-
-
     )
   }
 }

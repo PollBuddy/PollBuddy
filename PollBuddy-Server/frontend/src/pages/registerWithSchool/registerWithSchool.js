@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import "./registerWithSchool.scss"
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
+import {Link} from "react-router-dom";
 
 export default class registerWithSchool extends Component {
   componentDidMount() {
@@ -10,29 +10,33 @@ export default class registerWithSchool extends Component {
 
   render() {
     return (
-      <MDBContainer fluid>
+      <MDBContainer fluid className="page">
         <MDBContainer fluid className="box">
-          <h1 className="register-text">
+          <p className="bold fontSizeLarge">
             Register with School
-          </h1>
-          <p className="register-blurb">
+          </p>
+          <p className="width-90 fontSizeSmall">
             To create an account, enter your school name or login using RPI's CAS.
           </p>
+          <p className="width-90 fontSizeSmall">
+            School Name:
+          </p>
           <MDBContainer className="form-group">
-            {/*TODO: make this a dropdown with all the schools instead of a text box*/}
-            {/*If you have two different classNames, the compiler will give a warning. To get over this, concatenate their names, and the warning goes away.*/}
-            <input type="schoolName" className={`${"schoolName"} ${"form-control"}`} placeholder="Enter School Name"/>
+            <input placeholder="Enter school name" className="form-control textBox"/>
           </MDBContainer>
 
-          <form>{/*make sure that the link works with the account info page or any other school login page*/}
-            <button className="btn submit-button2" formAction="/accountinfo">Submit School Name</button>
-          </form>
+          <Link to={"/accountinfo"}>
+            <button className="btn button">Submit School Name</button>
+          </Link>
+
           <form>
-            <button className="btn cas-button"
+            <button className="btn button"
               formAction="https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Fcms.union.rpi.edu%2Flogin%2Fcas%2F%3Fnext%3Dhttps%253A%252F%252Fwww.google.com%252F">CAS
               (I'm an RPI student)
             </button>
           </form>
+
+
         </MDBContainer>
       </MDBContainer>
     )
