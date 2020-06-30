@@ -63,19 +63,20 @@ p{
 .button {
   border-radius: 30px;
   background-color: var(--base-purple-logo-bg);
-  color: var(--white-most-text);
-  transition-duration: 0.2s;
+  color: var(--light-purple-logo-text);
   font-family: var(--main-font);
   font-weight: 700;
   font-size: calc(13px + 0.3vmin);
   margin-top: 10px;
   margin-bottom: 10px;
   height: 45px;
+  transition: all 0.2s linear;
+  box-shadow: none;
 }
 
 .button:hover {
-  color: var(--light-purple-logo-text);
-  transition-duration: 0.3s;
+  color: var(--white-most-text);
+  box-shadow: none;
 }
 
 .textBox {

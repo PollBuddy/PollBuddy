@@ -26,7 +26,11 @@
   margin: -5px 40px 0 0;
   text-transform: uppercase;
   border-radius: 999px;
+  transition: all 0.2s linear;
 }
-.header_bar_btn, .header_bar_btn:hover, .header_bar_btn:active, .header_bar_btn:visited {
+.header_bar_btn, .header_bar_btn:active, .header_bar_btn:visited {
   color: var(--light-purple-logo-text);
+}
+.header_bar_btn:hover {
+  color: var(--white-most-text);
 }
