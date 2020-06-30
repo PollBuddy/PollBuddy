@@ -24,7 +24,6 @@
 }
 
 .page{
-  background-color: var(--dark-purple-main-background);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -118,7 +117,6 @@ p{
   border-left-color: var(--box-border-top-left-color);
   border-right-color: var(--box-border-bottom-right-color);
   border-bottom-color: var(--box-border-bottom-right-color);
-  background: var(--dark-purple-main-background);
   box-shadow: 41px 41px 82px var(box-shadow-a),
             -41px -41px 82px var(box-shadow-b);
   display: flex;
