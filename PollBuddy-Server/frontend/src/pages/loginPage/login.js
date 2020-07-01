@@ -24,18 +24,17 @@ export default class login extends Component {
     return (
       <MDBContainer className="page">
 
-        <p className="bold fontSizeSmall">
+        <p className="bold fontSizeSmall" id="emailText">
           Email:
         </p>
-
         <MDBContainer className="form-group">
-          <input type="email" placeholder="sisman@rpi.edu" className="form-control width-320px textBox" aria-label="email"/>
+          <input type="email" placeholder="sisman@rpi.edu" className="form-control width-320px textBox" aria-labelledby="emailText" />
         </MDBContainer>
-        <p className="bold fontSizeSmall">
+        <p className="bold fontSizeSmall" id="passwordText">
           Password:
         </p>
         <MDBContainer className="form-group">
-          <input type="password" placeholder="••••••••••••••" className="form-control width-320px textBox" aria-label="password"/>
+          <input type="password" placeholder="••••••••••••••" className="form-control width-320px textBox" aria-labelledby="passwordText" />
         </MDBContainer>
 
         <Link to={"/myclasses"}>
