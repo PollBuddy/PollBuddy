@@ -33,11 +33,11 @@ RUN npm run build
 FROM node:current-alpine
 WORKDIR /usr/src/app/
 
-# Bundle app source from builder
-COPY --from=builder /usr/src/app/build ./build
-
 # Install serve to serve the files
 RUN npm install -g serve
+
+# Bundle app source from builder
+COPY --from=builder /usr/src/app/build ./build
 
 # Start command
 EXPOSE 3000
