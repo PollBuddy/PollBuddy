@@ -13,11 +13,13 @@ RUN npm install
 # RUN npm ci --only=production
 
 # Bundle app source
+# Folders
 COPY bin ./bin
+COPY modules ./modules
 COPY public ./public
 COPY routes ./routes
+# Files
 COPY app.js ./
-COPY modules ./modules
 COPY .env ./
 
 EXPOSE 3000
