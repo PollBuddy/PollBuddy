@@ -1,4 +1,8 @@
-FROM node
+# This dockerfile is considered "production ready" so we're compiling and building the app rather than running it in
+# dev mode. This grants us a few optimizations that hopefully won't later backfire on us.
+
+# Build Stage 1 - Used to transpile and minimize
+FROM node:current AS builder
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -8,15 +12,33 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY package*.json ./
 
-RUN npm install
-# If you are building your code for production
-# RUN npm ci --only=production
+# Intead of npm install, we're using npm ci which uses package-lock.json instead of package.json for more reproducible
+# builds and for performance. We also won't be needing dev dependencies here so those are omitted.
+# RUN npm install
+RUN npm ci --only=production
 
 # Bundle app source
+# Folders
 COPY public ./public
 COPY src ./src
+# Files
 COPY .env ./
 
-EXPOSE 3000
+# Start command
+RUN npm run build
 
-CMD [ "npm", "run", "docker-start" ]
+
+
+# Build Stage 2 - Run previously built files
+FROM node:current-alpine
+WORKDIR /usr/src/app/
+
+# Bundle app source from builder
+COPY --from=builder /usr/src/app/build ./build
+
+# Install serve to serve the files
+RUN npm install -g serve
+
+# Start command
+EXPOSE 3000
+CMD ["serve", "-s", "build", "-l", "3000"]
