@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import "mdbreact/dist/css/mdb.css";
 import {MDBContainer} from "mdbreact";
 import ReactMarkdown from "react-markdown";
-import privacyMdPath from './privacy.md';
+import privacyMdPath from "./privacy.md";
 
 export default class privacy extends Component {
 
