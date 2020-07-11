@@ -9,6 +9,11 @@ export default class registerWithSchool extends Component {
     this.props.updateTitle("Register with School");
   }
 
+  constructor(props) {
+    super(props);
+    this.state = { value: "" }
+  }
+
   render() {
     return (
       <MDBContainer fluid className="page">
@@ -25,6 +30,7 @@ export default class registerWithSchool extends Component {
           <MDBContainer className="form-group">
             <Autocomplete
               getItemValue={(item) => item.label}
+              shouldItemRender={(item, value) => item.label.toLowerCase().indexOf(value.toLowerCase()) >= 0}
               items={[
                 { key: 0, label: "Rensselaer Polytechnic Institute" },
                 { key: 1, label: "Worcester Polytechnic Institute" },
@@ -35,27 +41,19 @@ export default class registerWithSchool extends Component {
                 { key: 6, label: "SUNY Albany" },
                 { key: 7, label: "Albany Medical College" }
               ]}
-              /*
-              renderInput={function(props) {
-                return (<input
-                  aria-labelledby="schoolNameText"
-                  placeholder="Enter school name"
-                  className="form-control textBox"
-                  onClick={props.onClick(props.ref)}
-                  onChange={props.onChange(props.ref)}
-                />)
+              inputProps = {{
+                className: "form-control textBox",
+                placeholder: "Enter school name",
+                "aria-labelledby": "schoolNameText"
               }}
-              */
               renderItem={(item, isHighlighted) =>
                 <div key={item.key} style={{ background: isHighlighted ? 'lightgray' : 'white' }}>
                   {item.label}
                 </div>
               }
-              value={""}
-              onChange={(e, value) => value = e.target.value}
-              // onChange={(e, value) => {console.log(value); console.log(e.target.value)}}
-              // these are one and the same
-              // onSelect={(val) => value = val}
+              value={this.state.value}
+              onChange = {e => this.setState({ value: e.target.value })}
+              onSelect={value => this.setState({ value })}
             />
           </MDBContainer>
 
