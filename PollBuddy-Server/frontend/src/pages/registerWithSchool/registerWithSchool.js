@@ -27,10 +27,8 @@ export default class registerWithSchool extends Component {
           <p className="width-90 fontSizeSmall" id="schoolNameText">
             School Name:
           </p>
-          <MDBContainer className="form-group">
+          <MDBContainer className="form-group" style={{ width: "100%" }}>
             <Autocomplete
-              getItemValue={(item) => item.label}
-              shouldItemRender={(item, value) => item.label.toLowerCase().indexOf(value.toLowerCase()) >= 0}
               items={[
                 { key: 0, label: "Rensselaer Polytechnic Institute" },
                 { key: 1, label: "Worcester Polytechnic Institute" },
@@ -41,18 +39,38 @@ export default class registerWithSchool extends Component {
                 { key: 6, label: "SUNY Albany" },
                 { key: 7, label: "Albany Medical College" }
               ]}
-              inputProps = {{
-                className: "form-control textBox",
-                placeholder: "Enter school name",
-                "aria-labelledby": "schoolNameText"
+              getItemValue={item => item.label}
+              sortItems={(itemA, itemB, value) => {
+                const lowA = itemA.label.toLowerCase();
+                const lowB = itemB.label.toLowerCase();
+                const indexA = lowA.indexOf(value.toLowerCase());
+                const indexB = lowB.indexOf(value.toLowerCase());
+                if(indexA !== indexB) return (indexA - indexB);
+                return (lowA < lowB ? -1 : 1);
               }}
+              shouldItemRender={(item, value) => item.label.toLowerCase().indexOf(value.toLowerCase()) >= 0}
               renderItem={(item, isHighlighted) =>
-                <div key={item.key} style={{ background: isHighlighted ? 'lightgray' : 'white' }}>
+                <div
+                  key={item.key}
+                  className="fontSizeSmall"
+                  style={{
+                    background: isHighlighted ? "#DFCFEA" : "#FFF",
+                    fontFamily: "monospace",
+                    textAlign: "center"
+                  }}
+                >
                   {item.label}
                 </div>
               }
+              inputProps={{
+                className: "form-control textBox",
+                style: { width: "100%" },
+                placeholder: "Enter school name",
+                "aria-labelledby": "schoolNameText"
+              }}
+              wrapperStyle={{ display: "inline-block", width: "100%"}}
               value={this.state.value}
-              onChange = {e => this.setState({ value: e.target.value })}
+              onChange={e => this.setState({ value: e.target.value })}
               onSelect={value => this.setState({ value })}
             />
           </MDBContainer>
