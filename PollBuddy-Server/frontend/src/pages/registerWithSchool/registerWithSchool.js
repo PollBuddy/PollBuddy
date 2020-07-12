@@ -45,7 +45,7 @@ export default class registerWithSchool extends Component {
                 const lowB = itemB.label.toLowerCase();
                 const indexA = lowA.indexOf(value.toLowerCase());
                 const indexB = lowB.indexOf(value.toLowerCase());
-                if(indexA !== indexB) return (indexA - indexB);
+                if(indexA !== indexB) { return (indexA - indexB); }
                 return (lowA < lowB ? -1 : 1);
               }}
               shouldItemRender={(item, value) => item.label.toLowerCase().indexOf(value.toLowerCase()) >= 0}
