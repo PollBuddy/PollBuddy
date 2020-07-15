@@ -19,6 +19,7 @@ import RegisterWithPollBuddy from "./pages/registerWithPollBuddy/registerWithPol
 import PollViewer from "./pages/pollviewer/pollviewer";
 import ResetPassword from "./pages/resetPassword/resetPassword";
 import PollDataView from "./pages/pollDataView/pollDataView";
+import About from "./pages/about/about"
 
 import Header from "./components/header/header.js"
 import Footer from "./components/footer/footer.js"
@@ -103,6 +104,9 @@ export default class App extends React.Component {
             </Route>
             <Route exact path="/pollviewer">
               <PollViewer updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/about">
+              <About updateTitle={this.updateTitle} />
             </Route>
 
             {/* Default route/error page */}
