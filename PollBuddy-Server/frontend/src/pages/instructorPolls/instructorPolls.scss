@@ -3,11 +3,12 @@
   margin-bottom: 10px;
 }
 
-.instructorView_element:hover .arrow{
-  margin-left: 100px;
-}
 .instructorView_element:hover .instructorView_text{
   color: var(--light-purple-logo-text);
+}
+
+.instructorView_element:hover .arrow{
+  color: var(--darkest-purple-header-color);
 }
 
 .instructorView_text{
@@ -15,10 +16,12 @@
   font-family: monospace;
   line-height: 26px;
 }
+
 .arrow{
-  color: var(--darkest-purple-header-color);
+  color: var(--dark-purple-main-background);
   border-color: var(--darkest-purple-header-color);
-  margin-left: 60px;
-  transform: scale(3.5);
-  transition: margin-left 0.6s;
+  margin-left: -30px;
+  margin-right: 40px;
+  transform: scale(3);
+  transition: color 0.6s;
 }
