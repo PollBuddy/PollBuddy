@@ -1,11 +1,13 @@
-.login_link{
-  color: #fff;
+a.login_link {
+  color: var(--white-most-text);
   opacity: 0.8;
   font-family: var(--main-font);
-  margin: 7px 0 7px 0;
+  margin: 7px 0;
 }
-.login_link:hover {
+a.login_link:hover {
   text-decoration: underline;
   opacity: 1;
-  color: #fff;
+}
+a.login_link:last-child {
+  margin-bottom: 0;
 }

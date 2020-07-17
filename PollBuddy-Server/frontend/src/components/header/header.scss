@@ -26,7 +26,7 @@
   margin: -5px 40px 0 0;
   text-transform: uppercase;
   border-radius: 999px;
-  transition: all 0.2s linear;
+  transition: var(--default-transition);
 }
 .header_bar_btn, .header_bar_btn:active, .header_bar_btn:visited {
   color: var(--light-purple-logo-text);
