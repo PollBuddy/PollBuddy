@@ -25,7 +25,7 @@ export default class accountinfo extends Component {
           <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText"/>
         </MDBContainer>
         <p className="fontSizeSmall">
-					<label htmlFor="currentPasswordText">Current password:</label>
+          <label htmlFor="currentPasswordText">Current password:</label>
         </p>
         <MDBContainer className="form-group">
           <input placeholder="shir1ey-is-my-gir1y" className="form-control textBox" id="currentPasswordText"/>
