@@ -17,23 +17,23 @@ export default class registerWithPollBuddy extends Component {
           <p className="width-90 fontSizeSmall">
             To create an account, fill in the text boxes, then press submit.
           </p>
-          <p className="width-90 fontSizeSmall" id="nameText">
-            Name:
+          <p className="width-90 fontSizeSmall">
+            <label htmlFor="nameText">Name:</label>
           </p>
           <MDBContainer className="form-group">
-            <input placeholder="SIS Man" className="form-control textBox" aria-labelledby="nameText"/>
+            <input placeholder="SIS Man" className="form-control textBox" id="nameText"/>
           </MDBContainer>
-          <p className="width-90 fontSizeSmall" id="emailText">
-            Email:
+          <p className="width-90 fontSizeSmall">
+            <label htmlFor="emailText">Email:</label>
           </p>
           <MDBContainer className="form-group">
-            <input placeholder="mans@rpi.edu" className="form-control textBox" aria-labelledby="emailText"/>
+            <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText"/>
           </MDBContainer>
-          <p className="width-90 fontSizeSmall" id="passwordText">
-            Password:
+          <p className="width-90 fontSizeSmall">
+            <label htmlFor="emailText">Password:</label>
           </p>
           <MDBContainer className="form-group">
-            <input placeholder="******************" className="form-control textBox" aria-labelledby="passwordText"/>
+            <input placeholder="******************" className="form-control textBox" id="passwordText"/>
           </MDBContainer>
 
           <form>

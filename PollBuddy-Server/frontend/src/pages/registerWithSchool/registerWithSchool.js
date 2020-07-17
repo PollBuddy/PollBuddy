@@ -18,11 +18,11 @@ export default class registerWithSchool extends Component {
           <p className="width-90 fontSizeSmall">
             To create an account, enter your school name or login using RPI's CAS.
           </p>
-          <p className="width-90 fontSizeSmall" id="schoolNameText">
-            School Name:
+          <p className="width-90 fontSizeSmall">
+            <label htmlFor="schoolNameText">School name:</label>
           </p>
           <MDBContainer className="form-group">
-            <input placeholder="Enter school name" className="form-control textBox" aria-labelledby="schoolNameText"/>
+            <input placeholder="Enter school name" className="form-control textBox" id="schoolNameText"/>
           </MDBContainer>
 
           <Link to={"/accountinfo"}>
