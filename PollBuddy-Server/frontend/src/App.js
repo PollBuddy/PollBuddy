@@ -19,6 +19,7 @@ import PollViewer from "./pages/pollviewer/pollviewer";
 import ResetPassword from "./pages/resetPassword/resetPassword";
 import PollDataView from "./pages/pollDataView/pollDataView";
 import InstructorPolls from "./pages/instructorPolls/instructorPolls";
+import InstructorLiveStats from "./pages/instructorLiveStats/instructorLiveStats";
 
 import Header from "./components/header/header.js"
 import Footer from "./components/footer/footer.js"
@@ -104,6 +105,9 @@ export default class App extends React.Component {
           </Route>
           <Route exact path="/instructorPolls">
             <InstructorPolls updateTitle={this.updateTitle} />
+          </Route>
+          <Route exact path="/instructorLiveStats">
+            <InstructorLiveStats updateTitle={this.updateTitle} />
           </Route>
        
           {/* Default route/error page */}
