@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { Bar } from "react-chartjs-2";
-import { MDBContainer } from "mdbreact";
+import {MDBContainer, MDBIcon} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import {Link} from "react-router-dom";
 import "./instructorLiveStats.scss";
+import Countdown, {zeroPad} from "react-countdown-now";
 export default class instructorLiveStats extends Component {
   componentDidMount(){
     this.props.updateTitle("Instructor Live Statistics");
@@ -71,8 +72,19 @@ export default class instructorLiveStats extends Component {
     }
   };
 
+  timeLimit = 5;
 
   render() {
+    const clockFormat = ({ minutes, seconds, completed }) => {
+
+      if (completed) {
+        // Render a completed state
+        return <p className="width-90 fontSizeLarge"> Question closed! </p>
+      } else {
+        // Render a countdown
+        return <p className="width-90 fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
+      }
+    };
     return (
 
       <MDBContainer fluid className="page">
@@ -81,9 +93,8 @@ export default class instructorLiveStats extends Component {
             <p className="width-90 fontSizeLarge">
               Time remaining:
             </p>
-            <p className="width-90 fontSizeLarge">
-              00:20
-            </p>
+            <Countdown renderer={clockFormat} date={Date.now() + this.timeLimit*1000} />
+
             <Link to={"/instructorLiveStats"}>
               <button className="btn button">Next Question</button>
             </Link>
