@@ -50,7 +50,11 @@
 }
 
 .width-320px {
-    width: 320px;
+  width: 320px;
+}
+
+.width-45, .width-90, .width-320px {
+  box-sizing: border-box;
 }
 
 .bold {
@@ -94,7 +98,6 @@ p {
   border: 5px solid transparent;
   outline: none;
   text-align: center;
-  justify-content: center;
   border-radius: 30px;
   font-family: var(--main-font);
   font-size: calc(21px + 0.3vmin);
@@ -113,15 +116,12 @@ input.textBox:focus::placeholder {
   color: var(--gray-placeholder-text);
   font-size: calc(20px + 0.3vmin);
   text-align: center;
-  justify-content: center;
   font-family: var(--main-font);
   transition: var(--default-transition);
 }
 
 .box {
   padding: 30px 50px;
-  margin: auto;
-  width: fit-content;
   border-radius: 40px;
   background: var(--darkest-purple-header-color);
   display: flex;
