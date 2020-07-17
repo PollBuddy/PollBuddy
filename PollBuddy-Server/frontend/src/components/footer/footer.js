@@ -28,6 +28,9 @@ export default class Footer extends Component {
           <a href = "mailto:contactus@pollbuddy.app">
 						Contact
           </a>
+          <a href = "/faq">
+            FAQ
+          </a>
           <a href = "/privacy">
 						Privacy
           </a>

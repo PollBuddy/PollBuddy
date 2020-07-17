@@ -1,17 +1,18 @@
 import React from "react";
-import {BrowserRouter, Route, Switch} from "react-router-dom"
+import {BrowserRouter, Route, Switch} from "react-router-dom";
 
-import Myclasses from "./pages/myclasses/myclasses"
-import Homepage from "./pages/homepage/homepage"
-import Login from "./pages/loginPage/login"
-import Classcreation from "./pages/classcreation/classcreation"
-import Lessons from "./pages/lessons/lessons"
-import Lesson from "./pages/lesson/lesson"
-import Notfound from "./pages/notfound/notfound"
-import Template from "./pages/template/template"
-import AccountInfo from "./pages/accountinfo/accountinfo"
-import Privacy from "./pages/privacy/privacy"
-import ForgotPassword from "./pages/forgotPassword/forgotPassword"
+import Myclasses from "./pages/myclasses/myclasses";
+import Homepage from "./pages/homepage/homepage";
+import Login from "./pages/loginPage/login";
+import Classcreation from "./pages/classcreation/classcreation";
+import Lessons from "./pages/lessons/lessons";
+import Lesson from "./pages/lesson/lesson";
+import Notfound from "./pages/notfound/notfound";
+import Template from "./pages/template/template";
+import FAQ from "./pages/faq/faq";
+import AccountInfo from "./pages/accountinfo/accountinfo";
+import Privacy from "./pages/privacy/privacy";
+import ForgotPassword from "./pages/forgotPassword/forgotPassword";
 import RegisterDefault from "./pages/registerDefault/registerDefault";
 import RegisterWithSchool from "./pages/registerWithSchool/registerWithSchool";
 import RegisterWithPollBuddy from "./pages/registerWithPollBuddy/registerWithPollBuddy";
@@ -19,8 +20,8 @@ import PollViewer from "./pages/pollviewer/pollviewer";
 import ResetPassword from "./pages/resetPassword/resetPassword";
 import PollDataView from "./pages/pollDataView/pollDataView";
 
-import Header from "./components/header/header.js"
-import Footer from "./components/footer/footer.js"
+import Header from "./components/header/header.js";
+import Footer from "./components/footer/footer.js";
 
 import "./styles/main.scss";
 
@@ -76,6 +77,9 @@ export default class App extends React.Component {
           </Route>
           <Route exact path="/accountinfo">
             <AccountInfo updateTitle={this.updateTitle} />
+          </Route>
+          <Route exact path="/faq">
+            <FAQ updateTitle={this.updateTitle} />
           </Route>
           <Route exact path="/forgotPassword">
             <ForgotPassword updateTitle={this.updateTitle} />
