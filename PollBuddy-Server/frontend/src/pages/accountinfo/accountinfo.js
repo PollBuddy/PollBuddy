@@ -12,7 +12,7 @@ export default class accountinfo extends Component {
     return (
       <MDBContainer className="page">
         <p className="fontSizeSmall">
-        <label htmlFor="nameText">Name:</label>
+          <label htmlFor="nameText">Name:</label>
         </p>
         <MDBContainer className="form-group">
           <input placeholder="SIS Man" className="form-control textBox" id="nameText"/>
@@ -24,7 +24,6 @@ export default class accountinfo extends Component {
         <MDBContainer className="form-group">
           <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText"/>
         </MDBContainer>
-
         <p className="fontSizeSmall">
 					<label htmlFor="currentPasswordText">Current password:</label>
         </p>
