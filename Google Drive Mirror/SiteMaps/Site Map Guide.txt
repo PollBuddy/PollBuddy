@@ -1,0 +1,15 @@
+Fellow Poll Buddies, 
+
+The following guide instructs on best practices for using the Poll Buddy site map. The most up to date version of the map can be found at the following link: https://draft.io/jubvd. 
+
+The Site Map is intended to provide a visual representation of the user experience. The secondary function is to show developers which pages need to be updated. 
+
+The map is set up such that boxes represent pages and lines represent links between pages. Each box has a tag on the bottom left, which indicates its completion status. Boxes will remain as "to do" until the group has decided that the page is ready to deploy. If an issue relating to the page arises, the box should be changed back to "to do". The colors of the boxes do not indicate anything at this time. 
+
+Lines have arrows on one or both sides. The head of the line represents the landing site and the tail represents the origin. The color of the line indicates the completion status. Red indicates a nonexistant connection, yellow indicates a work in progress, and green indicates a completed connection. 
+
+New developers are encouraged to refer to the site map and issue tracker to determine what to dedicate time towards. Current developers are encouraged to keep both of these tools up to date in order to reduce the learning curve and encourage participation. 
+
+When adjusting the site map, refer to the guidelines listed above when changing the color or status of an object. Utilize "chunked notes" if neccessary to make the map as clear as possible. The objective of this map is clarity and it is each member's responsibility to work towards this goal. 
+
+Thank you for following the guidelines and happy polling.
