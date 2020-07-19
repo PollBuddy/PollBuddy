@@ -1,40 +1,5 @@
-.page-homepage{
-  background-color: #4D3656;
-}
-
-.Homepage-header{
-  background-color: #4D3656;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 6vmin);
-  color: white;
-}
-
-.logo {
-  animation-duration: 2s;
-}
-
-.blurb {
-  font-size: calc(20px + 0.3vmin);
-  font-family: monospace;
-  width: 45%;
-  text-align: center;
-}
-
-.button {
-  border-radius: 30px;
-  background-color: #7F648F;
-  color: white;
-  transition-duration: 0.2s;
-  font-family: monospace;
-  font-weight: 700;
-  font-size: calc(13px + 0.3vmin);
-}
-
-.button:hover {
-  color: black;
-  transition-duration: 0.2s;
-}
+.homepage_logo {
+   height: 200px;
+   margin-top: 10px;
+   margin-bottom: 10px;
+ }

@@ -1,0 +1,41 @@
+ul {
+  text-align: left;
+  list-style-type: none;
+}
+
+li{
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.pollviewer_answer{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+//two answer:hover to change the color of answerBubble and answerText at the same time
+.pollviewer_answer:hover .pollviewer_bubble{
+  color: var(--light-purple-logo-text);
+}
+.pollviewer_answer:hover .pollviewer_text{
+  color: var(--light-purple-logo-text);
+}
+
+.pollviewer_text{
+  color: var(--white-most-text);
+  font-family: monospace;
+  line-height: 26px;
+}
+
+.pollviewer_bubble {
+  text-align: center;
+  color: var(--white-most-text);
+  font: 32px monospace;
+  line-height: 36px;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  padding: 10px;
+  background: var(--darkest-purple-header-color);
+  display: inline-block;
+}

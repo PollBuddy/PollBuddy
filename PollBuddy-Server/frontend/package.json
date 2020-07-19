@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@reach/router": "^1.2.1",
     "mdbreact": "^4.21.1",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.14.1",
     "react": "^16.10.2",
     "react-countdown-now": "^2.1.2",
     "react-dom": "^16.10.2",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1"
   },
   "scripts": {
@@ -16,11 +16,8 @@
     "docker-start": "CI=true react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "proxy": "http://localhost:3001",
-  "eslintConfig": {
-    "extends": "react-app"
+    "eject": "react-scripts eject",
+    "lint": "npx eslint src"
   },
   "browserslist": {
     "production": [

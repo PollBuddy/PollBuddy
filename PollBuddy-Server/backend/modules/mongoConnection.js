@@ -1,35 +1,33 @@
-const mongo = require('mongodb');
+const mongo = require("mongodb");
 const MongoClient = mongo.MongoClient;
-const url = 'mongodb://db:27017';
-const database = 'pollbuddy';
 
 var db;
 
 module.exports = {
-	connect: function(callback){
+  connect: function(callback){
 
-		con();
+    con();
 
-		function con() {
-			const client = new MongoClient(url);
-			client.connect((err) => {
-				if (err) {
-					console.error("Seems the database isn't up yet, retrying in 1 second");
-					setTimeout(function () {
-						con();
-					}, 1000);
-				} else {
-					db = client.db(database);
-					console.log('Database connected from module');
-				}
-			});
+    function con() {
+      const client = new MongoClient(process.env.DB_URL);
+      client.connect((err) => {
+        if (err) {
+          console.error("Seems the database isn't up yet, retrying in 1 second");
+          setTimeout(function () {
+            con();
+          }, 3000);
+        } else {
+          db = client.db(process.env.DB_NAME);
+          console.log("Database connected");
+        }
+      });
 
-		}
-	},
-	getDB: function(){
-		return db;
-	},
-	getMongo: function(){
-		return mongo;
-	}
+    }
+  },
+  getDB: function(){
+    return db;
+  },
+  getMongo: function(){
+    return mongo;
+  }
 };

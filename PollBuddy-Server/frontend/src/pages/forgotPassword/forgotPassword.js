@@ -1,33 +1,37 @@
-import React, { Component } from 'react';
-import './forgotPassword.scss'
-import { MDBContainer } from 'mdbreact';
-import 'mdbreact/dist/css/mdb.css';
-
-import Header from "../../components/header/header.js"
+import React, {Component} from "react";
+import {MDBContainer} from "mdbreact";
+import "mdbreact/dist/css/mdb.css";
+import {Link} from "react-router-dom";
 
 export default class pollCode extends Component {
 
-    componentDidMount(){
-        document.title = "Forgot Password - " + document.title;
-    }
+  componentDidMount() {
+    this.props.updateTitle("Forgot Password");
+  }
 
-    render() {
-        return (
-    		<MDBContainer fluid className="forgot-homepage">
-    			<Header title = "forgot password" btn = "login" />
-                <MDBContainer fluid className="forgot-box">
-                    <h1 class="forgot-text">
-                        Forgot Password?
-                    </h1>
-                    <p class="forgot-blurb">
-                        Enter your email and we will send you a reset.
-                    </p>
-                    <div className="form-group">
-                        <input type="email" className="form-control" placeholder="Enter Email" class="enterEmail"/>
-                    </div>
-                    <button class = "btn email-button">Reset Password</button>
-                </MDBContainer>
-    		</MDBContainer>
-    	)
-	}
+  render() {
+    return (
+      <MDBContainer fluid className="page">
+        <MDBContainer fluid className="box">
+          <p className="bold fontSizeLarge">
+            Forgot Password?
+          </p>
+          <p className="width-90 fontSizeSmall">
+            Enter your email and we will send you a reset.
+          </p>
+          <p className="width-90 fontSizeSmall">
+            Email:
+          </p>
+
+          <MDBContainer className="form-group">
+            <input placeholder="Enter email" className="form-control textBox"/>
+          </MDBContainer>
+          <Link to={"/resetPassword"}>
+            <button className="btn button">Reset Password</button>
+          </Link>
+
+        </MDBContainer>
+      </MDBContainer>
+    )
+  }
 }

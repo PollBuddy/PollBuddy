@@ -1,63 +1,47 @@
-import React, { Component } from 'react';
-import "./accountinfo.scss"
-import 'mdbreact/dist/css/mdb.css';
-import { MDBContainer } from 'mdbreact';
-
-import Header from "../../components/header/header.js"
+import React, { Component } from "react";
+import "mdbreact/dist/css/mdb.css";
+import { MDBContainer } from "mdbreact";
+import {Link} from "react-router-dom";
 
 export default class accountinfo extends Component {
-    componentDidMount(){
-        document.title = "Account Info - " + document.title;
-    }
+  componentDidMount(){
+    this.props.updateTitle("Account Info");
+  }
 
-    render() {
-      return (
-        <MDBContainer>
-          <header>
-            <Header title = "account information" btn = "account" />
-              <div className="main-body">
-              <br></br>
-              <br></br>
-              <div>
-              <form>
-                <label>
-                    Name: &nbsp;    
-                    <br></br>
-                    <input type="text" name="name" placeholder="John Doe"/>
-                </label>
-                <br></br> <br></br>
-                <label>
-                    Email: &nbsp;     
-                    <br></br>      
-                    <input type="text" name="email" placeholder="name@gmail.com"/>
-                </label>
-                <br></br> <br></br>
-                <label>
-                    Current Password: &nbsp;   
-                    <br></br>          
-                    <input type="password" name="current" placeholder="Current Password"/>
-                </label>
-                <br></br> <br></br>
-                <label>
-                    New Password: &nbsp;    
-                    <br></br>       
-                    <input type="password" name="new" placeholder="New Password"/>
-                </label>
-                <br></br> <br></br>
-                <label>
-                    Confirm Password: &nbsp;  
-                    <br></br>          
-                    <input type="password" name="confirm" placeholder= "Confirm Password"/>
-                </label>
-                <br></br> <br></br>
-                <input type="submit" value="Submit"></input>
-              </form>
-                     
-              </div>
-            </div>
-          </header>
-
+  render() {
+    return (
+      <MDBContainer className="page">
+        <p className="fontSizeSmall">
+					Name:
+        </p>
+        <MDBContainer className="form-group">
+          <input placeholder="SIS Man" className="form-control textBox"/>
         </MDBContainer>
-      )
-    }
+
+        <p className="fontSizeSmall">
+					Email:
+        </p>
+        <MDBContainer className="form-group">
+          <input placeholder="mans@rpi.edu" className="form-control textBox"/>
+        </MDBContainer>
+
+        <p className="fontSizeSmall">
+					Current password:
+        </p>
+        <MDBContainer className="form-group">
+          <input placeholder="shir1ey-is-my-gir1y" className="form-control textBox"/>
+        </MDBContainer>
+
+        <p className="fontSizeSmall">
+					Confirm password:
+        </p>
+        <MDBContainer className="form-group">
+          <input placeholder="shir1ey-is-my-gir1y" className="form-control textBox"/>
+        </MDBContainer>
+        <Link to={"/myclasses"}>
+          <button className="btn button">Submit</button>
+        </Link>
+      </MDBContainer>
+    )
+  }
 }

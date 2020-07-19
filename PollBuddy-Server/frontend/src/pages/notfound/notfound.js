@@ -1,14 +1,16 @@
-import React, {Component} from 'react';
-import './notfound.scss'
+import React, { Component } from "react";
+import "mdbreact/dist/css/mdb.css";
+
 export default class notfound extends Component {
+
   componentDidMount(){
-    document.title = "Page Not Found - " + document.title;
+    this.props.updateTitle("Page Not Found");
   }
   render() {    
     return (
-      <div className="page-notfound">
-        Route not found
-      </div>
+      <p className="bold fontSizeLarge">
+          Error: page not found.
+      </p>
     )
   }
 }

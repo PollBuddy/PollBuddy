@@ -1,35 +1,32 @@
-import React, { Component } from 'react';
-import './registerDefault.scss'
-import { MDBContainer } from 'mdbreact';
-import 'mdbreact/dist/css/mdb.css';
-
-import Header from "../../components/header/header.js"
-
+import React, {Component} from "react";
+import {MDBContainer} from "mdbreact";
+import "mdbreact/dist/css/mdb.css";
+import {Link} from "react-router-dom";
 
 export default class registerDefault extends Component {
-    componentDidMount(){
-        document.title = "Register - " + document.title;
-    }
+  componentDidMount() {
+    this.props.updateTitle("Register");
+  }
+
   render() {
     return (
-    		<MDBContainer fluid className="register-homepage">
-    			<Header title = "Register" btn = "login" />
-                <MDBContainer fluid className="box">
-                    <h1 className="register-text">
-                        Register for Poll Buddy
-                    </h1>
-                    <p className="register-blurb">
-                        Click on one of the following buttons to register.
-                    </p>
-                    <form>
-                        <button className="btn school-button" formAction="/registerWithSchool" >Register with School</button>
-                    </form>
-                    <form>
-                        <button className="btn poll-buddy-button" formAction="/registerWithPollBuddy" >Register with PollBuddy</button>
-                    </form>
+      <MDBContainer fluid className="page">
+        <MDBContainer fluid className="box">
+          <p className="bold fontSizeLarge">
+            Register for Poll Buddy
+          </p>
+          <p className="width-90 fontSizeSmall">
+            Click on one of the following buttons to register.
+          </p>
+          <Link to={"/registerWithSchool"}>
+            <button className="btn button">Register with School</button>
+          </Link>
 
-                </MDBContainer>
-    		</MDBContainer>
-    	)
-	}
+          <Link to={"/registerWithPollBuddy"}>
+            <button className="btn button">Register with Poll Buddy</button>
+          </Link>
+        </MDBContainer>
+      </MDBContainer>
+    )
+  }
 }

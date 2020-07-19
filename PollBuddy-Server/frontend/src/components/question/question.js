@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import './question.scss'
+import React, { Component } from "react";
+import "./question.scss"
 import {
   MDBCard,
   MDBCardBody,
@@ -9,9 +9,9 @@ import {
   MDBCol,
   MDBContainer, MDBBtn, MDBRow,
   MDBIcon
-} from 'mdbreact';
+} from "mdbreact";
 
-import Countdown, { zeroPad } from 'react-countdown-now';
+import Countdown, { zeroPad } from "react-countdown-now";
 
 
 export default class question extends Component {
@@ -82,23 +82,23 @@ export default class question extends Component {
   render() {
     const clockFormat = ({ minutes, seconds, completed }) => {
         
-        if (completed) {
-          // Render a completed state
-          return <span>Question closed!</span>
-        } else {
-          // Render a countdown
-          return <span>{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
-        }
+      if (completed) {
+        // Render a completed state
+        return <span>Question closed!</span>
+      } else {
+        // Render a countdown
+        return <span>{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
+      }
     };
     return (
-      <MDBContainer className="component-question">
+      <MDBContainer className="question_component-question">
         <MDBRow>
           <MDBCol md="8">
             <MDBCard >
               { // only display image if there is one
                 this.state.data.img &&
                 <MDBCardImage
-                  className="img-fluid"
+                  className="question_img-fluid"
                   src={this.state.data.img}
                   waves
                 />
@@ -120,7 +120,9 @@ export default class question extends Component {
                         <MDBContainer key={index}>
                           <MDBRow>
                             <MDBCol small="2">
-                              <MDBBtn className="btn-choice" onClick={() => { return this.deselectChoice(index) }}>
+                              <MDBBtn className="question_btn-choice" onClick={() => {
+                                return this.deselectChoice(index) 
+                              }}>
                                 {choice}
                               </MDBBtn>
                             </MDBCol>
@@ -135,7 +137,9 @@ export default class question extends Component {
                         <MDBContainer key={index}>
                           <MDBRow>
                             <MDBCol small="2">
-                              <MDBBtn className="btn-choice" outline onClick={() => { return this.selectChoice(index) }}>
+                              <MDBBtn className="question_btn-choice" outline onClick={() => {
+                                return this.selectChoice(index) 
+                              }}>
                                 {choice}
                               </MDBBtn>
                             </MDBCol>
@@ -154,10 +158,10 @@ export default class question extends Component {
                   <li className='list-inline-item white-text'>
                     <MDBIcon far icon="star" /> 12
                   </li>
-                    <li className='list-inline-item'>
-                      <a href='#!' className='white-text'>
-                        <MDBIcon far icon="clock" /> <Countdown renderer={clockFormat} date={Date.now() + this.state.data.timeLimit*1000} />
-                      </a>
+                  <li className='list-inline-item'>
+                    <a href='#!' className='white-text'>
+                      <MDBIcon far icon="clock" /> <Countdown renderer={clockFormat} date={Date.now() + this.state.data.timeLimit*1000} />
+                    </a>
                   </li>
                 </ul>
               </div>

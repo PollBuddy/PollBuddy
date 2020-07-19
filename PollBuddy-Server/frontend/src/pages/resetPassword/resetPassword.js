@@ -1,44 +1,46 @@
-import React, { Component } from 'react';
-import './resetPassword.scss'
-import { MDBContainer } from 'mdbreact';
-import {Link } from "@reach/router"
+import React, {Component} from "react";
+import {MDBContainer} from "mdbreact";
+import {Link} from "react-router-dom";
 
-import 'mdbreact/dist/css/mdb.css';
-
-import Header from "../../components/header/header.js"
+import "mdbreact/dist/css/mdb.css";
 
 export default class resetPassword extends Component {
 
-    componentDidMount(){
-        document.title = "Reset Password - " + document.title;
-    }
+  componentDidMount() {
+    this.props.updateTitle("Reset Password");
+  }
 
-    render() {
-        return (
-    		<MDBContainer fluid className="reset-homepage">
-    			<Header title = "Reset password" btn = "login" />
-                <MDBContainer fluid className="reset-box">
-                    <p className="reset-blurb">
-                        Enter the security code from your inbox and your new password.
-                    </p>
+  render() {
+    return (
+      <MDBContainer fluid className="page">
+        <MDBContainer fluid className="box">
+          <p className="width-90 fontSizeSmall">
+            Enter the security code from your inbox and your new password.
+          </p>
+          <p className="width-90 fontSizeSmall">
+            Security code:
+          </p>
+          <MDBContainer className="form-group">
+            <input placeholder="A9EM3FL8W" className="form-control textBox"/>
+          </MDBContainer>
+          <p className="width-90 fontSizeSmall">
+            New password:
+          </p>
+          <MDBContainer className="form-group">
+            <input placeholder="******************" className="form-control textBox"/>
+          </MDBContainer>
+          <p className="width-90 fontSizeSmall">
+            Confirm password:
+          </p>
+          <MDBContainer className="form-group">
+            <input placeholder="******************" className="form-control textBox"/>
+          </MDBContainer>
 
-                    {/*TODO: autofill the security code*/}
-                    <MDBContainer className="form-group">
-                        <input type="securityCode" className={`${"form-control"} ${"enterSecurityCode"}`} placeholder="Autofilled security code"/>
-                    </MDBContainer>
-                    <MDBContainer className="form-group">
-                        <input type="newPassword" className={`${"form-control"} ${"enterPassword"}`} placeholder="Enter new password"/>
-                    </MDBContainer>
-                    <MDBContainer className="form-group">
-                        <input type="confirmPassword" className={`${"form-control"} ${"confirmPassword"}`} placeholder="Confirm new password"/>
-                    </MDBContainer>
-
-                    {/*Should this link to the myclasses page? Submitting your new password means you are logging in*/}
-                    <Link to={"/accountinfo"}>
-                        <button className = "btn submit-button">Submit</button>
-                    </Link>
-                </MDBContainer>
-    		</MDBContainer>
-    	)
-	}
+          <Link to={"/myclasses"}>
+            <button className="btn button">Submit</button>
+          </Link>
+        </MDBContainer>
+      </MDBContainer>
+    )
+  }
 }
