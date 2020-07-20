@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import './classEditor.scss'
+import './classEditor.scss'
 import { MDBContainer } from "mdbreact";
 
 //this component has 2 modes, edit and new. The new version allows the user to create a new class while the edit version
@@ -51,6 +51,7 @@ export default class ClassEditor extends Component {
     //these are variables passed in to props
     new;
     id;
+    loadingon = false;
 
     onInput = e => {
       //update state to include the data that was changed from the form
@@ -99,10 +100,10 @@ export default class ClassEditor extends Component {
     }
     
     render() {
-      if(this.state === null){
+      if(this.state === null || this.loadingon == true){
         return (
-          <div class="loader"></div>
-		)
+          <MDBContainer className="loader"></MDBContainer>
+        )
       }else{
         return (
           <MDBContainer fluid className="box">
