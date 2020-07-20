@@ -100,8 +100,9 @@ export default class ClassEditor extends Component {
     
     render() {
       if(this.state === null){
-        //show nothing (or loading wheel) if the data has not come in yet
-        return null;//loading todo ui
+        return (
+          <div class="loader"></div>
+		)
       }else{
         return (
           <MDBContainer fluid className="box">
