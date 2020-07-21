@@ -23,20 +23,8 @@ export default class FAQ extends Component {
 
   render() {
     return (
-      // <MDBContainer fluid className="page">
-      //   <p className="width-90 fontSizeSmall">
-      //     Hello, world!
-      //   </p>
-      // </MDBContainer>
-      <MDBContainer fluid
-        className="page"
-        style={{
-          color: "#FFF",
-          fontFamily: "monospace",
-          listStyleType: "circle"
-        }}
-      >
-        <ReactMarkdown className="width-90 fontSizeSmall" source={this.state.questions} />
+      <MDBContainer fluid className="page" style={{ color: "#FFF", fontFamily: "monospace" }}>
+        <ReactMarkdown className="width-90 fontSizeSmall" source={this.state.questions}/>
       </MDBContainer>
     );
   }
