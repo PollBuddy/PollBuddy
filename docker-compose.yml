@@ -52,3 +52,8 @@ volumes:
 
   influxdata:
     external: false
+
+networks:
+  backend:
+  frontend:
+  logging:
