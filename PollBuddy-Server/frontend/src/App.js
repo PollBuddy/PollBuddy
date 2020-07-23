@@ -10,6 +10,7 @@ import Lessons from "./pages/lessons/lessons";
 import Lesson from "./pages/lesson/lesson";
 import Notfound from "./pages/notfound/notfound";
 import Template from "./pages/template/template";
+import ContactUs from "./pages/contactUs/contactUs";
 import FAQ from "./pages/faq/faq";
 import AccountInfo from "./pages/accountinfo/accountinfo";
 import Privacy from "./pages/privacy/privacy";
@@ -107,6 +108,9 @@ export default class App extends React.Component {
             </Route>
             <Route exact path="/faq">
               <FAQ updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/contactUs">
+              <ContactUs updateTitle={this.updateTitle} />
             </Route>
 
             {/* Default route/error page */}
