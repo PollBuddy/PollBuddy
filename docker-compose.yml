@@ -32,6 +32,8 @@ services:
     volumes:
       - mongodata:/data/db
       - mongoconfig:/data/configdb
+    networks:
+      - backend
 
   grafana:
     build: PollBuddy-Server/reporting/grafana
