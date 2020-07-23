@@ -12,16 +12,16 @@ services:
       - logging
 
   frontend:
+    build: PollBuddy-Server/frontend
     ports:
       - "3000:3000"
-    build: PollBuddy-Server/frontend
     networks:
       - frontend
 
   backend:
+    build: PollBuddy-Server/backend
     ports:
       - "3001:3001"
-    build: PollBuddy-Server/backend
     networks:
       - backend
   
@@ -31,14 +31,24 @@ services:
       - "27017:27017"
     volumes:
       - mongodata:/data/db
-    networks:
-      - backend
+      - mongoconfig:/data/configdb
+
+  grafana:
+    build: PollBuddy-Server/reporting/grafana
+    ports:
+      - "3002:3000"
+
+  influxdb:
+    build: PollBuddy-Server/reporting/influxdb
+    volumes:
+      - influxdata:/var/lib/influxdb
 
 volumes:
+  mongoconfig:
+    external: false
+
   mongodata:
     external: false
 
-networks:
-  backend:
-  frontend:
-  logging:
+  influxdata:
+    external: false
