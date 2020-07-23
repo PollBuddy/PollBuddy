@@ -6,16 +6,24 @@ services:
       - ./PollBuddy-Server/webproxy/conf.d:/etc/nginx/conf.d
     ports:
       - "7655:80"
+    networks:
+      - frontend
+      - backend
+      - logging
 
   frontend:
     ports:
       - "3000:3000"
     build: PollBuddy-Server/frontend
+    networks:
+      - frontend
 
   backend:
     ports:
       - "3001:3001"
     build: PollBuddy-Server/backend
+    networks:
+      - backend
   
   db:
     image: "mongo"
@@ -23,7 +31,14 @@ services:
       - "27017:27017"
     volumes:
       - mongodata:/data/db
+    networks:
+      - backend
 
 volumes:
   mongodata:
     external: false
+
+networks:
+  backend:
+  frontend:
+  logging:
