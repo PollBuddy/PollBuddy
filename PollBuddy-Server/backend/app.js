@@ -35,9 +35,9 @@ app.use(express_session({
 app.use(cors());
 
 var mongoConnection = require("./modules/mongoConnection.js");
-mongoConnection.connect(function (err, client) {
-  if (err) {
-    console.error(err);
+mongoConnection.connect(function (res) {
+  if (res !== true) {
+    console.error(res);
   }
 });
 
