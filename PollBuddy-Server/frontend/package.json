@@ -9,6 +9,7 @@
     "react-autocomplete": "^1.8.1",
     "react-countdown-now": "^2.1.2",
     "react-dom": "^16.10.2",
+    "react-markdown": "^4.3.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1"
   },
@@ -20,7 +21,6 @@
     "eject": "react-scripts eject",
     "lint": "npx eslint src"
   },
-  "proxy": "http://localhost:3001",
   "browserslist": {
     "production": [
       ">0.2%",
