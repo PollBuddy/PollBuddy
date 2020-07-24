@@ -106,13 +106,13 @@ export default class ClassEditor extends Component {
         return (
           <MDBContainer fluid className="box">
             <p className="bold fontSizeLarge">
-                        Class Name:
+              <label htmlFor="groupName">Class Name:</label>
             </p>
 
             <MDBContainer className="form-group">
               <input
                 name="name"
-                id="className"
+                id="groupName"
                 className="form-control textBox"
                 value={this.props.new ? null: this.state.name}
                 onInput={this.onInput} />
