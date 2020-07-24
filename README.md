@@ -5,6 +5,8 @@ Poll Buddy is an interactive questionnaire platform that aims to be an enjoyable
 
 RCOS/Project Google Drive (proposal, other project resources): https://drive.google.com/drive/folders/1lCov3Guqql_E-tnq5hascXrdLEYA7Pn6
 
+Site Map: https://draft.io/jubvd. Contact PM for edit access. 
+
 ## How to run the app
 
 (Please open an issue if these instructions are not clear enough or are outdated)
@@ -55,3 +57,4 @@ Enter the container's folder (contains a `Dockerfile`) and run:
 ```
 docker build -t <some identifier or name> .
 ```
+
