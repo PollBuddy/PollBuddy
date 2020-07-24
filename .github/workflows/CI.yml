@@ -16,7 +16,7 @@ jobs:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
           mkdir -p ~/.ssh
-          cat ${{ secrets.POLLBUDDY_CICD_SERVER_KNOWNHOST }} >> ~/.ssh/known_hosts
+          cat "${{ secrets.POLLBUDDY_CICD_SERVER_KNOWNHOST }}" >> ~/.ssh/known_hosts
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-add - <<< "${{ secrets.POLLBUDDY_CICD_SERVER_USER_KEY }}"
           cat ~/.ssh/known_hosts
