@@ -44,6 +44,6 @@ export default class privacy extends Component {
         </p>
 
       </MDBContainer>
-    )
+    );
   }
 }

@@ -41,6 +41,6 @@ export default class registerWithPollBuddy extends Component {
           </form>
         </MDBContainer>
       </MDBContainer>
-    )
+    );
   }
 }

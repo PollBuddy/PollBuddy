@@ -11,7 +11,7 @@ export default class registerWithSchool extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { value: "" }
+    this.state = { value: "" };
   }
 
   render() {
@@ -90,6 +90,6 @@ export default class registerWithSchool extends Component {
 
         </MDBContainer>
       </MDBContainer>
-    )
+    );
   }
 }
