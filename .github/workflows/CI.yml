@@ -16,7 +16,7 @@ jobs:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_URL }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_URL }} >> ~/.ssh/known_hosts
           ssh-agent -a $SSH_AUTH_SOCK > /dev/null
           ssh-add - <<< "${{ secrets.POLLBUDDY_CICD_SERVER_USER_KEY }}"
           cat ~/.ssh/known_hosts
@@ -25,10 +25,7 @@ jobs:
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
-          ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} echo $HOSTNAME
-          ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} "echo $HOSTNAME"
-          ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} uptime
-          ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} "uptime"
+          ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} cat test
           cat ~/.ssh/known_hosts
         id: remote_deploy
 
