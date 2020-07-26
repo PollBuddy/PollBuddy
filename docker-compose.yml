@@ -1,14 +1,29 @@
 version: '3'
 services:
+  webproxy:
+    image: "nginx"
+    volumes:
+      - ./PollBuddy-Server/webproxy/conf.d:/etc/nginx/conf.d
+    ports:
+      - "7655:80"
+    networks:
+      - frontend
+      - backend
+      - logging
+
   frontend:
+    build: PollBuddy-Server/frontend
     ports:
       - "3000:3000"
-    build: PollBuddy-Server/frontend
+    networks:
+      - frontend
 
   backend:
+    build: PollBuddy-Server/backend
     ports:
       - "3001:3001"
-    build: PollBuddy-Server/backend
+    networks:
+      - backend
   
   db:
     image: "mongo"
@@ -16,7 +31,31 @@ services:
       - "27017:27017"
     volumes:
       - mongodata:/data/db
+      - mongoconfig:/data/configdb
+    networks:
+      - backend
+
+  grafana:
+    build: PollBuddy-Server/reporting/grafana
+    ports:
+      - "3002:3000"
+
+  influxdb:
+    build: PollBuddy-Server/reporting/influxdb
+    volumes:
+      - influxdata:/var/lib/influxdb
 
 volumes:
+  mongoconfig:
+    external: false
+
   mongodata:
     external: false
+
+  influxdata:
+    external: false
+
+networks:
+  backend:
+  frontend:
+  logging:

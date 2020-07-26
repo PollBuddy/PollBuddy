@@ -90,26 +90,58 @@ function onListening() {
 }
 
 /**
+ * Access to mongo so it can be used during shutdown
+ */
+var mongoConnection = require("../modules/mongoConnection.js");
+
+/**
  * Shutdown handler
  */
 
-process.on('SIGTERM', shutdown);
-process.on('SIGINT', shutdown);
+process.on('SIGHUP', () => {
+  console.log(`Received SIGHUP`);
+  shutdown();
+});
+process.on('SIGINT', () => {
+  console.log(`Received SIGINT`);
+  shutdown();
+});
+process.on('SIGTERM', () => {
+  console.log(`Received SIGTERM`);
+  shutdown();
+});
 
 function shutdown() {
   console.log('Received kill signal, shutting down gracefully');
-  server.close(() => {
-    console.log('Closed out remaining connections');
-    process.exit(0);
-  });
 
+  // Track shutdown states
+  let expressStatus = false;
+  let mongoStatus = true;
+
+  // Check if services have shut down
+  function checkStatuses() {
+    if(expressStatus && mongoStatus) {
+      process.exit(0);
+    } else {
+      setTimeout(checkStatuses, 500);
+    }
+  }
+  setTimeout(checkStatuses, 500);
+
+  // Kill everything if not shut down in 7.5 seconds
   setTimeout(() => {
     console.error('Could not close connections in time, forcefully shutting down');
     process.exit(1);
-  }, 10000);
+  }, 7500);
 
-  //connections.forEach(curr => curr.end());
-  //setTimeout(() => connections.forEach(curr => curr.destroy()), 5000);
+  // Shut down express
+  server.close(() => {
+    console.log('Closed out remaining express connections');
+    expressStatus = true;
+  });
 
-  // close mongo connection
+  // Shut down mongo connection
+  mongoConnection.disconnect(() => {
+    mongoStatus = true;
+  });
 }

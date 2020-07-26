@@ -1,6 +1,7 @@
 # PollBuddy
 Welcome to PollBuddy! :D
-An affordable and compatible in-class quizzing platform.
+
+Poll Buddy is an interactive questionnaire platform that aims to be an enjoyable and easy to use way to collect answers and insights from a group of people.
 
 RCOS/Project Google Drive (proposal, other project resources): https://drive.google.com/drive/folders/1lCov3Guqql_E-tnq5hascXrdLEYA7Pn6
 

@@ -18,7 +18,7 @@ export default class classcreation extends Component {//this class will likely n
     handleClick = () => {
       console.log(this.state);
       if (this.state.name !== ""){
-        fetch("http://localhost:3001/api/groups/new/", {
+        fetch(process.env.REACT_APP_BACKEND_URL + "/groups/new/", {
           method: "POST",
           headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
           body: JSON.stringify({

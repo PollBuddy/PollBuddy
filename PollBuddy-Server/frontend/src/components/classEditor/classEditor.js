@@ -27,11 +27,11 @@ export default class ClassEditor extends Component {
     //if the component is in class creation mode, we don't need to read any data from the backend
     if(!this.props.new){
       //once the component is created, fetch the data from the given group from the backend
-      fetch("http://localhost:3001/api/groups/").then(res => {//this is how one calls a get request (backend specifically made a method for finding all groups)
+      fetch(process.env.REACT_APP_BACKEND_URL + "/groups/").then(res => {//this is how one calls a get request (backend specifically made a method for finding all groups)
         return res.json();
       }).then(myJson => {
         //get the info for the specific id in props from the json
-        fetch("http://localhost:3001/api/groups/" + this.props.id + "/").then(res => {//this is how one calls a get request (backend specifically made one for finding a specific group)
+        fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.id + "/").then(res => {//this is how one calls a get request (backend specifically made one for finding a specific group)
           return res.json();
         }).then(myJson => {
           //this workaround should be refactored later
@@ -54,7 +54,7 @@ export default class ClassEditor extends Component {
     new;
     id;
 
-    onChange = e =>{
+    onChange = e => {
       this.setState({
         loadingon: false
 	  })
@@ -80,9 +80,9 @@ export default class ClassEditor extends Component {
     getAPIURL(){
       return this.props.new ?
       //api/groups/new allows us to create a new entry
-        "http://localhost:3001/api/groups/new" :
+        process.env.REACT_APP_BACKEND_URL + "/groups/new" :
       //api/groups/groupID/edit allows us to edit an entry
-        "http://localhost:3001/api/groups/" + this.props.id + "/edit";
+        process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.id + "/edit";
     }
 
     //get the correct api json based on whether we're in create mode or not
@@ -109,12 +109,10 @@ export default class ClassEditor extends Component {
     render() {
       if(this.state === null || this.state.loadingon == true){
         return (
-          <MDBContainer>
+          <MDBContainer>  
             <LoadingWheel/>
-            <button className="btn button" onClick={this.onChange}>
-              Stop Loading
-            </button>
-         </MDBContainer>
+            <button className="btn button" onClick={this.onChange}>Stop Loading</button>
+          </MDBContainer>
         )
       }else{
         return (
