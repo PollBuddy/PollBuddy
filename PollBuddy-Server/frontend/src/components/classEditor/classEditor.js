@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import './classEditor.scss'
+//import './classEditor.scss'
 import { MDBContainer } from "mdbreact";
+import LoadingWheel from "../loadingWheel/loadingWheel.js"
 
 //this component has 2 modes, edit and new. The new version allows the user to create a new class while the edit version
 //allows the user to edit an existing class. Pass new=true into props if you want to use the new version of the component
@@ -102,7 +103,7 @@ export default class ClassEditor extends Component {
     render() {
       if(this.state === null || this.loadingon == true){
         return (
-          <MDBContainer className="loader"></MDBContainer>
+          <LoadingWheel/>
         )
       }else{
         return (
