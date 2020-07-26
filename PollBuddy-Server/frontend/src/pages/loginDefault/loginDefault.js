@@ -5,7 +5,7 @@ import {Link} from "react-router-dom";
 
 export default class LoginDefault extends Component {
   componentDidMount() {
-    this.props.updateTitle("Login");
+    this.props.updateTitle("Log in");
   }
 
   render() {
@@ -13,7 +13,7 @@ export default class LoginDefault extends Component {
       <MDBContainer fluid className="page">
         <MDBContainer fluid className="box">
           <p className="bold fontSizeLarge">
-            Login
+            Log in to PollBuddy
           </p>
           <p className="width-90 fontSizeSmall">
             Click on one of the following buttons to login.
