@@ -20,7 +20,8 @@ export default class ClassEditor extends Component {
       name: "",
       polls: null,
       users: null,
-      instructors: null
+      instructors: null,
+      loadingon: true
     }
 
     //if the component is in class creation mode, we don't need to read any data from the backend
@@ -52,7 +53,12 @@ export default class ClassEditor extends Component {
     //these are variables passed in to props
     new;
     id;
-    loadingon = false;
+
+    onChange = e => {
+      this.setState({
+        loadingon: false
+	  })
+	}
 
     onInput = e => {
       //update state to include the data that was changed from the form
@@ -101,9 +107,12 @@ export default class ClassEditor extends Component {
     }
     
     render() {
-      if(this.state === null || this.loadingon == true){
+      if(this.state === null || this.state.loadingon == true){
         return (
-          <LoadingWheel/>
+          <MDBContainer>  
+            <LoadingWheel/>
+            <button className="btn button" onClick={this.onChange}>Stop Loading</button>
+          </MDBContainer>
         )
       }else{
         return (
