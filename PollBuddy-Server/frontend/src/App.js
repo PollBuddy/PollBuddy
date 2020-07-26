@@ -5,6 +5,7 @@ import {MDBContainer} from "mdbreact"
 import Myclasses from "./pages/myclasses/myclasses"
 import Homepage from "./pages/homepage/homepage"
 import Login from "./pages/loginPage/login"
+import LoginDefault from "./pages/loginDefault/loginDefault"
 import Classcreation from "./pages/classcreation/classcreation"
 import Lessons from "./pages/lessons/lessons"
 import Lesson from "./pages/lesson/lesson"
@@ -70,6 +71,9 @@ export default class App extends React.Component {
             </Route>
             <Route exact path="/login">
               <Login updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/loginDefault">  
+              <LoginDefault updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/classcreation">
               <Classcreation updateTitle={this.updateTitle} />
