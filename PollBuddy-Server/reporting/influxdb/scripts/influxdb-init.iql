@@ -1,0 +1,4 @@
+CREATE DATABASE pollbuddy;
+CREATE RETENTION POLICY one_year ON pollbuddy DURATION 365d REPLICATION 1 DEFAULT;
+CREATE USER pollbuddy WITH PASSWORD 'pollbuddy';
+GRANT ALL ON pollbuddy TO pollbuddy;
