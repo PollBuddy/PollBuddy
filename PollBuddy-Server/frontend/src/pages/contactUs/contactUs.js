@@ -36,16 +36,16 @@ export default class Contact extends Component {
           </a></em>{' '}
         </p>
         <MDBContainer fluid className="box">
-          <label className="width-90 fontSizeSmall" for="name">
-            First and last name:
+          <label htmlFor="name">
+            <p className="fontSizeSmall">Full name:</p>
           </label>
           <MDBContainer className="form-group">
             <input className="form-control textBox" id="name" placeholder="Name"/>
           </MDBContainer>
-          <label className="width-90 fontSizeSmall" for="school">
-            School (if applicable):
+          <label htmlFor="school">
+            <p className="fontSizeSmall">School (if applicable):</p>
           </label>
-          <MDBContainer className="form-group" style={{ width: "100%" }}>
+          <MDBContainer className="form-group">
             <Autocomplete
               items={[
                 { key: 0, label: "N/A"},
@@ -91,10 +91,22 @@ export default class Contact extends Component {
               inputProps={{
                 className: "form-control textBox",
                 id: "school",
-                style: { width: "100%" },
                 placeholder: "School"
               }}
-              wrapperStyle={{ display: "inline-block", width: "100%"}}
+              menuStyle={{
+                borderRadius: 5,
+                position: 'fixed',
+                width: 100,
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+                maxHeight: '50%'
+              }}
+              wrapperStyle={{
+                display: "inline-block",
+                zIndex: 1,
+                position: "relative"
+              }}
               value={this.state.value}
               onChange={e => this.setState({ value: e.target.value })}
               onMenuVisibilityChange={isOpen => {
@@ -108,8 +120,8 @@ export default class Contact extends Component {
               onSelect={value => this.setState({ value })}
             />
           </MDBContainer>
-          <label className="width-90 fontSizeSmall" for="email">
-            Email address:
+          <label htmlFor="email">
+            <p className="fontSizeSmall">Email address:</p>
           </label>
           <MDBContainer className="form-group">
             <input
@@ -118,6 +130,9 @@ export default class Contact extends Component {
               id="email"
               placeholder="Email"
             />
+          </MDBContainer>
+          <MDBContainer className="form-group">
+            <button className="btn button">Send Ticket</button>
           </MDBContainer>
         </MDBContainer>
       </MDBContainer>
