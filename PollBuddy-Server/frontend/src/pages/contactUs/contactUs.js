@@ -19,21 +19,21 @@ export default class Contact extends Component {
       <MDBContainer fluid className="page">
         <p className="bold fontSizeLarge">
           Looking to get in touch with a developer? Shoot an email over to
-          {' '}<em><a href="mailto:contactus@pollbuddy.app">
+          {" "}<em><a href="mailto:contactus@pollbuddy.app">
             contactus@pollbuddy.app
-          </a></em>{' '}
+          </a></em>{" "}
           or use the form below to file a support ticket.
         </p>
         <p className="width-90 fontSizeSmall">
           Alternatively, it would be greatly appeciated if you reported technical
           problems, such as bugs or design complaints/suggestions, by
-          {' '}<em><a href="https://github.com/PollBuddy/PollBuddy/issues/new/choose">
+          {" "}<em><a href="https://github.com/PollBuddy/PollBuddy/issues/new/choose">
             opening an issue
-          </a></em>{' '}
+          </a></em>{" "}
           on our
-          {' '}<em><a href="https://github.com/PollBuddy/PollBuddy">
+          {" "}<em><a href="https://github.com/PollBuddy/PollBuddy">
             GitHub repository.
-          </a></em>{' '}
+          </a></em>{" "}
         </p>
         <MDBContainer fluid className="box">
           <label htmlFor="name">
@@ -95,12 +95,12 @@ export default class Contact extends Component {
               }}
               menuStyle={{
                 borderRadius: 5,
-                position: 'fixed',
+                position: "fixed",
                 width: 100,
-                overflow: 'hidden',
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
-                maxHeight: '50%'
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+                maxHeight: "50%"
               }}
               wrapperStyle={{
                 display: "inline-block",
@@ -112,8 +112,7 @@ export default class Contact extends Component {
               onMenuVisibilityChange={isOpen => {
                 if(isOpen && this.state.value === "N/A") {
                   this.setState({ value: "" });
-                }
-                else if(!isOpen && this.state.value === "") {
+                } else if(!isOpen && this.state.value === "") {
                   this.setState({ value: "N/A" });
                 }
               }}
