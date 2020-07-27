@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import Autocomplete from "react-autocomplete";
+import autosize from "autosize";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 
@@ -7,6 +8,7 @@ export default class Contact extends Component {
 
   componentDidMount() {
     this.props.updateTitle("Contact Us");
+    autosize(document.querySelector("textarea"));
   }
 
   constructor(props) {
@@ -36,6 +38,7 @@ export default class Contact extends Component {
           </a></em>{" "}
         </p>
         <MDBContainer fluid className="box">
+          <p className="bold fontSizeLarge">Support Ticket Information</p>
           <label htmlFor="name">
             <p className="fontSizeSmall">Full name:</p>
           </label>
@@ -129,6 +132,18 @@ export default class Contact extends Component {
               id="email"
               placeholder="Email"
             />
+          </MDBContainer>
+          <label htmlFor="description">
+            <p className="fontSizeSmall">Description of the issue:</p>
+          </label>
+          <MDBContainer className="form-group" style={{ width: "100%" }}>
+            <textarea required
+              className="form-control textBox"
+              id="description"
+              maxLength="500"
+              style={{ width: "100%" }}
+              placeholder="500 character limit"
+            ></textarea>
           </MDBContainer>
           <MDBContainer className="form-group">
             <button className="btn button">Send Ticket</button>
