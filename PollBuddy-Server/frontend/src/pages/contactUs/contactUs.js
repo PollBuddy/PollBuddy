@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import Autocomplete from "react-autocomplete";
 import autosize from "autosize";
 import {MDBContainer} from "mdbreact";
+import PhoneInput from "react-phone-input-2";
 import "mdbreact/dist/css/mdb.css";
 
 export default class Contact extends Component {
@@ -13,7 +14,7 @@ export default class Contact extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { value: "N/A" }
+    this.state = { phone: "", value: "N/A" }
   }
 
   render() {
@@ -43,7 +44,11 @@ export default class Contact extends Component {
             <p className="fontSizeSmall">Full name:</p>
           </label>
           <MDBContainer className="form-group">
-            <input className="form-control textBox" id="name" placeholder="Name"/>
+            <input required
+              className="form-control textBox"
+              id="name"
+              placeholder="Name"
+            />
           </MDBContainer>
           <label htmlFor="school">
             <p className="fontSizeSmall">School (if applicable):</p>
@@ -126,11 +131,23 @@ export default class Contact extends Component {
             <p className="fontSizeSmall">Email address:</p>
           </label>
           <MDBContainer className="form-group">
-            <input
+            <input required
               type="email"
               className="form-control textBox"
               id="email"
               placeholder="Email"
+            />
+          </MDBContainer>
+          <label htmlFor="phone">
+            <p class="fontSizeSmall">Phone number:</p>
+          </label>
+          <MDBContainer className="form-group">
+            <PhoneInput
+              inputProps={{ className: "form-control textBox", id: "phone" }}
+              disableDropdown={true}
+              country={"us"}
+              value={this.state.phone}
+              onChange={phone => this.setState({ phone })}
             />
           </MDBContainer>
           <label htmlFor="description">
