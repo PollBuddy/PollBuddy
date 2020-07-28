@@ -23,15 +23,12 @@ li{
 
 .pollviewer_text{
   color: var(--white-most-text);
-  font-family: var(--main-font);
-  line-height: 26px;
 }
 
 .pollviewer_bubble {
   text-align: center;
   color: var(--white-most-text);
-  font: 32px var(--main-font);
-  line-height: 36px;
+  font-size: 32px;
   border-radius: 50%;
   width: 36px;
   height: 36px;

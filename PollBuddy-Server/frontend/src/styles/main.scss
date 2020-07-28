@@ -15,13 +15,17 @@
   --box-shadow-a: #412e4b;
   --box-shadow-b: #593e65;
 
-  --main-font: monospace;
+  --main-font: 'Baloo 2';
+  --line-height: 1.2;
   --default-transition: all 0.2s ease-in-out;
 }
 
 #wrapper {
   min-height: 100vh;
   position: relative;
+  line-height: var(--line-height);
+  font-family: var(--main-font);
+  color: var(--white-most-text);
 }
 
 .page {
@@ -62,12 +66,9 @@
 }
 
 p {
-  color: var(--white-most-text);
-  font-family: var(--main-font);
   text-align: center;
   margin-top: 10px;
   margin-bottom: 10px;
-  line-height: 26px;
 }
 
 .button {
@@ -75,11 +76,11 @@ p {
   background-color: var(--base-purple-logo-bg);
   color: var(--light-purple-logo-text);
   font-family: var(--main-font);
-  font-weight: 700;
+  line-height: var(--line-height);
+  font-weight: bold;
   font-size: calc(13px + 0.3vmin);
   margin-top: 10px;
   margin-bottom: 10px;
-  height: 45px;
   transition: var(--default-transition);
   box-shadow: none;
 }
@@ -93,13 +94,14 @@ p {
   margin: 10px 0;
   padding: 5px 15px;
   background-color: var(--white-most-text);
-  font-weight: 700;
+  font-weight: bold;
   color: var(--darkest-purple-header-color);
   border: 5px solid transparent;
   outline: none;
   text-align: center;
   border-radius: 30px;
   font-family: var(--main-font);
+  line-height: var(--line-height);
   font-size: calc(21px + 0.3vmin);
   transition: var(--default-transition);
 }
@@ -112,11 +114,8 @@ input.textBox:focus::placeholder {
   opacity: 0;
 }
 
-::placeholder {
+input.textBox::placeholder {
   color: var(--gray-placeholder-text);
-  font-size: calc(20px + 0.3vmin);
-  text-align: center;
-  font-family: var(--main-font);
   transition: var(--default-transition);
 }
 
