@@ -9,11 +9,11 @@ export default class Template extends Component {//this class is an example of h
     super();
     this.state = {
       groups: []
-    }
+    };
   }
   async componentDidMount(){
     this.props.updateTitle("Template");
-    let groups = []
+    let groups = [];
     const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/");//this is alternative to .then's and all that
     const json = await response.json();
     for(let i = 0; i < json.length; i++){
@@ -46,13 +46,13 @@ export default class Template extends Component {//this class is an example of h
             this.state.groups.map(
               (group, index) => {
                 console.log(group._id);
-                return <ClassEditor key={group._id} id={group._id} new={false}/>//the key is needed because each child of a list must have a unique key
+                return <ClassEditor key={group._id} id={group._id} new={false}/>;//the key is needed because each child of a list must have a unique key
               }
             )
           }
         </MDBContainer>
 
       </MDBContainer>
-    )
+    );
   }
 }

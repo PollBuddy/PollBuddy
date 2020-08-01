@@ -43,6 +43,6 @@ export default class pollviewer extends Component {
 
         </MDBContainer>
       </MDBContainer>
-    )
+    );
   }
 }

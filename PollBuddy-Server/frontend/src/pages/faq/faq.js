@@ -8,13 +8,13 @@ export default class FAQ extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {questions: null}
+    this.state = {questions: null};
   }
 
   componentWillMount() {
     fetch(faqFile).then((response) => response.text()).then((text) => {
-      this.setState({questions: text})
-    })
+      this.setState({questions: text});
+    });
   }
   
   componentDidMount() {
