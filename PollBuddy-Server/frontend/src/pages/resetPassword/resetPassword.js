@@ -41,6 +41,6 @@ export default class resetPassword extends Component {
           </Link>
         </MDBContainer>
       </MDBContainer>
-    )
+    );
   }
 }

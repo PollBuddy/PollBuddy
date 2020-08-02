@@ -11,6 +11,6 @@ export default class notfound extends Component {
       <p className="bold fontSizeLarge">
           Error: page not found.
       </p>
-    )
+    );
   }
 }

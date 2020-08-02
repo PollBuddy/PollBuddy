@@ -1,5 +1,12 @@
 version: '3'
 services:
+  webproxy:
+    image: "nginx"
+    volumes:
+      - ./PollBuddy-Server/webproxy/conf.d:/etc/nginx/conf.d
+    ports:
+      - "7655:80"
+
   frontend:
     ports:
       - "3000:3000"

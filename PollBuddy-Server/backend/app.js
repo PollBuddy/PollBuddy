@@ -114,7 +114,7 @@ app.get("/gendata", (req, res) => {
     log += "Dropping DB\n";
 
     elements.forEach(function (element) {
-      addObj(element)
+      addObj(element);
     });
   });
 

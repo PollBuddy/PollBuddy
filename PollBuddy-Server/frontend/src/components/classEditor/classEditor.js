@@ -20,16 +20,16 @@ export default class ClassEditor extends Component {
       polls: null,
       users: null,
       instructors: null
-    }
+    };
 
     //if the component is in class creation mode, we don't need to read any data from the backend
     if(!this.props.new){
       //once the component is created, fetch the data from the given group from the backend
-      fetch("http://localhost:3001/api/groups/").then(res => {//this is how one calls a get request (backend specifically made a method for finding all groups)
+      fetch(process.env.REACT_APP_BACKEND_URL + "/groups/").then(res => {//this is how one calls a get request (backend specifically made a method for finding all groups)
         return res.json();
       }).then(myJson => {
         //get the info for the specific id in props from the json
-        fetch("http://localhost:3001/api/groups/" + this.props.id + "/").then(res => {//this is how one calls a get request (backend specifically made one for finding a specific group)
+        fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.id + "/").then(res => {//this is how one calls a get request (backend specifically made one for finding a specific group)
           return res.json();
         }).then(myJson => {
           //this workaround should be refactored later
@@ -42,8 +42,8 @@ export default class ClassEditor extends Component {
               users: obj.users,
               instructors: obj.instructors,
             }
-          )
-        })
+          );
+        });
       });
     }
 
@@ -56,7 +56,7 @@ export default class ClassEditor extends Component {
       //update state to include the data that was changed from the form
       this.setState({
         [e.target.name]: e.target.value
-      })
+      });
     }
 
     onSubmit = e =>{
@@ -72,9 +72,9 @@ export default class ClassEditor extends Component {
     getAPIURL(){
       return this.props.new ?
       //api/groups/new allows us to create a new entry
-        "http://localhost:3001/api/groups/new" :
+        process.env.REACT_APP_BACKEND_URL + "/groups/new" :
       //api/groups/groupID/edit allows us to edit an entry
-        "http://localhost:3001/api/groups/" + this.props.id + "/edit";
+        process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.id + "/edit";
     }
 
     //get the correct api json based on whether we're in create mode or not
@@ -95,7 +95,7 @@ export default class ClassEditor extends Component {
           InstructorID: this.state.instructors,
           PollID: this.state.polls,
           UserID: this.state.users,
-        }
+        };
     }
     
     render() {
@@ -122,7 +122,7 @@ export default class ClassEditor extends Component {
               {this.props.new ? "Create Class": "Save Changes"}
             </button>
           </MDBContainer>
-        )
+        );
       }
     }
 }

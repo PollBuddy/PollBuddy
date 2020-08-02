@@ -15,6 +15,7 @@ RUN npm install
 # Bundle app source
 COPY public ./public
 COPY src ./src
+COPY .env ./
 
 EXPOSE 3000
 

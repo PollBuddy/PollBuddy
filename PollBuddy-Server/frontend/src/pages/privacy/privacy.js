@@ -30,6 +30,6 @@ export default class privacy extends Component {
           <ReactMarkdown source={this.state.terms} />
         </p>
       </MDBContainer>
-    )
+    );
   }
 }

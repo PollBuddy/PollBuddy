@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./question.scss"
+import "./question.scss";
 import {
   MDBCard,
   MDBCardBody,
@@ -34,7 +34,7 @@ export default class question extends Component {
       key: props.number,
       data: data,
       studentChoices: tempArray,
-    }
+    };
   }
 
   deselectChoice(index) {
@@ -47,7 +47,7 @@ export default class question extends Component {
       studentChoices: tempChoices,
     }
     )
-    )
+    );
   }
 
   selectChoice(index) {
@@ -74,7 +74,7 @@ export default class question extends Component {
     this.setState(prevState => ({
       ...prevState,
       studentChoices: tempChoices,
-    }))
+    }));
   }
 
   
@@ -84,7 +84,7 @@ export default class question extends Component {
         
       if (completed) {
         // Render a completed state
-        return <span>Question closed!</span>
+        return <span>Question closed!</span>;
       } else {
         // Render a countdown
         return <span>{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
@@ -121,7 +121,7 @@ export default class question extends Component {
                           <MDBRow>
                             <MDBCol small="2">
                               <MDBBtn className="question_btn-choice" onClick={() => {
-                                return this.deselectChoice(index) 
+                                return this.deselectChoice(index); 
                               }}>
                                 {choice}
                               </MDBBtn>
@@ -131,14 +131,14 @@ export default class question extends Component {
                             </MDBCol>
                           </MDBRow>
                         </MDBContainer>
-                      )
+                      );
                     } else {
                       return (
                         <MDBContainer key={index}>
                           <MDBRow>
                             <MDBCol small="2">
                               <MDBBtn className="question_btn-choice" outline onClick={() => {
-                                return this.selectChoice(index) 
+                                return this.selectChoice(index); 
                               }}>
                                 {choice}
                               </MDBBtn>
@@ -148,7 +148,7 @@ export default class question extends Component {
                             </MDBCol>
                           </MDBRow>
                         </MDBContainer>
-                      )
+                      );
                     }
                   })}
                 </MDBContainer>
@@ -172,6 +172,6 @@ export default class question extends Component {
 
 
       </MDBContainer>
-    )
+    );
   }
 }
