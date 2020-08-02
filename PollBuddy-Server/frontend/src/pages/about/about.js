@@ -29,6 +29,6 @@ export default class about extends Component {
           <ReactMarkdown source={this.state.terms} unwrapDisallowed={true} />         
         </div>
       </MDBContainer>
-    )
+    );
   }
 }
