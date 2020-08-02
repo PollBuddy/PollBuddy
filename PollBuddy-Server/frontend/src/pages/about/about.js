@@ -24,10 +24,10 @@ export default class about extends Component {
   render() {
     return (
       <MDBContainer className="page">
-        <p className="fontSizeSmall width=90">
+        <div className="width-90 fontSizeSmall">
           {/* Render page from markdown file using react-markdown */}
-          <ReactMarkdown source={this.state.terms} />         
-        </p>
+          <ReactMarkdown source={this.state.terms} unwrapDisallowed={true} />         
+        </div>
       </MDBContainer>
     )
   }

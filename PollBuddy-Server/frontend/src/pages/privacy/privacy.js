@@ -25,10 +25,10 @@ export default class privacy extends Component {
     
     return (
       <MDBContainer className="page">
-        <p className="fontSizeSmall width-90">
+        <div className="fontSizeSmall width-90">
           {/* Render page from markdown file using react-markdown */}
           <ReactMarkdown source={this.state.terms} />
-        </p>
+        </div>
       </MDBContainer>
     );
   }

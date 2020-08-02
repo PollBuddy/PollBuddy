@@ -60,6 +60,21 @@ p{
   line-height: 26px;
 }
 
+h1 {
+  color: var(--white-most-text);
+  font-family: var(--main-font);
+}
+
+h2 {
+  color: var(--white-most-text);
+  font-family: var(--main-font);
+}
+
+ul {
+  color: var(--white-most-text);
+  font-family: var(--main-font);
+}
+
 li {
   list-style-type: circle;
 }
