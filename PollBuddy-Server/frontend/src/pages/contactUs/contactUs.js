@@ -14,7 +14,7 @@ export default class Contact extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { phone: "", value: "N/A" }
+    this.state = { formUp: false, phone: "", value: "N/A" }
   }
 
   render() {
@@ -25,7 +25,7 @@ export default class Contact extends Component {
           {" "}<em><a href="mailto:contactus@pollbuddy.app">
             contactus@pollbuddy.app
           </a></em>{" "}
-          or use the form below to file a support ticket.
+          or click the button below to open a support ticket form.
         </p>
         <p className="width-90 fontSizeSmall">
           Alternatively, it would be greatly appeciated if you reported technical
@@ -38,7 +38,16 @@ export default class Contact extends Component {
             GitHub repository.
           </a></em>{" "}
         </p>
-        <MDBContainer fluid className="box">
+        <button
+          className="btn button"
+          style={{ display: this.state.formUp ? "none" : ""}}
+          onClick={() => this.setState({ formUp: true })}
+        >
+          File Support Ticket
+        </button>
+        <MDBContainer fluid className="box"
+          style={{ display: this.state.formUp ? "flex" : "none", margin: "50px auto" }}
+        >
           <p className="bold fontSizeLarge">Support Ticket Information</p>
           <label htmlFor="name">
             <p className="fontSizeSmall">Full name:</p>
@@ -89,6 +98,9 @@ export default class Contact extends Component {
                   className="fontSizeSmall"
                   style={{
                     background: isHighlighted ? "#DFCFEA" : "#FFF",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    textOverflow: "ellipsis",
                     fontFamily: "monospace",
                     textAlign: "center"
                   }}
@@ -102,12 +114,10 @@ export default class Contact extends Component {
                 placeholder: "School"
               }}
               menuStyle={{
+                display: "inline-block",
                 borderRadius: 5,
                 position: "fixed",
                 width: 100,
-                overflow: "hidden",
-                whiteSpace: "nowrap",
-                textOverflow: "ellipsis",
                 maxHeight: "50%"
               }}
               wrapperStyle={{
@@ -163,7 +173,9 @@ export default class Contact extends Component {
             ></textarea>
           </MDBContainer>
           <MDBContainer className="form-group">
-            <button className="btn button">Send Ticket</button>
+            <button className="btn button" onClick={() => this.setState({ formUp: false })}>
+              Send Ticket
+            </button>
           </MDBContainer>
         </MDBContainer>
       </MDBContainer>
