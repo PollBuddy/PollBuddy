@@ -58,7 +58,7 @@ export default class ClassEditor extends Component {
       this.setState({
         loadingon: false
 	  })
-	}
+    }
 
     onInput = e => {
       //update state to include the data that was changed from the form

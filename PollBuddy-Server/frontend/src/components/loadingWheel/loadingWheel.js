@@ -3,9 +3,9 @@ import './loadingWheel.scss'
 import { MDBContainer } from "mdbreact";
 
 export default class LoadingWheel extends Component{
-	render(){
-		return (
-          <MDBContainer className="loader"></MDBContainer>
-        )
-	}
+  render(){
+    return (
+      <MDBContainer className="loader"></MDBContainer>
+    )
+  }
 }
