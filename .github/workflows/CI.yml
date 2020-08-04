@@ -25,7 +25,7 @@ jobs:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
           ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} cat test
-        id: remote_deploy
+        id: remote_test
 
       - name: Remote Deploy
         env:
