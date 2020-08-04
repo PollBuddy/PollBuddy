@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 //import './classEditor.scss'
 import { MDBContainer } from "mdbreact";
-import LoadingWheel from "../loadingWheel/loadingWheel.js"
+import LoadingWheel from "../loadingWheel/loadingWheel.js";
 
 //this component has 2 modes, edit and new. The new version allows the user to create a new class while the edit version
 //allows the user to edit an existing class. Pass new=true into props if you want to use the new version of the component
@@ -58,7 +58,7 @@ export default class ClassEditor extends Component {
     onChange = e => {
       this.setState({
         loadingon: false
-      })
+      });
     }
 
     onInput = e => {
@@ -114,7 +114,7 @@ export default class ClassEditor extends Component {
             <LoadingWheel/>
             <button className="btn button" onClick={this.onChange}>Stop Loading</button>
           </MDBContainer>
-        )
+        );
       }else{
         return (
           <MDBContainer fluid className="box">
