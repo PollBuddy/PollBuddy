@@ -39,6 +39,6 @@ export default class homepage extends Component {
         </Link>
 
       </MDBContainer>
-    )
+    );
   }
 }

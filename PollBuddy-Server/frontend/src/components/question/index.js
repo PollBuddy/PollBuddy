@@ -1,2 +1,2 @@
-import question from "./question"
+import question from "./question";
 export default question;

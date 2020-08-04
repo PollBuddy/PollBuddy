@@ -42,6 +42,6 @@ export default class accountinfo extends Component {
           <button className="btn button">Submit</button>
         </Link>
       </MDBContainer>
-    )
+    );
   }
 }
