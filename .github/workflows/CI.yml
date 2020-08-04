@@ -2,9 +2,11 @@ name: CI
 
 on:
   push:
+    branchs:
+      - 'CICD'
   pull_request:
-    branches:
-      - 'frontend'
+    branchs:
+      - 'CICD'
 
 jobs:
   Commit-Temp-Deploy:
@@ -27,9 +29,24 @@ jobs:
           ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} cat test
         id: remote_test
 
+      - name: Remote Update
+          env:
+            SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+          run: |
+            ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} "cd ./CI-CD && git pull"
+          id: remote_update
+
       - name: Remote Deploy
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
-          ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} "rm -rf ./CI-CD && git clone https://github.com/PollBuddy/CI-CD && cd ./CI-CD && bash ./createTestInstance.sh \"${GITHUB_REF#refs/heads/}\" \"${GITHUB_SHA}\""
+          ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} "cd ./CI-CD && bash ./createTestInstance.sh \"${GITHUB_SHA}\""
         id: remote_deploy
+
+      - name: Share Link on PR
+        continue-on-error: true
+        uses: thollander/actions-comment-pull-request@master
+        with:
+          message: |
+            Deploy Link: https://dev-${GITHUB_SHA}.pollbuddy.app/
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
