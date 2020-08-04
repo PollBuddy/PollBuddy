@@ -43,19 +43,19 @@ mongoConnection.connect(function (res) {
 });
 
 // InfluxDB
-var influxConnection = require('./modules/influx.js');
+var influxConnection = require("./modules/influx.js");
 
 // Response Time Logging to InfluxDB
 app.use((req, res, next) => {
   const start = Date.now();
 
-  res.on('finish', () => {
+  res.on("finish", () => {
     const duration = Date.now() - start;
     console.log(`Request to ${req.path} took ${duration}ms`);
 
     influxConnection.log([
       {
-        measurement: 'response_times',
+        measurement: "response_times",
         tags: {
           host: os.hostname(),
           platform: "backend",
@@ -66,13 +66,13 @@ app.use((req, res, next) => {
         },
         timestamp: new Date()
       }
-    ])
+    ]);
   });
   return next();
 });
 
 
-app.use(logger('dev'));
+app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
