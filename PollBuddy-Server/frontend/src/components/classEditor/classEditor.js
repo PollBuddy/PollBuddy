@@ -20,9 +20,10 @@ export default class ClassEditor extends Component {
       name: "",
       polls: null,
       users: null,
+
       instructors: null,
       loadingon: true
-    }
+    };
 
     //if the component is in class creation mode, we don't need to read any data from the backend
     if(!this.props.new){
@@ -44,8 +45,8 @@ export default class ClassEditor extends Component {
               users: obj.users,
               instructors: obj.instructors,
             }
-          )
-        })
+          );
+        });
       });
     }
 
@@ -64,7 +65,7 @@ export default class ClassEditor extends Component {
       //update state to include the data that was changed from the form
       this.setState({
         [e.target.name]: e.target.value
-      })
+      });
     }
 
     onSubmit = e =>{
@@ -103,7 +104,7 @@ export default class ClassEditor extends Component {
           InstructorID: this.state.instructors,
           PollID: this.state.polls,
           UserID: this.state.users,
-        }
+        };
     }
     
     render() {
@@ -134,7 +135,7 @@ export default class ClassEditor extends Component {
               {this.props.new ? "Create Class": "Save Changes"}
             </button>
           </MDBContainer>
-        )
+        );
       }
     }
 }

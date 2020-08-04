@@ -32,6 +32,6 @@ export default class pollCode extends Component {
 
         </MDBContainer>
       </MDBContainer>
-    )
+    );
   }
 }

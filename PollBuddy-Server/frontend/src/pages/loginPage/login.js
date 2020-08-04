@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import {Link, Redirect} from "react-router-dom";
 import "mdbreact/dist/css/mdb.css";
-import "./login.scss"
+import "./login.scss";
 import { MDBContainer } from "mdbreact";
 
 export default class login extends Component {
@@ -13,7 +13,7 @@ export default class login extends Component {
   constructor(){
     super();
     if(localStorage.getItem("loggedIn")){
-      this.setState({successfulLogin: true}) // Tell it to redirect to the next page if already logged in
+      this.setState({successfulLogin: true}); // Tell it to redirect to the next page if already logged in
     }
     console.log(process.env.REACT_APP_BACKEND_URL);
     fetch(process.env.REACT_APP_BACKEND_URL + "/groups", {
@@ -26,14 +26,14 @@ export default class login extends Component {
         console.log(data);
       })
       .catch(err => {
-        this.setState({error: "An error occurred during login. Please try again"})
+        this.setState({error: "An error occurred during login. Please try again"});
       });
   }
   handleLogin() {
     //needs some authentication before and if authentication passes then set local storage and such refer to classcreation page to see the way to make POST requests to the backend
     localStorage.setItem("loggedIn", true);//maybe have an admin/teacher var instead of just true
     //TODO MAYBE IN THE FUTURE USE COOKIES TO REMEMBER PAST SESSION
-    this.setState({successfulLogin: true}) // Tell it to redirect to the next page if successful
+    this.setState({successfulLogin: true}); // Tell it to redirect to the next page if successful
   }
 
   componentDidMount(){
@@ -45,7 +45,7 @@ export default class login extends Component {
     if(this.state.successfulLogin) { // Basically redirect if the person is logged in or if their login succeeds
       return (
         <Redirect to="/myClasses" />
-      )
+      );
     }
     return (
       <MDBContainer className="page">
@@ -76,6 +76,6 @@ export default class login extends Component {
         </a>
 
       </MDBContainer>
-    )
+    );
   }
 }

@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import { MDBContainer, MDBDropdownToggle, MDBDropdown, MDBDropdownItem, MDBDropdownMenu } from "mdbreact"
-import Question from "../../components/question"
+import { MDBContainer, MDBDropdownToggle, MDBDropdown, MDBDropdownItem, MDBDropdownMenu } from "mdbreact";
+import Question from "../../components/question";
 
 export default class lesson extends Component {
   constructor(props) {
@@ -15,7 +15,7 @@ export default class lesson extends Component {
       questions: questions.questions,
       askedQuestions: [],
       questionDispatcherIndex: 0,
-    }
+    };
   }
 
   askQuestion() {
@@ -25,7 +25,7 @@ export default class lesson extends Component {
         ...prevState.askedQuestions,
         prevState.questions[prevState.questionDispatcherIndex]
       ]
-    }))
+    }));
   }
   render() {
 
@@ -40,7 +40,7 @@ export default class lesson extends Component {
           {this.state.askedQuestions.map((value, index) => {
             return (
               <Question questionObj={value} key={index} number={index} />
-            )
+            );
           })}
 
           <MDBDropdown>
@@ -72,6 +72,6 @@ export default class lesson extends Component {
           <button className="btn button" onClick={this.askQuestion}>Ask!</button>
         </MDBContainer>
       </MDBContainer>
-    )
+    );
   }
 }

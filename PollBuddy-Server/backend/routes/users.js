@@ -221,7 +221,7 @@ module.exports.user_middleware = function (req, res, next) {
 
   req.isLoggedIn = function () {
     return req.session["UserID"] !== undefined;
-  }
+  };
 
   // If the current user is logged in, a user object will be returned, otherwise a 401 will be sent
   // Callback takes two parameters: err and user
@@ -244,7 +244,7 @@ module.exports.user_middleware = function (req, res, next) {
         }
       });
     }
-  }
+  };
 
   next();
 };

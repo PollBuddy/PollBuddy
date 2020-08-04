@@ -28,6 +28,10 @@
       "error",
       "always"
     ],
+    "semi": [
+      "error",
+      "always"
+    ],
     "default-case": "warn",
     "eqeqeq": "warn",
     "no-self-compare": "warn",
