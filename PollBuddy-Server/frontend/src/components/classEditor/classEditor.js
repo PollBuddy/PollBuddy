@@ -57,7 +57,7 @@ export default class ClassEditor extends Component {
     onChange = e => {
       this.setState({
         loadingon: false
-	  })
+      })
     }
 
     onInput = e => {
