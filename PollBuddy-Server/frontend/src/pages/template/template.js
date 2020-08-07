@@ -37,8 +37,8 @@ export default class Template extends Component {//this class is an example of h
     return (
       <MDBContainer className="page">
 
-        <p className="bold fontSizeLarge">
-          Test:
+        <p className="fontSizeLarge">
+          <b>Test:</b>
         </p>
         <MDBContainer className="class-editor">
           {

@@ -1,9 +1,11 @@
+:root {
+  --foot-font-size: 1rem;
+}
+
 .footer_foot {
-  padding: 20px 0;
-  font: 13px / 15px;
-  margin: 30px 0 0;
+  padding: 0 0 20px;
+  font: var(--foot-font-size) / 1 var(--main-font);
   box-sizing: border-box;
-  height: 55px;
   width: 100%;
   position: absolute;
   bottom: 0;
@@ -11,9 +13,10 @@
 .footer_linethru {
   background: var(--base-purple-logo-bg);
   width: 100%;
-  margin: 7px 0;
+  margin: calc((var(--foot-font-size) - 1px) / 2) 0;
   height: 1px;
   position: absolute;
+  z-index: -9;
 }
 .footer_foot_links {
   background: var(--dark-purple-main-background);
@@ -29,7 +32,6 @@
   right: 0;
 }
 .footer_links {
-  position: absolute;
   text-align: center;
   width: 100%;
 }
@@ -45,7 +47,7 @@
   opacity: 1;
 }
 .footer_foot_links img {
-  height: 13px;
+  height: var(--foot-font-size);
   width: auto;
 }
 .footer_foot div a:last-of-type {

@@ -11,28 +11,28 @@ export default class accountinfo extends Component {
   render() {
     return (
       <MDBContainer className="page">
-        <p className="fontSizeSmall">
+        <p>
 					Name:
         </p>
         <MDBContainer className="form-group">
           <input placeholder="SIS Man" className="form-control textBox"/>
         </MDBContainer>
 
-        <p className="fontSizeSmall">
+        <p>
 					Email:
         </p>
         <MDBContainer className="form-group">
           <input placeholder="mans@rpi.edu" className="form-control textBox"/>
         </MDBContainer>
 
-        <p className="fontSizeSmall">
+        <p>
 					Current password:
         </p>
         <MDBContainer className="form-group">
           <input placeholder="shir1ey-is-my-gir1y" className="form-control textBox"/>
         </MDBContainer>
 
-        <p className="fontSizeSmall">
+        <p>
 					Confirm password:
         </p>
         <MDBContainer className="form-group">

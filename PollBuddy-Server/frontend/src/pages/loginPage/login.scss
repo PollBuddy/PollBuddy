@@ -1,12 +1,10 @@
 a.login_link {
   color: var(--white-most-text);
+  font-size: 1rem;
   opacity: 0.8;
-  margin: 7px 0;
+  margin: 10px 0;
 }
 a.login_link:hover {
   text-decoration: underline;
   opacity: 1;
-}
-a.login_link:last-child {
-  margin-bottom: 0;
 }

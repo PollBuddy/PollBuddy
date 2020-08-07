@@ -6,10 +6,10 @@ export default class notfound extends Component {
   componentDidMount(){
     this.props.updateTitle("Page Not Found");
   }
-  render() {    
+  render() {
     return (
-      <p className="bold fontSizeLarge">
-          Error: page not found.
+      <p className="fontSizeLarge">
+        <b>Error: page not found.</b>
       </p>
     )
   }

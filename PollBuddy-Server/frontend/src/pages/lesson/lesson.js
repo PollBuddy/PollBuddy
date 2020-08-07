@@ -32,7 +32,7 @@ export default class lesson extends Component {
     return (
       <MDBContainer>
         <MDBContainer className="page">
-          <p className="width-90 fontSizeSmall">
+          <p>
                         Hello lesson {this.props.lessonId}
           </p>
 

@@ -16,6 +16,7 @@
   --box-shadow-b: #593e65;
 
   --main-font: 'Baloo 2';
+  --font-size: 1.2rem;
   --line-height: 1.2;
   --default-transition: all 0.2s ease-in-out;
 }
@@ -23,9 +24,6 @@
 #wrapper {
   min-height: 100vh;
   position: relative;
-  line-height: var(--line-height);
-  font-family: var(--main-font);
-  color: var(--white-most-text);
 }
 
 .page {
@@ -33,56 +31,32 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-bottom: 85px;
-}
-
-// singular attributes
-.fontSizeSmall {
-  font-size: calc(20px + 0.3vmin);
+  padding-bottom: calc(1rem + 70px);
 }
 
 .fontSizeLarge {
-  font-size: calc(25px + 0.3vmin);
-}
-
-.width-45 {
-  width: 45%;
-}
-
-.width-90 {
-  width: 90%;
-}
-
-.width-320px {
-  width: 320px;
-}
-
-.width-45, .width-90, .width-320px {
-  box-sizing: border-box;
-}
-
-.bold {
-  font-weight: bold;
+  font-size: 1.4rem;
 }
 
 p {
   text-align: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin: 10px 0;
 }
 
 .button {
-  border-radius: 30px;
+  padding: 12px 20px;
   background-color: var(--base-purple-logo-bg);
   color: var(--light-purple-logo-text);
-  font-family: var(--main-font);
-  line-height: var(--line-height);
-  font-weight: bold;
-  font-size: calc(13px + 0.3vmin);
-  margin-top: 10px;
-  margin-bottom: 10px;
-  transition: var(--default-transition);
+  font-size: 1rem;
   box-shadow: none;
+  text-transform: uppercase;
+  margin: 10px 5px;
+}
+
+.button, .textBox {
+  border-radius: 999px;
+  font-weight: bold;
+  transition: var(--default-transition);
 }
 
 .button:hover {
@@ -91,19 +65,16 @@ p {
 }
 
 .textBox {
-  margin: 10px 0;
-  padding: 5px 15px;
+  padding: 7px 15px;
   background-color: var(--white-most-text);
-  font-weight: bold;
   color: var(--darkest-purple-header-color);
+  font-size: var(--font-size);
   border: 5px solid transparent;
   outline: none;
   text-align: center;
-  border-radius: 30px;
-  font-family: var(--main-font);
-  line-height: var(--line-height);
-  font-size: calc(21px + 0.3vmin);
-  transition: var(--default-transition);
+  width: 320px;
+  margin: 10px 0;
+  box-sizing: border-box;
 }
 
 input.textBox:focus {
@@ -127,4 +98,20 @@ input.textBox::placeholder {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+}
+
+.box:only-child {
+  max-width: 50%;
+}
+
+body {
+  margin: 0;
+  background: var(--dark-purple-main-background);
+  color: var(--white-most-text);
+  font-size: var(--font-size);
+}
+
+body, .button, .textBox {
+  line-height: var(--line-height);
+  font-family: var(--main-font);
 }

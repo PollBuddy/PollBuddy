@@ -17,11 +17,11 @@ export default class Myclasses extends Component {
   componentDidMount(){
     this.props.updateTitle("My Classes");
   }
-  render() { 
+  render() {
     return (
 
       <MDBContainer className="page">
-        <p className="width-90 fontSizeLarge">
+        <p className="fontSizeLarge">
 					As Instructor:
         </p>
         <Link to={"/lessons"}>
@@ -31,7 +31,7 @@ export default class Myclasses extends Component {
           <button className="btn button">CSCI 2200 - Foundations of Computer Science</button>
         </Link>
 
-        <p className="width-90 fontSizeLarge">
+        <p className="fontSizeLarge">
 					As Student:
         </p>
         <Link to={"/lessons"}>

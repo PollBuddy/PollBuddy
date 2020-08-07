@@ -97,7 +97,7 @@ export default class ClassEditor extends Component {
           UserID: this.state.users,
         }
     }
-    
+
     render() {
       if(this.state === null){
         //show nothing (or loading wheel) if the data has not come in yet
@@ -105,8 +105,8 @@ export default class ClassEditor extends Component {
       }else{
         return (
           <MDBContainer fluid className="box">
-            <p className="bold fontSizeLarge">
-                        Class Name:
+            <p className="fontSizeLarge">
+              <b>Class Name:</b>
             </p>
 
             <MDBContainer className="form-group">

@@ -13,14 +13,14 @@ export default class pollCode extends Component {
     return (
       <MDBContainer fluid className="page">
         <MDBContainer fluid className="box">
-          <p className="bold fontSizeLarge">
-            Forgot Password?
+          <p className="fontSizeLarge">
+            <b>Forgot Password?</b>
           </p>
-          <p className="width-90 fontSizeSmall">
+          <p>
             Enter your email and we will send you a reset.
           </p>
-          <p className="width-90 fontSizeSmall">
-            Email:
+          <p>
+            <b>Email:</b>
           </p>
 
           <MDBContainer className="form-group">

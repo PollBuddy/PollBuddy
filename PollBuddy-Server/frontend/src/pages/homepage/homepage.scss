@@ -1,5 +1,15 @@
 .homepage_logo {
-   height: 200px;
-   margin-top: 10px;
-   margin-bottom: 10px;
- }
+  height: 200px;
+}
+.home_boxes {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+.home_boxes .box {
+  max-width: 320px;
+  margin: 50px 0 0;
+}
+.home_boxes .box:not(:first-child) {
+  margin-left: 50px;
+}

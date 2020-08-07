@@ -14,22 +14,22 @@ export default class resetPassword extends Component {
     return (
       <MDBContainer fluid className="page">
         <MDBContainer fluid className="box">
-          <p className="width-90 fontSizeSmall">
+          <p>
             Enter the security code from your inbox and your new password.
           </p>
-          <p className="width-90 fontSizeSmall">
+          <p>
             Security code:
           </p>
           <MDBContainer className="form-group">
             <input placeholder="A9EM3FL8W" className="form-control textBox"/>
           </MDBContainer>
-          <p className="width-90 fontSizeSmall">
+          <p>
             New password:
           </p>
           <MDBContainer className="form-group">
             <input placeholder="******************" className="form-control textBox"/>
           </MDBContainer>
-          <p className="width-90 fontSizeSmall">
+          <p>
             Confirm password:
           </p>
           <MDBContainer className="form-group">

@@ -12,13 +12,13 @@ export default class registerWithSchool extends Component {
     return (
       <MDBContainer fluid className="page">
         <MDBContainer fluid className="box">
-          <p className="bold fontSizeLarge">
-            Register with School
+          <p className="fontSizeLarge">
+            <b>Register with School</b>
           </p>
-          <p className="width-90 fontSizeSmall">
+          <p>
             To create an account, enter your school name or login using RPI's CAS.
           </p>
-          <p className="width-90 fontSizeSmall">
+          <p>
             School Name:
           </p>
           <MDBContainer className="form-group">

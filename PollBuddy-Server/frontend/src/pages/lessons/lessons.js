@@ -18,8 +18,8 @@ export default class lessons extends Component {
   render() {
     return (
       <MDBContainer className="page">
-        <p className="width-90 fontSizeLarge">
-                    Welcome to the lessons page!
+        <p className="fontSizeLarge">
+          Welcome to the lessons page!
         </p>
 
         <Link to={"/lesson/123"}>
