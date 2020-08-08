@@ -13,7 +13,7 @@ export default class ended extends Component {
     return (
       <MDBContainer fluid className="page">
         <p className="width-45 fontSizeLarge"> Question closed by instructor! </p>
-          {/*TODO: show this only if the instructor allows*/}
+        {/*TODO: show this only if the instructor allows*/}
         <Link to={"/pollDataView"}>
           <button className = "btn button">View Statistics for this question</button>
         </Link>

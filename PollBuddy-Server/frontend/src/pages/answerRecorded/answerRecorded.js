@@ -2,8 +2,7 @@ import React, {Component} from "react";
 import "mdbreact/dist/css/mdb.css";
 import Countdown, {zeroPad} from "react-countdown-now";
 import { MDBContainer } from "mdbreact";
-import {Link} from "react-router-dom";
-import { Redirect } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 
 export default class recorded extends Component {
@@ -13,18 +12,15 @@ export default class recorded extends Component {
   timeLimit = 5;
 
   render() {
-      const clockFormat = ({ minutes, seconds, completed }) => {
-
-          if (completed) {
-              return <Redirect to={"/questionEnded"} />
-
-              // Render a completed state
-              // return <p className="width-90 fontSizeLarge"> Question closed! </p>
-          } else {
-              // Render a countdown
-              return <p className="width-90 fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
-          }
-      };
+    const clockFormat = ({ minutes, seconds, completed }) => {
+      if (completed) {
+        // Render a completed state
+        return <Redirect to={"/questionEnded"} />
+      } else {
+        // Render a countdown
+        return <p className="width-90 fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
+      }
+    };
     return (
       <MDBContainer fluid className="page">
         <Link to={"/pollViewer"}>
