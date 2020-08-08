@@ -19,6 +19,7 @@ import RegisterWithSchool from "./pages/registerWithSchool/registerWithSchool";
 import RegisterWithPollBuddy from "./pages/registerWithPollBuddy/registerWithPollBuddy";
 import PollViewer from "./pages/pollviewer/pollviewer";
 import ResetPassword from "./pages/resetPassword/resetPassword";
+import FAQ from "./pages/faq/faq";
 import PollDataView from "./pages/pollDataView/pollDataView";
 import LoginWithSchool from "./pages/loginWithSchool/loginWithSchool";
 
