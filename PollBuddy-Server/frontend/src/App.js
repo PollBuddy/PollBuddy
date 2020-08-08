@@ -20,6 +20,7 @@ import RegisterWithPollBuddy from "./pages/registerWithPollBuddy/registerWithPol
 import PollViewer from "./pages/pollviewer/pollviewer";
 import ResetPassword from "./pages/resetPassword/resetPassword";
 import PollDataView from "./pages/pollDataView/pollDataView";
+import LoginWithSchool from "./pages/loginWithSchool/loginWithSchool";
 
 import Header from "./components/header/header.js";
 import Footer from "./components/footer/footer.js";
@@ -108,6 +109,10 @@ export default class App extends React.Component {
             <Route exact path="/faq">
               <FAQ updateTitle={this.updateTitle} />
             </Route>
+            <Route exact path="/loginWithSchool">
+              <LoginWithSchool updateTitle={this.updateTitle} />
+            </Route>
+
 
             {/* Default route/error page */}
             <Route>
