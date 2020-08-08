@@ -2,18 +2,18 @@ import React from "react";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 
-import Myclasses from "./pages/myclasses/myclasses";
-import Homepage from "./pages/homepage/homepage";
-import Login from "./pages/loginPage/login";
-import Classcreation from "./pages/classcreation/classcreation";
-import Lessons from "./pages/lessons/lessons";
-import Lesson from "./pages/lesson/lesson";
-import Notfound from "./pages/notfound/notfound";
-import Template from "./pages/template/template";
-import FAQ from "./pages/faq/faq";
-import AccountInfo from "./pages/accountinfo/accountinfo";
-import Privacy from "./pages/privacy/privacy";
-import ForgotPassword from "./pages/forgotPassword/forgotPassword";
+import Myclasses from "./pages/myclasses/myclasses"
+import Homepage from "./pages/homepage/homepage"
+import Login from "./pages/loginPage/login"
+import LoginDefault from "./pages/loginDefault/loginDefault"
+import Classcreation from "./pages/classcreation/classcreation"
+import Lessons from "./pages/lessons/lessons"
+import Lesson from "./pages/lesson/lesson"
+import Notfound from "./pages/notfound/notfound"
+import Template from "./pages/template/template"
+import AccountInfo from "./pages/accountinfo/accountinfo"
+import Privacy from "./pages/privacy/privacy"
+import ForgotPassword from "./pages/forgotPassword/forgotPassword"
 import RegisterDefault from "./pages/registerDefault/registerDefault";
 import RegisterWithSchool from "./pages/registerWithSchool/registerWithSchool";
 import RegisterWithPollBuddy from "./pages/registerWithPollBuddy/registerWithPollBuddy";
@@ -72,6 +72,9 @@ export default class App extends React.Component {
             </Route>
             <Route exact path="/login">
               <Login updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/loginDefault">  
+              <LoginDefault updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/classcreation">
               <Classcreation updateTitle={this.updateTitle} />

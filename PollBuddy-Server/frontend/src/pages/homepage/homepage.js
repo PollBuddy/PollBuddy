@@ -19,7 +19,7 @@ export default class homepage extends Component {
         <p className="width-45 fontSizeSmall"> An interactive questionnaire platform made by students, for
                     students, to strengthen lecture material and class attentiveness.</p>
         <MDBContainer>
-          <Link to={"/login"}>
+          <Link to={"/loginDefault"}>
             <button className = "btn button">Login</button>
           </Link>
           <Link to={"/registerDefault"}>
