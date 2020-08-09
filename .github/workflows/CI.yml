@@ -2,11 +2,7 @@ name: CI
 
 on:
   push:
-    branches:
-      - 'CICD'
   pull_request:
-    branches:
-      - 'CICD'
 
 jobs:
   Commit-Temp-Deploy:
