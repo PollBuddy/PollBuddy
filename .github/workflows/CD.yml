@@ -3,11 +3,12 @@ name: CD
 on:
   push:
     branchs:
-      - 'Master'
+      - 'master'
 
 jobs:
   Master-Deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
 
       - name: Initialize SSH
