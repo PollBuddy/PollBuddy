@@ -11,7 +11,7 @@ import {
   MDBIcon
 } from "mdbreact";
 
-import Countdown, { zeroPad } from "react-countdown-now";
+import Countdown, { zeroPad } from "react-countdown";
 
 
 export default class question extends Component {
@@ -160,7 +160,11 @@ export default class question extends Component {
                   </li>
                   <li className='list-inline-item'>
                     <a href='#!' className='white-text'>
-                      <MDBIcon far icon="clock" /> <Countdown renderer={clockFormat} date={Date.now() + this.state.data.timeLimit*1000} />
+                      <MDBIcon far icon="clock" />
+                      <Countdown
+                        renderer={clockFormat}
+                        date={Date.now() + this.state.data.timeLimit * 1000}
+                      />
                     </a>
                   </li>
                 </ul>
