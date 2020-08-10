@@ -14,7 +14,7 @@ export default class Contact extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { formUp: false, phone: "", value: "N/A" }
+    this.state = { formUp: false, phone: "", value: "N/A" };
   }
 
   render() {
