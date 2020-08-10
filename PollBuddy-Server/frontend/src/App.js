@@ -20,7 +20,7 @@ import RegisterWithPollBuddy from "./pages/registerWithPollBuddy/registerWithPol
 import PollViewer from "./pages/pollviewer/pollviewer";
 import ResetPassword from "./pages/resetPassword/resetPassword";
 import PollDataView from "./pages/pollDataView/pollDataView";
-import About from "./pages/about/about"
+import About from "./pages/about/about";
 
 import Header from "./components/header/header.js";
 import Footer from "./components/footer/footer.js";

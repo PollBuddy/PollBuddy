@@ -8,13 +8,13 @@ export default class privacy extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {terms: null}
+    this.state = {terms: null};
   }
 
   componentWillMount() {
     fetch(privacyMdPath).then((response) => response.text()).then((text) => {
-      this.setState({terms: text})
-    })
+      this.setState({terms: text});
+    });
   }
 
   componentDidMount() {
