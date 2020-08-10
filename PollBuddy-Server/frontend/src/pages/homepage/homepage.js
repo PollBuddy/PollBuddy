@@ -28,10 +28,12 @@ export default class homepage extends Component {
         </MDBContainer>
 
         <p className="width-45 fontSizeSmall"> Already have a Poll Code? Enter it here.</p>
-        <p className="width-45 fontSizeSmall"> Poll Code:</p>
+        <p className="width-45 fontSizeSmall"> 
+          <label htmlFor="pollCodeText">Poll Code:</label>
+        </p>
 
         <MDBContainer className="form-group">
-          <input placeholder="K30SW8" className="form-control textBox"/>
+          <input placeholder="K30SW8" className="form-control textBox" id="pollCodeText"/>
         </MDBContainer>
 
         <Link to={"/pollviewer"}>

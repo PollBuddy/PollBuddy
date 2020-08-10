@@ -24,6 +24,7 @@ export default class registerWithSchool extends Component {
           <p className="width-90 fontSizeSmall">
             To create an account, enter your school name or login using RPI's CAS.
           </p>
+          <!-- TODO: Add label here -->
           <p className="width-90 fontSizeSmall" id="schoolNameText">
             School Name:
           </p>

@@ -18,22 +18,22 @@ export default class resetPassword extends Component {
             Enter the security code from your inbox and your new password.
           </p>
           <p className="width-90 fontSizeSmall">
-            Security code:
+            <label htmlFor="securityCodeText">Security code:</label>
           </p>
           <MDBContainer className="form-group">
-            <input placeholder="A9EM3FL8W" className="form-control textBox"/>
+            <input placeholder="A9EM3FL8W" className="form-control textBox" id="securityCodeText"/>
           </MDBContainer>
           <p className="width-90 fontSizeSmall">
-            New password:
+            <label htmlFor="newPasswordText">New password:</label>
           </p>
           <MDBContainer className="form-group">
-            <input placeholder="******************" className="form-control textBox"/>
+            <input placeholder="******************" className="form-control textBox" id="newPasswordText"/>
           </MDBContainer>
           <p className="width-90 fontSizeSmall">
-            Confirm password:
+            <label htmlFor="confirmPasswordText">Confirm password:</label>
           </p>
           <MDBContainer className="form-group">
-            <input placeholder="******************" className="form-control textBox"/>
+            <input placeholder="******************" className="form-control textBox" id="confirmPasswordText"/>
           </MDBContainer>
 
           <Link to={"/myclasses"}>
