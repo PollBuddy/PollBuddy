@@ -20,7 +20,7 @@ export default class Header extends Component {
       };
     } else if(this.props.userInfo.sessionIdentifier === "account") {
       this.state = {
-        link: "/accountinfo",
+        link: "/accountInfo",
         text: "account"
       };
     }

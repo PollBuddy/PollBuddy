@@ -3,7 +3,7 @@ import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 import ClassEditor from "../../components/groupEditor/groupEditor";
 
-export default class groupcreation extends Component {//this class will likely need to call groups/new and do more with that...
+export default class groupCreation extends Component {//this class will likely need to call groups/new and do more with that...
   componentDidMount(){
     this.props.updateTitle("Class Creation");
   }

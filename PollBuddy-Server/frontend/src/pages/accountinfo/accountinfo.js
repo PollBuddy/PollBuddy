@@ -3,7 +3,7 @@ import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 import {Link} from "react-router-dom";
 
-export default class accountinfo extends Component {
+export default class accountInfo extends Component {
   componentDidMount(){
     this.props.updateTitle("Account Info");
   }

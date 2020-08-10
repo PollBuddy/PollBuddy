@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
-import "./pollviewer.scss";
+import "./pollViewer.scss";
 import { MDBContainer } from "mdbreact";
 
-export default class pollviewer extends Component {
+export default class pollViewer extends Component {
   componentDidMount(){
     this.props.updateTitle("Poll Viewer");
   }

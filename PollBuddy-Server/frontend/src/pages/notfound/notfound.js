@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 
-export default class notfound extends Component {
+export default class notFound extends Component {
 
   componentDidMount(){
     this.props.updateTitle("Page Not Found");
