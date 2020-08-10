@@ -168,7 +168,7 @@ export default class Contact extends Component {
               className="form-control textBox"
               id="description"
               maxLength="500"
-              style={{ width: "100%" }}
+              style={{ width: "100%", minHeight: "70px" }}
               placeholder="500 character limit"
             ></textarea>
           </MDBContainer>
