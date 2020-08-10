@@ -2,12 +2,12 @@ import React from "react";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 
-import Myclasses from "./pages/myclasses/myclasses";
+import Group from "./pages/groups/groups";
 import Homepage from "./pages/homepage/homepage";
 import Login from "./pages/loginPage/login";
-import Classcreation from "./pages/classcreation/classcreation";
-import Lessons from "./pages/lessons/lessons";
-import Lesson from "./pages/lesson/lesson";
+import GroupCreation from "./pages/groupcreation/groupcreation";
+import Polls from "./pages/polls/polls";
+import Poll from "./pages/poll/poll";
 import Notfound from "./pages/notfound/notfound";
 import Template from "./pages/template/template";
 import FAQ from "./pages/faq/faq";
@@ -60,20 +60,20 @@ export default class App extends React.Component {
             <Route exact path="/">
               <Homepage updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/myclasses">
-              <Myclasses updateTitle={this.updateTitle} />
+            <Route exact path="/groups">
+              <Group updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/lessons">
-              <Lessons updateTitle={this.updateTitle} />
+            <Route exact path="/groups/polls">
+              <Polls updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/lesson/:lessonId">
-              <Lesson updateTitle={this.updateTitle} />
+            <Route exact path="/poll/:lessonId">
+              <Poll updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/login">
               <Login updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/classcreation">
-              <Classcreation updateTitle={this.updateTitle} />
+            <Route exact path="/groups/new">
+              <GroupCreation updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/template">
               <Template updateTitle={this.updateTitle} />
@@ -84,13 +84,13 @@ export default class App extends React.Component {
             <Route exact path="/forgotPassword">
               <ForgotPassword updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/registerDefault">
+            <Route exact path="/register">
               <RegisterDefault updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/registerWithSchool">
+            <Route exact path="/register/school">
               <RegisterWithSchool updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/registerWithPollBuddy">
+            <Route exact path="/register/pollbuddy">
               <RegisterWithPollBuddy updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/privacy">
@@ -99,7 +99,7 @@ export default class App extends React.Component {
             <Route exact path="/resetPassword">
               <ResetPassword updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/pollDataView">
+            <Route exact path="/groups/pollDataView">
               <PollDataView updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/pollviewer">

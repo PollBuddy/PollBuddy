@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 
-export default class lessons extends Component {
+export default class polls extends Component {
   constructor(props){//shouldn't this be dependent on the class???? thats why i included a constructor.
     super(props);
     //need to connect to backend probably here and then store data until it can be stored in state.
@@ -22,13 +22,13 @@ export default class lessons extends Component {
                     Welcome to the lessons page!
         </p>
 
-        <Link to={"/lesson/123"}>
+        <Link to={"/poll/123"}>
           <button className="btn button">Lesson 123</button>
         </Link>
-        <Link to={"/lesson/420"}>
+        <Link to={"/poll/420"}>
           <button className="btn button">Lesson 420</button>
         </Link>
-        <Link to={"/lesson/666"}>
+        <Link to={"/poll/666"}>
           <button className="btn button">Lesson 666</button>
         </Link>
 

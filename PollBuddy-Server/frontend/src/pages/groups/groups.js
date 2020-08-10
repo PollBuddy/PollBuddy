@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Link, Redirect} from "react-router-dom";
 import { MDBContainer } from "mdbreact";
 
-export default class Myclasses extends Component {
+export default class Groups extends Component {
   constructor(){
     super();
     if(!localStorage.getItem("loggedIn")){
@@ -24,23 +24,23 @@ export default class Myclasses extends Component {
         <p className="width-90 fontSizeLarge">
 					As Instructor:
         </p>
-        <Link to={"/lessons"}>
+        <Link to={"/groups/polls"}>
           <button className="btn button">CSCI 1200 - Data Structures</button>
         </Link>
-        <Link to={"/lessons"}>
+        <Link to={"/groups/polls"}>
           <button className="btn button">CSCI 2200 - Foundations of Computer Science</button>
         </Link>
 
         <p className="width-90 fontSizeLarge">
 					As Student:
         </p>
-        <Link to={"/lessons"}>
+        <Link to={"/groups/polls"}>
           <button className="btn button">CSCI 2300 - Intro to Algorithms</button>
         </Link>
-        <Link to={"/lessons"}>
+        <Link to={"/groups/polls"}>
           <button className="btn button">CSCI 2500 - Computer Organization</button>
         </Link>
-        <Link to={"/lessons"}>
+        <Link to={"/groups/polls"}>
           <button className="btn button">CSCI 2960 - RCOS</button>
         </Link>
 

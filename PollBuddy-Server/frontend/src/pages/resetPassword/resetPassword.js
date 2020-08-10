@@ -36,7 +36,7 @@ export default class resetPassword extends Component {
             <input placeholder="******************" className="form-control textBox"/>
           </MDBContainer>
 
-          <Link to={"/myclasses"}>
+          <Link to={"/groups"}>
             <button className="btn button">Submit</button>
           </Link>
         </MDBContainer>

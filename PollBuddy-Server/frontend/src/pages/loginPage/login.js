@@ -30,7 +30,7 @@ export default class login extends Component {
       });
   }
   handleLogin() {
-    //needs some authentication before and if authentication passes then set local storage and such refer to classcreation page to see the way to make POST requests to the backend
+    //needs some authentication before and if authentication passes then set local storage and such refer to groupcreation page to see the way to make POST requests to the backend
     localStorage.setItem("loggedIn", true);//maybe have an admin/teacher var instead of just true
     //TODO MAYBE IN THE FUTURE USE COOKIES TO REMEMBER PAST SESSION
     this.setState({successfulLogin: true}); // Tell it to redirect to the next page if successful
@@ -44,7 +44,7 @@ export default class login extends Component {
 
     if(this.state.successfulLogin) { // Basically redirect if the person is logged in or if their login succeeds
       return (
-        <Redirect to="/myClasses" />
+        <Redirect to="/groups" />
       );
     }
     return (
@@ -64,7 +64,7 @@ export default class login extends Component {
           <input type="password" placeholder="••••••••••••••" className="form-control width-320px textBox"/>
         </MDBContainer>
 
-        <Link to={"/myclasses"}>
+        <Link to={"/groups"}>
           <button className = "btn button">Submit</button>
         </Link>
 
