@@ -13,13 +13,13 @@ export default class polls extends Component {
     };
   }
   componentDidMount(){
-    this.props.updateTitle("Lessons");
+    this.props.updateTitle("Polls");
   }
   render() {
     return (
       <MDBContainer className="page">
         <p className="width-90 fontSizeLarge">
-                    Welcome to the lessons page!
+                    Welcome to the polls page!
         </p>
 
         <Link to={"/poll/123"}>

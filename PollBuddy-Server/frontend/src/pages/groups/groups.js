@@ -15,7 +15,7 @@ export default class Groups extends Component {
     //Redirect("/login");
   }
   componentDidMount(){
-    this.props.updateTitle("My Classes");
+    this.props.updateTitle("My Groups");
   }
   render() { 
     return (
@@ -44,10 +44,33 @@ export default class Groups extends Component {
           <button className="btn button">CSCI 2960 - RCOS</button>
         </Link>
 
-        <Link to={"/login"}>
-          <button className="btn button">logout</button>
+        <p className="width-90 fontSizeLarge">
+              Poll Management:
+        </p>
+
+        <Link to={"/classCreation"}>
+          <button className="btn button">New Class</button>
         </Link>
 
+        <Link to={"/pollDataViewer"}>
+          <button className="btn button">Poll Data Viewer</button>
+        </Link>
+
+        <Link to={"/pollDataViewer"}>
+          <button className="btn button">Current Poll</button>
+        </Link>
+
+        <p className="width-90 fontSizeLarge">
+              My Account Info:
+        </p>
+
+        <Link to={"/accountInfo"}>
+          <button className="btn button">Account Details</button>
+        </Link>
+
+        <Link to={"/resetPassword"}>
+          <button className="btn button">Reset Password</button>
+        </Link>
 
       </MDBContainer>
     );

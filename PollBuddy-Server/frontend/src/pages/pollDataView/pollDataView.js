@@ -85,19 +85,19 @@ export default class pollDataView extends Component {
               Lesson #10
             </p>
 
-            <Link to={"/pollDataView"}>
+            <Link to={"/groups/pollDataView"}>
               <button className="btn button">Question 1</button>
             </Link>
-            <Link to={"/pollDataView"}>
+            <Link to={"/groups/pollDataView"}>
               <button className="btn button">Question 2</button>
             </Link>
-            <Link to={"/pollDataView"}>
+            <Link to={"/groups/pollDataView"}>
               <button className="btn button">Question 3</button>
             </Link>
-            <Link to={"/pollDataView"}>
+            <Link to={"/groups/pollDataView"}>
               <button className="btn button">Question 4</button>
             </Link>
-            <Link to={"/pollDataView"}>
+            <Link to={"/groups/pollDataView"}>
               <button className="btn button">Question 5</button>
             </Link>
 
