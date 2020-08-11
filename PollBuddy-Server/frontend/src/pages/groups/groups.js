@@ -48,15 +48,15 @@ export default class Groups extends Component {
               Poll Management:
         </p>
 
-        <Link to={"/classCreation"}>
+        <Link to={"/groups/new"}>
           <button className="btn button">New Class</button>
         </Link>
 
-        <Link to={"/pollDataViewer"}>
+        <Link to={"/groups/pollDataViewer"}>
           <button className="btn button">Poll Data Viewer</button>
         </Link>
 
-        <Link to={"/pollDataViewer"}>
+        <Link to={"/groups/pollView"}>
           <button className="btn button">Current Poll</button>
         </Link>
 
@@ -64,11 +64,11 @@ export default class Groups extends Component {
               My Account Info:
         </p>
 
-        <Link to={"/accountInfo"}>
+        <Link to={"/register/account"}>
           <button className="btn button">Account Details</button>
         </Link>
 
-        <Link to={"/resetPassword"}>
+        <Link to={"/login/reset"}>
           <button className="btn button">Reset Password</button>
         </Link>
 

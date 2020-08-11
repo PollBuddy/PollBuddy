@@ -78,10 +78,10 @@ export default class App extends React.Component {
             <Route exact path="/template">
               <Template updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/accountInfo">
+            <Route exact path="/register/account">
               <AccountInfo updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/forgotPassword">
+            <Route exact path="/login/forgot">
               <ForgotPassword updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/register">
@@ -96,7 +96,7 @@ export default class App extends React.Component {
             <Route exact path="/privacy">
               <Privacy updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/resetPassword">
+            <Route exact path="/login/reset">
               <ResetPassword updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/groups/pollDataView">

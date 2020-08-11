@@ -68,10 +68,10 @@ export default class login extends Component {
           <button className = "btn button">Submit</button>
         </Link>
 
-        <a className="login_link" href = "/registerDefault">
+        <a className="login_link" href = "/register">
           Register
         </a>
-        <a className="login_link" href = "/forgotPassword">
+        <a className="login_link" href = "/login/forgot">
           Forgot Password
         </a>
 

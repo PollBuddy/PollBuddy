@@ -15,7 +15,7 @@ export default class Header extends Component {
       };
     } else if(this.props.userInfo.sessionIdentifier === "register") {
       this.state = {
-        link: "/registerDefault",
+        link: "/register",
         text: "register"
       };
     } else if(this.props.userInfo.sessionIdentifier === "account") {

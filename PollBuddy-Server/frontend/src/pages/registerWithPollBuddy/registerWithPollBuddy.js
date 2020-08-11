@@ -37,7 +37,7 @@ export default class registerWithPollBuddy extends Component {
           </MDBContainer>
 
           <form>
-            <button className="btn button" formAction="/accountInfo">Submit</button>
+            <button className="btn button" formAction="/register/account">Submit</button>
           </form>
         </MDBContainer>
       </MDBContainer>

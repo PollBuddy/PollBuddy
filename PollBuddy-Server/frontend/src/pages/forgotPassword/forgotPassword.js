@@ -26,7 +26,7 @@ export default class pollCode extends Component {
           <MDBContainer className="form-group">
             <input placeholder="Enter email" className="form-control textBox"/>
           </MDBContainer>
-          <Link to={"/resetPassword"}>
+          <Link to={"/login/reset"}>
             <button className="btn button">Reset Password</button>
           </Link>
 
