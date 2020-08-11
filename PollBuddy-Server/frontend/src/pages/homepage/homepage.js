@@ -34,7 +34,7 @@ export default class homepage extends Component {
           <input placeholder="K30SW8" className="form-control textBox"/>
         </MDBContainer>
 
-        <Link to={"/pollViewer"}>
+        <Link to={"/poll/:pollID/view"}>
           <button className = "btn button">Join Poll</button>
         </Link>
 

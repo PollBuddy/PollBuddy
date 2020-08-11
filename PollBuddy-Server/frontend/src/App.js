@@ -6,8 +6,8 @@ import Group from "./pages/groups/groups";
 import Homepage from "./pages/homepage/homepage";
 import Login from "./pages/loginPage/login";
 import GroupCreation from "./pages/groupCreation/groupCreation";
-import Polls from "./pages/polls/polls";
-import Poll from "./pages/poll/poll";
+import Polls from "./pages/groupPolls/groupPolls";
+import Poll from "./pages/pollEditor/pollEditor";
 import Notfound from "./pages/notFound/notFound";
 import Template from "./pages/template/template";
 import FAQ from "./pages/faq/faq";
@@ -60,30 +60,43 @@ export default class App extends React.Component {
             <Route exact path="/">
               <Homepage updateTitle={this.updateTitle} />
             </Route>
+            <Route exact path="/privacy">
+              <Privacy updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/faq">
+              <FAQ updateTitle={this.updateTitle} />
+            </Route>
+
+            <Route exact path="/pollEditor/:pollID/edit">
+              <Poll updateTitle={this.updateTitle} />
+            </Route>
+
             <Route exact path="/groups">
               <Group updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/groups/polls">
+            <Route exact path="/groups/groupPolls">
               <Polls updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/poll/:lessonId">
-              <Poll updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/login">
-              <Login updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/groups/new">
               <GroupCreation updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/template">
-              <Template updateTitle={this.updateTitle} />
+            <Route exact path="/polls/:pollID/results">
+              <PollDataView updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/register/account">
-              <AccountInfo updateTitle={this.updateTitle} />
+            <Route exact path="/poll/:pollID/view">
+              <PollViewer updateTitle={this.updateTitle} />
+            </Route>
+
+            <Route exact path="/login">
+              <Login updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/login/forgot">
               <ForgotPassword updateTitle={this.updateTitle} />
             </Route>
+            <Route exact path="/login/reset">
+              <ResetPassword updateTitle={this.updateTitle} />
+            </Route>
+
             <Route exact path="/register">
               <RegisterDefault updateTitle={this.updateTitle} />
             </Route>
@@ -93,20 +106,13 @@ export default class App extends React.Component {
             <Route exact path="/register/pollbuddy">
               <RegisterWithPollBuddy updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/privacy">
-              <Privacy updateTitle={this.updateTitle} />
+
+            <Route exact path="/account">
+              <AccountInfo updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/login/reset">
-              <ResetPassword updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/groups/pollDataView">
-              <PollDataView updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/pollViewer">
-              <PollViewer updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/faq">
-              <FAQ updateTitle={this.updateTitle} />
+
+            <Route exact path="/template">
+              <Template updateTitle={this.updateTitle} />
             </Route>
 
             {/* Default route/error page */}

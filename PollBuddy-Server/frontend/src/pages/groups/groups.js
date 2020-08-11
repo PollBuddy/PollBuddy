@@ -24,23 +24,23 @@ export default class Groups extends Component {
         <p className="width-90 fontSizeLarge">
 					As Instructor:
         </p>
-        <Link to={"/groups/polls"}>
+        <Link to={"/groups/groupPolls"}>
           <button className="btn button">CSCI 1200 - Data Structures</button>
         </Link>
-        <Link to={"/groups/polls"}>
+        <Link to={"/groups/groupPolls"}>
           <button className="btn button">CSCI 2200 - Foundations of Computer Science</button>
         </Link>
 
         <p className="width-90 fontSizeLarge">
 					As Student:
         </p>
-        <Link to={"/groups/polls"}>
+        <Link to={"/groups/groupPolls"}>
           <button className="btn button">CSCI 2300 - Intro to Algorithms</button>
         </Link>
-        <Link to={"/groups/polls"}>
+        <Link to={"/groups/groupPolls"}>
           <button className="btn button">CSCI 2500 - Computer Organization</button>
         </Link>
-        <Link to={"/groups/polls"}>
+        <Link to={"/groups/groupPolls"}>
           <button className="btn button">CSCI 2960 - RCOS</button>
         </Link>
 
@@ -52,7 +52,7 @@ export default class Groups extends Component {
           <button className="btn button">New Class</button>
         </Link>
 
-        <Link to={"/groups/pollDataViewer"}>
+        <Link to={"/polls/:pollID/results"}>
           <button className="btn button">Poll Data Viewer</button>
         </Link>
 
@@ -64,7 +64,7 @@ export default class Groups extends Component {
               My Account Info:
         </p>
 
-        <Link to={"/register/account"}>
+        <Link to={"/account"}>
           <button className="btn button">Account Details</button>
         </Link>
 

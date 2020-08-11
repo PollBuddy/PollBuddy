@@ -82,7 +82,7 @@ router.post("/:id/delete/", function (req, res) {//use router.delete??
   });
   return res.sendStatus(200);
 });
-// GET polls listing.
+// GET groupPolls listing.
 router.get("/", function (req, res, next) {
   mongoConnection.getDB().collection("polls").find({}).toArray(function (err, result) {
     res.send(result);

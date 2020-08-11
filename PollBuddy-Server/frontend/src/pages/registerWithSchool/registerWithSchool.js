@@ -77,7 +77,7 @@ export default class registerWithSchool extends Component {
             />
           </MDBContainer>
 
-          <Link to={"/register/account"}>
+          <Link to={"/account"}>
             <button className="btn button">Submit School Name</button>
           </Link>
 

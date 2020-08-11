@@ -80,7 +80,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(usersRouter.user_middleware);
 
 app.use("/api/groups", groupsRouter);
-app.use("/api/polls", pollsRouter);
+app.use("/api/groupPolls", pollsRouter);
 app.use("/api/users", usersRouter);
 
 // When visiting /test, the database connection finds all documents in all collections, and returns them in JSON.

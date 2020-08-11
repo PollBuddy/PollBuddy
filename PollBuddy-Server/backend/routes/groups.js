@@ -120,7 +120,7 @@ router.get("/:id/", function (req, res, next) {
     return res.send(result);
   });
 });
-router.get("/:id/polls", function (req, res, next) {
+router.get("/:id/groupPolls", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("groups").find({"_id": id}, {projection: {_id: 0, Polls: 1}}).map(function (item) {
     return res.send(item.Polls);
