@@ -10,7 +10,7 @@ export default class lessons extends Component {
     this.state = {
       //need to put in groupID from backend
       //need to get other shit like pollIDs and their respective information...
-    }
+    };
   }
   componentDidMount(){
     this.props.updateTitle("Lessons");
@@ -33,6 +33,6 @@ export default class lessons extends Component {
         </Link>
 
       </MDBContainer>
-    )
+    );
   }
 }

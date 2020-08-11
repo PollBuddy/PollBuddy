@@ -21,17 +21,17 @@
 .header_bar_btn {
   position: absolute;
   right: 0;
-  font: bold 1rem / 1 var(--main-font);
+  font: bold var(--font-size-small) / 1 var(--main-font);
   padding: 12px 20px;
   background: var(--base-purple-logo-bg);
-  margin: calc((var(--head-font-size) - 1rem - 24px) / 2) 40px 0 0;
+  margin: calc((var(--head-font-size) - var(--font-size-small) - 24px) / 2) 40px 0 0;
   text-transform: uppercase;
   border-radius: 999px;
-  transition: var(--default-transition);
 }
-.header_bar_btn, .header_bar_btn:active, .header_bar_btn:visited {
+.header_bar_btn {
   color: var(--light-purple-logo-text);
 }
 .header_bar_btn:hover {
   color: var(--white-most-text);
+  text-decoration: none;
 }

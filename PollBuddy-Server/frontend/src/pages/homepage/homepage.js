@@ -28,10 +28,10 @@ export default class homepage extends Component {
             </MDBContainer>
           </MDBContainer>
           <MDBContainer className="box">
-            <p> Already have a Poll Code? Enter it here.</p>
-            <p> Poll Code:</p>
+            <p>Already have a Poll Code? Enter it here.</p>
 
             <MDBContainer className="form-group">
+              <label htmlFor="pollCodeText">Poll Code:</label>
               <input placeholder="K30SW8" className="form-control textBox"/>
             </MDBContainer>
 
@@ -41,6 +41,6 @@ export default class homepage extends Component {
           </MDBContainer>
         </MDBContainer>
       </MDBContainer>
-    )
+    );
   }
 }

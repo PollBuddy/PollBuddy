@@ -11,37 +11,22 @@ export default class accountinfo extends Component {
   render() {
     return (
       <MDBContainer className="page">
-        <p>
-					Name:
-        </p>
-        <MDBContainer className="form-group">
-          <input placeholder="SIS Man" className="form-control textBox"/>
+        <MDBContainer className="box">
+          <MDBContainer className="form-group">
+            <label htmlFor="nameText">Name:</label>
+            <input placeholder="SIS Man" className="form-control textBox" id="nameText"/>
+            <label htmlFor="emailText">Email:</label>
+            <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText"/>
+            <label htmlFor="currentPasswordText">Current password:</label>
+            <input placeholder="shir1ey-is-my-gir1y" className="form-control textBox" id="currentPasswordText"/>
+            <label htmlFor="confirmPassworkText">Confirm password:</label>
+            <input placeholder="shir1ey-is-my-gir1y" className="form-control textBox" id="confirmPassworkText"/>
+          </MDBContainer>
+          <Link to={"/myclasses"}>
+            <button className="btn button">Submit</button>
+          </Link>
         </MDBContainer>
-
-        <p>
-					Email:
-        </p>
-        <MDBContainer className="form-group">
-          <input placeholder="mans@rpi.edu" className="form-control textBox"/>
-        </MDBContainer>
-
-        <p>
-					Current password:
-        </p>
-        <MDBContainer className="form-group">
-          <input placeholder="shir1ey-is-my-gir1y" className="form-control textBox"/>
-        </MDBContainer>
-
-        <p>
-					Confirm password:
-        </p>
-        <MDBContainer className="form-group">
-          <input placeholder="shir1ey-is-my-gir1y" className="form-control textBox"/>
-        </MDBContainer>
-        <Link to={"/myclasses"}>
-          <button className="btn button">Submit</button>
-        </Link>
       </MDBContainer>
-    )
+    );
   }
 }

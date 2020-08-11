@@ -27,6 +27,6 @@ export default class registerDefault extends Component {
           </Link>
         </MDBContainer>
       </MDBContainer>
-    )
+    );
   }
 }

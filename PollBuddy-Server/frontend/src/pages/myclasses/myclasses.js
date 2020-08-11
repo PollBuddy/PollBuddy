@@ -50,6 +50,6 @@ export default class Myclasses extends Component {
 
 
       </MDBContainer>
-    )
+    );
   }
 }

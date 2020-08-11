@@ -17,6 +17,8 @@
 
   --main-font: 'Baloo 2';
   --font-size: 1.2rem;
+  --font-size-large: 1.4rem;
+  --font-size-small: 1rem;
   --line-height: 1.2;
   --default-transition: all 0.2s ease-in-out;
 }
@@ -31,15 +33,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-bottom: calc(1rem + 70px);
+  padding-bottom: calc(var(--font-size-small) + 70px);
 }
 
 .fontSizeLarge {
-  font-size: 1.4rem;
+  font-size: var(--font-size-large);
 }
 
 p {
-  text-align: center;
   margin: 10px 0;
 }
 
@@ -47,7 +48,7 @@ p {
   padding: 12px 20px;
   background-color: var(--base-purple-logo-bg);
   color: var(--light-purple-logo-text);
-  font-size: 1rem;
+  font-size: var(--font-size-small);
   box-shadow: none;
   text-transform: uppercase;
   margin: 10px 5px;
@@ -64,6 +65,10 @@ p {
   box-shadow: none;
 }
 
+.form-group, .textBox {
+  width: 100%;
+}
+
 .textBox {
   padding: 7px 15px;
   background-color: var(--white-most-text);
@@ -72,7 +77,6 @@ p {
   border: 5px solid transparent;
   outline: none;
   text-align: center;
-  width: 320px;
   margin: 10px 0;
   box-sizing: border-box;
 }
@@ -114,4 +118,32 @@ body {
 body, .button, .textBox {
   line-height: var(--line-height);
   font-family: var(--main-font);
+}
+
+label {
+  display: block;
+  margin: 10px 20px;
+  font-weight: bold;
+}
+
+.auto_comp {
+  color: var(--darkest-purple-header-color);
+  background: white;
+  text-align: center;
+  cursor: default;
+  padding: 1px 0;
+}
+
+.auto_comp:hover {
+  background: var(--light-purple-logo-text);
+}
+
+a {
+  color: var(--light-purple-logo-text);
+  transition: var(--default-transition);
+}
+
+a:hover {
+  color: var(--white-most-text);
+  text-decoration: underline;
 }

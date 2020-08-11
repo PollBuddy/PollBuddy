@@ -6,6 +6,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const os = require("os");
 
 var groupsRouter = require("./routes/groups");
 var pollsRouter = require("./routes/polls");
@@ -35,11 +36,41 @@ app.use(express_session({
 app.use(cors());
 
 var mongoConnection = require("./modules/mongoConnection.js");
-mongoConnection.connect(function (err, client) {
-  if (err) {
-    console.error(err);
+mongoConnection.connect(function (res) {
+  if (res !== true) {
+    console.error(res);
   }
 });
+
+// InfluxDB
+var influxConnection = require("./modules/influx.js");
+
+// Response Time Logging to InfluxDB
+app.use((req, res, next) => {
+  const start = Date.now();
+
+  res.on("finish", () => {
+    const duration = Date.now() - start;
+    console.log(`Request to ${req.path} took ${duration}ms`);
+
+    influxConnection.log([
+      {
+        measurement: "response_times",
+        tags: {
+          host: os.hostname(),
+          platform: "backend",
+          path: req.path
+        },
+        fields: {
+          duration: duration
+        },
+        timestamp: new Date()
+      }
+    ]);
+  });
+  return next();
+});
+
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -114,7 +145,7 @@ app.get("/gendata", (req, res) => {
     log += "Dropping DB\n";
 
     elements.forEach(function (element) {
-      addObj(element)
+      addObj(element);
     });
   });
 

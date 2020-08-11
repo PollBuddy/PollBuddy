@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 import "./footer.scss";
 import rcosLogo from "../../images/rcos.png";
-import githubLogo from "../../images/github.png"
+import githubLogo from "../../images/github.png";
 import {MDBContainer} from "mdbreact";
 
 export default class Footer extends Component {
@@ -38,6 +38,6 @@ export default class Footer extends Component {
           </MDBContainer>
         </MDBContainer>
       </footer>
-    )
+    );
   }
 }

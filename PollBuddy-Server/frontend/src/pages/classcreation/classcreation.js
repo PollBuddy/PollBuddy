@@ -34,7 +34,7 @@ export default class classcreation extends Component {//this class will likely n
       console.log(e.target.name);
       this.setState({
         [e.target.name]: e.target.value
-      })
+      });
     }
     render() {
       return (
@@ -48,6 +48,6 @@ export default class classcreation extends Component {//this class will likely n
             </MDBContainer>
           </MDBContainer>
         </MDBContainer>
-      )
+      );
     }
 }

@@ -19,12 +19,9 @@ export default class pollCode extends Component {
           <p>
             Enter your email and we will send you a reset.
           </p>
-          <p>
-            <b>Email:</b>
-          </p>
-
           <MDBContainer className="form-group">
-            <input placeholder="Enter email" className="form-control textBox"/>
+            <label htmlFor="emailText">Email:</label>
+            <input placeholder="Enter email" className="form-control textBox" id="emailText"/>
           </MDBContainer>
           <Link to={"/resetPassword"}>
             <button className="btn button">Reset Password</button>
@@ -32,6 +29,6 @@ export default class pollCode extends Component {
 
         </MDBContainer>
       </MDBContainer>
-    )
+    );
   }
 }

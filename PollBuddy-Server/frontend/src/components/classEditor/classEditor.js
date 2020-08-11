@@ -20,7 +20,7 @@ export default class ClassEditor extends Component {
       polls: null,
       users: null,
       instructors: null
-    }
+    };
 
     //if the component is in class creation mode, we don't need to read any data from the backend
     if(!this.props.new){
@@ -42,8 +42,8 @@ export default class ClassEditor extends Component {
               users: obj.users,
               instructors: obj.instructors,
             }
-          )
-        })
+          );
+        });
       });
     }
 
@@ -56,7 +56,7 @@ export default class ClassEditor extends Component {
       //update state to include the data that was changed from the form
       this.setState({
         [e.target.name]: e.target.value
-      })
+      });
     }
 
     onSubmit = e =>{
@@ -95,7 +95,7 @@ export default class ClassEditor extends Component {
           InstructorID: this.state.instructors,
           PollID: this.state.polls,
           UserID: this.state.users,
-        }
+        };
     }
 
     render() {
@@ -105,14 +105,11 @@ export default class ClassEditor extends Component {
       }else{
         return (
           <MDBContainer fluid className="box">
-            <p className="fontSizeLarge">
-              <b>Class Name:</b>
-            </p>
-
             <MDBContainer className="form-group">
+              <label htmlFor="groupName">Class Name:</label>
               <input
                 name="name"
-                id="className"
+                id="groupName"
                 className="form-control textBox"
                 value={this.props.new ? null: this.state.name}
                 onInput={this.onInput} />
@@ -122,7 +119,7 @@ export default class ClassEditor extends Component {
               {this.props.new ? "Create Class": "Save Changes"}
             </button>
           </MDBContainer>
-        )
+        );
       }
     }
 }

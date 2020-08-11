@@ -1,10 +1,6 @@
-:root {
-  --foot-font-size: 1rem;
-}
-
 .footer_foot {
   padding: 0 0 20px;
-  font: var(--foot-font-size) / 1 var(--main-font);
+  font: var(--font-size-small) / 1 var(--main-font);
   box-sizing: border-box;
   width: 100%;
   position: absolute;
@@ -13,7 +9,7 @@
 .footer_linethru {
   background: var(--base-purple-logo-bg);
   width: 100%;
-  margin: calc((var(--foot-font-size) - 1px) / 2) 0;
+  margin: calc((var(--font-size-small) - 1px) / 2) 0;
   height: 1px;
   position: absolute;
   z-index: -9;
@@ -38,16 +34,13 @@
 .footer_foot a {
   color: var(--white-most-text);
   margin: 0 20px 0 0;
-}
-.footer_foot a {
   opacity: 0.8;
 }
 .footer_foot a:hover {
-  text-decoration: underline;
   opacity: 1;
 }
 .footer_foot_links img {
-  height: var(--foot-font-size);
+  height: var(--font-size-small);
   width: auto;
 }
 .footer_foot div a:last-of-type {
