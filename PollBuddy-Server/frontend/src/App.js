@@ -6,8 +6,8 @@ import Group from "./pages/groups/groups";
 import Homepage from "./pages/homepage/homepage";
 import Login from "./pages/loginPage/login";
 import GroupCreation from "./pages/groupCreation/groupCreation";
-import Polls from "./pages/groupPolls/groupPolls";
-import Poll from "./pages/pollEditor/pollEditor";
+import groupPolls from "./pages/groupPolls/groupPolls";
+import pollEditor from "./pages/pollEditor/pollEditor";
 import Notfound from "./pages/notFound/notFound";
 import Template from "./pages/template/template";
 import FAQ from "./pages/faq/faq";
@@ -25,6 +25,7 @@ import Header from "./components/header/header.js";
 import Footer from "./components/footer/footer.js";
 
 import "./styles/main.scss";
+import groupEditor from "./components/groupEditor/groupEditor";
 
 export default class App extends React.Component {
 
@@ -67,24 +68,24 @@ export default class App extends React.Component {
               <FAQ updateTitle={this.updateTitle} />
             </Route>
 
-            <Route exact path="/pollEditor/:pollID/edit">
-              <Poll updateTitle={this.updateTitle} />
-            </Route>
-
             <Route exact path="/groups">
               <Group updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/groups/groupPolls">
-              <Polls updateTitle={this.updateTitle} />
+            <Route exact path="/groups/polls">
+              <groupPolls updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/groups/new">
               <GroupCreation updateTitle={this.updateTitle} />
             </Route>
+
             <Route exact path="/polls/:pollID/results">
               <PollDataView updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/poll/:pollID/view">
               <PollViewer updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/pollEditor/:pollID/edit">
+              <pollEditor updateTitle={this.updateTitle} />
             </Route>
 
             <Route exact path="/login">
