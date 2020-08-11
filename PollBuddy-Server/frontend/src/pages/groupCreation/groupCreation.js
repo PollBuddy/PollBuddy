@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
-import ClassEditor from "../../components/groupEditor/groupEditor";
+import GroupEditor from "../../components/groupEditor/groupEditor";
 
 export default class groupCreation extends Component {//this class will likely need to call groups/new and do more with that...
   componentDidMount(){
@@ -43,7 +43,7 @@ export default class groupCreation extends Component {//this class will likely n
             <MDBContainer>
               <MDBContainer className="page">
                 {/*set new to true so we can use the creation version of the class editor component*/}
-                <ClassEditor new={true}/>
+                <GroupEditor new={true}/>
               </MDBContainer>
             </MDBContainer>
           </MDBContainer>

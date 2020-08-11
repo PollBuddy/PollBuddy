@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import ClassEditor from "../../components/groupEditor/groupEditor";
+import GroupEditor from "../../components/groupEditor/groupEditor";
 
 export default class Template extends Component {//this class is an example of how to use get requests so frontend team can eventually connect to backend refer to class creation for post requests
   constructor() {
@@ -46,7 +46,7 @@ export default class Template extends Component {//this class is an example of h
             this.state.groups.map(
               (group, index) => {
                 console.log(group._id);
-                return <ClassEditor key={group._id} id={group._id} new={false}/>;//the key is needed because each child of a list must have a unique key
+                return <GroupEditor key={group._id} id={group._id} new={false}/>;//the key is needed because each child of a list must have a unique key
               }
             )
           }

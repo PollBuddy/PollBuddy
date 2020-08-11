@@ -5,7 +5,7 @@ import { MDBContainer } from "mdbreact";
 //this component has 2 modes, edit and new. The new version allows the user to create a new class while the edit version
 //allows the user to edit an existing class. Pass new=true into props if you want to use the new version of the component
 //and pass new=false if you want to use the edit version
-export default class ClassEditor extends Component {
+export default class GroupEditor extends Component {
   constructor(props){
     super(props);
 
@@ -22,7 +22,7 @@ export default class ClassEditor extends Component {
       instructors: null
     };
 
-    //if the component is in class creation mode, we don't need to read any data from the backend
+    //if the component is in group creation mode, we don't need to read any data from the backend
     if(!this.props.new){
       //once the component is created, fetch the data from the given group from the backend
       fetch(process.env.REACT_APP_BACKEND_URL + "/groups/").then(res => {//this is how one calls a get request (backend specifically made a method for finding all groups)
@@ -60,7 +60,7 @@ export default class ClassEditor extends Component {
     }
 
     onSubmit = e =>{
-      //create new class or edit class based on the given mode and data in state
+      //create new group or edit group based on the given mode and data in state
       fetch(this.getAPIURL(), {
         method: "POST",
         headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
@@ -106,7 +106,7 @@ export default class ClassEditor extends Component {
         return (
           <MDBContainer fluid className="box">
             <p className="bold fontSizeLarge">
-                        Class Name:
+                        Group Name:
             </p>
 
             <MDBContainer className="form-group">
@@ -119,7 +119,7 @@ export default class ClassEditor extends Component {
             </MDBContainer>
 
             <button className="btn button" onClick={this.onSubmit}>
-              {this.props.new ? "Create Class": "Save Changes"}
+              {this.props.new ? "Create Group": "Save Changes"}
             </button>
           </MDBContainer>
         );
