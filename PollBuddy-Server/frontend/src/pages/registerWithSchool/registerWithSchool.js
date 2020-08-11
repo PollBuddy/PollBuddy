@@ -25,7 +25,7 @@ export default class registerWithSchool extends Component {
             To create an account, enter your school name or login using RPI's CAS.
           </p>
           <p>
-          { /* TODO: Add label here */ }
+            { /* TODO: Add label here */ }
             School Name:
           </p>
           <MDBContainer className="form-group">
