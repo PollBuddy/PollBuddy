@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import './groupEditor.scss'
+// import './GroupEditor.scss'
 import { MDBContainer } from "mdbreact";
 
 //this component has 2 modes, edit and new. The new version allows the user to create a new class while the edit version

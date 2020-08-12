@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
-import GroupEditor from "../../components/groupEditor/groupEditor";
+import GroupEditor from "../GroupEditor/GroupEditor";
 
 export default class GroupCreation extends Component {//this class will likely need to call Groups/new and do more with that...
   componentDidMount(){
-    this.props.updateTitle("Class Creation");
+    this.props.updateTitle("Group Creation");
   }
 
   constructor() {
@@ -18,7 +18,7 @@ export default class GroupCreation extends Component {//this class will likely n
     handleClick = () => {
       console.log(this.state);
       if (this.state.name !== ""){
-        fetch(process.env.REACT_APP_BACKEND_URL + "/Groups/new/", {
+        fetch(process.env.REACT_APP_BACKEND_URL + "/groups/new/", {
           method: "POST",
           headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
           body: JSON.stringify({

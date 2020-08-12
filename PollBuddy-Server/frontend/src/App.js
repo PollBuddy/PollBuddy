@@ -6,6 +6,7 @@ import Group from "./pages/Groups/Groups";
 import Homepage from "./pages/Homepage/Homepage";
 import Login from "./pages/Login/Login";
 import GroupCreation from "./pages/GroupCreation/GroupCreation";
+import GroupEditor from "./pages/GroupEditor/GroupEditor";
 import GroupPolls from "./pages/GroupPolls/GroupPolls";
 import PollEditor from "./pages/PollEditor/PollEditor";
 import Notfound from "./pages/Error404/Error404";
@@ -25,7 +26,6 @@ import Header from "./components/header/header.js";
 import Footer from "./components/footer/footer.js";
 
 import "./styles/main.scss";
-import groupEditor from "./components/groupEditor/groupEditor";
 
 export default class App extends React.Component {
 
@@ -71,11 +71,14 @@ export default class App extends React.Component {
             <Route exact path="/groups">
               <Group updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/groups/polls">
-              <GroupPolls updateTitle={this.updateTitle} />
-            </Route>
             <Route exact path="/groups/new">
               <GroupCreation updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/groups/:groupID/polls">
+              <GroupPolls updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/groups/:groupID/edit">
+              <GroupEditor updateTitle={this.updateTitle} />
             </Route>
 
             <Route exact path="/poll/:pollID/view">

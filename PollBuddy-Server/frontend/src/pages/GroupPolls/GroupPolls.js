@@ -22,14 +22,14 @@ export default class GroupPolls extends Component {
                     Welcome to the polls page!
         </p>
 
-        <Link to={"/PollEditor/123"}>
-          <button className="btn button">Lesson 123</button>
+        <Link to={"/polls/123/edit"}>
+          <button className="btn button">Poll 123</button>
         </Link>
-        <Link to={"/PollEditor/420"}>
-          <button className="btn button">Lesson 420</button>
+        <Link to={"/polls/420/edit"}>
+          <button className="btn button">Poll 420</button>
         </Link>
-        <Link to={"/PollEditor/666"}>
-          <button className="btn button">Lesson 666</button>
+        <Link to={"/polls/666/edit"}>
+          <button className="btn button">Poll 666</button>
         </Link>
 
       </MDBContainer>
