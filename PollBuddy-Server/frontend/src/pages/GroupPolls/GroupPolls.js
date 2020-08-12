@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 
-export default class groupPolls extends Component {
+export default class GroupPolls extends Component {
   constructor(props){//shouldn't this be dependent on the class???? thats why i included a constructor.
     super(props);
     //need to connect to backend probably here and then store data until it can be stored in state.

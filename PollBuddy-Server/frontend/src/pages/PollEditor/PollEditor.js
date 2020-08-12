@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import { MDBContainer, MDBDropdownToggle, MDBDropdown, MDBDropdownItem, MDBDropdownMenu } from "mdbreact";
 import Question from "../../components/question";
 
-export default class pollEditor extends Component {
+export default class PollEditor extends Component {
   constructor(props) {
     super(props);
     this.askQuestion = this.askQuestion.bind(this);

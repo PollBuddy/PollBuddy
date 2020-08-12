@@ -3,7 +3,7 @@ import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 import {Link} from "react-router-dom";
 
-export default class accountInfo extends Component {
+export default class AccountInfo extends Component {
   componentDidMount(){
     this.props.updateTitle("Account Info");
   }
@@ -38,7 +38,7 @@ export default class accountInfo extends Component {
         <MDBContainer className="form-group">
           <input placeholder="shir1ey-is-my-gir1y" className="form-control textBox"/>
         </MDBContainer>
-        <Link to={"/Groups"}>
+        <Link to={"/groups"}>
           <button className="btn button">Submit</button>
         </Link>
       </MDBContainer>

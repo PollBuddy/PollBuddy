@@ -4,7 +4,7 @@ import "mdbreact/dist/css/mdb.css";
 import "./Login.scss";
 import { MDBContainer } from "mdbreact";
 
-export default class login extends Component {
+export default class Login extends Component {
 
   state = {
     successfulLogin: false
@@ -16,7 +16,7 @@ export default class login extends Component {
       this.setState({successfulLogin: true}); // Tell it to redirect to the next page if already logged in
     }
     console.log(process.env.REACT_APP_BACKEND_URL);
-    fetch(process.env.REACT_APP_BACKEND_URL + "/Groups", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "/groups", {
       method: "GET",
       headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
     }).then(response => response.json())

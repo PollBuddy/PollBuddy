@@ -3,7 +3,7 @@ import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 import GroupEditor from "../../components/groupEditor/groupEditor";
 
-export default class groupCreation extends Component {//this class will likely need to call Groups/new and do more with that...
+export default class GroupCreation extends Component {//this class will likely need to call Groups/new and do more with that...
   componentDidMount(){
     this.props.updateTitle("Class Creation");
   }
@@ -25,7 +25,7 @@ export default class groupCreation extends Component {//this class will likely n
             Name: this.state.name,
           })
         });/*note that this does not contain the trailing stuffs
-            as template class does due to the backend route not returning
+            as Template class does due to the backend route not returning
              anything for this endpoint... also no need for error checking
              because should always work... but probably should put in later maybe*/
       }

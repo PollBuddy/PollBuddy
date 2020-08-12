@@ -3,7 +3,7 @@ import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import {Link} from "react-router-dom";
 
-export default class registerDefault extends Component {
+export default class RegisterDefault extends Component {
   componentDidMount() {
     this.props.updateTitle("Register");
   }

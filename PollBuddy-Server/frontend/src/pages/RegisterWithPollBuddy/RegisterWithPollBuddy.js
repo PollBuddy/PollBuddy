@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 
-export default class registerWithPollBuddy extends Component {
+export default class RegisterWithPollBuddy extends Component {
   componentDidMount() {
     this.props.updateTitle("Register with Poll Buddy");
   }

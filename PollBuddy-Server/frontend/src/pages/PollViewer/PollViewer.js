@@ -3,7 +3,7 @@ import "mdbreact/dist/css/mdb.css";
 import "./PollViewer.scss";
 import { MDBContainer } from "mdbreact";
 
-export default class pollViewer extends Component {
+export default class PollViewer extends Component {
   componentDidMount(){
     this.props.updateTitle("Poll Viewer");
   }

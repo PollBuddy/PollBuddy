@@ -4,7 +4,7 @@ import {MDBContainer} from "mdbreact";
 import ReactMarkdown from "react-markdown";
 import privacyMdPath from "./Privacy.md";
 
-export default class privacy extends Component {
+export default class Privacy extends Component {
 
   constructor(props) {
     super(props);

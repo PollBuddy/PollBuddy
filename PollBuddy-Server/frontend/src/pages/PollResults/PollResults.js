@@ -4,7 +4,7 @@ import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import {Link} from "react-router-dom";
 import "./PollResults.scss";
-export default class pollResults extends Component {
+export default class PollResults extends Component {
   componentDidMount(){
     this.props.updateTitle("Poll Data View");
   }

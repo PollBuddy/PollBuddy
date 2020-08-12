@@ -6,10 +6,10 @@ import Group from "./pages/Groups/Groups";
 import Homepage from "./pages/Homepage/Homepage";
 import Login from "./pages/Login/Login";
 import GroupCreation from "./pages/GroupCreation/GroupCreation";
-import groupPolls from "./pages/GroupPolls/GroupPolls";
-import pollEditor from "./pages/PollEditor/PollEditor";
+import GroupPolls from "./pages/GroupPolls/GroupPolls";
+import PollEditor from "./pages/PollEditor/PollEditor";
 import Notfound from "./pages/Error404/Error404";
-import Template from "./pages/template/template";
+import Template from "./pages/Template/Template";
 import FAQ from "./pages/FAQ/FAQ";
 import AccountInfo from "./pages/AccountInfo/AccountInfo";
 import Privacy from "./pages/Privacy/Privacy";
@@ -78,14 +78,14 @@ export default class App extends React.Component {
               <GroupCreation updateTitle={this.updateTitle} />
             </Route>
 
-            <Route exact path="/polls/:pollID/results">
-              <PollDataView updateTitle={this.updateTitle} />
-            </Route>
             <Route exact path="/poll/:pollID/view">
               <PollViewer updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/pollEditor/:pollID/edit">
               <PollEditor updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/polls/:pollID/results">
+              <PollDataView updateTitle={this.updateTitle} />
             </Route>
 
             <Route exact path="/login">

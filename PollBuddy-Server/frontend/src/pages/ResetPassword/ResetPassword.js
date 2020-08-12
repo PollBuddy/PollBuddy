@@ -4,7 +4,7 @@ import {Link} from "react-router-dom";
 
 import "mdbreact/dist/css/mdb.css";
 
-export default class resetPassword extends Component {
+export default class ResetPassword extends Component {
 
   componentDidMount() {
     this.props.updateTitle("Reset Password");

@@ -3,7 +3,7 @@ import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import {Link} from "react-router-dom";
 
-export default class pollCode extends Component {
+export default class ForgotPassword extends Component {
 
   componentDidMount() {
     this.props.updateTitle("Forgot Password");
