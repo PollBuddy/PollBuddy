@@ -18,11 +18,11 @@ export default class registerDefault extends Component {
           <p className="width-90 fontSizeSmall">
             Click on one of the following buttons to register.
           </p>
-          <Link to={"/RegisterWithSchool"}>
+          <Link to={"/register/school"}>
             <button className="btn button">Register with School</button>
           </Link>
 
-          <Link to={"/RegisterWithPollBuddy"}>
+          <Link to={"/register/pollBuddy"}>
             <button className="btn button">Register with Poll Buddy</button>
           </Link>
         </MDBContainer>
