@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
-import "./header.scss";
+import "./Header.scss";
 import logo from "../../images/logo.png";
 
 export default class Header extends Component {

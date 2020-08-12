@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import { MDBContainer, MDBDropdownToggle, MDBDropdown, MDBDropdownItem, MDBDropdownMenu } from "mdbreact";
-import Question from "../../components/question";
+import Question from "../../components/Question/Question";
 
 export default class PollEditor extends Component {
   constructor(props) {

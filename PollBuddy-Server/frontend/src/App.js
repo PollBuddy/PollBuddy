@@ -22,8 +22,8 @@ import PollViewer from "./pages/PollViewer/PollViewer";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import PollDataView from "./pages/PollResults/PollResults";
 
-import Header from "./components/header/header.js";
-import Footer from "./components/footer/footer.js";
+import Header from "./components/Header/Header.js";
+import Footer from "./components/Footer/Footer.js";
 
 import "./styles/main.scss";
 
@@ -81,10 +81,10 @@ export default class App extends React.Component {
               <GroupEditor updateTitle={this.updateTitle} />
             </Route>
 
-            <Route exact path="/poll/:pollID/view">
+            <Route exact path="/polls/:pollID/view">
               <PollViewer updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/pollEditor/:pollID/edit">
+            <Route exact path="/polls/:pollID/edit">
               <PollEditor updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/polls/:pollID/results">

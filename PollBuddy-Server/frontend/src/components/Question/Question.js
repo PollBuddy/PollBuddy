@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./question.scss";
+import "./Question.scss";
 import {
   MDBCard,
   MDBCardBody,
@@ -14,7 +14,7 @@ import {
 import Countdown, { zeroPad } from "react-countdown-now";
 
 
-export default class question extends Component {
+export default class Question extends Component {
   constructor(props) {
     super(props);
     //binding helper functions
