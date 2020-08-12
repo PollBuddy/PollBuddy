@@ -24,23 +24,23 @@ export default class Groups extends Component {
         <p className="width-90 fontSizeLarge">
 					As Instructor:
         </p>
-        <Link to={"/groups/groupPolls"}>
+        <Link to={"/Groups/GroupPolls"}>
           <button className="btn button">CSCI 1200 - Data Structures</button>
         </Link>
-        <Link to={"/groups/groupPolls"}>
+        <Link to={"/Groups/GroupPolls"}>
           <button className="btn button">CSCI 2200 - Foundations of Computer Science</button>
         </Link>
 
         <p className="width-90 fontSizeLarge">
 					As Student:
         </p>
-        <Link to={"/groups/groupPolls"}>
+        <Link to={"/Groups/GroupPolls"}>
           <button className="btn button">CSCI 2300 - Intro to Algorithms</button>
         </Link>
-        <Link to={"/groups/groupPolls"}>
+        <Link to={"/Groups/GroupPolls"}>
           <button className="btn button">CSCI 2500 - Computer Organization</button>
         </Link>
-        <Link to={"/groups/groupPolls"}>
+        <Link to={"/Groups/GroupPolls"}>
           <button className="btn button">CSCI 2960 - RCOS</button>
         </Link>
 
@@ -48,7 +48,7 @@ export default class Groups extends Component {
               Poll Management:
         </p>
 
-        <Link to={"/groups/new"}>
+        <Link to={"/Groups/new"}>
           <button className="btn button">New Class</button>
         </Link>
 
@@ -56,7 +56,7 @@ export default class Groups extends Component {
           <button className="btn button">Poll Data Viewer</button>
         </Link>
 
-        <Link to={"/groups/pollView"}>
+        <Link to={"/Groups/pollView"}>
           <button className="btn button">Current Poll</button>
         </Link>
 

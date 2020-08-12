@@ -22,13 +22,13 @@ export default class groupPolls extends Component {
                     Welcome to the polls page!
         </p>
 
-        <Link to={"/pollEditor/123"}>
+        <Link to={"/PollEditor/123"}>
           <button className="btn button">Lesson 123</button>
         </Link>
-        <Link to={"/pollEditor/420"}>
+        <Link to={"/PollEditor/420"}>
           <button className="btn button">Lesson 420</button>
         </Link>
-        <Link to={"/pollEditor/666"}>
+        <Link to={"/PollEditor/666"}>
           <button className="btn button">Lesson 666</button>
         </Link>
 

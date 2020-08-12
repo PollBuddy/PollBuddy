@@ -14,10 +14,10 @@ export default class Template extends Component {//this class is an example of h
   async componentDidMount(){
     this.props.updateTitle("Template");
     let groups = [];
-    const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/");//this is alternative to .then's and all that
+    const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/Groups/");//this is alternative to .then's and all that
     const json = await response.json();
     for(let i = 0; i < json.length; i++){
-      const r = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + json[i] + "/");
+      const r = await fetch(process.env.REACT_APP_BACKEND_URL + "/Groups/" + json[i] + "/");
       const rjson = await r.json();
       groups[i] = rjson[0];
     }
@@ -25,8 +25,8 @@ export default class Template extends Component {//this class is an example of h
   }
   getID(){//don't know exactly why arrow was borked but if you call by reference or without () then it will not return right
     let result = null;
-    if(this.state.groups[0]!==undefined){//this is necessary. Checking the first index of groups but could do a more rigorous check in future
-      result = this.state.groups[0]._id;//groups[0] is temporary
+    if(this.state.groups[0]!==undefined){//this is necessary. Checking the first index of Groups but could do a more rigorous check in future
+      result = this.state.groups[0]._id;//Groups[0] is temporary
     }
     return result;
   }
@@ -42,7 +42,7 @@ export default class Template extends Component {//this class is an example of h
         </p>
         <MDBContainer className="class-editor">
           {
-            //display each class in the backend by mapping the groups to class editor components
+            //display each class in the backend by mapping the Groups to class editor components
             this.state.groups.map(
               (group, index) => {
                 console.log(group._id);

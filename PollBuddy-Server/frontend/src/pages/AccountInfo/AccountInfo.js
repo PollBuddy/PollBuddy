@@ -38,7 +38,7 @@ export default class accountInfo extends Component {
         <MDBContainer className="form-group">
           <input placeholder="shir1ey-is-my-gir1y" className="form-control textBox"/>
         </MDBContainer>
-        <Link to={"/groups"}>
+        <Link to={"/Groups"}>
           <button className="btn button">Submit</button>
         </Link>
       </MDBContainer>

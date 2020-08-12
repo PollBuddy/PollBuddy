@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
-import "./pollViewer.scss";
+import "./PollViewer.scss";
 import { MDBContainer } from "mdbreact";
 
 export default class pollViewer extends Component {

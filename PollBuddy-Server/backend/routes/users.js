@@ -201,7 +201,7 @@ router.get("/:id/", function (req, res, next) {
   });
 });
 
-router.get("/:id/groups", function (req, res, next) {
+router.get("/:id/Groups", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("users").find({"_id": id}, {projection: {_id: 0, Groups: 1}}).map(function (item) {
     return res.send(item.Groups);

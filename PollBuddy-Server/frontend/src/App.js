@@ -2,24 +2,24 @@ import React from "react";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 
-import Group from "./pages/groups/groups";
-import Homepage from "./pages/homepage/homepage";
-import Login from "./pages/loginPage/login";
-import GroupCreation from "./pages/groupCreation/groupCreation";
-import groupPolls from "./pages/groupPolls/groupPolls";
-import pollEditor from "./pages/pollEditor/pollEditor";
-import Notfound from "./pages/notFound/notFound";
+import Group from "./pages/Groups/Groups";
+import Homepage from "./pages/Homepage/Homepage";
+import Login from "./pages/Login/Login";
+import GroupCreation from "./pages/GroupCreation/GroupCreation";
+import groupPolls from "./pages/GroupPolls/GroupPolls";
+import pollEditor from "./pages/PollEditor/PollEditor";
+import Notfound from "./pages/Error404/Error404";
 import Template from "./pages/template/template";
-import FAQ from "./pages/faq/faq";
-import AccountInfo from "./pages/accountInfo/accountInfo";
-import Privacy from "./pages/privacy/privacy";
-import ForgotPassword from "./pages/forgotPassword/forgotPassword";
-import RegisterDefault from "./pages/registerDefault/registerDefault";
-import RegisterWithSchool from "./pages/registerWithSchool/registerWithSchool";
-import RegisterWithPollBuddy from "./pages/registerWithPollBuddy/registerWithPollBuddy";
-import PollViewer from "./pages/pollViewer/pollViewer";
-import ResetPassword from "./pages/resetPassword/resetPassword";
-import PollDataView from "./pages/pollDataView/pollDataView";
+import FAQ from "./pages/FAQ/FAQ";
+import AccountInfo from "./pages/AccountInfo/AccountInfo";
+import Privacy from "./pages/Privacy/Privacy";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import RegisterDefault from "./pages/RegisterDefault/RegisterDefault";
+import RegisterWithSchool from "./pages/RegisterWithSchool/RegisterWithSchool";
+import RegisterWithPollBuddy from "./pages/RegisterWithPollBuddy/RegisterWithPollBuddy";
+import PollViewer from "./pages/PollViewer/PollViewer";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import PollDataView from "./pages/PollResults/PollResults";
 
 import Header from "./components/header/header.js";
 import Footer from "./components/footer/footer.js";
@@ -72,7 +72,7 @@ export default class App extends React.Component {
               <Group updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/groups/polls">
-              <groupPolls updateTitle={this.updateTitle} />
+              <GroupPolls updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/groups/new">
               <GroupCreation updateTitle={this.updateTitle} />
@@ -85,7 +85,7 @@ export default class App extends React.Component {
               <PollViewer updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/pollEditor/:pollID/edit">
-              <pollEditor updateTitle={this.updateTitle} />
+              <PollEditor updateTitle={this.updateTitle} />
             </Route>
 
             <Route exact path="/login">

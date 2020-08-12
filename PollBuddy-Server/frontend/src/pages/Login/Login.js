@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import {Link, Redirect} from "react-router-dom";
 import "mdbreact/dist/css/mdb.css";
-import "./login.scss";
+import "./Login.scss";
 import { MDBContainer } from "mdbreact";
 
 export default class login extends Component {
@@ -16,7 +16,7 @@ export default class login extends Component {
       this.setState({successfulLogin: true}); // Tell it to redirect to the next page if already logged in
     }
     console.log(process.env.REACT_APP_BACKEND_URL);
-    fetch(process.env.REACT_APP_BACKEND_URL + "/groups", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "/Groups", {
       method: "GET",
       headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
     }).then(response => response.json())
@@ -30,7 +30,7 @@ export default class login extends Component {
       });
   }
   handleLogin() {
-    //needs some authentication before and if authentication passes then set local storage and such refer to groupCreation page to see the way to make POST requests to the backend
+    //needs some authentication before and if authentication passes then set local storage and such refer to GroupCreation page to see the way to make POST requests to the backend
     localStorage.setItem("loggedIn", true);//maybe have an admin/teacher var instead of just true
     //TODO MAYBE IN THE FUTURE USE COOKIES TO REMEMBER PAST SESSION
     this.setState({successfulLogin: true}); // Tell it to redirect to the next page if successful
@@ -64,7 +64,7 @@ export default class login extends Component {
           <input type="password" placeholder="••••••••••••••" className="form-control width-320px textBox"/>
         </MDBContainer>
 
-        <Link to={"/groups"}>
+        <Link to={"/Groups"}>
           <button className = "btn button">Submit</button>
         </Link>
 
