@@ -16,8 +16,10 @@ export default class homepage extends Component {
       <MDBContainer fluid className="page">
         <img src={logo} alt="logo" className="homepage_logo img-fluid" />
 
-        <p className="width-45 fontSizeSmall"> An interactive questionnaire platform made by students, for
-                    students, to strengthen lecture material and class attentiveness.</p>
+        <p className="width-45 fontSizeSmall">
+          Poll Buddy is an interactive questionnaire platform that aims to be an enjoyable and easy to use way to
+          collect answers and insights from a group of people.
+        </p>
         <MDBContainer>
           <Link to={"/login"}>
             <button className = "btn button">Login</button>
