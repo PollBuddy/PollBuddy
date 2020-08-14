@@ -42,6 +42,10 @@ p, ul {
   margin: 10px 0;
 }
 
+li:not(:last-child) {
+  margin-bottom: 10px;
+}
+
 .button {
   padding: 12px 20px;
   background-color: var(--base-purple-logo-bg);
