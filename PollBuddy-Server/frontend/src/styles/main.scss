@@ -9,14 +9,9 @@
   --light-gray: #EEEEEE;
   --gray-placeholder-text: #707070;
 
-  // other colors used
-  --box-border-top-left-color: #4f3860;
-  --box-border-bottom-right-color: #493254;
-  --box-shadow-a: #412e4b;
-  --box-shadow-b: #593e65;
-
   --main-font: 'Baloo 2';
   --font-size: 1.2rem;
+  --head-font-size: 1.8rem;
   --font-size-large: 1.4rem;
   --font-size-small: 1rem;
   --line-height: 1.2;
@@ -30,17 +25,20 @@
 
 .page {
   display: flex;
+  width: 100%;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding-bottom: calc(var(--font-size-small) + 70px);
+  min-height: calc(100vh - var(--head-font-size) - var(--font-size-small) - 160px);
 }
 
 .fontSizeLarge {
   font-size: var(--font-size-large);
+  font-weight: bold;
 }
 
-p {
+p, ul {
   margin: 10px 0;
 }
 
@@ -102,10 +100,27 @@ input.textBox::placeholder {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 .box:only-child {
   max-width: 50%;
+}
+
+.box-body-text {
+  align-items: flex-start;
+}
+
+.two-box {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+code {
+  font-family: monospace;
 }
 
 body {

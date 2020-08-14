@@ -38,15 +38,9 @@ export default class classcreation extends Component {//this class will likely n
     }
     render() {
       return (
-        <MDBContainer>
-          <MDBContainer className="page-classcreation">
-            <MDBContainer>
-              <MDBContainer className="page">
-                {/*set new to true so we can use the creation version of the class editor component*/}
-                <ClassEditor new={true}/>
-              </MDBContainer>
-            </MDBContainer>
-          </MDBContainer>
+        <MDBContainer className="page">
+          {/*set new to true so we can use the creation version of the class editor component*/}
+          <ClassEditor new={true}/>
         </MDBContainer>
       );
     }

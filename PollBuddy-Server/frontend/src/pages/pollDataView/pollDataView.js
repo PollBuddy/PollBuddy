@@ -38,7 +38,7 @@ export default class pollDataView extends Component {
     barChartOptions: {
       legend: { display: false },
       responsive: true,
-      maintainAspectRatio: false,
+      maintainAspectRatio: true,
       scales: {
         xAxes: [
           {
@@ -57,7 +57,7 @@ export default class pollDataView extends Component {
           {
             gridLines: {
               display: true,
-              color: "rgba(30,30,30, 1)"
+              color: "rgba(255, 255, 255, 0.5)"
             },
             ticks: {
               beginAtZero: true,
@@ -76,8 +76,8 @@ export default class pollDataView extends Component {
     return (
 
       <MDBContainer fluid className="page">
-        <MDBContainer fluid className="pollDataView-page">
-          <MDBContainer className="pollDataView-questions">
+        <MDBContainer fluid className="pollDataView-page two-box">
+          <MDBContainer className="pollDataView-questions box">
             <p>
               CSCI 1200 - Data Structures
             </p>
@@ -102,7 +102,7 @@ export default class pollDataView extends Component {
             </Link>
 
           </MDBContainer>
-          <MDBContainer fluid className="pollDataView-graph">
+          <MDBContainer fluid className="pollDataView-graph box">
             <p>
               Question 1: Who is the bestest boi?
             </p>

@@ -18,20 +18,22 @@ export default class lessons extends Component {
   render() {
     return (
       <MDBContainer className="page">
-        <p className="fontSizeLarge">
-          Welcome to the lessons page!
-        </p>
+        <MDBContainer className="box">
+          <p className="fontSizeLarge">
+            Welcome to the lessons page!
+          </p>
 
-        <Link to={"/lesson/123"}>
-          <button className="btn button">Lesson 123</button>
-        </Link>
-        <Link to={"/lesson/420"}>
-          <button className="btn button">Lesson 420</button>
-        </Link>
-        <Link to={"/lesson/666"}>
-          <button className="btn button">Lesson 666</button>
-        </Link>
+          <Link to={"/lesson/123"}>
+            <button className="btn button">Lesson 123</button>
+          </Link>
+          <Link to={"/lesson/420"}>
+            <button className="btn button">Lesson 420</button>
+          </Link>
+          <Link to={"/lesson/666"}>
+            <button className="btn button">Lesson 666</button>
+          </Link>
 
+        </MDBContainer>
       </MDBContainer>
     );
   }

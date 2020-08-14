@@ -37,7 +37,7 @@ export default class login extends Component {
   }
 
   componentDidMount(){
-    this.props.updateTitle("Log in");
+    this.props.updateTitle("Login");
   }
   render() {
     this.handleLogin = this.handleLogin.bind(this); // This is needed so stuff like this.setState works

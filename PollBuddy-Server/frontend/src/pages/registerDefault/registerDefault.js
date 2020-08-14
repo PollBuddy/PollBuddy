@@ -13,7 +13,7 @@ export default class registerDefault extends Component {
       <MDBContainer fluid className="page">
         <MDBContainer fluid className="box">
           <p className="fontSizeLarge">
-            <b>Register for Poll Buddy</b>
+            Register for Poll Buddy
           </p>
           <p>
             Click on one of the following buttons to register.

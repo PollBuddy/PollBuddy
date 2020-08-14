@@ -19,7 +19,7 @@ export default class registerWithSchool extends Component {
       <MDBContainer fluid className="page">
         <MDBContainer fluid className="box">
           <p className="fontSizeLarge">
-            <b>Register with School</b>
+            Register with School
           </p>
           <p>
             To create an account, enter your school name or login using RPI's CAS.

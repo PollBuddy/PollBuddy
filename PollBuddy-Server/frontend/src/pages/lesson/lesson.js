@@ -32,44 +32,45 @@ export default class lesson extends Component {
     return (
       <MDBContainer>
         <MDBContainer className="page">
-          <p>
-                        Hello lesson {this.props.lessonId}
-          </p>
+          <MDBContainer className="box">
+            <p>
+              Hello lesson {this.props.lessonId}
+            </p>
 
+            {this.state.askedQuestions.map((value, index) => {
+              return (
+                <Question questionObj={value} key={index} number={index} />
+              );
+            })}
 
-          {this.state.askedQuestions.map((value, index) => {
-            return (
-              <Question questionObj={value} key={index} number={index} />
-            );
-          })}
+            <MDBDropdown>
+              <MDBDropdownToggle caret className="button">
+                {this.state.questions[this.state.questionDispatcherIndex].title}
+              </MDBDropdownToggle>
+              <MDBDropdownMenu basic>
+                {this.state.questions.map((value, index) => {
+                  let tag;
+                  if(index === this.state.questionDispatcherIndex) {
+                    tag = <MDBDropdownItem key={index} active href="#">
+                      {index+1}: {value.title}
+                    </MDBDropdownItem>;
+                  } else {
+                    tag = <MDBDropdownItem
+                      onClick={() => {
+                        this.setState({questionDispatcherIndex: index});
+                      } }
+                      key={index}
+                      href="#">
+                      {index+1}: {value.title}
+                    </MDBDropdownItem>;
+                  }
+                  return tag;
+                })}
+              </MDBDropdownMenu>
+            </MDBDropdown>
 
-          <MDBDropdown>
-            <MDBDropdownToggle caret className="button">
-              {this.state.questions[this.state.questionDispatcherIndex].title}
-            </MDBDropdownToggle>
-            <MDBDropdownMenu basic>
-              {this.state.questions.map((value, index) => {
-                let tag;
-                if(index === this.state.questionDispatcherIndex) {
-                  tag = <MDBDropdownItem key={index} active href="#">
-                    {index+1}: {value.title}
-                  </MDBDropdownItem>;
-                } else {
-                  tag = <MDBDropdownItem
-                    onClick={() => {
-                      this.setState({questionDispatcherIndex: index});
-                    } }
-                    key={index}
-                    href="#">
-                    {index+1}: {value.title}
-                  </MDBDropdownItem>;
-                }
-                return tag;
-              })}
-            </MDBDropdownMenu>
-          </MDBDropdown>
-
-          <button className="btn button" onClick={this.askQuestion}>Ask!</button>
+            <button className="btn button" onClick={this.askQuestion}>Ask!</button>
+          </MDBContainer>
         </MDBContainer>
       </MDBContainer>
     );

@@ -15,7 +15,7 @@ export default class homepage extends Component {
     return (
       <MDBContainer fluid className="page">
         <img src={logo} alt="logo" className="homepage_logo img-fluid" />
-        <MDBContainer className="home_boxes">
+        <MDBContainer className="home_boxes two-box">
           <MDBContainer className="box">
             <p>An interactive questionnaire platform made by students, for students, to strengthen lecture material and class attentiveness.</p>
             <MDBContainer>

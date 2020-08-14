@@ -2,14 +2,11 @@
   height: 200px;
 }
 .home_boxes {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-}
-.home_boxes .box {
-  max-width: 320px;
   margin: 50px 0 0;
 }
-.home_boxes .box:not(:first-child) {
-  margin-left: 50px;
+.home_boxes .box {
+  width: calc((70% - 50px) / 2);
+}
+.home_boxes .box:first-child {
+  margin-right: 50px;
 }

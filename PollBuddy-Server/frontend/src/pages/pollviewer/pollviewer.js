@@ -16,7 +16,7 @@ export default class pollviewer extends Component {
               Question 3 of 28:
             </p>
             <p className="fontSizeLarge">
-              <b>Why does the tooth fairy collect teeth?</b>
+              Why does the tooth fairy collect teeth?
             </p>
 
             <ul>

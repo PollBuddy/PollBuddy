@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
+import { MDBContainer } from "mdbreact";
 
 export default class notfound extends Component {
 
@@ -8,9 +9,14 @@ export default class notfound extends Component {
   }
   render() {
     return (
-      <p className="fontSizeLarge">
-        <b>Error: page not found.</b>
-      </p>
+      <MDBContainer className="page">
+        <MDBContainer className="box">
+          <p className="fontSizeLarge">
+            Error: page not found.
+          </p>
+        </MDBContainer>
+      </MDBContainer>
+
     );
   }
 }

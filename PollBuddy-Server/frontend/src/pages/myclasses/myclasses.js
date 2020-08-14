@@ -21,34 +21,34 @@ export default class Myclasses extends Component {
     return (
 
       <MDBContainer className="page">
-        <p className="fontSizeLarge">
-					As Instructor:
-        </p>
-        <Link to={"/lessons"}>
-          <button className="btn button">CSCI 1200 - Data Structures</button>
-        </Link>
-        <Link to={"/lessons"}>
-          <button className="btn button">CSCI 2200 - Foundations of Computer Science</button>
-        </Link>
+        <MDBContainer className="box">
+          <p className="fontSizeLarge">
+            As Instructor:
+          </p>
+          <Link to={"/lessons"}>
+            <button className="btn button">CSCI 1200 - Data Structures</button>
+          </Link>
+          <Link to={"/lessons"}>
+            <button className="btn button">CSCI 2200 - Foundations of Computer Science</button>
+          </Link>
 
-        <p className="fontSizeLarge">
-					As Student:
-        </p>
-        <Link to={"/lessons"}>
-          <button className="btn button">CSCI 2300 - Intro to Algorithms</button>
-        </Link>
-        <Link to={"/lessons"}>
-          <button className="btn button">CSCI 2500 - Computer Organization</button>
-        </Link>
-        <Link to={"/lessons"}>
-          <button className="btn button">CSCI 2960 - RCOS</button>
-        </Link>
+          <p className="fontSizeLarge">
+            As Student:
+          </p>
+          <Link to={"/lessons"}>
+            <button className="btn button">CSCI 2300 - Intro to Algorithms</button>
+          </Link>
+          <Link to={"/lessons"}>
+            <button className="btn button">CSCI 2500 - Computer Organization</button>
+          </Link>
+          <Link to={"/lessons"}>
+            <button className="btn button">CSCI 2960 - RCOS</button>
+          </Link>
 
-        <Link to={"/login"}>
-          <button className="btn button">logout</button>
-        </Link>
-
-
+          <Link to={"/login"}>
+            <button className="btn button">logout</button>
+          </Link>
+        </MDBContainer>
       </MDBContainer>
     );
   }

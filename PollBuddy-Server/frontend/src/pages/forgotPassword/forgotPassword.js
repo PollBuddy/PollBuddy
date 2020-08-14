@@ -14,7 +14,7 @@ export default class pollCode extends Component {
       <MDBContainer fluid className="page">
         <MDBContainer fluid className="box">
           <p className="fontSizeLarge">
-            <b>Forgot Password?</b>
+            Forgot Password?
           </p>
           <p>
             Enter your email and we will send you a reset.
