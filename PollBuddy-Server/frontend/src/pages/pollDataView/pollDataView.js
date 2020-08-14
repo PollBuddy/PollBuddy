@@ -76,7 +76,7 @@ export default class pollDataView extends Component {
     return (
 
       <MDBContainer fluid className="page">
-        <MDBContainer fluid className="pollDataView-page two-box">
+        <MDBContainer fluid className="two-box">
           <MDBContainer className="pollDataView-questions box">
             <p>
               CSCI 1200 - Data Structures
