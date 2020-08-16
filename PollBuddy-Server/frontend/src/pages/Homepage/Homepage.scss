@@ -1,0 +1,12 @@
+.homepage_logo {
+  height: 200px;
+}
+.home_boxes {
+  margin: 50px 0 0;
+}
+.home_boxes .box {
+  width: calc((70% - 50px) / 2);
+}
+.home_boxes .box:first-child {
+  margin-right: 50px;
+}

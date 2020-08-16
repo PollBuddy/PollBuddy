@@ -1,0 +1,31 @@
+.pollview_answers ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pollview_answers li {
+  margin: 10px 0;
+}
+
+.pollview_answers a {
+  color: var(--white-most-text);
+}
+
+.pollview_answers a:hover {
+  color: var(--light-purple-logo-text);
+  text-decoration: none;
+}
+
+.pollviewer_bubble {
+  text-align: center;
+  vertical-align: middle;
+  border-radius: 999px;
+  width: var(--font-size-large);
+  height: var(--font-size-large);
+  font-size: var(--font-size-large);
+  background: var(--base-purple-logo-bg);
+  margin-right: 15px;
+  display: inline-block;
+  padding: 5px;
+}

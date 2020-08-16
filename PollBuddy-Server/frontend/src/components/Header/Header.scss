@@ -1,0 +1,34 @@
+.header_bar {
+  padding: 20px;
+  font: var(--head-font-size) / 1 'Fredoka One';
+  text-align: center;
+  background: var(--darkest-purple-header-color);
+  width: 100%;
+  box-sizing: border-box;
+  text-transform: capitalize;
+  margin: 0 0 50px;
+}
+.header_bar_logo {
+  position: absolute;
+  left: 0;
+  height: calc(20px + var(--head-font-size));
+  width: auto;
+  margin: -10px 0 0 40px;
+}
+.header_bar_btn {
+  position: absolute;
+  right: 0;
+  font: bold var(--font-size-small) / 1 var(--main-font);
+  padding: 12px 20px;
+  background: var(--base-purple-logo-bg);
+  margin: calc((var(--head-font-size) - var(--font-size-small) - 24px) / 2) 40px 0 0;
+  text-transform: uppercase;
+  border-radius: 999px;
+}
+.header_bar_btn {
+  color: var(--light-purple-logo-text);
+}
+.header_bar_btn:hover {
+  color: var(--white-most-text);
+  text-decoration: none;
+}

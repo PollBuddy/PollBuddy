@@ -2,27 +2,30 @@ import React from "react";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 
-import Myclasses from "./pages/myclasses/myclasses";
-import Homepage from "./pages/homepage/homepage";
-import Login from "./pages/loginPage/login";
-import Classcreation from "./pages/classcreation/classcreation";
-import Lessons from "./pages/lessons/lessons";
-import Lesson from "./pages/lesson/lesson";
-import Notfound from "./pages/notfound/notfound";
-import Template from "./pages/template/template";
-import FAQ from "./pages/faq/faq";
-import AccountInfo from "./pages/accountinfo/accountinfo";
-import Privacy from "./pages/privacy/privacy";
-import ForgotPassword from "./pages/forgotPassword/forgotPassword";
-import RegisterDefault from "./pages/registerDefault/registerDefault";
-import RegisterWithSchool from "./pages/registerWithSchool/registerWithSchool";
-import RegisterWithPollBuddy from "./pages/registerWithPollBuddy/registerWithPollBuddy";
-import PollViewer from "./pages/pollviewer/pollviewer";
-import ResetPassword from "./pages/resetPassword/resetPassword";
-import PollDataView from "./pages/pollDataView/pollDataView";
+import Group from "./pages/Groups/Groups";
+import Homepage from "./pages/Homepage/Homepage";
+import Login from "./pages/Login/Login";
+import GroupCreation from "./pages/GroupCreation/GroupCreation";
+import GroupEditor from "./pages/GroupEditor/GroupEditor";
+import GroupPolls from "./pages/GroupPolls/GroupPolls";
+import PollEditor from "./pages/PollEditor/PollEditor";
+import Notfound from "./pages/Error404/Error404";
+import Template from "./pages/Template/Template";
+import FAQ from "./pages/FAQ/FAQ";
+import AccountInfo from "./pages/AccountInfo/AccountInfo";
+import Privacy from "./pages/Privacy/Privacy";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import RegisterDefault from "./pages/RegisterDefault/RegisterDefault";
+import RegisterWithSchool from "./pages/RegisterWithSchool/RegisterWithSchool";
+import RegisterWithPollBuddy from "./pages/RegisterWithPollBuddy/RegisterWithPollBuddy";
+import PollViewer from "./pages/PollViewer/PollViewer";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import PollDataView from "./pages/PollResults/PollResults";
+import Contact from "./pages/Contact/Contact";
+import About from "./pages/About/About";
 
-import Header from "./components/header/header.js";
-import Footer from "./components/footer/footer.js";
+import Header from "./components/Header/Header.js";
+import Footer from "./components/Footer/Footer.js";
 
 import "./styles/main.scss";
 
@@ -60,53 +63,69 @@ export default class App extends React.Component {
             <Route exact path="/">
               <Homepage updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/myclasses">
-              <Myclasses updateTitle={this.updateTitle} />
+
+            <Route exact path="/about">
+              <About updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/lessons">
-              <Lessons updateTitle={this.updateTitle} />
+            <Route exact path="/contact">
+              <Contact updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/lesson/:lessonId">
-              <Lesson updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/login">
-              <Login updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/classcreation">
-              <Classcreation updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/template">
-              <Template updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/accountinfo">
-              <AccountInfo updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/forgotPassword">
-              <ForgotPassword updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/registerDefault">
-              <RegisterDefault updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/registerWithSchool">
-              <RegisterWithSchool updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/registerWithPollBuddy">
-              <RegisterWithPollBuddy updateTitle={this.updateTitle} />
+            <Route exact path="/faq">
+              <FAQ updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/privacy">
               <Privacy updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/resetPassword">
-              <ResetPassword updateTitle={this.updateTitle} />
+
+            <Route exact path="/groups">
+              <Group updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/pollDataView">
-              <PollDataView updateTitle={this.updateTitle} />
+            <Route exact path="/groups/new">
+              <GroupCreation updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/pollviewer">
+            <Route exact path="/groups/:groupID/polls">
+              <GroupPolls updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/groups/:groupID/edit">
+              <GroupEditor updateTitle={this.updateTitle} />
+            </Route>
+
+            <Route exact path="/polls/:pollID/view">
               <PollViewer updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/faq">
-              <FAQ updateTitle={this.updateTitle} />
+            <Route exact path="/polls/:pollID/edit">
+              <PollEditor updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/polls/:pollID/results">
+              <PollDataView updateTitle={this.updateTitle} />
+            </Route>
+
+            <Route exact path="/login">
+              <Login updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/login/forgot">
+              <ForgotPassword updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/login/reset">
+              <ResetPassword updateTitle={this.updateTitle} />
+            </Route>
+
+            <Route exact path="/register">
+              <RegisterDefault updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/register/school">
+              <RegisterWithSchool updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/register/pollbuddy">
+              <RegisterWithPollBuddy updateTitle={this.updateTitle} />
+            </Route>
+
+            <Route exact path="/account">
+              <AccountInfo updateTitle={this.updateTitle} />
+            </Route>
+
+            <Route exact path="/template">
+              <Template updateTitle={this.updateTitle} />
             </Route>
 
             {/* Default route/error page */}
