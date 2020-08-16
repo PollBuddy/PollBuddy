@@ -21,7 +21,7 @@ import RegisterWithPollBuddy from "./pages/RegisterWithPollBuddy/RegisterWithPol
 import PollViewer from "./pages/PollViewer/PollViewer";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import PollDataView from "./pages/PollResults/PollResults";
-import ContactUs from "./pages/contactUs/contactUs";
+import Contact from "./pages/Contact/Contact";
 
 import Header from "./components/Header/Header.js";
 import Footer from "./components/Footer/Footer.js";
@@ -120,8 +120,8 @@ export default class App extends React.Component {
               <Template updateTitle={this.updateTitle} />
             </Route>
             
-            <Route exact path="/contactUs">
-              <ContactUs updateTitle={this.updateTitle} />
+            <Route exact path="/contact">
+              <Contact updateTitle={this.updateTitle} />
             </Route>
 
             {/* Default route/error page */}
