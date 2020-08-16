@@ -25,11 +25,11 @@ export default class GroupEditor extends Component {
     //if the component is in group creation mode, we don't need to read any data from the backend
     if(!this.props.new){
       //once the component is created, fetch the data from the given group from the backend
-      fetch(process.env.REACT_APP_BACKEND_URL + "/Groups/").then(res => {//this is how one calls a get request (backend specifically made a method for finding all Groups)
+      fetch(process.env.REACT_APP_BACKEND_URL + "/groups/").then(res => {//this is how one calls a get request (backend specifically made a method for finding all groups)
         return res.json();
       }).then(myJson => {
         //get the info for the specific id in props from the json
-        fetch(process.env.REACT_APP_BACKEND_URL + "/Groups/" + this.props.id + "/").then(res => {//this is how one calls a get request (backend specifically made one for finding a specific group)
+        fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.id + "/").then(res => {//this is how one calls a get request (backend specifically made one for finding a specific group)
           return res.json();
         }).then(myJson => {
           //this workaround should be refactored later
@@ -71,10 +71,10 @@ export default class GroupEditor extends Component {
     //get the correct api url based on whether we're in create mode or not
     getAPIURL(){
       return this.props.new ?
-      //api/Groups/new allows us to create a new entry
-        process.env.REACT_APP_BACKEND_URL + "/Groups/new" :
-      //api/Groups/groupID/edit allows us to edit an entry
-        process.env.REACT_APP_BACKEND_URL + "/Groups/" + this.props.id + "/edit";
+      //api/groups/new allows us to create a new entry
+        process.env.REACT_APP_BACKEND_URL + "/groups/new" :
+      //api/groups/groupID/edit allows us to edit an entry
+        process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.id + "/edit";
     }
 
     //get the correct api json based on whether we're in create mode or not
@@ -106,13 +106,13 @@ export default class GroupEditor extends Component {
         return (
           <MDBContainer fluid className="box">
             <p className="bold fontSizeLarge">
-                        Group Name:
+              <label htmlFor="groupName">Group Name:</label>
             </p>
 
             <MDBContainer className="form-group">
               <input
                 name="name"
-                id="className"
+                id="groupName"
                 className="form-control textBox"
                 value={this.props.new ? null: this.state.name}
                 onInput={this.onInput} />
