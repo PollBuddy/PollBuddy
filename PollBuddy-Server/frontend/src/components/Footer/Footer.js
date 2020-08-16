@@ -21,8 +21,11 @@ export default class Footer extends Component {
             <a href = "https://info.rpi.edu/statement-of-accessibility" target = "_blank" rel = "noopener noreferrer">
               Accessibility
             </a>
-            <a href = "mailto:contactus@pollbuddy.app">
+            <a href = "/contactUs">
               Contact
+            </a>
+            <a href = "/faq">
+              FAQ
             </a>
             <a href = "/privacy">
               Privacy
