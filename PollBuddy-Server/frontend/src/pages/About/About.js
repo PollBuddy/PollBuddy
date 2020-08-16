@@ -2,9 +2,9 @@ import React, {Component} from "react";
 import "mdbreact/dist/css/mdb.css";
 import {MDBContainer} from "mdbreact";
 import ReactMarkdown from "react-markdown";
-import aboutMdPath from "./about.md";
+import aboutMdPath from "./About.md";
 
-export default class about extends Component {
+export default class About extends Component {
 
   constructor(props) {
     super(props);

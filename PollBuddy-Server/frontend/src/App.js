@@ -2,7 +2,27 @@ import React from "react";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 
-import About from "./pages/about/about";
+import Group from "./pages/Groups/Groups";
+import Homepage from "./pages/Homepage/Homepage";
+import Login from "./pages/Login/Login";
+import GroupCreation from "./pages/GroupCreation/GroupCreation";
+import GroupEditor from "./pages/GroupEditor/GroupEditor";
+import GroupPolls from "./pages/GroupPolls/GroupPolls";
+import PollEditor from "./pages/PollEditor/PollEditor";
+import Notfound from "./pages/Error404/Error404";
+import Template from "./pages/Template/Template";
+import FAQ from "./pages/FAQ/FAQ";
+import AccountInfo from "./pages/AccountInfo/AccountInfo";
+import Privacy from "./pages/Privacy/Privacy";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import RegisterDefault from "./pages/RegisterDefault/RegisterDefault";
+import RegisterWithSchool from "./pages/RegisterWithSchool/RegisterWithSchool";
+import RegisterWithPollBuddy from "./pages/RegisterWithPollBuddy/RegisterWithPollBuddy";
+import PollViewer from "./pages/PollViewer/PollViewer";
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import PollDataView from "./pages/PollResults/PollResults";
+import Contact from "./pages/Contact/Contact";
+import About from "./pages/About/About";
 
 import Header from "./components/Header/Header.js";
 import Footer from "./components/Footer/Footer.js";
@@ -43,11 +63,18 @@ export default class App extends React.Component {
             <Route exact path="/">
               <Homepage updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/privacy">
-              <Privacy updateTitle={this.updateTitle} />
+
+            <Route exact path="/about">
+              <About updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/contact">
+              <Contact updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/faq">
               <FAQ updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/privacy">
+              <Privacy updateTitle={this.updateTitle} />
             </Route>
 
             <Route exact path="/groups">
@@ -99,13 +126,6 @@ export default class App extends React.Component {
 
             <Route exact path="/template">
               <Template updateTitle={this.updateTitle} />
-            </Route>
-            
-            <Route exact path="/contact">
-              <Contact updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/about">
-              <About updateTitle={this.updateTitle} />
             </Route>
 
             {/* Default route/error page */}
