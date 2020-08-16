@@ -15,7 +15,7 @@ export default class Footer extends Component {
             &copy; 2020 Poll Buddy
           </MDBContainer>
           <MDBContainer className = "footer_foot_links">
-            <a href = "/">
+            <a href = "/about">
               About
             </a>
             <a href = "https://info.rpi.edu/statement-of-accessibility" target = "_blank" rel = "noopener noreferrer">
