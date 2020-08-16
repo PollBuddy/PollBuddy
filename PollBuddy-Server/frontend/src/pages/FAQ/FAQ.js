@@ -16,15 +16,17 @@ export default class FAQ extends Component {
       this.setState({questions: text});
     });
   }
-  
+
   componentDidMount() {
     this.props.updateTitle("Frequently Asked Questions");
   }
 
   render() {
     return (
-      <MDBContainer fluid className="page" style={{ color: "#FFF", fontFamily: "monospace" }}>
-        <ReactMarkdown className="width-90 fontSizeSmall" source={this.state.questions}/>
+      <MDBContainer fluid className="page">
+        <MDBContainer className="box box-body-text">
+          <ReactMarkdown source={this.state.questions}/>
+        </MDBContainer>
       </MDBContainer>
     );
   }

@@ -18,6 +18,9 @@ export default class Footer extends Component {
             <a href = "/about">
               About
             </a>
+            <a href = "/faq">
+              FAQ
+            </a>
             <a href = "https://info.rpi.edu/statement-of-accessibility" target = "_blank" rel = "noopener noreferrer">
               Accessibility
             </a>

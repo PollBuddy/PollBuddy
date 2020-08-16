@@ -18,17 +18,17 @@ export default class RegisterWithSchool extends Component {
     return (
       <MDBContainer fluid className="page">
         <MDBContainer fluid className="box">
-          <p className="bold fontSizeLarge">
+          <p className="fontSizeLarge">
             Register with School
           </p>
-          <p className="width-90 fontSizeSmall">
+          <p>
             To create an account, enter your school name or login using RPI's CAS.
           </p>
-          { /* TODO: Add label here */ }
-          <p className="width-90 fontSizeSmall" id="schoolNameText">
+          <p>
+            { /* TODO: Add label here */ }
             School Name:
           </p>
-          <MDBContainer className="form-group" style={{ width: "100%" }}>
+          <MDBContainer className="form-group">
             <Autocomplete
               items={[
                 { key: 0, label: "Rensselaer Polytechnic Institute" },
@@ -52,26 +52,20 @@ export default class RegisterWithSchool extends Component {
                 return (lowA < lowB ? -1 : 1);
               }}
               shouldItemRender={(item, value) => item.label.toLowerCase().indexOf(value.toLowerCase()) >= 0}
-              renderItem={(item, isHighlighted) =>
+              renderItem={(item) =>
                 <div
                   key={item.key}
-                  className="fontSizeSmall"
-                  style={{
-                    background: isHighlighted ? "#DFCFEA" : "#FFF",
-                    fontFamily: "monospace",
-                    textAlign: "center"
-                  }}
+                  className="auto_comp"
                 >
                   {item.label}
                 </div>
               }
               inputProps={{
                 className: "form-control textBox",
-                style: { width: "100%" },
                 placeholder: "Enter school name",
                 "aria-labelledby": "schoolNameText"
               }}
-              wrapperStyle={{ display: "inline-block", width: "100%"}}
+              wrapperStyle={{ display: "block" }}
               value={this.state.value}
               onChange={e => this.setState({ value: e.target.value })}
               onSelect={value => this.setState({ value })}

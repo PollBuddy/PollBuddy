@@ -13,16 +13,14 @@ export default class ForgotPassword extends Component {
     return (
       <MDBContainer fluid className="page">
         <MDBContainer fluid className="box">
-          <p className="bold fontSizeLarge">
+          <p className="fontSizeLarge">
             Forgot Password?
           </p>
-          <p className="width-90 fontSizeSmall">
+          <p>
             Enter your email and we will send you a reset.
           </p>
-          <p className="width-90 fontSizeSmall">
-            <label htmlFor="emailText">Email:</label>
-          </p>
           <MDBContainer className="form-group">
+            <label htmlFor="emailText">Email:</label>
             <input placeholder="Enter email" className="form-control textBox" id="emailText"/>
           </MDBContainer>
           <Link to={"/login/reset"}>

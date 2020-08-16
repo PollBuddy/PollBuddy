@@ -22,13 +22,13 @@ export default class Privacy extends Component {
   }
 
   render() {
-    
+
     return (
       <MDBContainer className="page">
-        <div className="fontSizeSmall width-90">
+        <MDBContainer className="box box-body-text">
           {/* Render page from markdown file using react-markdown */}
           <ReactMarkdown source={this.state.terms} />
-        </div>
+        </MDBContainer>
       </MDBContainer>
     );
   }

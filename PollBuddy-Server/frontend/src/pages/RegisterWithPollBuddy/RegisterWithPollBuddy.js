@@ -11,29 +11,19 @@ export default class RegisterWithPollBuddy extends Component {
     return (
       <MDBContainer fluid className="page">
         <MDBContainer fluid className="box">
-          <p className="bold fontSizeLarge">
+          <p className="fontSizeLarge">
             Register with Poll Buddy
           </p>
-          <p className="width-90 fontSizeSmall">
+          <p>
             To create an account, fill in the text boxes, then press submit.
           </p>
-          <p className="width-90 fontSizeSmall">
+          <MDBContainer className="form-group">
             <label htmlFor="nameText">Name:</label>
-          </p>
-          <MDBContainer className="form-group">
             <input placeholder="SIS Man" className="form-control textBox" id="nameText"/>
-          </MDBContainer>
-          <p className="width-90 fontSizeSmall">
             <label htmlFor="emailText">Email:</label>
-          </p>
-          <MDBContainer className="form-group">
             <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText"/>
-          </MDBContainer>
-          <p className="width-90 fontSizeSmall">
             <label htmlFor="passwordText">Password:</label>
-          </p>
-          <MDBContainer className="form-group">
-            <input placeholder="******************" className="form-control textBox" id="passwordText"/>
+            <input placeholder="●●●●●●●●●●●●" className="form-control textBox" id="passwordText"/>
           </MDBContainer>
 
           <form>

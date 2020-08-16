@@ -6,7 +6,6 @@ etc. etc.
 
 (We will definitely need to rewrite the above text)
 
-
 Here's some information about privacy policies. Pretty much, we need to talk about what info we will
 take,
 how we will use it, how we will store/protect it, cookies, etc. At one point in the near future, we

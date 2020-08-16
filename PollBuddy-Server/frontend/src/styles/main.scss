@@ -9,13 +9,13 @@
   --light-gray: #EEEEEE;
   --gray-placeholder-text: #707070;
 
-  // other colors used
-  --box-border-top-left-color: #4f3860;
-  --box-border-bottom-right-color: #493254;
-  --box-shadow-a: #412e4b;
-  --box-shadow-b: #593e65;
-
-  --main-font: monospace;
+  --main-font: 'Baloo 2';
+  --font-size: 1.2rem;
+  --head-font-size: 1.8rem;
+  --font-size-large: 1.4rem;
+  --font-size-small: 1rem;
+  --line-height: 1.2;
+  --default-transition: all 0.2s ease-in-out;
 }
 
 #wrapper {
@@ -23,41 +23,23 @@
   position: relative;
 }
 
-.page{
+.page {
   display: flex;
+  width: 100%;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-bottom: 85px;
+  padding-bottom: calc(var(--font-size-small) + 70px);
+  min-height: calc(100vh - var(--head-font-size) - var(--font-size-small) - 160px);
 }
 
-// singular attributes
-.fontSizeSmall{
-  font-size: calc(20px + 0.3vmin);
-}
-.fontSizeLarge{
-  font-size: calc(25px + 0.3vmin);
-}
-.width-45{
-  width: 45%;
-}
-.width-90{
-  width: 90%;
-}
-.width-320px{
-    width: 320px;
-}
-.bold{
+.fontSizeLarge {
+  font-size: var(--font-size-large);
   font-weight: bold;
 }
 
-p{
-  color: var(--white-most-text);
-  font-family: var(--main-font);
-  text-align: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  line-height: 26px;
+p, ul {
+  margin: 10px 0;
 }
 
 h1 {
@@ -79,18 +61,24 @@ li {
   list-style-type: circle;
 }
 
+li:not(:last-child) {
+  margin-bottom: 10px;
+}
+
 .button {
-  border-radius: 30px;
+  padding: 12px 20px;
   background-color: var(--base-purple-logo-bg);
   color: var(--light-purple-logo-text);
-  font-family: var(--main-font);
-  font-weight: 700;
-  font-size: calc(13px + 0.3vmin);
-  margin-top: 10px;
-  margin-bottom: 10px;
-  height: 45px;
-  transition: all 0.2s linear;
+  font-size: var(--font-size-small);
   box-shadow: none;
+  text-transform: uppercase;
+  margin: 10px 5px;
+}
+
+.button, .textBox {
+  border-radius: 999px;
+  font-weight: bold;
+  transition: var(--default-transition);
 }
 
 .button:hover {
@@ -98,49 +86,102 @@ li {
   box-shadow: none;
 }
 
-.textBox {
-  height: 35px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  background-color: var(--white-most-text);
-  position: relative;
-  font-weight: 700;
-  color: black;
-  border-color: transparent;
-  outline-color: transparent;
-  outline-width: 0;
-  text-align: center;
-  justify-content: center;
-  border-radius: 30px;
-  font-family: var(--main-font);
-  font-size: calc(21px + 0.3vmin);
-  top: 0;
+.form-group, .textBox {
+  width: 100%;
 }
-::placeholder{
-  color: var(--gray-placeholder-text);
-  font-size: calc(20px + 0.3vmin);
+
+.textBox {
+  padding: 7px 15px;
+  background-color: var(--white-most-text);
+  color: var(--darkest-purple-header-color);
+  font-size: var(--font-size);
+  border: 5px solid transparent;
+  outline: none;
   text-align: center;
-  justify-content: center;
-  font-family: var(--main-font);
-  top: 2px;
+  margin: 10px 0;
+  box-sizing: border-box;
+}
+
+input.textBox:focus {
+  border-color: var(--base-purple-logo-bg);
+}
+
+input.textBox:focus::placeholder {
+  opacity: 0;
+}
+
+input.textBox::placeholder {
+  color: var(--gray-placeholder-text);
+  transition: var(--default-transition);
 }
 
 .box {
-  padding: 30px 30px 30px 30px;
-  margin: 100px auto;
-  width: 50%;
-  height: 100%;
-  border-radius: 35px;
-  border-style: solid;
-  border-width: 4px;
-  border-top-color: var(--box-border-top-left-color);
-  border-left-color: var(--box-border-top-left-color);
-  border-right-color: var(--box-border-bottom-right-color);
-  border-bottom-color: var(--box-border-bottom-right-color);
-  box-shadow: 41px 41px 82px var(box-shadow-a),
-            -41px -41px 82px var(box-shadow-b);
+  padding: 30px 50px;
+  border-radius: 40px;
+  background: var(--darkest-purple-header-color);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
+}
+
+.box:only-child {
+  max-width: 50%;
+}
+
+.box-body-text {
+  align-items: flex-start;
+}
+
+.two-box {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+}
+
+code {
+  font-family: monospace;
+}
+
+body {
+  margin: 0;
+  background: var(--dark-purple-main-background);
+  color: var(--white-most-text);
+  font-size: var(--font-size);
+}
+
+body, .button, .textBox {
+  line-height: var(--line-height);
+  font-family: var(--main-font);
+}
+
+label {
+  display: block;
+  margin: 10px 20px;
+  font-weight: bold;
+}
+
+.auto_comp {
+  color: var(--darkest-purple-header-color);
+  background: white;
+  text-align: center;
+  cursor: default;
+  padding: 1px 0;
+}
+
+.auto_comp:hover {
+  background: var(--light-purple-logo-text);
+}
+
+a {
+  color: var(--light-purple-logo-text);
+  transition: var(--default-transition);
+}
+
+a:hover {
+  color: var(--white-most-text);
+  text-decoration: underline;
 }

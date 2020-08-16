@@ -12,10 +12,10 @@ export default class RegisterDefault extends Component {
     return (
       <MDBContainer fluid className="page">
         <MDBContainer fluid className="box">
-          <p className="bold fontSizeLarge">
+          <p className="fontSizeLarge">
             Register for Poll Buddy
           </p>
-          <p className="width-90 fontSizeSmall">
+          <p>
             Click on one of the following buttons to register.
           </p>
           <Link to={"/register/school"}>

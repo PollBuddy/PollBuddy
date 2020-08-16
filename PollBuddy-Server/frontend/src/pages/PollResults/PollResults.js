@@ -38,7 +38,7 @@ export default class PollResults extends Component {
     barChartOptions: {
       legend: { display: false },
       responsive: true,
-      maintainAspectRatio: false,
+      maintainAspectRatio: true,
       scales: {
         xAxes: [
           {
@@ -57,7 +57,7 @@ export default class PollResults extends Component {
           {
             gridLines: {
               display: true,
-              color: "rgba(30,30,30, 1)"
+              color: "rgba(255, 255, 255, 0.5)"
             },
             ticks: {
               beginAtZero: true,
@@ -76,12 +76,12 @@ export default class PollResults extends Component {
     return (
 
       <MDBContainer fluid className="page">
-        <MDBContainer fluid className="pollDataView-page">
-          <MDBContainer className="pollDataView-questions">
-            <p className="width-90 fontSizeSmall">
+        <MDBContainer fluid className="two-box">
+          <MDBContainer className="pollDataView-questions box">
+            <p>
               CSCI 1200 - Data Structures
             </p>
-            <p className="width-90 fontSizeSmall">
+            <p>
               Lesson #10
             </p>
 
@@ -102,14 +102,14 @@ export default class PollResults extends Component {
             </Link>
 
           </MDBContainer>
-          <MDBContainer fluid className="pollDataView-graph">
-            <p className="width-90 fontSizeSmall">
+          <MDBContainer fluid className="pollDataView-graph box">
+            <p>
               Question 1: Who is the bestest boi?
             </p>
-            <p className="width-90 fontSizeSmall">
+            <p>
               Correct Answer: Pupper
             </p>
-            <p className="width-90 fontSizeSmall">
+            <p>
               Total Number of Answers: 296
             </p>
 
