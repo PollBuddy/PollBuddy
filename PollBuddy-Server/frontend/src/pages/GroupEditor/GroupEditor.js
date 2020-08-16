@@ -105,11 +105,8 @@ export default class GroupEditor extends Component {
       }else{
         return (
           <MDBContainer fluid className="box">
-            <p className="bold fontSizeLarge">
-              <label htmlFor="groupName">Group Name:</label>
-            </p>
-
             <MDBContainer className="form-group">
+              <label htmlFor="groupName">Group Name:</label>
               <input
                 name="name"
                 id="groupName"

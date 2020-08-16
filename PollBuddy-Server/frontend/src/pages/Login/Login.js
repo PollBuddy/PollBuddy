@@ -49,31 +49,25 @@ export default class Login extends Component {
     }
     return (
       <MDBContainer className="page">
+        <MDBContainer className="box">
+          <MDBContainer className="form-group">
+            <label htmlFor="emailText">Email:</label>
+            <input type="email" placeholder="sisman@rpi.edu" className="form-control textBox" id="emailText" />
+            <label htmlFor="passwordText">Password:</label>
+            <input type="password" placeholder="●●●●●●●●●●●●" className="form-control textBox" id="passwordText"/>
+          </MDBContainer>
 
-        <p className="bold fontSizeSmall">
-          <label htmlFor="emailText">Email:</label>
-        </p>
-        <MDBContainer className="form-group">
-          <input type="email" placeholder="sisman@rpi.edu" className="form-control width-320px textBox" id="emailText" />
+          <Link to={"/Groups"}>
+            <button className = "btn button">Submit</button>
+          </Link>
+
+          <a className="login_link" href = "/register">
+            Register
+          </a>
+          <a className="login_link" href = "/login/forgot">
+            Forgot Password
+          </a>
         </MDBContainer>
-        <p className="bold fontSizeSmall">
-          <label htmlFor="passwordText">Password:</label>
-        </p>
-        <MDBContainer className="form-group">
-          <input type="password" placeholder="••••••••••••••" className="form-control width-320px textBox" id="passwordText"/>
-        </MDBContainer>
-
-        <Link to={"/Groups"}>
-          <button className = "btn button">Submit</button>
-        </Link>
-
-        <a className="login_link" href = "/register">
-          Register
-        </a>
-        <a className="login_link" href = "/login/forgot">
-          Forgot Password
-        </a>
-
       </MDBContainer>
     );
   }

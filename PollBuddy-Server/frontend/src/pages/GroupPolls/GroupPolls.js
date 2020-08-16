@@ -18,20 +18,22 @@ export default class GroupPolls extends Component {
   render() {
     return (
       <MDBContainer className="page">
-        <p className="width-90 fontSizeLarge">
-                    Welcome to the polls page!
-        </p>
+        <MDBContainer className="box">
+          <p className="fontSizeLarge">
+            Welcome to the polls page!
+          </p>
 
-        <Link to={"/polls/123/edit"}>
-          <button className="btn button">Poll 123</button>
-        </Link>
-        <Link to={"/polls/420/edit"}>
-          <button className="btn button">Poll 420</button>
-        </Link>
-        <Link to={"/polls/666/edit"}>
-          <button className="btn button">Poll 666</button>
-        </Link>
+          <Link to={"/polls/123/edit"}>
+            <button className="btn button">Poll 123</button>
+          </Link>
+          <Link to={"/polls/420/edit"}>
+            <button className="btn button">Poll 420</button>
+          </Link>
+          <Link to={"/polls/666/edit"}>
+            <button className="btn button">Poll 666</button>
+          </Link>
 
+        </MDBContainer>
       </MDBContainer>
     );
   }

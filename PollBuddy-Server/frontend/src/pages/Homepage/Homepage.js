@@ -30,14 +30,10 @@ export default class Homepage extends Component {
             </MDBContainer>
           </MDBContainer>
           <MDBContainer className="box">
-            <p>Already have a Poll Code? Enter it here.</p>
-
             <MDBContainer className="form-group">
-              <label htmlFor="pollCodeText">Poll Code:</label>
+              <label htmlFor="pollCodeText">Already have a Poll Code? Enter it here:</label>
               <input placeholder="K30SW8" className="form-control textBox"/>
             </MDBContainer>
-
-
             <Link to={"/poll/:pollID/view"}>
               <button className = "btn button">Join Poll</button>
             </Link>
