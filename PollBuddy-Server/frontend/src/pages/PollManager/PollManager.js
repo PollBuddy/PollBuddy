@@ -81,7 +81,7 @@ export default class PollManager extends Component {
 
       if (completed) {
         // Render a completed state
-        return <p className="width-90 fontSizeLarge"> Question closed! </p>
+        return <p className="width-90 fontSizeLarge"> Question closed! </p>;
       } else {
         // Render a countdown
         return <p className="width-90 fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
