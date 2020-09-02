@@ -57,7 +57,7 @@ export default class Login extends Component {
             <input type="password" placeholder="●●●●●●●●●●●●" className="form-control textBox" id="passwordText"/>
           </MDBContainer>
 
-          <Link to={"/Groups"}>
+          <Link to={"/groups"}>
             <button className = "btn button">Submit</button>
           </Link>
 

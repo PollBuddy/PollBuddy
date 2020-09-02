@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 // import './GroupEditor.scss'
 import { MDBContainer } from "mdbreact";
+import LoadingWheel from "../../components/LoadingWheel/LoadingWheel.js";
 
 //this component has 2 modes, edit and new. The new version allows the user to create a new class while the edit version
 //allows the user to edit an existing class. Pass new=true into props if you want to use the new version of the component
@@ -19,7 +20,8 @@ export default class GroupEditor extends Component {
       name: "",
       polls: null,
       users: null,
-      instructors: null
+      instructors: null,
+      loadingon: true
     };
 
     //if the component is in group creation mode, we don't need to read any data from the backend
@@ -48,78 +50,89 @@ export default class GroupEditor extends Component {
     }
 
   }
-    //these are variables passed in to props
-    new;
-    id;
 
-    onInput = e => {
-      //update state to include the data that was changed from the form
-      this.setState({
-        [e.target.name]: e.target.value
-      });
-    }
+  //these are variables passed in to props
+  new;
+  id;
 
-    onSubmit = e =>{
-      //create new group or edit group based on the given mode and data in state
-      fetch(this.getAPIURL(), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
-        body: JSON.stringify(this.getAPIJSON())
-      });
-    }
+  onChange = e => {
+    this.setState({
+      loadingon: false
+    });
+  }
 
-    //get the correct api url based on whether we're in create mode or not
-    getAPIURL(){
-      return this.props.new ?
-      //api/groups/new allows us to create a new entry
-        process.env.REACT_APP_BACKEND_URL + "/groups/new" :
-      //api/groups/groupID/edit allows us to edit an entry
-        process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.id + "/edit";
-    }
+  onInput = e => {
+    //update state to include the data that was changed from the form
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  }
 
-    //get the correct api json based on whether we're in create mode or not
-    getAPIJSON(){
-      return this.props.new ?
-        {
-          Name: this.state.name,
-          //TODO: add functionality
-          InstructorID: this.state.instructors,
-          PollID: this.state.polls,
-          UserID: this.state.users,
-        } :
-        {
-          //edit the data to include the values inputted
-          Action: "Add",
-          Name: this.state.name,
-          //TODO: add functionality
-          InstructorID: this.state.instructors,
-          PollID: this.state.polls,
-          UserID: this.state.users,
-        };
-    }
-    
-    render() {
-      if(this.state === null){
-        //show nothing (or loading wheel) if the data has not come in yet
-        return null;//loading todo ui
-      }else{
-        return (
-          <MDBContainer fluid className="box">
-            <MDBContainer className="form-group">
-              <label htmlFor="groupName">Group Name:</label>
-              <input
-                name="name"
-                id="groupName"
-                className="form-control textBox"
-                value={this.props.new ? null: this.state.name}
-                onInput={this.onInput} />
-            </MDBContainer>
+  onSubmit = e =>{
+    //create new group or edit group based on the given mode and data in state
+    fetch(this.getAPIURL(), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+      body: JSON.stringify(this.getAPIJSON())
+    });
+  }
 
-            <button className="btn button" onClick={this.onSubmit}>
-              {this.props.new ? "Create Group": "Save Changes"}
-            </button>
+  //get the correct api url based on whether we're in create mode or not
+  getAPIURL(){
+    return this.props.new ?
+    //api/groups/new allows us to create a new entry
+      process.env.REACT_APP_BACKEND_URL + "/groups/new" :
+    //api/groups/groupID/edit allows us to edit an entry
+      process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.id + "/edit";
+  }
+
+  //get the correct api json based on whether we're in create mode or not
+  getAPIJSON(){
+    return this.props.new ?
+      {
+        Name: this.state.name,
+        //TODO: add functionality
+        InstructorID: this.state.instructors,
+        PollID: this.state.polls,
+        UserID: this.state.users,
+      } :
+      {
+        //edit the data to include the values inputted
+        Action: "Add",
+        Name: this.state.name,
+        //TODO: add functionality
+        InstructorID: this.state.instructors,
+        PollID: this.state.polls,
+        UserID: this.state.users,
+      };
+  }
+
+  render() {
+    if(this.state === null || this.state.loadingon === true){
+      return (
+        <MDBContainer>
+          <LoadingWheel/>
+          <button className="btn button" onClick={this.onChange}>Stop Loading</button>
+        </MDBContainer>
+      );
+    }else{
+      return (
+        <MDBContainer fluid className="box">
+          <MDBContainer className="form-group">
+            <label htmlFor="groupName">Group Name:</label>
+            <input
+              name="name"
+              id="groupName"
+              className="form-control textBox"
+              value={this.props.new ? null: this.state.name}
+              onInput={this.onInput} />
           </MDBContainer>
-        );
-      }
+
+          <button className="btn button" onClick={this.onSubmit}>
+            {this.props.new ? "Create Group": "Save Changes"}
+          </button>
+        </MDBContainer>
+      );
     }
+  }
 }

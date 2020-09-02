@@ -18,7 +18,7 @@ export default class PollViewer extends Component {
             <p className="fontSizeLarge">
               Why does the tooth fairy collect teeth?
             </p>
-
+            
             <ul>
               <li id="answerElement0"><a href={"#1"}><span className={"pollviewer_bubble"}>A</span>She grinds them into the fairy dust she needs to fly</a></li>
               <li id="answerElement1"><a href={"#2"}><span className={"pollviewer_bubble"}>B</span>She gives them to new babies who are ready to grow teeth</a></li>

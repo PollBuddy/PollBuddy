@@ -20,9 +20,12 @@ import RegisterWithSchool from "./pages/RegisterWithSchool/RegisterWithSchool";
 import RegisterWithPollBuddy from "./pages/RegisterWithPollBuddy/RegisterWithPollBuddy";
 import PollViewer from "./pages/PollViewer/PollViewer";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
-import PollDataView from "./pages/PollResults/PollResults";
+import PollResults from "./pages/PollResults/PollResults";
+import PollManager from "./pages/PollManager/PollManager";
 import Contact from "./pages/Contact/Contact";
 import About from "./pages/About/About";
+import QuestionEnded from "./pages/QuestionEnded/QuestionEnded";
+import AnswerRecorded from "./pages/AnswerRecorded/AnswerRecorded";
 
 import Header from "./components/Header/Header.js";
 import Footer from "./components/Footer/Footer.js";
@@ -96,8 +99,17 @@ export default class App extends React.Component {
             <Route exact path="/polls/:pollID/edit">
               <PollEditor updateTitle={this.updateTitle} />
             </Route>
+            <Route exact path="/polls/:pollID/manage">
+              <PollManager updateTitle={this.updateTitle} />
+            </Route>
             <Route exact path="/polls/:pollID/results">
-              <PollDataView updateTitle={this.updateTitle} />
+              <PollResults updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/questionEnded">
+              <QuestionEnded updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/answerRecorded">
+              <AnswerRecorded updateTitle={this.updateTitle} />
             </Route>
 
             <Route exact path="/login">

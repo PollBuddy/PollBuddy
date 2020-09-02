@@ -1,0 +1,28 @@
+.GroupPolls-element{
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.GroupPolls-element:hover .GroupPolls-text{
+  color: var(--light-purple-logo-text);
+}
+
+.GroupPolls-element:hover .GroupPolls-arrow{
+  color: var(--white-most-text);
+}
+
+.GroupPolls-text{
+  color: var(--white-most-text);
+  font-family: monospace;
+  line-height: 26px;
+}
+
+
+.GroupPolls-arrow{
+  color: var(--darkest-purple-header-color);
+  border-color: var(--darkest-purple-header-color);
+  margin-left: -30px;
+  margin-right: 40px;
+  transform: scale(3);
+  transition: color 0.3s;
+}
