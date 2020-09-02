@@ -20,7 +20,8 @@ import RegisterWithSchool from "./pages/RegisterWithSchool/RegisterWithSchool";
 import RegisterWithPollBuddy from "./pages/RegisterWithPollBuddy/RegisterWithPollBuddy";
 import PollViewer from "./pages/PollViewer/PollViewer";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
-import PollDataView from "./pages/PollResults/PollResults";
+import PollResults from "./pages/PollResults/PollResults";
+import PollManager from "./pages/PollManager/PollManager";
 import Contact from "./pages/Contact/Contact";
 import About from "./pages/About/About";
 
@@ -96,8 +97,11 @@ export default class App extends React.Component {
             <Route exact path="/polls/:pollID/edit">
               <PollEditor updateTitle={this.updateTitle} />
             </Route>
+            <Route exact path="/polls/:pollID/manage">
+              <PollManager updateTitle={this.updateTitle} />
+            </Route>
             <Route exact path="/polls/:pollID/results">
-              <PollDataView updateTitle={this.updateTitle} />
+              <PollResults updateTitle={this.updateTitle} />
             </Route>
 
             <Route exact path="/login">

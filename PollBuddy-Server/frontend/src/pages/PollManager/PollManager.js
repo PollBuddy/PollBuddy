@@ -3,8 +3,10 @@ import { Bar } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import {Link} from "react-router-dom";
-import "./PollResults.scss";
-export default class PollResults extends Component {
+import "./PollManager.scss";
+import Countdown, {zeroPad} from "react-countdown";
+
+export default class PollManager extends Component {
   componentDidMount(){
     this.props.updateTitle("Poll Data View");
   }
@@ -72,13 +74,24 @@ export default class PollResults extends Component {
   };
 
 
+  timeLimit = 5;
+
   render() {
+    const clockFormat = ({ minutes, seconds, completed }) => {
+
+      if (completed) {
+        // Render a completed state
+        return <p className="width-90 fontSizeLarge"> Question closed! </p>
+      } else {
+        // Render a countdown
+        return <p className="width-90 fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
+      }
+    };
     return (
 
       <MDBContainer fluid className="page">
         <MDBContainer fluid className="two-box">
-          <MDBContainer className="PollResults-questions box">
-            {/* TODO: These 2 fields need to be dynamically populated */}
+          <MDBContainer className="PollManager-questions box">
             <p>
               CSCI 1200 - Data Structures
             </p>
@@ -86,24 +99,35 @@ export default class PollResults extends Component {
               Lesson #10
             </p>
 
-            <Link to={"/polls/:pollID/results"}>
-              <button className="btn button">Question 1</button>
+            <p className="width-90 fontSizeLarge">
+              Time remaining:
+            </p>
+            <Countdown renderer={clockFormat} date={Date.now() + this.timeLimit*1000} />
+
+            <Link to={"/polls/:pollID/manage"}>
+              <button className="btn button">Next Question</button>
             </Link>
-            <Link to={"/polls/:pollID/results"}>
-              <button className="btn button">Question 2</button>
+            <Link to={"/polls/:pollID/manage"}>
+              <button className="btn button">Select Question</button>
+              {/* TODO: When pressed, show a (popup or something) dropdown menu of question titles to pick */}
             </Link>
-            <Link to={"/polls/:pollID/results"}>
-              <button className="btn button">Question 3</button>
+            <Link to={"/polls/:pollID/manage"}>
+              <button className="btn button">Disable Further Poll Answers</button>
             </Link>
-            <Link to={"/polls/:pollID/results"}>
-              <button className="btn button">Question 4</button>
+            {/* TODO: Don't show both disable and enable, only show the opposite of the current status */}
+            <Link to={"/polls/:pollID/manage"}>
+              <button className="btn button">Enable Further Poll Answers</button>
             </Link>
-            <Link to={"/polls/:pollID/results"}>
-              <button className="btn button">Question 5</button>
+            <Link to={"/polls/:pollID/manage"}>
+              <button className="btn button">Display Statistics to Poll Viewers</button>
+            </Link>
+            <Link to={"/polls/:pollID/manage"}>
+              <button className="btn button">Display Correct Answer to Poll Viewers</button>
             </Link>
 
+
           </MDBContainer>
-          <MDBContainer fluid className="PollResults-graph box">
+          <MDBContainer fluid className="PollManager-graph box">
             <p>
               Question 1: Who is the bestest boi?
             </p>
