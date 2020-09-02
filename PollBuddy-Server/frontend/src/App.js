@@ -24,6 +24,8 @@ import PollResults from "./pages/PollResults/PollResults";
 import PollManager from "./pages/PollManager/PollManager";
 import Contact from "./pages/Contact/Contact";
 import About from "./pages/About/About";
+import QuestionEnded from "./pages/questionEnded/questionEnded";
+import AnswerRecorded from "./pages/answerRecorded/answerRecorded";
 
 import Header from "./components/Header/Header.js";
 import Footer from "./components/Footer/Footer.js";
@@ -102,6 +104,12 @@ export default class App extends React.Component {
             </Route>
             <Route exact path="/polls/:pollID/results">
               <PollResults updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/questionEnded">
+              <QuestionEnded updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/answerRecorded">
+              <AnswerRecorded updateTitle={this.updateTitle} />
             </Route>
 
             <Route exact path="/login">
