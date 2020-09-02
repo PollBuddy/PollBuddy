@@ -2,6 +2,7 @@ version: '3'
 services:
   webproxy:
     image: "nginx"
+    restart: unless-stopped
     volumes:
       - ./PollBuddy-Server/webproxy/conf.d:/etc/nginx/conf.d
     ports:
@@ -13,22 +14,19 @@ services:
 
   frontend:
     build: PollBuddy-Server/frontend
-    ports:
-      - "3000:3000"
+    restart: unless-stopped
     networks:
       - frontend
 
   backend:
     build: PollBuddy-Server/backend
-    ports:
-      - "3001:3001"
+    restart: unless-stopped
     networks:
       - backend
   
   db:
     image: "mongo"
-    ports:
-      - "27017:27017"
+    restart: unless-stopped
     volumes:
       - mongodata:/data/db
       - mongoconfig:/data/configdb
@@ -37,13 +35,18 @@ services:
 
   grafana:
     build: PollBuddy-Server/reporting/grafana
-    ports:
-      - "3002:3000"
+    restart: unless-stopped
+    networks:
+      - logging
 
   influxdb:
     build: PollBuddy-Server/reporting/influxdb
+    restart: unless-stopped
     volumes:
       - influxdata:/var/lib/influxdb
+    networks:
+      - logging
+      - backend
 
 volumes:
   mongoconfig:
@@ -59,3 +62,5 @@ networks:
   backend:
   frontend:
   logging:
+
+
