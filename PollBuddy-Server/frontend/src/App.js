@@ -24,8 +24,8 @@ import PollResults from "./pages/PollResults/PollResults";
 import PollManager from "./pages/PollManager/PollManager";
 import Contact from "./pages/Contact/Contact";
 import About from "./pages/About/About";
-import QuestionEnded from "./pages/questionEnded/questionEnded";
-import AnswerRecorded from "./pages/answerRecorded/answerRecorded";
+import QuestionEnded from "./pages/QuestionEnded/QuestionEnded";
+import AnswerRecorded from "./pages/AnswerRecorded/AnswerRecorded";
 
 import Header from "./components/Header/Header.js";
 import Footer from "./components/Footer/Footer.js";
