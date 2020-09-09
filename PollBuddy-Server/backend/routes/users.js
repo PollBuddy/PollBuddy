@@ -6,6 +6,9 @@ const bson = require("bson");
 var bcrypt = require("bcrypt");
 
 
+const cas = require('../modules/cas')
+
+
 // GET users listing.
 router.get("/", function (req, res, next) {
   mongoConnection.getDB().collection("users").find({}).toArray(function (err, result) {
@@ -72,6 +75,23 @@ router.post("/login", function (req, res) {
 
 });
 
+router.get("/login/cas", function(req, res, next) {
+
+  console.log("Trying to bounce");
+
+  req.url = '/api/users/login/cas'
+
+  cas.bounce(req, res, next);
+
+  console.log("Bounced");
+
+}, function (req, res, next) {
+
+  return res.send("Ok");
+
+});
+
+
 router.post("/register", function (req, res, next) {
   var requestBody = req.body;
 
@@ -84,6 +104,7 @@ router.post("/register", function (req, res, next) {
   });
   return res.sendStatus(200);
 });
+
 router.post("/:id/edit/", function (req, res) {//TODO RCS BOOL refer to documentation
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   var jsonContent = req.body;
@@ -191,6 +212,7 @@ router.post("/:id/edit/", function (req, res) {//TODO RCS BOOL refer to document
   }
   return res.sendStatus(200); // TODO: Ensure this is true
 });
+
 router.get("/:id/", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("users").find({"_id": id}).toArray(function (err, result) {
@@ -214,7 +236,6 @@ router.get("/:id/groups", function (req, res, next) {
 });
 
 module.exports = router;
-
 
 // Middleware for getting user information
 module.exports.user_middleware = function (req, res, next) {

@@ -1,15 +1,16 @@
 const CASAuthentication = require('cas-authentication')
-const User = require('./routes/user')
+const User = require('../routes/users')
 
 const cas = new CASAuthentication({
 	cas_url: process.env.CAS_URL || 'https://cas-auth.rpi.edu/cas',
-	service_url: process.env.CAS_SERVICE_URL || "http://localhost:3000",
+	service_url: process.env.CAS_SERVICE_URL || "http://localhost:7655",
 	cas_version: '3.0',
 	renew: false
 })
 
 module.exports = {
 	bounce: cas.bounce,
+  bounce_redirect: cas.bounce_redirect,
 	block: cas.block,
 	logout: cas.logout,
 	async getUser(req){
