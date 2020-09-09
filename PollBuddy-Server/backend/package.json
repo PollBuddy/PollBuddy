@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "bcrypt": "^3.0.7",
+    "cas-authentication": "0.0.8",
     "connect-mongo": "^3.2.0",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
