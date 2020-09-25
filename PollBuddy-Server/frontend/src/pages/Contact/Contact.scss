@@ -1,0 +1,7 @@
+.contact .box {
+	width: 50%;
+}
+
+.contact .box:not(:first-child) {
+	margin-top: 50px;
+}

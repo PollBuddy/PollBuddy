@@ -24,11 +24,8 @@ export default class RegisterWithSchool extends Component {
           <p>
             To create an account, enter your school name or login using RPI's CAS.
           </p>
-          <p>
-            { /* TODO: Add label here */ }
-            School Name:
-          </p>
           <MDBContainer className="form-group">
+            <label htmlFor="school">School Name:</label>
             <Autocomplete
               items={[
                 { key: 0, label: "Rensselaer Polytechnic Institute" },
@@ -63,7 +60,7 @@ export default class RegisterWithSchool extends Component {
               inputProps={{
                 className: "form-control textBox",
                 placeholder: "Enter school name",
-                "aria-labelledby": "schoolNameText"
+                id: "school",
               }}
               wrapperStyle={{ display: "block" }}
               value={this.state.value}
