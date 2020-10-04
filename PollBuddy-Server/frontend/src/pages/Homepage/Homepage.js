@@ -3,7 +3,7 @@ import "mdbreact/dist/css/mdb.css";
 import "./Homepage.scss";
 import { MDBContainer } from "mdbreact";
 import logo from "../../images/logo.png";
-import {Link, useHistory} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 export default class Homepage extends Component {
 
@@ -28,7 +28,7 @@ export default class Homepage extends Component {
     this.setState({valid: validCodeRegex.test(code)});
   }
 
-  submitCode(event) {
+  submitCode() {
     // set error message if input is invalid
     this.setState({errMsg: 
       !this.state.valid ? "Code must be 6 characters, A-Z, 0-9" : ""});
