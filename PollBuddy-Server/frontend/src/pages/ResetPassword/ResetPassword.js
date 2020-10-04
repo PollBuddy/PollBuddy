@@ -21,9 +21,9 @@ export default class ResetPassword extends Component {
             <label htmlFor="securityCodeText">Security code:</label>
             <input placeholder="A9EM3FL8W" className="form-control textBox" id="securityCodeText"/>
             <label htmlFor="newPasswordText">New password:</label>
-            <input placeholder="●●●●●●●●●●●●" className="form-control textBox" id="newPasswordText"/>
+            <input placeholder="••••••••••••" className="form-control textBox" id="newPasswordText"/>
             <label htmlFor="confirmPasswordText">Confirm password:</label>
-            <input placeholder="●●●●●●●●●●●●" className="form-control textBox" id="confirmPasswordText"/>
+            <input placeholder="••••••••••••" className="form-control textBox" id="confirmPasswordText"/>
           </MDBContainer>
 
           <Link to={"/Groups"}>
