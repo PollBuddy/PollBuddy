@@ -4,6 +4,7 @@ var router = express.Router();
 var mongoConnection = require("../modules/mongoConnection.js");
 const bson = require("bson");
 var bcrypt = require("bcrypt");
+var path = require("path");
 
 
 const cas = require('../modules/cas')
@@ -75,19 +76,25 @@ router.post("/login", function (req, res) {
 
 });
 
-router.get("/login/cas", function(req, res, next) {
+router.get("/login/cas", cas.bounce2, function (req, res, next) {
 
-  console.log("Trying to bounce");
+  // This runs if the user is logged in successfully
 
-  req.url = '/api/users/login/cas'
+  var options = {
+    root: path.join(__dirname, '../public'),
+    dotfiles: 'deny',
+    headers: {
+      'x-timestamp': Date.now(),
+      'x-sent': true
+    }
+  }
 
-  cas.bounce(req, res, next);
-
-  console.log("Bounced");
-
-}, function (req, res, next) {
-
-  return res.send("Ok");
+  res.sendFile("pages/loginRedirect.html", options, function (err) {
+    if (err) {
+      console.log(err);
+      res.send(500);
+    }
+  });
 
 });
 

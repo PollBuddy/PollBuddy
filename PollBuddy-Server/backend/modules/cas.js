@@ -21,5 +21,10 @@ module.exports = {
 			await user.save()
 		}
 		return user
-	}
+	},
+  // Bounce user to RPI's login page if they're not logged in, then back to the login handler
+  bounce2: function(req, res, next) {
+    req.url = '/api/users/login/cas'
+    cas.bounce(req, res, next);
+  }
 }
