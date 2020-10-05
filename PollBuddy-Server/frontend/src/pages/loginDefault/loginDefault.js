@@ -30,6 +30,6 @@ export default class LoginDefault extends Component {
           </form>
         </MDBContainer>
       </MDBContainer>
-    )
+    );
   }
 }
