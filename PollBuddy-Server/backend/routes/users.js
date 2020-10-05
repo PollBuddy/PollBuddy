@@ -80,6 +80,27 @@ router.get("/login/cas", cas.bounce2, function (req, res, next) {
   // This runs if the user is logged in successfully
 
   // Log the user in on the backend side of things
+  if(req.query.ticket) {
+    console.log("Locating user to add to session."); // TODO: Remove after testing
+    mongoConnection.getDB().collection("users").findOne({Username: req.session.cookie.cas_user}, {projection: {_id: false, Username: true}}, (err, result) => {
+      if (err) {
+        console.log("Error occurred"); // TODO: Improve error messaging
+        console.log(err);
+      } else {
+        console.log("Result found"); // TODO: Remove after testing
+        console.log(result);
+        if(result == null) {
+          // User not registered, TODO: Redirect to registration
+          return res.send("User not registered!");
+        } else {
+          req.session.UserID = result.Username;
+        }
+      }
+    });
+
+  } else {
+    console.log("Ticket not specified."); // TODO: Remove after testing
+  }
 
   // Redirect the user to the homepage with a nice message
   var options = {
