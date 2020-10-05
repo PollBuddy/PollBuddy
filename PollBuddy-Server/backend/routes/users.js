@@ -1,13 +1,12 @@
 var createError = require("http-errors");
 var express = require("express");
 var router = express.Router();
-var mongoConnection = require("../modules/mongoConnection.js");
 const bson = require("bson");
 var bcrypt = require("bcrypt");
-var path = require("path");;
+var path = require("path");
 
-
-const cas = require('../modules/cas')
+var mongoConnection = require("../modules/mongoConnection.js");
+const cas = require('../modules/cas');
 
 
 // GET users listing.
