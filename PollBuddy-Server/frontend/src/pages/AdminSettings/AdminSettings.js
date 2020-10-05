@@ -23,33 +23,39 @@ export default class Groups extends Component {
       <MDBContainer className="page">
         <MDBContainer className="box">
           <p className="fontSizeLarge">
-            As a Group Admin:
+            {/*  TODO: change this to whatever was clicked on in the last screen*/}
+            CSCI 1200 - Data Structures
           </p>
-          <Link to={"/groups/123/edit"}>
-            <button className="btn button">CSCI 1200 - Data Structures</button>
+          <Link to={"/polls/123/edit"}>
+            <button className="btn button">Create New Poll</button>
           </Link>
-          <Link to={"/groups/123/edit"}>
-            <button className="btn button">CSCI 2200 - Foundations of Computer Science</button>
-          </Link>
+          <p className="fontSizeSmall">
+            Total number of polls: 12
+          </p>
+          <p className="fontSizeSmall">
+            Total number of questions: 24
+          </p>
+          <p className="fontSizeSmall">
+            Average correct answers: 21
+          </p>
+          {/*change name, details, add people, remove people*/}
+          {/*TODO: admin should be able to select individual students and see their information here*/}
 
-          <p className="fontSizeLarge">
-            As a Group Member:
-          </p>
-          <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2300 - Intro to Algorithms</button>
-          </Link>
-          <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2500 - Computer Organization</button>
-          </Link>
-          <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2960 - RCOS</button>
-          </Link>
+          <MDBContainer>
+            <input type="GroupName" placeholder="New Group Name" className="form-control textBox" id="idText" />
+            <button className="btn button">Change Group Name</button>
 
-          <p className="fontSizeLarge">
-            Group Management:
-          </p>
-          <Link to={"/groups/new"}>
-            <button className="btn button">New Group</button>
+            <input type="RCSID" placeholder="Input RCSID to add student" className="form-control textBox" id="idText" />
+            <button className="btn button">Add Student</button>
+
+            <input type="RCSID" placeholder="Input RCSID to remove student" className="form-control textBox" id="idText" />
+            <button className="btn button">Remove Student</button>
+          </MDBContainer>
+
+
+
+          <Link to={"/Groups"}>
+            <button className="btn button">Delete this Group</button>
           </Link>
         </MDBContainer>
       </MDBContainer>

@@ -25,25 +25,54 @@ export default class Groups extends Component {
           <p className="fontSizeLarge">
             As a Group Admin:
           </p>
-          <Link to={"/groups/123/edit"}>
-            <button className="btn button">CSCI 1200 - Data Structures</button>
-          </Link>
-          <Link to={"/groups/123/edit"}>
-            <button className="btn button">CSCI 2200 - Foundations of Computer Science</button>
-          </Link>
+          <MDBContainer>
+            <Link to={"/groups/123/edit"}>
+              <button className="btn button">CSCI 1200 - Data Structures</button>
+            </Link>
+            <Link to={"/adminSettings"}>
+              <button className="btn button">Edit</button>
+            </Link>
+          </MDBContainer>
+
+          <MDBContainer>
+            <Link to={"/groups/123/edit"}>
+              <button className="btn button">CSCI 2200 - FOCS</button>
+            </Link>
+            <Link to={"/adminSettings"}>
+              <button className="btn button">Edit</button>
+            </Link>
+          </MDBContainer>
 
           <p className="fontSizeLarge">
             As a Group Member:
           </p>
-          <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2300 - Intro to Algorithms</button>
-          </Link>
-          <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2500 - Computer Organization</button>
-          </Link>
-          <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2960 - RCOS</button>
-          </Link>
+
+          <MDBContainer>
+            <Link to={"/groups/123/polls"}>
+              <button className="btn button">CSCI 2300 - Intro to Algorithms</button>
+            </Link>
+            <Link to={"/memberSettings"}>
+              <button className="btn button">Edit</button>
+            </Link>
+          </MDBContainer>
+
+          <MDBContainer>
+            <Link to={"/groups/123/polls"}>
+              <button className="btn button">CSCI 2500 - Computer Organization</button>
+            </Link>
+            <Link to={"/memberSettings"}>
+              <button className="btn button">Edit</button>
+            </Link>
+          </MDBContainer>
+
+          <MDBContainer>
+            <Link to={"/groups/123/polls"}>
+              <button className="btn button">CSCI 2960 - RCOS</button>
+            </Link>
+            <Link to={"/memberSettings"}>
+              <button className="btn button">Edit</button>
+            </Link>
+          </MDBContainer>
 
           <p className="fontSizeLarge">
             Group Management:

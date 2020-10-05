@@ -19,37 +19,29 @@ export default class Groups extends Component {
   }
   render() { 
     return (
-        
+
       <MDBContainer className="page">
         <MDBContainer className="box">
-          <p className="fontSizeLarge">
-            As a Group Admin:
-          </p>
-          <Link to={"/groups/123/edit"}>
-            <button className="btn button">CSCI 1200 - Data Structures</button>
-          </Link>
-          <Link to={"/groups/123/edit"}>
-            <button className="btn button">CSCI 2200 - Foundations of Computer Science</button>
-          </Link>
 
           <p className="fontSizeLarge">
-            As a Group Member:
+            {/*  TODO: change this to whatever was clicked on in the last screen*/}
+            CSCI 2300 - Intro to Algorithms
           </p>
-          <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2300 - Intro to Algorithms</button>
-          </Link>
-          <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2500 - Computer Organization</button>
-          </Link>
-          <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2960 - RCOS</button>
-          </Link>
 
-          <p className="fontSizeLarge">
-            Group Management:
+          <p className="fontSizeSmall">
+            Total number of polls: 12
           </p>
-          <Link to={"/groups/new"}>
-            <button className="btn button">New Group</button>
+          <p className="fontSizeSmall">
+            Total number of questions: 24
+          </p>
+          <p className="fontSizeSmall">
+            Number of questions answered correctly: 21
+          </p>
+
+          {/*TODO: add more (correct) read-only information here*/}
+
+          <Link to={"/Groups"}>
+            <button className="btn button">Leave Group</button>
           </Link>
         </MDBContainer>
       </MDBContainer>
