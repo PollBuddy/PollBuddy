@@ -13,7 +13,7 @@ module.exports = {
   bounce_redirect: cas.bounce_redirect,
 	block: cas.block,
 	logout: cas.logout,
-	async getUser(req){
+	getUser: async function(req){
 		const rcs_id = req.session[cas.session_name]
 		let user = await User.findOne({rcs_id: rcs_id})
 		if(!user){

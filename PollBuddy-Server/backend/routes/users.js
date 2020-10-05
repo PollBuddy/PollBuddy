@@ -4,7 +4,7 @@ var router = express.Router();
 var mongoConnection = require("../modules/mongoConnection.js");
 const bson = require("bson");
 var bcrypt = require("bcrypt");
-var path = require("path");
+var path = require("path");;
 
 
 const cas = require('../modules/cas')
@@ -80,6 +80,9 @@ router.get("/login/cas", cas.bounce2, function (req, res, next) {
 
   // This runs if the user is logged in successfully
 
+  // Log the user in on the backend side of things
+
+  // Redirect the user to the homepage with a nice message
   var options = {
     root: path.join(__dirname, '../public'),
     dotfiles: 'deny',
@@ -87,7 +90,7 @@ router.get("/login/cas", cas.bounce2, function (req, res, next) {
       'x-timestamp': Date.now(),
       'x-sent': true
     }
-  }
+  };
 
   res.sendFile("pages/loginRedirect.html", options, function (err) {
     if (err) {
