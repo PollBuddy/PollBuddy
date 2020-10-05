@@ -13,42 +13,17 @@ export default class AccountInfo extends Component {
       <MDBContainer className="page">
         <MDBContainer className="box">
           <MDBContainer className="form-group">
-            <label htmlFor="nameText">Name:</label>
-            <input placeholder="SIS Man" className="form-control textBox" id="nameText"/>
-            <label htmlFor="emailText">Email:</label>
-            <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText"/>
-            <label htmlFor="currentPasswordText">Current password:</label>
-            <input placeholder="shir1ey-is-my-gir1y" className="form-control textBox" id="currentPasswordText"/>
-            <label htmlFor="confirmPassworkText">Confirm password:</label>
-            <input placeholder="shir1ey-is-my-gir1y" className="form-control textBox" id="confirmPassworkText"/>
+            <p>Your Name: SIS Man</p>
+            <p>Your Email: mans@rpi.edu</p>
+            <p>Location: Troy, NY</p>
+            <p>Time Zone: EDT (UTC-4)</p>
           </MDBContainer>
-          <Link to={"/myclasses"}>
-            <button className="btn button">Submit</button>
+
+          <Link to={"/login/forgot"}>
+            <button className="btn button">Change password</button>
           </Link>
-        </MDBContainer>
 
-        <p className="fontSizeSmall">
-          <label htmlFor="emailText">Email:</label>
-        </p>
-        <MDBContainer className="form-group">
-          <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText"/>
         </MDBContainer>
-        <p className="fontSizeSmall">
-          <label htmlFor="currentPasswordText">Current password:</label>
-        </p>
-        <MDBContainer className="form-group">
-          <input placeholder="shir1ey-is-my-gir1y" className="form-control textBox" id="currentPasswordText"/>
-        </MDBContainer>
-
-        <p className="fontSizeSmall">
-          <label htmlFor="confirmPassworkText">Confirm password:</label>
-        </p>
-        <MDBContainer className="form-group">
-          <input placeholder="shir1ey-is-my-gir1y" className="form-control textBox" id="confirmPassworkText"/>
-        </MDBContainer>
-        <Link to={"/myclasses"}>
-          <button className="btn button">Submit</button>
-        </Link>
       </MDBContainer>
     );
   }
