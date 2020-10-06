@@ -10,7 +10,7 @@ export default class Header extends Component {
     // in which case it may display register. This also will need to show account once logged in.
     if(this.props.userInfo.sessionIdentifier === "") {
       this.state = {
-        link: "/loginDefault",
+        link: "/login",
         text: "login"
       };
     } else if(this.props.userInfo.sessionIdentifier === "register") {

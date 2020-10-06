@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import {Link, Redirect} from "react-router-dom";
 import "mdbreact/dist/css/mdb.css";
-import "./login.scss";
+import "./LoginWithPollBuddy.scss";
 import { MDBContainer } from "mdbreact";
 
-export default class login extends Component {
+export default class LoginWithPollBuddy extends Component {
 
   state = {
     successfulLogin: false
@@ -30,54 +30,44 @@ export default class login extends Component {
       });
   }
   handleLogin() {
-    //needs some authentication before and if authentication passes then set local storage and such refer to classcreation page to see the way to make POST requests to the backend
+    //needs some authentication before and if authentication passes then set local storage and such refer to GroupCreation page to see the way to make POST requests to the backend
     localStorage.setItem("loggedIn", true);//maybe have an admin/teacher var instead of just true
     //TODO MAYBE IN THE FUTURE USE COOKIES TO REMEMBER PAST SESSION
     this.setState({successfulLogin: true}); // Tell it to redirect to the next page if successful
   }
 
   componentDidMount(){
-    this.props.updateTitle("Log in");
+    this.props.updateTitle("Login With Poll Buddy");
   }
   render() {
     this.handleLogin = this.handleLogin.bind(this); // This is needed so stuff like this.setState works
 
     if(this.state.successfulLogin) { // Basically redirect if the person is logged in or if their login succeeds
       return (
-        <Redirect to="/myClasses" />
+        <Redirect to="/groups" />
       );
     }
     return (
       <MDBContainer className="page">
+        <MDBContainer className="box">
+          <MDBContainer className="form-group">
+            <label htmlFor="emailText">Email:</label>
+            <input type="email" placeholder="sisman@rpi.edu" className="form-control textBox" id="emailText" />
+            <label htmlFor="passwordText">Password:</label>
+            <input type="password" placeholder="●●●●●●●●●●●●" className="form-control textBox" id="passwordText"/>
+          </MDBContainer>
 
-        <p className="bold fontSizeSmall">
-          Email:
-        </p>
+          <Link to={"/groups"}>
+            <button className = "btn button">Submit</button>
+          </Link>
 
-        <MDBContainer className="form-group">
-          <input type="email" placeholder="sisman@rpi.edu" className="form-control width-320px textBox"/>
+          <a className="login_link" href = "/register">
+            Register
+          </a>
+          <a className="login_link" href = "/login/forgot">
+            Forgot Password
+          </a>
         </MDBContainer>
-        <p className="bold fontSizeSmall">
-          Password:
-        </p>
-        <MDBContainer className="form-group">
-          <input type="password" placeholder="••••••••••••••" className="form-control width-320px textBox"/>
-        </MDBContainer>
-
-        <Link to={"/myclasses"}>
-          <button className = "btn button">Submit</button>
-        </Link>
-
-        <a className="login_link" href = "/loginWithSchool">
-          Login with School
-        </a>
-        <a className="login_link" href = "/registerDefault">
-          Register
-        </a>
-        <a className="login_link" href = "/forgotPassword">
-          Forgot Password
-        </a>
-
       </MDBContainer>
     );
   }
