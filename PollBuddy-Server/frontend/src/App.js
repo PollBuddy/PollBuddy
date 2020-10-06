@@ -26,6 +26,8 @@ import Contact from "./pages/Contact/Contact";
 import About from "./pages/About/About";
 import QuestionEnded from "./pages/QuestionEnded/QuestionEnded";
 import AnswerRecorded from "./pages/AnswerRecorded/AnswerRecorded";
+import LoginDefault from "./pages/loginDefault/loginDefault";
+import LoginWithSchool from "./pages/loginWithSchool/loginWithSchool";
 
 import Header from "./components/Header/Header.js";
 import Footer from "./components/Footer/Footer.js";
@@ -79,6 +81,12 @@ export default class App extends React.Component {
             <Route exact path="/privacy">
               <Privacy updateTitle={this.updateTitle} />
             </Route>
+            <Route exact path="/loginDefault">  
+              <LoginDefault updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/classcreation">
+              <Classcreation updateTitle={this.updateTitle} />
+            </Route>
 
             <Route exact path="/groups">
               <Group updateTitle={this.updateTitle} />
@@ -130,6 +138,9 @@ export default class App extends React.Component {
             </Route>
             <Route exact path="/register/pollbuddy">
               <RegisterWithPollBuddy updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/loginWithSchool">
+              <LoginWithSchool updateTitle={this.updateTitle} />
             </Route>
 
             <Route exact path="/account">

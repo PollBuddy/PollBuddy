@@ -84,7 +84,7 @@ app.use("/api/polls", pollsRouter);
 app.use("/api/users", usersRouter);
 
 // When visiting /test, the database connection finds all documents in all collections, and returns them in JSON.
-app.get("/test", (req, res) => {
+app.get("/api/test", (req, res) => {
   var documents = [];
   mongoConnection.getDB().listCollections().toArray().then((data) => {
     // Here you can do something with your data
@@ -174,6 +174,12 @@ app.get("/gendata", (req, res) => {
 app.get("/", function (req, res, next) {
   next(createError(200));
 });
+
+// API Root page (aka its working)
+app.get("/api", function (req, res, next) {
+  next(createError(200));
+});
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
