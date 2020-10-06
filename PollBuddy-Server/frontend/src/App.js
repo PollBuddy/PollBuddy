@@ -4,7 +4,7 @@ import {MDBContainer} from "mdbreact";
 
 import Group from "./pages/Groups/Groups";
 import Homepage from "./pages/Homepage/Homepage";
-import Login from "./pages/Login/Login";
+import LoginWithPollBuddy from "./pages/LoginWithPollBuddy/LoginWithPollBuddy";
 import GroupCreation from "./pages/GroupCreation/GroupCreation";
 import GroupEditor from "./pages/GroupEditor/GroupEditor";
 import GroupPolls from "./pages/GroupPolls/GroupPolls";
@@ -26,6 +26,8 @@ import Contact from "./pages/Contact/Contact";
 import About from "./pages/About/About";
 import QuestionEnded from "./pages/QuestionEnded/QuestionEnded";
 import AnswerRecorded from "./pages/AnswerRecorded/AnswerRecorded";
+import LoginDefault from "./pages/LoginDefault/LoginDefault";
+import LoginWithSchool from "./pages/LoginWithSchool/LoginWithSchool";
 
 import Header from "./components/Header/Header.js";
 import Footer from "./components/Footer/Footer.js";
@@ -113,7 +115,13 @@ export default class App extends React.Component {
             </Route>
 
             <Route exact path="/login">
-              <Login updateTitle={this.updateTitle} />
+              <LoginDefault updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/login/pollbuddy">
+              <LoginWithPollBuddy updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/login/school">
+              <LoginWithSchool updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/login/forgot">
               <ForgotPassword updateTitle={this.updateTitle} />
@@ -125,11 +133,11 @@ export default class App extends React.Component {
             <Route exact path="/register">
               <RegisterDefault updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/register/school">
-              <RegisterWithSchool updateTitle={this.updateTitle} />
-            </Route>
             <Route exact path="/register/pollbuddy">
               <RegisterWithPollBuddy updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/register/school">
+              <RegisterWithSchool updateTitle={this.updateTitle} />
             </Route>
 
             <Route exact path="/account">

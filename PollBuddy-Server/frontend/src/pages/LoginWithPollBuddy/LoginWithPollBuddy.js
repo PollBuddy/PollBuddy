@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import {Link, Redirect} from "react-router-dom";
 import "mdbreact/dist/css/mdb.css";
-import "./Login.scss";
+import "./LoginWithPollBuddy.scss";
 import { MDBContainer } from "mdbreact";
 
-export default class Login extends Component {
+export default class LoginWithPollBuddy extends Component {
 
   state = {
     successfulLogin: false
@@ -37,7 +37,7 @@ export default class Login extends Component {
   }
 
   componentDidMount(){
-    this.props.updateTitle("Log in");
+    this.props.updateTitle("Login With Poll Buddy");
   }
   render() {
     this.handleLogin = this.handleLogin.bind(this); // This is needed so stuff like this.setState works
