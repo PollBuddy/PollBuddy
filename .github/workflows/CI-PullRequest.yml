@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Save start time
         run: |
-          echo $(TZ=America/New_York echo "START_TIME=$(date +"%Y/%m/%d %r")") >> $GITHUB_ENV
+          echo "START_TIME=$(TZ='America/New_York' date +"%Y/%m/%d %r")" >> $GITHUB_ENV
       - name: Initialize SSH
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
@@ -43,7 +43,7 @@ jobs:
 
       - name: Save end time
         run: |
-          echo $(TZ=America/New_York echo "END_TIME=$(date +"%Y/%m/%d %r")") >> $GITHUB_ENV
+          echo "END_TIME=$(TZ='America/New_York' date +"%Y/%m/%d %r")" >> $GITHUB_ENV
 
       - name: Share Link on PR
         continue-on-error: true
