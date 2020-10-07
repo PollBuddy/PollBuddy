@@ -1,10 +1,10 @@
-name: CI-Commit
+name: CI-PullRequest
 
 on:
-  push:
+  pull_request:
 
 jobs:
-  Commit-Temp-Deploy:
+  PullRequest-Temp-Deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
@@ -36,5 +36,13 @@ jobs:
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
         run: |
-          ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} "cd ./CI-CD && bash ./deployTestInstance.sh \"${GITHUB_SHA}\" ISSUE"
+          ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} "cd ./CI-CD && bash ./deployTestInstance.sh \"${github.event.number}\" PR"
         id: remote_deploy
+
+      - name: Share Link on PR
+        continue-on-error: true
+        uses: thollander/actions-comment-pull-request@master
+        with:
+          message: |
+            Live Version: https://dev-${{github.event.number}}.pollbuddy.app/
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
