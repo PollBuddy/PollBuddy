@@ -8,7 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
-
+      - name: Set environment variables
+        run: |
+          echo "START_TIME=$(date +"%Y/%m/%d %r")" >> $GITHUB_ENV
       - name: Initialize SSH
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
@@ -39,10 +41,19 @@ jobs:
           ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} "cd ./CI-CD && bash ./deployTestInstance.sh \"${{github.event.number}}\" PR"
         id: remote_deploy
 
+      - name: Set environment variables
+        run: |
+          echo "END_TIME=$(date +"%Y/%m/%d %r")" >> $GITHUB_ENV
+
       - name: Share Link on PR
         continue-on-error: true
         uses: thollander/actions-comment-pull-request@master
         with:
           message: |
-            Live Version: https://dev-${{github.event.number}}.pollbuddy.app/
+            Live version has been created!
+            Note: Old URLs will reflect subsequent rebuilds.
+            URL: https://dev-${{github.event.number}}.pollbuddy.app/
+            Start Time: ${{ env.START_TIME }}
+            End Time: ${{ env.END_TIME }}
+            Last commit: ${{ github.event.pull_request.head.sha }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
