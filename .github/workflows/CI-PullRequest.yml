@@ -51,7 +51,7 @@ jobs:
         with:
           message: |
             Live version has been created!
-            Note: Old URLs will reflect subsequent rebuilds.
+            Note:  Any previous URLs will reflect subsequent builds.
             URL: https://dev-${{github.event.number}}.pollbuddy.app/
             Start Time: ${{ env.START_TIME }}
             End Time: ${{ env.END_TIME }}
