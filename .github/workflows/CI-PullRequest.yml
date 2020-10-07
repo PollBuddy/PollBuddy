@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Set environment variables
         run: |
-          echo "START_TIME=$(date +"%Y/%m/%d %r")" >> $GITHUB_ENV
+          env TZ=America/New_York echo "START_TIME=$(date +"%Y/%m/%d %r")" >> $GITHUB_ENV
       - name: Initialize SSH
         env:
           SSH_AUTH_SOCK: /tmp/ssh_agent.sock
@@ -43,7 +43,7 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "END_TIME=$(date +"%Y/%m/%d %r")" >> $GITHUB_ENV
+          env TZ=America/New_York echo "END_TIME=$(date +"%Y/%m/%d %r")" >> $GITHUB_ENV
 
       - name: Share Link on PR
         continue-on-error: true
@@ -52,9 +52,9 @@ jobs:
           message: |
             Live version has been created!
             Always-Updated URL: https://dev-${{ github.event.number }}.pollbuddy.app/
-            
-            Start Time: ${{ env.START_TIME }}
-            End Time: ${{ env.END_TIME }}
+
+            Start Time: ${{ env.START_TIME }} ET
+            End Time: ${{ env.END_TIME }} ET
             Last commit: ${{ github.event.pull_request.head.sha }}
             Up-To-Commit URL: https://dev-${{ github.event.pull_request.head.sha }}.pollbuddy.app/
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
