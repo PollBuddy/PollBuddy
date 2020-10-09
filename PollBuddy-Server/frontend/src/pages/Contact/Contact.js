@@ -23,22 +23,11 @@ export default class Contact extends Component {
       <MDBContainer fluid className="page contact">
         <MDBContainer className = "box">
           <p className="fontSizeLarge">
-            Looking to get in touch with a developer? Shoot an email over to
-            {" "}<em><a href="mailto:contact@pollbuddy.app">
-              contact@pollbuddy.app
-            </a></em>{" "}
-            or click the button below to open a support ticket form.
+            Looking to get in touch with a developer? Shoot an email over to <a href="mailto:contact@pollbuddy.app">contact@pollbuddy.app</a> or click the button below to open a support ticket form.
           </p>
           <p>
             Alternatively, it would be greatly appreciated if you reported technical
-            problems, such as bugs or design complaints/suggestions, by
-            {" "}<em><a href="https://github.com/PollBuddy/PollBuddy/issues/new/choose">
-              opening an issue
-            </a></em>{" "}
-            on our
-            {" "}<em><a href="https://github.com/PollBuddy/PollBuddy">
-              GitHub repository.
-            </a></em>{" "}
+            problems, such as bugs or design complaints/suggestions, by <a href="https://github.com/PollBuddy/PollBuddy/issues/new/choose">opening an issue</a> on our <a href="https://github.com/PollBuddy/PollBuddy">GitHub repository.</a>
           </p>
           <button
             className="btn button"
