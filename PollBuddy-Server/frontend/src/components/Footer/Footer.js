@@ -8,13 +8,13 @@ import {MDBContainer} from "mdbreact";
 export default class Footer extends Component {
   render() {
     return (
-      <footer className = "footer_foot">
-        <MDBContainer className = "footer_linethru" />
-        <MDBContainer className = "footer_links">
-          <MDBContainer className = "footer_foot_links">
+      <footer className = "Footer-foot">
+        <MDBContainer className = "Footer-linethru" />
+        <MDBContainer className = "Footer-links">
+          <MDBContainer className = "Footer-foot_links">
             &copy; 2020 Poll Buddy
           </MDBContainer>
-          <MDBContainer className = "footer_foot_links">
+          <MDBContainer className = "Footer-foot_links">
             <a href = "/about">
               About
             </a>
@@ -31,7 +31,7 @@ export default class Footer extends Component {
               Privacy
             </a>
           </MDBContainer>
-          <MDBContainer className = "footer_foot_links">
+          <MDBContainer className = "Footer-foot_links">
             <a href = "https://rcos.io/" target = "_blank" rel="noopener noreferrer">
               <img src = {rcosLogo} alt = "RCOS" />
             </a>
