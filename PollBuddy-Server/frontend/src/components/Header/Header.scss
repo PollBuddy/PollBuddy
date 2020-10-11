@@ -1,4 +1,4 @@
-.Header-bar {
+.header_bar {
   padding: 20px;
   font: var(--head-font-size) / 1 'Fredoka One';
   text-align: center;
@@ -8,14 +8,14 @@
   text-transform: capitalize;
   margin: 0 0 50px;
 }
-.Header-bar_logo {
+.header_bar_logo {
   position: absolute;
   left: 0;
   height: calc(20px + var(--head-font-size));
   width: auto;
   margin: -10px 0 0 40px;
 }
-.Header-bar_btn {
+.header_bar_btn {
   position: absolute;
   right: 0;
   font: bold var(--font-size-small) / 1 var(--main-font);
@@ -25,10 +25,10 @@
   text-transform: uppercase;
   border-radius: 999px;
 }
-.Header-bar_btn {
+.header_bar_btn {
   color: var(--light-purple-logo-text);
 }
-.Header-bar_btn:hover {
+.header_bar_btn:hover {
   color: var(--white-most-text);
   text-decoration: none;
 }
