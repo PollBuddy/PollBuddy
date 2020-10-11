@@ -27,12 +27,12 @@ export default class Header extends Component {
   }
   render() {
     return (
-      <header className = "header_bar">
+      <header className = "Header-bar">
         <a href = "/">
-          <img src = {logo} className = "header_bar_logo" alt = "logo" />
+          <img src = {logo} className = "Header-bar_logo" alt = "logo" />
         </a>
         {this.props.title}
-        <a href = {this.state.link} className = "header_bar_btn">
+        <a href = {this.state.link} className = "Header-bar_btn">
           {this.state.text}
         </a>
       </header>
