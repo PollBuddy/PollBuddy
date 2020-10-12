@@ -7,7 +7,7 @@ var path = require("path");
 
 var mongoConnection = require("../modules/mongoConnection.js");
 const cas = require('../modules/cas');
-
+const { log } = require("console");
 
 // GET users listing.
 router.get("/", function (req, res, next) {
@@ -131,7 +131,10 @@ router.post("/register", function (req, res, next) {
     Username: requestBody.Username,
     Email: requestBody.Email,
     Password: bcrypt.hashSync(requestBody.Password, 10)
+  }, (err, result) => {
+    if (err) return res.sendStatus(450);
   });
+
   return res.sendStatus(200);
 });
 

@@ -22,15 +22,16 @@ export default class RegisterWithPollBuddy extends Component {
 
   handleRegister() {
     // do input validation
-    const userReg = new RegExp('/^[a-zA-Z0-9_-.]{3,32}$/');
-    const emailReg = new RegExp('/^[a-zA-Z0-9_.]+@\w+\.\w+$/');
-    const passReg = new RegExp('/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/');
+    const userValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(this.state.username);
+    const emailValid = new RegExp(/^[a-zA-Z0-9_.]+@\w+\.\w+$/).test(this.state.email);
+    const passValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/).test(this.state.password);
 
-    this.setState({userValid: userReg.test(this.state.username)});
-    this.setState({emailValid: emailReg.test(this.state.email)});
-    this.setState({passValid: passReg.test(this.state.password)});
+    // update component's state
+    this.setState({userValid: userValid});
+    this.setState({emailValid: emailValid});
+    this.setState({passValid: passValid});
 
-    if (!this.state.userValid || !this.state.emailValid || !this.state.passValid)
+    if (!userValid || !emailValid || !passValid)
       return;
 
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/register", {
@@ -80,7 +81,7 @@ export default class RegisterWithPollBuddy extends Component {
               </div>
             }
             <label htmlFor="passwordText">Password:</label>
-            <input placeholder="●●●●●●●●●●●●" className="form-control textBox" id="passwordText"
+            <input type="password" placeholder="●●●●●●●●●●●●" className="form-control textBox" id="passwordText"
               onChange= {(evt) => { this.setState({password: evt.target.value}); }}/>
             {!this.state.passValid && 
               <div className="error">
