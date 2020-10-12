@@ -16,33 +16,33 @@ export default class Groups extends Component {
   }
 
   toggleShowChangeGroupName() {
-      if(document.getElementById("groupText").style.display === "block") {
-          document.getElementById("groupText").style.display = "none";
-          document.querySelector("#groupBtn").textContent = "Change group name";
-      }
-      else {
-          document.getElementById("groupText").style.display = "block";
-          document.querySelector("#groupBtn").textContent = "Submit";
-      }
+    if(document.getElementById("groupText").style.display === "block") {
+      document.getElementById("groupText").style.display = "none";
+      document.querySelector("#groupBtn").textContent = "Change group name";
+    }
+    else {
+      document.getElementById("groupText").style.display = "block";
+      document.querySelector("#groupBtn").textContent = "Submit";
+    }
   }
   toggleAddStudent() {
     if(document.getElementById("addText").style.display === "block") {
-        document.getElementById("addText").style.display = "none";
-        document.querySelector("#addBtn").textContent = "Add Student";
+      document.getElementById("addText").style.display = "none";
+      document.querySelector("#addBtn").textContent = "Add Student";
     }
     else {
-        document.getElementById("addText").style.display = "block";
-        document.querySelector("#addBtn").textContent = "Submit";
+      document.getElementById("addText").style.display = "block";
+      document.querySelector("#addBtn").textContent = "Submit";
     }
   }
   toggleRemoveStudent() {
     if(document.getElementById("removeText").style.display === "block") {
-        document.getElementById("removeText").style.display = "none";
-        document.querySelector("#removeBtn").textContent = "Remove Student";
+      document.getElementById("removeText").style.display = "none";
+      document.querySelector("#removeBtn").textContent = "Remove Student";
     }
     else {
-        document.getElementById("removeText").style.display = "block";
-        document.querySelector("#removeBtn").textContent = "Submit";
+      document.getElementById("removeText").style.display = "block";
+      document.querySelector("#removeBtn").textContent = "Submit";
     }
   }
   componentDidMount(){
@@ -74,20 +74,20 @@ export default class Groups extends Component {
           {/*TODO: admin should be able to select individual students and see their information here*/}
 
 
-            <MDBContainer>
-                <input type="GroupName" placeholder="New Group Name" className="display_none form-control textBox" id="groupText" />
-                <button id="groupBtn" className="btn button" onClick={this.toggleShowChangeGroupName}>Change Group Name</button>
-            </MDBContainer>
+          <MDBContainer>
+            <input type="GroupName" placeholder="New Group Name" className="display_none form-control textBox" id="groupText" />
+            <button id="groupBtn" className="btn button" onClick={this.toggleShowChangeGroupName}>Change Group Name</button>
+          </MDBContainer>
 
-            <MDBContainer>
-                <input type="AddStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="addText" />
-                <button id="addBtn" className="btn button" onClick={this.toggleAddStudent}>Add Student</button>
-            </MDBContainer>
+          <MDBContainer>
+            <input type="AddStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="addText" />
+            <button id="addBtn" className="btn button" onClick={this.toggleAddStudent}>Add Student</button>
+          </MDBContainer>
 
-            <MDBContainer>
-                <input type="RemoveStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="removeText" />
-                <button id="removeBtn" className="btn button" onClick={this.toggleRemoveStudent}>Remove Student</button>
-            </MDBContainer>
+          <MDBContainer>
+            <input type="RemoveStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="removeText" />
+            <button id="removeBtn" className="btn button" onClick={this.toggleRemoveStudent}>Remove Student</button>
+          </MDBContainer>
 
           <Link to={"/Groups"}>
             <button className="btn button">Delete this Group</button>
