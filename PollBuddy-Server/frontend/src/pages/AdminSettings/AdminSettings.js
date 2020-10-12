@@ -14,14 +14,46 @@ export default class Groups extends Component {
     //localStorage.removeItem("loggedIn");//todo if admin -- more specifically make diff states if the user who logged in is an admin... or teacher. wouldn't want teacher accessing user things or vice versa...
     //Redirect("/login");
   }
+
+  toggleShowChangeGroupName() {
+      if(document.getElementById("groupText").style.display === "block") {
+          document.getElementById("groupText").style.display = "none";
+          document.querySelector("#groupBtn").textContent = "Change group name";
+      }
+      else {
+          document.getElementById("groupText").style.display = "block";
+          document.querySelector("#groupBtn").textContent = "Submit";
+      }
+  }
+  toggleAddStudent() {
+    if(document.getElementById("addText").style.display === "block") {
+        document.getElementById("addText").style.display = "none";
+        document.querySelector("#addBtn").textContent = "Add Student";
+    }
+    else {
+        document.getElementById("addText").style.display = "block";
+        document.querySelector("#addBtn").textContent = "Submit";
+    }
+  }
+  toggleRemoveStudent() {
+    if(document.getElementById("removeText").style.display === "block") {
+        document.getElementById("removeText").style.display = "none";
+        document.querySelector("#removeBtn").textContent = "Remove Student";
+    }
+    else {
+        document.getElementById("removeText").style.display = "block";
+        document.querySelector("#removeBtn").textContent = "Submit";
+    }
+  }
   componentDidMount(){
     this.props.updateTitle("Admin Settings");
   }
-  render() { 
+  render() {
     return (
 
       <MDBContainer className="page">
         <MDBContainer className="box">
+
           <p className="fontSizeLarge">
             {/*  TODO: change this to whatever was clicked on in the last screen*/}
             CSCI 1200 - Data Structures
@@ -41,18 +73,21 @@ export default class Groups extends Component {
           {/*change name, details, add people, remove people*/}
           {/*TODO: admin should be able to select individual students and see their information here*/}
 
-          <MDBContainer>
-            <input type="GroupName" placeholder="New Group Name" className="form-control textBox" id="idText" />
-            <button className="btn button">Change Group Name</button>
 
-            <input type="RCSID" placeholder="Input RCSID to add student" className="form-control textBox" id="idText" />
-            <button className="btn button">Add Student</button>
+            <MDBContainer>
+                <input type="GroupName" placeholder="New Group Name" className="display_none form-control textBox" id="groupText" />
+                <button id="groupBtn" className="btn button" onClick={this.toggleShowChangeGroupName}>Change Group Name</button>
+            </MDBContainer>
 
-            <input type="RCSID" placeholder="Input RCSID to remove student" className="form-control textBox" id="idText" />
-            <button className="btn button">Remove Student</button>
-          </MDBContainer>
+            <MDBContainer>
+                <input type="AddStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="addText" />
+                <button id="addBtn" className="btn button" onClick={this.toggleAddStudent}>Add Student</button>
+            </MDBContainer>
 
-
+            <MDBContainer>
+                <input type="RemoveStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="removeText" />
+                <button id="removeBtn" className="btn button" onClick={this.toggleRemoveStudent}>Remove Student</button>
+            </MDBContainer>
 
           <Link to={"/Groups"}>
             <button className="btn button">Delete this Group</button>
