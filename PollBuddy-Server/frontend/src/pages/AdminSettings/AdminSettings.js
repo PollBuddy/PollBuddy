@@ -19,8 +19,7 @@ export default class Groups extends Component {
     if(document.getElementById("groupText").style.display === "block") {
       document.getElementById("groupText").style.display = "none";
       document.querySelector("#groupBtn").textContent = "Change group name";
-    }
-    else {
+    } else {
       document.getElementById("groupText").style.display = "block";
       document.querySelector("#groupBtn").textContent = "Submit";
     }
@@ -29,8 +28,7 @@ export default class Groups extends Component {
     if(document.getElementById("addText").style.display === "block") {
       document.getElementById("addText").style.display = "none";
       document.querySelector("#addBtn").textContent = "Add Student";
-    }
-    else {
+    } else {
       document.getElementById("addText").style.display = "block";
       document.querySelector("#addBtn").textContent = "Submit";
     }
@@ -39,8 +37,7 @@ export default class Groups extends Component {
     if(document.getElementById("removeText").style.display === "block") {
       document.getElementById("removeText").style.display = "none";
       document.querySelector("#removeBtn").textContent = "Remove Student";
-    }
-    else {
+    } else {
       document.getElementById("removeText").style.display = "block";
       document.querySelector("#removeBtn").textContent = "Submit";
     }
