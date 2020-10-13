@@ -12,6 +12,7 @@ export default class RegisterWithPollBuddy extends Component {
       password: "",
       userValid: true,
       emailValid: true,
+      emailExists: false,
       passValid: true,
     };
   }
@@ -30,6 +31,7 @@ export default class RegisterWithPollBuddy extends Component {
     this.setState({userValid: userValid});
     this.setState({emailValid: emailValid});
     this.setState({passValid: passValid});
+    this.setState({emailExists: false});
 
     if (!userValid || !emailValid || !passValid)
       return;
@@ -44,10 +46,14 @@ export default class RegisterWithPollBuddy extends Component {
         Email: this.state.email, 
         Password: this.state.password
       })
-    }).then(response => response.json())
-      .then(data => {
-        console.log(data);
-      });
+    })
+    .then(response => response.text())
+    .then(response => {
+      // email already exists in database
+      if (response.status === "Exists") {
+        this.setState({emailExists: true});
+      }
+    })
   }
 
   render() {
@@ -80,6 +86,7 @@ export default class RegisterWithPollBuddy extends Component {
                 <p>Invalid email format!</p>
               </div>
             }
+            {this.state.emailExists && <div className="error">A user with this email already exists!</div>}
             <label htmlFor="passwordText">Password:</label>
             <input type="password" placeholder="●●●●●●●●●●●●" className="form-control textBox" id="passwordText"
               onChange= {(evt) => { this.setState({password: evt.target.value}); }}/>

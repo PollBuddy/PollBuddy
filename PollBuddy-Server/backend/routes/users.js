@@ -132,10 +132,9 @@ router.post("/register", function (req, res, next) {
     Email: requestBody.Email,
     Password: bcrypt.hashSync(requestBody.Password, 10)
   }, (err, result) => {
-    if (err) return res.sendStatus(450);
+    if (err) return res.send("Exists");
+    else return res.sendStatus(200);
   });
-
-  return res.sendStatus(200);
 });
 
 router.post("/:id/edit/", function (req, res) {//TODO RCS BOOL refer to documentation
