@@ -2,10 +2,12 @@ import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import "./RegisterWithPollBuddy.scss";
+import {withRouter} from "react-router-dom";
 
-export default class RegisterWithPollBuddy extends Component {
+class RegisterWithPollBuddy extends Component {
   constructor(props) {
     super(props);
+    let history = 
     this.state = {
       username: "",
       email: "",
@@ -25,7 +27,8 @@ export default class RegisterWithPollBuddy extends Component {
     // do input validation
     const userValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(this.state.username);
     const emailValid = new RegExp(/^[a-zA-Z0-9_.]+@\w+\.\w+$/).test(this.state.email);
-    const passValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/).test(this.state.password);
+    const passValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/)
+      .test(this.state.password);
 
     // update component's state
     this.setState({userValid: userValid});
@@ -49,9 +52,14 @@ export default class RegisterWithPollBuddy extends Component {
     })
     .then(response => response.text())
     .then(response => {
-      // email already exists in database
-      if (response.status === "Exists") {
+      // email already exists in database, don't login
+      if (response === "Exists") {
         this.setState({emailExists: true});
+      }
+      else {
+        localStorage.setItem("loggedIn", true);
+        // redirect to groups page
+        this.props.history.push("/groups");
       }
     })
   }
@@ -99,10 +107,11 @@ export default class RegisterWithPollBuddy extends Component {
               </div>
             }
           </MDBContainer>
-
           <button className="btn button" onClick={this.handleRegister}>Submit</button>
         </MDBContainer>
       </MDBContainer>
     );
   }
 }
+
+export default withRouter(RegisterWithPollBuddy);
