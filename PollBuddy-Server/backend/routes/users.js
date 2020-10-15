@@ -7,7 +7,6 @@ var path = require("path");
 
 var mongoConnection = require("../modules/mongoConnection.js");
 const cas = require('../modules/cas');
-const { log } = require("console");
 
 // GET users listing.
 router.get("/", function (req, res, next) {

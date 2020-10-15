@@ -7,7 +7,6 @@ import {withRouter} from "react-router-dom";
 class RegisterWithPollBuddy extends Component {
   constructor(props) {
     super(props);
-    let history = 
     this.state = {
       username: "",
       email: "",
