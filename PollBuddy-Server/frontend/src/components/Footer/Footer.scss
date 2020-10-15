@@ -14,16 +14,16 @@
   position: absolute;
   z-index: -9;
 }
-.Footer-foot_links {
+.Footer-foot-links {
   background: var(--dark-purple-main-background);
   padding: 0px 40px;
   display: inline-block;
 }
-.Footer-foot_links:first-child {
+.Footer-foot-links:first-child {
   position: absolute;
   left: 0;
 }
-.Footer-foot_links:last-child {
+.Footer-foot-links:last-child {
   position: absolute;
   right: 0;
 }
@@ -39,7 +39,7 @@
 .Footer-foot a:hover {
   opacity: 1;
 }
-.Footer-foot_links img {
+.Footer-foot-links img {
   height: var(--font-size-small);
   width: auto;
 }

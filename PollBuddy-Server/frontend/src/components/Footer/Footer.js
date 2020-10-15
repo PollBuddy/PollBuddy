@@ -11,10 +11,10 @@ export default class Footer extends Component {
       <footer className = "Footer-foot">
         <MDBContainer className = "Footer-linethru" />
         <MDBContainer className = "Footer-links">
-          <MDBContainer className = "Footer-foot_links">
+          <MDBContainer className = "Footer-foot-links">
             &copy; 2020 Poll Buddy
           </MDBContainer>
-          <MDBContainer className = "Footer-foot_links">
+          <MDBContainer className = "Footer-foot-links">
             <a href = "/about">
               About
             </a>
@@ -31,7 +31,7 @@ export default class Footer extends Component {
               Privacy
             </a>
           </MDBContainer>
-          <MDBContainer className = "Footer-foot_links">
+          <MDBContainer className = "Footer-foot-links">
             <a href = "https://rcos.io/" target = "_blank" rel="noopener noreferrer">
               <img src = {rcosLogo} alt = "RCOS" />
             </a>

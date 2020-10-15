@@ -8,14 +8,14 @@
   text-transform: capitalize;
   margin: 0 0 50px;
 }
-.Header-bar_logo {
+.Header-bar-logo {
   position: absolute;
   left: 0;
   height: calc(20px + var(--head-font-size));
   width: auto;
   margin: -10px 0 0 40px;
 }
-.Header-bar_btn {
+.Header-bar-btn {
   position: absolute;
   right: 0;
   font: bold var(--font-size-small) / 1 var(--main-font);
@@ -25,10 +25,10 @@
   text-transform: uppercase;
   border-radius: 999px;
 }
-.Header-bar_btn {
+.Header-bar-btn {
   color: var(--light-purple-logo-text);
 }
-.Header-bar_btn:hover {
+.Header-bar-btn:hover {
   color: var(--white-most-text);
   text-decoration: none;
 }
