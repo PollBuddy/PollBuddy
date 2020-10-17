@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 // import './GroupEditor.scss'
 import { MDBContainer } from "mdbreact";
+import {withRouter} from 'react-router-dom';
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel.js";
+import Redirect from "react-router-dom/es/Redirect";
 
 //this component has 2 modes, edit and new. The new version allows the user to create a new class while the edit version
 //allows the user to edit an existing class. Pass new=true into props if you want to use the new version of the component
@@ -9,14 +11,13 @@ import LoadingWheel from "../../components/LoadingWheel/LoadingWheel.js";
 export default class GroupEditor extends Component {
   constructor(props){
     super(props);
-
     this.onInput = this.onInput.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.getAPIURL = this.getAPIURL.bind(this);
     this.getAPIJSON = this.getAPIJSON.bind(this);
 
-    //the id of the component is not stored in state because it will never change
     this.state = {
+      id: this.props.id,
       name: "",
       polls: null,
       users: null,
@@ -44,6 +45,7 @@ export default class GroupEditor extends Component {
               users: obj.users,
               instructors: obj.instructors,
               loadingon: false,
+              redirectToGroup: false,
             }
           );
         });
@@ -63,23 +65,32 @@ export default class GroupEditor extends Component {
     this.setState({
       loadingon: false
     });
-  }
+  };
 
   onInput = e => {
     //update state to include the data that was changed from the form
     this.setState({
       [e.target.name]: e.target.value
     });
-  }
+  };
 
-  onSubmit = e =>{
+  onSubmit = async e => {
     //create new group or edit group based on the given mode and data in state
-    fetch(this.getAPIURL(), {
+    let response = await fetch(this.getAPIURL(), {
       method: "POST",
       headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
       body: JSON.stringify(this.getAPIJSON())
     });
-  }
+    if(response.status === 200){
+      if(this.props.new){
+        //if the component is in new mode, redirect the user to the group's page
+        //TODO get id from backend and add it to props
+        this.setState({redirectToGroup: true, id: "temporary"});
+      }
+    }else{
+      //TODO: let user know that something went wrong
+    }
+  };
 
   //get the correct api url based on whether we're in create mode or not
   getAPIURL(){
@@ -112,11 +123,14 @@ export default class GroupEditor extends Component {
   }
 
   render() {
-    if(this.state === null || this.state.loadingon === true){
+    //redirect to the page containing information about a group if one was just created
+    if (this.state.redirectToGroup) {
+      return <Redirect to={`/groups/${this.state.id}/polls`} />
+    }
+    if(this.state.loadingon === true){
       return (
         <MDBContainer>
           <LoadingWheel/>
-          {/*<button className="btn button" onClick={this.onChange}>Stop Loading</button>*/}
         </MDBContainer>
       );
     }else{
