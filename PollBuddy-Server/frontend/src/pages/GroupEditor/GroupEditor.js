@@ -21,10 +21,10 @@ export default class GroupEditor extends Component {
       polls: null,
       users: null,
       instructors: null,
-      loadingon: true
+      loadingon: true,
     };
 
-    //if the component is in group creation mode, we don't need to read any data from the backend
+    //we only need to read data from the backend if the component is in edit mode
     if(!this.props.new){
       //once the component is created, fetch the data from the given group from the backend
       fetch(process.env.REACT_APP_BACKEND_URL + "/groups/").then(res => {//this is how one calls a get request (backend specifically made a method for finding all groups)
@@ -43,12 +43,16 @@ export default class GroupEditor extends Component {
               polls: obj.polls,
               users: obj.users,
               instructors: obj.instructors,
+              loadingon: false,
             }
           );
         });
       });
+    }else{
+      //if the component is in create mode, don't show the loading indicator since we don't have to fetch anything from
+      //the backend
+      this.state['loadingon'] = false;
     }
-
   }
 
   //these are variables passed in to props
@@ -112,7 +116,7 @@ export default class GroupEditor extends Component {
       return (
         <MDBContainer>
           <LoadingWheel/>
-          <button className="btn button" onClick={this.onChange}>Stop Loading</button>
+          {/*<button className="btn button" onClick={this.onChange}>Stop Loading</button>*/}
         </MDBContainer>
       );
     }else{
