@@ -28,6 +28,7 @@ import QuestionEnded from "./pages/QuestionEnded/QuestionEnded";
 import AnswerRecorded from "./pages/AnswerRecorded/AnswerRecorded";
 import LoginDefault from "./pages/LoginDefault/LoginDefault";
 import LoginWithSchool from "./pages/LoginWithSchool/LoginWithSchool";
+import PollHistory from "./pages/PollHistory/PollHistory";
 
 import Header from "./components/Header/Header.js";
 import Footer from "./components/Footer/Footer.js";
@@ -146,6 +147,10 @@ export default class App extends React.Component {
 
             <Route exact path="/template">
               <Template updateTitle={this.updateTitle} />
+            </Route>
+
+            <Route exact path="/polls/:pollID/history">
+              <PollHistory updateTitle={this.updateTitle} />
             </Route>
 
             {/* Default route/error page */}
