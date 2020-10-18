@@ -2,6 +2,9 @@ import React, {Component} from "react";
 import {Link, Redirect} from "react-router-dom";
 import { MDBContainer } from "mdbreact";
 
+//TODO This page can only be access when one is logged in
+//TODO Need to dynamically grab what polls the user has access to from the backend
+//TODO Need a way to know which polls the users has admin access to and which they do not
 
 // /api/users/
 export default class Groups extends Component {
@@ -19,7 +22,19 @@ export default class Groups extends Component {
   componentDidMount(){
     this.props.updateTitle("My Poll Histories");
   }
-  render() { 
+  //TODO, this state needs to be dynamically updated according to each user
+  state = {
+    polls_admin : [
+      {id: "1", title: "CSCI 1200 - Data Structures"},
+      {id: "2", title: "CSCI 2200 - Foundations of Computer Science"}
+    ],
+    polls_member : [
+      {id: "3", title: "CSCI 2300 - Intro to Algorithms"},
+      {id: "4", title: "CSCI 2500 - Computer Organization"},
+      {id: "5", title: "CSCI 2960 - RCOS"}
+    ]
+  }
+  render() {
     return (
 
       <MDBContainer className="page">
@@ -27,32 +42,31 @@ export default class Groups extends Component {
           <p className="fontSizeLarge">
             As a Group Admin:
           </p>
-          <Link to={"/polls/123/edit"}>
-            <button className="btn button">CSCI 1200 - Data Structures</button>
-          </Link>
-          <Link to={"/groups/123/edit"}>
-            <button className="btn button">CSCI 2200 - Foundations of Computer Science</button>
-          </Link>
-
+          {//Uses react to loop through polls_admin and make buttons. same step for polls_members
+            <React.Fragment>
+              {this.state.polls_admin.map(polls_admin => (
+                  <li key={polls_admin.id} className={polls_admin.title}>
+                    <Link to={"/polls/" + polls_admin.id + "/results"}>
+                      <button className="btn button">{polls_admin.title}</button>
+                    </Link>
+                  </li>
+              ))}
+            </React.Fragment>
+          }
           <p className="fontSizeLarge">
             As a Group Member:
           </p>
-          <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2300 - Intro to Algorithms</button>
-          </Link>
-          <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2500 - Computer Organization</button>
-          </Link>
-          <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2960 - RCOS</button>
-          </Link>
 
-          <p className="fontSizeLarge">
-            Group Management:
-          </p>
-          <Link to={"/groups/new"}>
-            <button className="btn button">New Group</button>
-          </Link>
+          <React.Fragment>
+              {this.state.polls_member.map(polls_member => (
+                  <li key={polls_member.id} className={polls_member.title}>
+                    <Link to={"/polls/"+polls_member.id+"/results"}>
+                      <button className = "btn button">{polls_member.title}</button>
+                    </Link>
+                  </li>
+              ))}
+          </React.Fragment>
+
         </MDBContainer>
       </MDBContainer>
     );
