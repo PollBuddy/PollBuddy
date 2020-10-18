@@ -10,6 +10,7 @@ export default class GroupCreation extends Component {//this class will likely n
 
   constructor() {
     super();
+    //TODO check if they're logged in
     this.state = {
       name: ""
       , description: ""
@@ -37,6 +38,7 @@ export default class GroupCreation extends Component {//this class will likely n
       });
     }
     render() {
+    //TODO check if they're logged in
       return (
         <MDBContainer className="page">
           {/*set new to true so we can use the creation version of the class editor component*/}

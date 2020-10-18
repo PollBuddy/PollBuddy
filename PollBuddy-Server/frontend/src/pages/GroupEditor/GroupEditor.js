@@ -4,6 +4,8 @@ import { MDBContainer } from "mdbreact";
 import {withRouter} from 'react-router-dom';
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel.js";
 import Redirect from "react-router-dom/es/Redirect";
+import {zeroPad} from "react-countdown";
+import ErrorText from "../../components/ErrorText/ErrorText";
 
 //this component has 2 modes, edit and new. The new version allows the user to create a new class while the edit version
 //allows the user to edit an existing class. Pass new=true into props if you want to use the new version of the component
@@ -16,6 +18,7 @@ export default class GroupEditor extends Component {
     this.getAPIURL = this.getAPIURL.bind(this);
     this.getAPIJSON = this.getAPIJSON.bind(this);
     this.getInitialData = this.getInitialData.bind(this);
+    this.checkError = this.checkError.bind(this);
 
     this.state = {
       id: this.props.id,
@@ -52,6 +55,7 @@ export default class GroupEditor extends Component {
           instructors: obj.instructors,
           loadingon: false,
           redirectToGroup: false,
+          showError: false,
         }
     );
   };
@@ -74,6 +78,8 @@ export default class GroupEditor extends Component {
   };
 
   onSubmit = async e => {
+    //hide the error message if it was showing
+    this.setState({showError: false});
     //create new group or edit group based on the given mode and data in state
     let response = await fetch(this.getAPIURL(), {
       method: "POST",
@@ -87,8 +93,8 @@ export default class GroupEditor extends Component {
         this.setState({redirectToGroup: true, id: "temporary"});
       }
     }else{
-      //TODO: let user know that something went wrong
-      console.log("error");
+      //let user know that something went wrong
+      this.setState({showError: true});
     }
   };
 
@@ -122,6 +128,10 @@ export default class GroupEditor extends Component {
       };
   }
 
+  checkError = e => {
+    return this.state.showError ? <ErrorText/> : null;
+  };
+
   render() {
     //redirect to the page containing information about a group if one was just created
     if (this.state.redirectToGroup) {
@@ -145,7 +155,7 @@ export default class GroupEditor extends Component {
               value={this.props.new ? null: this.state.name}
               onInput={this.onInput} />
           </MDBContainer>
-
+          {this.checkError()}
           <button className="btn button" onClick={this.onSubmit}>
             {this.props.new ? "Create Group": "Save Changes"}
           </button>
