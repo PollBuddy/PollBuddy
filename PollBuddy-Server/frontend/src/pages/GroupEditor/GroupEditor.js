@@ -15,6 +15,7 @@ export default class GroupEditor extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.getAPIURL = this.getAPIURL.bind(this);
     this.getAPIJSON = this.getAPIJSON.bind(this);
+    this.getInitialData = this.getInitialData.bind(this);
 
     this.state = {
       id: this.props.id,
@@ -26,36 +27,34 @@ export default class GroupEditor extends Component {
     };
 
     //we only need to read data from the backend if the component is in edit mode
-    if(!this.props.new){
-      //once the component is created, fetch the data from the given group from the backend
-      fetch(process.env.REACT_APP_BACKEND_URL + "/groups/").then(res => {//this is how one calls a get request (backend specifically made a method for finding all groups)
-        return res.json();
-      }).then(myJson => {
-        //get the info for the specific id in props from the json
-        fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.id + "/").then(res => {//this is how one calls a get request (backend specifically made one for finding a specific group)
-          return res.json();
-        }).then(myJson => {
-          //this workaround should be refactored later
-          let obj = myJson[0];
-          //call setState so the component updates once the data comes in
-          this.setState(
-            {
-              name: obj.Name,
-              polls: obj.polls,
-              users: obj.users,
-              instructors: obj.instructors,
-              loadingon: false,
-              redirectToGroup: false,
-            }
-          );
-        });
-      });
+    if(!this.props.new) {
+      this.getInitialData();
     }else{
       //if the component is in create mode, don't show the loading indicator since we don't have to fetch anything from
       //the backend
       this.state['loadingon'] = false;
     }
   }
+
+  getInitialData = async e => {
+    //once the component is created, fetch the data from the given group from the backend
+    //get the info for the specific id in props from the json
+    let response = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.id + "/");
+    let json = await response.json();
+    //this workaround should be refactored later
+    let obj = json[0];
+    //call setState so the component updates once the data comes in
+    this.setState(
+        {
+          name: obj.Name,
+          polls: obj.polls,
+          users: obj.users,
+          instructors: obj.instructors,
+          loadingon: false,
+          redirectToGroup: false,
+        }
+    );
+  };
 
   //these are variables passed in to props
   new;
@@ -89,6 +88,7 @@ export default class GroupEditor extends Component {
       }
     }else{
       //TODO: let user know that something went wrong
+      console.log("error");
     }
   };
 
