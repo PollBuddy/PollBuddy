@@ -29,12 +29,41 @@ export default class Groups extends Component {
       {id: "2", title: "CSCI 2200 - Foundations of Computer Science"}
     ],
     polls_member : [
-      {id: "3", title: "CSCI 2300 - Intro to Algorithms"},
-      {id: "4", title: "CSCI 2500 - Computer Organization"},
-      {id: "5", title: "CSCI 2960 - RCOS"}
+
     ]
   }
   render() {
+    {//These if else statement chooses what to display depending on if you are in groups or not}
+    let admin_display;
+    let member_display;
+    {
+      if (this.state.polls_admin.length == 0) {
+        admin_display = <p className=""> Looks like you have not created any groups! </p>
+      } else {
+        admin_display = <React.Fragment>
+                        {this.state.polls_admin.map(polls_admin => (
+                            <li key={polls_admin.id} className={polls_admin.title}>
+                              <Link to={"/polls/" + polls_admin.id + "/results"}>
+                                <button className="btn button">{polls_admin.title}</button>
+                              </Link>
+                            </li>
+                        ))}
+                      </React.Fragment>
+      }
+      if (this.state.polls_member.length == 0){
+        member_display = <p className=""> Looks like you are not in any groups! </p>
+      } else {
+        member_display = <React.Fragment>
+                          {this.state.polls_member.map(polls_member => (
+                              <li key={polls_member.id} className={polls_member.title}>
+                                <Link to={"/polls/"+polls_member.id+"/results"}>
+                                  <button className = "btn button">{polls_member.title}</button>
+                                </Link>
+                              </li>
+                          ))}
+                        </React.Fragment>
+      }
+    }
     return (
 
       <MDBContainer className="page">
@@ -42,31 +71,11 @@ export default class Groups extends Component {
           <p className="fontSizeLarge">
             As a Group Admin:
           </p>
-          {//Uses react to loop through polls_admin and make buttons. same step for polls_members
-            <React.Fragment>
-              {this.state.polls_admin.map(polls_admin => (
-                  <li key={polls_admin.id} className={polls_admin.title}>
-                    <Link to={"/polls/" + polls_admin.id + "/results"}>
-                      <button className="btn button">{polls_admin.title}</button>
-                    </Link>
-                  </li>
-              ))}
-            </React.Fragment>
-          }
+          {admin_display}
           <p className="fontSizeLarge">
             As a Group Member:
           </p>
-
-          <React.Fragment>
-              {this.state.polls_member.map(polls_member => (
-                  <li key={polls_member.id} className={polls_member.title}>
-                    <Link to={"/polls/"+polls_member.id+"/results"}>
-                      <button className = "btn button">{polls_member.title}</button>
-                    </Link>
-                  </li>
-              ))}
-          </React.Fragment>
-
+          {member_display}
         </MDBContainer>
       </MDBContainer>
     );
