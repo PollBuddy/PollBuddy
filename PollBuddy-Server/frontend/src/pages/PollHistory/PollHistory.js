@@ -29,11 +29,12 @@ export default class Groups extends Component {
       {id: "2", title: "CSCI 2200 - Foundations of Computer Science"}
     ],
     polls_member : [
-
+      {id: "3", title: "CSCI 2300 - Intro to Algorithms"},
+      {id: "4", title: "CSCI 2500 - Computer Organization"},
+      {id: "5", title: "CSCI 2960 - RCOS"}
     ]
   }
   render() {
-    let admin_display;
     //These if else statement chooses what to display depending on if you are in groups or not
     let admin_display;
     let member_display;
