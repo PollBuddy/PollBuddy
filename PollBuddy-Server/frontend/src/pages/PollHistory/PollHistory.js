@@ -33,7 +33,7 @@ export default class Groups extends Component {
     ]
   }
   render() {
-    {//These if else statement chooses what to display depending on if you are in groups or not}
+    //These if else statement chooses what to display depending on if you are in groups or not
     let admin_display;
     let member_display;
     {
