@@ -20,7 +20,7 @@ export default class Contact extends Component {
 
   render() {
     return(
-      <MDBContainer fluid className="page contact">
+      <MDBContainer fluid className="page Contact">
         <MDBContainer className = "box">
           <p className="fontSizeLarge">
             Looking to get in touch with a developer? Shoot an email over to <a href="mailto:contact@pollbuddy.app">contact@pollbuddy.app</a> or click the button below to open a support ticket form.

@@ -13,4 +13,4 @@ Additionally, you may choose to log in via RPI’s CAS. In this case, the CAS id
 Personally identifiable data, such as name and email, are collected via user input. Cookies may be used to keep track of the user’s session. Poll Buddy may also collect IP addresses and browser information for anti-cheating functionality. This data is used only for Poll Buddy related functions, and none of the information is sold or shared with anyone else.
 Poll Buddy’s main function is to collect user answers to questions, and will only collect as much information is necessary to provide the site’s functionality. Information inputted by the user is stored potentially indefinitely, but you do have the option to request timely deletion of your data.
 
-If you have any remaining concerns regarding Poll Buddy’s privacy policy or requests regarding your data, please contact us at privacy@pollbuddy.app.
+If you have any remaining concerns regarding Poll Buddy’s privacy policy or requests regarding your data, please contact us at [privacy@pollbuddy.app](mailto:privacy@pollbuddy.app).
