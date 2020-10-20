@@ -1,23 +1,23 @@
-.pollview_answers ul {
+.PollViewer-answers ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
-.pollview_answers li {
+.PollViewer-answers li {
   margin: 10px 0;
 }
 
-.pollview_answers a {
+.PollViewer-answers a {
   color: var(--white-most-text);
 }
 
-.pollview_answers a:hover {
+.PollViewer-answers a:hover {
   color: var(--light-purple-logo-text);
   text-decoration: none;
 }
 
-.pollviewer_bubble {
+.PollViewer-bubble {
   text-align: center;
   vertical-align: middle;
   border-radius: 999px;

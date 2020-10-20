@@ -37,8 +37,8 @@ export default class Homepage extends Component {
   render() {
     return (
       <MDBContainer fluid className="page">
-        <img src={logo} alt="logo" className="homepage_logo img-fluid" />
-        <MDBContainer className="home_boxes two-box">
+        <img src={logo} alt="logo" className="Homepage-logo img-fluid" />
+        <MDBContainer className="Homepage-boxes two-box">
           <MDBContainer className="box">
             <p>
               Poll Buddy is an interactive questionnaire platform that aims to be an enjoyable and easy to use way to collect answers and insights from a group of people.

@@ -61,10 +61,10 @@ export default class LoginWithPollBuddy extends Component {
             <button className = "btn button">Submit</button>
           </Link>
 
-          <a className="login_link" href = "/register">
+          <a className="Login-link" href = "/register">
             Register
           </a>
-          <a className="login_link" href = "/login/forgot">
+          <a className="Login-link" href = "/login/forgot">
             Forgot Password
           </a>
         </MDBContainer>
