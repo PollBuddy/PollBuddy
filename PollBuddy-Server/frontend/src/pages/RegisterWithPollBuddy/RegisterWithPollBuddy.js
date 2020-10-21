@@ -35,8 +35,9 @@ class RegisterWithPollBuddy extends Component {
     this.setState({passValid: passValid});
     this.setState({emailExists: false});
 
-    if (!userValid || !emailValid || !passValid)
+    if (!userValid || !emailValid || !passValid) {
       return;
+    }
 
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/register", {
       method: "POST",
@@ -49,18 +50,18 @@ class RegisterWithPollBuddy extends Component {
         Password: this.state.password
       })
     })
-    .then(response => response.text())
-    .then(response => {
-      // email already exists in database, don't login
-      if (response === "Exists") {
-        this.setState({emailExists: true});
-      }
-      else {
-        localStorage.setItem("loggedIn", true);
-        // redirect to groups page
-        this.props.history.push("/groups");
-      }
-    })
+      .then(response => response.text())
+      .then(response => {
+        // email already exists in database, don't login
+        if (response === "Exists") {
+          this.setState({emailExists: true});
+        }
+        else {
+          localStorage.setItem("loggedIn", true);
+          // redirect to groups page
+          this.props.history.push("/groups");
+        }
+      });
   }
 
   render() {
@@ -80,30 +81,30 @@ class RegisterWithPollBuddy extends Component {
             <input placeholder="SIS Man" className="form-control textBox" id="nameText" 
               onChange={(evt) => { this.setState({username: evt.target.value}); }}/>
             {!this.state.userValid && 
-              <div className="error">
-                <p>Username must be between 3 and 32 characters</p>
-                <p>Valid characters: (A-Z), (0-9), (-,_,.)</p>
-              </div>
+              <ul className="error">
+                <li>Username must be between 3 and 32 characters</li>
+                <li>Valid characters: (A-Z), (0-9), (-,_,.)</li>
+              </ul>
             }
             <label htmlFor="emailText">Email:</label>
             <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText"
               onChange={(evt) => { this.setState({email: evt.target.value}); }}/>
             {!this.state.emailValid && 
-              <div className="error">
-                <p>Invalid email format!</p>
-              </div>
+              <ul className="error">
+                <li>Invalid email format!</li>
+              </ul>
             }
             {this.state.emailExists && <div className="error">A user with this email already exists!</div>}
             <label htmlFor="passwordText">Password:</label>
             <input type="password" placeholder="●●●●●●●●●●●●" className="form-control textBox" id="passwordText"
               onChange= {(evt) => { this.setState({password: evt.target.value}); }}/>
             {!this.state.passValid && 
-              <div className="error">
-                <p>Invalid password. Must contain:</p>
-                <p>6 or more characters</p>
-                <p>At least 1 uppercase letter</p>
-                <p>At least 1 number</p>
-              </div>
+              <ul className="error">
+                <li>Invalid password. Must contain:</li>
+                <li>6 or more characters</li>
+                <li>At least 1 uppercase letter</li>
+                <li>At least 1 number</li>
+              </ul>
             }
           </MDBContainer>
           <button className="btn button" onClick={this.handleRegister}>Submit</button>
