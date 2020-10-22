@@ -51,7 +51,7 @@ The Frontend is available at `http://localhost:7655`.
 
 The Backend is available at `http://localhost:7655/api`.
 
-TOFIX: The Database available at `localhost:27017`. (note, expose the port manually through Docker-Compose in order to connect)
+The Database can be made available at `localhost:27017`. To do this, edit the `docker-compose.yml` file. You should see a comment under the `db` container definition about this. Uncomment the 2 lines for ports under that comment. You will want to restart the app if it is already running for the changes to take effect.
 
 Reporting is available at `http://localhost:7655/reporting`.
 
