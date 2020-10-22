@@ -55,8 +55,7 @@ class RegisterWithPollBuddy extends Component {
         // email already exists in database, don't login
         if (response === "Exists") {
           this.setState({emailExists: true});
-        }
-        else {
+        } else {
           localStorage.setItem("loggedIn", true);
           // redirect to groups page
           this.props.history.push("/groups");
