@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Link, Redirect} from "react-router-dom";
+import {MDBContainer} from "mdbreact";
 
 //TODO This page can only be access when one is logged in
 //TODO Need to dynamically grab what polls the user has access to from the backend
@@ -11,22 +12,20 @@ export default class Groups extends Component {
     this.props.updateTitle("My Poll Histories");
   }
 
-
   //TODO, this state needs to be dynamically updated according to each user
   state = {
     polls_admin: [
-      {id: "1", title: "CSCI 1200 - Data Structures"},
-      {id: "2", title: "CSCI 2200 - Foundations of Computer Science"}
+      {id:"1", title:"CSCI 1200 - Data Structures"},
+      {id:"2", title:"CSCI 2200 - Foundations of Computer Science"}
     ],
     polls_member: [
-      {id: "3", title: "CSCI 2300 - Intro to Algorithms"},
-      {id: "4", title: "CSCI 2500 - Computer Organization"},
-      {id: "5", title: "CSCI 2960 - RCOS"}
+      {id:"3", title:"CSCI 2300 - Intro to Algorithms"},
+      {id:"4", title:"CSCI 2500 - Computer Organization"},
+      {id:"5", title:"CSCI 2960 - RCOS"}
     ]
   }
 
-  render()
-  {
+  render() {
     //These if else statement chooses what to display depending on if you are in groups or not
     let admin_display;
     let member_display;
