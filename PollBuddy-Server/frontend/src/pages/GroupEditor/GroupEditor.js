@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 // import './GroupEditor.scss'
 import { MDBContainer } from "mdbreact";
-import {withRouter} from 'react-router-dom';
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel.js";
 import Redirect from "react-router-dom/es/Redirect";
-import {zeroPad} from "react-countdown";
 import ErrorText from "../../components/ErrorText/ErrorText";
 
 //this component has 2 modes, edit and new. The new version allows the user to create a new class while the edit version
@@ -35,11 +33,11 @@ export default class GroupEditor extends Component {
     }else{
       //if the component is in create mode, don't show the loading indicator since we don't have to fetch anything from
       //the backend
-      this.state['loadingon'] = false;
+      this.state["loadingon"] = false;
     }
   }
 
-  getInitialData = async e => {
+  async getInitialData(){
     //once the component is created, fetch the data from the given group from the backend
     //get the info for the specific id in props from the json
     let response = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.id + "/");
@@ -58,17 +56,11 @@ export default class GroupEditor extends Component {
           showError: false,
         }
     );
-  };
+  }
 
   //these are variables passed in to props
   new;
   id;
-
-  onChange = e => {
-    this.setState({
-      loadingon: false
-    });
-  };
 
   onInput = e => {
     //update state to include the data that was changed from the form
@@ -77,7 +69,7 @@ export default class GroupEditor extends Component {
     });
   };
 
-  onSubmit = async e => {
+  async onSubmit() {
     //hide the error message if it was showing
     this.setState({showError: false});
     //create new group or edit group based on the given mode and data in state
@@ -128,14 +120,14 @@ export default class GroupEditor extends Component {
       };
   }
 
-  checkError = e => {
+  checkError() {
     return this.state.showError ? <ErrorText/> : null;
   };
 
   render() {
     //redirect to the page containing information about a group if one was just created
     if (this.state.redirectToGroup) {
-      return <Redirect to={`/groups/${this.state.id}/polls`} />
+      return <Redirect to={`/groups/${this.state.id}/polls`} />;
     }
     if(this.state.loadingon === true){
       return (
