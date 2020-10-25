@@ -46,15 +46,15 @@ export default class GroupEditor extends Component {
     let obj = json[0];
     //call setState so the component updates once the data comes in
     this.setState(
-        {
-          name: obj.Name,
-          polls: obj.polls,
-          users: obj.users,
-          instructors: obj.instructors,
-          loadingon: false,
-          redirectToGroup: false,
-          showError: false,
-        }
+      {
+        name: obj.Name,
+        polls: obj.polls,
+        users: obj.users,
+        instructors: obj.instructors,
+        loadingon: false,
+        redirectToGroup: false,
+        showError: false,
+      }
     );
   }
 
@@ -88,7 +88,7 @@ export default class GroupEditor extends Component {
       //let user know that something went wrong
       this.setState({showError: true});
     }
-  };
+  }
 
   //get the correct api url based on whether we're in create mode or not
   getAPIURL(){
@@ -122,7 +122,7 @@ export default class GroupEditor extends Component {
 
   checkError() {
     return this.state.showError ? <ErrorText/> : null;
-  };
+  }
 
   render() {
     //redirect to the page containing information about a group if one was just created
