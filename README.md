@@ -43,6 +43,8 @@ The Frontend is available at `http://localhost:3000`.
 
 The Backend is available at `http://localhost:3001`.
 
+Accessing the website locally is available at `http://localhost:7655`.
+
 The Database available at `localhost:27017`. (note, expose the port manually through Docker-Compose in order to connect)
 
 ### Shutting down the app
