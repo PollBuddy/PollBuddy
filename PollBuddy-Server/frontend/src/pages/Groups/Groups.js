@@ -3,6 +3,9 @@ import {Link, Redirect} from "react-router-dom";
 import { MDBContainer } from "mdbreact";
 
 export default class Groups extends Component {
+  state = {
+    showXs: false
+  };
   constructor(){
     super();
     if(!localStorage.getItem("loggedIn")){
@@ -17,7 +20,11 @@ export default class Groups extends Component {
   componentDidMount(){
     this.props.updateTitle("My Groups");
   }
+  toggleLeaveGroup = () => {
+    this.setState(prevState => ({ showXs: !prevState.showXs }));
+  };
   render() { 
+    const { showXs } = this.state;
     return (
 
       <MDBContainer className="page">
@@ -36,13 +43,19 @@ export default class Groups extends Component {
             As a Group Member:
           </p>
           <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2300 - Intro to Algorithms</button>
+            <button className="btn button">CSCI 2300 - Intro to Algorithms
+              {showXs && <LeaveGroupIcon />}
+            </button>
           </Link>
           <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2500 - Computer Organization</button>
+            <button className="btn button">CSCI 2500 - Computer Organization
+              {showXs && <LeaveGroupIcon />}
+            </button>
           </Link>
           <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2960 - RCOS</button>
+            <button className="btn button">CSCI 2960 - RCOS
+              {showXs && <LeaveGroupIcon />}
+            </button>
           </Link>
 
           <p className="fontSizeLarge">
@@ -51,8 +64,15 @@ export default class Groups extends Component {
           <Link to={"/groups/new"}>
             <button className="btn button">New Group</button>
           </Link>
+          <button className="btn button" onClick={this.toggleLeaveGroup}>Leave Group</button>
         </MDBContainer>
       </MDBContainer>
     );
   }
+}
+
+function LeaveGroupIcon() {
+  return (
+    <span className="groups_removable">X</span>
+  );
 }

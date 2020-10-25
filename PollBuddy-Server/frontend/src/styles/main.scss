@@ -185,3 +185,13 @@ a:hover {
   color: var(--white-most-text);
   text-decoration: underline;
 }
+
+.groups_removable {
+  color: var(--darkest-purple-header-color);
+  font-weight: 900;
+  margin-left: 10px;
+}
+
+.groups_removable:hover {
+  color: var(--white-most-text);
+}
