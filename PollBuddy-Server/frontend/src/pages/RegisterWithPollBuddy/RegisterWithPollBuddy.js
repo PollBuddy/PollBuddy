@@ -23,7 +23,7 @@ export default class RegisterWithPollBuddy extends Component {
             <label htmlFor="emailText">Email:</label>
             <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText"/>
             <label htmlFor="passwordText">Password:</label>
-            <input placeholder="●●●●●●●●●●●●" className="form-control textBox" id="passwordText"/>
+            <input type="password" placeholder="••••••••••••" className="form-control textBox" id="passwordText"/>
           </MDBContainer>
 
           <form>

@@ -20,36 +20,36 @@ export default class GroupPolls extends Component {
 
   render() {
     return (
-      <MDBContainer className="page">
+      <MDBContainer className="page GroupPolls">
         <MDBContainer className="box">
-          <p className="fontSizeLarge bold">
+          <p className="fontSizeLarge">
             CSCI 1200 - Data Structures
           </p>
 
-          {/*TODO: arrows should represent active polls rather than mouse hover, and the styling is a bit broken now oops sorry */}
+          {/*TODO: arrows should represent active polls rather than mouse hover */}
           <ul>
-            <li id="poll0" className="GroupPolls-element">
+            <li id="poll0">
               <a href={"/polls/:pollID/view"}>
                 <MDBIcon className="GroupPolls-arrow" icon="long-arrow-alt-right" size="lg"/>
-                <span className={"GroupPolls-text fontSizeSmall"}> Lesson #1 - vectors</span>
+                <span>Lesson #1 - vectors</span>
               </a>
             </li>
-            <li id="poll1" className="GroupPolls-element">
+            <li id="poll1">
               <a href={"/polls/:pollID/view"}>
                 <MDBIcon className="GroupPolls-arrow" icon="long-arrow-alt-right" size="lg"/>
-                <span className={"GroupPolls-text fontSizeSmall"}> Lesson #2 - linked lists</span>
+                <span>Lesson #2 - linked lists</span>
               </a>
             </li>
-            <li id="poll2" className="GroupPolls-element">
+            <li id="poll2">
               <a href={"/polls/:pollID/view"}>
                 <MDBIcon className="GroupPolls-arrow" icon="long-arrow-alt-right" size="lg"/>
-                <span className={"GroupPolls-text fontSizeSmall"}> Lesson #3 - sets</span>
+                <span>Lesson #3 - sets</span>
               </a>
             </li>
-            <li id="poll3" className="GroupPolls-element">
+            <li id="poll3">
               <a href={"/polls/:pollID/view"}>
                 <MDBIcon className="GroupPolls-arrow" icon="long-arrow-alt-right" size="lg"/>
-                <span className={"GroupPolls-text fontSizeSmall"}> Lesson #4 - unordered maps</span>
+                <span>Lesson #4 - unordered maps</span>
               </a>
             </li>
           </ul>
