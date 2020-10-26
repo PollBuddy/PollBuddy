@@ -24,9 +24,9 @@ export default class About extends Component {
   render() {
     return (
       <MDBContainer className="page">
-        <div className="width-90 fontSizeSmall">
+        <div className="box box-body-text">
           {/* Render page from markdown file using react-markdown */}
-          <ReactMarkdown source={this.state.terms} unwrapDisallowed={true} />         
+          <ReactMarkdown source={this.state.terms} unwrapDisallowed={true} />
         </div>
       </MDBContainer>
     );

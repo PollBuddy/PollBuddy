@@ -22,6 +22,7 @@ import PollViewer from "./pages/PollViewer/PollViewer";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import PollResults from "./pages/PollResults/PollResults";
 import PollManager from "./pages/PollManager/PollManager";
+import PollHistory from "./pages/PollHistory/PollHistory";
 import Contact from "./pages/Contact/Contact";
 import About from "./pages/About/About";
 import QuestionEnded from "./pages/QuestionEnded/QuestionEnded";
@@ -106,6 +107,9 @@ export default class App extends React.Component {
             </Route>
             <Route exact path="/polls/:pollID/results">
               <PollResults updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/polls/history">
+              <PollHistory updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/questionEnded">
               <QuestionEnded updateTitle={this.updateTitle} />

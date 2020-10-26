@@ -8,7 +8,6 @@ var path = require("path");
 var mongoConnection = require("../modules/mongoConnection.js");
 const cas = require('../modules/cas');
 
-
 // GET users listing.
 router.get("/", function (req, res, next) {
   mongoConnection.getDB().collection("users").find({}).toArray(function (err, result) {
@@ -131,8 +130,13 @@ router.post("/register", function (req, res, next) {
     Username: requestBody.Username,
     Email: requestBody.Email,
     Password: bcrypt.hashSync(requestBody.Password, 10)
+  }, (err, result) => {
+    if (err) {
+      return res.send("Exists");
+    } else {
+      return res.sendStatus(200);
+    }
   });
-  return res.sendStatus(200);
 });
 
 router.post("/:id/edit/", function (req, res) {//TODO RCS BOOL refer to documentation

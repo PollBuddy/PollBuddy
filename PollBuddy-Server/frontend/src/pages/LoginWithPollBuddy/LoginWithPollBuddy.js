@@ -54,17 +54,17 @@ export default class LoginWithPollBuddy extends Component {
             <label htmlFor="emailText">Email:</label>
             <input type="email" placeholder="sisman@rpi.edu" className="form-control textBox" id="emailText" />
             <label htmlFor="passwordText">Password:</label>
-            <input type="password" placeholder="●●●●●●●●●●●●" className="form-control textBox" id="passwordText"/>
+            <input type="password" placeholder="••••••••••••" className="form-control textBox" id="passwordText"/>
           </MDBContainer>
 
           <Link to={"/groups"}>
             <button className = "btn button">Submit</button>
           </Link>
 
-          <a className="login_link" href = "/register">
+          <a className="Login-link" href = "/register">
             Register
           </a>
-          <a className="login_link" href = "/login/forgot">
+          <a className="Login-link" href = "/login/forgot">
             Forgot Password
           </a>
         </MDBContainer>
