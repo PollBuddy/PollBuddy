@@ -4,6 +4,7 @@ import autosize from "autosize";
 import {MDBContainer} from "mdbreact";
 import PhoneInput from "react-phone-input-2";
 import "mdbreact/dist/css/mdb.css";
+import "./Contact.scss";
 
 export default class Contact extends Component {
 
@@ -19,50 +20,35 @@ export default class Contact extends Component {
 
   render() {
     return(
-      <MDBContainer fluid className="page">
-        <p className="bold fontSizeLarge">
-          Looking to get in touch with a developer? Shoot an email over to
-          {" "}<em><a href="mailto:contact@pollbuddy.app">
-            contact@pollbuddy.app
-          </a></em>{" "}
-          or click the button below to open a support ticket form.
-        </p>
-        <p className="width-90 fontSizeSmall">
-          Alternatively, it would be greatly appreciated if you reported technical
-          problems, such as bugs or design complaints/suggestions, by
-          {" "}<em><a href="https://github.com/PollBuddy/PollBuddy/issues/new/choose">
-            opening an issue
-          </a></em>{" "}
-          on our
-          {" "}<em><a href="https://github.com/PollBuddy/PollBuddy">
-            GitHub repository.
-          </a></em>{" "}
-        </p>
-        <button
-          className="btn button"
-          style={{ display: this.state.formUp ? "none" : ""}}
-          onClick={() => this.setState({ formUp: true })}
-        >
-          File Support Ticket
-        </button>
+      <MDBContainer fluid className="page Contact">
+        <MDBContainer className = "box">
+          <p className="fontSizeLarge">
+            Looking to get in touch with a developer? Shoot an email over to <a href="mailto:contact@pollbuddy.app">contact@pollbuddy.app</a> or click the button below to open a support ticket form.
+          </p>
+          <p>
+            Alternatively, it would be greatly appreciated if you reported technical
+            problems, such as bugs or design complaints/suggestions, by <a href="https://github.com/PollBuddy/PollBuddy/issues/new/choose">opening an issue</a> on our <a href="https://github.com/PollBuddy/PollBuddy">GitHub repository.</a>
+          </p>
+          <button
+            className="btn button"
+            style={{ display: this.state.formUp ? "none" : ""}}
+            onClick={() => this.setState({ formUp: true })}
+          >
+            File Support Ticket
+          </button>
+        </MDBContainer>
         <MDBContainer fluid className="box"
-          style={{ display: this.state.formUp ? "flex" : "none", margin: "50px auto" }}
+          style={{ display: this.state.formUp ? "flex" : "none" }}
         >
-          <p className="bold fontSizeLarge">Support Ticket Information</p>
-          <label htmlFor="name">
-            <p className="fontSizeSmall">Full name:</p>
-          </label>
+          <p className="fontSizeLarge">Support Ticket Information</p>
           <MDBContainer className="form-group">
+            <label htmlFor="name">Full name:</label>
             <input required
               className="form-control textBox"
               id="name"
               placeholder="Name"
             />
-          </MDBContainer>
-          <label htmlFor="school">
-            <p className="fontSizeSmall">School (if applicable):</p>
-          </label>
-          <MDBContainer className="form-group">
+            <label htmlFor="school">School (if applicable):</label>
             <Autocomplete
               items={[
                 { key: 0, label: "N/A"},
@@ -95,15 +81,7 @@ export default class Contact extends Component {
               renderItem={(item, isHighlighted) =>
                 <div
                   key={item.key}
-                  className="fontSizeSmall"
-                  style={{
-                    background: isHighlighted ? "#DFCFEA" : "#FFF",
-                    overflow: "hidden",
-                    whiteSpace: "nowrap",
-                    textOverflow: "ellipsis",
-                    fontFamily: "monospace",
-                    textAlign: "center"
-                  }}
+                  className="auto_comp"
                 >
                   {item.label}
                 </div>
@@ -113,17 +91,8 @@ export default class Contact extends Component {
                 id: "school",
                 placeholder: "School"
               }}
-              menuStyle={{
-                display: "inline-block",
-                borderRadius: 5,
-                position: "fixed",
-                width: 100,
-                maxHeight: "50%"
-              }}
               wrapperStyle={{
-                display: "inline-block",
-                zIndex: 1,
-                position: "relative"
+                display: "block",
               }}
               value={this.state.value}
               onChange={e => this.setState({ value: e.target.value })}
@@ -136,22 +105,14 @@ export default class Contact extends Component {
               }}
               onSelect={value => this.setState({ value })}
             />
-          </MDBContainer>
-          <label htmlFor="email">
-            <p className="fontSizeSmall">Email address:</p>
-          </label>
-          <MDBContainer className="form-group">
+            <label htmlFor="email">Email address:</label>
             <input required
               type="email"
               className="form-control textBox"
               id="email"
               placeholder="Email"
             />
-          </MDBContainer>
-          <label htmlFor="phone">
-            <p class="fontSizeSmall">Phone number:</p>
-          </label>
-          <MDBContainer className="form-group">
+            <label htmlFor="phone">Phone number:</label>
             <PhoneInput
               inputProps={{ className: "form-control textBox", id: "phone" }}
               disableDropdown={true}
@@ -159,20 +120,13 @@ export default class Contact extends Component {
               value={this.state.phone}
               onChange={phone => this.setState({ phone })}
             />
-          </MDBContainer>
-          <label htmlFor="description">
-            <p className="fontSizeSmall">Description of the issue:</p>
-          </label>
-          <MDBContainer className="form-group" style={{ width: "100%" }}>
+            <label htmlFor="description">Description of the issue:</label>
             <textarea required
               className="form-control textBox"
               id="description"
               maxLength="500"
-              style={{ width: "100%", minHeight: "70px", resize: "none" }}
               placeholder="500 character limit"
             ></textarea>
-          </MDBContainer>
-          <MDBContainer className="form-group">
             <button className="btn button" onClick={() => this.setState({ formUp: false })}>
               Send Ticket
             </button>
@@ -181,5 +135,5 @@ export default class Contact extends Component {
       </MDBContainer>
     );
   }
-  
+
 }

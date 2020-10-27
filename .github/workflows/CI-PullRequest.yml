@@ -1,0 +1,60 @@
+name: CI-PullRequest
+
+on:
+  pull_request:
+
+jobs:
+  PullRequest-Temp-Deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Save start time
+        run: |
+          echo "START_TIME=$(TZ='America/New_York' date +"%Y/%m/%d %r")" >> $GITHUB_ENV
+      - name: Initialize SSH
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.POLLBUDDY_CICD_SERVER_KNOWNHOST }}" >> ~/.ssh/known_hosts
+          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+          ssh-add - <<< "${{ secrets.POLLBUDDY_CICD_SERVER_USER_KEY }}"
+
+      - name: Remote Test
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} cat test
+        id: remote_test
+
+      - name: Remote Update
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} "cd ./CI-CD && git pull"
+        id: remote_update
+
+      - name: Remote Deploy
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+        run: |
+          ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} "cd ./CI-CD && bash ./deployTestInstance.sh \"${{ github.event.number }}\" PR"
+        id: remote_deploy
+
+      - name: Save end time
+        run: |
+          echo "END_TIME=$(TZ='America/New_York' date +"%Y/%m/%d %r")" >> $GITHUB_ENV
+
+      - name: Share Link on PR
+        continue-on-error: true
+        uses: thollander/actions-comment-pull-request@master
+        with:
+          message: |
+            Live version has been created!
+            Always-Updated URL: https://dev-${{ github.event.number }}.pollbuddy.app/
+
+            Start Time: ${{ env.START_TIME }} ET
+            End Time: ${{ env.END_TIME }} ET
+            Last commit: ${{ github.event.pull_request.head.sha }}
+            Up-To-Commit URL: https://dev-${{ github.event.pull_request.head.sha }}.pollbuddy.app/
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

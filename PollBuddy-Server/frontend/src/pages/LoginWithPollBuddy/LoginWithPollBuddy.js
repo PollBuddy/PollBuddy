@@ -76,7 +76,7 @@ export default class LoginWithPollBuddy extends Component {
             <input type="email" placeholder="sisman@rpi.edu" className="form-control textBox" id="emailText" 
               onChange={(evt) => { this.setState({email: evt.target.value}); }}/>
             <label htmlFor="passwordText">Password:</label>
-            <input type="password" placeholder="●●●●●●●●●●●●" className="form-control textBox" id="passwordText"
+            <input type="password" placeholder="••••••••••••" className="form-control textBox" id="passwordText"
               onChange={(evt) => { this.setState({password: evt.target.value}); }}/>
           </MDBContainer>
 
