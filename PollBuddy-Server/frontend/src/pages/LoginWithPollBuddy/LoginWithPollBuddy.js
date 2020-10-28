@@ -60,6 +60,7 @@ export default class LoginWithPollBuddy extends Component {
   componentDidMount(){
     this.props.updateTitle("Login With Poll Buddy");
   }
+
   render() {
     this.handleLogin = this.handleLogin.bind(this); // This is needed so stuff like this.setState works
 
@@ -80,6 +81,7 @@ export default class LoginWithPollBuddy extends Component {
               onChange={(evt) => { this.setState({password: evt.target.value}); }}/>
           </MDBContainer>
 
+          <p style={{color: "red"}}>{ this.state.error }</p>
           <button className = "btn button" onClick={this.handleLogin}>Submit</button>
 
           <a className="Login-link" href = "/register">
