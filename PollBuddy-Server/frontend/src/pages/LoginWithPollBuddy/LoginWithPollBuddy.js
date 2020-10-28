@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Link, Redirect, withRouter} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 import "mdbreact/dist/css/mdb.css";
 import "./LoginWithPollBuddy.scss";
 import { MDBContainer } from "mdbreact";
@@ -42,19 +42,19 @@ export default class LoginWithPollBuddy extends Component {
         password: this.state.password
       })
     }).then(response => {
-        if (response.status === 200) {
-          //needs some authentication before and if authentication passes then set local storage and such refer to GroupCreation page to see the way to make POST requests to the backend
-          localStorage.setItem("loggedIn", true);//maybe have an admin/teacher var instead of just true
-          //TODO MAYBE IN THE FUTURE USE COOKIES TO REMEMBER PAST SESSION
-          this.setState({successfulLogin: true}); // Tell it to redirect to the next page if successful
-        }
-        else {
-          this.setState({error: "Invalid email/password combination"});
-        }
-      })
-      .catch(err => {
-        this.setState({error: "An error occurred during login. Please try again"});
-      });
+      if (response.status === 200) {
+        //needs some authentication before and if authentication passes then set local storage and such refer to GroupCreation page to see the way to make POST requests to the backend
+        localStorage.setItem("loggedIn", true);//maybe have an admin/teacher var instead of just true
+        //TODO MAYBE IN THE FUTURE USE COOKIES TO REMEMBER PAST SESSION
+        this.setState({successfulLogin: true}); // Tell it to redirect to the next page if successful
+      }
+      else {
+        this.setState({error: "Invalid email/password combination"});
+      }
+    }).catch(err => {
+      console.log(err);
+      this.setState({error: "An error occurred during login. Please try again"});
+    });
   }
 
   componentDidMount(){
