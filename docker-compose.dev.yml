@@ -1,0 +1,84 @@
+version: '3'
+services:
+  webproxy:
+    image: "nginx"
+    restart: unless-stopped
+    volumes:
+      - ./PollBuddy-Server/webproxy/conf.d:/etc/nginx/conf.d
+    ports:
+      - "7655:80"
+    networks:
+      - frontend
+      - backend
+      - logging
+
+  frontend:
+    build:
+      context: PollBuddy-Server/frontend
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    volumes:
+      - "./PollBuddy-Server/frontend/src:/usr/src/app/src"
+      - "./PollBuddy-Server/frontend/public:/usr/src/app/public"
+      - "./PollBuddy-Server/frontend/.env:/usr/src/app/.env"
+    networks:
+      - frontend
+
+  backend:
+    build:
+      context: PollBuddy-Server/backend
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    volumes:
+      - "./PollBuddy-Server/backend/bin:/usr/src/app/bin"
+      - "./PollBuddy-Server/backend/modules:/usr/src/app/modules"
+      - "./PollBuddy-Server/backend/public:/usr/src/app/public"
+      - "./PollBuddy-Server/backend/routes:/usr/src/app/routes"
+      - "./PollBuddy-Server/backend/app.js:/usr/src/app/app.js"
+      - "./PollBuddy-Server/backend/.env:/usr/src/app/.env"
+    networks:
+      - backend
+  
+  db:
+    image: "mongo"
+    restart: unless-stopped
+    volumes:
+      - mongodata:/data/db
+      - mongoconfig:/data/configdb
+    # Uncomment the 2 lines below if you need direct database access for some reason (ex: developing/debugging)
+    #ports:
+    #  - "27017:27017"
+    networks:
+      - backend
+
+  grafana:
+    build: PollBuddy-Server/reporting/grafana
+    restart: unless-stopped
+    networks:
+      - logging
+
+  influxdb:
+    build: PollBuddy-Server/reporting/influxdb
+    restart: unless-stopped
+    volumes:
+      - influxdata:/var/lib/influxdb
+    networks:
+      - logging
+      - backend
+
+volumes:
+  mongoconfig:
+    external: false
+
+  mongodata:
+    external: false
+
+  influxdata:
+    external: false
+
+networks:
+  backend:
+  frontend:
+  logging:
+
+
