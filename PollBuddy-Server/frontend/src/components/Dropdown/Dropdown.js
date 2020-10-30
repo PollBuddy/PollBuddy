@@ -13,11 +13,21 @@ export default class Dropdown extends Component {
 
 function DropdownButton() {
   const [open, setOpen] = useState(false);
+  const [close, setClose] = useState(false);
   function handleStateChange() {
-    setOpen(!open);
+    setOpen(false);
+    setClose(true);
+  }
+  function handleMenuClick() {
+    if (!open && !close) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+      setClose(false);
+    }
   }
   return (
-    <span onClick={() => setOpen(!open)}>
+    <span onClick={handleMenuClick}>
       <span className="header_bar_btn">Menu</span>
 
       {open && <DropdownMenu onStateChange={handleStateChange}></DropdownMenu>}
@@ -45,7 +55,6 @@ function useOutsideAlerter(ref, menuProps) {
 function DropdownMenu(props) {
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef, props);
-
   function DropdownItem(props) {
     return (
       <a href={props.link} className="dropdown_menu_item">
@@ -56,16 +65,16 @@ function DropdownMenu(props) {
 
   return (
     <div ref={wrapperRef}>
-    <div className="dropdown">
-      <DropdownItem link="/login">Login</DropdownItem>
-      <DropdownItem link="/">Logout</DropdownItem>
-      <DropdownItem link="/register">Register</DropdownItem>
-      <DropdownItem link="/account">Account</DropdownItem>
-      <DropdownItem link="/poll/:pollID/view">Enter Poll Code</DropdownItem>
-      <DropdownItem link="/groups">Groups</DropdownItem>
-      <DropdownItem link="/">History</DropdownItem>
-      <DropdownItem link="/">Settings</DropdownItem>
-    </div>
+      <div className="dropdown">
+        <DropdownItem link="/login">Login</DropdownItem>
+        <DropdownItem link="/">Logout</DropdownItem>
+        <DropdownItem link="/register">Register</DropdownItem>
+        <DropdownItem link="/account">Account</DropdownItem>
+        <DropdownItem link="/poll/:pollID/view">Enter Poll Code</DropdownItem>
+        <DropdownItem link="/groups">Groups</DropdownItem>
+        <DropdownItem link="/">History</DropdownItem>
+        <DropdownItem link="/">Settings</DropdownItem>
+      </div>
     </div>
   );
 }
