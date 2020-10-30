@@ -22,6 +22,8 @@ COPY routes ./routes
 COPY app.js ./
 COPY .env ./
 
+# Port
 EXPOSE 3000
 
+# Start command
 CMD ["node", "bin/www"]
