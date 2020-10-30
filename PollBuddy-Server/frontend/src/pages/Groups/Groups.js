@@ -26,20 +26,20 @@ export default class Groups extends Component {
             As a Group Admin:
           </p>
           <MDBContainer>
-            <Link to={"/groups/123/edit"}>
+            <Link to={"/groups/123/polls"}>
               <button className="btn button">CSCI 1200 - Data Structures</button>
             </Link>
             <Link to={"/adminSettings"}>
-              <button className="btn button">Edit</button>
+              <button className="btn button">Info</button>
             </Link>
           </MDBContainer>
 
           <MDBContainer>
-            <Link to={"/groups/123/edit"}>
+            <Link to={"/groups/123/polls"}>
               <button className="btn button">CSCI 2200 - FOCS</button>
             </Link>
             <Link to={"/adminSettings"}>
-              <button className="btn button">Edit</button>
+              <button className="btn button">Info</button>
             </Link>
           </MDBContainer>
 
@@ -52,7 +52,7 @@ export default class Groups extends Component {
               <button className="btn button">CSCI 2300 - Intro to Algorithms</button>
             </Link>
             <Link to={"/memberSettings"}>
-              <button className="btn button">Edit</button>
+              <button className="btn button">Info</button>
             </Link>
           </MDBContainer>
 
@@ -61,7 +61,7 @@ export default class Groups extends Component {
               <button className="btn button">CSCI 2500 - Computer Organization</button>
             </Link>
             <Link to={"/memberSettings"}>
-              <button className="btn button">Edit</button>
+              <button className="btn button">Info</button>
             </Link>
           </MDBContainer>
 
@@ -70,7 +70,7 @@ export default class Groups extends Component {
               <button className="btn button">CSCI 2960 - RCOS</button>
             </Link>
             <Link to={"/memberSettings"}>
-              <button className="btn button">Edit</button>
+              <button className="btn button">Info</button>
             </Link>
           </MDBContainer>
 
