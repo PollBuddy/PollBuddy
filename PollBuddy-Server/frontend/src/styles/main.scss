@@ -29,8 +29,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-bottom: calc(var(--font-size-small) + 70px);
-  min-height: calc(100vh - var(--head-font-size) - var(--font-size-small) - 160px);
+  padding-bottom: calc(50px + var(--font-size-small) + 40px);
+  min-height: calc(100vh - var(--head-font-size) - 40px - var(--font-size-small) - 40px - 100px);
 }
 
 h1, .fontSizeLarge {
