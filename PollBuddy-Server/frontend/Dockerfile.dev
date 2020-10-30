@@ -15,4 +15,4 @@ COPY package*.json ./
 RUN npm install
 
 # Start command
-RUN npm start
+CMD ["npm", "start"]

@@ -13,4 +13,8 @@ RUN npm install
 
 EXPOSE 3000
 
-CMD ["nodemon", "bin/www"]
+# Install nodemon
+RUN npm install -g nodemon
+
+# Start command
+CMD ["nodemon", "--legacy-watch", "bin/www"]
