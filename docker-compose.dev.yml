@@ -48,9 +48,8 @@ services:
     volumes:
       - mongodata:/data/db
       - mongoconfig:/data/configdb
-    # Uncomment the 2 lines below if you need direct database access for some reason (ex: developing/debugging)
-    #ports:
-    #  - "27017:27017"
+    ports:
+      - "27017:27017"
     networks:
       - backend
 
