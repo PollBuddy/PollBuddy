@@ -3,6 +3,7 @@ import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import GroupEditor from "../GroupEditor/GroupEditor";
+import Question from "../../components/Question/Question";
 
 export default class Template extends Component {//this class is an example of how to use get requests so frontend team can eventually connect to backend refer to class creation for post requests
   constructor() {
@@ -36,22 +37,42 @@ export default class Template extends Component {//this class is an example of h
   render() {
     return (
       <MDBContainer className="page">
-        <MDBContainer className="box">
+        {/*<MDBContainer className="box">*/}
           <p className="fontSizeLarge">
             Test:
           </p>
-          <MDBContainer className="class-editor">
-            {
-              //display each class in the backend by mapping the groups to class editor components
-              this.state.groups.map(
-                (group, index) => {
-                  console.log(group._id);
-                  return <GroupEditor key={group._id} id={group._id} new={false}/>;//the key is needed because each child of a list must have a unique key
-                }
-              )
-            }
-          </MDBContainer>
-        </MDBContainer>
+          <Question questionObj={{
+            "questionNumber": "1",
+            "question": "What's 2 + 2",
+            // "img": "https://i.kym-cdn.com/photos/images/newsfeed/001/409/553/5f5.png",
+            "choices": [
+              "A",
+              "B",
+              "C",
+              "D"
+            ],
+            "choicesText": [
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "points": 2,
+            "maxAllowedChoices": 1,
+            "timeLimit": 10
+          }}/>
+          {/*<MDBContainer className="class-editor">*/}
+          {/*  {*/}
+          {/*    //display each class in the backend by mapping the groups to class editor components*/}
+          {/*    this.state.groups.map(*/}
+          {/*      (group, index) => {*/}
+          {/*        console.log(group._id);*/}
+          {/*        return <GroupEditor key={group._id} id={group._id} new={false}/>;//the key is needed because each child of a list must have a unique key*/}
+          {/*      }*/}
+          {/*    )*/}
+          {/*  }*/}
+          {/*</MDBContainer>*/}
+        {/*</MDBContainer>*/}
       </MDBContainer>
     );
   }

@@ -31,7 +31,7 @@ export default class Question extends Component {
     }
     //add the data and the array to state
     this.state = {
-      key: props.number,
+      key: props.questionNumber,
       data: data,
       studentChoices: tempArray,
     };
@@ -91,68 +91,44 @@ export default class Question extends Component {
       }
     };
     return (
-      <MDBContainer className="question_component-question">
-        <MDBRow>
-          <MDBCol md="8">
-            <MDBCard >
-              { // only display image if there is one
-                this.state.data.img &&
-                <MDBCardImage
-                  className="question_img-fluid"
-                  src={this.state.data.img}
-                  waves
-                />
-              }
-              
-              <MDBCardBody>
-                
-                <MDBCardTitle>Q{this.state.key+1}: {this.state.data.title} </MDBCardTitle>
-                
-                <MDBCardText>
-                  {this.state.data.question}
-                </MDBCardText>
-                <hr />
-                <MDBContainer>
+      <MDBContainer id={"question-box"} className="box">
+        <p>Question {this.state.data.questionNumber}</p>
+        <span className={"question-title"}>{this.state.data.question}</span>
+        { // only display image if there is one
+          this.state.data.img &&
+          <img
+            className="question_img-fluid"
+            src={this.state.data.img}
+            alt={""}/>
+        }
+                <MDBContainer className={"question-btn-container"}>
                   {this.state.data.choices.map((choice, index) => {
 
                     if (this.state.studentChoices[index]) {
                       return (
-                        <MDBContainer key={index}>
-                          <MDBRow>
-                            <MDBCol small="2">
-                              <MDBBtn className="question_btn-choice" onClick={() => {
-                                return this.deselectChoice(index); 
-                              }}>
+                        <btn className={"question-btn-and-text"} onClick={() => {
+                          return this.deselectChoice(index);
+                        }}>
+                              <MDBContainer className="question-btn question-btn-active question-btn-apply-hover-effect">
                                 {choice}
-                              </MDBBtn>
-                            </MDBCol>
-                            <MDBCol small="10">
-                              {this.state.data.choicesText[index]}
-                            </MDBCol>
-                          </MDBRow>
-                        </MDBContainer>
+                              </MDBContainer>
+                          {this.state.data.choicesText[index]}
+                        </btn>
                       );
                     } else {
                       return (
-                        <MDBContainer key={index}>
-                          <MDBRow>
-                            <MDBCol small="2">
-                              <MDBBtn className="question_btn-choice" outline onClick={() => {
-                                return this.selectChoice(index); 
-                              }}>
+                        <btn className={"question-btn-and-text"} onClick={() => {
+                          return this.selectChoice(index);
+                        }}>
+                              <MDBContainer className="question-btn question-btn-inactive question-btn-apply-hover-effect">
                                 {choice}
-                              </MDBBtn>
-                            </MDBCol>
-                            <MDBCol small="10">
-                              {this.state.data.choicesText[index]}
-                            </MDBCol>
-                          </MDBRow>
-                        </MDBContainer>
+                              </MDBContainer>
+                          {this.state.data.choicesText[index]}
+                        </btn>
                       );
                     }
                   })}
                 </MDBContainer>
-              </MDBCardBody>
               <div className='rounded-bottom mdb-color lighten-3 text-center pt-3'>
                 <ul className='list-unstyled list-inline font-small'>
                   <li className='list-inline-item white-text'>
@@ -169,12 +145,6 @@ export default class Question extends Component {
                   </li>
                 </ul>
               </div>
-            </MDBCard>
-          </MDBCol>
-
-        </MDBRow>
-
-
       </MDBContainer>
     );
   }
