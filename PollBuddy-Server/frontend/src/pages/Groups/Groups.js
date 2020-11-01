@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {Link, Redirect} from "react-router-dom";
 import { MDBContainer } from "mdbreact";
+import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 
 function getGroups(){
   return [
@@ -14,6 +15,8 @@ export default class Groups extends Component {
   constructor(){
     super();
     this.state = {
+      error: null,
+      doneLoading: false,
       admin_groups: [
         {key: 0, id: 123, label: "CSCI 1200 - Data Structures"},
         {key: 1, id: 123, label: "CSCI 2200 - Foundations of Computer Science"}
@@ -32,44 +35,63 @@ export default class Groups extends Component {
     }
   }
 
+  stopLoading = e => {
+    this.setState({
+      doneLoading: true
+    });
+  };
+
   signout(){
     //localStorage.removeItem("loggedIn");//todo if admin -- more specifically make diff states if the user who logged in is an admin... or teacher. wouldn't want teacher accessing user things or vice versa...
     //Redirect("/login");
   }
   componentDidMount(){
     this.props.updateTitle("My Groups");
+
   }
   render() {
-    return (
-
-      <MDBContainer className="page">
-        <MDBContainer className="box">
-          <p className="fontSizeLarge">
-            As a Group Admin:
-          </p>
-          {this.state.admin_groups.map((e) => (
-              <Link to={"/groups/" + e.id + "/polls"}>
-                <button className="btn button width-20em">{e.label}</button>
-              </Link>
-          ))}
-
-          <p className="fontSizeLarge">
-            As a Group Member:
-          </p>
-          {this.state.member_groups.map((e) => (
-              <Link to={"/groups/" + e.id + "/polls"}>
-                <button className="btn button width-20em">{e.label}</button>
-              </Link>
-          ))}
-
-          <p className="fontSizeLarge">
-            Group Management:
-          </p>
-          <Link to={"/groups/new"}>
-            <button className="btn button">New Group</button>
-          </Link>
+    if(this.state.error != null){
+      return <p className="fontSizeLarge">Error! Please try again.</p>
+    }
+    else if(!this.state.doneLoading){
+      return (
+        <MDBContainer>
+          <LoadingWheel/>
+          <button className="btn button" onClick={this.stopLoading}>End Loading</button>
         </MDBContainer>
-      </MDBContainer>
-    );
+      );
+    }
+    else {
+      return (
+        <MDBContainer className="page">
+          <MDBContainer className="box">
+            <p className="fontSizeLarge">
+              As a Group Admin:
+            </p>
+            {this.state.admin_groups.map((e) => (
+                <Link to={"/groups/" + e.id + "/polls"}>
+                  <button className="btn button width-20em">{e.label}</button>
+                </Link>
+            ))}
+
+            <p className="fontSizeLarge">
+              As a Group Member:
+            </p>
+            {this.state.member_groups.map((e) => (
+                <Link to={"/groups/" + e.id + "/polls"}>
+                  <button className="btn button width-20em">{e.label}</button>
+                </Link>
+            ))}
+
+            <p className="fontSizeLarge">
+              Group Management:
+            </p>
+            <Link to={"/groups/new"}>
+              <button className="btn button">New Group</button>
+            </Link>
+          </MDBContainer>
+        </MDBContainer>
+      );
+    }
   }
 }
