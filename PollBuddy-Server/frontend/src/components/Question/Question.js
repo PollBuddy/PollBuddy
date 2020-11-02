@@ -15,11 +15,43 @@ import Countdown, { zeroPad } from "react-countdown";
 
 
 export default class Question extends Component {
+  choiceOrder;
   constructor(props) {
     super(props);
     //binding helper functions
     this.deselectChoice = this.deselectChoice.bind(this);
     this.selectChoice = this.selectChoice.bind(this);
+    this.getChoiceLabel = this.getChoiceLabel.bind(this);
+
+    this.choiceOrder = [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H",
+      "I",
+      "J",
+      "K",
+      "L",
+      "M",
+      "N",
+      "O",
+      "P",
+      "Q",
+      "R",
+      "S",
+      "T",
+      "U",
+      "V",
+      "W",
+      "X",
+      "Y",
+      "Z",
+    ];
+
     //get props
     let data = props.questionObj;
 
@@ -77,6 +109,19 @@ export default class Question extends Component {
     }));
   }
 
+  //return the correct label to go in the choice bubble based on the index of the choice
+  getChoiceLabel(index){
+    //if the index is between 0 and 25, simply return the proper letter
+    if(index < this.choiceOrder.length) return this.choiceOrder[index];
+    //if the index is greater than 25, return a combination of letters (ex. AA, BB, etc)
+    let repititions = Math.floor(index / 26) + 1;
+    let charIndex = index % 26;
+    let str = "";
+    for(let i = 0; i < repititions; i++){
+      str += this.choiceOrder[charIndex];
+    }
+    return str;
+  }
   
 
   render() {
@@ -101,50 +146,50 @@ export default class Question extends Component {
             src={this.state.data.img}
             alt={""}/>
         }
-                <MDBContainer className={"question-btn-container"}>
-                  {this.state.data.choices.map((choice, index) => {
+        <MDBContainer className={"question-btn-container"}>
+          {this.state.data.choices.map((choice, index) => {
 
-                    if (this.state.studentChoices[index]) {
-                      return (
-                        <btn className={"question-btn-and-text"} onClick={() => {
-                          return this.deselectChoice(index);
-                        }}>
-                              <MDBContainer className="question-btn question-btn-active question-btn-apply-hover-effect">
-                                {choice}
-                              </MDBContainer>
-                          {this.state.data.choicesText[index]}
-                        </btn>
-                      );
-                    } else {
-                      return (
-                        <btn className={"question-btn-and-text"} onClick={() => {
-                          return this.selectChoice(index);
-                        }}>
-                              <MDBContainer className="question-btn question-btn-inactive question-btn-apply-hover-effect">
-                                {choice}
-                              </MDBContainer>
-                          {this.state.data.choicesText[index]}
-                        </btn>
-                      );
-                    }
-                  })}
-                </MDBContainer>
-              <div className='rounded-bottom mdb-color lighten-3 text-center pt-3'>
-                <ul className='list-unstyled list-inline font-small'>
-                  <li className='list-inline-item white-text'>
-                    <MDBIcon far icon="star" /> 12
-                  </li>
-                  <li className='list-inline-item'>
-                    <a href='#!' className='white-text'>
-                      <MDBIcon far icon="clock" />
-                      <Countdown
-                        renderer={clockFormat}
-                        date={Date.now() + this.state.data.timeLimit * 1000}
-                      />
-                    </a>
-                  </li>
-                </ul>
-              </div>
+            if (this.state.studentChoices[index]) {
+              return (
+                <btn className={"question-btn-and-text"} onClick={() => {
+                  return this.deselectChoice(index);
+                }}>
+                      <MDBContainer className="question-label-bubble question-label-bubble-active">
+                        <span className={"question-label-text"}>{this.getChoiceLabel(index)}</span>
+                      </MDBContainer>
+                  {choice}
+                </btn>
+              );
+            } else {
+              return (
+                <btn className={"question-btn-and-text"} onClick={() => {
+                  return this.selectChoice(index);
+                }}>
+                      <MDBContainer className="question-label-bubble question-label-bubble-inactive">
+                        <span className={"question-label-text"}>{this.getChoiceLabel(index)}</span>
+                      </MDBContainer>
+                  {choice}
+                </btn>
+              );
+            }
+          })}
+      </MDBContainer>
+        <div className='rounded-bottom mdb-color lighten-3 text-center pt-3'>
+          <ul className='list-unstyled list-inline font-small'>
+            <li className='list-inline-item white-text'>
+              <MDBIcon far icon="star" /> 12
+            </li>
+            <li className='list-inline-item'>
+              <a href='#!' className='white-text'>
+                <MDBIcon far icon="clock" />
+                <Countdown
+                  renderer={clockFormat}
+                  date={Date.now() + this.state.data.timeLimit * 1000}
+                />
+              </a>
+            </li>
+          </ul>
+        </div>
       </MDBContainer>
     );
   }

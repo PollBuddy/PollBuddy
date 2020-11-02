@@ -46,19 +46,13 @@ export default class Template extends Component {//this class is an example of h
             "question": "What's 2 + 2",
             // "img": "https://i.kym-cdn.com/photos/images/newsfeed/001/409/553/5f5.png",
             "choices": [
-              "A",
-              "B",
-              "C",
-              "D"
-            ],
-            "choicesText": [
               "1",
               "2",
               "3",
-              "4"
+              "4",
             ],
             "points": 2,
-            "maxAllowedChoices": 1,
+            "maxAllowedChoices": 2,
             "timeLimit": 10
           }}/>
           {/*<MDBContainer className="class-editor">*/}

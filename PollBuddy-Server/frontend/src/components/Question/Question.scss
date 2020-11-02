@@ -4,11 +4,10 @@
     margin: 8px;
 }
 
-.question-btn{
+.question-label-bubble{
     //height:3em;
     margin: 8px 16px;
-    height: 1em;
-    width: 1em;
+    height: fit-content;
     padding: 0.4em;
     border-radius: 100px;
     display: inline-block;
@@ -33,15 +32,15 @@
     cursor: pointer;
 }
 
-.question-btn-and-text:hover .question-btn-apply-hover-effect{
+.question-btn-and-text:hover .question-label-bubble{
     box-shadow: 0px 2px 9px 4px rgba(70,70,70,0.6);
 }
 
-.question-btn-inactive{
+.question-label-bubble-inactive{
     background: transparent;
 }
 
-.question-btn-active {
+.question-label-bubble-active {
     background: var(--base-purple-logo-bg);
 }
 
