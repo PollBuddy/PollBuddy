@@ -1,12 +1,11 @@
 import React, { Component, useState, useRef, useEffect } from "react";
 import "mdbreact/dist/css/mdb.css";
 import "./Dropdown.scss";
-import "../Header/Header.scss";
 
 export default class Dropdown extends Component {
   render() {
     return (
-      <DropdownButton></DropdownButton>
+      <DropdownButton />
     );
   }
 }
@@ -27,10 +26,9 @@ function DropdownButton() {
     }
   }
   return (
-    <span onClick={handleMenuClick}>
-      <span className="header_bar_btn">Menu</span>
-
-      {open && <DropdownMenu onStateChange={handleStateChange}></DropdownMenu>}
+    <span>
+      <span className="Dropdown-button button" onClick={handleMenuClick}>Menu</span>
+      {open && <DropdownMenu onStateChange={handleStateChange} />}
     </span>
   );
 }
@@ -57,24 +55,22 @@ function DropdownMenu(props) {
   useOutsideAlerter(wrapperRef, props);
   function DropdownItem(props) {
     return (
-      <a href={props.link} className="dropdown_menu_item">
+      <a href={props.link}>
         {props.children}
       </a>
     );
   }
 
   return (
-    <div ref={wrapperRef}>
-      <div className="dropdown">
-        <DropdownItem link="/login">Login</DropdownItem>
-        <DropdownItem link="/">Logout</DropdownItem>
-        <DropdownItem link="/register">Register</DropdownItem>
-        <DropdownItem link="/account">Account</DropdownItem>
-        <DropdownItem link="/poll/:pollID/view">Enter Poll Code</DropdownItem>
-        <DropdownItem link="/groups">Groups</DropdownItem>
-        <DropdownItem link="/">History</DropdownItem>
-        <DropdownItem link="/">Settings</DropdownItem>
-      </div>
+    <div className="Dropdown" ref={wrapperRef}>
+      <DropdownItem link="/login">Login</DropdownItem>
+      <DropdownItem link="/">Logout</DropdownItem>
+      <DropdownItem link="/register">Register</DropdownItem>
+      <DropdownItem link="/account">Account</DropdownItem>
+      <DropdownItem link="/poll/:pollID/view">Enter Poll Code</DropdownItem>
+      <DropdownItem link="/groups">Groups</DropdownItem>
+      <DropdownItem link="/">History</DropdownItem>
+      <DropdownItem link="/">Settings</DropdownItem>
     </div>
   );
 }

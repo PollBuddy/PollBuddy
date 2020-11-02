@@ -33,7 +33,7 @@ export default class Header extends Component {
           <img src = {logo} className = "header_bar_logo" alt = "logo" />
         </a>
         {this.props.title}
-        <Dropdown></Dropdown>
+        <Dropdown />
       </header>
     );
   }
