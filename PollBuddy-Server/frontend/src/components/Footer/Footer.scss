@@ -28,6 +28,9 @@
   height: var(--font-size-small);
   width: auto;
 }
+.Footer-foot-links:last-child a {
+  padding: 8px 10px !important;
+}
 @media only screen and (min-width: 762px) {
   .Footer-foot-links:last-child {
     position: absolute;
@@ -35,7 +38,7 @@
     margin-right: 20px;
   }
 }
-@media only screen and (max-width: 419px) {
+@media only screen and (max-width: 420px) {
   .Footer-foot-links span {
     display: block;
   }
