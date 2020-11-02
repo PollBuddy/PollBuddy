@@ -1,10 +1,12 @@
 var createError = require("http-errors");
 var express = require("express");
 var router = express.Router();
-var mongoConnection = require("../modules/mongoConnection.js");
 const bson = require("bson");
 var bcrypt = require("bcrypt");
+var path = require("path");
 
+var mongoConnection = require("../modules/mongoConnection.js");
+const cas = require('../modules/cas');
 
 // GET users listing.
 router.get("/", function (req, res, next) {
@@ -72,6 +74,53 @@ router.post("/login", function (req, res) {
 
 });
 
+router.get("/login/cas", cas.bounce2, function (req, res, next) {
+
+  // This runs if the user is logged in successfully
+
+  // Log the user in on the backend side of things
+  if(req.query.ticket) {
+    console.log("Locating user to add to session."); // TODO: Remove after testing
+    mongoConnection.getDB().collection("users").findOne({Username: req.session.cookie.cas_user}, {projection: {_id: false, Username: true}}, (err, result) => {
+      if (err) {
+        console.log("Error occurred"); // TODO: Improve error messaging
+        console.log(err);
+      } else {
+        console.log("Result found"); // TODO: Remove after testing
+        console.log(result);
+        if(result == null) {
+          // User not registered, TODO: Redirect to registration
+          return res.send("User not registered!");
+        } else {
+          req.session.UserID = result.Username;
+        }
+      }
+    });
+
+  } else {
+    console.log("Ticket not specified."); // TODO: Remove after testing
+  }
+
+  // Redirect the user to the homepage with a nice message
+  var options = {
+    root: path.join(__dirname, '../public'),
+    dotfiles: 'deny',
+    headers: {
+      'x-timestamp': Date.now(),
+      'x-sent': true
+    }
+  };
+
+  res.sendFile("pages/loginRedirect.html", options, function (err) {
+    if (err) {
+      console.log(err);
+      res.send(500);
+    }
+  });
+
+});
+
+
 router.post("/register", function (req, res, next) {
   var requestBody = req.body;
 
@@ -81,9 +130,15 @@ router.post("/register", function (req, res, next) {
     Username: requestBody.Username,
     Email: requestBody.Email,
     Password: bcrypt.hashSync(requestBody.Password, 10)
+  }, (err, result) => {
+    if (err) {
+      return res.send("Exists");
+    } else {
+      return res.sendStatus(200);
+    }
   });
-  return res.sendStatus(200);
 });
+
 router.post("/:id/edit/", function (req, res) {//TODO RCS BOOL refer to documentation
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   var jsonContent = req.body;
@@ -191,6 +246,7 @@ router.post("/:id/edit/", function (req, res) {//TODO RCS BOOL refer to document
   }
   return res.sendStatus(200); // TODO: Ensure this is true
 });
+
 router.get("/:id/", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("users").find({"_id": id}).toArray(function (err, result) {
@@ -214,7 +270,6 @@ router.get("/:id/groups", function (req, res, next) {
 });
 
 module.exports = router;
-
 
 // Middleware for getting user information
 module.exports.user_middleware = function (req, res, next) {

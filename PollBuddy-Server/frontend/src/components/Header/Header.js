@@ -28,13 +28,13 @@ export default class Header extends Component {
   }
   render() {
     return (
-      <header className = "header_bar">
+      <header className = "Header-bar">
         <a href = "/">
-          <img src = {logo} className = "header_bar_logo" alt = "logo" />
+          <img src = {logo} className = "Header-bar-logo" alt = "logo" />
         </a>
         {this.props.title}
         <Dropdown />
-      </header>
+     </header>
     );
   }
 }

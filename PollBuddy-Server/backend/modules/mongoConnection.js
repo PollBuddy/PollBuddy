@@ -20,6 +20,8 @@ module.exports = {
         } else {
           db = client.db(process.env.DB_NAME);
           console.log("Database connected");
+          // Make email unique index
+          db.collection("users").createIndex({"Email": 1}, {unique: true});
           callback(true);
         }
       });

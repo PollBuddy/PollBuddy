@@ -1,4 +1,4 @@
-.header_bar {
+.Header-bar {
   padding: 20px;
   font: var(--head-font-size) / 1 'Fredoka One';
   text-align: center;
@@ -8,7 +8,7 @@
   text-transform: capitalize;
   margin: 0 0 50px;
 }
-.header_bar_logo {
+.Header-bar-logo {
   position: absolute;
   left: 0;
   height: calc(20px + var(--head-font-size));

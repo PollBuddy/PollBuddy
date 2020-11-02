@@ -1,8 +1,6 @@
 # Welcome to Poll Buddy!
 ## An affordable and compatible in-class quizzing platform.
 
-----
-
 Many professors use iClickers in the classroom to create polls, ask questions, take attendance, and quiz their students. Unfortunately, these devices come with many drawbacks:
 - Expensive
 - Limited to five buttons (A, B, C, D, E)
@@ -12,7 +10,7 @@ Many professors use iClickers in the classroom to create polls, ask questions, t
 - Difficult to integrate with other programs
 - Only professors can track answers
 
-And the list goes on... 
+And the list goes on...
 
 As a group of RPI students fed up with iClickers we decided to create Poll Buddy; a website that shares all the same functionality of iClickers, but can do so much more while solving all of these problems.
 
