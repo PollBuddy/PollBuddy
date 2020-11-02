@@ -34,7 +34,7 @@ export default class Header extends Component {
         </a>
         {this.props.title}
         <Dropdown />
-     </header>
+      </header>
     );
   }
 }
