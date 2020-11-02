@@ -47,8 +47,7 @@ export default class LoginWithPollBuddy extends Component {
         localStorage.setItem("loggedIn", true);//maybe have an admin/teacher var instead of just true
         //TODO MAYBE IN THE FUTURE USE COOKIES TO REMEMBER PAST SESSION
         this.setState({successfulLogin: true}); // Tell it to redirect to the next page if successful
-      }
-      else {
+      } else {
         this.setState({error: "Invalid email/password combination"});
       }
     }).catch(err => {
