@@ -12,22 +12,12 @@ export default class Dropdown extends Component {
 
 function DropdownButton() {
   const [open, setOpen] = useState(false);
-  const [close, setClose] = useState(false);
   function handleStateChange() {
-    setOpen(false);
-    setClose(true);
-  }
-  function handleMenuClick() {
-    if (!open && !close) {
-      setOpen(true);
-    } else {
-      setOpen(false);
-      setClose(false);
-    }
+    setOpen(!open);
   }
   return (
     <span>
-      <span className="Dropdown-button button" onClick={handleMenuClick}>Menu</span>
+      <span className="Dropdown-button button" onClick={handleStateChange}>Menu</span>
       {open && <DropdownMenu onStateChange={handleStateChange} />}
     </span>
   );
@@ -42,10 +32,10 @@ function useOutsideAlerter(ref, menuProps) {
       }
     }
     // Bind the event listener
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
     return () => {
       // Unbind the event listener on clean up
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, [ref]);
 }
@@ -53,24 +43,16 @@ function useOutsideAlerter(ref, menuProps) {
 function DropdownMenu(props) {
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef, props);
-  function DropdownItem(props) {
-    return (
-      <a href={props.link}>
-        {props.children}
-      </a>
-    );
-  }
-
   return (
     <div className="Dropdown" ref={wrapperRef}>
-      <DropdownItem link="/login">Login</DropdownItem>
-      <DropdownItem link="/">Logout</DropdownItem>
-      <DropdownItem link="/register">Register</DropdownItem>
-      <DropdownItem link="/account">Account</DropdownItem>
-      <DropdownItem link="/poll/:pollID/view">Enter Poll Code</DropdownItem>
-      <DropdownItem link="/groups">Groups</DropdownItem>
-      <DropdownItem link="/">History</DropdownItem>
-      <DropdownItem link="/">Settings</DropdownItem>
+      <a href="/login">Login</a>
+      <a href="/">Logout</a>
+      <a href="/register">Register</a>
+      <a href="/account">Account</a>
+      <a href="/poll/:pollID/view">Enter Poll Code</a>
+      <a href="/groups">Groups</a>
+      <a href="/">History</a>
+      <a href="/">Settings</a>
     </div>
   );
 }
