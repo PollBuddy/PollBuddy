@@ -61,22 +61,32 @@ export default class Question extends Component {
     for (let i = 0; i < data.choices.length; i++) {
       tempArray.push(false);
     }
+    let tempQueue = [];
     //add the data and the array to state
     this.state = {
       key: props.questionNumber,
       data: data,
       studentChoices: tempArray,
+      choicesQueue: tempQueue,
     };
   }
 
   deselectChoice(index) {
     //set the boolean in the array at the selected index to false
-    //and update state
+    //remove it from the queue and update state
     let tempChoices = this.state.studentChoices;
     tempChoices[index] = false;
+    //remove the index from teh queue
+    for(let i = 0; i < this.state.choicesQueue.length; i++){
+      if(this.state.choicesQueue[i] === index){
+        this.state.choicesQueue.splice(i, 1);
+        break;
+      }
+    }
     this.setState(prevState => ({
       ...prevState,
       studentChoices: tempChoices,
+      // choicesQueue: tempQueue,
     }
     )
     );
@@ -85,6 +95,8 @@ export default class Question extends Component {
   selectChoice(index) {
     let tempChoices = this.state.studentChoices;
     let count = 0;
+    //push the index to the queue
+    this.state.choicesQueue.push(index);
     //count the number of booleans that are true in the array
     for (let i = 0; i < this.state.studentChoices.length; i++) {
       if (this.state.studentChoices[i]) {
@@ -92,14 +104,15 @@ export default class Question extends Component {
       }
     }
     //if the number of true booleans is greater than the maximum number of
-    //allowed choices (specified by the json) then set the entire array
-    //back to false
+    //allowed choices (specified by the json) then pop from the queue to set the first
+    //choice chosen back to false
     if (count >= this.state.data.maxAllowedChoices) {
-      for (let i = 0; i < this.state.studentChoices.length; i++) {
-        if (this.state.studentChoices[i]) {
-          tempChoices[i] = false;
-        }
-      }
+      this.state.studentChoices[this.state.choicesQueue.shift()] = false;
+      // for (let i = 0; i < this.state.studentChoices.length; i++) {
+      //   if (this.state.studentChoices[i]) {
+      //     tempChoices[i] = false;
+      //   }
+      // }
     }
     //make the boolean at the selected index true and update state
     tempChoices[index] = true;
@@ -125,6 +138,7 @@ export default class Question extends Component {
   
 
   render() {
+    console.log(this.state.choicesQueue);
     const clockFormat = ({ minutes, seconds, completed }) => {
         
       if (completed) {
