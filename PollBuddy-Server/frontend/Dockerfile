@@ -1,5 +1,5 @@
 # This dockerfile is considered "production ready" so we're compiling and building the app rather than running it in
-# dev mode. This grants us a few optimizations desireable in a production environment.
+# dev mode. This grants us a few optimizations desirable in a production environment.
 
 # Build Stage 1 - Used to transpile and minimize
 FROM node:current AS builder
