@@ -80,8 +80,9 @@ function LeaveGroupIcon(props) {
 function Dialog(props) {
   return (
     <div className="leave_groups_dialog">
-      <button onClick={props.onClose}>X</button>
-      <div>I'm a dialog</div>
+      <button onClick={props.onClose} className="btn button">X</button>
+      <p>Are you sure you want to leave this group?</p>
+      <button onClick={props.onClose} className="btn button leave_group_button">Yes</button>
     </div>
   );
 }

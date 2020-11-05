@@ -197,3 +197,16 @@ a:hover {
   color: var(--white-most-text);
   cursor: pointer;
 }
+
+.leave_groups_dialog {
+  position: absolute;
+  background-color: var(--dark-purple-main-background);
+  height: 200px;
+  width: 300px;
+  padding: 20px;
+  border-radius: 40px;
+}
+
+.leave_group_button {
+  float: right;
+}
