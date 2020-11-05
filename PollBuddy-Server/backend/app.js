@@ -105,6 +105,11 @@ app.get("/api/test", (req, res) => {
   });
 });
 
+app.get("/api/schools", (req, res) => {
+  var schools = ["RPI"]; //to be expanded soon? :eyes:
+  res.json(schools);
+});
+
 app.get("/gendata", (req, res) => {
   var log = "";
   var completes = [];
@@ -196,4 +201,3 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
-
