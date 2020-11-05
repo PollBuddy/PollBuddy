@@ -3,11 +3,12 @@ import {Link, Redirect} from "react-router-dom";
 import "mdbreact/dist/css/mdb.css";
 import "./LoginWithPollBuddy.scss";
 import { MDBContainer } from "mdbreact";
+import cookie from 'react-cookies'
 
 export default class LoginWithPollBuddy extends Component {
 
   state = {
-    successfulLogin: false
+    successfulLogin: cookie.load('loggedIn') | false
   };
 
   constructor(){
@@ -34,6 +35,7 @@ export default class LoginWithPollBuddy extends Component {
     localStorage.setItem("loggedIn", true);//maybe have an admin/teacher var instead of just true
     //TODO MAYBE IN THE FUTURE USE COOKIES TO REMEMBER PAST SESSION
     this.setState({successfulLogin: true}); // Tell it to redirect to the next page if successful
+    cookie.save('loggedIn', true, { path: '/' })
   }
 
   componentDidMount(){
