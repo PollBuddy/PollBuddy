@@ -4,7 +4,8 @@ import { MDBContainer } from "mdbreact";
 
 export default class Groups extends Component {
   state = {
-    showXs: false
+    showXs: false,
+    isOpen: false
   };
   constructor(){
     super();
@@ -43,20 +44,17 @@ export default class Groups extends Component {
             As a Group Member:
           </p>
           <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2300 - Intro to Algorithms
-              {showXs && <LeaveGroupIcon />}
-            </button>
+            <button className="btn button">CSCI 2300 - Intro to Algorithms</button>  
           </Link>
+          {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
           <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2500 - Computer Organization
-              {showXs && <LeaveGroupIcon />}
-            </button>
+            <button className="btn button">CSCI 2500 - Computer Organization</button>
           </Link>
+          {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
           <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2960 - RCOS
-              {showXs && <LeaveGroupIcon />}
-            </button>
+            <button className="btn button">CSCI 2960 - RCOS</button>
           </Link>
+          {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
 
           <p className="fontSizeLarge">
             Group Management:
@@ -65,14 +63,25 @@ export default class Groups extends Component {
             <button className="btn button">New Group</button>
           </Link>
           <button className="btn button" onClick={this.toggleLeaveGroup}>Leave Group</button>
+        
+          {this.state.isOpen && <Dialog onClose={(e) => this.setState({ isOpen: false})}></Dialog>}
         </MDBContainer>
       </MDBContainer>
     );
   }
 }
 
-function LeaveGroupIcon() {
+function LeaveGroupIcon(props) {
   return (
-    <span className="groups_removable">X</span>
+    <span className="groups_removable" onClick={props.openDialog}>X</span>
+  );
+}
+
+function Dialog(props) {
+  return (
+    <div className="leave_groups_dialog">
+      <button onClick={props.onClose}>X</button>
+      <div>I'm a dialog</div>
+    </div>
   );
 }

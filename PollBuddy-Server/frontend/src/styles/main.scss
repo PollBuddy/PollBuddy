@@ -187,11 +187,13 @@ a:hover {
 }
 
 .groups_removable {
-  color: var(--darkest-purple-header-color);
+  color: var(--light-purple-logo-text);
   font-weight: 900;
   margin-left: 10px;
+  text-decoration: none;
 }
 
 .groups_removable:hover {
   color: var(--white-most-text);
+  cursor: pointer;
 }
