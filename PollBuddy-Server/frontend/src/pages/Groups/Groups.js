@@ -43,17 +43,15 @@ export default class Groups extends Component {
 
   render() {
     if(this.state.error != null){
-      return <p className="fontSizeLarge">Error! Please try again.</p>
-    }
-    else if(!this.state.doneLoading){
+      return <p className="fontSizeLarge">Error! Please try again.</p>;
+    } else if(!this.state.doneLoading){
       return (
         <MDBContainer>
           <LoadingWheel/>
           <button className="btn button" onClick={this.stopLoading}>End Loading</button>
         </MDBContainer>
       );
-    }
-    else {
+    } else {
       return (
         <MDBContainer className="page">
           <MDBContainer className="box">
