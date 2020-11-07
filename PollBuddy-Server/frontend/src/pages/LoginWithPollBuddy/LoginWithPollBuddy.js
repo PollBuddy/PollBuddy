@@ -8,7 +8,7 @@ import cookie from 'react-cookies'
 export default class LoginWithPollBuddy extends Component {
 
   state = {
-    successfulLogin: cookie.load('loggedIn') | false,
+    successfulLogin: false,
     error: "",
     email: "",
     password: ""
@@ -16,6 +16,7 @@ export default class LoginWithPollBuddy extends Component {
 
   constructor(){
     super();
+
     if(localStorage.getItem("loggedIn")){
       this.setState({successfulLogin: true}); // Tell it to redirect to the next page if already logged in
     }
@@ -47,7 +48,7 @@ export default class LoginWithPollBuddy extends Component {
         // Needs some authentication before and if authentication passes then set local storage and such refer to GroupCreation page to see the way to make POST requests to the backend
         localStorage.setItem("loggedIn", true); // Maybe have an admin/teacher var instead of just true
         this.setState({successfulLogin: true}); // Tell it to redirect to the next page if successful
-        cookie.save('loggedIn', true, { path: '/' }) // Set login cookie to true
+        cookie.save('loggedIn', true, { path: '/', secure: true }) // Set login cookie to true
       } else {
         this.setState({error: "Invalid email/password combination"});
       }

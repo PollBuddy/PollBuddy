@@ -51,6 +51,7 @@ export default class App extends React.Component {
 
   render() {
     this.updateTitle = this.updateTitle.bind(this);
+
     return (
       <BrowserRouter>
 

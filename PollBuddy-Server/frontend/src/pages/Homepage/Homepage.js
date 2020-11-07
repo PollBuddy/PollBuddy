@@ -3,13 +3,19 @@ import "mdbreact/dist/css/mdb.css";
 import "./Homepage.scss";
 import { MDBContainer } from "mdbreact";
 import logo from "../../images/logo.png";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
+import cookie from 'react-cookies'
 
 export default class Homepage extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {code: "testcode", valid: false, errMsg: ""};
+    this.state = {
+      code: "testcode", 
+      valid: false, 
+      errMsg: "",
+      loggedIn: cookie.load('loggedIn') || false
+    };
 
     this.handleCodeChange = this.handleCodeChange.bind(this);
     this.submitCode = this.submitCode.bind(this);
@@ -35,6 +41,12 @@ export default class Homepage extends Component {
   }
 
   render() {
+    if(this.state.loggedIn) { // Gets login cookie and redirects if true
+      return (
+        <Redirect to="/groups" />
+      );
+    }
+
     return (
       <MDBContainer fluid className="page">
         <img src={logo} alt="logo" className="Homepage-logo img-fluid" />
