@@ -1,32 +1,24 @@
 import React, {Component} from "react";
-import {Link, Redirect} from "react-router-dom";
+import {Link } from "react-router-dom";
 import { MDBContainer } from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-
-function getGroups(){
-  return [
-    {key: 0, id: 123, label: "CSCI 2300 - Intro to Algorithms"},
-    {key: 1, id: 123, label: "CSCI 2500 - Computer Organization"},
-    {key: 2, id: 123, label: "CSCI 2960 - RCOS"}
-  ]
-}
 
 export default class Groups extends Component {
   constructor(){
     super();
     this.state = {
+      //TODO: fetch this data from api/users/:id/groups when that functionality works
       error: null,
       doneLoading: false,
       admin_groups: [
-        {key: 0, id: 123, label: "CSCI 1200 - Data Structures"},
-        {key: 1, id: 123, label: "CSCI 2200 - Foundations of Computer Science"}
+        {id: 123, label: "CSCI 1200 - Data Structures"},
+        {id: 123, label: "CSCI 2200 - Foundations of Computer Science"}
       ],
       member_groups: [
-        {key: 0, id: 123, label: "CSCI 2300 - Intro to Algorithms"},
-        {key: 1, id: 123, label: "CSCI 2500 - Computer Organization"},
-        {key: 2, id: 123, label: "CSCI 2960 - RCOS"}
-      ],
-      all_groups: getGroups()
+        {id: 123, label: "CSCI 2300 - Intro to Algorithms"},
+        {id: 123, label: "CSCI 2500 - Computer Organization"},
+        {id: 123, label: "CSCI 2960 - RCOS"}
+      ]
     };
 
     if(!localStorage.getItem("loggedIn")){
@@ -47,8 +39,8 @@ export default class Groups extends Component {
   }
   componentDidMount(){
     this.props.updateTitle("My Groups");
-
   }
+
   render() {
     if(this.state.error != null){
       return <p className="fontSizeLarge">Error! Please try again.</p>
@@ -68,20 +60,32 @@ export default class Groups extends Component {
             <p className="fontSizeLarge">
               As a Group Admin:
             </p>
-            {this.state.admin_groups.map((e) => (
-                <Link to={"/groups/" + e.id + "/polls"}>
-                  <button className="btn button width-20em">{e.label}</button>
-                </Link>
-            ))}
+            {this.state.admin_groups.length === 0 ? (
+              <p>Sorry, you are not the admin of any groups.</p>
+            ) : (
+              <MDBContainer className="box">
+                {this.state.admin_groups.map((e) => (
+                  <Link to={"/groups/" + e.id + "/polls"}>
+                    <button className="btn button width-20em">{e.label}</button>
+                  </Link>
+                ))}
+              </MDBContainer>
+            )}
 
             <p className="fontSizeLarge">
               As a Group Member:
             </p>
-            {this.state.member_groups.map((e) => (
-                <Link to={"/groups/" + e.id + "/polls"}>
-                  <button className="btn button width-20em">{e.label}</button>
-                </Link>
-            ))}
+            {this.state.member_groups.length === 0 ? (
+              <p>Sorry, you are not the member of any groups.</p>
+            ) : (
+              <MDBContainer className="box">
+                {this.state.member_groups.map((e) => (
+                  <Link to={"/groups/" + e.id + "/polls"}>
+                    <button className="btn button width-20em">{e.label}</button>
+                  </Link>
+                ))}
+              </MDBContainer>
+            )}
 
             <p className="fontSizeLarge">
               Group Management:
