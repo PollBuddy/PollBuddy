@@ -29,6 +29,7 @@ import QuestionEnded from "./pages/QuestionEnded/QuestionEnded";
 import AnswerRecorded from "./pages/AnswerRecorded/AnswerRecorded";
 import LoginDefault from "./pages/LoginDefault/LoginDefault";
 import LoginWithSchool from "./pages/LoginWithSchool/LoginWithSchool";
+import Code from "./pages/Code/Code";
 
 import Header from "./components/Header/Header.js";
 import Footer from "./components/Footer/Footer.js";
@@ -95,7 +96,9 @@ export default class App extends React.Component {
             <Route exact path="/groups/:groupID/edit">
               <GroupEditor updateTitle={this.updateTitle} />
             </Route>
-
+            <Route exact path="/code">
+              <Code updateTitle={this.updateTitle} />
+            </Route>
             <Route exact path="/polls/:pollID/view">
               <PollViewer updateTitle={this.updateTitle} />
             </Route>
