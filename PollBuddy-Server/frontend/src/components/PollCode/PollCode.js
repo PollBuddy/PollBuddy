@@ -5,15 +5,15 @@ import {Link} from "react-router-dom";
 
 export default class PollCode extends Component {
   constructor(props) {
-  super(props);
-  this.state = {
+    super(props);
+    this.state = {
       code: "testcode",
       valid: false,
       errMsg: ""
-  };
+    };
 
-  this.handleCodeChange = this.handleCodeChange.bind(this);
-  this.submitCode = this.submitCode.bind(this);
+    this.handleCodeChange = this.handleCodeChange.bind(this);
+    this.submitCode = this.submitCode.bind(this);
   }
 
   handleCodeChange(event) {

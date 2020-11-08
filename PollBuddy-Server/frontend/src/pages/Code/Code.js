@@ -5,10 +5,6 @@ import PollCode from "../../components/PollCode/PollCode";
 
 export default class Code extends Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.props.updateTitle("Enter Poll Code");
   }
@@ -16,7 +12,7 @@ export default class Code extends Component {
   render() {
     return (
       <MDBContainer fluid className="page">
-          <PollCode/>
+        <PollCode/>
       </MDBContainer>
     );
   }

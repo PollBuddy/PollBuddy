@@ -8,10 +8,6 @@ import PollCode from "../../components/PollCode/PollCode";
 
 export default class Homepage extends Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.props.updateTitle("Home");
   }
