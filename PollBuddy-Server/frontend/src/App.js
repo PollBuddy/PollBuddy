@@ -83,6 +83,9 @@ export default class App extends React.Component {
             <Route exact path="/privacy">
               <Privacy updateTitle={this.updateTitle} />
             </Route>
+            <Route exact path="/code">
+              <Code updateTitle={this.updateTitle} />
+            </Route>
 
             <Route exact path="/groups">
               <Group updateTitle={this.updateTitle} />
@@ -95,9 +98,6 @@ export default class App extends React.Component {
             </Route>
             <Route exact path="/groups/:groupID/edit">
               <GroupEditor updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/code">
-              <Code updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/polls/:pollID/view">
               <PollViewer updateTitle={this.updateTitle} />
