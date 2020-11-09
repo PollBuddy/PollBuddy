@@ -1,0 +1,18 @@
+# This dockerfile is considered "development ready" so we're running in development mode instead of a full build.
+# This allows for a few beneficial things like faster rebuilds, live code updating, etc.
+
+FROM node:current
+
+# Create app directory
+WORKDIR /usr/src/app
+
+# Install app dependencies
+# A wildcard is used to ensure both package.json AND package-lock.json are copied
+# where available (npm@5+)
+COPY package*.json ./
+
+# Install all dependencies
+RUN npm install
+
+# Start command
+CMD ["npm", "start"]
