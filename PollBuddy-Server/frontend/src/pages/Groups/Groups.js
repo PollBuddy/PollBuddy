@@ -43,7 +43,14 @@ export default class Groups extends Component {
 
   render() {
     if(this.state.error != null){
-      return <p className="fontSizeLarge">Error! Please try again.</p>;
+      return <MDBContainer fluid className="page">
+        <MDBContainer fluid className="box">
+          <p className="fontSizeLarge">
+            Error! Please try again.
+          </p>
+        </MDBContainer>
+      </MDBContainer>
+
     } else if(!this.state.doneLoading){
       return (
         <MDBContainer>
@@ -59,30 +66,30 @@ export default class Groups extends Component {
               As a Group Admin:
             </p>
             {this.state.admin_groups.length === 0 ? (
-              <p>Sorry, you are not the admin of any groups.</p>
+              <p>Sorry, you are not the admin of any groups.<br/> <br/> <br/></p>
             ) : (
-              <MDBContainer className="box">
+              <React.Fragment>
                 {this.state.admin_groups.map((e) => (
                   <Link to={"/groups/" + e.id + "/polls"}>
                     <button className="btn button width-20em">{e.label}</button>
                   </Link>
                 ))}
-              </MDBContainer>
+              </React.Fragment>
             )}
 
             <p className="fontSizeLarge">
               As a Group Member:
             </p>
             {this.state.member_groups.length === 0 ? (
-              <p>Sorry, you are not the member of any groups.</p>
+                <p>Sorry, you are not the member of any groups.<br/> <br/> <br/></p>
             ) : (
-              <MDBContainer className="box">
+              <React.Fragment>
                 {this.state.member_groups.map((e) => (
                   <Link to={"/groups/" + e.id + "/polls"}>
                     <button className="btn button width-20em">{e.label}</button>
                   </Link>
                 ))}
-              </MDBContainer>
+              </React.Fragment>
             )}
 
             <p className="fontSizeLarge">
