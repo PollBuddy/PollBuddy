@@ -43,14 +43,15 @@ export default class Groups extends Component {
 
   render() {
     if(this.state.error != null){
-      return <MDBContainer fluid className="page">
-        <MDBContainer fluid className="box">
-          <p className="fontSizeLarge">
-            Error! Please try again.
-          </p>
+      return (
+        <MDBContainer fluid className="page">
+          <MDBContainer fluid className="box">
+            <p className="fontSizeLarge">
+              Error! Please try again.
+            </p>
+          </MDBContainer>
         </MDBContainer>
-      </MDBContainer>
-
+      );
     } else if(!this.state.doneLoading){
       return (
         <MDBContainer>
@@ -81,7 +82,7 @@ export default class Groups extends Component {
               As a Group Member:
             </p>
             {this.state.member_groups.length === 0 ? (
-                <p>Sorry, you are not the member of any groups.<br/> <br/> <br/></p>
+              <p>Sorry, you are not the member of any groups.<br/> <br/> <br/></p>
             ) : (
               <React.Fragment>
                 {this.state.member_groups.map((e) => (
