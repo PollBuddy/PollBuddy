@@ -11,6 +11,9 @@ export default class recorded extends Component {
   }
 
   timeLimit = 5;
+  answerRecorded() {
+
+  }
 
   questionEnded() {
     return (
@@ -31,7 +34,6 @@ export default class recorded extends Component {
         <p className="width-45 fontSizeLarge">|--loading--|</p>
         <p className="width-45 fontSizeLarge">\---here--/</p>
         <p className="width-45 fontSizeLarge">‾‾‾‾‾‾</p>
-
       </MDBContainer>
     )
   }
