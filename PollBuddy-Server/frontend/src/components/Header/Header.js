@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 import "./Header.scss";
 import logo from "../../images/logo.png";
+import Dropdown from "../Dropdown/Dropdown.js";
 
 export default class Header extends Component {
   constructor(props) {
@@ -32,9 +33,7 @@ export default class Header extends Component {
           <img src = {logo} className = "Header-bar-logo" alt = "logo" />
         </a>
         {this.props.title}
-        <a href = {this.state.link} className = "Header-bar-btn">
-          {this.state.text}
-        </a>
+        <Dropdown />
       </header>
     );
   }
