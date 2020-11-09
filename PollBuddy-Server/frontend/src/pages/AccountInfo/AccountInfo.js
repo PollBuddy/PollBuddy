@@ -17,6 +17,8 @@ export default class AccountInfo extends Component {
             <input placeholder="SIS Man" className="form-control textBox" id="nameText"/>
             <label htmlFor="emailText">Email:</label>
             <input placeholder="sisman@rpi.edu" className="form-control textBox" id="emailText"/>
+            
+            { /* TODO: Hide these until the user clicks the change password button below */ }
             <label htmlFor="newPasswordText">New password:</label>
             <input type="password" placeholder="••••••••••••" className="form-control textBox" id="newPasswordText"/>
             <label htmlFor="confirmNewPassword">Confirm new password:</label>
@@ -24,8 +26,9 @@ export default class AccountInfo extends Component {
             <label htmlFor="currentPasswordText">Verify changes with current password:</label>
             <input type="password" placeholder="••••••••••••" className="form-control textBox" id="currentPasswordText"/>
           </MDBContainer>
-          <Link to={"/myclasses"}>
-            <button className="btn button">Submit</button>
+
+          <Link to={"/login/forgot"}>
+            <button className="btn button">Change password</button>
           </Link>
         </MDBContainer>
       </MDBContainer>
