@@ -47,7 +47,7 @@ export default class Homepage extends Component {
               <Link to={"/login"}>
                 <button className = "btn button">Login</button>
               </Link>
-              <Link to={"/registerDefault"}>
+              <Link to={"/register"}>
                 <button className = "btn button">Register</button>
               </Link>
             </MDBContainer>
