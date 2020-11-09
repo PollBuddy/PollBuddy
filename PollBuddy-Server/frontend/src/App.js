@@ -6,7 +6,7 @@ import Group from "./pages/Groups/Groups";
 import Homepage from "./pages/Homepage/Homepage";
 import LoginWithPollBuddy from "./pages/LoginWithPollBuddy/LoginWithPollBuddy";
 import GroupCreation from "./pages/GroupCreation/GroupCreation";
-import GroupEditor from "./pages/GroupEditor/GroupEditor";
+import GroupEdit from "./pages/GroupEdit/GroupEdit";
 import GroupPolls from "./pages/GroupPolls/GroupPolls";
 import PollEditor from "./pages/PollEditor/PollEditor";
 import Notfound from "./pages/Error404/Error404";
@@ -94,21 +94,23 @@ export default class App extends React.Component {
             <Route exact path="/groups/:groupID/polls">
               <GroupPolls updateTitle={this.updateTitle} />
             </Route>
-            <Route exact path="/groups/:groupID/edit">
-              <GroupEditor updateTitle={this.updateTitle} />
-            </Route>
+
+            {/*use the render function so that we can retrieve :groupID from inside the component*/}
+            <Route exact path="/groups/:groupID/edit" render={
+              (props) => (<GroupEdit {...props} updateTitle={this.updateTitle} />)
+            }/>
 
             <Route exact path="/polls/:pollID/view">
               <PollViewer updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/polls/:pollID/edit">
-              <PollEditor updateTitle={this.updateTitle} />
+              <PollEditor updateTitle={this.updateTitle}/>
             </Route>
             <Route exact path="/polls/:pollID/manage">
               <PollManager updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/polls/:pollID/results">
-              <PollResults updateTitle={this.updateTitle} />
+              <PollResults updateTitle={this.updateTitle}/>
             </Route>
             <Route exact path="/polls/history">
               <PollHistory updateTitle={this.updateTitle} />
