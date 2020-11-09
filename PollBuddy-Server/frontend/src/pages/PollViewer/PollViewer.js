@@ -7,6 +7,7 @@ export default class PollViewer extends Component {
   componentDidMount(){
     this.props.updateTitle("Poll Viewer");
   }
+
   render() {
     return (
       <MDBContainer>
