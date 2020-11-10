@@ -11,8 +11,8 @@ export default class Groups extends Component {
       error: null,
       doneLoading: false,
       admin_groups: [
-        {id: 123, label: "CSCI 1200 - Data Structures"},
-        {id: 123, label: "CSCI 2200 - Foundations of Computer Science"}
+        // {id: 123, label: "CSCI 1200 - Data Structures"},
+        // {id: 123, label: "CSCI 2200 - Foundations of Computer Science"}
       ],
       member_groups: [
         {id: 123, label: "CSCI 2300 - Intro to Algorithms"},
@@ -67,7 +67,7 @@ export default class Groups extends Component {
               As a Group Admin:
             </p>
             {this.state.admin_groups.length === 0 ? (
-              <p>Sorry, you are not the admin of any groups.<br/> <br/> <br/></p>
+              <p>Sorry, you are not the admin of any groups.<br/> <br/></p>
             ) : (
               <React.Fragment>
                 {this.state.admin_groups.map((e) => (
@@ -82,7 +82,7 @@ export default class Groups extends Component {
               As a Group Member:
             </p>
             {this.state.member_groups.length === 0 ? (
-              <p>Sorry, you are not the member of any groups.<br/> <br/> <br/></p>
+              <p>Sorry, you are not the member of any groups.<br/> <br/></p>
             ) : (
               <React.Fragment>
                 {this.state.member_groups.map((e) => (
