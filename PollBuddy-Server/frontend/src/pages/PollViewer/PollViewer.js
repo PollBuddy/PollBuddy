@@ -89,6 +89,12 @@ export default class PollViewer extends Component {
     );
   }
 
+  state = {
+    0: this.pollViewer(),
+    1: this.answerRecored(),
+    2: this.questionEnded()
+  }
+
   render() {
     const clockFormat = ({minutes, seconds, completed}) => {
       if (completed) {
