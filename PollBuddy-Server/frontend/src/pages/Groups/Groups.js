@@ -43,18 +43,24 @@ export default class Groups extends Component {
           <p className="fontSizeLarge">
             As a Group Member:
           </p>
-          <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2300 - Intro to Algorithms</button>  
-          </Link>
-          {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
-          <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2500 - Computer Organization</button>
-          </Link>
-          {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
-          <Link to={"/groups/123/polls"}>
-            <button className="btn button">CSCI 2960 - RCOS</button>
-          </Link>
-          {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
+          <div>
+            <Link to={"/groups/123/polls"}>
+              <button className="btn button">CSCI 2300 - Intro to Algorithms</button>  
+            </Link>
+            {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
+          </div>
+          <div>
+            <Link to={"/groups/123/polls"}>
+              <button className="btn button">CSCI 2500 - Computer Organization</button>
+            </Link>
+            {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
+          </div>
+          <div>
+            <Link to={"/groups/123/polls"}>
+              <button className="btn button">CSCI 2960 - RCOS</button>
+            </Link>
+            {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
+          </div>
 
           <p className="fontSizeLarge">
             Group Management:

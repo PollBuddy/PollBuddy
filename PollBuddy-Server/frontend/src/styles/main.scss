@@ -191,6 +191,7 @@ a:hover {
   font-weight: 900;
   margin-left: 10px;
   text-decoration: none;
+  padding: 5px;
 }
 
 .groups_removable:hover {
@@ -202,11 +203,13 @@ a:hover {
   position: absolute;
   background-color: var(--dark-purple-main-background);
   height: 200px;
-  width: 300px;
+  width: 350px;
   padding: 20px;
   border-radius: 40px;
 }
 
 .leave_group_button {
-  float: right;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
 }
