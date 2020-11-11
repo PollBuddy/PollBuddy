@@ -7,7 +7,7 @@
     "lint": "npx eslint ."
   },
   "dependencies": {
-    "bcrypt": "^3.0.7",
+    "bcrypt": "^5.0.0",
     "bson": "^4.1.0",
     "cas-authentication": "0.0.8",
     "connect-mongo": "^3.2.0",
