@@ -32,6 +32,10 @@ app.use(express_session({
   })
 }));
 
+app.get('/session', (req, res, next) => {
+  res.send("hello");
+});
+
 // Cors: https://daveceddia.com/access-control-allow-origin-cors-errors-in-react-express/
 app.use(cors());
 

@@ -4,7 +4,6 @@ import "./Homepage.scss";
 import { MDBContainer } from "mdbreact";
 import logo from "../../images/logo.png";
 import {Link, Redirect} from "react-router-dom";
-import cookie from 'react-cookies'
 
 export default class Homepage extends Component {
 
@@ -14,7 +13,7 @@ export default class Homepage extends Component {
       code: "testcode", 
       valid: false, 
       errMsg: "",
-      loggedIn: cookie.load('loggedIn') || false
+      loggedIn: false
     };
 
     this.handleCodeChange = this.handleCodeChange.bind(this);
@@ -23,6 +22,9 @@ export default class Homepage extends Component {
 
   componentDidMount() {
     this.props.updateTitle("Home");
+
+    fetch('/session')
+      .then(response => console.log(response));
   }
 
   handleCodeChange(event) {

@@ -3,7 +3,6 @@ import {Redirect} from "react-router-dom";
 import "mdbreact/dist/css/mdb.css";
 import "./LoginWithPollBuddy.scss";
 import { MDBContainer } from "mdbreact";
-import cookie from 'react-cookies'
 
 export default class LoginWithPollBuddy extends Component {
 

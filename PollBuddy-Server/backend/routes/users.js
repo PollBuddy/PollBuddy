@@ -14,8 +14,8 @@ router.get("/", function (req, res, next) {
     res.send(result);
   });
 });
-router.post("/login", function (req, res) {
 
+router.post("/login", function (req, res) {
   // Get email and password from request in JSON form
   var email = req.body["email"];
   var password = req.body["password"];
@@ -58,8 +58,11 @@ router.post("/login", function (req, res) {
                   error: "Error regenerating session"
                 });
               } else {
+                // successful login
                 req.session["UserID"] = result_db["_id"];
                 res.sendStatus(200);
+                // save session
+                req.session.userData = {loggedIn: true, email: email, password: password};
               }
             });
           } else {
