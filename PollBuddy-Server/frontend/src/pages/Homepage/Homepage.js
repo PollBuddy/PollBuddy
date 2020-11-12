@@ -3,14 +3,28 @@ import "mdbreact/dist/css/mdb.css";
 import "./Homepage.scss";
 import { MDBContainer } from "mdbreact";
 import logo from "../../images/logo.png";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 
 export default class Homepage extends Component {
 
+  state = {
+    code: "testcode", 
+    valid: false, 
+    errMsg: "",
+    loggedIn: false
+  };
+
   constructor(props) {
     super(props);
-    this.state = {code: "testcode", valid: false, errMsg: ""};
 
+    // get past session if it exists
+    fetch(process.env.REACT_APP_BACKEND_URL + "/session")
+      .then(response => response.json())
+      .then(json => {
+        this.setState({loggedIn: json.loggedIn || false});
+        // eventually we can also get json.email and json.password
+    });
+    
     this.handleCodeChange = this.handleCodeChange.bind(this);
     this.submitCode = this.submitCode.bind(this);
   }
@@ -35,6 +49,12 @@ export default class Homepage extends Component {
   }
 
   render() {
+    if(this.state.loggedIn) { // Redirect if previously logged in
+      return (
+        <Redirect to="/groups" />
+      );
+    }
+
     return (
       <MDBContainer fluid className="page">
         <img src={logo} alt="logo" className="Homepage-logo img-fluid" />

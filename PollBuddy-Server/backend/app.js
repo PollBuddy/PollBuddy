@@ -32,6 +32,11 @@ app.use(express_session({
   })
 }));
 
+// stored user session data
+app.get('/api/session', (req, res, next) => {
+  res.send(req.session.userData || {});
+});
+
 // Cors: https://daveceddia.com/access-control-allow-origin-cors-errors-in-react-express/
 app.use(cors());
 

@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Link, Redirect} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { MDBContainer } from "mdbreact";
 
 export default class Groups extends Component {

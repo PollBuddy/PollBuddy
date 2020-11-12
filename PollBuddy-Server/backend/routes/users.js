@@ -58,7 +58,9 @@ router.post("/login", function (req, res) {
                   error: "Error regenerating session"
                 });
               } else {
+                // successful login
                 req.session["UserID"] = result_db["_id"];
+                req.session["userData"] = {loggedIn: true, email: email, password: password};
                 res.sendStatus(200);
               }
             });
