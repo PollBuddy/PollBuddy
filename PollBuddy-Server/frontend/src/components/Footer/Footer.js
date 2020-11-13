@@ -10,9 +10,6 @@ export default class Footer extends Component {
     return (
       <footer className = "Footer-foot">
         <MDBContainer className = "Footer-foot-links">
-          <span>&copy; 2020 Poll Buddy</span>
-        </MDBContainer>
-        <MDBContainer className = "Footer-foot-links">
           <span><a href = "/about">
             About
           </a>
@@ -28,6 +25,9 @@ export default class Footer extends Component {
           <a href = "/privacy">
             Privacy
           </a></span>
+        </MDBContainer>
+        <MDBContainer className = "Footer-foot-links Footer-copy">
+          <span>&copy; 2020 Poll Buddy</span>
         </MDBContainer>
         <MDBContainer className = "Footer-foot-links">
           <a href = "https://rcos.io/" target = "_blank" rel="noopener noreferrer">
