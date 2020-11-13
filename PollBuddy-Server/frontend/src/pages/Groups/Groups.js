@@ -5,7 +5,8 @@ import { MDBContainer } from "mdbreact";
 export default class Groups extends Component {
   state = {
     showXs: false,
-    isOpen: false
+    isOpen: false,
+    leaveGroupButtonText: "Leave Group"
   };
   constructor(){
     super();
@@ -23,6 +24,11 @@ export default class Groups extends Component {
   }
   toggleLeaveGroup = () => {
     this.setState(prevState => ({ showXs: !prevState.showXs }));
+    if (this.state.leaveGroupButtonText == "Leave Group") {
+      this.setState({ leaveGroupButtonText: "Exit Leave Group" });
+    } else {
+      this.setState({ leaveGroupButtonText: "Leave Group" });
+    }
   };
   render() { 
     const { showXs } = this.state;
@@ -68,7 +74,7 @@ export default class Groups extends Component {
           <Link to={"/groups/new"}>
             <button className="btn button">New Group</button>
           </Link>
-          <button className="btn button" onClick={this.toggleLeaveGroup}>Leave Group</button>
+          <button className="btn button" onClick={this.toggleLeaveGroup}>{this.state.leaveGroupButtonText}</button>
         
           {this.state.isOpen && <Dialog onClose={(e) => this.setState({ isOpen: false})}></Dialog>}
         </MDBContainer>
