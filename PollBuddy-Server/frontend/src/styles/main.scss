@@ -192,6 +192,7 @@ a:hover {
   margin-left: 10px;
   text-decoration: none;
   padding: 5px;
+  transition: var(--default-transition);
 }
 
 .groups_removable:hover {
@@ -202,6 +203,7 @@ a:hover {
 .leave_groups_dialog {
   position: absolute;
   background-color: var(--dark-purple-main-background);
+  font-weight: bold;
   height: 200px;
   width: 350px;
   padding: 20px;
