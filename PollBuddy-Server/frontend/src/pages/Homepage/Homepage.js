@@ -30,7 +30,7 @@ export default class Homepage extends Component {
 
   submitCode() {
     // set error message if input is invalid
-    this.setState({errMsg:
+    this.setState({errMsg: 
       !this.state.valid ? "Code must be 6 characters, A-Z, 0-9" : ""});
   }
 
@@ -55,7 +55,7 @@ export default class Homepage extends Component {
           <MDBContainer className="box">
             <MDBContainer className="form-group">
               <label htmlFor="pollCodeText">Already have a Poll Code? Enter it here:</label>
-              <input placeholder="P8C0D3" onChange={this.handleCodeChange} className="form-control textBox"/>
+              <input placeholder="K30SW8" onChange={this.handleCodeChange} className="form-control textBox"/>
               <p style={{color: "red", textAlign: "center"}}>{this.state.errMsg}</p>
             </MDBContainer>
             <Link to={this.state.valid ? "/poll/" + this.state.code + "/view" : ""}>
