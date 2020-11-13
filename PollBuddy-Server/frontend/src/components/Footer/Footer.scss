@@ -9,9 +9,7 @@
   margin-top: 50px;
 }
 .Footer-foot-links {
-  display: inline-block;
   padding: 0 10px;
-  vertical-align: top;
 }
 .Footer-foot a, .Footer-foot span:only-child {
   display: inline-block;
@@ -29,12 +27,9 @@
   width: auto;
 }
 .Footer-foot-links:last-child a {
-  padding: 8px 10px !important;
+  padding: 8px 10px;
 }
-.Footer-foot-links:first-child {
-  display: block;
-}
-.Footer-foot-links span {
+.Footer-foot-links:first-child, .Footer-foot-links span {
   display: block;
 }
 @media only screen and (min-width: 762px) {
@@ -51,5 +46,9 @@
 @media only screen and (min-width: 420px) {
   .Footer-foot-links span {
     display: inline;
+  }
+  .Footer-foot-links {
+    display: inline-block;
+    vertical-align: top;
   }
 }

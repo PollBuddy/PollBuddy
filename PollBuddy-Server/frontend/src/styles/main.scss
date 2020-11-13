@@ -23,12 +23,6 @@
   --footer-height: calc(4 * (var(--font-size-small) + 20px) + 20px);
 }
 
-@media only screen and (min-width: 383px) {
-  :root {
-    --footer-height: calc(3 * (var(--font-size-small) + 20px) + 20px);
-  }
-}
-
 @media only screen and (min-width: 420px) {
   :root {
     --footer-height: calc(2 * (var(--font-size-small) + 20px) + 20px);
