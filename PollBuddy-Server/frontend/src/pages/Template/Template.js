@@ -52,7 +52,7 @@ export default class Template extends Component {//this class is an example of h
         {/*    )*/}
         {/*  }*/}
         {/*</MDBContainer>*/}
-      {/*</MDBContainer>*/}
+        {/*</MDBContainer>*/}
       </MDBContainer>
     );
   }
