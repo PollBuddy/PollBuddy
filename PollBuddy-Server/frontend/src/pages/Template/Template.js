@@ -38,23 +38,9 @@ export default class Template extends Component {//this class is an example of h
     return (
       <MDBContainer className="page">
         {/*<MDBContainer className="box">*/}
-          <p className="fontSizeLarge">
-            Test:
-          </p>
-          <Question questionObj={{
-            "questionNumber": "1",
-            "question": "What's 2 + 2",
-            // "img": "https://i.kym-cdn.com/photos/images/newsfeed/001/409/553/5f5.png",
-            "choices": [
-              "1",
-              "2",
-              "3",
-              "4",
-            ],
-            "points": 2,
-            "maxAllowedChoices": 2,
-            "timeLimit": 10
-          }}/>
+        <p className="fontSizeLarge">
+          Test:
+        </p>
           {/*<MDBContainer className="class-editor">*/}
           {/*  {*/}
           {/*    //display each class in the backend by mapping the groups to class editor components*/}

@@ -125,7 +125,9 @@ export default class Question extends Component {
   //return the correct label to go in the choice bubble based on the index of the choice
   getChoiceLabel(index){
     //if the index is between 0 and 25, simply return the proper letter
-    if(index < this.choiceOrder.length) return this.choiceOrder[index];
+    if(index < this.choiceOrder.length){
+      return this.choiceOrder[index];
+    }
     //if the index is greater than 25, return a combination of letters (ex. AA, BB, etc)
     let repititions = Math.floor(index / 26) + 1;
     let charIndex = index % 26;
