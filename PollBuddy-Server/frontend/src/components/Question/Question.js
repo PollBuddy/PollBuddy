@@ -1,13 +1,7 @@
 import React, { Component } from "react";
 import "./Question.scss";
 import {
-  MDBCard,
-  MDBCardBody,
-  MDBCardImage,
-  MDBCardTitle,
-  MDBCardText,
-  MDBCol,
-  MDBContainer, MDBBtn, MDBRow,
+  MDBContainer,
   MDBIcon
 } from "mdbreact";
 
@@ -16,12 +10,14 @@ import Countdown, { zeroPad } from "react-countdown";
 
 export default class Question extends Component {
   choiceOrder;
+  questionStartTime;
   constructor(props) {
     super(props);
     //binding helper functions
     this.deselectChoice = this.deselectChoice.bind(this);
     this.selectChoice = this.selectChoice.bind(this);
     this.getChoiceLabel = this.getChoiceLabel.bind(this);
+    this.onTimeEnd = this.onTimeEnd.bind(this);
 
     this.choiceOrder = [
       "A",
@@ -52,6 +48,8 @@ export default class Question extends Component {
       "Z",
     ];
 
+    this.questionStartTime = Date.now();
+
     //get props
     let data = props.questionObj;
 
@@ -68,10 +66,12 @@ export default class Question extends Component {
       data: data,
       studentChoices: tempArray,
       choicesQueue: tempQueue,
+      canChoose: true,
     };
   }
 
   deselectChoice(index) {
+    if(!this.state.canChoose) return;
     //set the boolean in the array at the selected index to false
     //remove it from the queue and update state
     let tempChoices = this.state.studentChoices;
@@ -93,6 +93,7 @@ export default class Question extends Component {
   }
 
   selectChoice(index) {
+    if(!this.state.canChoose) return;
     let tempChoices = this.state.studentChoices;
     let count = 0;
     //push the index to the queue
@@ -108,11 +109,6 @@ export default class Question extends Component {
     //choice chosen back to false
     if (count >= this.state.data.maxAllowedChoices) {
       this.state.studentChoices[this.state.choicesQueue.shift()] = false;
-      // for (let i = 0; i < this.state.studentChoices.length; i++) {
-      //   if (this.state.studentChoices[i]) {
-      //     tempChoices[i] = false;
-      //   }
-      // }
     }
     //make the boolean at the selected index true and update state
     tempChoices[index] = true;
@@ -134,6 +130,12 @@ export default class Question extends Component {
       str += this.choiceOrder[charIndex];
     }
     return str;
+  }
+
+  onTimeEnd(){
+    this.state.canChoose = false;
+    //TODO send answers to backend
+    //TODO move on to next question (probably should be handled in a callback prop)
   }
   
 
@@ -188,22 +190,14 @@ export default class Question extends Component {
             }
           })}
       </MDBContainer>
-        <div className='rounded-bottom mdb-color lighten-3 text-center pt-3'>
-          <ul className='list-unstyled list-inline font-small'>
-            <li className='list-inline-item white-text'>
-              <MDBIcon far icon="star" /> 12
-            </li>
-            <li className='list-inline-item'>
-              <a href='#!' className='white-text'>
-                <MDBIcon far icon="clock" />
+        <MDBContainer className="time-info">
+                <MDBIcon far icon="clock" className="time-icon"/>
                 <Countdown
                   renderer={clockFormat}
-                  date={Date.now() + this.state.data.timeLimit * 1000}
+                  date={this.questionStartTime + this.state.data.timeLimit * 1000}
+                  onComplete={this.onTimeEnd}
                 />
-              </a>
-            </li>
-          </ul>
-        </div>
+        </MDBContainer>
       </MDBContainer>
     );
   }
