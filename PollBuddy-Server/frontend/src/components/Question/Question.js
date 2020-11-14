@@ -71,7 +71,9 @@ export default class Question extends Component {
   }
 
   deselectChoice(index) {
-    if(!this.state.canChoose) return;
+    if(!this.state.canChoose){
+      return;
+    }
     //set the boolean in the array at the selected index to false
     //remove it from the queue and update state
     let tempChoices = this.state.studentChoices;
@@ -93,7 +95,9 @@ export default class Question extends Component {
   }
 
   selectChoice(index) {
-    if(!this.state.canChoose) return;
+    if(!this.state.canChoose){
+      return;
+    }
     let tempChoices = this.state.studentChoices;
     let count = 0;
     //push the index to the queue
@@ -170,9 +174,9 @@ export default class Question extends Component {
                 <btn className={"question-btn-and-text"} onClick={() => {
                   return this.deselectChoice(index);
                 }}>
-                      <MDBContainer className="question-label-bubble question-label-bubble-active">
-                        <span className={"question-label-text"}>{this.getChoiceLabel(index)}</span>
-                      </MDBContainer>
+                  <MDBContainer className="question-label-bubble question-label-bubble-active">
+                    <span className={"question-label-text"}>{this.getChoiceLabel(index)}</span>
+                  </MDBContainer>
                   {choice}
                 </btn>
               );
@@ -181,22 +185,22 @@ export default class Question extends Component {
                 <btn className={"question-btn-and-text"} onClick={() => {
                   return this.selectChoice(index);
                 }}>
-                      <MDBContainer className="question-label-bubble question-label-bubble-inactive">
-                        <span className={"question-label-text"}>{this.getChoiceLabel(index)}</span>
-                      </MDBContainer>
+                  <MDBContainer className="question-label-bubble question-label-bubble-inactive">
+                    <span className={"question-label-text"}>{this.getChoiceLabel(index)}</span>
+                  </MDBContainer>
                   {choice}
                 </btn>
               );
             }
           })}
-      </MDBContainer>
+        </MDBContainer>
         <MDBContainer className="time-info">
-                <MDBIcon far icon="clock" className="time-icon"/>
-                <Countdown
-                  renderer={clockFormat}
-                  date={this.questionStartTime + this.state.data.timeLimit * 1000}
-                  onComplete={this.onTimeEnd}
-                />
+          <MDBIcon far icon="clock" className="time-icon"/>
+          <Countdown
+            renderer={clockFormat}
+            date={this.questionStartTime + this.state.data.timeLimit * 1000}
+            onComplete={this.onTimeEnd}
+          />
         </MDBContainer>
       </MDBContainer>
     );
