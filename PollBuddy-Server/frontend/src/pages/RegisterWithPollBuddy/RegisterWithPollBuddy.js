@@ -78,7 +78,8 @@ class RegisterWithPollBuddy extends Component {
           <MDBContainer className="form-group">
             <label htmlFor="firstnameText">Name:</label>
             <label htmlFor="lastnameText">Name:</label>
-            <input placeholder="SIS Man" className="form-control textBox" id="nameText" 
+            <input placeholder="SIS" className="form-control textBox" id="firstnameText"/>
+            <input placeholder="Man" className="form-control textBox" id="lastnameText"/>
               onChange={(evt) => { this.setState({username: evt.target.value}); }}/>
             {!this.state.userValid && 
               <ul className="error">
