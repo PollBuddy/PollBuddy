@@ -1,19 +1,19 @@
 import React from "react";
 import Autocomplete from "react-autocomplete";
-import {MDBContainer} from "mdbreact";
+import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 
 // TODO: This will need to pull from the database in the near future
-const schools = [
-  {key: 0, label: "Rensselaer Polytechnic Institute"},
-  {key: 1, label: "Worcester Polytechnic Institute"},
-  {key: 2, label: "Massachusetts Institute of Technology"},
-  {key: 3, label: "Rochester Institute of Technology"},
-  {key: 4, label: "University of Rochester"},
-  {key: 5, label: "SUNY Polytechnic Institute"},
-  {key: 6, label: "SUNY Albany"},
-  {key: 7, label: "Albany Medical College"}
-];
+// const schools = [
+//   {key: 0, label: "Rensselaer Polytechnic Institute"},
+//   {key: 1, label: "Worcester Polytechnic Institute"},
+//   {key: 2, label: "Massachusetts Institute of Technology"},
+//   {key: 3, label: "Rochester Institute of Technology"},
+//   {key: 4, label: "University of Rochester"},
+//   {key: 5, label: "SUNY Polytechnic Institute"},
+//   {key: 6, label: "SUNY Albany"},
+//   {key: 7, label: "Albany Medical College"}
+// ];
 
 const sortItems = (itemA, itemB, value) => {
   const lowA = itemA.label.toLowerCase();
@@ -32,7 +32,7 @@ const renderDropdownItem = (item) => (
   </div>
 );
 
-export default ({value, onChange, onSelect}) => (
+export default ({ value, onChange, onSelect, schools }) => (
   <MDBContainer className="form-group">
     <Autocomplete
       items={schools}
@@ -44,7 +44,7 @@ export default ({value, onChange, onSelect}) => (
         placeholder: "Enter school name",
         "aria-labelledby": "schoolNameText"
       }}
-      wrapperStyle={{display: "block"}}
+      wrapperStyle={{ display: "block" }}
       value={value}
       onChange={onChange}
       onSelect={onSelect}

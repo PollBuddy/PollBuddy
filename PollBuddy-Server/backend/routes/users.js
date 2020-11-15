@@ -120,6 +120,47 @@ router.get("/login/cas", cas.bounce2, function (req, res, next) {
 
 });
 
+// router.get("/register/cas", cas.bounce2, function (req, res, next) { 
+//   // Log the user in on the backend side of things
+//   if (req.query.ticket) {
+//     console.log("Locating user to add to session."); // TODO: Remove after testing
+//     mongoConnection.getDB().collection("users").findOne({ Username: req.session.cookie.cas_user }, { projection: { _id: false, Username: true } }, (err, result) => {
+//       if (err) {
+//         console.log("Error occurred"); // TODO: Improve error messaging
+//         console.log(err);
+//       } else {
+//         if (result == null) {
+//           // User not exists in database, create a new record for him/her
+
+//         } else {
+//           // User already exists in database
+//           console.log("User already exists")
+//         }
+//       }
+//     });
+
+//   } else {
+//     console.log("Ticket not specified."); // TODO: Remove after testing
+//   }
+
+//   // Redirect the user to the homepage with a nice message
+//   var options = {
+//     root: path.join(__dirname, '../public'),
+//     dotfiles: 'deny',
+//     headers: {
+//       'x-timestamp': Date.now(),
+//       'x-sent': true
+//     }
+//   };
+
+//   res.sendFile("pages/loginRedirect.html", options, function (err) {
+//     if (err) {
+//       console.log(err);
+//       res.send(500);
+//     }
+//   });
+// });
+
 
 router.post("/register", function (req, res, next) {
   var requestBody = req.body;

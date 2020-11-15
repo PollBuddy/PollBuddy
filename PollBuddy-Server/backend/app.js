@@ -74,7 +74,7 @@ app.use((req, res, next) => {
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(usersRouter.user_middleware);
@@ -105,11 +105,21 @@ app.get("/api/test", (req, res) => {
   });
 });
 
+// fake a backend schools api to test login with school frontend function
+app.get("/api/schools", (req, res) => {
+  var schools = {
+    "Rensselaer Polytechnic Institute": "https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Fcms.union.rpi.edu%2Flogin%2Fcas%2F%3Fnext%3Dhttps%253A%252F%252Fwww.google.com%252F",
+    "Worcester Polytechnic Institute": "https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Fcms.union.rpi.edu%2Flogin%2Fcas%2F%3Fnext%3Dhttps%253A%252F%252Fwww.google.com%252F",
+    "Massachusetts Institute of Technology": "https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Fcms.union.rpi.edu%2Flogin%2Fcas%2F%3Fnext%3Dhttps%253A%252F%252Fwww.google.com%252F"
+  }; //to be expanded soon? :eyes:
+  res.json(schools);
+});
+
 app.get("/gendata", (req, res) => {
   var log = "";
   var completes = [];
   var elements = [
-    ["test", {SIS: "Man"}],
+    ["test", { SIS: "Man" }],
     ["users", {
       FirstName: "Bill",
       LastName: "Cheese",
@@ -126,8 +136,8 @@ app.get("/gendata", (req, res) => {
       password: "password2!",
       RCS: "stev3"
     }],
-    ["groups", {Name: "RCOS", instructors: ["Turner (should be ID later)"], AssociatedPolls: []}],
-    ["groups", {Name: "Chemistry", instructors: ["Kirover-Snover (should be ID later)"], AssociatedPolls: []}],
+    ["groups", { Name: "RCOS", instructors: ["Turner (should be ID later)"], AssociatedPolls: [] }],
+    ["groups", { Name: "Chemistry", instructors: ["Kirover-Snover (should be ID later)"], AssociatedPolls: [] }],
     ["polls", {
       Name: "Chem 1 Poll 1",
       Questions: ["What is your name?", "What grade are you in?"],
