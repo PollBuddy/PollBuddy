@@ -12,6 +12,17 @@ export default class PollViewer extends Component {
 
   timeLimit = 10;
 
+
+  clockFormat = ({minutes, seconds, completed}) => {
+    if (completed) {
+      // Render a completed state
+      this.setState({display:this.questionEnded()});
+    } else {
+      // Render a countdown
+      return <p className="width-90 fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
+    }
+  };
+
   pollViewer() {
     return (
       <MDBContainer>
@@ -20,7 +31,7 @@ export default class PollViewer extends Component {
             <p className="width-90 fontSizeLarge">
               Time remaining:
             </p>
-            <Countdown renderer={clockFormat} date={Date.now() + this.timeLimit * 1000}/>
+            <Countdown renderer={this.clockFormat} date={Date.now() + this.timeLimit * 1000}/>
             <p>
               Question 3 of 28:
             </p>
@@ -46,13 +57,11 @@ export default class PollViewer extends Component {
   answerRecored() {
     return (
       <MDBContainer fluid className="page">
-        <Link to={"/pollViewer"}>
-          <button className="btn button">Change Answer?</button>
-        </Link>
+        <button className="btn button" onClick={this.setState({display: this.pollViewer()})}>Change Answer?</button>
         <p className="width-90 fontSizeLarge">
           Time remaining:
         </p>
-        <Countdown renderer={clockFormat} date={Date.now() + this.timeLimit * 1000}/>
+        <Countdown renderer={this.clockFormat} date={Date.now() + this.timeLimit * 1000}/>
 
         <Link to={"/myclasses"}>
           <button className="btn button">Leave Poll?</button>
@@ -90,48 +99,11 @@ export default class PollViewer extends Component {
   }
 
   state = {
-    0: this.pollViewer(),
-    1: this.answerRecored(),
-    2: this.questionEnded()
+    display: this.pollViewer()
   }
+  
 
-  render() {
-    const clockFormat = ({minutes, seconds, completed}) => {
-      if (completed) {
-        // Render a completed state
-        return this.questionEnded();
-      } else {
-        // Render a countdown
-        return <p className="width-90 fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
-      }
-    };
-    return (
-      <MDBContainer>
-        <MDBContainer className="page">
-          <MDBContainer className="box PollViewer-answers">
-            <p className="width-90 fontSizeLarge">
-              Time remaining:
-            </p>
-            <Countdown renderer={clockFormat} date={Date.now() + this.timeLimit * 1000}/>
-            <p>
-              Question 3 of 28:
-            </p>
-            <p className="fontSizeLarge">
-              Why does the tooth fairy collect teeth?
-            </p>
-            
-            <ul>
-
-              <li id="answerElement0"><a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>A</span>She grinds them into the fairy dust she needs to fly</a></li>
-              <li id="answerElement1"><a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>B</span>She gives them to new babies who are ready to grow teeth</a></li>
-              <li id="answerElement2"><a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>C</span>She gives the good teeth to dentists to make false teeth</a></li>
-              <li id="answerElement3"><a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>D</span>She grinds them up and makes sand for the beach</a></li>
-              <li id="answerElement4"><a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>E</span>She needs to replace her own teeth</a></li>
-            </ul>
-
-          </MDBContainer>
-        </MDBContainer>
-      </MDBContainer>
-    );
+render() {
+    return this.state.display;
   }
 }
