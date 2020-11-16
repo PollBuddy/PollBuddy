@@ -11,15 +11,16 @@ RCOS/Project Google Drive (proposal, other project resources): https://drive.goo
 
 Site Map: https://draft.io/jubvd. Contact PM for edit access.
 
-## How to start contributing
-New Poll Buddy members can go to [our Wiki page](https://github.com/PollBuddy/PollBuddy/wiki/Contribution-Guide) on how you can start making contributions to Poll Buddy.
-
 
 ## How to run the app
 
 (Please open an issue if these instructions are not clear enough or are outdated)
 
 Please visit [our Wiki](https://github.com/PollBuddy/PollBuddy/wiki/Installation-Instructions) for detailed instructions on how to install and run Poll Buddy locally.
+
+## How to start contributing
+New Poll Buddy members can go to [our Wiki page](https://github.com/PollBuddy/PollBuddy/wiki/Contribution-Guide) for instructions on how you can start making contributions to Poll Buddy.
+
 
 ## Development information
 
