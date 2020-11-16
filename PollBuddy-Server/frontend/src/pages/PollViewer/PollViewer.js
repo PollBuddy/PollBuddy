@@ -6,7 +6,7 @@ import Countdown, {zeroPad} from "react-countdown";
 import {Link} from "react-router-dom";
 
 export default class PollViewer extends Component {
-  componentDidMount(){
+  componentDidMount() {
     this.props.updateTitle("Poll Viewer");
   }
 
@@ -16,7 +16,7 @@ export default class PollViewer extends Component {
   clockFormat = ({minutes, seconds, completed}) => {
     if (completed) {
       // Render a completed state
-      this.setState({display:this.questionEnded()});
+      this.setState({display: 2});
     } else {
       // Render a countdown
       return <p className="width-90 fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
@@ -41,11 +41,31 @@ export default class PollViewer extends Component {
 
             <ul>
 
-              <li id="answerElement0"><a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>A</span>She grinds them into the fairy dust she needs to fly</a></li>
-              <li id="answerElement1"><a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>B</span>She gives them to new babies who are ready to grow teeth</a></li>
-              <li id="answerElement2"><a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>C</span>She gives the good teeth to dentists to make false teeth</a></li>
-              <li id="answerElement3"><a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>D</span>She grinds them up and makes sand for the beach</a></li>
-              <li id="answerElement4"><a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>E</span>She needs to replace her own teeth</a></li>
+              <li id="answerElement0">
+                <a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>A</span>She grinds them into the fairy
+                  dust she needs to fly
+                </a>
+              </li>
+              <li id="answerElement1">
+                <a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>B</span>She gives them to new babies
+                  who are ready to grow teeth
+                </a>
+              </li>
+              <li id="answerElement2">
+                <a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>C</span>She gives the good teeth to
+                  dentists to make false teeth
+                </a>
+              </li>
+              <li id="answerElement3">
+                <a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>D</span>She grinds them up and makes
+                  sand for the beach
+                </a>
+              </li>
+              <li id="answerElement4">
+                <a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>E</span>She needs to replace her own
+                  teeth
+                </a>
+              </li>
             </ul>
 
           </MDBContainer>
@@ -54,10 +74,10 @@ export default class PollViewer extends Component {
     );
   }
 
-  answerRecored() {
+  answerRecorded() {
     return (
       <MDBContainer fluid className="page">
-        <button className="btn button" onClick={this.setState({display: this.pollViewer()})}>Change Answer?</button>
+        <button className="btn button" onClick={this.setState({display: 0})}>Change Answer?</button>
         <p className="width-90 fontSizeLarge">
           Time remaining:
         </p>
@@ -99,11 +119,27 @@ export default class PollViewer extends Component {
   }
 
   state = {
-    display: this.pollViewer()
+    display: 0
   }
-  
 
-render() {
-    return this.state.display;
+  /*
+    changeDisplay(param) {
+      this.setState({ display: param }, () => {
+        console.log(this.state.display);
+      })
+    };
+  */
+  render() {
+    let display;
+    if (this.state.display == 2) {
+      display = this.questionEnded();
+    } else if (this.state.display == 1) {
+      display = this.answerRecorded();
+    } else {
+      display = this.pollViewer();
+    }
+    return (
+      display
+    );
   }
 }
