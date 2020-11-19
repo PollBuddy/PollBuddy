@@ -31,6 +31,7 @@ import AdminSettings from "./pages/AdminSettings/AdminSettings";
 import MemberSettings from "./pages/MemberSettings/MemberSettings";
 import LoginDefault from "./pages/LoginDefault/LoginDefault";
 import LoginWithSchool from "./pages/LoginWithSchool/LoginWithSchool";
+import Code from "./pages/Code/Code";
 
 import Header from "./components/Header/Header.js";
 import Footer from "./components/Footer/Footer.js";
@@ -84,6 +85,9 @@ export default class App extends React.Component {
             <Route exact path="/privacy">
               <Privacy updateTitle={this.updateTitle} />
             </Route>
+            <Route exact path="/code">
+              <Code updateTitle={this.updateTitle} />
+            </Route>
 
             <Route exact path="/groups">
               <Group updateTitle={this.updateTitle} />
@@ -99,7 +103,6 @@ export default class App extends React.Component {
             <Route exact path="/groups/:groupID/edit" render={
               (props) => (<GroupEdit {...props} updateTitle={this.updateTitle} />)
             }/>
-
             <Route exact path="/polls/:pollID/view">
               <PollViewer updateTitle={this.updateTitle} />
             </Route>
