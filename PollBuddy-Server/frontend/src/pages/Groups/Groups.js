@@ -11,8 +11,8 @@ export default class Groups extends Component {
       error: null,
       doneLoading: false,
       admin_groups: [
-        // {id: 123, label: "CSCI 1200 - Data Structures"},
-        // {id: 123, label: "CSCI 2200 - Foundations of Computer Science"}
+        {id: 123, label: "CSCI 1200 - Data Structures"},
+        {id: 123, label: "CSCI 2200 - Foundations of Computer Science"}
       ],
       member_groups: [
         {id: 123, label: "CSCI 2300 - Intro to Algorithms"},
