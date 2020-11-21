@@ -1,5 +1,8 @@
 const CASAuthentication = require('cas-authentication');
 const User = require('../routes/users');
+const schoolList = require("./schoolList");
+
+schoolList.append("RPI");
 
 const cas = new CASAuthentication({
   cas_url: process.env.CAS_URL || 'https://cas-auth.rpi.edu/cas',
