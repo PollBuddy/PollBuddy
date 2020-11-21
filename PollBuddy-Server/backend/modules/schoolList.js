@@ -1,4 +1,4 @@
-let list = []
+let list = [];
 
 module.exports = {
   append: function(item) {
