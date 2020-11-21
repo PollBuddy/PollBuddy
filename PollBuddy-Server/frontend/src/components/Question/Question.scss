@@ -37,10 +37,14 @@
 }
 
 .question-label-bubble-inactive{
+    width: 1.4rem;
+    height: 1.4rem;
     background: transparent;
 }
 
 .question-label-bubble-active {
+    width: 1.4rem;
+    height: 1.4rem;
     background: var(--base-purple-logo-bg);
 }
 
