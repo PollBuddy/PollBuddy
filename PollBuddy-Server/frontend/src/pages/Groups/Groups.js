@@ -110,7 +110,7 @@ export default class Groups extends Component {
             </Link>
             <button className="btn button" onClick={(e) => this.setState({ openJoinGroupPopup: true })}>Join Group</button>
             <Popup isOpen={this.state.openJoinGroupPopup} onClose={(e) => this.setState({ openJoinGroupPopup: false })}>
-              Hello
+              <div>Please enter your group code:</div>
             </Popup>
           </MDBContainer>
         </MDBContainer>
