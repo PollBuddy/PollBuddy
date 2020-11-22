@@ -25,8 +25,6 @@ import PollManager from "./pages/PollManager/PollManager";
 import PollHistory from "./pages/PollHistory/PollHistory";
 import Contact from "./pages/Contact/Contact";
 import About from "./pages/About/About";
-import QuestionEnded from "./pages/QuestionEnded/QuestionEnded";
-import AnswerRecorded from "./pages/AnswerRecorded/AnswerRecorded";
 import LoginDefault from "./pages/LoginDefault/LoginDefault";
 import LoginWithSchool from "./pages/LoginWithSchool/LoginWithSchool";
 
@@ -110,12 +108,6 @@ export default class App extends React.Component {
             </Route>
             <Route exact path="/polls/history">
               <PollHistory updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/questionEnded">
-              <QuestionEnded updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/answerRecorded">
-              <AnswerRecorded updateTitle={this.updateTitle} />
             </Route>
 
             <Route exact path="/login">
