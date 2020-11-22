@@ -69,10 +69,13 @@ export default class App extends React.Component {
           */}
 
           <Switch>
+
+            {/* Main page */}
             <Route exact path="/">
               <Homepage updateTitle={this.updateTitle} />
             </Route>
 
+            {/* Footer division pages */}
             <Route exact path="/about">
               <About updateTitle={this.updateTitle} />
             </Route>
@@ -89,6 +92,7 @@ export default class App extends React.Component {
               <Code updateTitle={this.updateTitle} />
             </Route>
 
+            {/* Group pages */}
             <Route exact path="/groups">
               <Group updateTitle={this.updateTitle} />
             </Route>
@@ -103,6 +107,8 @@ export default class App extends React.Component {
             <Route exact path="/groups/:groupID/edit" render={
               (props) => (<GroupEdit {...props} updateTitle={this.updateTitle} />)
             }/>
+
+            {/* Poll handler pages */}
             <Route exact path="/polls/:pollID/view">
               <PollViewer updateTitle={this.updateTitle} />
             </Route>
@@ -125,6 +131,7 @@ export default class App extends React.Component {
               <AnswerRecorded updateTitle={this.updateTitle} />
             </Route>
 
+            {/* Login Pages */}
             <Route exact path="/login">
               <LoginDefault updateTitle={this.updateTitle} />
             </Route>
@@ -141,6 +148,7 @@ export default class App extends React.Component {
               <ResetPassword updateTitle={this.updateTitle} />
             </Route>
 
+            {/* Registration Pages */}
             <Route exact path="/register">
               <RegisterDefault updateTitle={this.updateTitle} />
             </Route>
@@ -151,6 +159,7 @@ export default class App extends React.Component {
               <RegisterWithSchool updateTitle={this.updateTitle} />
             </Route>
 
+            {/* account & user-setting pages */}
             <Route exact path="/account">
               <AccountInfo updateTitle={this.updateTitle} />
             </Route>
