@@ -11,9 +11,8 @@ export default class PollViewer extends Component {
   }
 
   timeLimit = 5;
-
+  /*use this state to check if the answer has been recorded*/
   state = {
-    //use this state to check if the answer has been recorded
     recorded: false
   }
 
@@ -98,13 +97,13 @@ export default class PollViewer extends Component {
 
 
   render() {
-    //timer: if timer is complete, return questionEnded, else returns a timer
+    {/*timer: if timer is complete, return questionEnded, else returns a timer*/}
     const clockFormat = ({minutes, seconds, completed}) => {
       if (completed) {
-        // Render a completed state
+        {/* Render a completed state*/}
         return this.questionEnded();
       } else {
-        // Render a countdown
+        {/* Render a countdown*/}
         return (
           <>
             <p className="width-90 fontSizeLarge">
@@ -126,9 +125,9 @@ export default class PollViewer extends Component {
     return (
       <MDBContainer>
         <MDBContainer className="page">
-          //renders a timer
+          {/*renders a timer*/}
           <Countdown renderer={clockFormat} date={Date.now() + this.timeLimit * 1000}/>
-          //use display to choose between pollViewer and answerRecorded
+          {/*use display to choose between pollViewer and answerRecorded*/}
           {display}
         </MDBContainer>
       </MDBContainer>
