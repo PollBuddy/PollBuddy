@@ -76,11 +76,15 @@ class RegisterWithPollBuddy extends Component {
             To create an account, fill in the text boxes, then press submit.
           </p>
           <MDBContainer className="form-group">
-            <label htmlFor="firstnameText">Name:</label>
-            <label htmlFor="lastnameText">Name:</label>
-            <input placeholder="SIS" className="form-control textBox" id="firstnameText"/>
-            <input placeholder="Man" className="form-control textBox" id="lastnameText"/>
-              onChange={(evt) => { this.setState({username: evt.target.value}); }}/>
+            <label htmlFor="firstnameText">First Name:</label>
+            <input placeholder="SIS" className="form-control textBox" id="firstnameText"
+            onChange={(evt) => { this.setState({firstname: evt.target.value}); }}/>
+            <label htmlFor="lastnameText">Last Name:</label>
+            <input placeholder="Man" className="form-control textBox" id="lastnameText"
+            onChange={(evt) => { this.setState({lastname: evt.target.value}); }}/>
+            <label htmlFor="usernameText">Username:</label>
+            <input placeholder="mans" className="form-control textBox" id="usernameText"
+            onChange={(evt) => { this.setState({username: evt.target.value}); }}/>
             {!this.state.userValid && 
               <ul className="error">
                 <li>Username must be between 3 and 32 characters</li>
