@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { MDBContainer } from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import Popup from "../../components/Popup/Popup";
 
 export default class Groups extends Component {
   constructor() {
@@ -18,7 +19,8 @@ export default class Groups extends Component {
         {id: 123, label: "CSCI 2300 - Intro to Algorithms"},
         {id: 123, label: "CSCI 2500 - Computer Organization"},
         {id: 123, label: "CSCI 2960 - RCOS"}
-      ]
+      ],
+      openJoinGroupPopup: false
     };
 
     if(!localStorage.getItem("loggedIn")){
@@ -106,7 +108,10 @@ export default class Groups extends Component {
             <Link to={"/groups/new"}>
               <button className="btn button">New Group</button>
             </Link>
-            <button className="btn button" onClick={this.handleClick}>Join Group</button>
+            <button className="btn button" onClick={(e) => this.setState({ openJoinGroupPopup: true })}>Join Group</button>
+            <Popup isOpen={this.state.openJoinGroupPopup} onClose={(e) => this.setState({ openJoinGroupPopup: false })}>
+              Hello
+            </Popup>
           </MDBContainer>
         </MDBContainer>
       );
