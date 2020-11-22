@@ -16,6 +16,23 @@
   --font-size-small: 1rem;
   --line-height: 1.2;
   --default-transition: all 0.2s ease-in-out;
+
+
+  // header + footer heights + margin to make calculating page height easier
+  --header-height: calc(var(--head-font-size) + 40px);
+  --footer-height: calc(4 * (var(--font-size-small) + 20px) + 20px);
+}
+
+@media only screen and (min-width: 420px) {
+  :root {
+    --footer-height: calc(2 * (var(--font-size-small) + 20px) + 20px);
+  }
+}
+
+@media only screen and (min-width: 762px) {
+  :root {
+    --footer-height: calc(var(--font-size-small) + 20px + 20px);
+  }
 }
 
 #wrapper {
@@ -29,8 +46,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-bottom: calc(var(--font-size-small) + 70px);
-  min-height: calc(100vh - var(--head-font-size) - var(--font-size-small) - 160px);
+  padding-bottom: calc(50px + var(--footer-height));
+  min-height: calc(100vh - var(--header-height) - var(--footer-height) - 100px);
 }
 
 h1, .fontSizeLarge {
