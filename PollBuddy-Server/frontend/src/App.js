@@ -27,8 +27,6 @@ import Contact from "./pages/Contact/Contact";
 import About from "./pages/About/About";
 import QuestionEnded from "./pages/QuestionEnded/QuestionEnded";
 import AnswerRecorded from "./pages/AnswerRecorded/AnswerRecorded";
-import AdminSettings from "./pages/AdminSettings/AdminSettings";
-import MemberSettings from "./pages/MemberSettings/MemberSettings";
 import LoginDefault from "./pages/LoginDefault/LoginDefault";
 import LoginWithSchool from "./pages/LoginWithSchool/LoginWithSchool";
 import Code from "./pages/Code/Code";
@@ -153,12 +151,6 @@ export default class App extends React.Component {
 
             <Route exact path="/account">
               <AccountInfo updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/adminSettings">
-              <AdminSettings updateTitle={this.updateTitle} />
-            </Route>
-            <Route exact path="/memberSettings">
-              <MemberSettings updateTitle={this.updateTitle} />
             </Route>
             <Route exact path="/template">
               <Template updateTitle={this.updateTitle} />

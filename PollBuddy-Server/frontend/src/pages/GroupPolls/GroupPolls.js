@@ -100,36 +100,28 @@ export default class GroupPolls extends Component {
           }
           <MDBContainer className="box">
             <p className="fontSizeLarge">
-              Polls
+              My Polls
             </p>
 
-            {/*TODO: arrows should represent active polls rather than mouse hover */}
-            <ul>
-              <li id="poll0">
-                <a href={"/polls/:pollID/view"}>
-                  <MDBIcon className="GroupPolls-arrow" icon="long-arrow-alt-right" size="lg"/>
-                  <span>Lesson #1 - vectors</span>
-                </a>
-              </li>
-              <li id="poll1">
-                <a href={"/polls/:pollID/view"}>
-                  <MDBIcon className="GroupPolls-arrow" icon="long-arrow-alt-right" size="lg"/>
-                  <span>Lesson #2 - linked lists</span>
-                </a>
-              </li>
-              <li id="poll2">
-                <a href={"/polls/:pollID/view"}>
-                  <MDBIcon className="GroupPolls-arrow" icon="long-arrow-alt-right" size="lg"/>
-                  <span>Lesson #3 - sets</span>
-                </a>
-              </li>
-              <li id="poll3">
-                <a href={"/polls/:pollID/view"}>
-                  <MDBIcon className="GroupPolls-arrow" icon="long-arrow-alt-right" size="lg"/>
-                  <span>Lesson #4 - unordered maps</span>
-                </a>
-              </li>
-            </ul>
+            <Link to={"/polls/:pollID/view"}>
+              <button className = "btn button">Lesson #1 - vectors</button>
+            </Link>
+            <Link to={"/polls/:pollID/view"}>
+              <button className = "btn button">Lesson #2 - linked lists</button>
+            </Link>
+            <Link to={"/polls/:pollID/view"}>
+              <button className = "btn button">Lesson #3 - sets</button>
+            </Link>
+            <Link to={"/polls/:pollID/view"}>
+              <button className = "btn button">Lesson #1 - vectors</button>
+            </Link>
+            <Link to={"/polls/:pollID/view"}>
+              <button className = "btn button">Lesson #2 - linked lists</button>
+            </Link>
+            <Link to={"/polls/:pollID/view"}>
+              <button className = "btn button">Lesson #3 - sets</button>
+            </Link>
+
 
           </MDBContainer>
         </MDBContainer>
