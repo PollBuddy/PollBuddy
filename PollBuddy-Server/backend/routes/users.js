@@ -30,7 +30,7 @@ router.post("/login", function (req, res) {
       error: "Missing password"
     });
   } else {
-    mongoConnection.getDB().collection("users").findOne({Email: email}, {
+    mongoConnection.getDB().collection("users").findOne({ Email: email }, {
       _id: true,
       Password: true
     }, (err_db, result_db) => {
@@ -79,16 +79,16 @@ router.get("/login/cas", cas.bounce2, function (req, res, next) {
   // This runs if the user is logged in successfully
 
   // Log the user in on the backend side of things
-  if(req.query.ticket) {
+  if (req.query.ticket) {
     console.log("Locating user to add to session."); // TODO: Remove after testing
-    mongoConnection.getDB().collection("users").findOne({Username: req.session.cookie.cas_user}, {projection: {_id: false, Username: true}}, (err, result) => {
+    mongoConnection.getDB().collection("users").findOne({ Username: req.session.cookie.cas_user }, { projection: { _id: false, Username: true } }, (err, result) => {
       if (err) {
         console.log("Error occurred"); // TODO: Improve error messaging
         console.log(err);
       } else {
         console.log("Result found"); // TODO: Remove after testing
         console.log(result);
-        if(result == null) {
+        if (result == null) {
           // User not registered, TODO: Redirect to registration
           return res.send("User not registered!");
         } else {
@@ -139,13 +139,13 @@ router.post("/register", function (req, res, next) {
   });
 });
 
-router.post("/:id/edit/", function (req, res) {//TODO RCS BOOL refer to documentation
+router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documentation
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   var jsonContent = req.body;
   var success = false;
   if (jsonContent.Action === "Add") {
     if (jsonContent.FirstName !== undefined) {
-      mongoConnection.getDB().collection("users").updateOne({"_id": id}, {"$addToSet": {FirstName: jsonContent.FirstName}}, function (err, res) {
+      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { FirstName: jsonContent.FirstName } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -154,7 +154,7 @@ router.post("/:id/edit/", function (req, res) {//TODO RCS BOOL refer to document
       });
     }
     if (jsonContent.LastName !== undefined) {
-      mongoConnection.getDB().collection("users").updateOne({"_id": id}, {"$addToSet": {LastName: jsonContent.LastName}}, function (err, res) {
+      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { LastName: jsonContent.LastName } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -163,7 +163,7 @@ router.post("/:id/edit/", function (req, res) {//TODO RCS BOOL refer to document
       });
     }
     if (jsonContent.Username !== undefined) {
-      mongoConnection.getDB().collection("users").updateOne({"_id": id}, {"$addToSet": {Username: jsonContent.Username}}, function (err, res) {
+      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { Username: jsonContent.Username } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -172,7 +172,7 @@ router.post("/:id/edit/", function (req, res) {//TODO RCS BOOL refer to document
       });
     }
     if (jsonContent.Email !== undefined) {
-      mongoConnection.getDB().collection("users").updateOne({"_id": id}, {"$addToSet": {Email: jsonContent.Email}}, function (err, res) {
+      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { Email: jsonContent.Email } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -181,7 +181,7 @@ router.post("/:id/edit/", function (req, res) {//TODO RCS BOOL refer to document
       });
     }
     if (jsonContent.Password !== undefined) {
-      mongoConnection.getDB().collection("users").updateOne({"_id": id}, {"$addToSet": {Password: bcrypt.hashSync(jsonContent.Password, 10)}}, function (err, res) {
+      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { Password: bcrypt.hashSync(jsonContent.Password, 10) } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -194,7 +194,7 @@ router.post("/:id/edit/", function (req, res) {//TODO RCS BOOL refer to document
     }
   } else if (jsonContent.Action === "Remove") {
     if (jsonContent.FirstName !== undefined) {
-      mongoConnection.getDB().collection("users").updateOne({"_id": id}, {"$pull": {FirstName: jsonContent.FirstName}}, function (err, res) {
+      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { FirstName: jsonContent.FirstName } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -203,7 +203,7 @@ router.post("/:id/edit/", function (req, res) {//TODO RCS BOOL refer to document
       });
     }
     if (jsonContent.LastName !== undefined) {
-      mongoConnection.getDB().collection("users").updateOne({"_id": id}, {"$pull": {LastName: jsonContent.LastName}}, function (err, res) {
+      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { LastName: jsonContent.LastName } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -212,7 +212,7 @@ router.post("/:id/edit/", function (req, res) {//TODO RCS BOOL refer to document
       });
     }
     if (jsonContent.Username !== undefined) {
-      mongoConnection.getDB().collection("users").updateOne({"_id": id}, {"$pull": {Username: jsonContent.Username}}, function (err, res) {
+      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { Username: jsonContent.Username } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -221,7 +221,7 @@ router.post("/:id/edit/", function (req, res) {//TODO RCS BOOL refer to document
       });
     }
     if (jsonContent.Email !== undefined) {
-      mongoConnection.getDB().collection("users").updateOne({"_id": id}, {"$pull": {Email: jsonContent.Email}}, function (err, res) {
+      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { Email: jsonContent.Email } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -230,7 +230,7 @@ router.post("/:id/edit/", function (req, res) {//TODO RCS BOOL refer to document
       });
     }
     if (jsonContent.Password !== undefined) {
-      mongoConnection.getDB().collection("users").updateOne({"_id": id}, {"$pull": {Password: jsonContent.Password}}, function (err, res) {
+      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { Password: jsonContent.Password } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -247,9 +247,9 @@ router.post("/:id/edit/", function (req, res) {//TODO RCS BOOL refer to document
   return res.sendStatus(200); // TODO: Ensure this is true
 });
 
-router.get("/:id/", function (req, res, next) {
+router.get("/:id", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  mongoConnection.getDB().collection("users").find({"_id": id}).toArray(function (err, result) {
+  mongoConnection.getDB().collection("users").find({ "_id": id }).toArray(function (err, result) {
     if (err) {
       return res.sendStatus(500);
     }
@@ -259,7 +259,7 @@ router.get("/:id/", function (req, res, next) {
 
 router.get("/:id/groups", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  mongoConnection.getDB().collection("users").find({"_id": id}, {projection: {_id: 0, Groups: 1}}).map(function (item) {
+  mongoConnection.getDB().collection("users").find({ "_id": id }, { projection: { _id: 0, Groups: 1 } }).map(function (item) {
     return res.send(item.Groups);
   }).toArray(function (err, result) {
     if (err) {
@@ -289,7 +289,7 @@ module.exports.user_middleware = function (req, res, next) {
         callback(new Error("Not logged in"));
       }
     } else {
-      mongoConnection.getDB().collection("users").findOne({_id: bson.ObjectId(req.session["UserID"])}, {projection: {Password: false}}, (err, result) => {
+      mongoConnection.getDB().collection("users").findOne({ _id: bson.ObjectId(req.session["UserID"]) }, { projection: { Password: false } }, (err, result) => {
         if (err) {
           return callback(err);
         } else {
