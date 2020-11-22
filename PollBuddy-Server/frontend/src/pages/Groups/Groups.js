@@ -1,10 +1,10 @@
-import React, {Component} from "react";
-import {Link } from "react-router-dom";
+import React, { Component } from "react";
+import { Link, Redirect } from "react-router-dom";
 import { MDBContainer } from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 
 export default class Groups extends Component {
-  constructor(){
+  constructor() {
     super();
     this.state = {
       //TODO: fetch this data from api/users/:id/groups when that functionality works
@@ -37,8 +37,15 @@ export default class Groups extends Component {
     //localStorage.removeItem("loggedIn");//todo if admin -- more specifically make diff states if the user who logged in is an admin... or teacher. wouldn't want teacher accessing user things or vice versa...
     //Redirect("/login");
   }
-  componentDidMount(){
+  componentDidMount() {
     this.props.updateTitle("My Groups");
+  }
+  handleClick = (event) => {
+
+    // call prompt() with custom message to get user input from alert-like dialog 
+    const groupCode = prompt('Please enter your group code');
+    // combine the group code into URL and redirect to the next page
+    window.location.replace("/groups/" + groupCode + "/polls");
   }
 
   render() {
@@ -100,6 +107,7 @@ export default class Groups extends Component {
               <button className="btn button">New Group</button>
             </Link>
           </MDBContainer>
+          <button className="btn button" onClick={this.handleClick}>Join Group</button>
         </MDBContainer>
       );
     }
