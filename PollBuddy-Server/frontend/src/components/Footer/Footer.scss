@@ -1,39 +1,22 @@
 .Footer-foot {
-  padding: 0 0 20px;
+  padding: 10px 20px;
   font: var(--font-size-small) / 1 var(--main-font);
   box-sizing: border-box;
   width: 100%;
   position: absolute;
   bottom: 0;
-}
-.Footer-linethru {
-  background: var(--base-purple-logo-bg);
-  width: 100%;
-  margin: calc((var(--font-size-small) - 1px) / 2) 0;
-  height: 1px;
-  position: absolute;
-  z-index: -9;
+  background: var(--darkest-purple-header-color);
+  margin-top: 50px;
 }
 .Footer-foot-links {
-  background: var(--dark-purple-main-background);
-  padding: 0px 40px;
+  padding: 0 10px;
+}
+.Footer-foot a, .Footer-foot span:only-child {
   display: inline-block;
-}
-.Footer-foot-links:first-child {
-  position: absolute;
-  left: 0;
-}
-.Footer-foot-links:last-child {
-  position: absolute;
-  right: 0;
-}
-.Footer-links {
-  text-align: center;
-  width: 100%;
+  padding: 10px;
 }
 .Footer-foot a {
   color: var(--white-most-text);
-  margin: 0 20px 0 0;
   opacity: 0.8;
 }
 .Footer-foot a:hover {
@@ -43,6 +26,29 @@
   height: var(--font-size-small);
   width: auto;
 }
-.Footer-foot div a:last-of-type {
-  margin: 0;
+.Footer-foot-links:last-child a {
+  padding: 8px 10px;
+}
+.Footer-foot-links:first-child, .Footer-foot-links span {
+  display: block;
+}
+@media only screen and (min-width: 762px) {
+  .Footer-foot-links:last-child {
+    float: right;
+  }
+  .Footer-copy {
+    float: left;
+  }
+  .Footer-foot-links:first-child {
+    display: inline-block;
+  }
+}
+@media only screen and (min-width: 420px) {
+  .Footer-foot-links span {
+    display: inline;
+  }
+  .Footer-foot-links {
+    display: inline-block;
+    vertical-align: top;
+  }
 }
