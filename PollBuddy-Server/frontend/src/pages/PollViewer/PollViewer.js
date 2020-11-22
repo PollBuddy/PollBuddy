@@ -13,7 +13,7 @@ export default class PollViewer extends Component {
   timeLimit = 5;
 
   state = {
-    display: 0
+    display: false
   }
 
   pollViewer() {
@@ -101,13 +101,6 @@ export default class PollViewer extends Component {
   }
 
 
-  /*
-    changeDisplay(param) {
-      this.setState({ display: param }, () => {
-        console.log(this.state.display);
-      })
-    };
-  */
   render() {
     const clockFormat = ({minutes, seconds, completed}) => {
       if (completed) {
@@ -115,7 +108,16 @@ export default class PollViewer extends Component {
         return this.questionEnded();
       } else {
         // Render a countdown
-        return <p className="width-90 fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
+        return(
+          <>
+            <p className="width-90 fontSizeLarge">
+              Time remaining:
+            </p>
+            <p className="width-90 fontSizeLarge">
+              {zeroPad(minutes)}:{zeroPad(seconds)}
+            </p>
+          </>
+        );
       }
     };
     let timer = (
@@ -126,8 +128,59 @@ export default class PollViewer extends Component {
         <Countdown renderer={clockFormat} date={Date.now() + this.timeLimit * 1000}/>
       </MDBContainer>
     );
-    return(
-        timer
-    );
+    if (this.state.display) {
+      return (
+        <React.Fragment>
+          timer,
+          this.answerRecorded()
+        </React.Fragment>
+      );
+    } else {
+      return(
+        <MDBContainer>
+          <MDBContainer className="page">
+            <Countdown renderer={clockFormat} date={Date.now() + this.timeLimit * 1000}/>
+            <MDBContainer className="box PollViewer-answers">
+              <p>
+                Question 3 of 28:
+              </p>
+              <p className="fontSizeLarge">
+                Why does the tooth fairy collect teeth?
+              </p>
+
+              <ul>
+
+                <li id="answerElement0">
+                  <a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>A</span>She grinds them into the fairy
+                    dust she needs to fly
+                  </a>
+                </li>
+                <li id="answerElement1">
+                  <a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>B</span>She gives them to new babies
+                    who are ready to grow teeth
+                  </a>
+                </li>
+                <li id="answerElement2">
+                  <a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>C</span>She gives the good teeth to
+                    dentists to make false teeth
+                  </a>
+                </li>
+                <li id="answerElement3">
+                  <a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>D</span>She grinds them up and makes
+                    sand for the beach
+                  </a>
+                </li>
+                <li id="answerElement4">
+                  <a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>E</span>She needs to replace her own
+                    teeth
+                  </a>
+                </li>
+              </ul>
+
+            </MDBContainer>
+          </MDBContainer>
+        </MDBContainer>
+      );
+    }
   }
 }
