@@ -106,8 +106,8 @@ export default class Groups extends Component {
             <Link to={"/groups/new"}>
               <button className="btn button">New Group</button>
             </Link>
+            <button className="btn button" onClick={this.handleClick}>Join Group</button>
           </MDBContainer>
-          <button className="btn button" onClick={this.handleClick}>Join Group</button>
         </MDBContainer>
       );
     }
