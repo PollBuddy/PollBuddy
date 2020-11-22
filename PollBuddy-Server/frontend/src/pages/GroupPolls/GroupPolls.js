@@ -1,8 +1,7 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import "./GroupPolls.scss";
-import {MDBContainer, MDBIcon} from "mdbreact";
-import GroupEditor from "../../components/GroupEditor/GroupEditor";
+import {MDBContainer} from "mdbreact";
 
 export default class GroupPolls extends Component {
   constructor(props) {//shouldn't this be dependent on the class???? thats why i included a constructor.
@@ -11,7 +10,20 @@ export default class GroupPolls extends Component {
     //problem is there is no find in backend rn... frontend could do find but probably more resource intensive?
     this.state = {
       isMember: false,
-      class: "1200 - Data Structures"
+      class: "1200 - Data Structures",
+      polls: [
+        {pollId: 1, label: "Big O Notation"},
+        {pollId: 2, label: "Basic C++ Syntax"},
+        {pollId: 3, label: "Pointers"},
+        {pollId: 4, label: "Vectors"},
+        {pollId: 5, label: "Linked Lists"},
+        {pollId: 6, label: "Sets"},
+        {pollId: 7, label: "Maps"}
+      ],
+      total_polls: 7,
+      total_questions: 24,
+      avg_correct: 20,
+      member_correct: 22
       //need to put in groupID from backend
       //need to get other shit like pollIDs and their respective information...
     };
@@ -41,13 +53,13 @@ export default class GroupPolls extends Component {
                 Member Settings:
               </p>
               <p className="fontSizeSmall">
-                Total number of polls: 12
+                {"Total number of polls: " + this.state.total_polls}
               </p>
               <p className="fontSizeSmall">
-                Total nestions: 24
+                {"Total questions: " + this.state.total_questions}
               </p>
               <p className="fontSizeSmall">
-                Questions answered correctly: 21
+                {"Questions answered correctly: " + this.state.member_correct}
               </p>
 
               {/*TODO: add more (correct) read-only information here*/}
@@ -66,13 +78,13 @@ export default class GroupPolls extends Component {
                 <button className="btn button">Create New Poll</button>
               </Link>
               <p className="fontSizeSmall">
-                Total number of polls: 12
+                {"Total number of polls: " + this.state.total_polls}
               </p>
               <p className="fontSizeSmall">
-                Total number of questions: 24
+                {"Total questions: " + this.state.total_questions}
               </p>
               <p className="fontSizeSmall">
-                Average correct answers: 21
+                {"Average correct answers: " + this.state.avg_correct}
               </p>
               {/*change name, details, add people, remove people*/}
               {/*TODO: admin should be able to select individual students and see their information here*/}
@@ -102,25 +114,29 @@ export default class GroupPolls extends Component {
             <p className="fontSizeLarge">
               My Polls
             </p>
-
-            <Link to={"/polls/:pollID/view"}>
-              <button className = "btn button">Lesson #1 - vectors</button>
-            </Link>
-            <Link to={"/polls/:pollID/view"}>
-              <button className = "btn button">Lesson #2 - linked lists</button>
-            </Link>
-            <Link to={"/polls/:pollID/view"}>
-              <button className = "btn button">Lesson #3 - sets</button>
-            </Link>
-            <Link to={"/polls/:pollID/view"}>
-              <button className = "btn button">Lesson #1 - vectors</button>
-            </Link>
-            <Link to={"/polls/:pollID/view"}>
-              <button className = "btn button">Lesson #2 - linked lists</button>
-            </Link>
-            <Link to={"/polls/:pollID/view"}>
-              <button className = "btn button">Lesson #3 - sets</button>
-            </Link>
+            {this.state.polls.map((e) => (
+                <Link to={"/polls/" + e.pollId + "/view"}>
+                  <button style={{  width: "17em" }} className="btn button">{"Poll " + e.pollId + ": " + e.label}</button>
+                </Link>
+            ))}
+            {/*<Link to={"/polls/:pollID/view"}>*/}
+            {/*  <button className = "btn button">Lesson #1 - vectors</button>*/}
+            {/*</Link>*/}
+            {/*<Link to={"/polls/:pollID/view"}>*/}
+            {/*  <button className = "btn button">Lesson #2 - linked lists</button>*/}
+            {/*</Link>*/}
+            {/*<Link to={"/polls/:pollID/view"}>*/}
+            {/*  <button className = "btn button">Lesson #3 - sets</button>*/}
+            {/*</Link>*/}
+            {/*<Link to={"/polls/:pollID/view"}>*/}
+            {/*  <button className = "btn button">Lesson #1 - vectors</button>*/}
+            {/*</Link>*/}
+            {/*<Link to={"/polls/:pollID/view"}>*/}
+            {/*  <button className = "btn button">Lesson #2 - linked lists</button>*/}
+            {/*</Link>*/}
+            {/*<Link to={"/polls/:pollID/view"}>*/}
+            {/*  <button className = "btn button">Lesson #3 - sets</button>*/}
+            {/*</Link>*/}
 
 
           </MDBContainer>
