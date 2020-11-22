@@ -19,7 +19,7 @@ export default class AccountInfo extends Component {
             <label htmlFor="lastnameText">Last Name:</label>
             <input placeholder="Man" className="form-control textBox" id="lastnameText"/>
             <label htmlFor="usernametext">Username:</label>
-            <input placeholder="mans" className="form-control textBox" id="usernametext" readonly><br><br>
+            <input placeholder="mans" className="form-control textBox" id="usernametext" readonly><br><br/>
             <label htmlFor="emailText">Email:</label>
             <input placeholder="sisman@rpi.edu" className="form-control textBox" id="emailText"/>
             
