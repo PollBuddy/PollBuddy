@@ -31,6 +31,7 @@ import AdminSettings from "./pages/AdminSettings/AdminSettings";
 import MemberSettings from "./pages/MemberSettings/MemberSettings";
 import LoginDefault from "./pages/LoginDefault/LoginDefault";
 import LoginWithSchool from "./pages/LoginWithSchool/LoginWithSchool";
+import Code from "./pages/Code/Code";
 
 import Header from "./components/Header/Header.js";
 import Footer from "./components/Footer/Footer.js";
@@ -68,6 +69,7 @@ export default class App extends React.Component {
           */}
 
           <Switch>
+
             {/* Main page */}
             <Route exact path="/">
               <Homepage updateTitle={this.updateTitle} />
@@ -85,6 +87,9 @@ export default class App extends React.Component {
             </Route>
             <Route exact path="/privacy">
               <Privacy updateTitle={this.updateTitle} />
+            </Route>
+            <Route exact path="/code">
+              <Code updateTitle={this.updateTitle} />
             </Route>
 
             {/* Group pages */}
