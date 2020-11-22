@@ -10,28 +10,17 @@ export default class PollViewer extends Component {
     this.props.updateTitle("Poll Viewer");
   }
 
-  timeLimit = 10;
+  timeLimit = 5;
 
-
-  clockFormat = ({minutes, seconds, completed}) => {
-    if (completed) {
-      // Render a completed state
-      this.setState({display: 2});
-    } else {
-      // Render a countdown
-      return <p className="width-90 fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
-    }
-  };
+  state = {
+    display: 0
+  }
 
   pollViewer() {
     return (
       <MDBContainer>
         <MDBContainer className="page">
           <MDBContainer className="box PollViewer-answers">
-            <p className="width-90 fontSizeLarge">
-              Time remaining:
-            </p>
-            <Countdown renderer={this.clockFormat} date={Date.now() + this.timeLimit * 1000}/>
             <p>
               Question 3 of 28:
             </p>
@@ -78,11 +67,6 @@ export default class PollViewer extends Component {
     return (
       <MDBContainer fluid className="page">
         <button className="btn button" onClick={this.setState({display: 0})}>Change Answer?</button>
-        <p className="width-90 fontSizeLarge">
-          Time remaining:
-        </p>
-        <Countdown renderer={this.clockFormat} date={Date.now() + this.timeLimit * 1000}/>
-
         <Link to={"/myclasses"}>
           <button className="btn button">Leave Poll?</button>
         </Link>
@@ -98,7 +82,6 @@ export default class PollViewer extends Component {
     return (
       <MDBContainer fluid className="page">
         <p className="width-45 fontSizeLarge">Question closed by instructor!</p>
-        {/*TODO: show this only if the instructor allows*/}
         <Link to={"/pollDataView"}>
           <button className="btn button">View Statistics for this question</button>
         </Link>
@@ -113,14 +96,10 @@ export default class PollViewer extends Component {
         <p className="width-45 fontSizeLarge">|--loading--|</p>
         <p className="width-45 fontSizeLarge">\---here--/</p>
         <p className="width-45 fontSizeLarge">‾‾‾‾‾‾</p>
-
       </MDBContainer>
     );
   }
 
-  state = {
-    display: 0
-  }
 
   /*
     changeDisplay(param) {
@@ -130,16 +109,25 @@ export default class PollViewer extends Component {
     };
   */
   render() {
-    let display;
-    if (this.state.display == 2) {
-      display = this.questionEnded();
-    } else if (this.state.display == 1) {
-      display = this.answerRecorded();
-    } else {
-      display = this.pollViewer();
-    }
-    return (
-      display
+    const clockFormat = ({minutes, seconds, completed}) => {
+      if (completed) {
+        // Render a completed state
+        return this.questionEnded();
+      } else {
+        // Render a countdown
+        return <p className="width-90 fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
+      }
+    };
+    let timer = (
+      <MDBContainer fluid className="page">
+        <p className="width-90 fontSizeLarge">
+          Time remaining:
+        </p>
+        <Countdown renderer={clockFormat} date={Date.now() + this.timeLimit * 1000}/>
+      </MDBContainer>
+    );
+    return(
+        timer
     );
   }
 }
