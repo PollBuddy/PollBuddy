@@ -35,23 +35,19 @@ export default class PollViewer extends Component {
               </a>
             </li>
             <li id="answerElement1">
-              <a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>B</span>She gives them to new babies
-                who are ready to grow teeth
+              <a onClick={() =>this.setState({recorded: true})}><span className={"PollViewer-bubble"}>B</span>She gives them to new babies who are ready to grow teeth
               </a>
             </li>
             <li id="answerElement2">
-              <a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>C</span>She gives the good teeth to
-                dentists to make false teeth
+              <a onClick={() =>this.setState({recorded: true})}><span className={"PollViewer-bubble"}>C</span>She gives the good teeth to dentists to make false teeth
               </a>
             </li>
             <li id="answerElement3">
-              <a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>D</span>She grinds them up and makes
-                sand for the beach
+              <a onClick={() =>this.setState({recorded: true})}><span className={"PollViewer-bubble"}>D</span>She grinds them up and makes sand for the beach
               </a>
             </li>
             <li id="answerElement4">
-              <a href={"/answerRecorded"}><span className={"PollViewer-bubble"}>E</span>She needs to replace her own
-                teeth
+              <a onClick={() =>this.setState({recorded: true})}><span className={"PollViewer-bubble"}>E</span>She needs to replace her own teeth
               </a>
             </li>
           </ul>
@@ -118,9 +114,9 @@ export default class PollViewer extends Component {
     };
     let display;
     if (this.state.recorded) {
-      display = this.answerRecorded()
+      display = this.answerRecorded();
     } else {
-      display = this.pollViewer()
+      display = this.pollViewer();
     }
     return (
       <MDBContainer>
