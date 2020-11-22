@@ -8,6 +8,7 @@ export default class GroupPolls extends Component {
     super(props);
     //need to connect to backend probably here and then store data until it can be stored in state.
     //problem is there is no find in backend rn... frontend could do find but probably more resource intensive?
+    //TODO: get all this from a backend call
     this.state = {
       isMember: false,
       class: "1200 - Data Structures",
@@ -20,7 +21,6 @@ export default class GroupPolls extends Component {
         {pollId: 6, label: "Sets"},
         {pollId: 7, label: "Maps"}
       ],
-      total_polls: 7,
       total_questions: 24,
       avg_correct: 20,
       member_correct: 22
@@ -46,14 +46,14 @@ export default class GroupPolls extends Component {
     return (
       <MDBContainer className="page GroupPolls">
         <MDBContainer className="Homepage-boxes two-box">
+          {/*TODO: put the GroupEditor component here*/}
           {this.state.isMember ? (
             <MDBContainer className="box">
               <p className="fontSizeLarge">
-                {/*  TODO: change this to whatever was clicked on in the last screen*/}
                 Member Settings:
               </p>
               <p className="fontSizeSmall">
-                {"Total number of polls: " + this.state.total_polls}
+                {"Total number of polls: " + this.state.polls.length}
               </p>
               <p className="fontSizeSmall">
                 {"Total questions: " + this.state.total_questions}
@@ -78,7 +78,7 @@ export default class GroupPolls extends Component {
                 <button className="btn button">Create New Poll</button>
               </Link>
               <p className="fontSizeSmall">
-                {"Total number of polls: " + this.state.total_polls}
+                {"Total number of polls: " + this.state.polls.length}
               </p>
               <p className="fontSizeSmall">
                 {"Total questions: " + this.state.total_questions}
@@ -119,26 +119,6 @@ export default class GroupPolls extends Component {
                   <button style={{  width: "17em" }} className="btn button">{"Poll " + e.pollId + ": " + e.label}</button>
                 </Link>
             ))}
-            {/*<Link to={"/polls/:pollID/view"}>*/}
-            {/*  <button className = "btn button">Lesson #1 - vectors</button>*/}
-            {/*</Link>*/}
-            {/*<Link to={"/polls/:pollID/view"}>*/}
-            {/*  <button className = "btn button">Lesson #2 - linked lists</button>*/}
-            {/*</Link>*/}
-            {/*<Link to={"/polls/:pollID/view"}>*/}
-            {/*  <button className = "btn button">Lesson #3 - sets</button>*/}
-            {/*</Link>*/}
-            {/*<Link to={"/polls/:pollID/view"}>*/}
-            {/*  <button className = "btn button">Lesson #1 - vectors</button>*/}
-            {/*</Link>*/}
-            {/*<Link to={"/polls/:pollID/view"}>*/}
-            {/*  <button className = "btn button">Lesson #2 - linked lists</button>*/}
-            {/*</Link>*/}
-            {/*<Link to={"/polls/:pollID/view"}>*/}
-            {/*  <button className = "btn button">Lesson #3 - sets</button>*/}
-            {/*</Link>*/}
-
-
           </MDBContainer>
         </MDBContainer>
       </MDBContainer>
