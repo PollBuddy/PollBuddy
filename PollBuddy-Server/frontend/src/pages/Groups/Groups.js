@@ -4,11 +4,7 @@ import { MDBContainer } from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 
 export default class Groups extends Component {
-  state = {
-    showXs: false,
-    isOpen: false,
-    leaveGroupButtonText: "Leave Group"
-  };
+
   constructor(){
     super();
     this.state = {
@@ -23,7 +19,10 @@ export default class Groups extends Component {
         {id: 123, label: "CSCI 2300 - Intro to Algorithms"},
         {id: 123, label: "CSCI 2500 - Computer Organization"},
         {id: 123, label: "CSCI 2960 - RCOS"}
-      ]
+      ],
+      showXs: false,
+      isOpen: false,
+      leaveGroupButtonText: "Leave Group"
     };
 
     if(!localStorage.getItem("loggedIn")){
@@ -47,7 +46,7 @@ export default class Groups extends Component {
   }
   toggleLeaveGroup = () => {
     this.setState(prevState => ({ showXs: !prevState.showXs }));
-    if (this.state.leaveGroupButtonText == "Leave Group") {
+    if (this.state.leaveGroupButtonText === "Leave Group") {
       this.setState({ leaveGroupButtonText: "Exit Leave Group" });
     } else {
       this.setState({ leaveGroupButtonText: "Leave Group" });
@@ -63,8 +62,6 @@ export default class Groups extends Component {
 
   render() { 
     const { showXs } = this.state;
-    return (
-  render() {
     if(this.state.error != null){
       return (
         <MDBContainer fluid className="page">
@@ -94,11 +91,11 @@ export default class Groups extends Component {
             ) : (
               <React.Fragment>
                 {this.state.admin_groups.map((e) => (
-                    <div>
-                        <Link to={"/groups/" + e.id + "/polls"}>
-                        <button className="btn button width-20em">{e.label}</button>
-                        </Link>
-                        {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
+                  <div>
+                    <Link to={"/groups/" + e.id + "/polls"}>
+                      <button className="btn button width-20em">{e.label}</button>
+                    </Link>
+                    {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
                   </div>
                 ))}
               </React.Fragment>
@@ -112,11 +109,11 @@ export default class Groups extends Component {
             ) : (
               <React.Fragment>
                 {this.state.member_groups.map((e) => (
-                    <div>
-                        <Link to={"/groups/" + e.id + "/polls"}>
-                        <button className="btn button width-20em">{e.label}</button>
-                        </Link>
-                        {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
+                  <div>
+                    <Link to={"/groups/" + e.id + "/polls"}>
+                      <button className="btn button width-20em">{e.label}</button>
+                    </Link>
+                    {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
                   </div>
                 ))}
               </React.Fragment>
@@ -130,9 +127,8 @@ export default class Groups extends Component {
             </Link>
             <button className="btn button" onClick={this.handleClick}>Join Group</button>
             <button className="btn button" onClick={this.toggleLeaveGroup}>{this.state.leaveGroupButtonText}</button>
-            {this.state.isOpen && <Dialog onClose={(e) => this.setState({ isOpen: false})}></Dialog>}
+            {this.state.isOpen && <Dialog onClose={(e) => this.setState({isOpen: false})} />}
           </MDBContainer>
-
         </MDBContainer>
       );
     }
