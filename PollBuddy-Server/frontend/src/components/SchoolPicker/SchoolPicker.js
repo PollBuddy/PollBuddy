@@ -15,6 +15,25 @@ import "mdbreact/dist/css/mdb.css";
 //   {key: 7, label: "Albany Medical College"}
 // ];
 
+var schools = [];
+var schoolLinkDict = {};
+
+fetch(process.env.REACT_APP_BACKEND_URL + "/schools", {
+  method: "GET",
+  headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+}).then(response => response.json())
+  // handle response
+  .then(data => {
+    console.log(data); // for testing, can be deleted later
+    schoolLinkDict = data;
+    const schoolNames = Object.keys(data);
+    console.log(schoolNames); // for testing, can be deleted later
+    for (var i = 0; i < schoolNames.length; i++) {
+      schools.push({ key: i, label: schoolNames[i] });
+    }
+    console.log(schools); // for testing, can be deleted later
+  })
+
 const sortItems = (itemA, itemB, value) => {
   const lowA = itemA.label.toLowerCase();
   const lowB = itemB.label.toLowerCase();
@@ -32,7 +51,7 @@ const renderDropdownItem = (item) => (
   </div>
 );
 
-export default ({ value, onChange, onSelect, schools }) => (
+export default ({ value, onChange, onSelect}) => (
   <MDBContainer className="form-group">
     <Autocomplete
       items={schools}
@@ -52,3 +71,5 @@ export default ({ value, onChange, onSelect, schools }) => (
     />
   </MDBContainer>
 );
+
+export {schoolLinkDict};

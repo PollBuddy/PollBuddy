@@ -4,31 +4,13 @@ import "mdbreact/dist/css/mdb.css";
 import { Link } from "react-router-dom";
 
 import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";
+import {schoolLinkDict} from "../../components/SchoolPicker/SchoolPicker";
 
 export default class LoginWithSchool extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = { value: "" };
     this.schools = [];
-    this.schoolLinkDict = {};
-    fetch(process.env.REACT_APP_BACKEND_URL + "/schools", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
-    }).then(response => response.json())
-      // handle response
-      .then(data => {
-        console.log(data); // for testing, can be deleted later
-        this.schoolLinkDict = data;
-        const schoolNames = Object.keys(data);
-        console.log(schoolNames); // for testing, can be deleted later
-        for (var i = 0; i < schoolNames.length; i++) {
-          this.schools.push({ key: i, label: schoolNames[i] });
-        }
-        console.log(this.schools); // for testing, can be deleted later
-      })
-      .catch(err => {
-        this.setState({ error: "An error occurred during login. Please try again" });
-      });
   }
 
   componentDidMount() {
@@ -53,10 +35,9 @@ export default class LoginWithSchool extends Component {
             value={this.state.value}
             onChange={e => this.setState({ value: e.target.value })}
             onSelect={value => this.setState({ value })}
-            schools={this.schools}
           />
           <form>
-            <button className="btn button" formAction={this.schoolLinkDict[this.state.value]}>Submit</button>
+            <button className="btn button" formAction={schoolLinkDict[this.state.value]}>Submit</button>
           </form>
 
           {/* <form>
