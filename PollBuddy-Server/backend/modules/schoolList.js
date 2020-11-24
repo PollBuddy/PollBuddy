@@ -1,8 +1,8 @@
 let list = [];
 
 module.exports = {
-  append: function(item) {
-    list.push(item);
+  append: function(name, url) {
+    list.push([name, url]);
   },
   getList: function(){
     return list;

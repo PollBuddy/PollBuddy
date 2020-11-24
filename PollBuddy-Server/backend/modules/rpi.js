@@ -2,7 +2,7 @@ const CASAuthentication = require('cas-authentication');
 const User = require('../routes/users');
 const schoolList = require("./schoolList");
 
-schoolList.append("RPI");
+schoolList.append("Rensselaer Polytechnic Institute (RPI)", "/api/users/login/rpi");
 
 const cas = new CASAuthentication({
   cas_url: process.env.CAS_URL || 'https://cas-auth.rpi.edu/cas',
@@ -18,7 +18,7 @@ module.exports = {
   logout: cas.logout,
   // Bounce user to RPI's login page if they're not logged in, then back to the login handler
   bounce2: function (req, res, next) {
-    req.url = '/api/users/login/cas';
+    req.url = '/api/users/login/rpi';
     cas.bounce(req, res, next);
   }
 };
