@@ -70,21 +70,25 @@ export default class App extends React.Component {
 
           <Switch>
 
-            {/* Main page */}
+            {/* Main Site Page */}
             <Route exact path="/">
               <Homepage updateTitle={this.updateTitle} />
             </Route>
 
             {/* Footer division pages */}
+            {/* About Poll Buddy Page */}
             <Route exact path="/about">
               <About updateTitle={this.updateTitle} />
             </Route>
+            {/* Contact Us Page */}
             <Route exact path="/contact">
               <Contact updateTitle={this.updateTitle} />
             </Route>
+            {/* Frequently Asked Question(FAQ) Page */}
             <Route exact path="/faq">
               <FAQ updateTitle={this.updateTitle} />
             </Route>
+            {/* Data Privacy Page */}
             <Route exact path="/privacy">
               <Privacy updateTitle={this.updateTitle} />
             </Route>
@@ -93,82 +97,108 @@ export default class App extends React.Component {
             </Route>
 
             {/* Group pages */}
+            {/* My Group Page */}
             <Route exact path="/groups">
               <Group updateTitle={this.updateTitle} />
             </Route>
+            {/* Group Creation Page */}
             <Route exact path="/groups/new">
               <GroupCreation updateTitle={this.updateTitle} />
             </Route>
+            {/* Group Polls Page */}
             <Route exact path="/groups/:groupID/polls">
               <GroupPolls updateTitle={this.updateTitle} />
             </Route>
 
+            {/* Group Edit Page */}
             {/*use the render function so that we can retrieve :groupID from inside the component*/}
             <Route exact path="/groups/:groupID/edit" render={
               (props) => (<GroupEdit {...props} updateTitle={this.updateTitle} />)
             }/>
 
             {/* Poll handler pages */}
+            {/* Poll Viewer Page */}
             <Route exact path="/polls/:pollID/view">
               <PollViewer updateTitle={this.updateTitle} />
             </Route>
+            {/* Poll Edit Page */}
             <Route exact path="/polls/:pollID/edit">
               <PollEditor updateTitle={this.updateTitle}/>
             </Route>
+            {/* Poll Data View Page - manage */}
             <Route exact path="/polls/:pollID/manage">
               <PollManager updateTitle={this.updateTitle} />
             </Route>
+            {/* Poll Data View Page - results */}
             <Route exact path="/polls/:pollID/results">
               <PollResults updateTitle={this.updateTitle}/>
             </Route>
+            {/* My Poll Histories Page */}
             <Route exact path="/polls/history">
               <PollHistory updateTitle={this.updateTitle} />
             </Route>
+            {/* Question Ended Page */}
+            {/* a page shows question is closed by instructor */}
             <Route exact path="/questionEnded">
               <QuestionEnded updateTitle={this.updateTitle} />
             </Route>
+            {/* Answer Recorded Page */}
+            {/* a pages shows a time recorded question, after time ends
+             it will negaviate to Question Ended Page */}
             <Route exact path="/answerRecorded">
               <AnswerRecorded updateTitle={this.updateTitle} />
             </Route>
 
             {/* Login Pages */}
+            {/* Login Main Page */}
             <Route exact path="/login">
               <LoginDefault updateTitle={this.updateTitle} />
             </Route>
+            {/* Login with Poll Buddy Account Page */}
             <Route exact path="/login/pollbuddy">
               <LoginWithPollBuddy updateTitle={this.updateTitle} />
             </Route>
+            {/* Login with School Account Page */}
             <Route exact path="/login/school">
               <LoginWithSchool updateTitle={this.updateTitle} />
             </Route>
+            {/* Forgot Password Page */}
             <Route exact path="/login/forgot">
               <ForgotPassword updateTitle={this.updateTitle} />
             </Route>
+            {/* Reset Password Page */}
             <Route exact path="/login/reset">
               <ResetPassword updateTitle={this.updateTitle} />
             </Route>
 
             {/* Registration Pages */}
+            {/* Register Main Page */}
             <Route exact path="/register">
               <RegisterDefault updateTitle={this.updateTitle} />
             </Route>
+            {/* Register with Poll Buddy Account Page */}
             <Route exact path="/register/pollbuddy">
               <RegisterWithPollBuddy updateTitle={this.updateTitle} />
             </Route>
+            {/* Register with School Account Page */}
             <Route exact path="/register/school">
               <RegisterWithSchool updateTitle={this.updateTitle} />
             </Route>
 
             {/* account & user-setting pages */}
+            {/* Account Info Page */}
             <Route exact path="/account">
               <AccountInfo updateTitle={this.updateTitle} />
             </Route>
+            {/* Admin Settings Page */}
             <Route exact path="/adminSettings">
               <AdminSettings updateTitle={this.updateTitle} />
             </Route>
+            {/* Member Settings Page */}
             <Route exact path="/memberSettings">
               <MemberSettings updateTitle={this.updateTitle} />
             </Route>
+            {/* Template Page */}
             <Route exact path="/template">
               <Template updateTitle={this.updateTitle} />
             </Route>
