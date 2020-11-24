@@ -32,7 +32,7 @@ fetch(process.env.REACT_APP_BACKEND_URL + "/schools", {
       schools.push({ key: i, label: schoolNames[i] });
     }
     console.log(schools); // for testing, can be deleted later
-  })
+  });
 
 const sortItems = (itemA, itemB, value) => {
   const lowA = itemA.label.toLowerCase();

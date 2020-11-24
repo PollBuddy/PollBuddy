@@ -3,8 +3,7 @@ import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import { Link } from "react-router-dom";
 
-import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";
-import {schoolLinkDict} from "../../components/SchoolPicker/SchoolPicker";
+import SchoolPicker, {schoolLinkDict} from "../../components/SchoolPicker/SchoolPicker";
 
 export default class LoginWithSchool extends Component {
   constructor(props) {
