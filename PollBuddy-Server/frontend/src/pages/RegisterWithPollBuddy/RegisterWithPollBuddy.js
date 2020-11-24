@@ -76,8 +76,14 @@ class RegisterWithPollBuddy extends Component {
             To create an account, fill in the text boxes, then press submit.
           </p>
           <MDBContainer className="form-group">
-            <label htmlFor="nameText">Name:</label>
-            <input placeholder="SIS Man" className="form-control textBox" id="nameText" 
+            <label htmlFor="firstnameText">First Name:</label>
+            <input placeholder="SIS" className="form-control textBox" id="firstnameText"
+              onChange={(evt) => { this.setState({firstname: evt.target.value}); }}/>
+            <label htmlFor="lastnameText">Last Name:</label>
+            <input placeholder="Man" className="form-control textBox" id="lastnameText"
+              onChange={(evt) => { this.setState({lastname: evt.target.value}); }}/>
+            <label htmlFor="usernameText">Username:</label>
+            <input placeholder="mans" className="form-control textBox" id="usernameText"
               onChange={(evt) => { this.setState({username: evt.target.value}); }}/>
             {!this.state.userValid && 
               <ul className="error">
