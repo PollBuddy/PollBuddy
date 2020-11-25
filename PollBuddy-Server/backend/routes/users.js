@@ -6,7 +6,7 @@ var bcrypt = require("bcrypt");
 var path = require("path");
 
 var mongoConnection = require("../modules/mongoConnection.js");
-const cas = require('../modules/cas');
+const rpi = require("../modules/rpi");
 
 // GET users listing.
 router.get("/", function (req, res, next) {
@@ -74,9 +74,10 @@ router.post("/login", function (req, res) {
 
 });
 
-router.get("/login/cas", cas.bounce2, function (req, res, next) {
+router.get("/login/rpi", rpi.bounce2, function (req, res, next) {
 
-  // This runs if the user is logged in successfully
+  // This runs if the user is logged in successfully, the user is first bounced to the RPI CAS login and only after
+  // will they end up in here.
 
   // Log the user in on the backend side of things
   if(req.query.ticket) {
@@ -88,7 +89,7 @@ router.get("/login/cas", cas.bounce2, function (req, res, next) {
       } else {
         console.log("Result found"); // TODO: Remove after testing
         console.log(result);
-        if(result == null) {
+        if(result === null) {
           // User not registered, TODO: Redirect to registration
           return res.send("User not registered!");
         } else {
@@ -103,14 +104,13 @@ router.get("/login/cas", cas.bounce2, function (req, res, next) {
 
   // Redirect the user to the homepage with a nice message
   var options = {
-    root: path.join(__dirname, '../public'),
-    dotfiles: 'deny',
+    root: path.join(__dirname, "../public"),
+    dotfiles: "deny",
     headers: {
-      'x-timestamp': Date.now(),
-      'x-sent': true
+      "x-timestamp": Date.now(),
+      "x-sent": true
     }
   };
-
   res.sendFile("pages/loginRedirect.html", options, function (err) {
     if (err) {
       console.log(err);
