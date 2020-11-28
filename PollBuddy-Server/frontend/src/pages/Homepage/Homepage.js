@@ -10,8 +10,7 @@ export default class Homepage extends Component {
   state = {
     code: "testcode", 
     valid: false, 
-    errMsg: "",
-    loggedIn: false
+    errMsg: ""
   };
 
   constructor(props) {
@@ -21,8 +20,12 @@ export default class Homepage extends Component {
     fetch(process.env.REACT_APP_BACKEND_URL + "/session")
       .then(response => response.json())
       .then(json => {
-        this.setState({loggedIn: json.loggedIn || false});
-        // eventually we can also get json.email and json.password
+        // store user variables in local storage for global-component use
+        console.log(json);
+        localStorage.setItem("loggedIn", json.loggedIn);
+        localStorage.setItem("username", json.username);
+        localStorage.setItem("firstName", json.firstName);
+        localStorage.setItem("lastName", json.lastName);
     });
     
     this.handleCodeChange = this.handleCodeChange.bind(this);
@@ -49,12 +52,6 @@ export default class Homepage extends Component {
   }
 
   render() {
-    if(this.state.loggedIn) { // Redirect if previously logged in
-      return (
-        <Redirect to="/groups" />
-      );
-    }
-
     return (
       <MDBContainer fluid className="page">
         <img src={logo} alt="logo" className="Homepage-logo img-fluid" />

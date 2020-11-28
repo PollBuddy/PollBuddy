@@ -45,7 +45,6 @@ export default class LoginWithPollBuddy extends Component {
       if (response.status === 200) {
         //needs some authentication before and if authentication passes then set local storage and such refer to GroupCreation page to see the way to make POST requests to the backend
         localStorage.setItem("loggedIn", true);//maybe have an admin/teacher var instead of just true
-        //TODO MAYBE IN THE FUTURE USE COOKIES TO REMEMBER PAST SESSION
         this.setState({successfulLogin: true}); // Tell it to redirect to the next page if successful
       } else {
         this.setState({error: "Invalid email/password combination"});

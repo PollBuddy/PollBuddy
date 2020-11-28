@@ -60,7 +60,13 @@ router.post("/login", function (req, res) {
               } else {
                 // successful login
                 req.session["UserID"] = result_db["_id"];
-                req.session["userData"] = {loggedIn: true, email: email, password: password};
+                req.session["userData"] = {
+                  loggedIn: true, 
+                  username: result_db["Username"], 
+                  firstName: result_db["FirstName"], 
+                  lastName: result_db["LastName"],
+                  sessionID: req.session.id
+                };
                 res.sendStatus(200);
               }
             });
