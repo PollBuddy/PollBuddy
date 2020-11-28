@@ -36,21 +36,6 @@ export default class Homepage extends Component {
     this.props.updateTitle("Home");
   }
 
-  handleCodeChange(event) {
-    // gets code string from input
-    const code = event.target.value;
-    this.setState({code: code});
-
-    const validCodeRegex = RegExp(/^[a-zA-z0-9]{6}$/);
-    this.setState({valid: validCodeRegex.test(code)});
-  }
-
-  submitCode() {
-    // set error message if input is invalid
-    this.setState({errMsg: 
-      !this.state.valid ? "Code must be 6 characters, A-Z, 0-9" : ""});
-  }
-
   render() {
     return (
       <MDBContainer fluid className="page">
@@ -69,18 +54,7 @@ export default class Homepage extends Component {
               </Link>
             </MDBContainer>
           </MDBContainer>
-          <MDBContainer className="box">
-            <MDBContainer className="form-group">
-              <label htmlFor="pollCodeText">Already have a Poll Code? Enter it here:</label>
-              <input placeholder="K30SW8" onChange={this.handleCodeChange} className="form-control textBox"/>
-              <p style={{color: "red", textAlign: "center"}}>{this.state.errMsg}</p>
-            </MDBContainer>
-            <Link to={this.state.valid ? "/poll/" + this.state.code + "/view" : ""}>
-              <button className = "btn button" onClick={this.submitCode}>
-                  Join Poll
-              </button>
-            </Link>
-          </MDBContainer>
+          <PollCode/>
         </MDBContainer>
       </MDBContainer>
     );
