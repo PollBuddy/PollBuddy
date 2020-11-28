@@ -3,7 +3,8 @@ import "mdbreact/dist/css/mdb.css";
 import "./Homepage.scss";
 import { MDBContainer } from "mdbreact";
 import logo from "../../images/logo.png";
-import {Link, Redirect} from "react-router-dom";
+import {Link} from "react-router-dom";
+import PollCode from "../../components/PollCode/PollCode";
 
 export default class Homepage extends Component {
 
@@ -27,9 +28,6 @@ export default class Homepage extends Component {
         localStorage.setItem("firstName", json.firstName);
         localStorage.setItem("lastName", json.lastName);
     });
-    
-    this.handleCodeChange = this.handleCodeChange.bind(this);
-    this.submitCode = this.submitCode.bind(this);
   }
 
   componentDidMount() {
