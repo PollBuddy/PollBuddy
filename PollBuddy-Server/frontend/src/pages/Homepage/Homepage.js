@@ -27,7 +27,7 @@ export default class Homepage extends Component {
         localStorage.setItem("username", json.username);
         localStorage.setItem("firstName", json.firstName);
         localStorage.setItem("lastName", json.lastName);
-    });
+      });
   }
 
   componentDidMount() {
