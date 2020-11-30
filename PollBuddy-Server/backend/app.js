@@ -105,6 +105,13 @@ app.get("/api/test", (req, res) => {
   });
 });
 
+var schoolsModule = require("./modules/schoolList.js");
+app.get("/api/schools", (req, res) => {
+  var schools = schoolsModule.getList();
+  res.json(schools);
+});
+
+
 app.get("/gendata", (req, res) => {
   var log = "";
   var completes = [];
@@ -196,4 +203,3 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
-
