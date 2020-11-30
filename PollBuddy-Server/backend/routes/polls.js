@@ -4,9 +4,33 @@ var router = express.Router();
 var mongoConnection = require("../modules/mongoConnection.js");
 
 router.post("/new", function (req, res) {
+  // Get POST data
   var jsonContent = req.body;
-  mongoConnection.getDB().collection("polls").insertOne({ Name: jsonContent.Name });
-  return res.sendStatus(200); // TODO: Ensure this is true
+
+  // Validate
+  // Name should be present
+  if(!jsonContent.Name) {
+    return res.status(400).send("Error, Name parameter not specified");
+  }
+
+  // TODO: Need to add more validation like length, characters perhaps, etc.
+
+  // Add to DB
+  mongoConnection.getDB().collection("polls").insertOne({Name: jsonContent.Name}, function(err, result) {
+    if (err) {
+      console.log(err);
+      return res.sendStatus(500);
+    } else {
+      if(result.result.ok !== 1) {
+        // Failed to insert for some reason
+        return res.sendStatus(500);
+      } else {
+        // Things seemed to be ok, send result message and ID of inserted object
+        return res.send({ "Result": "Success", "ID": result.insertedId });
+      }
+    }
+  });
+
 });
 router.post("/:id/edit", function (req, res) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
