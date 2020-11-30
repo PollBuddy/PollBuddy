@@ -1,12 +1,8 @@
 .Footer-foot {
   padding: 10px 20px;
   font: var(--font-size-small) / 1 var(--main-font);
-  box-sizing: border-box;
-  width: 100%;
-  position: absolute;
-  bottom: 0;
   background: var(--darkest-purple-header-color);
-  margin-top: 50px;
+  margin-top: var(--box-margin);
 }
 .Footer-foot-links {
   padding: 0 10px;

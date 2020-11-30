@@ -3,6 +3,6 @@
   width: 60%;
 }
 .PollResults-questions{
-  margin-right: 50px;
-  width: calc(25% - 50px);
+  margin-right: var(--box-margin);
+  width: calc(25% - var(--box-margin));
 }

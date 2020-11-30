@@ -1,17 +1,10 @@
 .Header-bar {
-  padding: 20px;
-  font: var(--head-font-size) / 1 'Fredoka One';
-  text-align: center;
+  padding: 10px 40px;
   background: var(--darkest-purple-header-color);
-  width: 100%;
-  box-sizing: border-box;
-  text-transform: capitalize;
-  margin: 0 0 50px;
+  height: var(--header-inner-height);
+  margin-bottom: var(--box-margin);
 }
 .Header-bar-logo {
-  position: absolute;
-  left: 0;
-  height: calc(20px + var(--head-font-size));
+  height: calc(var(--header-inner-height));
   width: auto;
-  margin: -10px 0 0 40px;
 }

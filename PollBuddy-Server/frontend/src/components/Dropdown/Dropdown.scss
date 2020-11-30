@@ -1,6 +1,6 @@
 .Dropdown {
   position: absolute;
-  top: calc(var(--head-font-size) + 32px);
+  top: calc(var(--header-inner-height) + 12px);
   right: 0;
   background-color: var(--darkest-purple-header-color);
   border-radius: 0 0 0 20px;
@@ -18,9 +18,8 @@
   background-color: var(--base-purple-logo-bg);
 }
 .Dropdown-button {
-  position: absolute;
-  right: 0;
-  margin: calc((var(--head-font-size) - var(--font-size-small) * var(--line-height) - 24px) / 2) 40px 0 0 !important;
+  float: right;
+  margin: calc((var(--header-inner-height) - var(--font-size-small) * var(--line-height) - 24px) / 2) 0 0 0 !important;
 }
 .Dropdown-button:hover {
   cursor: pointer;

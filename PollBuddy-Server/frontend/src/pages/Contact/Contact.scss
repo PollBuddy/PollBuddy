@@ -3,5 +3,5 @@
 }
 
 .Contact .box:not(:first-child) {
-	margin-top: 50px;
+	margin-top: var(--box-margin);
 }

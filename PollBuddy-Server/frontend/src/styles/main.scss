@@ -10,17 +10,20 @@
   --gray-placeholder-text: #707070;
 
   --main-font: 'Baloo 2';
-  --font-size: 1.2rem;
-  --head-font-size: 1.8rem;
-  --font-size-large: 1.4rem;
   --font-size-small: 1rem;
+  --font-size: 1.2rem;
+  --font-size-large: 1.4rem;
+  --font-size-xlarge: 1.6rem;
   --line-height: 1.2;
   --default-transition: all 0.2s ease-in-out;
 
 
   // header + footer heights + margin to make calculating page height easier
-  --header-height: calc(var(--head-font-size) + 40px);
+  --header-inner-height: 3rem;
+  --header-height: calc(var(--header-inner-height) + 20px);
   --footer-height: calc(4 * (var(--font-size-small) + 20px) + 20px);
+  --box-margin: 50px;
+  --box-padding: 50px;
 }
 
 @media only screen and (min-width: 420px) {
@@ -46,8 +49,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-bottom: calc(50px + var(--footer-height));
-  min-height: calc(100vh - var(--header-height) - var(--footer-height) - 100px);
+  min-height: calc(100vh - var(--header-height) - var(--footer-height) - 2 * var(--box-margin));
 }
 
 h1, .fontSizeLarge {
@@ -140,8 +142,8 @@ textarea {
 }
 
 .box {
-  padding: 30px 50px;
-  border-radius: 40px;
+  padding: calc(var(--box-padding) * 3 / 5) var(--box-padding);
+  border-radius: calc(var(--box-padding) * 4 / 5);
   background: var(--darkest-purple-header-color);
   display: flex;
   flex-direction: column;
