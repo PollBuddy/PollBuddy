@@ -115,9 +115,9 @@ export default class GroupPolls extends Component {
               My Polls
             </p>
             {this.state.polls.map((e) => (
-                <Link to={"/polls/" + e.pollId + "/view"}>
-                  <button style={{  width: "17em" }} className="btn button">{"Poll " + e.pollId + ": " + e.label}</button>
-                </Link>
+              <Link to={"/polls/" + e.pollId + "/view"}>
+                <button style={{  width: "17em" }} className="btn button">{"Poll " + e.pollId + ": " + e.label}</button>
+              </Link>
             ))}
           </MDBContainer>
         </MDBContainer>
