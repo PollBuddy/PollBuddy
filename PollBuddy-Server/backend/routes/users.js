@@ -58,7 +58,15 @@ router.post("/login", function (req, res) {
                   error: "Error regenerating session"
                 });
               } else {
+                // successful login
                 req.session["UserID"] = result_db["_id"];
+                req.session["userData"] = {
+                  loggedIn: true, 
+                  username: result_db["Username"], 
+                  firstName: result_db["FirstName"], 
+                  lastName: result_db["LastName"],
+                  sessionID: req.session.id
+                };
                 res.sendStatus(200);
               }
             });
@@ -268,6 +276,13 @@ router.get("/:id/groups", function (req, res, next) {
     return res.send(result[0]);
   });
 });
+
+
+// stored user session data
+router.get("/session", (req, res, next) => {
+  res.send(req.session.userData || {});
+});
+
 
 module.exports = router;
 
