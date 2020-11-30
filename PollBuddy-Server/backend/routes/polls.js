@@ -60,33 +60,56 @@ router.post("/:id/edit", function (req, res) {
   }
   return res.sendStatus(200); // TODO: Ensure this is true
 });
-router.post("/:id/submit", function (req, res) {//todo
+router.post("/:id/submit", function (req, res) {
   var jsonContent = req.body;
   var pollId = new mongoConnection.getMongo().ObjectID(req.params.id);
   var count = 0;
-  if (pollId != undefined && jsonContent.UserID != undefined) {
-    mongoConnection.getDB().collection("poll_answers").find({ "$and": [{ "PollID": pollId }, { "UserID": jsonContent.UserID }] }).toArray(function (err, result) {
+
+  // Check that pollId was specified and is valid
+  if (pollId !== undefined) {
+    mongoConnection.getDB().collection("polls").find({ "_id": pollId }).toArray(function (err, result) {
       if (err) {
-        count = 0;
+        return res.sendStatus(500);
       }
-      count = result.length;
+      if(result.length === 0) {
+        return res.status(500).send({"Result": "Error", "Error": "Cannot find poll"});
+      }
     });
-    if (count == 0) {
-      mongoConnection.getDB().collection("poll_answers").insertOne({ "PollID": pollId }, { "UserID": jsonContent.UserID }, { "$addToSet": jsonContent.Answers });
-    } else {
-      if (jsonContent.Answers != undefined) {
-        mongoConnection.getDB().collection("poll_answers").updateOne({ "$and": [{ "PollID": pollId }, { "UserID": jsonContent.UserID }] }, { "$addToSet": jsonContent.Answers }, function (err, result) {
-          if (err) {
-            res.sendStatus(500);
-          }
-        });
-      } else {
-        return res.sendStatus(400);
-      }
-    }
-    return res.sendStatus(200);
   }
-  return res.sendStatus(400);
+
+  // Check that answers were supplied in the correct format
+  if(!jsonContent.Answers) {
+    return res.status(500).send({"Result": "Error", "Error": "Answers not specified"});
+  }
+  if(!Array.isArray(jsonContent.Answers)) {
+    return res.status(500).send({"Result": "Error", "Error": "Answers is not an array"});
+  }
+  if(jsonContent.Answers.empty) {
+    return res.status(500).send({"Result": "Error", "Error": "Answers is empty"});
+  }
+
+  // Save answers
+  mongoConnection.getDB().collection("poll_answers").find({ "$and": [{ "PollID": pollId }, { "UserID": jsonContent.UserID }] }).toArray(function (err, result) {
+    if (err) {
+      count = 0;
+    }
+    count = result.length;
+  });
+  if (count == 0) {
+    mongoConnection.getDB().collection("poll_answers").insertOne({ "PollID": pollId }, { "UserID": jsonContent.UserID }, { "$addToSet": jsonContent.Answers });
+  } else {
+    if (jsonContent.Answers != undefined) {
+      mongoConnection.getDB().collection("poll_answers").updateOne({ "$and": [{ "PollID": pollId }, { "UserID": jsonContent.UserID }] }, { "$addToSet": jsonContent.Answers }, function (err, result) {
+        if (err) {
+          res.sendStatus(500);
+        }
+      });
+    } else {
+      return res.sendStatus(400);
+    }
+  }
+  return res.sendStatus(200);
+  
 });
 router.get("/pollAnswers", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
