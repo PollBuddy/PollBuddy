@@ -122,4 +122,32 @@ router.get("/:id", function (req, res, next) {
   });
 });
 
+router.get("/:id/view", function (req, res, next) {
+  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+  mongoConnection.getDB().collection("polls").find({ "_id": id }).toArray(function (err, result) {
+    if (err) {
+      return res.sendStatus(500);
+    }
+    let openQuestions = [];
+    console.log(result[0].Questions);
+    console.log("---");
+    console.log(result[0].Questions[1]);
+    console.log(result[0].Questions[1].Visible);
+    console.log(result[0].Questions[1][0]);
+    console.log(result[0].Questions[1][0].Visible);
+    console.log(result[0].Questions[1][0].Visible === true);
+    for(let i = 0; i < result[0].Questions.length; i++) {
+      if(result[0].Questions[i][0].Visible) {
+        let q = {};
+        q.QuestionNumber = result[0].Questions[i][0].QuestionNumber;
+        q.QuestionText = result[0].Questions[i][0].QuestionText;
+        q.AnswerChoices = result[0].Questions[i][0].AnswerChoices;
+        openQuestions.push(q);
+      }
+    }
+    console.log(openQuestions);
+    res.send({ "Questions": openQuestions });
+  });
+});
+
 module.exports = router;
