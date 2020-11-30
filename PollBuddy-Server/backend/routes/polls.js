@@ -61,7 +61,6 @@ router.post("/:id/edit", function (req, res) {
   return res.sendStatus(200); // TODO: Ensure this is true
 });
 router.post("/:id/submit", function (req, res) {
-  console.log("Api polls submit");
   var jsonContent = req.body;
   var pollId = new mongoConnection.getMongo().ObjectID(req.params.id);
   var count = 0;
@@ -92,27 +91,22 @@ router.post("/:id/submit", function (req, res) {
   // Save answers
 
   // Check for existing answers
-  console.log(req.session.UserID);
   if(req.session.UserID) {
     // User is logged in, save with their ID
-    console.log("User logged in");
     mongoConnection.getDB().collection("poll_answers").find({ "$and": [{ "PollID": pollId }, { "UserID": jsonContent.UserID }] }).toArray(function (err, result) {
       if (err) {
         return res.sendStatus(500);
       }
       count = result.length;
       if (count === 0) {
-        console.log("No previous answers");
         // User has not answered any questions in this poll yet, create a default set
         mongoConnection.getDB().collection("poll_answers").insertOne({ "PollID": pollId, "UserID": jsonContent.UserID, "Answers": jsonContent.Answers });
       } else {
-        console.log("Previous answers");
         // User has answered questions in this poll already, add to existing set
         mongoConnection.getDB().collection("poll_answers").updateOne({ "$and": [{ "PollID": pollId }, { "UserID": jsonContent.UserID }] }, { "$addToSet": { "Answers": jsonContent.Answers } }, function (err2, result2) {
           if (err2) {
             return res.sendStatus(500);
           }
-          console.log(result2);
           if(result2.result.ok === 1) {
             return res.sendStatus(200);
           } else {
@@ -124,24 +118,20 @@ router.post("/:id/submit", function (req, res) {
 
   } else {
     // User is not logged in, save as anonymous (without any user ID)
-    console.log("User not logged in");
     mongoConnection.getDB().collection("poll_answers").find({ "PollID": pollId }).toArray(function (err, result) {
       if (err) {
         return res.sendStatus(500);
       }
       count = result.length;
       if (count === 0) {
-        console.log("No previous answers");
         // Anonymous users have not answered any questions in this poll yet, create a default set
         mongoConnection.getDB().collection("poll_answers").insertOne({ "PollID": pollId, "Answers": jsonContent.Answers });
       } else {
-        console.log("Previous answers");
         // Anonymous users have answered questions in this poll already, add to existing set
         mongoConnection.getDB().collection("poll_answers").updateOne({"PollID": pollId}, {"$addToSet": {"Answers": jsonContent.Answers}}, function (err2, result2) {
           if (err2) {
             return res.sendStatus(500);
           }
-          console.log(result2);
           if(result2.result.ok === 1) {
             return res.sendStatus(200);
           } else {
