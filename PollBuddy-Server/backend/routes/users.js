@@ -147,6 +147,11 @@ router.post("/register", function (req, res, next) {
   });
 });
 
+// stored user session data
+router.get("/session", function (req, res, next) {
+  res.send(req.session.userData || {});
+});
+
 router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documentation
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   var jsonContent = req.body;
@@ -276,13 +281,6 @@ router.get("/:id/groups", function (req, res, next) {
     return res.send(result[0]);
   });
 });
-
-
-// stored user session data
-router.get("/session", (req, res, next) => {
-  res.send(req.session.userData || {});
-});
-
 
 module.exports = router;
 
