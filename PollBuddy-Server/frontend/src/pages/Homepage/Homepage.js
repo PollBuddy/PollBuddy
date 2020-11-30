@@ -18,7 +18,7 @@ export default class Homepage extends Component {
     super(props);
 
     // get past session if it exists
-    fetch(process.env.REACT_APP_BACKEND_URL + "/session")
+    fetch(process.env.REACT_APP_BACKEND_URL + "/users/session")
       .then(response => response.json())
       .then(json => {
         // store user variables in local storage for global-component use

@@ -277,6 +277,13 @@ router.get("/:id/groups", function (req, res, next) {
   });
 });
 
+
+// stored user session data
+router.get("/session", (req, res, next) => {
+  res.send(req.session.userData || {});
+});
+
+
 module.exports = router;
 
 // Middleware for getting user information
