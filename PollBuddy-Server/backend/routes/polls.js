@@ -128,14 +128,12 @@ router.get("/:id/view", function (req, res, next) {
     if (err) {
       return res.sendStatus(500);
     }
+    
+    // TODO: Make sure ID is valid
+
+    // Loop through the poll's questions and add to openQuestions the Question Number, Text and Answer Choices if
+    // the question is set as Visible.
     let openQuestions = [];
-    console.log(result[0].Questions);
-    console.log("---");
-    console.log(result[0].Questions[1]);
-    console.log(result[0].Questions[1].Visible);
-    console.log(result[0].Questions[1][0]);
-    console.log(result[0].Questions[1][0].Visible);
-    console.log(result[0].Questions[1][0].Visible === true);
     for(let i = 0; i < result[0].Questions.length; i++) {
       if(result[0].Questions[i][0].Visible) {
         let q = {};
@@ -145,7 +143,7 @@ router.get("/:id/view", function (req, res, next) {
         openQuestions.push(q);
       }
     }
-    console.log(openQuestions);
+    // Send the open questions
     res.send({ "Questions": openQuestions });
   });
 });
