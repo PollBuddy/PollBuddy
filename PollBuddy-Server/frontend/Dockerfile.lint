@@ -1,31 +1,25 @@
-# Production Dockerfile
+# This dockerfile is merely to launch a lint test. The app will not run afterwards.
 
-FROM node
+FROM node:current
 
 # Create app directory
 WORKDIR /usr/src/app
 
 # Install app dependencies
-
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
 COPY package*.json ./
 
-# Only install production dependencies
-RUN npm ci --only=production
+# Install all dependencies
+RUN npm install
 
 # Bundle app source
 # Folders
-COPY bin ./bin
-COPY modules ./modules
 COPY public ./public
-COPY routes ./routes
+COPY src ./src
 # Files
-COPY app.js ./
 COPY .env ./
-
-# Port
-EXPOSE 3000
+COPY .eslint* ./
 
 # Start command
-CMD ["node", "bin/www"]
+CMD ["sh", "-c", "echo 'Running frontend lint:' ; npm run lint"]
