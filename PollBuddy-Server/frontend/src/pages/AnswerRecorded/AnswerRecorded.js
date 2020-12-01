@@ -18,7 +18,7 @@ export default class recorded extends Component {
         return <Redirect to={"/QuestionEnded"} />;
       } else {
         // Render a countdown
-        return <p className="width-90 fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
+        return <p className="fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
       }
     };
     return (
@@ -26,7 +26,7 @@ export default class recorded extends Component {
         <Link to={"/pollViewer"}>
           <button className = "btn button">Change Answer?</button>
         </Link>
-        <p className="width-90 fontSizeLarge">
+        <p className="fontSizeLarge">
           Time remaining:
         </p>
         <Countdown renderer={clockFormat} date={Date.now() + this.timeLimit*1000} />
@@ -35,7 +35,7 @@ export default class recorded extends Component {
           <button className = "btn button">Leave Poll?</button>
         </Link>
 
-        <p className="width-45 fontSizeSmall"> Waiting for next question... </p>
+        <p className="fontSizeSmall"> Waiting for next question... </p>
 
 
       </MDBContainer>

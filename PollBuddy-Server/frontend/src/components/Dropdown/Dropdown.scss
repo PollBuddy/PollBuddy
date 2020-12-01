@@ -1,12 +1,14 @@
 .Dropdown {
   position: absolute;
-  top: calc(var(--header-inner-height) + 12px);
+  top: calc(var(--header-inner-height) + 20px);
   right: 0;
   background-color: var(--darkest-purple-header-color);
-  border-radius: 0 0 0 20px;
-  padding: 8px 0px;
+  border-radius: 0 0 0 var(--box-margin);
+  padding: 0 0 8px;
   overflow: hidden;
   text-align: left;
+  border-left: calc(var(--box-margin) / 2) solid var(--dark-purple-main-background);
+  border-bottom: calc(var(--box-margin) / 2) solid var(--dark-purple-main-background);
 }
 .Dropdown a {
   font: bold var(--font-size-small) / 1 var(--main-font);

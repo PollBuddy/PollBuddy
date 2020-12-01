@@ -22,8 +22,8 @@
   --header-inner-height: 3rem;
   --header-height: calc(var(--header-inner-height) + 20px);
   --footer-height: calc(4 * (var(--font-size-small) + 20px) + 20px);
-  --box-margin: 50px;
-  --box-padding: 50px;
+  --box-margin: 20px;
+  --box-padding: 25px;
 }
 
 @media only screen and (min-width: 420px) {
@@ -148,12 +148,49 @@ textarea {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   box-sizing: border-box;
+  width: calc(100% - 2 * var(--box-margin));
 }
 
-.box:only-child {
-  max-width: 50%;
+@media only screen and (min-width: 414px) {
+  :root {
+    --box-margin: 30px;
+    --box-padding: 35px;
+  }
+}
+
+@media only screen and (min-width: 568px) {
+  .box {
+    width: auto;
+    max-width: calc(100% - 2 * var(--box-margin));
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  :root {
+    --box-margin: 40px;
+    --box-padding: 40px;
+  }
+  .box {
+    width: auto;
+    max-width: 80%;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .box {
+    max-width: 70%;
+  }
+}
+
+@media only screen and (min-width: 1200px) {
+  :root {
+    --box-margin: 50px;
+    --box-padding: 50px;
+  }
+  .box {
+    max-width: 50%;
+  }
 }
 
 .box-body-text {
@@ -163,9 +200,32 @@ textarea {
 .two-box {
   display: flex;
   width: 100%;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: nowrap;
+  align-items: center;
   justify-content: center;
+}
+
+.two-box .box {
+  width: calc(100% - 2 * var(--box-margin));
+  max-width: none !important;
+}
+
+.two-box .box:not(:first-child) {
+  margin: var(--box-margin) 0 0 0;
+}
+
+@media only screen and (min-width: 812px) {
+  .two-box {
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .two-box .box {
+    width: calc(50% - 3 * var(--box-margin) / 2);
+  }
+  .two-box .box:not(:first-child) {
+    margin: 0 0 0 var(--box-margin);
+  }
 }
 
 code {

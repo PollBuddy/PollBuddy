@@ -81,10 +81,10 @@ export default class PollManager extends Component {
 
       if (completed) {
         // Render a completed state
-        return <p className="width-90 fontSizeLarge"> Question closed! </p>;
+        return <p className="fontSizeLarge"> Question closed! </p>;
       } else {
         // Render a countdown
-        return <p className="width-90 fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
+        return <p className="fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
       }
     };
     return (
@@ -99,7 +99,7 @@ export default class PollManager extends Component {
               Lesson #10
             </p>
 
-            <p className="width-90 fontSizeLarge">
+            <p className="fontSizeLarge">
               Time remaining:
             </p>
             <Countdown renderer={clockFormat} date={Date.now() + this.timeLimit*1000} />

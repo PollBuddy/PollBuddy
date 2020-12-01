@@ -22,14 +22,14 @@ export default class registerWithSchool extends Component {
           <p className="bold fontSizeLarge">
             Login with School
           </p>
-          <p className="width-90 fontSizeSmall">
+          <p className="fontSizeSmall">
             To login, enter your school name or login using RPI's CAS.
           </p>
-          <p className="width-90 fontSizeSmall" id="schoolNameText">
+          <p className="fontSizeSmall" id="schoolNameText">
             School Name:
           </p>
 
-          <SchoolPicker 
+          <SchoolPicker
             value={this.state.value}
             onChange={e => this.setState({ value: e.target.value })}
             onSelect={value => this.setState({ value })}

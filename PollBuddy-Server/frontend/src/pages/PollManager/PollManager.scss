@@ -1,8 +1,9 @@
 //PollResults page needs 3 different containers
-.PollManager-graph{
-  width: 60%;
-}
-.PollManager-questions{
-  margin-right: var(--box-margin);
-  width: calc(25% - var(--box-margin));
+@media only screen and (min-width: 812px) {
+  .PollManager-graph {
+    width: calc(70% - 3 * var(--box-margin) / 2) !important;
+  }
+  .PollManager-questions {
+    width: calc(30% - 3 * var(--box-margin) / 2) !important;
+  }
 }

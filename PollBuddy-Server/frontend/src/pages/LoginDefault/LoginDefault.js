@@ -15,7 +15,7 @@ export default class LoginDefault extends Component {
           <p className="bold fontSizeLarge">
             Login to Poll Buddy
           </p>
-          <p className="width-90 fontSizeSmall">
+          <p className="fontSizeSmall">
             Click on one of the following buttons to login.
           </p>
           <Link to={"/login/pollbuddy"}>
