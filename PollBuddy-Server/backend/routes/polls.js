@@ -228,18 +228,18 @@ router.get("/:id/results", function (req, res, next) {
           q.QuestionText = result[0].Questions[i][0].QuestionText;
           q.CorrectAnswers = result[0].Questions[i][0].CorrectAnswers;
           q.AnswerChoices = [];
+          q.Tallies = [];
 
           // Add and tally answers
           for (let k = 0; k < result[0].Questions[i][0].AnswerChoices.length; k++) {
-            let a = {};
-            a.Answer = result[0].Questions[i][0].AnswerChoices[k];
-            a.Tally = 0;
+            q.AnswerChoices.push(result[0].Questions[i][0].AnswerChoices[k]);
+            let tally = 0;
             for (let j = 0; j < result2[0].Answers.length; j++) {
-              if(result2[0].Answers[j].Answers[0].Answer === a.Answer) {
-                a.Tally++;
+              if(result2[0].Answers[j].Answers[0].Answer === q.AnswerChoices[k]) {
+                tally++;
               }
             }
-            q.AnswerChoices.push(a);
+            q.Tallies.push(tally);
           }
 
           results.push(q);
