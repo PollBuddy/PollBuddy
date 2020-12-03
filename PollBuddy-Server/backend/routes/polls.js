@@ -218,8 +218,6 @@ router.get("/:id/results", function (req, res, next) {
         return res.sendStatus(500);
       }
 
-      console.log(result2);
-
       // Loop through the poll's questions and add to openQuestions the Question Number, Text and Answer Choices if
       // the question is set as Visible.
       let results = [];
@@ -232,19 +230,13 @@ router.get("/:id/results", function (req, res, next) {
           q.AnswerChoices = [];
 
           // Add and tally answers
-          console.log(result[0].Questions[i][0]);
-          console.log(result[0].Questions[i][0].AnswerChoices);
-          console.log(result[0].Questions[i][0].AnswerChoices.length);
           for (let k = 0; k < result[0].Questions[i][0].AnswerChoices.length; k++) {
             let a = {};
             a.Answer = result[0].Questions[i][0].AnswerChoices[k];
             a.Tally = 0;
             for (let j = 0; j < result2[0].Answers.length; j++) {
-              console.log("'" + result2[0].Answers[j].Answers[0].Answer + "'");
-              console.log("'" + a.Answer + "'");
               if(result2[0].Answers[j].Answers[0].Answer === a.Answer) {
                 a.Tally++;
-                console.log("Incrementing");
               }
             }
             q.AnswerChoices.push(a);
