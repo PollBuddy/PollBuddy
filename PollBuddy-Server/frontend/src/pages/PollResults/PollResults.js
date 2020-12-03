@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Bar } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import {Link} from "react-router-dom";
 import "./PollResults.scss";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 
@@ -49,7 +48,7 @@ export default class PollResults extends Component {
               },
               ticks: {
                 fontColor: "white",
-                fontSize: 20,
+                fontSize: 16,
                 fontFamily: "Fredoka One",
               }
             }
@@ -63,8 +62,9 @@ export default class PollResults extends Component {
               ticks: {
                 beginAtZero: true,
                 fontColor: "white",
-                fontSize: 20,
+                fontSize: 16,
                 fontFamily: "Fredoka One",
+                precision: 0
               }
             }
           ]
@@ -95,11 +95,15 @@ export default class PollResults extends Component {
           } else {
             console.log("Fetching data succeeded");
             console.log(response);
-            this.setState({"questionData": response, "doneLoading": true});
-            this.state.dataBar.labels = this.state.questionData.Results[0].AnswerChoices;
-            this.state.dataBar.datasets[0].data = this.state.questionData.Results[0].Tallies;
-            console.log(this.state.dataBar.labels);
-            console.log(this.state.dataBar.datasets[0].data);
+
+            // eslint-disable-next-line no-sequences
+            this.setState(state => {
+              state.questionData = response;
+              state.dataBar.labels = response.Results[0].AnswerChoices;
+              state.dataBar.datasets[0].data = response.Results[0].Tallies;
+              state.doneLoading = true;
+              return state;
+            });
           }
         })
         .catch(error => this.setState({"error": error}));
@@ -108,20 +112,20 @@ export default class PollResults extends Component {
   render() {
     if (this.state.error != null) {
       return (
-          <MDBContainer fluid className="page">
-            <MDBContainer fluid className="box">
-              <p className="fontSizeLarge">
-                Error loading data! Please try again.
-              </p>
-            </MDBContainer>
+        <MDBContainer fluid className="page">
+          <MDBContainer fluid className="box">
+            <p className="fontSizeLarge">
+              Error loading data! Please try again.
+            </p>
           </MDBContainer>
+        </MDBContainer>
       );
     } else if (!this.state.doneLoading) {
       return (
-          <MDBContainer>
-            <LoadingWheel/>
-            <button className="btn button" onClick={this.stopLoading}>End Loading</button>
-          </MDBContainer>
+        <MDBContainer>
+          <LoadingWheel/>
+          <button className="btn button" onClick={this.stopLoading}>End Loading</button>
+        </MDBContainer>
       );
     } else {
       return (
@@ -137,9 +141,8 @@ export default class PollResults extends Component {
                 {"Correct Answers: " + this.state.questionData.Results[0].CorrectAnswers}
               </p>
               <p>
-                Total Number of Answers: 296
+                {"Total Number of Answers: " + this.state.dataBar.datasets[0].data.reduce((a, b) => a + b, 0)}
               </p>
-
               {/*The MDBReact Bar component was built on top of chart.js.
                       Look at https://www.chartjs.org/docs/latest/ for more info*/}
               <Bar data={this.state.dataBar} options={this.state.barChartOptions}/>
