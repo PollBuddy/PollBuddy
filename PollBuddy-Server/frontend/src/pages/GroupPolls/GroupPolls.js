@@ -114,11 +114,19 @@ export default class GroupPolls extends Component {
             <p className="fontSizeLarge">
               My Polls
             </p>
-            {this.state.polls.map((e) => (
-              <Link to={"/polls/" + e.pollId + "/view"}>
-                <button style={{  width: "17em" }} className="btn button">{"Poll " + e.pollId + ": " + e.label}</button>
-              </Link>
-            ))}
+
+            {this.state.polls.length === 0 ? (
+                <p>Sorry, you don't have any polls.<br/> <br/></p>
+            ) : (
+                <React.Fragment>
+                  {this.state.polls.map((e) => (
+                      <Link to={"/polls/" + e.pollId + "/view"}>
+                        <button style={{  width: "17em" }} className="btn button">{"Poll " + e.pollId + ": " + e.label}</button>
+                      </Link>
+                  ))}
+                </React.Fragment>
+            )}
+
           </MDBContainer>
         </MDBContainer>
       </MDBContainer>
