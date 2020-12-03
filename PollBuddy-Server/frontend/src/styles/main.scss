@@ -147,7 +147,7 @@ textarea {
   width: calc(100% - 2 * var(--box-margin));
 }
 
-.box > * {
+.box * {
   max-width: 100%;
 }
 
