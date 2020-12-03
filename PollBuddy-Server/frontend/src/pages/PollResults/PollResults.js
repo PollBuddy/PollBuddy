@@ -3,7 +3,6 @@ import { Bar } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import {Link} from "react-router-dom";
-import "./PollResults.scss";
 export default class PollResults extends Component {
   componentDidMount(){
     this.props.updateTitle("Poll Data View");
@@ -48,8 +47,7 @@ export default class PollResults extends Component {
             },
             ticks: {
               fontColor: "white",
-              fontSize: 20,
-              fontFamily: "Fredoka One",
+              fontSize: 16,
             }
           }
         ],
@@ -62,8 +60,7 @@ export default class PollResults extends Component {
             ticks: {
               beginAtZero: true,
               fontColor: "white",
-              fontSize: 20,
-              fontFamily: "Fredoka One",
+              fontSize: 16,
             }
           }
         ]
@@ -76,8 +73,8 @@ export default class PollResults extends Component {
     return (
 
       <MDBContainer fluid className="page">
-        <MDBContainer fluid className="two-box">
-          <MDBContainer className="PollResults-questions box">
+        <MDBContainer fluid className="two-box two-box-different">
+          <MDBContainer className="smaller box">
             {/* TODO: These 2 fields need to be dynamically populated */}
             <p>
               CSCI 1200 - Data Structures
@@ -103,7 +100,7 @@ export default class PollResults extends Component {
             </Link>
 
           </MDBContainer>
-          <MDBContainer fluid className="PollResults-graph box">
+          <MDBContainer fluid className="bigger box">
             <p>
               Question 1: Who is the bestest boi?
             </p>

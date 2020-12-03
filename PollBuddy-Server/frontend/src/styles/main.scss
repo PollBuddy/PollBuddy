@@ -70,10 +70,6 @@ h2 {
   font-weight: bold;
 }
 
-ul {
-  list-style-type: circle;
-}
-
 li:not(:last-child) {
   margin-bottom: 10px;
 }
@@ -125,6 +121,7 @@ input.textBox:focus::placeholder, textarea.textBox:focus::placeholder {
 
 input.textBox::placeholder, textarea.textBox::placeholder {
   color: var(--gray-placeholder-text);
+  line-height: var(--line-height);
   transition: var(--default-transition);
 }
 
@@ -152,6 +149,10 @@ textarea {
   width: calc(100% - 2 * var(--box-margin));
 }
 
+.box > * {
+  max-width: 100%;
+}
+
 @media only screen and (min-width: 414px) {
   :root {
     --box-margin: 30px;
@@ -164,6 +165,9 @@ textarea {
     width: auto;
     max-width: calc(100% - 2 * var(--box-margin));
   }
+  .box:not(:only-child) {
+    width: calc(100% - 2 * var(--box-margin));
+  }
 }
 
 @media only screen and (min-width: 768px) {
@@ -175,11 +179,17 @@ textarea {
     width: auto;
     max-width: 80%;
   }
+  .box:not(:only-child) {
+    width: 80%;
+  }
 }
 
 @media only screen and (min-width: 1024px) {
   .box {
     max-width: 70%;
+  }
+  .box:not(:only-child) {
+    width: 70%;
   }
 }
 
@@ -191,6 +201,12 @@ textarea {
   .box {
     max-width: 50%;
   }
+  .box:not(:only-child) {
+    width: 50%;
+  }
+  .two-box {
+    width: 75%;
+  }
 }
 
 .box-body-text {
@@ -199,11 +215,14 @@ textarea {
 
 .two-box {
   display: flex;
-  width: 100%;
   flex-direction: column;
   flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
+}
+
+.two-box:not(:first-child), .box:not(:first-child) {
+  margin: var(--box-margin) 0 0;
 }
 
 .two-box .box {
@@ -211,8 +230,8 @@ textarea {
   max-width: none !important;
 }
 
-.two-box .box:not(:first-child) {
-  margin: var(--box-margin) 0 0 0;
+.two-box-different {
+  width: 100% !important;
 }
 
 @media only screen and (min-width: 812px) {
@@ -226,6 +245,12 @@ textarea {
   .two-box .box:not(:first-child) {
     margin: 0 0 0 var(--box-margin);
   }
+  .two-box-different .smaller {
+    width: calc(30% - 3 * var(--box-margin) / 2) !important;
+  }
+  .two-box-different .bigger {
+    width: calc(70% - 3 * var(--box-margin) / 2) !important;
+  }
 }
 
 code {
@@ -237,6 +262,7 @@ body {
   background: var(--dark-purple-main-background);
   color: var(--white-most-text);
   font-size: var(--font-size);
+  overflow-wrap: break-word;
 }
 
 body, .button, .textBox {

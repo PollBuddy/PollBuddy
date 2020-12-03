@@ -4,7 +4,6 @@ import autosize from "autosize";
 import {MDBContainer} from "mdbreact";
 import PhoneInput from "react-phone-input-2";
 import "mdbreact/dist/css/mdb.css";
-import "./Contact.scss";
 
 export default class Contact extends Component {
 
@@ -20,7 +19,7 @@ export default class Contact extends Component {
 
   render() {
     return(
-      <MDBContainer fluid className="page Contact">
+      <MDBContainer fluid className="page">
         <MDBContainer className = "box">
           <p className="fontSizeLarge">
             Looking to get in touch with a developer? Shoot an email over to <a href="mailto:contact@pollbuddy.app">contact@pollbuddy.app</a> or click the button below to open a support ticket form.

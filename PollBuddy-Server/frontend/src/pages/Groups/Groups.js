@@ -52,15 +52,15 @@ export default class Groups extends Component {
       this.setState({ leaveGroupButtonText: "Leave Group" });
     }
   };
-  
+
   handleClick = (event) => {
-    // call prompt() with custom message to get user input from alert-like dialog 
+    // call prompt() with custom message to get user input from alert-like dialog
     const groupCode = prompt('Please enter your group code');
     // combine the group code into URL and redirect to the next page
     window.location.replace("/groups/" + groupCode + "/polls");
   }
 
-  render() { 
+  render() {
     const { showXs } = this.state;
     if(this.state.error != null){
       return (
@@ -74,7 +74,7 @@ export default class Groups extends Component {
       );
     } else if(!this.state.doneLoading){
       return (
-        <MDBContainer>
+        <MDBContainer className="page">
           <LoadingWheel/>
           <button className="btn button" onClick={this.stopLoading}>End Loading</button>
         </MDBContainer>

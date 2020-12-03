@@ -1,9 +1,0 @@
-//PollResults page needs 3 different containers
-@media only screen and (min-width: 812px) {
-  .PollResults-graph {
-    width: calc(70% - 3 * var(--box-margin) / 2) !important;
-  }
-  .PollResults-questions {
-    width: calc(30% - 3 * var(--box-margin) / 2) !important;
-  }
-}

@@ -3,7 +3,6 @@ import { Bar } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import {Link} from "react-router-dom";
-import "./PollManager.scss";
 import Countdown, {zeroPad} from "react-countdown";
 
 export default class PollManager extends Component {
@@ -50,8 +49,7 @@ export default class PollManager extends Component {
             },
             ticks: {
               fontColor: "white",
-              fontSize: 20,
-              fontFamily: "Fredoka One",
+              fontSize: 16,
             }
           }
         ],
@@ -64,8 +62,7 @@ export default class PollManager extends Component {
             ticks: {
               beginAtZero: true,
               fontColor: "white",
-              fontSize: 20,
-              fontFamily: "Fredoka One",
+              fontSize: 16,
             }
           }
         ]
@@ -90,8 +87,8 @@ export default class PollManager extends Component {
     return (
 
       <MDBContainer fluid className="page">
-        <MDBContainer fluid className="two-box">
-          <MDBContainer className="PollManager-questions box">
+        <MDBContainer fluid className="two-box two-box-different">
+          <MDBContainer className="smaller box">
             <p>
               CSCI 1200 - Data Structures
             </p>
@@ -127,7 +124,7 @@ export default class PollManager extends Component {
 
 
           </MDBContainer>
-          <MDBContainer fluid className="PollManager-graph box">
+          <MDBContainer fluid className="bigger box">
             <p>
               Question 1: Who is the bestest boi?
             </p>

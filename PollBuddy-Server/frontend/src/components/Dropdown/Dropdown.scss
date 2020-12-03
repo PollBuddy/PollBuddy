@@ -3,12 +3,12 @@
   top: calc(var(--header-inner-height) + 20px);
   right: 0;
   background-color: var(--darkest-purple-header-color);
-  border-radius: 0 0 0 var(--box-margin);
+  border-radius: 0 0 0 20px;
   padding: 0 0 8px;
   overflow: hidden;
   text-align: left;
-  border-left: calc(var(--box-margin) / 2) solid var(--dark-purple-main-background);
-  border-bottom: calc(var(--box-margin) / 2) solid var(--dark-purple-main-background);
+  border-left: 2px solid var(--dark-purple-main-background);
+  border-bottom: 2px solid var(--dark-purple-main-background);
 }
 .Dropdown a {
   font: bold var(--font-size-small) / 1 var(--main-font);
