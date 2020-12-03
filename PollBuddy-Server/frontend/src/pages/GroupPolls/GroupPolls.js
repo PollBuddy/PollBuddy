@@ -116,7 +116,7 @@ export default class GroupPolls extends Component {
             </p>
 
             {this.state.polls.length === 0 ? (
-                <p>Sorry, you don't have any polls.<br/> <br/></p>
+              <p>Sorry, you don't have any polls.<br/> <br/></p>
             ) : (
               <React.Fragment>
                 {this.state.polls.map((e) => (
