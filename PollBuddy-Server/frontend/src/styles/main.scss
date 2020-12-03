@@ -229,7 +229,7 @@ textarea {
     align-items: stretch;
   }
   .two-box .box {
-    width: calc(50% - 3 * var(--box-margin) / 2);
+    width: calc(50% - 3 * var(--box-margin) / 2) !important;
   }
   .two-box .box:not(:first-child) {
     margin: 0 0 0 var(--box-margin);
