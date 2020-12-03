@@ -145,10 +145,9 @@ export default class App extends React.Component {
             </Route>
 
             {/* Poll Results Page */}
-            <Route exact path="/polls/:pollID/results">
-              <PollResults updateTitle={this.updateTitle}/>
-            </Route>
-
+            <Route exact path="/polls/:pollID/results"
+              render={ (props) => (<PollResults {...props} updateTitle={this.updateTitle} />) }
+            />
             {/* My Poll Histories Page */}
             <Route exact path="/polls/history">
               <PollHistory updateTitle={this.updateTitle} />
