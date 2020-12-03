@@ -125,6 +125,9 @@ export default class PollManager extends Component {
 
           </MDBContainer>
           <MDBContainer fluid className="bigger box">
+            <p className="fontSizeLarge">
+              Poll Results
+            </p>
             <p>
               Question 1: Who is the bestest boi?
             </p>

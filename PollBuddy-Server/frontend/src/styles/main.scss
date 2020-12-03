@@ -56,7 +56,11 @@ h1, .fontSizeLarge {
   font-weight: bold;
 }
 
-p, ul, ol, h1, h2 {
+h1 {
+  margin: 10px auto;
+}
+
+p, ul, ol, h2 {
   margin: 10px 0;
 }
 
@@ -157,6 +161,31 @@ textarea {
   max-width: 100%;
 }
 
+.box-body-text {
+  align-items: flex-start;
+}
+
+.two-box {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.two-box:not(:first-child), .box:not(:first-child) {
+  margin: var(--box-margin) 0 0;
+}
+
+.two-box .box {
+  width: calc(100% - 2 * var(--box-margin));
+  max-width: none !important;
+}
+
+.two-box-different {
+  width: 100% !important;
+}
+
 @media only screen and (min-width: 414px) {
   :root {
     --box-margin: 30px;
@@ -164,7 +193,7 @@ textarea {
   }
 }
 
-@media only screen and (min-width: 568px) {
+@media only screen and (min-width: 667px) {
   .box {
     width: auto;
     max-width: calc(100% - 2 * var(--box-margin));
@@ -195,50 +224,6 @@ textarea {
   .box:not(:only-child) {
     width: 70%;
   }
-}
-
-@media only screen and (min-width: 1200px) {
-  :root {
-    --box-margin: 50px;
-    --box-padding: 50px;
-  }
-  .box {
-    max-width: 60%;
-  }
-  .box:not(:only-child) {
-    width: 60%;
-  }
-  .two-box {
-    width: 75%;
-  }
-}
-
-.box-body-text {
-  align-items: flex-start;
-}
-
-.two-box {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: center;
-}
-
-.two-box:not(:first-child), .box:not(:first-child) {
-  margin: var(--box-margin) 0 0;
-}
-
-.two-box .box {
-  width: calc(100% - 2 * var(--box-margin));
-  max-width: none !important;
-}
-
-.two-box-different {
-  width: 100% !important;
-}
-
-@media only screen and (min-width: 812px) {
   .two-box {
     flex-direction: row;
     align-items: stretch;
@@ -254,6 +239,22 @@ textarea {
   }
   .two-box-different .bigger {
     width: calc(70% - 3 * var(--box-margin) / 2) !important;
+  }
+}
+
+@media only screen and (min-width: 1224px) {
+  :root {
+    --box-margin: 50px;
+    --box-padding: 50px;
+  }
+  .box {
+    max-width: 60%;
+  }
+  .box:not(:only-child) {
+    width: 60%;
+  }
+  .two-box {
+    width: 75%;
   }
 }
 
@@ -276,7 +277,7 @@ body, .button, .textBox {
 
 label {
   display: block;
-  margin: 10px 20px;
+  margin: 10px var(--font-size);
   font-weight: bold;
   text-align: left;
 }

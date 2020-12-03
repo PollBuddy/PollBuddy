@@ -13,6 +13,7 @@ export default class AccountInfo extends Component {
     return (
       <MDBContainer className="page">
         <MDBContainer className="box">
+          <h1>Account Settings</h1>
           <MDBContainer className="form-group">
             <label htmlFor="firstnameText">First Name:</label>
             <input placeholder="SIS" className="form-control textBox" id="firstnameText"/>
