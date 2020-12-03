@@ -192,7 +192,7 @@ export default class Question extends Component {
 
     if(this.state.successfulSubmission) {
       return (
-        <Redirect to="/questionEnded" push={true} />
+        <Redirect to={"/polls/" + this.state.PollID + "/results"} push={true} />
       );
     }
 
