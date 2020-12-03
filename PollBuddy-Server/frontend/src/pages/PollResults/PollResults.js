@@ -12,6 +12,7 @@ export default class PollResults extends Component {
       error: null,
       doneLoading: false,
       questionData: {},
+      correctAnswers: "",
       dataBar: {
         labels: [],
         datasets: [
@@ -48,8 +49,8 @@ export default class PollResults extends Component {
               },
               ticks: {
                 fontColor: "white",
-                fontSize: 16,
-                fontFamily: "Fredoka One",
+                fontSize: 20,
+                fontFamily: 'Baloo 2',
               }
             }
           ],
@@ -62,8 +63,8 @@ export default class PollResults extends Component {
               ticks: {
                 beginAtZero: true,
                 fontColor: "white",
-                fontSize: 16,
-                fontFamily: "Fredoka One",
+                fontSize: 20,
+                fontFamily: 'Baloo 2',
                 precision: 0
               }
             }
@@ -81,34 +82,37 @@ export default class PollResults extends Component {
     fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.match.params.pollID + "/results", {
       method: "GET"
     })
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error("Something went wrong");
-          }
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Something went wrong");
+        }
 
-        })
-        .then(response => {
-          if (response === {}) {
-            console.log("Error fetching data");
-          } else {
-            console.log("Fetching data succeeded");
-            console.log(response);
+      })
+      .then(response => {
+        if (response === {}) {
+          console.log("Error fetching data");
+        } else {
+          console.log("Fetching data succeeded");
+          console.log(response);
 
-            // eslint-disable-next-line no-sequences
-            this.setState(state => {
-              state.questionData = response;
-              state.dataBar.labels = response.Results[0].AnswerChoices;
-              state.dataBar.datasets[0].data = response.Results[0].Tallies;
-              state.doneLoading = true;
-              return state;
-            });
+          // eslint-disable-next-line no-sequences
+          this.setState(state => {
+            state.questionData = response;
+            state.dataBar.labels = response.Results[0].AnswerChoices;
+            state.dataBar.datasets[0].data = response.Results[0].Tallies;
+            return state;
+          });
+          for(let i = 0; i < this.state.questionData.Results[0].CorrectAnswers.length-1; i++){
+            this.state.correctAnswers = this.state.correctAnswers + this.state.questionData.Results[0].CorrectAnswers[i] + ", ";
           }
-        })
-        .catch(error => this.setState({"error": error}));
+          this.state.correctAnswers+= this.state.questionData.Results[0].CorrectAnswers[this.state.questionData.Results[0].CorrectAnswers.length-1];
+          this.setState({"doneLoading": true});
+        }
+      })
+      .catch(error => this.setState({"error": error}));
   }
-
   render() {
     if (this.state.error != null) {
       return (
@@ -129,16 +133,14 @@ export default class PollResults extends Component {
       );
     } else {
       return (
-
         <MDBContainer fluid className="page">
           <MDBContainer fluid className="two-box">
-
             <MDBContainer fluid className="PollResults-graph box">
-              <p>
+              <p className="fontSizeLarge">
                 {"Question " + this.state.questionData.Results[0].QuestionNumber + ": " + this.state.questionData.Results[0].QuestionText}
               </p>
               <p>
-                {"Correct Answers: " + this.state.questionData.Results[0].CorrectAnswers}
+                {"Correct Answers: " + this.state.correctAnswers}
               </p>
               <p>
                 {"Total Number of Answers: " + this.state.dataBar.datasets[0].data.reduce((a, b) => a + b, 0)}
