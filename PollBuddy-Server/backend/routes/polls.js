@@ -61,9 +61,9 @@ router.post("/:id/edit", function (req, res) {
   return res.sendStatus(200); // TODO: Ensure this is true
 });
 router.post("/:id/submit", function (req, res) {
-  var jsonContent = req.body;
-  var pollId = new mongoConnection.getMongo().ObjectID(req.params.id);
-  var count = 0;
+  const jsonContent = req.body;
+  const pollId = new mongoConnection.getMongo().ObjectID(req.params.id);
+  let count = 0; // Used to store if an entry exists in poll_answers
 
   // Check that pollId was specified and is valid
   if (pollId !== undefined) {
@@ -88,6 +88,11 @@ router.post("/:id/submit", function (req, res) {
     return res.status(500).send({"Result": "Error", "Error": "Answers is empty"});
   }
 
+  // Add timestamp to answers (in new object
+  let data = {};
+  data.Answers = jsonContent.Answers;
+  data.Timestamp = Date.now();
+
   // Save answers
 
   // Check for existing answers
@@ -98,12 +103,12 @@ router.post("/:id/submit", function (req, res) {
         return res.sendStatus(500);
       }
       count = result.length;
-      if (count === 0) {
+//      if (count === 0) {
         // User has not answered any questions in this poll yet, create a default set
-        mongoConnection.getDB().collection("poll_answers").insertOne({ "PollID": pollId, "UserID": jsonContent.UserID, "Answers": jsonContent.Answers });
-      } else {
+//        mongoConnection.getDB().collection("poll_answers").insertOne({ "PollID": pollId, "UserID": jsonContent.UserID, "Answers": jsonContent.Answers });
+//      } else {
         // User has answered questions in this poll already, add to existing set
-        mongoConnection.getDB().collection("poll_answers").updateOne({ "$and": [{ "PollID": pollId }, { "UserID": jsonContent.UserID }] }, { "$addToSet": { "Answers": jsonContent.Answers } }, function (err2, result2) {
+        mongoConnection.getDB().collection("poll_answers").updateOne({ "$and": [{ "PollID": pollId }, { "UserID": jsonContent.UserID }] }, { "$push": { "Answers": jsonContent.Answers } }, function (err2, result2) {
           if (err2) {
             return res.sendStatus(500);
           }
@@ -113,7 +118,7 @@ router.post("/:id/submit", function (req, res) {
             return res.sendStatus(500);
           }
         });
-      }
+//      }
     });
 
   } else {
@@ -125,10 +130,21 @@ router.post("/:id/submit", function (req, res) {
       count = result.length;
       if (count === 0) {
         // Anonymous users have not answered any questions in this poll yet, create a default set
-        mongoConnection.getDB().collection("poll_answers").insertOne({ "PollID": pollId, "Answers": jsonContent.Answers });
+        mongoConnection.getDB().collection("poll_answers").insertOne({ "PollID": pollId }, function (err2, result2) {
+          mongoConnection.getDB().collection("poll_answers").updateOne({"PollID": pollId}, {"$push": {"Answers": data}}, function (err3, result3) {
+            if (err3) {
+              return res.sendStatus(500);
+            }
+            if(result3.result.ok === 1) {
+              return res.sendStatus(200);
+            } else {
+              return res.sendStatus(500);
+            }
+          });
+        });
       } else {
         // Anonymous users have answered questions in this poll already, add to existing set
-        mongoConnection.getDB().collection("poll_answers").updateOne({"PollID": pollId}, {"$addToSet": {"Answers": jsonContent.Answers}}, function (err2, result2) {
+        mongoConnection.getDB().collection("poll_answers").updateOne({"PollID": pollId}, {"$push": {"Answers": data}}, function (err2, result2) {
           if (err2) {
             return res.sendStatus(500);
           }
