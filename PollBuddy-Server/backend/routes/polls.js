@@ -122,4 +122,30 @@ router.get("/:id", function (req, res, next) {
   });
 });
 
+router.get("/:id/view", function (req, res, next) {
+  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+  mongoConnection.getDB().collection("polls").find({ "_id": id }).toArray(function (err, result) {
+    if (err) {
+      return res.sendStatus(500);
+    }
+    
+    // TODO: Make sure ID is valid
+
+    // Loop through the poll's questions and add to openQuestions the Question Number, Text and Answer Choices if
+    // the question is set as Visible.
+    let openQuestions = [];
+    for(let i = 0; i < result[0].Questions.length; i++) {
+      if(result[0].Questions[i][0].Visible) {
+        let q = {};
+        q.QuestionNumber = result[0].Questions[i][0].QuestionNumber;
+        q.QuestionText = result[0].Questions[i][0].QuestionText;
+        q.AnswerChoices = result[0].Questions[i][0].AnswerChoices;
+        openQuestions.push(q);
+      }
+    }
+    // Send the open questions
+    res.send({ "Questions": openQuestions });
+  });
+});
+
 module.exports = router;
