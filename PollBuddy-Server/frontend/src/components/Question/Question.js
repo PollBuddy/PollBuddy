@@ -6,6 +6,7 @@ import {
 } from "mdbreact";
 
 import Countdown, { zeroPad } from "react-countdown";
+import {Redirect} from "react-router-dom";
 
 
 export default class Question extends Component {
@@ -18,6 +19,7 @@ export default class Question extends Component {
     this.selectChoice = this.selectChoice.bind(this);
     this.getChoiceLabel = this.getChoiceLabel.bind(this);
     this.onTimeEnd = this.onTimeEnd.bind(this);
+    this.submitAnswers = this.submitAnswers.bind(this);
 
     this.choiceOrder = [
       "A",
@@ -53,20 +55,27 @@ export default class Question extends Component {
     //get props
     let data = props.questionObj;
 
+    // Store ID for answer submission
+    let id = data.PollID;
+
+    // TODO: Update so that this can handle multiple questions, or do it in PollViewer.js
+    // Manual override is below
+    data = data.Questions[0];
+
     //set up an array of booleans (representing the student's answer choices)
     //and initialize it to all false
     let tempArray = [];
-    for (let i = 0; i < data.choices.length; i++) {
+    for (let i = 0; i < data.AnswerChoices.length; i++) {
       tempArray.push(false);
     }
     let tempQueue = [];
     //add the data and the array to state
     this.state = {
-      key: props.questionNumber,
       data: data,
       studentChoices: tempArray,
       choicesQueue: tempQueue,
       canChoose: true,
+      PollID: id
     };
   }
 
@@ -111,7 +120,7 @@ export default class Question extends Component {
     //if the number of true booleans is greater than the maximum number of
     //allowed choices (specified by the json) then pop from the queue to set the first
     //choice chosen back to false
-    if (count >= this.state.data.maxAllowedChoices) {
+    if (count >= this.state.data.MaxAllowedChoices) {
       this.state.studentChoices[this.state.choicesQueue.shift()] = false;
     }
     //make the boolean at the selected index true and update state
@@ -143,7 +152,30 @@ export default class Question extends Component {
     //TODO send answers to backend
     //TODO move on to next question (probably should be handled in a callback prop)
   }
-  
+
+
+  submitAnswers = () => {
+    // Build submission
+    // TODO: This will need to be formatted better in the future but it's fine for the demo
+    let submission = { "Answers": [ { "QuestionNumber": 1} ]};
+    console.log(this.state.studentChoices);
+    console.log(this.state.choicesQueue);
+    submission.Answers[0].Answer = this.state.data.AnswerChoices[this.state.choicesQueue[0]];
+    console.log(submission);
+
+    // Submit
+    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.PollID + "/submit", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(submission)
+    })
+      .then(response => response.text())
+      .then(response => {
+        console.log("Server response to submission: " + response);
+        this.setState({successfulSubmission: true});
+      });
+  };
+
 
   render() {
     console.log(this.state.choicesQueue);
@@ -157,10 +189,17 @@ export default class Question extends Component {
         return <span>{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
       }
     };
+
+    if(this.state.successfulSubmission) {
+      return (
+        <Redirect to="/questionEnded" push={true} />
+      );
+    }
+
     return (
       <MDBContainer id={"question-box"} className="box">
-        <p>Question {this.state.data.questionNumber}</p>
-        <span className={"question-title"}>{this.state.data.question}</span>
+        <p>Question {this.state.data.QuestionNumber}</p>
+        <span className={"question-title"}>{this.state.data.QuestionText}</span>
         { // only display image if there is one
           this.state.data.img &&
           <img
@@ -169,7 +208,7 @@ export default class Question extends Component {
             alt={""}/>
         }
         <MDBContainer className={"question-btn-container"}>
-          {this.state.data.choices.map((choice, index) => {
+          {this.state.data.AnswerChoices.map((choice, index) => {
 
             if (this.state.studentChoices[index]) {
               return (
@@ -200,9 +239,12 @@ export default class Question extends Component {
           <MDBIcon far icon="clock" className="time-icon"/>
           <Countdown
             renderer={clockFormat}
-            date={this.questionStartTime + this.state.data.timeLimit * 1000}
+            date={this.questionStartTime + this.state.data.TimeLimit * 1000}
             onComplete={this.onTimeEnd}
           />
+        </MDBContainer>
+        <MDBContainer>
+          <button className="btn button" onClick={this.submitAnswers}>Submit</button>
         </MDBContainer>
       </MDBContainer>
     );

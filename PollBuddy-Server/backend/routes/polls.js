@@ -194,11 +194,13 @@ router.get("/:id/view", function (req, res, next) {
         q.QuestionNumber = result[0].Questions[i][0].QuestionNumber;
         q.QuestionText = result[0].Questions[i][0].QuestionText;
         q.AnswerChoices = result[0].Questions[i][0].AnswerChoices;
+        q.MaxAllowedChoices = result[0].Questions[i][0].MaxAllowedChoices;
+        q.TimeLimit = result[0].Questions[i][0].TimeLimit;
         openQuestions.push(q);
       }
     }
     // Send the open questions
-    res.send({ "Questions": openQuestions });
+    res.send({ "Questions": openQuestions, "PollID": id });
   });
 });
 
