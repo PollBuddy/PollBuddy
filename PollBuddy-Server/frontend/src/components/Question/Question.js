@@ -143,12 +143,12 @@ export default class Question extends Component {
     //TODO send answers to backend
     //TODO move on to next question (probably should be handled in a callback prop)
   }
-  
+
 
   render() {
     console.log(this.state.choicesQueue);
     const clockFormat = ({ minutes, seconds, completed }) => {
-        
+
       if (completed) {
         // Render a completed state
         return <span>Question closed!</span>;
@@ -158,17 +158,17 @@ export default class Question extends Component {
       }
     };
     return (
-      <MDBContainer id={"question-box"} className="box">
-        <p>Question {this.state.data.questionNumber}</p>
+      <MDBContainer className="box">
+        <p className="question-num">Question {this.state.data.questionNumber}</p>
         <span className={"question-title"}>{this.state.data.question}</span>
         { // only display image if there is one
           this.state.data.img &&
           <img
-            className="question_img-fluid"
+            className="question-img-fluid"
             src={this.state.data.img}
             alt={""}/>
         }
-        <MDBContainer className={"question-btn-container"}>
+        <MDBContainer>
           {this.state.data.choices.map((choice, index) => {
 
             if (this.state.studentChoices[index]) {
@@ -177,7 +177,7 @@ export default class Question extends Component {
                   return this.deselectChoice(index);
                 }}>
                   <MDBContainer className="question-label-bubble question-label-bubble-active">
-                    <span className={"question-label-text"}>{this.getChoiceLabel(index)}</span>
+                    {this.getChoiceLabel(index)}
                   </MDBContainer>
                   {choice}
                 </btn>
@@ -188,7 +188,7 @@ export default class Question extends Component {
                   return this.selectChoice(index);
                 }}>
                   <MDBContainer className="question-label-bubble question-label-bubble-inactive">
-                    <span className={"question-label-text"}>{this.getChoiceLabel(index)}</span>
+                    {this.getChoiceLabel(index)}
                   </MDBContainer>
                   {choice}
                 </btn>
@@ -196,7 +196,7 @@ export default class Question extends Component {
             }
           })}
         </MDBContainer>
-        <MDBContainer className="time-info">
+        <MDBContainer className="button">
           <MDBIcon far icon="clock" className="time-icon"/>
           <Countdown
             renderer={clockFormat}

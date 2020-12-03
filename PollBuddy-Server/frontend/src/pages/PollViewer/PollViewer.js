@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
-import "./PollViewer.scss";
 import { MDBContainer } from "mdbreact";
 import Question from "../../components/Question/Question";
 

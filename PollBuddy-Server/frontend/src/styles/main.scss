@@ -13,7 +13,6 @@
   --font-size-small: 1rem;
   --font-size: 1.2rem;
   --font-size-large: 1.4rem;
-  --font-size-xlarge: 1.6rem;
   --line-height: 1.2;
   --default-transition: all 0.2s ease-in-out;
 
@@ -121,7 +120,6 @@ input.textBox:focus::placeholder, textarea.textBox:focus::placeholder {
 
 input.textBox::placeholder, textarea.textBox::placeholder {
   color: var(--gray-placeholder-text);
-  line-height: var(--line-height);
   transition: var(--default-transition);
 }
 
@@ -199,10 +197,10 @@ textarea {
     --box-padding: 50px;
   }
   .box {
-    max-width: 50%;
+    max-width: 60%;
   }
   .box:not(:only-child) {
-    width: 50%;
+    width: 60%;
   }
   .two-box {
     width: 75%;
