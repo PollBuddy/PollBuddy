@@ -3,6 +3,7 @@ import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 import {Link} from "react-router-dom";
 
+
 export default class AccountInfo extends Component {
   componentDidMount(){
     this.props.updateTitle("Account Info");
@@ -13,8 +14,12 @@ export default class AccountInfo extends Component {
       <MDBContainer className="page">
         <MDBContainer className="box">
           <MDBContainer className="form-group">
-            <label htmlFor="nameText">Name:</label>
-            <input placeholder="SIS Man" className="form-control textBox" id="nameText"/>
+            <label htmlFor="firstnameText">First Name:</label>
+            <input placeholder="SIS" className="form-control textBox" id="firstnameText"/>
+            <label htmlFor="lastnameText">Last Name:</label>
+            <input placeholder="Man" className="form-control textBox" id="lastnameText"/>
+            <label htmlFor="usernametext">Username:</label>
+            <input placeholder="mans" className="form-control textBox" id="usernametext" readOnly/>
             <label htmlFor="emailText">Email:</label>
             <input placeholder="sisman@rpi.edu" className="form-control textBox" id="emailText"/>
             

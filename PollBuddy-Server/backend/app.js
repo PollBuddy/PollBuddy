@@ -105,6 +105,13 @@ app.get("/api/test", (req, res) => {
   });
 });
 
+var schoolsModule = require("./modules/schoolList.js");
+app.get("/api/schools", (req, res) => {
+  var schools = schoolsModule.getList();
+  res.json(schools);
+});
+
+
 app.get("/gendata", (req, res) => {
   var log = "";
   var completes = [];
@@ -187,6 +194,9 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
+
+  console.log(err);
+
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
@@ -196,4 +206,3 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
-

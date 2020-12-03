@@ -1,9 +1,10 @@
 import React, {Component} from "react";
-import {Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import { MDBContainer } from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 
 export default class Groups extends Component {
+
   constructor(){
     super();
     this.state = {
@@ -37,11 +38,27 @@ export default class Groups extends Component {
     //localStorage.removeItem("loggedIn");//todo if admin -- more specifically make diff states if the user who logged in is an admin... or teacher. wouldn't want teacher accessing user things or vice versa...
     //Redirect("/login");
   }
-  componentDidMount(){
+  componentDidMount() {
     this.props.updateTitle("My Groups");
   }
+  toggleLeaveGroup = () => {
+    this.setState(prevState => ({ showXs: !prevState.showXs }));
+    if (this.state.leaveGroupButtonText === "Leave Group") {
+      this.setState({ leaveGroupButtonText: "Exit Leave Group" });
+    } else {
+      this.setState({ leaveGroupButtonText: "Leave Group" });
+    }
+  };
+  
+  handleClick = (event) => {
+    // call prompt() with custom message to get user input from alert-like dialog 
+    const groupCode = prompt('Please enter your group code');
+    // combine the group code into URL and redirect to the next page
+    window.location.replace("/groups/" + groupCode + "/polls");
+  }
 
-  render() {
+  render() { 
+    const { showXs } = this.state;
     if(this.state.error != null){
       return (
         <MDBContainer fluid className="page">
@@ -99,9 +116,28 @@ export default class Groups extends Component {
             <Link to={"/groups/new"}>
               <button className="btn button">New Group</button>
             </Link>
+            <button className="btn button" onClick={this.handleClick}>Join Group</button>
+            <button className="btn button" onClick={this.toggleLeaveGroup}>{this.state.leaveGroupButtonText}</button>
+            {this.state.isOpen && <Dialog onClose={(e) => this.setState({isOpen: false})} />}
           </MDBContainer>
         </MDBContainer>
       );
     }
   }
+}
+
+function LeaveGroupIcon(props) {
+  return (
+    <span className="groups_removable" onClick={props.openDialog}>X</span>
+  );
+}
+
+function Dialog(props) {
+  return (
+    <div className="leave_groups_dialog">
+      <button onClick={props.onClose} className="btn button">X</button>
+      <p>Are you sure you want to leave this group?</p>
+      <button onClick={props.onClose} className="btn button leave_group_button">Yes</button>
+    </div>
+  );
 }

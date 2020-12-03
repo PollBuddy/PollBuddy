@@ -3,6 +3,7 @@ import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import GroupEditor from "../../components/GroupEditor/GroupEditor";
+import Question from "../../components/Question/Question";
 
 export default class Template extends Component {//this class is an example of how to use get requests so frontend team can eventually connect to backend refer to class creation for post requests
   constructor() {
@@ -36,22 +37,22 @@ export default class Template extends Component {//this class is an example of h
   render() {
     return (
       <MDBContainer className="page">
-        <MDBContainer className="box">
-          <p className="fontSizeLarge">
-            Test:
-          </p>
-          <MDBContainer className="class-editor">
-            {
-              //display each class in the backend by mapping the groups to class editor components
-              this.state.groups.map(
-                (group, index) => {
-                  console.log(group._id);
-                  return <GroupEditor key={group._id} id={group._id} new={false}/>;//the key is needed because each child of a list must have a unique key
-                }
-              )
-            }
-          </MDBContainer>
-        </MDBContainer>
+        {/*<MDBContainer className="box">*/}
+        <p className="fontSizeLarge">
+          Test:
+        </p>
+        {/*<MDBContainer className="class-editor">*/}
+        {/*  {*/}
+        {/*    //display each class in the backend by mapping the groups to class editor components*/}
+        {/*    this.state.groups.map(*/}
+        {/*      (group, index) => {*/}
+        {/*        console.log(group._id);*/}
+        {/*        return <GroupEditor key={group._id} id={group._id} new={false}/>;//the key is needed because each child of a list must have a unique key*/}
+        {/*      }*/}
+        {/*    )*/}
+        {/*  }*/}
+        {/*</MDBContainer>*/}
+        {/*</MDBContainer>*/}
       </MDBContainer>
     );
   }
