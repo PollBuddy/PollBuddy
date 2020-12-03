@@ -19,11 +19,11 @@ export default class LoginDefault extends Component {
             Click on one of the following buttons to login.
           </p>
           <Link to={"/login/pollbuddy"}>
-            <button className="btn button">Login with Poll Buddy Account</button>
+            <button className="button">Login with Poll Buddy Account</button>
           </Link>
 
           <Link to={"/login/school"}>
-            <button className="btn button">Login with School Account</button>
+            <button className="button">Login with School Account</button>
           </Link>
         </MDBContainer>
       </MDBContainer>

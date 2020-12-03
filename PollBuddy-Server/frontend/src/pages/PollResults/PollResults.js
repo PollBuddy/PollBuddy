@@ -84,19 +84,19 @@ export default class PollResults extends Component {
             </p>
 
             <Link to={"/polls/:pollID/results"}>
-              <button className="btn button">Question 1</button>
+              <button className="button">Question 1</button>
             </Link>
             <Link to={"/polls/:pollID/results"}>
-              <button className="btn button">Question 2</button>
+              <button className="button">Question 2</button>
             </Link>
             <Link to={"/polls/:pollID/results"}>
-              <button className="btn button">Question 3</button>
+              <button className="button">Question 3</button>
             </Link>
             <Link to={"/polls/:pollID/results"}>
-              <button className="btn button">Question 4</button>
+              <button className="button">Question 4</button>
             </Link>
             <Link to={"/polls/:pollID/results"}>
-              <button className="btn button">Question 5</button>
+              <button className="button">Question 5</button>
             </Link>
 
           </MDBContainer>

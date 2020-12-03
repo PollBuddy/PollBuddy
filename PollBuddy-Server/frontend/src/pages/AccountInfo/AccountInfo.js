@@ -22,7 +22,7 @@ export default class AccountInfo extends Component {
             <input placeholder="mans" className="form-control textBox" id="usernametext" readOnly/>
             <label htmlFor="emailText">Email:</label>
             <input placeholder="sisman@rpi.edu" className="form-control textBox" id="emailText"/>
-            
+
             { /* TODO: Hide these until the user clicks the change password button below */ }
             <label htmlFor="newPasswordText">New password:</label>
             <input type="password" placeholder="••••••••••••" className="form-control textBox" id="newPasswordText"/>
@@ -33,7 +33,7 @@ export default class AccountInfo extends Component {
           </MDBContainer>
 
           <Link to={"/login/forgot"}>
-            <button className="btn button">Change password</button>
+            <button className="button">Change password</button>
           </Link>
         </MDBContainer>
       </MDBContainer>

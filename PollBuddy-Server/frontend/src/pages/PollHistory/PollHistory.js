@@ -37,7 +37,7 @@ export default class Groups extends Component {
           {this.state.polls_admin.map(polls_admin => (
             <li key={polls_admin.id} className={polls_admin.title}>
               <Link to={"/polls/" + polls_admin.id + "/results"}>
-                <button className="btn button">{polls_admin.title}</button>
+                <button className="button">{polls_admin.title}</button>
               </Link>
             </li>
           ))}
@@ -50,7 +50,7 @@ export default class Groups extends Component {
           {this.state.polls_member.map(polls_member => (
             <li key={polls_member.id} className={polls_member.title}>
               <Link to={"/polls/" + polls_member.id + "/results"}>
-                <button className="btn button">{polls_member.title}</button>
+                <button className="button">{polls_member.title}</button>
               </Link>
             </li>
           ))}

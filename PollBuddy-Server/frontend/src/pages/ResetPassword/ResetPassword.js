@@ -27,7 +27,7 @@ export default class ResetPassword extends Component {
           </MDBContainer>
 
           <Link to={"/Groups"}>
-            <button className="btn button">Submit</button>
+            <button className="button">Submit</button>
           </Link>
         </MDBContainer>
       </MDBContainer>

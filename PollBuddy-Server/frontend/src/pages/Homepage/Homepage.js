@@ -45,10 +45,10 @@ export default class Homepage extends Component {
             </p>
             <MDBContainer>
               <Link to={"/login"}>
-                <button className = "btn button">Login</button>
+                <button className = "button">Login</button>
               </Link>
               <Link to={"/register"}>
-                <button className = "btn button">Register</button>
+                <button className = "button">Register</button>
               </Link>
             </MDBContainer>
           </MDBContainer>

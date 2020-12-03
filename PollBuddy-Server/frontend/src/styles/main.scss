@@ -81,6 +81,7 @@ li:not(:last-child) {
   box-shadow: none;
   text-transform: uppercase;
   margin: 10px 5px;
+  border: none;
 }
 
 .button, .textBox {
@@ -92,6 +93,11 @@ li:not(:last-child) {
 .button:hover {
   color: var(--white-most-text);
   box-shadow: none;
+  cursor: pointer;
+}
+
+button:focus {
+  outline: none;
 }
 
 .form-group, .textBox {

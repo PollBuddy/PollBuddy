@@ -196,7 +196,7 @@ export default class Question extends Component {
             }
           })}
         </MDBContainer>
-        <MDBContainer className="button">
+        <MDBContainer className="button time-info">
           <MDBIcon far icon="clock" className="time-icon"/>
           <Countdown
             renderer={clockFormat}

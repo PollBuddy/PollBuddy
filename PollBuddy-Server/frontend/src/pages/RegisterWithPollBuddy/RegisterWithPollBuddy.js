@@ -43,10 +43,10 @@ class RegisterWithPollBuddy extends Component {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
-        FirstName: "", 
-        LastName: "", 
-        Username: this.state.username, 
-        Email: this.state.email, 
+        FirstName: "",
+        LastName: "",
+        Username: this.state.username,
+        Email: this.state.email,
         Password: this.state.password
       })
     })
@@ -85,7 +85,7 @@ class RegisterWithPollBuddy extends Component {
             <label htmlFor="usernameText">Username:</label>
             <input placeholder="mans" className="form-control textBox" id="usernameText"
               onChange={(evt) => { this.setState({username: evt.target.value}); }}/>
-            {!this.state.userValid && 
+            {!this.state.userValid &&
               <ul className="error">
                 <li>Username must be between 3 and 32 characters</li>
                 <li>Valid characters: (A-Z), (0-9), (-,_,.)</li>
@@ -94,7 +94,7 @@ class RegisterWithPollBuddy extends Component {
             <label htmlFor="emailText">Email:</label>
             <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText"
               onChange={(evt) => { this.setState({email: evt.target.value}); }}/>
-            {!this.state.emailValid && 
+            {!this.state.emailValid &&
               <ul className="error">
                 <li>Invalid email format!</li>
               </ul>
@@ -103,7 +103,7 @@ class RegisterWithPollBuddy extends Component {
             <label htmlFor="passwordText">Password:</label>
             <input type="password" placeholder="••••••••••••" className="form-control textBox" id="passwordText"
               onChange= {(evt) => { this.setState({password: evt.target.value}); }}/>
-            {!this.state.passValid && 
+            {!this.state.passValid &&
               <ul className="error">
                 <li>Invalid password. Must contain:</li>
                 <li>6 or more characters</li>
@@ -112,7 +112,7 @@ class RegisterWithPollBuddy extends Component {
               </ul>
             }
           </MDBContainer>
-          <button className="btn button" onClick={this.handleRegister}>Submit</button>
+          <button className="button" onClick={this.handleRegister}>Submit</button>
         </MDBContainer>
       </MDBContainer>
     );

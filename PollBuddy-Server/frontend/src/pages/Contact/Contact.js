@@ -29,7 +29,7 @@ export default class Contact extends Component {
             problems, such as bugs or design complaints/suggestions, by <a href="https://github.com/PollBuddy/PollBuddy/issues/new/choose">opening an issue</a> on our <a href="https://github.com/PollBuddy/PollBuddy">GitHub repository.</a>
           </p>
           <button
-            className="btn button"
+            className="button"
             style={{ display: this.state.formUp ? "none" : ""}}
             onClick={() => this.setState({ formUp: true })}
           >
@@ -126,7 +126,7 @@ export default class Contact extends Component {
               maxLength="500"
               placeholder="500 character limit"
             ></textarea>
-            <button className="btn button" onClick={() => this.setState({ formUp: false })}>
+            <button className="button" onClick={() => this.setState({ formUp: false })}>
               Send Ticket
             </button>
           </MDBContainer>

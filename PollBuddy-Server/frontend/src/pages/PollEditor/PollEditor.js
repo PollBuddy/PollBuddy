@@ -69,7 +69,7 @@ export default class PollEditor extends Component {
               </MDBDropdownMenu>
             </MDBDropdown>
 
-            <button className="btn button" onClick={this.askQuestion}>Ask!</button>
+            <button className="button" onClick={this.askQuestion}>Ask!</button>
           </MDBContainer>
         </MDBContainer>
       </MDBContainer>

@@ -24,7 +24,7 @@ export default class ForgotPassword extends Component {
             <input placeholder="Enter email" className="form-control textBox" id="emailText"/>
           </MDBContainer>
           <Link to={"/login/reset"}>
-            <button className="btn button">Reset Password</button>
+            <button className="button">Reset Password</button>
           </Link>
 
         </MDBContainer>

@@ -30,18 +30,18 @@ export default class RegisterWithSchool extends Component {
             School Name:
           </p>
 
-          <SchoolPicker 
+          <SchoolPicker
             value={this.state.value}
             onChange={e => this.setState({ value: e.target.value })}
             onSelect={value => this.setState({ value })}
           />
 
           <Link to={"/account"}>
-            <button className="btn button">Submit School Name</button>
+            <button className="button">Submit School Name</button>
           </Link>
 
           <form>
-            <button className="btn button"
+            <button className="button"
               formAction="https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Fcms.union.rpi.edu%2Flogin%2Fcas%2F%3Fnext%3Dhttps%253A%252F%252Fwww.google.com%252F">
               CAS (I'm an RPI student)
             </button>

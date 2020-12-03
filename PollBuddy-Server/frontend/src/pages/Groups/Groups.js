@@ -76,7 +76,7 @@ export default class Groups extends Component {
       return (
         <MDBContainer className="page">
           <LoadingWheel/>
-          <button className="btn button" onClick={this.stopLoading}>End Loading</button>
+          <button className="button" onClick={this.stopLoading}>End Loading</button>
         </MDBContainer>
       );
     } else {
@@ -93,7 +93,7 @@ export default class Groups extends Component {
                 {this.state.admin_groups.map((e) => (
                   <div>
                     <Link to={"/groups/" + e.id + "/polls"}>
-                      <button className="btn button width-20em">{e.label}</button>
+                      <button className="button width-20em">{e.label}</button>
                     </Link>
                     {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
                   </div>
@@ -111,7 +111,7 @@ export default class Groups extends Component {
                 {this.state.member_groups.map((e) => (
                   <div>
                     <Link to={"/groups/" + e.id + "/polls"}>
-                      <button className="btn button width-20em">{e.label}</button>
+                      <button className="button width-20em">{e.label}</button>
                     </Link>
                     {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
                   </div>
@@ -123,10 +123,10 @@ export default class Groups extends Component {
               Group Management:
             </p>
             <Link to={"/groups/new"}>
-              <button className="btn button">New Group</button>
+              <button className="button">New Group</button>
             </Link>
-            <button className="btn button" onClick={this.handleClick}>Join Group</button>
-            <button className="btn button" onClick={this.toggleLeaveGroup}>{this.state.leaveGroupButtonText}</button>
+            <button className="button" onClick={this.handleClick}>Join Group</button>
+            <button className="button" onClick={this.toggleLeaveGroup}>{this.state.leaveGroupButtonText}</button>
             {this.state.isOpen && <Dialog onClose={(e) => this.setState({isOpen: false})} />}
           </MDBContainer>
         </MDBContainer>
@@ -144,9 +144,9 @@ function LeaveGroupIcon(props) {
 function Dialog(props) {
   return (
     <div className="leave_groups_dialog">
-      <button onClick={props.onClose} className="btn button">X</button>
+      <button onClick={props.onClose} className="button">X</button>
       <p>Are you sure you want to leave this group?</p>
-      <button onClick={props.onClose} className="btn button leave_group_button">Yes</button>
+      <button onClick={props.onClose} className="button leave_group_button">Yes</button>
     </div>
   );
 }

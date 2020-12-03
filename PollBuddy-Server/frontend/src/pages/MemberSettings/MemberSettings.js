@@ -17,7 +17,7 @@ export default class Groups extends Component {
   componentDidMount(){
     this.props.updateTitle("Member Settings");
   }
-  render() { 
+  render() {
     return (
 
       <MDBContainer className="page">
@@ -41,7 +41,7 @@ export default class Groups extends Component {
           {/*TODO: add more (correct) read-only information here*/}
 
           <Link to={"/Groups"}>
-            <button className="btn button">Leave Group</button>
+            <button className="button">Leave Group</button>
           </Link>
         </MDBContainer>
       </MDBContainer>

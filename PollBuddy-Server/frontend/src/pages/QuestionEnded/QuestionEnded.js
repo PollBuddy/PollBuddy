@@ -15,10 +15,10 @@ export default class ended extends Component {
         <p className="fontSizeLarge"> Question closed by instructor! </p>
         {/*TODO: show this only if the instructor allows*/}
         <Link to={"/pollDataView"}>
-          <button className = "btn button">View Statistics for this question</button>
+          <button className = "button">View Statistics for this question</button>
         </Link>
         <Link to={"/myclasses"}>
-          <button className = "btn button">Leave Poll?</button>
+          <button className = "button">Leave Poll?</button>
         </Link>
 
         <p className="fontSizeSmall"> Waiting for next question... </p>

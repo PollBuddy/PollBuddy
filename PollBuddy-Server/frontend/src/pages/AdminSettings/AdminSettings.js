@@ -56,7 +56,7 @@ export default class Groups extends Component {
             CSCI 1200 - Data Structures
           </p>
           <Link to={"/polls/123/edit"}>
-            <button className="btn button">Create New Poll</button>
+            <button className="button">Create New Poll</button>
           </Link>
           <p className="fontSizeSmall">
             Total number of polls: 12
@@ -73,21 +73,21 @@ export default class Groups extends Component {
 
           <MDBContainer>
             <input type="GroupName" placeholder="New Group Name" className="display_none form-control textBox" id="groupText" />
-            <button id="groupBtn" className="btn button" onClick={this.toggleShowChangeGroupName}>Change Group Name</button>
+            <button id="groupBtn" className="button" onClick={this.toggleShowChangeGroupName}>Change Group Name</button>
           </MDBContainer>
 
           <MDBContainer>
             <input type="AddStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="addText" />
-            <button id="addBtn" className="btn button" onClick={this.toggleAddStudent}>Add Student</button>
+            <button id="addBtn" className="button" onClick={this.toggleAddStudent}>Add Student</button>
           </MDBContainer>
 
           <MDBContainer>
             <input type="RemoveStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="removeText" />
-            <button id="removeBtn" className="btn button" onClick={this.toggleRemoveStudent}>Remove Student</button>
+            <button id="removeBtn" className="button" onClick={this.toggleRemoveStudent}>Remove Student</button>
           </MDBContainer>
 
           <Link to={"/Groups"}>
-            <button className="btn button">Delete this Group</button>
+            <button className="button">Delete this Group</button>
           </Link>
         </MDBContainer>
       </MDBContainer>

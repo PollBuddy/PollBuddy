@@ -102,24 +102,24 @@ export default class PollManager extends Component {
             <Countdown renderer={clockFormat} date={Date.now() + this.timeLimit*1000} />
 
             <Link to={"/polls/:pollID/manage"}>
-              <button className="btn button">Next Question</button>
+              <button className="button">Next Question</button>
             </Link>
             <Link to={"/polls/:pollID/manage"}>
-              <button className="btn button">Select Question</button>
+              <button className="button">Select Question</button>
               {/* TODO: When pressed, show a (popup or something) dropdown menu of question titles to pick */}
             </Link>
             <Link to={"/polls/:pollID/manage"}>
-              <button className="btn button">Disable Further Poll Answers</button>
+              <button className="button">Disable Further Poll Answers</button>
             </Link>
             {/* TODO: Don't show both disable and enable, only show the opposite of the current status */}
             <Link to={"/polls/:pollID/manage"}>
-              <button className="btn button">Enable Further Poll Answers</button>
+              <button className="button">Enable Further Poll Answers</button>
             </Link>
             <Link to={"/polls/:pollID/manage"}>
-              <button className="btn button">Display Statistics to Poll Viewers</button>
+              <button className="button">Display Statistics to Poll Viewers</button>
             </Link>
             <Link to={"/polls/:pollID/manage"}>
-              <button className="btn button">Display Correct Answer to Poll Viewers</button>
+              <button className="button">Display Correct Answer to Poll Viewers</button>
             </Link>
 
 

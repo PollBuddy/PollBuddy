@@ -24,7 +24,7 @@ export default class recorded extends Component {
     return (
       <MDBContainer fluid className="page">
         <Link to={"/pollViewer"}>
-          <button className = "btn button">Change Answer?</button>
+          <button className = "button">Change Answer?</button>
         </Link>
         <p className="fontSizeLarge">
           Time remaining:
@@ -32,7 +32,7 @@ export default class recorded extends Component {
         <Countdown renderer={clockFormat} date={Date.now() + this.timeLimit*1000} />
 
         <Link to={"/myclasses"}>
-          <button className = "btn button">Leave Poll?</button>
+          <button className = "button">Leave Poll?</button>
         </Link>
 
         <p className="fontSizeSmall"> Waiting for next question... </p>
