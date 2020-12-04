@@ -204,4 +204,51 @@ router.get("/:id/view", function (req, res, next) {
   });
 });
 
+router.get("/:id/results", function (req, res, next) {
+  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+  // TODO: Make sure ID is valid
+
+  mongoConnection.getDB().collection("polls").find({ "_id": id }).toArray(function (err, result) {
+    if (err) {
+      return res.sendStatus(500);
+    }
+
+    mongoConnection.getDB().collection("poll_answers").find({ "PollID": id }).toArray(function (err2, result2) {
+      if (err2) {
+        return res.sendStatus(500);
+      }
+
+      // Loop through the poll's questions and add to openQuestions the Question Number, Text and Answer Choices if
+      // the question is set as Visible.
+      let results = [];
+      for (let i = 0; i < result[0].Questions.length; i++) {
+        if (result[0].Questions[i][0].Visible) {
+          let q = {};
+          q.QuestionNumber = result[0].Questions[i][0].QuestionNumber;
+          q.QuestionText = result[0].Questions[i][0].QuestionText;
+          q.CorrectAnswers = result[0].Questions[i][0].CorrectAnswers;
+          q.AnswerChoices = [];
+          q.Tallies = [];
+
+          // Add and tally answers
+          for (let k = 0; k < result[0].Questions[i][0].AnswerChoices.length; k++) {
+            q.AnswerChoices.push(result[0].Questions[i][0].AnswerChoices[k]);
+            let tally = 0;
+            for (let j = 0; j < result2[0].Answers.length; j++) {
+              if(result2[0].Answers[j].Answers[0].Answer === q.AnswerChoices[k]) {
+                tally++;
+              }
+            }
+            q.Tallies.push(tally);
+          }
+
+          results.push(q);
+        }
+      }
+      // Send the open questions
+      res.send({"Results": results});
+    });
+  });
+});
+
 module.exports = router;
