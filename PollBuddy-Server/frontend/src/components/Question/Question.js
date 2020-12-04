@@ -190,7 +190,7 @@ export default class Question extends Component {
 
     if(this.state.successfulSubmission) {
       return (
-        <Redirect to="/questionEnded" push={true} />
+        <Redirect to={"/polls/" + this.state.PollID + "/results"} push={true} />
       );
     }
 
@@ -242,7 +242,7 @@ export default class Question extends Component {
           />
         </MDBContainer>
         <MDBContainer>
-          <button className="btn button" onClick={this.submitAnswers}>Submit</button>
+          <button className="button" onClick={this.submitAnswers}>Submit</button>
         </MDBContainer>
       </MDBContainer>
     );

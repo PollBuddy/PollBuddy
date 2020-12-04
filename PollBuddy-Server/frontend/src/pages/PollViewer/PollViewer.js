@@ -58,7 +58,7 @@ export default class PollViewer extends Component {
       return (
         <MDBContainer>
           <LoadingWheel/>
-          <button className="btn button" onClick={this.stopLoading}>End Loading</button>
+          <button className="button" onClick={this.stopLoading}>End Loading</button>
         </MDBContainer>
       );
     } else {
