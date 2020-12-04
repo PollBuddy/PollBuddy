@@ -59,7 +59,7 @@ export default class App extends React.Component {
 
         <MDBContainer id="wrapper">
 
-          <Header />
+          <Header userInfo={this.state.userInfo} />
 
           {/*
             Using React BrowserRouter now

@@ -49,10 +49,10 @@ function DropdownMenu(props) {
       <a href="/">Logout</a>
       <a href="/register">Register</a>
       <a href="/account">Account</a>
-      <a href="/poll/:pollID/view">Enter Poll Code</a>
       <a href="/groups">Groups</a>
-      <a href="/">History</a>
-      <a href="/">Settings</a>
+      <a href="/polls/history">History</a>
+      <a href="/code">Enter Poll Code</a>
+      {/* <a href="/">Settings</a> */}
     </div>
-  );
+  ); // settings page will probably be the account info page which will have to be renamed "Account Settings"
 }

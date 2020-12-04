@@ -93,7 +93,7 @@ export default class Groups extends Component {
                 {this.state.admin_groups.map((e) => (
                   <div>
                     <Link to={"/groups/" + e.id + "/polls"}>
-                      <button className="button width-20em">{e.label}</button>
+                      <button style={{  width: "20em" }} className="button">{e.label}</button>
                     </Link>
                     {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
                   </div>
@@ -111,7 +111,7 @@ export default class Groups extends Component {
                 {this.state.member_groups.map((e) => (
                   <div>
                     <Link to={"/groups/" + e.id + "/polls"}>
-                      <button className="button width-20em">{e.label}</button>
+                      <button  style={{  width: "20em" }} className="button">{e.label}</button>
                     </Link>
                     {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
                   </div>
