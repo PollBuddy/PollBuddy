@@ -205,7 +205,7 @@ export default class Question extends Component {
             src={this.state.data.img}
             alt={""}/>
         }
-        <MDBContainer>
+        <MDBContainer style={{ width: '100%' }}>
           {this.state.data.AnswerChoices.map((choice, index) => {
 
             if (this.state.studentChoices[index]) {
