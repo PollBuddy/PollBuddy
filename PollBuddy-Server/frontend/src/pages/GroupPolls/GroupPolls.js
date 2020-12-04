@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
-import "./GroupPolls.scss";
 import {MDBContainer} from "mdbreact";
 
 export default class GroupPolls extends Component {
@@ -44,8 +43,8 @@ export default class GroupPolls extends Component {
   }
   render() {
     return (
-      <MDBContainer className="page GroupPolls">
-        <MDBContainer className="Homepage-boxes two-box">
+      <MDBContainer className="page">
+        <MDBContainer className="two-box">
           {/*TODO: put the GroupEditor component here*/}
           {this.state.isMember ? (
             <MDBContainer className="box">
@@ -65,7 +64,7 @@ export default class GroupPolls extends Component {
               {/*TODO: add more (correct) read-only information here*/}
 
               <Link to={"/Groups"}>
-                <button className="btn button">Leave Group</button>
+                <button className="button">Leave Group</button>
               </Link>
             </MDBContainer>
           ) : (
@@ -75,7 +74,7 @@ export default class GroupPolls extends Component {
                 Admin Settings
               </p>
               <Link to={"/polls/123/edit"}>
-                <button className="btn button">Create New Poll</button>
+                <button className="button">Create New Poll</button>
               </Link>
               <p className="fontSizeSmall">
                 {"Total number of polls: " + this.state.polls.length}
@@ -91,21 +90,21 @@ export default class GroupPolls extends Component {
 
               <MDBContainer>
                 <input type="GroupName" placeholder="New Group Name" className="display_none form-control textBox" id="groupText" />
-                <button id="groupBtn" className="btn button" onClick={() => this.toggleTextBox("groupText","#groupBtn","Change Group Name")}>Change Group Name</button>
+                <button id="groupBtn" className="button" onClick={() => this.toggleTextBox("groupText","#groupBtn","Change Group Name")}>Change Group Name</button>
               </MDBContainer>
 
               <MDBContainer>
                 <input type="AddStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="addText" />
-                <button id="addBtn" className="btn button" onClick={() => this.toggleTextBox("addText","#addBtn","Add Student")}>Add Student</button>
+                <button id="addBtn" className="button" onClick={() => this.toggleTextBox("addText","#addBtn","Add Student")}>Add Student</button>
               </MDBContainer>
 
               <MDBContainer>
                 <input type="RemoveStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="removeText" />
-                <button id="removeBtn" className="btn button" onClick={() => this.toggleTextBox("removeText","#removeBtn","Remove Student")}>Remove Student</button>
+                <button id="removeBtn" className="button" onClick={() => this.toggleTextBox("removeText","#removeBtn","Remove Student")}>Remove Student</button>
               </MDBContainer>
 
               <Link to={"/Groups"}>
-                <button className="btn button">Delete this Group</button>
+                <button className="button">Delete this Group</button>
               </Link>
             </MDBContainer>
           )
@@ -121,7 +120,7 @@ export default class GroupPolls extends Component {
               <React.Fragment>
                 {this.state.polls.map((e) => (
                   <Link to={"/polls/" + e.pollId + "/view"}>
-                    <button style={{  width: "17em" }} className="btn button">{"Poll " + e.pollId + ": " + e.label}</button>
+                    <button style={{  width: "17em" }} className="button">{"Poll " + e.pollId + ": " + e.label}</button>
                   </Link>
                 ))}
               </React.Fragment>

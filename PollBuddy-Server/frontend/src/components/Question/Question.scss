@@ -1,82 +1,58 @@
-.Question-img-fluid {
-    text-align: center;
-    display: block;
-    margin: 8px;
+.question-img-fluid {
+  display: block;
+  margin: 8px;
 }
 
-.question-label-bubble{
-    //height:3em;
-    margin: 8px 16px;
-    height: fit-content;
-    padding: 0.4em;
-    border-radius: 100px;
-    display: inline-block;
-    text-align: center;
-    border: 2px solid var(--base-purple-logo-bg);
-    box-shadow: 0px 2px 9px 0px rgba(70,70,70,0.6);
+.question-label-bubble {
+  margin: 8px 16px 8px 0;
+  padding: 5px;
+  border-radius: 100%;
+  display: inline-block;
+  text-align: center;
+  border: 2px solid var(--base-purple-logo-bg);
+  width: var(--font-size-large);
+  height: var(--font-size-large);
 }
 
-.question-btn-container{
-   align-items: start;
-   width: 100%;
+.question-btn-and-text {
+  display: block;
+  transition: var(--default-transition);
 }
 
-.question-btn-and-text{
-    color: white;
-    display: block;
-    width: fit-content;
+.question-btn-and-text:hover {
+  color: var(--light-purple-logo-text);
+  cursor: pointer;
 }
 
-.question-btn-and-text:hover{
-    color: var(--light-purple-logo-text);
-    cursor: pointer;
+.question-btn-and-text:hover .question-label-bubble {
+  box-shadow: 0 0 0 2px var(--dark-purple-main-background);
 }
 
-.question-btn-and-text:hover .question-label-bubble{
-    box-shadow: 0px 2px 9px 4px rgba(70,70,70,0.6);
-}
-
-.question-label-bubble-inactive{
-    width: 1.4rem;
-    height: 1.4rem;
-    background: transparent;
+.question-label-bubble-inactive {
+  background: transparent;
 }
 
 .question-label-bubble-active {
-    width: 1.4rem;
-    height: 1.4rem;
-    background: var(--base-purple-logo-bg);
+  background: var(--base-purple-logo-bg);
 }
 
-.question_component-question{
-    margin-bottom: 1em;
+.question-title {
+  font-size: var(--font-size-large);
+  margin: 8px 0;
 }
 
-.question-title{
-    font-size: var(--head-font-size);
-    margin: 8px;
-    text-align: start;
+.time-info {
+  color: var(--white-most-text) !important;
 }
 
-.question-text{
-    margin: 8px;
-    font-size: var(--font-size-large);
+.time-info:hover {
+  cursor: default !important;
 }
 
-#question-box{
-    //align-items: start;
-    min-width: 30%;
-    max-width: 50%;
+.time-icon {
+  margin-right: 5px;
 }
 
-.time-info{
-    background: var(--base-purple-logo-bg);
-    padding: 0.75em;
-    border-radius: 200em;
-    margin-top: 10px;
+.question-num {
+  font-size: var(--font-size-small);
 }
-
-.time-icon{
-    margin-right: 5px;
-}
-

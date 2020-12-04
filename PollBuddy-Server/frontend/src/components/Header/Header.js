@@ -32,7 +32,6 @@ export default class Header extends Component {
         <a href = "/">
           <img src = {logo} className = "Header-bar-logo" alt = "logo" />
         </a>
-        {this.props.title}
         <Dropdown />
       </header>
     );

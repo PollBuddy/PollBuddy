@@ -40,7 +40,7 @@ export default class PollCode extends Component {
           <p style={{color: "red", textAlign: "center"}}>{this.state.errMsg}</p>
         </MDBContainer>
         <Link to={this.state.valid ? "/polls/" + this.state.code + "/view" : ""}>
-          <button className = "btn button" onClick={this.submitCode}>
+          <button className = "button" onClick={this.submitCode}>
             Join Poll
           </button>
         </Link>

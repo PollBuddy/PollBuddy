@@ -1,12 +1,5 @@
 .Homepage-logo {
-  height: 200px;
-}
-.Homepage-boxes {
-  margin: 50px 0 0;
-}
-.Homepage-boxes .box {
-  width: calc((70% - 50px) / 2);
-}
-.Homepage-boxes .box:first-child {
-  margin-right: 50px;
+  max-width: 414px;
+  width: calc(100% - 2 * var(--box-margin));
+  height: auto;
 }

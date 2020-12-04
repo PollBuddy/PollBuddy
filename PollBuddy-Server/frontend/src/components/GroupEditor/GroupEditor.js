@@ -148,7 +148,7 @@ export default class GroupEditor extends Component {
               onInput={this.onInput} />
           </MDBContainer>
           {this.checkError()}
-          <button className="btn button" onClick={this.onSubmit}>
+          <button className="button" onClick={this.onSubmit}>
             {this.props.new ? "Create Group": "Save Changes"}
           </button>
         </MDBContainer>

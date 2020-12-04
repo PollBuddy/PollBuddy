@@ -4,7 +4,6 @@ import autosize from "autosize";
 import {MDBContainer} from "mdbreact";
 import PhoneInput from "react-phone-input-2";
 import "mdbreact/dist/css/mdb.css";
-import "./Contact.scss";
 
 export default class Contact extends Component {
 
@@ -20,7 +19,7 @@ export default class Contact extends Component {
 
   render() {
     return(
-      <MDBContainer fluid className="page Contact">
+      <MDBContainer fluid className="page">
         <MDBContainer className = "box">
           <p className="fontSizeLarge">
             Looking to get in touch with a developer? Shoot an email over to <a href="mailto:contact@pollbuddy.app">contact@pollbuddy.app</a> or click the button below to open a support ticket form.
@@ -30,7 +29,7 @@ export default class Contact extends Component {
             problems, such as bugs or design complaints/suggestions, by <a href="https://github.com/PollBuddy/PollBuddy/issues/new/choose">opening an issue</a> on our <a href="https://github.com/PollBuddy/PollBuddy">GitHub repository.</a>
           </p>
           <button
-            className="btn button"
+            className="button"
             style={{ display: this.state.formUp ? "none" : ""}}
             onClick={() => this.setState({ formUp: true })}
           >
@@ -127,7 +126,7 @@ export default class Contact extends Component {
               maxLength="500"
               placeholder="500 character limit"
             ></textarea>
-            <button className="btn button" onClick={() => this.setState({ formUp: false })}>
+            <button className="button" onClick={() => this.setState({ formUp: false })}>
               Send Ticket
             </button>
           </MDBContainer>
