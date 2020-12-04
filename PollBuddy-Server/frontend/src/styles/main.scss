@@ -171,6 +171,7 @@ textarea {
   flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
+  width: 100%;
 }
 
 .two-box:not(:first-child), .box:not(:first-child) {
@@ -178,7 +179,7 @@ textarea {
 }
 
 .two-box .box {
-  width: calc(100% - 2 * var(--box-margin));
+  width: calc(100% - 2 * var(--box-margin)) !important;
   max-width: none !important;
 }
 
