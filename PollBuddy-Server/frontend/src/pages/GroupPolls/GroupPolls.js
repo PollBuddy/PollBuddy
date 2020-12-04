@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
-import "./GroupPolls.scss";
 import {MDBContainer} from "mdbreact";
 
 export default class GroupPolls extends Component {
