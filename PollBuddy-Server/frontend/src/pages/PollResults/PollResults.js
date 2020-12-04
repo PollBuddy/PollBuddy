@@ -125,9 +125,8 @@ export default class PollResults extends Component {
       );
     } else if (!this.state.doneLoading) {
       return (
-        <MDBContainer>
+        <MDBContainer className="page">
           <LoadingWheel/>
-          <button className="button" onClick={this.stopLoading}>End Loading</button>
         </MDBContainer>
       );
     } else {
