@@ -211,37 +211,3 @@ a:hover {
   text-decoration: underline;
 }
 
-.groups_removable {
-  color: var(--light-purple-logo-text);
-  font-weight: 900;
-  margin-left: 10px;
-  text-decoration: none;
-  padding: 5px;
-  transition: var(--default-transition);
-}
-
-.groups_removable:hover {
-  color: var(--white-most-text);
-  cursor: pointer;
-}
-
-.leave_groups_dialog {
-  position: absolute;
-  background-color: var(--dark-purple-main-background);
-  font-weight: bold;
-  height: 200px;
-  width: 350px;
-  padding: 20px;
-  border-radius: 40px;
-}
-
-.leave_group_button {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-}
-
-//for group buttons on the Groups page
-.width-20em{
-  width: 20em;
-}

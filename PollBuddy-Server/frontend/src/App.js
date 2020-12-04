@@ -27,8 +27,6 @@ import Contact from "./pages/Contact/Contact";
 import About from "./pages/About/About";
 import QuestionEnded from "./pages/QuestionEnded/QuestionEnded";
 import AnswerRecorded from "./pages/AnswerRecorded/AnswerRecorded";
-import AdminSettings from "./pages/AdminSettings/AdminSettings";
-import MemberSettings from "./pages/MemberSettings/MemberSettings";
 import LoginDefault from "./pages/LoginDefault/LoginDefault";
 import LoginWithSchool from "./pages/LoginWithSchool/LoginWithSchool";
 import Code from "./pages/Code/Code";
@@ -145,9 +143,9 @@ export default class App extends React.Component {
             </Route>
 
             {/* Poll Results Page */}
-            <Route exact path="/polls/:pollID/results">
-              <PollResults updateTitle={this.updateTitle}/>
-            </Route>
+            <Route exact path="/polls/:pollID/results"
+              render={ (props) => (<PollResults {...props} updateTitle={this.updateTitle} />) }
+            />
 
             {/* My Poll Histories Page */}
             <Route exact path="/polls/history">
@@ -224,17 +222,6 @@ export default class App extends React.Component {
 
 
             {/* --- Other Pages --- */}
-            {/* Note: the following 3 pages are likely to be removed soon */}
-
-            {/* Admin Settings Page */}
-            <Route exact path="/adminSettings">
-              <AdminSettings updateTitle={this.updateTitle} />
-            </Route>
-
-            {/* Member Settings Page */}
-            <Route exact path="/memberSettings">
-              <MemberSettings updateTitle={this.updateTitle} />
-            </Route>
 
             {/* Template Page */}
             <Route exact path="/template">
