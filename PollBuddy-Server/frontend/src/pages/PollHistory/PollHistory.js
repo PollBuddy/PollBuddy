@@ -35,11 +35,11 @@ export default class Groups extends Component {
       } else {
         admin_display = <React.Fragment>
           {this.state.polls_admin.map(polls_admin => (
-            <li key={polls_admin.id} className={polls_admin.title}>
+            <div key={polls_admin.id} className={polls_admin.title}>
               <Link to={"/polls/" + polls_admin.id + "/results"}>
-                <button className="btn button">{polls_admin.title}</button>
+                <button style={{  width: "20em" }} className="button">{polls_admin.title}</button>
               </Link>
-            </li>
+            </div>
           ))}
         </React.Fragment>;
       }
@@ -48,11 +48,11 @@ export default class Groups extends Component {
       } else {
         member_display = <React.Fragment>
           {this.state.polls_member.map(polls_member => (
-            <li key={polls_member.id} className={polls_member.title}>
+            <div key={polls_member.id} className={polls_member.title}>
               <Link to={"/polls/" + polls_member.id + "/results"}>
-                <button className="btn button">{polls_member.title}</button>
+                <button style={{  width: "20em" }} className="button">{polls_member.title}</button>
               </Link>
-            </li>
+            </div>
           ))}
         </React.Fragment>;
       }

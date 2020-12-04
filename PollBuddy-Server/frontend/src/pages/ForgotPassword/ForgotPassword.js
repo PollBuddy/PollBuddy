@@ -13,9 +13,7 @@ export default class ForgotPassword extends Component {
     return (
       <MDBContainer fluid className="page">
         <MDBContainer fluid className="box">
-          <p className="fontSizeLarge">
-            Forgot Password?
-          </p>
+          <h1>Forgot Your Password?</h1>
           <p>
             Enter your email and we will send you a reset.
           </p>
@@ -24,7 +22,7 @@ export default class ForgotPassword extends Component {
             <input placeholder="Enter email" className="form-control textBox" id="emailText"/>
           </MDBContainer>
           <Link to={"/login/reset"}>
-            <button className="btn button">Reset Password</button>
+            <button className="button">Reset Password</button>
           </Link>
 
         </MDBContainer>

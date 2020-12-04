@@ -22,25 +22,25 @@ export default class registerWithSchool extends Component {
           <p className="bold fontSizeLarge">
             Login with School
           </p>
-          <p className="width-90 fontSizeSmall">
+          <p className="fontSizeSmall">
             To login, enter your school name or login using RPI's CAS.
           </p>
-          <p className="width-90 fontSizeSmall" id="schoolNameText">
+          <p className="fontSizeSmall" id="schoolNameText">
             School Name:
           </p>
 
-          <SchoolPicker 
+          <SchoolPicker
             value={this.state.value}
             onChange={e => this.setState({ value: e.target.value })}
             onSelect={value => this.setState({ value })}
           />
 
           <Link to={"/accountinfo"}>
-            <button className="btn button">Submit</button>
+            <button className="button">Submit</button>
           </Link>
 
           <form>
-            <button className="btn button"
+            <button className="button"
               formAction="https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Fcms.union.rpi.edu%2Flogin%2Fcas%2F%3Fnext%3Dhttps%253A%252F%252Fwww.google.com%252F">
               CAS (I'm an RPI student (TODO: Integrate with school selector))
             </button>

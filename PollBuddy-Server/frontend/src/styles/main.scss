@@ -10,17 +10,19 @@
   --gray-placeholder-text: #707070;
 
   --main-font: 'Baloo 2';
-  --font-size: 1.2rem;
-  --head-font-size: 1.8rem;
-  --font-size-large: 1.4rem;
   --font-size-small: 1rem;
+  --font-size: 1.2rem;
+  --font-size-large: 1.4rem;
   --line-height: 1.2;
   --default-transition: all 0.2s ease-in-out;
 
 
   // header + footer heights + margin to make calculating page height easier
-  --header-height: calc(var(--head-font-size) + 40px);
+  --header-inner-height: 3rem;
+  --header-height: calc(var(--header-inner-height) + 20px);
   --footer-height: calc(4 * (var(--font-size-small) + 20px) + 20px);
+  --box-margin: 20px;
+  --box-padding: 25px;
 }
 
 @media only screen and (min-width: 420px) {
@@ -46,8 +48,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-bottom: calc(50px + var(--footer-height));
-  min-height: calc(100vh - var(--header-height) - var(--footer-height) - 100px);
+  min-height: calc(100vh - var(--header-height) - var(--footer-height) - 2 * var(--box-margin));
 }
 
 h1, .fontSizeLarge {
@@ -55,7 +56,11 @@ h1, .fontSizeLarge {
   font-weight: bold;
 }
 
-p, ul, ol, h1, h2 {
+h1 {
+  margin: 10px auto;
+}
+
+p, ul, ol, h2 {
   margin: 10px 0;
 }
 
@@ -66,10 +71,6 @@ p, ul, ol, h1, h2 {
 h2 {
   font-size: calc((var(--font-size-large) + var(--font-size)) / 2);
   font-weight: bold;
-}
-
-ul {
-  list-style-type: circle;
 }
 
 li:not(:last-child) {
@@ -84,6 +85,7 @@ li:not(:last-child) {
   box-shadow: none;
   text-transform: uppercase;
   margin: 10px 5px;
+  border: none;
 }
 
 .button, .textBox {
@@ -95,6 +97,11 @@ li:not(:last-child) {
 .button:hover {
   color: var(--white-most-text);
   box-shadow: none;
+  cursor: pointer;
+}
+
+button:focus {
+  outline: none;
 }
 
 .form-group, .textBox {
@@ -140,18 +147,18 @@ textarea {
 }
 
 .box {
-  padding: 30px 50px;
-  border-radius: 40px;
+  padding: calc(var(--box-padding) * 3 / 5) var(--box-padding);
+  border-radius: calc(var(--box-padding) * 4 / 5);
   background: var(--darkest-purple-header-color);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   box-sizing: border-box;
+  width: calc(100% - 2 * var(--box-margin));
 }
 
-.box:only-child {
-  max-width: 50%;
+.box * {
+  max-width: 100%;
 }
 
 .box-body-text {
@@ -160,10 +167,96 @@ textarea {
 
 .two-box {
   display: flex;
-  width: 100%;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: nowrap;
+  align-items: center;
   justify-content: center;
+  width: 100%;
+}
+
+.two-box:not(:first-child), .box:not(:first-child) {
+  margin: var(--box-margin) 0 0;
+}
+
+.two-box .box {
+  width: calc(100% - 2 * var(--box-margin)) !important;
+  max-width: none !important;
+}
+
+.two-box-different {
+  width: 100% !important;
+}
+
+@media only screen and (min-width: 414px) {
+  :root {
+    --box-margin: 30px;
+    --box-padding: 35px;
+  }
+}
+
+@media only screen and (min-width: 667px) {
+  .box {
+    width: auto;
+    max-width: calc(100% - 2 * var(--box-margin));
+  }
+  .box:not(:only-child) {
+    width: calc(100% - 2 * var(--box-margin));
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  :root {
+    --box-margin: 40px;
+    --box-padding: 40px;
+  }
+  .box {
+    width: auto;
+    max-width: 80%;
+  }
+  .box:not(:only-child) {
+    width: 80%;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .box {
+    max-width: 70%;
+  }
+  .box:not(:only-child) {
+    width: 70%;
+  }
+  .two-box {
+    flex-direction: row;
+    align-items: stretch;
+  }
+  .two-box .box {
+    width: calc(50% - 3 * var(--box-margin) / 2) !important;
+  }
+  .two-box .box:not(:first-child) {
+    margin: 0 0 0 var(--box-margin);
+  }
+  .two-box-different .smaller {
+    width: calc(30% - 3 * var(--box-margin) / 2) !important;
+  }
+  .two-box-different .bigger {
+    width: calc(70% - 3 * var(--box-margin) / 2) !important;
+  }
+}
+
+@media only screen and (min-width: 1224px) {
+  :root {
+    --box-margin: 50px;
+    --box-padding: 50px;
+  }
+  .box {
+    max-width: 60%;
+  }
+  .box:not(:only-child) {
+    width: 60%;
+  }
+  .two-box {
+    width: 75%;
+  }
 }
 
 code {
@@ -175,6 +268,7 @@ body {
   background: var(--dark-purple-main-background);
   color: var(--white-most-text);
   font-size: var(--font-size);
+  overflow-wrap: break-word;
 }
 
 body, .button, .textBox {
@@ -184,7 +278,7 @@ body, .button, .textBox {
 
 label {
   display: block;
-  margin: 10px 20px;
+  margin: 10px var(--font-size);
   font-weight: bold;
   text-align: left;
 }
@@ -211,3 +305,7 @@ a:hover {
   text-decoration: underline;
 }
 
+::selection {
+  color: var(--darkest-purple-header-color);
+  background: var(--light-purple-logo-text);
+}

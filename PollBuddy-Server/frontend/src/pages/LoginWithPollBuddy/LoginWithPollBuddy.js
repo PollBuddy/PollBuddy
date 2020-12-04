@@ -72,7 +72,7 @@ export default class LoginWithPollBuddy extends Component {
         <MDBContainer className="box">
           <MDBContainer className="form-group">
             <label htmlFor="emailText">Email:</label>
-            <input type="email" placeholder="sisman@rpi.edu" className="form-control textBox" id="emailText" 
+            <input type="email" placeholder="sisman@rpi.edu" className="form-control textBox" id="emailText"
               onChange={(evt) => { this.setState({email: evt.target.value}); }}/>
             <label htmlFor="passwordText">Password:</label>
             <input type="password" placeholder="••••••••••••" className="form-control textBox" id="passwordText"
@@ -80,7 +80,7 @@ export default class LoginWithPollBuddy extends Component {
           </MDBContainer>
 
           <p style={{color: "red"}}>{ this.state.error }</p>
-          <button className = "btn button" onClick={this.handleLogin}>Submit</button>
+          <button className = "button" onClick={this.handleLogin}>Submit</button>
 
           <a className="Login-link" href = "/register">
             Register

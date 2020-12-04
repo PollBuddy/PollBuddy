@@ -49,15 +49,15 @@ export default class Groups extends Component {
       this.setState({ leaveGroupButtonText: "Leave Group" });
     }
   };
-  
+
   handleClick = (event) => {
-    // call prompt() with custom message to get user input from alert-like dialog 
+    // call prompt() with custom message to get user input from alert-like dialog
     const groupCode = prompt('Please enter your group code');
     // combine the group code into URL and redirect to the next page
     window.location.replace("/groups/" + groupCode + "/polls");
   }
 
-  render() { 
+  render() {
     const { showXs } = this.state;
     if(this.state.error != null){
       return (
@@ -71,9 +71,9 @@ export default class Groups extends Component {
       );
     } else if(!this.state.doneLoading){
       return (
-        <MDBContainer>
+        <MDBContainer className="page">
           <LoadingWheel/>
-          <button className="btn button" onClick={this.stopLoading}>End Loading</button>
+          <button className="button" onClick={this.stopLoading}>End Loading</button>
         </MDBContainer>
       );
     } else {
@@ -89,7 +89,7 @@ export default class Groups extends Component {
               <React.Fragment>
                 {this.state.admin_groups.map((e) => (
                   <Link to={"/groups/" + e.groupId + "/polls"}>
-                    <button style={{  width: "20em" }} className="btn button">{e.label}</button>
+                    <button style={{  width: "20em" }} className="button">{e.label}</button>
                   </Link>
                 ))}
               </React.Fragment>
@@ -104,7 +104,7 @@ export default class Groups extends Component {
               <React.Fragment>
                 {this.state.member_groups.map((e) => (
                   <Link to={"/groups/" + e.groupId + "/polls"}>
-                    <button style={{  width: "20em" }} className="btn button">{e.label}</button>
+                    <button style={{  width: "20em" }} className="button">{e.label}</button>
                   </Link>
                 ))}
               </React.Fragment>
@@ -114,10 +114,10 @@ export default class Groups extends Component {
               Group Management:
             </p>
             <Link to={"/groups/new"}>
-              <button className="btn button">New Group</button>
+              <button className="button">New Group</button>
             </Link>
-            <button className="btn button" onClick={this.handleClick}>Join Group</button>
-            <button className="btn button" onClick={this.toggleLeaveGroup}>{this.state.leaveGroupButtonText}</button>
+            <button className="button" onClick={this.handleClick}>Join Group</button>
+            <button className="button" onClick={this.toggleLeaveGroup}>{this.state.leaveGroupButtonText}</button>
             {this.state.isOpen && <Dialog onClose={(e) => this.setState({isOpen: false})} />}
           </MDBContainer>
         </MDBContainer>
@@ -135,9 +135,9 @@ function LeaveGroupIcon(props) {
 function Dialog(props) {
   return (
     <div className="leave_groups_dialog">
-      <button onClick={props.onClose} className="btn button">X</button>
+      <button onClick={props.onClose} className="button">X</button>
       <p>Are you sure you want to leave this group?</p>
-      <button onClick={props.onClose} className="btn button leave_group_button">Yes</button>
+      <button onClick={props.onClose} className="button leave_group_button">Yes</button>
     </div>
   );
 }

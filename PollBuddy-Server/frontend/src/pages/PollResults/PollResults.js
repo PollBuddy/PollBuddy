@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Bar } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import "./PollResults.scss";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 
 export default class PollResults extends Component {
@@ -126,29 +125,26 @@ export default class PollResults extends Component {
       );
     } else if (!this.state.doneLoading) {
       return (
-        <MDBContainer>
+        <MDBContainer className="page">
           <LoadingWheel/>
-          <button className="btn button" onClick={this.stopLoading}>End Loading</button>
         </MDBContainer>
       );
     } else {
       return (
         <MDBContainer fluid className="page">
-          <MDBContainer fluid className="two-box">
-            <MDBContainer fluid className="PollResults-graph box">
-              <p className="fontSizeLarge">
-                {"Question " + this.state.questionData.Results[0].QuestionNumber + ": " + this.state.questionData.Results[0].QuestionText}
-              </p>
-              <p>
-                {"Correct Answers: " + this.state.correctAnswers}
-              </p>
-              <p>
-                {"Total Number of Answers: " + this.state.dataBar.datasets[0].data.reduce((a, b) => a + b, 0)}
-              </p>
-              {/*The MDBReact Bar component was built on top of chart.js.
-                      Look at https://www.chartjs.org/docs/latest/ for more info*/}
-              <Bar data={this.state.dataBar} options={this.state.barChartOptions}/>
-            </MDBContainer>
+          <MDBContainer fluid className="box">
+            <p className="fontSizeLarge">
+              {"Question " + this.state.questionData.Results[0].QuestionNumber + ": " + this.state.questionData.Results[0].QuestionText}
+            </p>
+            <p>
+              {"Correct Answers: " + this.state.correctAnswers}
+            </p>
+            <p>
+              {"Total Number of Answers: " + this.state.dataBar.datasets[0].data.reduce((a, b) => a + b, 0)}
+            </p>
+            {/*The MDBReact Bar component was built on top of chart.js.
+                    Look at https://www.chartjs.org/docs/latest/ for more info*/}
+            <Bar data={this.state.dataBar} options={this.state.barChartOptions}/>
           </MDBContainer>
         </MDBContainer>
       );
