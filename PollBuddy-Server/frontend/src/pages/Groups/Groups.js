@@ -12,17 +12,14 @@ export default class Groups extends Component {
       error: null,
       doneLoading: false,
       admin_groups: [
-        // {id: 123, label: "CSCI 1200 - Data Structures"},
-        // {id: 123, label: "CSCI 2200 - Foundations of Computer Science"}
+        {groupId: 123, label: "CSCI 1200 - Data Structures"},
+        {groupId: 123, label: "CSCI 2200 - Foundations of Computer Science"}
       ],
       member_groups: [
-        {id: 123, label: "CSCI 2300 - Intro to Algorithms"},
-        {id: 123, label: "CSCI 2500 - Computer Organization"},
-        {id: 123, label: "CSCI 2960 - RCOS"}
-      ],
-      showXs: false,
-      isOpen: false,
-      leaveGroupButtonText: "Leave Group"
+        {groupId: 123, label: "CSCI 2300 - Intro to Algorithms"},
+        {groupId: 123, label: "CSCI 2500 - Computer Organization"},
+        {groupId: 123, label: "CSCI 2960 - RCOS"}
+      ]
     };
 
     if(!localStorage.getItem("loggedIn")){
@@ -91,12 +88,9 @@ export default class Groups extends Component {
             ) : (
               <React.Fragment>
                 {this.state.admin_groups.map((e) => (
-                  <div>
-                    <Link to={"/groups/" + e.id + "/polls"}>
-                      <button className="btn button width-20em">{e.label}</button>
-                    </Link>
-                    {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
-                  </div>
+                  <Link to={"/groups/" + e.groupId + "/polls"}>
+                    <button style={{  width: "20em" }} className="btn button">{e.label}</button>
+                  </Link>
                 ))}
               </React.Fragment>
             )}
@@ -109,12 +103,9 @@ export default class Groups extends Component {
             ) : (
               <React.Fragment>
                 {this.state.member_groups.map((e) => (
-                  <div>
-                    <Link to={"/groups/" + e.id + "/polls"}>
-                      <button className="btn button width-20em">{e.label}</button>
-                    </Link>
-                    {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
-                  </div>
+                  <Link to={"/groups/" + e.groupId + "/polls"}>
+                    <button style={{  width: "20em" }} className="btn button">{e.label}</button>
+                  </Link>
                 ))}
               </React.Fragment>
             )}
