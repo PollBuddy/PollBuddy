@@ -149,19 +149,16 @@ router.post("/register", function (req, res, next) {
     .test(requestBody.Password);
 
   let errorMsg = {};
+
   if(!firstnameValid){
     errorMsg["firstName"] = "Invalid firstname format!";
-  }
-  else if(!lastnameValid){
+  }else if(!lastnameValid){
     errorMsg["lastName"] = "Invalid lastname format!";
-  }
-  else if(!userValid){
+  }else if(!userValid){
     errorMsg["userName"] = "Invalid username format!";
-  }
-  else if(!emailValid){
+  }else if(!emailValid){
     errorMsg["email"] = "Invalid email format!";
-  }
-  else if(!passValid){
+  }else if(!passValid){
     errorMsg["password"] = "Invalid password format!";
   }
 
@@ -179,8 +176,7 @@ router.post("/register", function (req, res, next) {
         return res.sendStatus(203);
       }
     });
-  }
-  else {
+  }else {
     return res.send(errorMsg);
   }
 });
