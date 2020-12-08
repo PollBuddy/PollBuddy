@@ -62,7 +62,7 @@ class RegisterWithPollBuddy extends Component {
     this.setState({lastnameValid: lastnameValid});
 
 
-    if (!userValid || !emailValid || !passValid || !firstnameValid || !firstnameValid) {
+    if (!userValid || !emailValid || !passValid || !lastnameValid || !firstnameValid) {
       return;
     }
 
@@ -76,16 +76,28 @@ class RegisterWithPollBuddy extends Component {
         Email: this.state.email.toLowerCase(),
         Password: this.state.password
       })
-    })
-      .then(response => response.text())
+    }).then(response => response.text())
       .then(response => {
-        // email already exists in database, don't login
+        // the backend api (user/register) has three return values:
+        // 1. an error array: {firstname: "Invalid firstname format!", lastname: "Invalid lastname format!"}
+        // 2. a string: Exists, which means the email address has already been registered
+        // 3. status 203: everything is ok
+
+        // print and check the reponse for debugging (can be deleted later)
+        console.log(response);
         if (response === "Exists") {
           this.setState({emailExists: true});
-        } else {
-          localStorage.setItem("loggedIn", true);
-          // redirect to groups page
-          this.props.history.push("/groups");
+        } 
+        else {
+          try {
+            let result2 = JSON.parse(response);
+            console.log("You have following errors:");
+            console.log(result2);
+          } catch(e) {
+            localStorage.setItem("loggedIn", true);
+            // redirect to groups page
+            this.props.history.push("/groups");
+          } 
         }
       });
   }

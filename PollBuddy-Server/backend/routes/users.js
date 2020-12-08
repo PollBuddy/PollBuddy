@@ -128,23 +128,61 @@ router.get("/login/rpi", rpi.bounce2, function (req, res, next) {
 
 });
 
+function isEmpty(obj) {
+  for(var prop in obj) {
+    if(obj.hasOwnProperty(prop)) {
+      return false;
+    }
+  }
+
+  return JSON.stringify(obj) === JSON.stringify({});
+}
 
 router.post("/register", function (req, res, next) {
   var requestBody = req.body;
 
-  mongoConnection.getDB().collection("users").insertOne({
-    FirstName: requestBody.FirstName,
-    LastName: requestBody.LastName,
-    Username: requestBody.Username,
-    Email: requestBody.Email,
-    Password: bcrypt.hashSync(requestBody.Password, 10)
-  }, (err, result) => {
-    if (err) {
-      return res.send("Exists");
-    } else {
-      return res.sendStatus(200);
-    }
-  });
+  const firstnameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(requestBody.FirstName);
+  const lastnameValid = new RegExp(/^[a-zA-Z]{0,256}$/).test(requestBody.LastName);
+  const userValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(requestBody.Username);
+  const emailValid = new RegExp(/^[a-zA-Z0-9_.]+@\w+\.\w+$/).test(requestBody.Email);
+  const passValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/)
+    .test(requestBody.Password);
+
+  let errorMsg = {};
+  if(!firstnameValid){
+    errorMsg["firstName"] = "Invalid firstname format!";
+  }
+  else if(!lastnameValid){
+    errorMsg["lastName"] = "Invalid lastname format!";
+  }
+  else if(!userValid){
+    errorMsg["userName"] = "Invalid username format!";
+  }
+  else if(!emailValid){
+    errorMsg["email"] = "Invalid email format!";
+  }
+  else if(!passValid){
+    errorMsg["password"] = "Invalid password format!";
+  }
+
+  if (isEmpty(errorMsg)) {
+    mongoConnection.getDB().collection("users").insertOne({
+      FirstName: requestBody.FirstName,
+      LastName: requestBody.LastName,
+      Username: requestBody.Username,
+      Email: requestBody.Email,
+      Password: bcrypt.hashSync(requestBody.Password, 10)
+    }, (err, result) => {
+      if (err) {
+        return res.send("Exists");
+      } else {
+        return res.sendStatus(203);
+      }
+    });
+  }
+  else {
+    return res.send(errorMsg);
+  }
 });
 
 // stored user session data
