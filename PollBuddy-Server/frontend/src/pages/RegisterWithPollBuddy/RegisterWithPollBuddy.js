@@ -46,8 +46,7 @@ class RegisterWithPollBuddy extends Component {
           passValid = false;
           break;
         }
-      }
-      else {
+      } else {
         lastChara = passWord.charAt(i);
         count = 1;
       }
