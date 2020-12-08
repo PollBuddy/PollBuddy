@@ -87,8 +87,7 @@ class RegisterWithPollBuddy extends Component {
         console.log(response);
         if (response === "Exists") {
           this.setState({emailExists: true});
-        } 
-        else {
+        } else {
           try {
             let result2 = JSON.parse(response);
             console.log("You have following errors:");
