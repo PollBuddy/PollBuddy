@@ -130,7 +130,7 @@ router.get("/login/rpi", rpi.bounce2, function (req, res, next) {
 
 function isEmpty(obj) {
   for(var prop in obj) {
-    if(obj.hasOwnProperty(prop)) {
+    if(Object.prototype.hasOwnProperty.call(obj,prop)) {
       return false;
     }
   }
