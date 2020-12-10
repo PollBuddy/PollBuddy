@@ -143,4 +143,22 @@ router.get("/:id/users", function (req, res, next) {
   });
 });
 
+router.get("/join", function (req, res, next) {
+  return res.sendStatus(404);
+});
+
+router.post("/id:/join", function (res, req, next) {
+  var userID = req.session["UserID"];
+  if (userID === undefined) {
+    res.status(401).send({ error: "Not logged in" });
+  }
+  
+  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+  mongoConnection.getDB().collection("groups").updateOne({ "_id:": id }, { $addToSet: { Users: userID } }, (err, item) => {
+    if (err) {
+      return res.sendStatus(500);
+    }
+  })
+});
+
 module.exports = router;
