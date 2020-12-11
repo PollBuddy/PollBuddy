@@ -118,10 +118,10 @@ export default class Groups extends Component {
             </Link>
             <button className="btn button" onClick={(e) => this.setState({ openJoinGroupPopup: true })}>Join Group</button>
             <Popup isOpen={this.state.openJoinGroupPopup} onClose={(e) => this.setState({ openJoinGroupPopup: false })}>
-              <div>Please enter your group code:</div>
               <form onSubmit={this.handleSubmit}>
-                <input type="text" name="groupCode" onChange={this.handleChange}/>
-                <input className="btn button" type="submit" value="OK"/>
+                <label>Please enter your group code:</label>
+                <input className="form-control textBox" type="text" name="groupCode" onChange={this.handleChange}/>
+                <input className="btn button float-right" type="submit" value="OK"/>
               </form>
             </Popup>
           </MDBContainer>
