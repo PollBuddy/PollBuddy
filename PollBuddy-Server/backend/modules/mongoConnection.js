@@ -22,6 +22,8 @@ module.exports = {
           console.log("Database connected");
           // Make email unique index
           db.collection("users").createIndex({"Email": 1}, {unique: true});
+          // Similarly, make username a unique index
+          db.collection("users").createIndex({"UserName": 2}, {unique: true});
           callback(true);
         }
       });
