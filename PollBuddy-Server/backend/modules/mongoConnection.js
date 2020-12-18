@@ -8,10 +8,15 @@ var db;
 // attributes are unique. This will run on every DB connect, but it should silently do nothing if the indexes
 // already exist in the database.
 function createIndexes() {
-  // Make email unique index
+  // Create unique indexes
   db.collection("users").createIndex({"Email": 1}, {unique: true});
-  // Similarly, make username a unique index
-  db.collection("users").createIndex({"UserName": 2}, {unique: true});
+  db.collection("users").createIndex({"UserName": 1}, {unique: true});
+
+  // Create non-unique indexes
+  // Note: May be desirable to add other details like Name,eMail in the future to the SchoolAffiliation index
+  db.collection("users").createIndex({"SchoolAffiliation": 1});
+  db.collection("poll_answers").createIndex({"PollID": 1});
+  db.collection("poll_answers").createIndex({"UserID": 1});
 }
 
 module.exports = {
