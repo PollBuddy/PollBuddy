@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import { MDBContainer } from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import Popup from "../../components/Popup/Popup";
 
 export default class Groups extends Component {
 
@@ -19,7 +20,9 @@ export default class Groups extends Component {
         {groupId: 123, label: "CSCI 2300 - Intro to Algorithms"},
         {groupId: 123, label: "CSCI 2500 - Computer Organization"},
         {groupId: 123, label: "CSCI 2960 - RCOS"}
-      ]
+      ],
+      openJoinGroupPopup: false,
+      groupCode: ""
     };
 
     if(!localStorage.getItem("loggedIn")){
@@ -55,6 +58,13 @@ export default class Groups extends Component {
     const groupCode = prompt('Please enter your group code');
     // combine the group code into URL and redirect to the next page
     window.location.replace("/groups/" + groupCode + "/polls");
+  }
+  handleSubmit = (e) => {
+    e.preventDefault();
+    window.location.href = "/groups/" + this.state.groupCode + "/polls";
+  }
+  handleChange = (e) => {
+    this.setState({groupCode: e.target.value});
   }
 
   render() {
@@ -116,7 +126,14 @@ export default class Groups extends Component {
             <Link to={"/groups/new"}>
               <button className="button">New Group</button>
             </Link>
-            <button className="button" onClick={this.handleClick}>Join Group</button>
+            <button className="btn button" onClick={(e) => this.setState({ openJoinGroupPopup: true })}>Join Group</button>
+            <Popup isOpen={this.state.openJoinGroupPopup} onClose={(e) => this.setState({ openJoinGroupPopup: false })}>
+              <form onSubmit={this.handleSubmit}>
+                <label>Please enter your group code:</label>
+                <input className="form-control textBox" type="text" name="groupCode" onChange={this.handleChange}/>
+                <input className="btn button float-right" type="submit" value="OK"/>
+              </form>
+            </Popup>
             <button className="button" onClick={this.toggleLeaveGroup}>{this.state.leaveGroupButtonText}</button>
             {this.state.isOpen && <Dialog onClose={(e) => this.setState({isOpen: false})} />}
           </MDBContainer>
