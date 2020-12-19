@@ -25,13 +25,12 @@ fetch(process.env.REACT_APP_BACKEND_URL + "/schools", {
   // handle response
   .then(data => {
     console.log(data); // for testing, can be deleted later
-    schoolLinkDict = data;
-    const schoolNames = Object.keys(data);
-    console.log(schoolNames); // for testing, can be deleted later
-    for (var i = 0; i < schoolNames.length; i++) {
-      schools.push({ key: i, label: schoolNames[i] });
+    for (var i = 0; i < data.length; i++) {
+      schools.push({ key: i, label: data[i][0] });
+      schoolLinkDict[data[i][0]] = data[i][1];
     }
     console.log(schools); // for testing, can be deleted later
+    console.log(schoolLinkDict); // for testing, can be deleted later
   });
 
 const sortItems = (itemA, itemB, value) => {
