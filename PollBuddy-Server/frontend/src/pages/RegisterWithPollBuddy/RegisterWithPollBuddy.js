@@ -11,10 +11,14 @@ class RegisterWithPollBuddy extends Component {
       username: "",
       email: "",
       password: "",
+      firstname: "",
+      lastname: "",
       userValid: true,
       emailValid: true,
       emailExists: false,
       passValid: true,
+      firstnameValid: true,
+      lastnameValid: true,
     };
   }
 
@@ -25,17 +29,40 @@ class RegisterWithPollBuddy extends Component {
   handleRegister() {
     // do input validation
     const userValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(this.state.username);
-    const emailValid = new RegExp(/^[a-zA-Z0-9_.]+@\w+\.\w+$/).test(this.state.email);
-    const passValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/)
+    const emailValid = new RegExp(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/).test(this.state.email);
+    var passValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{10,256}$/)
       .test(this.state.password);
+    const firstnameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(this.state.firstname);
+    const lastnameValid = new RegExp(/^[a-zA-Z]{0,256}$/).test(this.state.lastname);
+
+    // disallow more than 4 of the same characters in a row for password
+    const passWord = this.state.password;
+    var count = 0;
+    var lastChara = "";
+    for (var i = 0; i < passWord.length; i++){
+      if (passWord.charAt(i) === lastChara) {
+        count += 1;
+        if (count > 4) {
+          passValid = false;
+          break;
+        }
+      } else {
+        lastChara = passWord.charAt(i);
+        count = 1;
+      }
+    }
+
 
     // update component's state
     this.setState({userValid: userValid});
     this.setState({emailValid: emailValid});
     this.setState({passValid: passValid});
     this.setState({emailExists: false});
+    this.setState({firstnameValid: firstnameValid});
+    this.setState({lastnameValid: lastnameValid});
 
-    if (!userValid || !emailValid || !passValid) {
+
+    if (!userValid || !emailValid || !passValid || !lastnameValid || !firstnameValid) {
       return;
     }
 
@@ -43,22 +70,33 @@ class RegisterWithPollBuddy extends Component {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
-        FirstName: "",
-        LastName: "",
-        Username: this.state.username,
-        Email: this.state.email,
+        FirstName: this.state.firstname,
+        LastName: this.state.lastname,
+        Username: this.state.username.toLowerCase(),
+        Email: this.state.email.toLowerCase(),
         Password: this.state.password
       })
-    })
-      .then(response => response.text())
+    }).then(response => response.text())
       .then(response => {
-        // email already exists in database, don't login
+        // the backend api (user/register) has three return values:
+        // 1. an error array: {firstname: "Invalid firstname format!", lastname: "Invalid lastname format!"}
+        // 2. a string: Exists, which means the email address has already been registered
+        // 3. status 203: everything is ok
+
+        // print and check the reponse for debugging (can be deleted later)
+        console.log(response);
         if (response === "Exists") {
           this.setState({emailExists: true});
         } else {
-          localStorage.setItem("loggedIn", true);
-          // redirect to groups page
-          this.props.history.push("/groups");
+          try {
+            let result2 = JSON.parse(response);
+            console.log("You have following errors:");
+            console.log(result2);
+          } catch(e) {
+            localStorage.setItem("loggedIn", true);
+            // redirect to groups page
+            this.props.history.push("/groups");
+          } 
         }
       });
   }
@@ -79,16 +117,26 @@ class RegisterWithPollBuddy extends Component {
             <label htmlFor="firstnameText">First Name:</label>
             <input placeholder="SIS" className="form-control textBox" id="firstnameText"
               onChange={(evt) => { this.setState({firstname: evt.target.value}); }}/>
+            {!this.state.firstnameValid &&
+              <ul className="error">
+                <li>First name must be between 1 and 256 characters</li>
+              </ul>
+            }
             <label htmlFor="lastnameText">Last Name:</label>
             <input placeholder="Man" className="form-control textBox" id="lastnameText"
               onChange={(evt) => { this.setState({lastname: evt.target.value}); }}/>
+            {!this.state.lastnameValid &&
+              <ul className="error">
+                <li>Last name must be less than 256 characters</li>
+              </ul>
+            }
             <label htmlFor="usernameText">Username:</label>
             <input placeholder="mans" className="form-control textBox" id="usernameText"
               onChange={(evt) => { this.setState({username: evt.target.value}); }}/>
             {!this.state.userValid &&
               <ul className="error">
                 <li>Username must be between 3 and 32 characters</li>
-                <li>Valid characters: (A-Z), (0-9), (-,_,.)</li>
+                <li>Valid characters: a-z0-9-_ (alphanumeric + underscore + dash)</li>
               </ul>
             }
             <label htmlFor="emailText">Email:</label>
@@ -106,7 +154,7 @@ class RegisterWithPollBuddy extends Component {
             {!this.state.passValid &&
               <ul className="error">
                 <li>Invalid password. Must contain:</li>
-                <li>6 or more characters</li>
+                <li>10 or more characters</li>
                 <li>At least 1 uppercase letter</li>
                 <li>At least 1 number</li>
               </ul>
