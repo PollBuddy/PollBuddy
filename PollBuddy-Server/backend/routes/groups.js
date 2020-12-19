@@ -143,4 +143,28 @@ router.get("/:id/users", function (req, res, next) {
   });
 });
 
+router.get("/id:/join", function (req, res, next) {
+  return res.sendStatus(404);
+});
+
+/**
+ * Adds user to group with given id
+ */
+router.post("/id:/join", function (res, req, next) {
+  var userID = req.session["UserID"];
+  if (userID === undefined) {
+    res.status(401).send({ error: "Not logged in" });
+  }
+  
+  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+  // Add user to group, do nothing if they are already in it
+  mongoConnection.getDB().collection("groups").updateOne({ "_id:": id }, { $addToSet: { Users: userID } }, (err, res) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    // Returns 1 if it was added, 0 if it already existed
+    return res.status(200).send(res.result.nModified);
+  });
+});
+
 module.exports = router;

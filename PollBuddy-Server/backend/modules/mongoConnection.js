@@ -4,6 +4,21 @@ const MongoClient = mongo.MongoClient;
 var client;
 var db;
 
+// This function is used to create the indexes in the database. These help increase performance and ensure certain
+// attributes are unique. This will run on every DB connect, but it should silently do nothing if the indexes
+// already exist in the database.
+function createIndexes() {
+  // Create unique indexes
+  db.collection("users").createIndex({"Email": 1}, {unique: true});
+  db.collection("users").createIndex({"UserName": 1}, {unique: true});
+
+  // Create non-unique indexes
+  // Note: May be desirable to add other details like Name,eMail in the future to the SchoolAffiliation index
+  db.collection("users").createIndex({"SchoolAffiliation": 1});
+  db.collection("poll_answers").createIndex({"PollID": 1});
+  db.collection("poll_answers").createIndex({"UserID": 1});
+}
+
 module.exports = {
   connect: function(callback) {
 
@@ -20,8 +35,8 @@ module.exports = {
         } else {
           db = client.db(process.env.DB_NAME);
           console.log("Database connected");
-          // Make email unique index
-          db.collection("users").createIndex({"Email": 1}, {unique: true});
+
+          createIndexes();
           callback(true);
         }
       });
