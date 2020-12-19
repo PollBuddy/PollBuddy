@@ -22,7 +22,10 @@ export default class Groups extends Component {
         {groupId: 123, label: "CSCI 2960 - RCOS"}
       ],
       openJoinGroupPopup: false,
-      groupCode: ""
+      groupCode: "",
+      leaveGroupButtonText: "Leave Group",
+      showXs: false,
+      isOpen: false
     };
 
     if(!localStorage.getItem("loggedIn")){
