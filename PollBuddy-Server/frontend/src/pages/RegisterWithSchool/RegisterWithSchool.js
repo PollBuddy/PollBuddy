@@ -1,9 +1,9 @@
-import React, {Component} from "react";
-import {MDBContainer} from "mdbreact";
+import React, { Component } from "react";
+import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
-import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";
+import SchoolPicker, {schoolLinkDict} from "../../components/SchoolPicker/SchoolPicker";
 
 export default class RegisterWithSchool extends Component {
   componentDidMount() {
@@ -26,7 +26,7 @@ export default class RegisterWithSchool extends Component {
             To create an account, enter your school name or login using RPI's CAS.
           </p>
           <p>
-            { /* TODO: Add label here */ }
+            { /* TODO: Add label here */}
             School Name:
           </p>
 
@@ -36,16 +36,16 @@ export default class RegisterWithSchool extends Component {
             onSelect={value => this.setState({ value })}
           />
 
-          <Link to={"/account"}>
-            <button className="button">Submit School Name</button>
-          </Link>
-
           <form>
-            <button className="button"
+            <button className="btn button" formAction={schoolLinkDict[this.state.value]}>Submit</button>
+          </form>
+
+          {/* <form>
+            <button className="btn button"
               formAction="https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Fcms.union.rpi.edu%2Flogin%2Fcas%2F%3Fnext%3Dhttps%253A%252F%252Fwww.google.com%252F">
               CAS (I'm an RPI student)
             </button>
-          </form>
+          </form> */}
 
         </MDBContainer>
       </MDBContainer>

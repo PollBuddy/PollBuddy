@@ -74,7 +74,7 @@ app.use((req, res, next) => {
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(usersRouter.user_middleware);
@@ -116,7 +116,7 @@ app.get("/gendata", (req, res) => {
   var log = "";
   var completes = [];
   var elements = [
-    ["test", {SIS: "Man"}],
+    ["test", { SIS: "Man" }],
     ["users", {
       FirstName: "Bill",
       LastName: "Cheese",
@@ -133,8 +133,8 @@ app.get("/gendata", (req, res) => {
       password: "password2!",
       RCS: "stev3"
     }],
-    ["groups", {Name: "RCOS", instructors: ["Turner (should be ID later)"], AssociatedPolls: []}],
-    ["groups", {Name: "Chemistry", instructors: ["Kirover-Snover (should be ID later)"], AssociatedPolls: []}],
+    ["groups", { Name: "RCOS", instructors: ["Turner (should be ID later)"], AssociatedPolls: [] }],
+    ["groups", { Name: "Chemistry", instructors: ["Kirover-Snover (should be ID later)"], AssociatedPolls: [] }],
     ["polls", {
       Name: "Chem 1 Poll 1",
       Questions: ["What is your name?", "What grade are you in?"],
