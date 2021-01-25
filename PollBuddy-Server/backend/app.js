@@ -71,6 +71,10 @@ app.use((req, res, next) => {
   return next();
 });
 
+// Automated Email System
+var email = require("./modules/email.js");
+email.send("hbh7@hbh7.com", "This is a test email", "<b>I hope this works :D</b>");
+
 
 app.use(logger("dev"));
 app.use(express.json());
