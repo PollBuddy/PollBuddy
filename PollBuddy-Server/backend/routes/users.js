@@ -62,7 +62,7 @@ router.post("/login", function (req, res) {
                 req.session["UserID"] = result_db["_id"];
                 req.session["userData"] = {
                   loggedIn: true, 
-                  username: result_db["Username"], 
+                  username: result_db["UserName"],
                   firstName: result_db["FirstName"], 
                   lastName: result_db["LastName"],
                   sessionID: req.session.id
@@ -90,7 +90,7 @@ router.get("/login/rpi", rpi.bounce2, function (req, res, next) {
   // Log the user in on the backend side of things
   if (req.query.ticket) {
     console.log("Locating user to add to session."); // TODO: Remove after testing
-    mongoConnection.getDB().collection("users").findOne({ Username: req.session.cookie.cas_user }, { projection: { _id: false, Username: true } }, (err, result) => {
+    mongoConnection.getDB().collection("users").findOne({ UserName: req.session.cookie.cas_user }, { projection: { _id: false, UserName: true } }, (err, result) => {
       if (err) {
         console.log("Error occurred"); // TODO: Improve error messaging
         console.log(err);
@@ -101,7 +101,7 @@ router.get("/login/rpi", rpi.bounce2, function (req, res, next) {
           // User not registered, TODO: Redirect to registration
           return res.send("User not registered!");
         } else {
-          req.session.UserID = result.Username;
+          req.session.UserID = result.UserName;
         }
       }
     });
@@ -143,7 +143,7 @@ router.post("/register", function (req, res, next) {
 
   const firstnameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(requestBody.FirstName);
   const lastnameValid = new RegExp(/^[a-zA-Z]{0,256}$/).test(requestBody.LastName);
-  const userValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(requestBody.Username);
+  const userValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(requestBody.UserName);
   const emailValid = new RegExp(/^[a-zA-Z0-9_.]+@\w+\.\w+$/).test(requestBody.Email);
   const passValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/)
     .test(requestBody.Password);
@@ -166,7 +166,7 @@ router.post("/register", function (req, res, next) {
     mongoConnection.getDB().collection("users").insertOne({
       FirstName: requestBody.FirstName,
       LastName: requestBody.LastName,
-      Username: requestBody.Username,
+      UserName: requestBody.UserName,
       Email: requestBody.Email,
       Password: bcrypt.hashSync(requestBody.Password, 10)
     }, (err, result) => {
@@ -209,8 +209,8 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
         }
       });
     }
-    if (jsonContent.Username !== undefined) {
-      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { Username: jsonContent.Username } }, function (err, res) {
+    if (jsonContent.UserName !== undefined) {
+      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { UserName: jsonContent.UserName } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -258,8 +258,8 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
         }
       });
     }
-    if (jsonContent.Username !== undefined) {
-      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { Username: jsonContent.Username } }, function (err, res) {
+    if (jsonContent.UserName !== undefined) {
+      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { UserName: jsonContent.UserName } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {

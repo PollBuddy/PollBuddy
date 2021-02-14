@@ -72,7 +72,7 @@ class RegisterWithPollBuddy extends Component {
       body: JSON.stringify({
         FirstName: this.state.firstname,
         LastName: this.state.lastname,
-        Username: this.state.username.toLowerCase(),
+        UserName: this.state.username.toLowerCase(),
         Email: this.state.email.toLowerCase(),
         Password: this.state.password
       })
