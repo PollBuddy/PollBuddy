@@ -122,7 +122,8 @@ router.get("/login/rpi", rpi.bounce2, function (req, res, next) {
           // User not registered
 
           // Delete session information obtained from CAS
-
+          delete req.session.cas_return_to;
+          delete req.session.cas_user;
 
           // Send the user the unregistered user error page
           res.status(401).sendFile("pages/loginRedirect_Unregistered.html", options, function (err2) {
