@@ -87,30 +87,7 @@ router.get("/login/rpi", rpi.bounce2, function (req, res, next) {
   // This runs if the user is logged in successfully, the user is first bounced to the RPI CAS login and only after
   // will they end up in here.
 
-  // Log the user in on the backend side of things
-  if (req.query.ticket) {
-    console.log("Locating user to add to session."); // TODO: Remove after testing
-    mongoConnection.getDB().collection("users").findOne({ Username: req.session.cookie.cas_user }, { projection: { _id: false, Username: true } }, (err, result) => {
-      if (err) {
-        console.log("Error occurred"); // TODO: Improve error messaging
-        console.log(err);
-      } else {
-        console.log("Result found"); // TODO: Remove after testing
-        console.log(result);
-        if (result === null) {
-          // User not registered, TODO: Redirect to registration
-          return res.send("User not registered!");
-        } else {
-          req.session.UserID = result.Username;
-        }
-      }
-    });
-
-  } else {
-    console.log("Ticket not specified."); // TODO: Remove after testing
-  }
-
-  // Redirect the user to the homepage with a nice message
+  // Some options used in the resultant data returned
   var options = {
     root: path.join(__dirname, "../public"),
     dotfiles: "deny",
@@ -119,12 +96,70 @@ router.get("/login/rpi", rpi.bounce2, function (req, res, next) {
       "x-sent": true
     }
   };
-  res.sendFile("pages/loginRedirect.html", options, function (err) {
-    if (err) {
-      console.log(err);
-      res.send(500);
-    }
-  });
+
+  // Log the user in on the backend side of things
+
+  console.log(req.session);
+
+  if (req.session.cas_user) {
+    console.log("Locating user to add to session."); // TODO: Remove after testing
+    mongoConnection.getDB().collection("users").findOne({ UserName: req.session.cas_user }, { projection: { _id: false, UserName: true } }, (err, result) => {
+      if (err) {
+        // Something went wrong
+        // Send the user the login process error page
+        console.log("Database Error Occurred"); // TODO: Improve error messaging
+        console.log(err);
+        res.status(500).sendFile("pages/loginRedirect_Error.html", options, function (err2) {
+          if (err2) {
+            console.log(err2);
+            res.send(500);
+          }
+        });
+      } else {
+        console.log("Result found"); // TODO: Remove after testing
+        console.log(result);
+        if (result === null) {
+          // User not registered
+
+          // Delete session information obtained from CAS
+
+
+          // Send the user the unregistered user error page
+          res.status(401).sendFile("pages/loginRedirect_Unregistered.html", options, function (err2) {
+            if (err2) {
+              console.log(err2);
+              res.send(500);
+            }
+          });
+        } else {
+          // Success!
+          // TODO: Ensure that is really what we want (we probs want to check for the existence of our result)
+
+          // Save some information in the session
+          req.session.UserID = result.UserName;
+
+          // Send the user the login success page
+          res.sendFile("pages/loginRedirect.html", options, function (err2) {
+            if (err2) {
+              console.log(err2);
+              res.send(500);
+            }
+          });
+        }
+      }
+    });
+
+  } else {
+    // Something went wrong
+    // Send the user the login process error page
+    console.log("Error occurred, user got to the rpi login page without logging in"); // TODO: Improve error messaging
+    res.status(500).sendFile("pages/loginRedirect_Error.html", options, function (err2) {
+      if (err2) {
+        console.log(err2);
+        res.send(500);
+      }
+    });
+  }
 
 });
 

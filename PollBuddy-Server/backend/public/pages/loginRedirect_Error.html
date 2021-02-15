@@ -5,13 +5,15 @@
     <title>Logged In Successfully! - Poll Buddy</title>
 </head>
 <body>
-<p>You have logged in successfully! Redirecting in 5 seconds...</p>
+<p>
+    Error: Something has gone wrong with the login process. Please try again in a minute or two. Or now if you're in a hurry, that's fine too. <br />
+    You will be redirected to the login page in 15 seconds...</p>
 <script>
   setTimeout(function(){
     //window.location.href = '/';
   }, 5000);
 </script>
-<p>If you are not redirected, please click <a href="/">here</a>.</p>
+<p>If you are not redirected, please click <a href="/login">here</a>.</p>
 <!-- TODO: This needs to be a path generated from the .env file -->
 </body>
 </html>
