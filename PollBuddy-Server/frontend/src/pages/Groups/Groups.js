@@ -116,9 +116,12 @@ export default class Groups extends Component {
             ) : (
               <React.Fragment>
                 {this.state.member_groups.map((e) => (
-                  <Link to={"/groups/" + e.groupId + "/polls"}>
-                    <button style={{  width: "20em" }} className="button">{e.label}</button>
-                  </Link>
+                  <div>
+                    <Link to={"/groups/" + e.groupId + "/polls"}>
+                      <button style={{  width: "20em" }} className="button">{e.label}</button>
+                    </Link>
+                    {showXs && <LeaveGroupIcon openDialog={(e) => this.setState({ isOpen: true })} />}
+                  </div>
                 ))}
               </React.Fragment>
             )}
@@ -127,9 +130,9 @@ export default class Groups extends Component {
               Group Management:
             </p>
             <Link to={"/groups/new"}>
-              <button className="button">New Group</button>
+              <button className="button">Create New Group</button>
             </Link>
-            <button className="btn button" onClick={(e) => this.setState({ openJoinGroupPopup: true })}>Join Group</button>
+            <button className="btn button" onClick={(e) => this.setState({ openJoinGroupPopup: true })}>Join Existing Group</button>
             <Popup isOpen={this.state.openJoinGroupPopup} onClose={(e) => this.setState({ openJoinGroupPopup: false })}>
               <form onSubmit={this.handleSubmit}>
                 <label>Please enter your group code:</label>
