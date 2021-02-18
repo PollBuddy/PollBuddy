@@ -20,6 +20,7 @@
     "express-session": "^1.17.1",
     "http-errors": "~1.6.3",
     "influx": "^5.6.3",
+    "joi": "^17.4.0",
     "mongodb": "^3.6.0",
     "morgan": "~1.9.1",
     "promise-retry": "^1.1.1"

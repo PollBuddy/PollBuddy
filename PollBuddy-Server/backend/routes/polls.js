@@ -2,21 +2,21 @@ var createError = require("http-errors");
 var express = require("express");
 var router = express.Router();
 var mongoConnection = require("../modules/mongoConnection.js");
+const Joi = require("joi");
 
 router.post("/new", function (req, res) {
-  // Get POST data
-  var jsonContent = req.body;
-
-  // Validate
-  // Name should be present
-  if(!jsonContent.Name) {
-    return res.status(400).send("Error, Name parameter not specified");
+  // Validate request body
+  const schema = Joi.object({
+    Name: Joi.string().alphanum().min(3).max(30).required()
+  });
+  const validResult = schema.validate(req.body);
+  // invalidate handling
+  if (validResult.error) {
+    return res.status(404).send(validResult.error);
   }
 
-  // TODO: Need to add more validation like length, characters perhaps, etc.
-
   // Add to DB
-  mongoConnection.getDB().collection("polls").insertOne({Name: jsonContent.Name}, function(err, result) {
+  mongoConnection.getDB().collection("polls").insertOne({Name: validResult.value.Name}, function(err, result) {
     if (err) {
       console.log(err);
       return res.sendStatus(500);
