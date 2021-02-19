@@ -1,8 +1,8 @@
-const CASAuthentication = require("cas-authentication");
+const CASAuthentication = require("express-cas-authentication");
 
 // Register RPI as a school that can be logged in with
 const schoolList = require("./schoolList");
-schoolList.append("Rensselaer Polytechnic Institute (RPI)", "/api/users/login/rpi");
+schoolList.append("Rensselaer Polytechnic Institute (RPI)", "rpi");
 
 const cas = new CASAuthentication({
   /* eslint-disable camelcase */
