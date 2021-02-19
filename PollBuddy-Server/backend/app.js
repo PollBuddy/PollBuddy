@@ -22,10 +22,11 @@ const express_session = require("express-session");
 const MongoStore = require("connect-mongo")(express_session);
 app.use(express_session({
   cookie: {
-    maxAge: 3600000
+    maxAge: 2629800000
   },
   name: "pb_session",
   secret: "s3cr3t",// TODO: Move this out of the code and make it secure
+  secure: true,
   store: new MongoStore({
     url: process.env["DB_URL"],
     dbName: process.env["DB_NAME"]
