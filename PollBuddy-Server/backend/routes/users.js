@@ -59,7 +59,7 @@ router.post("/login", function (req, res) {
                 });
               } else {
                 // successful login
-                req.session["UserID"] = result_db["_id"];
+                req.session["UserName"] = result_db["_id"];
                 req.session["userData"] = {
                   loggedIn: true, 
                   username: result_db["Username"], 
@@ -82,10 +82,10 @@ router.post("/login", function (req, res) {
 
 });
 
-router.get("/login/rpi", rpi.bounce2, function (req, res, next) {
+router.get("/login/rpi", rpi.bounce, function (req, res, next) {
 
-  // This runs if the user is logged in successfully, the user is first bounced to the RPI CAS login and only after
-  // will they end up in here.
+  // The user is first bounced to the RPI CAS login and only after will they end up in here.
+  // Therefore, this only runs if the user is logged in with CAS successfully.
 
   // Some options used in the resultant data returned
   var options = {
@@ -137,7 +137,8 @@ router.get("/login/rpi", rpi.bounce2, function (req, res, next) {
           // TODO: Ensure that is really what we want (we probs want to check for the existence of our result)
 
           // Save some information in the session
-          req.session.UserID = result.UserName;
+          req.session.UserData = {};
+          req.session.UserData.UserName = result.UserName;
 
           // Send the user the login success page
           res.sendFile("pages/loginRedirect.html", options, function (err2) {
@@ -174,7 +175,7 @@ function isEmpty(obj) {
   return JSON.stringify(obj) === JSON.stringify({});
 }
 
-router.post("/register", function (req, res, next) {
+router.post("/register", function (req, res) {
   var requestBody = req.body;
 
   const firstnameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(requestBody.FirstName);
@@ -215,6 +216,194 @@ router.post("/register", function (req, res, next) {
   }else {
     return res.send(errorMsg);
   }
+});
+
+router.get("/register/rpi", rpi.bounce2, function (req, res, next) {
+
+  // The user is first bounced to the RPI CAS login and only after will they end up in here.
+  // Therefore, this only runs if the user has logged in with CAS successfully.
+
+  // At this point, we just want to copy over the CAS data into our session format, and indicate what we want
+  // the client to fill out in the frontend. Then that'll get send to /api/users/register/rpi (POST)
+  // which will validate and finalize the registration process.
+
+  // Some options used in the resultant data returned
+  var options = {
+    root: path.join(__dirname, "../public"),
+    dotfiles: "deny",
+    headers: {
+      "x-timestamp": Date.now(),
+      "x-sent": true
+    }
+  };
+
+  console.log(req.session); // debug
+
+  if (req.session.cas_user) {
+
+    // Configure email, username (For RPI, that is the CAS username + "@rpi.edu") and save in session
+    req.session.userData = {};
+    req.session.userData.userName = req.session.cas_user;
+    req.session.userData.email = req.session.userData.userName + "@rpi.edu";
+
+    // Delete session information obtained from CAS
+    delete req.session.cas_return_to;
+    delete req.session.cas_user;
+
+    // Send the user the registration success page
+    res.sendFile("pages/registerRedirect.html", options, function (err2) {
+      if (err2) {
+        console.log(err2);
+        res.send(500);
+      }
+    });
+  } else {
+    // Something went wrong
+    // Send the user the registration process error page
+    console.log("Error occurred, user got to the rpi registration page without logging in"); // TODO: Improve error messaging
+    res.status(500).sendFile("pages/registerRedirect_Error.html", options, function (err2) {
+      if (err2) {
+        console.log(err2);
+        res.send(500);
+      }
+    });
+  }
+
+});
+
+router.post("/register/rpi", rpi.bounce2, function (req, res) {
+
+  // The user is first bounced to the RPI CAS login and only after will they end up in here.
+  // Therefore, this only runs if the user has logged in with CAS successfully.
+
+  // At this point, the user should be submitting extra data to complete registration. We want to validate it
+  // and complete the registration, or send an error back.
+
+  var requestBody = req.body;
+
+  const firstNameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(requestBody.firstName);
+  const lastNameValid = new RegExp(/^[a-zA-Z]{0,256}$/).test(requestBody.lastName);
+
+  let errorMsg = {};
+
+  if(!firstNameValid){
+    errorMsg["firstName"] = "Invalid First Name!";
+  }
+  if(!lastNameValid){
+    errorMsg["lastName"] = "Invalid Last Name!";
+  }
+
+  // Configure email, username (For RPI, that is the CAS username + "@rpi.edu"), overwriting whatever the user
+  // may have sent as we don't want it anyways.
+  requestBody.userName = req.session.userData.userName;
+  requestBody.email = req.userData.email;
+
+  // Some options used in the resultant data returned
+  var options = {
+    root: path.join(__dirname, "../public"),
+    dotfiles: "deny",
+    headers: {
+      "x-timestamp": Date.now(),
+      "x-sent": true
+    }
+  };
+
+  if (isEmpty(errorMsg)) {
+    mongoConnection.getDB().collection("users").insertOne({
+      FirstName: requestBody.firstName,
+      LastName: requestBody.lastName,
+      UserName: requestBody.userName,
+      Email: requestBody.email,
+    }, (err, result) => {
+      if (err) {
+        // Something went wrong
+        // Send the user the registration process error page
+        console.log("Database Error Occurred"); // TODO: Improve error messaging
+        console.log(err);
+        res.status(500).sendFile("pages/registrationRedirect_Error.html", options, function (err2) {
+          if (err2) {
+            console.log(err2);
+            res.send(500);
+          }
+        });
+      } else {
+        // TODO: Validate the result object
+        // Send the user the registration success page
+        // TODO: This needs to use the .env file to locate the frontend
+        res.redirect("/register/school/step2?userName=" + requestBody.UserName + "&email=" + requestBody.Email);
+      }
+    });
+  } else {
+    return res.send(errorMsg);
+  }
+
+
+
+  // Log the user in on the backend side of things
+
+  console.log(req.session);
+
+  if (req.session.cas_user) {
+    console.log("Locating user to add to session."); // TODO: Remove after testing
+    mongoConnection.getDB().collection("users").findOne({ UserName: req.session.cas_user }, { projection: { _id: false, UserName: true } }, (err, result) => {
+      if (err) {
+        // Something went wrong
+        // Send the user the login process error page
+        console.log("Database Error Occurred"); // TODO: Improve error messaging
+        console.log(err);
+        res.status(500).sendFile("pages/loginRedirect_Error.html", options, function (err2) {
+          if (err2) {
+            console.log(err2);
+            res.send(500);
+          }
+        });
+      } else {
+        console.log("Result found"); // TODO: Remove after testing
+        console.log(result);
+        if (result === null) {
+          // User not registered
+
+          // Delete session information obtained from CAS
+          delete req.session.cas_return_to;
+          delete req.session.cas_user;
+
+          // Send the user the unregistered user error page
+          res.status(401).sendFile("pages/loginRedirect_Unregistered.html", options, function (err2) {
+            if (err2) {
+              console.log(err2);
+              res.send(500);
+            }
+          });
+        } else {
+          // Success!
+          // TODO: Ensure that is really what we want (we probs want to check for the existence of our result)
+
+          // Save some information in the session
+          req.session.UserName = result.UserName;
+
+          // Send the user the login success page
+          res.sendFile("pages/loginRedirect.html", options, function (err2) {
+            if (err2) {
+              console.log(err2);
+              res.send(500);
+            }
+          });
+        }
+      }
+    });
+
+  } else {
+    // Something went wrong
+    // Send the user the login process error page
+    console.log("Error occurred, user got to the rpi login page without logging in"); // TODO: Improve error messaging
+    res.status(500).sendFile("pages/loginRedirect_Error.html", options, function (err2) {
+      if (err2) {
+        console.log(err2);
+        res.send(500);
+      }
+    });
+  }
+
 });
 
 // stored user session data
@@ -358,7 +547,7 @@ module.exports = router;
 module.exports.user_middleware = function (req, res, next) {
 
   req.isLoggedIn = function () {
-    return req.session["UserID"] !== undefined;
+    return req.session["UserName"] !== undefined;
   };
 
   // If the current user is logged in, a user object will be returned, otherwise a 401 will be sent
@@ -372,7 +561,7 @@ module.exports.user_middleware = function (req, res, next) {
         callback(new Error("Not logged in"));
       }
     } else {
-      mongoConnection.getDB().collection("users").findOne({ _id: bson.ObjectId(req.session["UserID"]) }, { projection: { Password: false } }, (err, result) => {
+      mongoConnection.getDB().collection("users").findOne({ _id: bson.ObjectId(req.session["UserName"]) }, { projection: { Password: false } }, (err, result) => {
         if (err) {
           return callback(err);
         } else {
