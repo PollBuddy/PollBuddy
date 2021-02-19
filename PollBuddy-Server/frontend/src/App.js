@@ -17,6 +17,7 @@ import Privacy from "./pages/Privacy/Privacy";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import RegisterDefault from "./pages/RegisterDefault/RegisterDefault";
 import RegisterWithSchool from "./pages/RegisterWithSchool/RegisterWithSchool";
+import RegisterWithSchoolStep2 from "./pages/RegisterWithSchoolStep2/RegisterWithSchoolStep2";
 import RegisterWithPollBuddy from "./pages/RegisterWithPollBuddy/RegisterWithPollBuddy";
 import PollViewer from "./pages/PollViewer/PollViewer";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
@@ -143,6 +144,7 @@ export default class App extends React.Component {
             </Route>
 
             {/* Poll Results Page */}
+            {/*use the render function so that we can retrieve :groupID from inside the component*/}
             <Route exact path="/polls/:pollID/results"
               render={ (props) => (<PollResults {...props} updateTitle={this.updateTitle} />) }
             />
@@ -211,6 +213,12 @@ export default class App extends React.Component {
             <Route exact path="/register/school">
               <RegisterWithSchool updateTitle={this.updateTitle} />
             </Route>
+
+            {/* Register with School Account Step 2 Page */}
+            {/*use the render function so that we can retrieve :groupID from inside the component*/}
+            <Route exact path="/register/school/step2"
+              render={ (props) => (<RegisterWithSchoolStep2 {...props} updateTitle={this.updateTitle} />) }
+            />
 
 
             {/* --- Account and User Settings Pages --- */}
