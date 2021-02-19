@@ -61,10 +61,10 @@ module.exports = {
     }
     //find ID object, stopping after the first one found to preserve time
     if(db.collection(type).countDocuments({id}, {limit: 1}) > 0 ) {
-      return true
+      return true;
     }
     else {
-      return false
+      return false;
     }
   }
 };
