@@ -62,7 +62,7 @@ router.post("/login", function (req, res) {
                 req.session["UserName"] = result_db["_id"];
                 req.session["userData"] = {
                   loggedIn: true, 
-                  username: result_db["Username"], 
+                  username: result_db["UserName"],
                   firstName: result_db["FirstName"], 
                   lastName: result_db["LastName"],
                   sessionID: req.session.id
@@ -180,7 +180,7 @@ router.post("/register", function (req, res) {
 
   const firstnameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(requestBody.FirstName);
   const lastnameValid = new RegExp(/^[a-zA-Z]{0,256}$/).test(requestBody.LastName);
-  const userValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(requestBody.Username);
+  const userValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(requestBody.UserName);
   const emailValid = new RegExp(/^[a-zA-Z0-9_.]+@\w+\.\w+$/).test(requestBody.Email);
   const passValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/)
     .test(requestBody.Password);
@@ -203,7 +203,7 @@ router.post("/register", function (req, res) {
     mongoConnection.getDB().collection("users").insertOne({
       FirstName: requestBody.FirstName,
       LastName: requestBody.LastName,
-      Username: requestBody.Username,
+      UserName: requestBody.UserName,
       Email: requestBody.Email,
       Password: bcrypt.hashSync(requestBody.Password, 10)
     }, (err, result) => {
@@ -434,8 +434,8 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
         }
       });
     }
-    if (jsonContent.Username !== undefined) {
-      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { Username: jsonContent.Username } }, function (err, res) {
+    if (jsonContent.UserName !== undefined) {
+      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { UserName: jsonContent.UserName } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -483,8 +483,8 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
         }
       });
     }
-    if (jsonContent.Username !== undefined) {
-      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { Username: jsonContent.Username } }, function (err, res) {
+    if (jsonContent.UserName !== undefined) {
+      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { UserName: jsonContent.UserName } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
