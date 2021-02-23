@@ -3,6 +3,8 @@ import {Link} from "react-router-dom";
 import { MDBContainer } from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import Popup from "../../components/Popup/Popup";
+import "../../styles/main.scss";
+import "./Groups.scss";
 
 export default class Groups extends Component {
 
@@ -140,7 +142,7 @@ export default class Groups extends Component {
                 <input className="btn button float-right" type="submit" value="OK"/>
               </form>
             </Popup>
-            <button className={"button " + (this.state.leaveGroupButtonText === "Exit Leave Group" ? "exit_leave_group" : "")} onClick={this.toggleLeaveGroup}>{this.state.leaveGroupButtonText}</button>
+            <button className={"button " + (this.state.leaveGroupButtonText === "Exit Leave Group" ? "groups_exit_leave_group" : "")} onClick={this.toggleLeaveGroup}>{this.state.leaveGroupButtonText}</button>
             {this.state.isOpen && <Dialog onClose={() => this.setState({isOpen: false})} />}
           </MDBContainer>
         </MDBContainer>
@@ -157,10 +159,10 @@ function LeaveGroupIcon(props) {
 
 function Dialog(props) {
   return (
-    <div className="leave_groups_dialog">
+    <div className="groups_leave_groups_dialog">
       <button onClick={props.onClose} className="button">X</button>
       <p>Are you sure you want to leave this group?</p>
-      <button onClick={props.onClose} className="button leave_group_button">Yes</button>
+      <button onClick={props.onClose} className="button groups_leave_group_button">Yes</button>
     </div>
   );
 }
