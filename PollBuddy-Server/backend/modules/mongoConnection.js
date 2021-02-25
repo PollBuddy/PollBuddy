@@ -55,15 +55,13 @@ module.exports = {
     return mongo;
   },
   validateID: function(id, type){
-    //error check for valid type
-    if(type !== "groups" || type !== "polls" || type !== "users") {
-      return false;
+    //check for valid type
+    if(type == "groups" || type == "polls" || type == "users") {
+      //find ID object, stopping after the first one found to preserve time
+      if(db.collection(type).countDocuments({id}, {limit: 1}) > 0 ) {
+        return true;
+      }
     }
-    //find ID object, stopping after the first one found to preserve time
-    if(db.collection(type).countDocuments({id}, {limit: 1}) > 0 ) {
-      return true;
-    } else {
-      return false;
-    }
+    return false;
   }
 };
