@@ -1,14 +1,13 @@
-var createError = require("http-errors");
 var express = require("express");
 var router = express.Router();
 var mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
-const {createResponse} = require("../modules/utils");
+const {createResponse, validateID} = require("../modules/utils");
 
 router.post("/new", function (req, res) {
   // Validate request body
   const schema = Joi.object({
-    Name: Joi.string().alphanum().min(3).max(30).required()
+    Name: Joi.string().min(3).max(30).required()
   });
   const validResult = schema.validate(req.body);
   // invalidate handling
@@ -34,33 +33,48 @@ router.post("/new", function (req, res) {
   });
 
 });
-router.post("/:id/edit", function (req, res) {
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  var jsonContent = req.body;
-  if (jsonContent.Action === "Add") {
-    if (jsonContent.Questions !== undefined) {//QUESTION IS AN OBJECT https://docs.google.com/document/d/1kFdjwiE4_POgcTDqXK-bcnz4RAeLG6yaF2RxLzkNDrE/edit
-      mongoConnection.getDB().collection("polls").updateOne({"_id": id}, {"$addToSet": {Questions: jsonContent.Questions}}, function (err, res) {
-        if (err) {
-          return res.sendStatus(500);
-        }
-      });
-    } else {
-      return res.sendStatus(400);
-    }
-  } else if (jsonContent.Action === "Remove") {
-    if (jsonContent.Questions !== undefined) {
-      mongoConnection.getDB().collection("polls").updateOne({"_id": id}, {"$pull": {Questions: ""}}, function (err, res) {
-        if (err) {
-          return res.sendStatus(500);
-        }
-      });
-    } else {
-      return res.sendStatus(400);
-    }
-  } else {
-    return res.sendStatus(400);
+router.post("/:id/edit", async (req, res) => {
+  // validate request body
+  const schema = Joi.object({
+    Action: Joi.string().valid("add", "remove").required(), // two mode supported: 'add' or 'remove'
+    Question: Joi.object().keys({
+      QuestionText: Joi.string().min(3).max(512).required(),  // question text capped at 512 words
+      AnswerChoices: Joi.array().items(Joi.string()).min(1).unique().required(),
+      CorrectAnswers: Joi.array().items(Joi.string()).min(1).unique().required()
+    }).required()
+  });
+  const validResult = schema.validate(req.body);
+  // invalidate handling
+  if (validResult.error) {
+    return res.status(404).send(createResponse(false, validResult.error.details[0].message));
   }
-  return res.sendStatus(200); // TODO: Ensure this is true
+  // validate id
+  const id = await validateID("polls", req.params.id);
+  if (!id) {
+    return res.status(400).send(createResponse(false, "Invalid ID."));
+  }
+
+  if (validResult.value.Action === "add") {
+    // "Action": "add"
+    try{
+      const prom = await mongoConnection.getDB().collection("polls")
+        .updateOne({"_id": id}, {"$addToSet": {Question: validResult.value.Question}});
+      return res.status(200).send(prom);
+    } catch(e) {
+      return res.status(400).send(e);
+    }
+  } else{
+    // "Action": "remove"
+    if (validResult.value.Question) {
+      mongoConnection.getDB().collection("polls").updateOne({"_id": id}, {"$pull": {Question: ""}}, function (err, res) {
+        if (err) {
+          return res.sendStatus(500);
+        }
+      });
+    } else {
+      return res.sendStatus(400);
+    }
+  }
 });
 router.post("/:id/submit", function (req, res) {
   const jsonContent = req.body;
@@ -178,13 +192,15 @@ router.get("/:id", function (req, res, next) {
 });
 
 router.get("/:id/view", function (req, res, next) {
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+  const id = validateID("polls", req.params.id);
+  if (!id) {
+    return res.status(400).send(createResponse(false, "Invalid ID."));
+  }
+
   mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
     if (err) {
       return res.sendStatus(500);
     }
-
-    // TODO: Make sure ID is valid
 
     // Loop through the poll's questions and add to openQuestions the Question Number, Text and Answer Choices if
     // the question is set as Visible.
@@ -206,8 +222,10 @@ router.get("/:id/view", function (req, res, next) {
 });
 
 router.get("/:id/results", function (req, res, next) {
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  // TODO: Make sure ID is valid
+  const id = validateID("polls", id);
+  if (!id) {
+    return res.status(400).send(createResponse(false, "Invalid ID."));
+  }
 
   mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
     if (err) {
