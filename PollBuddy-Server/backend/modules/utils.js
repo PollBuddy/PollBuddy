@@ -20,7 +20,7 @@ function createResponse(isSuccess = true, error, data) {
 // returns objectID if valid or null if nothing is found.
 async function validateID(collection, id) {
   try {
-    const objId = new mongoConnection.getMongo().ObjectID(id)
+    const objId = new mongoConnection.getMongo().ObjectID(id);
     await mongoConnection.getDB().collection(collection) // find id cursor
       .find({_id: objId}, {limit: 1});
     return objId;  // exists
