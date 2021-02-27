@@ -218,7 +218,19 @@ router.post("/register", function (req, res) {
   }
 });
 
-router.get("/register/rpi", rpi.bounce2, function (req, res, next) {
+/**
+ * This route is hit by the user's browser as part of the registration with RPI process. It bounces the user to the CAS login
+ * portal, then that returns here and we set up some session details, then bounce them back to /register/school/step2
+ * with some additional data requests to finalize the registration process.
+ * @urlparams {void} None
+ * @returns {void} On success: a browser redirect to /register/school/step2 with GET parameters of userName, email, and school.
+ * On failure: { "result": "failure", "error": "User has not logged in with RPI" }
+ * @name backend/users/register/rpi_GET
+ * @param {string} path - Express path
+ * @param {middleware} middleware - Express middleware to redirect the user to CAS
+ * @param {callback} callback - function handler for data received after CAS redirection
+ */
+router.get("/register/rpi", rpi.bounce2, function (req, res) {
 
   // The user is first bounced to the RPI CAS login and only after will they end up in here.
   // Therefore, this only runs if the user has logged in with CAS successfully.
@@ -227,16 +239,7 @@ router.get("/register/rpi", rpi.bounce2, function (req, res, next) {
   // the client to fill out in the frontend. Then that'll get send to /api/users/register/rpi (POST)
   // which will validate and finalize the registration process.
 
-  // Some options used in the resultant data returned
-  var options = {
-    root: path.join(__dirname, "../public"),
-    dotfiles: "deny",
-    headers: {
-      "x-timestamp": Date.now(),
-      "x-sent": true
-    }
-  };
-
+  // Check to make sure the user completed the CAS registration process
   if (req.session.cas_user) {
 
     // Configure email, username (For RPI, that is the CAS username + "@rpi.edu") and save in session
@@ -249,22 +252,32 @@ router.get("/register/rpi", rpi.bounce2, function (req, res, next) {
     delete req.session.cas_user;
 
     // Send the user to the registration step 2 page
-    return res.redirect("/register/school/step2?userName=" + req.session.userData.userName + "&email=" + req.session.userData.email);
+    return res.redirect("/register/school/step2?userName=" + req.session.userData.userName +
+      "&email=" + req.session.userData.email + "&school=rpi");
 
   } else {
     // Something went wrong
-    // Send the user the registration process error page
-    console.log("Error occurred, user got to the rpi registration page without logging in"); // TODO: Improve error messaging
-    res.status(500).sendFile("pages/registerRedirect_Error.html", options, function (err2) {
-      if (err2) {
-        console.log(err2);
-        res.send(500);
-      }
-    });
+    console.log("Error occurred, user got to the rpi registration page without logging in. This should not happen.");
+    return res.status(401).json({"result": "failure", "error": "User has not logged in with RPI"});
   }
 
 });
 
+/**
+ * This route is hit by the user's browser as part of the register with RPI process. At this point, the user is at
+ * /register/school/step2 in the frontend, and are submitting registration data here for processing. We validate it and
+ * save it in the database if success, and send errors if there's any problems.
+ * @urlparams {void} body: {firstName: string, lastName: string, userName: string (optional, ignored), email: string (optional, ignored)}
+ * @returns {void} On success: status 200, {"result": "success", "data": {"firstName": requestBody.firstName,
+                               "lastName": requestBody.lastName, "userName": requestBody.userName}}
+ * On failure: status 400, { "result": "failure", "error": "This username is already in use" }
+ *         or: status 400 { "result": "failure", "error": "Validation failed", "data": (errorMsg obj with keys of firstName,
+ *                           lastName, etc. as relevant and with value of error message) });
+ *         or: status 500, { "result": "failure", "error": "An error occurred while communicating with the database" }
+ * @name backend/users/register/rpi_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for data received after CAS redirection
+ */
 router.post("/register/rpi", function (req, res) {
 
   // The user is first bounced to the RPI CAS login and only after will they end up in here.
@@ -292,17 +305,8 @@ router.post("/register/rpi", function (req, res) {
   requestBody.userName = req.session.userData.userName;
   requestBody.email = req.session.userData.email;
 
-  // Some options used in the resultant data returned
-  var options = {
-    root: path.join(__dirname, "../public"),
-    dotfiles: "deny",
-    headers: {
-      "x-timestamp": Date.now(),
-      "x-sent": true
-    }
-  };
-
   if (isEmpty(errorMsg)) {
+    // No validation errors, let's try adding the user!
     mongoConnection.getDB().collection("users").insertOne({
       FirstName: requestBody.firstName,
       FirstNameLocked: false,
@@ -319,29 +323,26 @@ router.post("/register/rpi", function (req, res) {
         console.log("Database Error occurred while creating a new user with RPI");
         console.log(err);
         if(err.code === 11000) { // This code means we're trying to insert a duplicate key (aka user already registered)
-          res.status(400).json({"result": "failure", "error": "This username is already in use"});
+          return res.status(400).json({"result": "failure", "error": "This username is already in use"});
         } else {
-          res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database"});
+          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database"});
         }
       } else {
         // No error object at least
         if (result.result.ok === 1) {
           // One result changed, therefore it worked. Send the response object with some basic info for the frontend to store
-          res.json({"result": "success", "data": {"firstName": requestBody.firstName,
+          return res.json({"result": "success", "data": {"firstName": requestBody.firstName,
             "lastName": requestBody.lastName, "userName": requestBody.userName}});
         } else {
           // For some reason, the user wasn't inserted, send an error.
           console.log("Database Error occurred while creating a new user with RPI");
           console.log(err);
-          res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database"});
+          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database"});
         }
-        console.log(result);
-        // TODO: Validate the result object
-
       }
     });
   } else {
-    return res.json({ "result": "failure", "error": "Validation failed", "data": errorMsg });
+    return res.status(400).json({ "result": "failure", "error": "Validation failed", "data": errorMsg });
   }
 
 });
