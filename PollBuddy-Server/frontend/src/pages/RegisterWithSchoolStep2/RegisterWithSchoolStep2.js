@@ -81,17 +81,23 @@ class RegisterWithSchoolStep2 extends Component {
         // TODO: Debug print, delete
         console.log(response);
         if (response != null) {
-          if (response.Result === "Success") {
+          if (response.result === "success") {
+            // Save data about the user
             localStorage.setItem("loggedIn", true);
+            localStorage.setItem("firstName", response.data.firstName);
+            localStorage.setItem("lastName", response.data.lastName);
+            localStorage.setItem("userName", response.data.userName);
             // Redirect to groups page
             this.props.history.push("/groups");
           } else {
-            if (response.Error === "Email Address Already Exists") {
-              this.setState({emailExists: true});
+            // Something went wrong, handle it
+            if (response.error === "Validation failed") {
+              // TODO: This needs to be reported better (in an error popup, for example)
+              console.log(response.data.errors);
             } else {
               // TODO: This needs to be reported better (in an error popup, for example)
-              console.log("You have following errors:");
-              console.log(response.Data.Errors);
+              console.log("You have following error:");
+              console.log(response.error);
             }
           }
         }

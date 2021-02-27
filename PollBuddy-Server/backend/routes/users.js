@@ -237,26 +237,20 @@ router.get("/register/rpi", rpi.bounce2, function (req, res, next) {
     }
   };
 
-  console.log(req.session); // debug
-
   if (req.session.cas_user) {
 
     // Configure email, username (For RPI, that is the CAS username + "@rpi.edu") and save in session
     req.session.userData = {};
-    req.session.userData.userName = req.session.cas_user;
+    req.session.userData.userName = req.session.cas_user.toLowerCase();
     req.session.userData.email = req.session.userData.userName + "@rpi.edu";
 
     // Delete session information obtained from CAS
     delete req.session.cas_return_to;
     delete req.session.cas_user;
 
-    // Send the user the registration success page
-    res.sendFile("pages/registerRedirect.html", options, function (err2) {
-      if (err2) {
-        console.log(err2);
-        res.send(500);
-      }
-    });
+    // Send the user to the registration step 2 page
+    return res.redirect("/register/school/step2?userName=" + req.session.userData.userName + "&email=" + req.session.userData.email);
+
   } else {
     // Something went wrong
     // Send the user the registration process error page
@@ -271,7 +265,7 @@ router.get("/register/rpi", rpi.bounce2, function (req, res, next) {
 
 });
 
-router.post("/register/rpi", rpi.bounce2, function (req, res) {
+router.post("/register/rpi", function (req, res) {
 
   // The user is first bounced to the RPI CAS login and only after will they end up in here.
   // Therefore, this only runs if the user has logged in with CAS successfully.
@@ -296,7 +290,7 @@ router.post("/register/rpi", rpi.bounce2, function (req, res) {
   // Configure email, username (For RPI, that is the CAS username + "@rpi.edu"), overwriting whatever the user
   // may have sent as we don't want it anyways.
   requestBody.userName = req.session.userData.userName;
-  requestBody.email = req.userData.email;
+  requestBody.email = req.session.userData.email;
 
   // Some options used in the resultant data returned
   var options = {
@@ -311,97 +305,43 @@ router.post("/register/rpi", rpi.bounce2, function (req, res) {
   if (isEmpty(errorMsg)) {
     mongoConnection.getDB().collection("users").insertOne({
       FirstName: requestBody.firstName,
+      FirstNameLocked: false,
       LastName: requestBody.lastName,
+      LatNameLocked: false,
       UserName: requestBody.userName,
+      UserNameLocked: true,
       Email: requestBody.email,
+      EmailLocked: true,
+      SchoolAffiliation: "RPI"
     }, (err, result) => {
       if (err) {
         // Something went wrong
-        // Send the user the registration process error page
-        console.log("Database Error Occurred"); // TODO: Improve error messaging
+        console.log("Database Error occurred while creating a new user with RPI");
         console.log(err);
-        res.status(500).sendFile("pages/registrationRedirect_Error.html", options, function (err2) {
-          if (err2) {
-            console.log(err2);
-            res.send(500);
-          }
-        });
-      } else {
-        // TODO: Validate the result object
-        // Send the user the registration success page
-        // TODO: This needs to use the .env file to locate the frontend
-        res.redirect("/register/school/step2?userName=" + requestBody.UserName + "&email=" + requestBody.Email);
-      }
-    });
-  } else {
-    return res.send(errorMsg);
-  }
-
-
-
-  // Log the user in on the backend side of things
-
-  console.log(req.session);
-
-  if (req.session.cas_user) {
-    console.log("Locating user to add to session."); // TODO: Remove after testing
-    mongoConnection.getDB().collection("users").findOne({ UserName: req.session.cas_user }, { projection: { _id: false, UserName: true } }, (err, result) => {
-      if (err) {
-        // Something went wrong
-        // Send the user the login process error page
-        console.log("Database Error Occurred"); // TODO: Improve error messaging
-        console.log(err);
-        res.status(500).sendFile("pages/loginRedirect_Error.html", options, function (err2) {
-          if (err2) {
-            console.log(err2);
-            res.send(500);
-          }
-        });
-      } else {
-        console.log("Result found"); // TODO: Remove after testing
-        console.log(result);
-        if (result === null) {
-          // User not registered
-
-          // Delete session information obtained from CAS
-          delete req.session.cas_return_to;
-          delete req.session.cas_user;
-
-          // Send the user the unregistered user error page
-          res.status(401).sendFile("pages/loginRedirect_Unregistered.html", options, function (err2) {
-            if (err2) {
-              console.log(err2);
-              res.send(500);
-            }
-          });
+        if(err.code === 11000) { // This code means we're trying to insert a duplicate key (aka user already registered)
+          res.status(400).json({"result": "failure", "error": "This username is already in use"});
         } else {
-          // Success!
-          // TODO: Ensure that is really what we want (we probs want to check for the existence of our result)
-
-          // Save some information in the session
-          req.session.UserName = result.UserName;
-
-          // Send the user the login success page
-          res.sendFile("pages/loginRedirect.html", options, function (err2) {
-            if (err2) {
-              console.log(err2);
-              res.send(500);
-            }
-          });
+          res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database"});
         }
-      }
-    });
+      } else {
+        // No error object at least
+        if (result.result.ok === 1) {
+          // One result changed, therefore it worked. Send the response object with some basic info for the frontend to store
+          res.json({"result": "success", "data": {"firstName": requestBody.firstName,
+            "lastName": requestBody.lastName, "userName": requestBody.userName}});
+        } else {
+          // For some reason, the user wasn't inserted, send an error.
+          console.log("Database Error occurred while creating a new user with RPI");
+          console.log(err);
+          res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database"});
+        }
+        console.log(result);
+        // TODO: Validate the result object
 
-  } else {
-    // Something went wrong
-    // Send the user the login process error page
-    console.log("Error occurred, user got to the rpi login page without logging in"); // TODO: Improve error messaging
-    res.status(500).sendFile("pages/loginRedirect_Error.html", options, function (err2) {
-      if (err2) {
-        console.log(err2);
-        res.send(500);
       }
     });
+  } else {
+    return res.json({ "result": "failure", "error": "Validation failed", "data": errorMsg });
   }
 
 });

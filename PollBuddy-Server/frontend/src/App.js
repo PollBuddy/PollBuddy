@@ -217,7 +217,8 @@ export default class App extends React.Component {
             {/* Register with School Account Step 2 Page */}
             {/*use the render function so that we can retrieve :groupID from inside the component*/}
             <Route exact path="/register/school/step2"
-              render={ (props) => (<RegisterWithSchoolStep2 {...props} updateTitle={this.updateTitle} />) }
+              render={ (props) => (<RegisterWithSchoolStep2 {...props} updateTitle={this.updateTitle}
+                userInfo={this.state.userInfo} />) }
             />
 
 

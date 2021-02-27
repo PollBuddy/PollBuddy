@@ -83,7 +83,7 @@ class RegisterWithPollBuddy extends Component {
         // 2. a string: Exists, which means the email address has already been registered
         // 3. status 203: everything is ok
 
-        // print and check the reponse for debugging (can be deleted later)
+        // print and check the response for debugging (can be deleted later)
         console.log(response);
         if (response === "Exists") {
           this.setState({emailExists: true});
