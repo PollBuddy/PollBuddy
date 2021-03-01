@@ -3,6 +3,8 @@ import {Link} from "react-router-dom";
 import { MDBContainer } from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import Popup from "../../components/Popup/Popup";
+import "../../styles/main.scss";
+import "./Groups.scss";
 
 export default class Groups extends Component {
 
@@ -12,11 +14,11 @@ export default class Groups extends Component {
       //TODO: fetch this data from api/users/:id/groups when that functionality works
       error: null,
       doneLoading: false,
-      admin_groups: [
+      adminGroups: [
         {groupId: 123, label: "CSCI 1200 - Data Structures"},
         {groupId: 123, label: "CSCI 2200 - Foundations of Computer Science"}
       ],
-      member_groups: [
+      memberGroups: [
         {groupId: 123, label: "CSCI 2300 - Intro to Algorithms"},
         {groupId: 123, label: "CSCI 2500 - Computer Organization"},
         {groupId: 123, label: "CSCI 2960 - RCOS"}
@@ -34,7 +36,7 @@ export default class Groups extends Component {
     }
   }
 
-  stopLoading = e => {
+  stopLoading = () => {
     this.setState({
       doneLoading: true
     });
@@ -56,9 +58,9 @@ export default class Groups extends Component {
     }
   };
 
-  handleClick = (event) => {
+  handleClick = () => {
     // call prompt() with custom message to get user input from alert-like dialog
-    const groupCode = prompt('Please enter your group code');
+    const groupCode = prompt("Please enter your group code");
     // combine the group code into URL and redirect to the next page
     window.location.replace("/groups/" + groupCode + "/polls");
   }
@@ -96,11 +98,11 @@ export default class Groups extends Component {
             <p className="fontSizeLarge">
               As a Group Admin:
             </p>
-            {this.state.admin_groups.length === 0 ? (
+            {this.state.adminGroups.length === 0 ? (
               <p>Sorry, you are not the admin of any groups.<br/> <br/></p>
             ) : (
               <React.Fragment>
-                {this.state.admin_groups.map((e) => (
+                {this.state.adminGroups.map((e) => (
                   <Link to={"/groups/" + e.groupId + "/polls"}>
                     <button style={{  width: "20em" }} className="button">{e.label}</button>
                   </Link>
@@ -111,14 +113,17 @@ export default class Groups extends Component {
             <p className="fontSizeLarge">
               As a Group Member:
             </p>
-            {this.state.member_groups.length === 0 ? (
+            {this.state.memberGroups.length === 0 ? (
               <p>Sorry, you are not the member of any groups.<br/> <br/></p>
             ) : (
               <React.Fragment>
-                {this.state.member_groups.map((e) => (
-                  <Link to={"/groups/" + e.groupId + "/polls"}>
-                    <button style={{  width: "20em" }} className="button">{e.label}</button>
-                  </Link>
+                {this.state.memberGroups.map((e) => (
+                  <div>
+                    <Link to={"/groups/" + e.groupId + "/polls"}>
+                      <button style={{  width: "20em" }} className="button">{e.label}</button>
+                    </Link>
+                    {showXs && <LeaveGroupIcon openDialog={() => this.setState({ isOpen: true })} />}
+                  </div>
                 ))}
               </React.Fragment>
             )}
@@ -127,18 +132,18 @@ export default class Groups extends Component {
               Group Management:
             </p>
             <Link to={"/groups/new"}>
-              <button className="button">New Group</button>
+              <button className="button">Create New Group</button>
             </Link>
-            <button className="btn button" onClick={(e) => this.setState({ openJoinGroupPopup: true })}>Join Group</button>
-            <Popup isOpen={this.state.openJoinGroupPopup} onClose={(e) => this.setState({ openJoinGroupPopup: false })}>
+            <button className="btn button" onClick={() => this.setState({ openJoinGroupPopup: true })}>Join Existing Group</button>
+            <Popup isOpen={this.state.openJoinGroupPopup} onClose={() => this.setState({ openJoinGroupPopup: false })}>
               <form onSubmit={this.handleSubmit}>
                 <label>Please enter your group code:</label>
                 <input className="form-control textBox" type="text" name="groupCode" onChange={this.handleChange}/>
                 <input className="btn button float-right" type="submit" value="OK"/>
               </form>
             </Popup>
-            <button className="button" onClick={this.toggleLeaveGroup}>{this.state.leaveGroupButtonText}</button>
-            {this.state.isOpen && <Dialog onClose={(e) => this.setState({isOpen: false})} />}
+            <button className={"button " + (this.state.leaveGroupButtonText === "Exit Leave Group" ? "groups_exit_leave_group" : "")} onClick={this.toggleLeaveGroup}>{this.state.leaveGroupButtonText}</button>
+            {this.state.isOpen && <Dialog onClose={() => this.setState({isOpen: false})} />}
           </MDBContainer>
         </MDBContainer>
       );
@@ -154,10 +159,10 @@ function LeaveGroupIcon(props) {
 
 function Dialog(props) {
   return (
-    <div className="leave_groups_dialog">
+    <div className="groups_leave_groups_dialog">
       <button onClick={props.onClose} className="button">X</button>
       <p>Are you sure you want to leave this group?</p>
-      <button onClick={props.onClose} className="button leave_group_button">Yes</button>
+      <button onClick={props.onClose} className="button groups_leave_group_button">Yes</button>
     </div>
   );
 }
