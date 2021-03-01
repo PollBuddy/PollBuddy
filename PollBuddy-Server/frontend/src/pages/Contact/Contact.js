@@ -5,6 +5,8 @@ import {MDBContainer} from "mdbreact";
 import PhoneInput from "react-phone-input-2";
 import "mdbreact/dist/css/mdb.css";
 
+import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";
+
 export default class Contact extends Component {
 
   componentDidMount() {
@@ -14,10 +16,22 @@ export default class Contact extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { formUp: false, phone: "", value: "N/A" };
+    this.state = {
+      formUp: false,
+      phone: "",
+      value: "",
+      fullName: "",
+      descriptionOfIssue: ""
+    };
+  }
+
+  handleSendTicket() {
+    this.setState({ formUp: false });
   }
 
   render() {
+    this.handleSendTicket = this.handleSendTicket.bind(this);
+
     return(
       <MDBContainer fluid className="page">
         <MDBContainer className = "box">
@@ -46,70 +60,13 @@ export default class Contact extends Component {
               className="form-control textBox"
               id="name"
               placeholder="Name"
+              onChange={(evt) => { this.setState({fullName: evt.target.value}); }}
             />
             <label htmlFor="school">School (if applicable):</label>
-            <Autocomplete
-              items={[
-                { key: 0, label: "N/A"},
-                { key: 1, label: "Rensselaer Polytechnic Institute" },
-                { key: 2, label: "Worcester Polytechnic Institute" },
-                { key: 3, label: "Massachusetts Institute of Technology" },
-                { key: 4, label: "Rochester Institute of Technology" },
-                { key: 5, label: "University of Rochester" },
-                { key: 6, label: "SUNY Polytechnic Institute" },
-                { key: 7, label: "SUNY Albany" },
-                { key: 8, label: "Albany Medical College" }
-              ]}
-              getItemValue={item => item.label}
-              sortItems={(itemA, itemB, value) => {
-                if(itemB.label === "N/A") {
-                  return 99;
-                }
-                const lowA = itemA.label.toLowerCase();
-                const lowB = itemB.label.toLowerCase();
-                const indexA = lowA.indexOf(value.toLowerCase());
-                const indexB = lowB.indexOf(value.toLowerCase());
-                if(indexA !== indexB) {
-                  return (indexA - indexB);
-                }
-                return (lowA < lowB ? -1 : 1);
-              }}
-              shouldItemRender={(item, value) =>
-                (item.label.toLowerCase().indexOf(value.toLowerCase()) >= 0) || item.label === "N/A"
-              }
-              renderItem={(item, isHighlighted) =>
-                <div
-                  key={item.key}
-                  className="auto_comp"
-                >
-                  {item.label}
-                </div>
-              }
-              inputProps={{
-                className: "form-control textBox",
-                id: "school",
-                placeholder: "School"
-              }}
-              wrapperStyle={{
-                display: "block",
-              }}
+            <SchoolPicker
               value={this.state.value}
               onChange={e => this.setState({ value: e.target.value })}
-              onMenuVisibilityChange={isOpen => {
-                if(isOpen && this.state.value === "N/A") {
-                  this.setState({ value: "" });
-                } else if(!isOpen && this.state.value === "") {
-                  this.setState({ value: "N/A" });
-                }
-              }}
               onSelect={value => this.setState({ value })}
-            />
-            <label htmlFor="email">Email address:</label>
-            <input required
-              type="email"
-              className="form-control textBox"
-              id="email"
-              placeholder="Email"
             />
             <label htmlFor="phone">Phone number:</label>
             <PhoneInput
@@ -125,8 +82,9 @@ export default class Contact extends Component {
               id="description"
               maxLength="500"
               placeholder="500 character limit"
+              onChange={(evt) => { this.setState({descriptionOfIssue: evt.target.value}); }}
             ></textarea>
-            <button className="button" onClick={() => this.setState({ formUp: false })}>
+            <button className="button" onClick={this.handleSendTicket}>
               Send Ticket
             </button>
           </MDBContainer>
