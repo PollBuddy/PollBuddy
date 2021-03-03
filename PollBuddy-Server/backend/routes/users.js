@@ -8,12 +8,24 @@ var path = require("path");
 var mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
 
+// TODO: This probably should move somewhere else, like a utils.js that I think was created in another branch.
+function isEmpty(obj) {
+  for(var prop in obj) {
+    if(Object.prototype.hasOwnProperty.call(obj,prop)) {
+      return false;
+    }
+  }
+  return JSON.stringify(obj) === JSON.stringify({});
+}
+
 // GET users listing.
 router.get("/", function (req, res, next) {
   mongoConnection.getDB().collection("users").find({}).toArray(function (err, result) {
     res.send(result);
   });
 });
+
+
 router.post("/login", function (req, res) {
 
   // Get email and password from request in JSON form
@@ -82,6 +94,18 @@ router.post("/login", function (req, res) {
 
 });
 
+/**
+ * This route is hit by the user's browser as part of the registration with RPI process. It bounces the user to the CAS login
+ * portal, then that returns here and we set up some session details, then bounce them back to /register/school/step2
+ * with some additional data requests to finalize the registration process.
+ * @urlparams {void} None
+ * @returns {void} On success: a browser redirect to /register/school/step2 with GET parameters of userName, email, and school.
+ * On failure: { "result": "failure", "error": "User has not logged in with RPI" }
+ * @name backend/users/register/rpi_GET
+ * @param {string} path - Express path
+ * @param {middleware} middleware - Express middleware to redirect the user to CAS
+ * @param {callback} callback - function handler for data received after CAS redirection
+ */
 router.get("/login/rpi", rpi.bounce, function (req, res, next) {
 
   // The user is first bounced to the RPI CAS login and only after will they end up in here.
@@ -165,25 +189,29 @@ router.get("/login/rpi", rpi.bounce, function (req, res, next) {
 
 });
 
-function isEmpty(obj) {
-  for(var prop in obj) {
-    if(Object.prototype.hasOwnProperty.call(obj,prop)) {
-      return false;
-    }
-  }
-
-  return JSON.stringify(obj) === JSON.stringify({});
-}
-
+/**
+ * This route called by frontend internal JS as part of the registration with Poll Buddy process. Here, we set up some
+ * session details, validate data we were sent, save it in the database if success, and send errors if there's any problems.
+ * @urlparams {void} body: { firstName: string, lastName: string, userName: string, email: string, password: string }
+ * @returns {void} On success: status 200, {"result": "success", "data": {"firstName": requestBody.firstName,
+                               "lastName": requestBody.lastName, "userName": requestBody.userName}}
+ * On failure: status 400, { "result": "failure", "error": "This username is already in use" }
+ *         or: status 400 { "result": "failure", "error": "Validation failed", "data": (errorMsg obj with keys of firstName,
+ *                           lastName, etc. as relevant and with value of error message) });
+ *         or: status 500, { "result": "failure", "error": "An error occurred while communicating with the database" }
+ * @name backend/users/register_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for data received
+ */
 router.post("/register", function (req, res) {
   var requestBody = req.body;
 
-  const firstnameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(requestBody.FirstName);
-  const lastnameValid = new RegExp(/^[a-zA-Z]{0,256}$/).test(requestBody.LastName);
-  const userValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(requestBody.UserName);
-  const emailValid = new RegExp(/^[a-zA-Z0-9_.]+@\w+\.\w+$/).test(requestBody.Email);
+  const firstnameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(requestBody.firstName);
+  const lastnameValid = new RegExp(/^[a-zA-Z]{0,256}$/).test(requestBody.lastName);
+  const userValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(requestBody.userName);
+  const emailValid = new RegExp(/^[a-zA-Z0-9_.]+@\w+\.\w+$/).test(requestBody.email);
   const passValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/)
-    .test(requestBody.Password);
+    .test(requestBody.password);
 
   let errorMsg = {};
 
@@ -200,21 +228,49 @@ router.post("/register", function (req, res) {
   }
 
   if (isEmpty(errorMsg)) {
+    // No validation errors, let's try adding the user!
+
+    // Configure user data and save in session
+    req.session.userData = {};
+    req.session.userData.userName = requestBody.userName;
+    req.session.userData.email = requestBody.email;
+
+    // Attempt to insert the user into the database
     mongoConnection.getDB().collection("users").insertOne({
-      FirstName: requestBody.FirstName,
-      LastName: requestBody.LastName,
-      UserName: requestBody.UserName,
-      Email: requestBody.Email,
-      Password: bcrypt.hashSync(requestBody.Password, 10)
+      FirstName: requestBody.firstName,
+      FirstNameLocked: false,
+      LastName: requestBody.lastName,
+      LatNameLocked: false,
+      UserName: requestBody.userName,
+      UserNameLocked: true,
+      Email: requestBody.email,
+      EmailLocked: false
     }, (err, result) => {
       if (err) {
-        return res.send("Exists");
+        // Something went wrong
+        console.log("Database Error occurred while creating a new user");
+        console.log(err);
+        if(err.code === 11000) { // This code means we're trying to insert a duplicate key (aka user already registered)
+          return res.status(400).json({"result": "failure", "error": "This username is already in use"});
+        } else {
+          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database"});
+        }
       } else {
-        return res.sendStatus(203);
+        // No error object at least
+        if (result.result.ok === 1) {
+          // One result changed, therefore it worked. Send the response object with some basic info for the frontend to store
+          return res.json({"result": "success", "data": {"firstName": requestBody.firstName,
+            "lastName": requestBody.lastName, "userName": requestBody.userName}});
+        } else {
+          // For some reason, the user wasn't inserted, send an error.
+          console.log("Database Error occurred while creating a new user");
+          console.log(err);
+          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database"});
+        }
       }
     });
-  }else {
-    return res.send(errorMsg);
+  } else {
+    return res.status(400).json({ "result": "failure", "error": "Validation failed", "data": errorMsg });
   }
 });
 
@@ -264,7 +320,7 @@ router.get("/register/rpi", rpi.bounce2, function (req, res) {
 });
 
 /**
- * This route is hit by the user's browser as part of the register with RPI process. At this point, the user is at
+ * This route is called by frontend internal JS as part of the register with RPI process. At this point, the user is at
  * /register/school/step2 in the frontend, and are submitting registration data here for processing. We validate it and
  * save it in the database if success, and send errors if there's any problems.
  * @urlparams {void} body: {firstName: string, lastName: string, userName: string (optional, ignored), email: string (optional, ignored)}
@@ -276,7 +332,7 @@ router.get("/register/rpi", rpi.bounce2, function (req, res) {
  *         or: status 500, { "result": "failure", "error": "An error occurred while communicating with the database" }
  * @name backend/users/register/rpi_POST
  * @param {string} path - Express path
- * @param {callback} callback - function handler for data received after CAS redirection
+ * @param {callback} callback - function handler for data received
  */
 router.post("/register/rpi", function (req, res) {
 
