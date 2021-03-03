@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import Autocomplete from "react-autocomplete";
 import autosize from "autosize";
 import {MDBContainer} from "mdbreact";
 import PhoneInput from "react-phone-input-2";
