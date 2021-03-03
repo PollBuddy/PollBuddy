@@ -30,6 +30,7 @@ import QuestionEnded from "./pages/QuestionEnded/QuestionEnded";
 import AnswerRecorded from "./pages/AnswerRecorded/AnswerRecorded";
 import LoginDefault from "./pages/LoginDefault/LoginDefault";
 import LoginWithSchool from "./pages/LoginWithSchool/LoginWithSchool";
+import LoginWithSchoolStep2 from "./pages/LoginWithSchoolStep2/LoginWithSchoolStep2";
 import Code from "./pages/Code/Code";
 
 import Header from "./components/Header/Header.js";
@@ -185,6 +186,12 @@ export default class App extends React.Component {
             <Route exact path="/login/school">
               <LoginWithSchool updateTitle={this.updateTitle} />
             </Route>
+
+            {/* Login with School Account Step 2 Page */}
+            <Route exact path="/login/school/step2"
+              render={ (props) => (<LoginWithSchoolStep2 {...props} updateTitle={this.updateTitle}
+                userInfo={this.state.userInfo} />) }
+            />
 
             {/* Forgot Password Page */}
             <Route exact path="/login/forgot">

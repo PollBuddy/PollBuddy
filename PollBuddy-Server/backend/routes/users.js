@@ -95,13 +95,12 @@ router.post("/login", function (req, res) {
 });
 
 /**
- * This route is hit by the user's browser as part of the registration with RPI process. It bounces the user to the CAS login
- * portal, then that returns here and we set up some session details, then bounce them back to /register/school/step2
- * with some additional data requests to finalize the registration process.
+ * This route is hit by the user's browser as part of the login with RPI process. It bounces the user to the CAS login
+ * portal, then that returns here and we set up some session details and send the frontend the relevant data.
  * @urlparams {void} None
- * @returns {void} On success: a browser redirect to /register/school/step2 with GET parameters of userName, email, and school.
- * On failure: { "result": "failure", "error": "User has not logged in with RPI" }
- * @name backend/users/register/rpi_GET
+ * @returns {void} On success: a browser redirect to /login/school/step2 with GET parameters of TODO: FILL IN
+ * On failure: TODO: FILL IN
+ * @name backend/users/login/rpi_GET
  * @param {string} path - Express path
  * @param {middleware} middleware - Express middleware to redirect the user to CAS
  * @param {callback} callback - function handler for data received after CAS redirection
@@ -111,36 +110,26 @@ router.get("/login/rpi", rpi.bounce, function (req, res, next) {
   // The user is first bounced to the RPI CAS login and only after will they end up in here.
   // Therefore, this only runs if the user is logged in with CAS successfully.
 
-  // Some options used in the resultant data returned
-  var options = {
-    root: path.join(__dirname, "../public"),
-    dotfiles: "deny",
-    headers: {
-      "x-timestamp": Date.now(),
-      "x-sent": true
-    }
-  };
-
-  // Log the user in on the backend side of things
-
-  console.log(req.session);
-
+  // Make sure they succeeded in authenticating with CAS
   if (req.session.cas_user) {
-    console.log("Locating user to add to session."); // TODO: Remove after testing
-    mongoConnection.getDB().collection("users").findOne({ UserName: req.session.cas_user }, { projection: { _id: false, UserName: true } }, (err, result) => {
+
+    // Lowercase the cas_user data first
+    // eslint-disable-next-line camelcase
+    req.session.cas_user = req.session.cas_user.toLowerCase();
+
+    // Check to make sure they're already registered
+    console.log(req.session.cas_user);
+    mongoConnection.getDB().collection("users").findOne({ UserName: req.session.cas_user }, {
+      projection: { _id: false, UserName: true, Email: true, FirstName: true, LastName: true } }, (err, result) => {
       if (err) {
         // Something went wrong
-        // Send the user the login process error page
-        console.log("Database Error Occurred"); // TODO: Improve error messaging
+        console.log("Database Error occurred while searching for an existing user during log in with RPI");
         console.log(err);
-        res.status(500).sendFile("pages/loginRedirect_Error.html", options, function (err2) {
-          if (err2) {
-            console.log(err2);
-            res.send(500);
-          }
-        });
+        // Note: It's not impossible that this won't format correctly and will need some %20's, not sure. TODO: Test.
+        // Send the user the login with school step 2 page with relevant information
+        return res.redirect("/login/school/step2?result=failure&error=An error occurred while communicating with the database");
       } else {
-        console.log("Result found"); // TODO: Remove after testing
+        // No error object at least
         console.log(result);
         if (result === null) {
           // User not registered
@@ -149,42 +138,28 @@ router.get("/login/rpi", rpi.bounce, function (req, res, next) {
           delete req.session.cas_return_to;
           delete req.session.cas_user;
 
-          // Send the user the unregistered user error page
-          res.status(401).sendFile("pages/loginRedirect_Unregistered.html", options, function (err2) {
-            if (err2) {
-              console.log(err2);
-              res.send(500);
-            }
-          });
+          // Send the user the login with school step 2 page with relevant information
+          return res.redirect("/login/school/step2?result=failure&error=User is not registered");
         } else {
-          // Success!
-          // TODO: Ensure that is really what we want (we probs want to check for the existence of our result)
+          // User has been found
 
-          // Save some information in the session
-          req.session.UserData = {};
-          req.session.UserData.UserName = result.UserName;
+          // Configure user data and save in session
+          req.session.userData = {};
+          req.session.userData.userName = result.UserName;
+          req.session.userData.email = result.Email;
 
-          // Send the user the login success page
-          res.sendFile("pages/loginRedirect.html", options, function (err2) {
-            if (err2) {
-              console.log(err2);
-              res.send(500);
-            }
-          });
+          // Send the user the login with school step 2 page with relevant information
+          return res.redirect("/login/school/step2?result=success&data=" + JSON.stringify(
+            {"firstName": result.FirstName, "lastName": result.LastName, "userName": result.UserName}
+          ));
         }
       }
     });
 
   } else {
     // Something went wrong
-    // Send the user the login process error page
-    console.log("Error occurred, user got to the rpi login page without logging in"); // TODO: Improve error messaging
-    res.status(500).sendFile("pages/loginRedirect_Error.html", options, function (err2) {
-      if (err2) {
-        console.log(err2);
-        res.send(500);
-      }
-    });
+    console.log("Error occurred, user got to the rpi registration page without logging in. This should not happen.");
+    return res.redirect("/login/school/step2?result=failure&error=User has not logged in with RPI");
   }
 
 });
