@@ -58,7 +58,7 @@ router.post("/:id/edit", async (req, res) => {
     try{
       await mongoConnection.getDB().collection("polls")
         .updateOne({"_id": id}, {"$addToSet": {Question: validResult.value.Question}});
-      return res.status(200).send(createResponse(null));
+      return res.status(200).send(createResponse());
     } catch(e) {
       return res.status(500).send(createResponse(null, e));
     }
@@ -67,7 +67,7 @@ router.post("/:id/edit", async (req, res) => {
     try {
       await mongoConnection.getDB().collection("polls")
         .updateOne({"_id": id}, {"$pull": {Question: ""}});
-      return res.status(200).send(createResponse(null));
+      return res.status(200).send(createResponse());
     } catch (e) {
       return res.status(500).send(createResponse(null, e));
     }
