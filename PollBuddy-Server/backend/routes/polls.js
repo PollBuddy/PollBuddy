@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
-const {createResponse, validateID} = require("../modules/utils");
+const {createResponse, validateID} = require("../modules/utils"); // object destructuring, only import desired functions
 
 router.post("/new", function (req, res) {
   // Validate request body
@@ -12,7 +12,7 @@ router.post("/new", function (req, res) {
   const validResult = schema.validate(req.body);
   // invalidate handling
   if (validResult.error) {
-    return res.status(404).send(createResponse(false, validResult.error.details[0].message));
+    return res.status(404).send(createResponse(null, validResult.error.details[0].message));
   }
 
   // Add to DB
@@ -26,8 +26,7 @@ router.post("/new", function (req, res) {
         return res.sendStatus(500);
       } else {
         // Things seemed to be ok, send result message and ID of inserted object
-        // return res.send({"Result": "Success", "ID": result.insertedId});
-        return res.send(createResponse(true, null, {ID: result.insertedId}));
+        return res.send(createResponse({ID: result.insertedId}));
       }
     }
   });
@@ -46,33 +45,31 @@ router.post("/:id/edit", async (req, res) => {
   const validResult = schema.validate(req.body);
   // invalidate handling
   if (validResult.error) {
-    return res.status(404).send(createResponse(false, validResult.error.details[0].message));
+    return res.status(404).send(createResponse(null, validResult.error.details[0].message));
   }
   // validate id
   const id = await validateID("polls", req.params.id);
   if (!id) {
-    return res.status(400).send(createResponse(false, "Invalid ID."));
+    return res.status(400).send(createResponse(null, "Invalid ID."));
   }
 
   if (validResult.value.Action === "add") {
     // "Action": "add"
     try{
-      const prom = await mongoConnection.getDB().collection("polls")
+      await mongoConnection.getDB().collection("polls")
         .updateOne({"_id": id}, {"$addToSet": {Question: validResult.value.Question}});
-      return res.status(200).send(prom);
+      return res.status(200).send(createResponse(null));
     } catch(e) {
-      return res.status(400).send(e);
+      return res.status(500).send(createResponse(null, e));
     }
   } else{
     // "Action": "remove"
-    if (validResult.value.Question) {
-      mongoConnection.getDB().collection("polls").updateOne({"_id": id}, {"$pull": {Question: ""}}, function (err, res) {
-        if (err) {
-          return res.sendStatus(500);
-        }
-      });
-    } else {
-      return res.sendStatus(400);
+    try {
+      await mongoConnection.getDB().collection("polls")
+        .updateOne({"_id": id}, {"$pull": {Question: ""}});
+      return res.status(200).send(createResponse(null));
+    } catch (e) {
+      return res.status(500).send(createResponse(null, e));
     }
   }
 });
@@ -194,7 +191,7 @@ router.get("/:id", function (req, res, next) {
 router.get("/:id/view", function (req, res, next) {
   const id = validateID("polls", req.params.id);
   if (!id) {
-    return res.status(400).send(createResponse(false, "Invalid ID."));
+    return res.status(400).send(createResponse(null, "Invalid ID."));
   }
 
   mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
@@ -224,7 +221,7 @@ router.get("/:id/view", function (req, res, next) {
 router.get("/:id/results", function (req, res, next) {
   const id = validateID("polls", id);
   if (!id) {
-    return res.status(400).send(createResponse(false, "Invalid ID."));
+    return res.status(400).send(createResponse(null, "Invalid ID."));
   }
 
   mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {

@@ -2,16 +2,16 @@ const mongoConnection = require("../modules/mongoConnection.js");
 
 
 // Helper function for creating specified http response (https://pollbuddy.app/api/users)
-// error and data are optional
-function createResponse(isSuccess = true, error, data) {
+// both data and error are optional
+function createResponse(data, error) {
   const payload = {
-    result: isSuccess ? "success" : "failure"
+    result: !error ? "success" : "failure"
   };
-  if (error) {
-    payload.error = error;
-  }
   if (data) {
     payload.data = data;
+  }
+  if (error) {
+    payload.error = error;
   }
   return payload;
 }
