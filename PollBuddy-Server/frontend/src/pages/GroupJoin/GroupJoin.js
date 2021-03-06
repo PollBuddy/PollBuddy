@@ -10,25 +10,36 @@ export default class GroupJoin extends Component {//this class will likely need 
   constructor() {
     super();
     //TODO check if they're logged in
+    this.state = {
+      groupCode: ""
+    }
+  }
+
+  handleClick = (event) => {
+    var response = confirm("Are you sure you want to join this group?");
+    if (response == true) {
+      window.location.replace("/groups/" + this.state.groupCode + "/polls");
+    } else {
+      window.location.replace("/groups")
+    }
+  }
+
+  handleChange = (e) => {
+    this.setState({groupCode: e.target.value});
   }
 
   render() {
     //TODO check if they're logged in
     return (
-        <MDBContainer className="page">
-            <MDBContainer fluid className="box">
-                <MDBContainer className="form-group">
-                    <label>Please enter your group code:</label>
-                    <input className="form-control textBox" type="text" name="groupCode" onChange={this.handleChange}/>
-                    <input className="btn button float-right" type="submit" value="OK"/>
-                </MDBContainer>
-                {/* <form className="form-group" onSubmit={this.handleSubmit}>
-                    <label>Please enter your group code:</label>
-                    <input className="form-control textBox" type="text" name="groupCode" onChange={this.handleChange}/>
-                    <input className="btn button float-right" type="submit" value="OK"/>
-                </form> */}
-            </MDBContainer>
+      <MDBContainer className="page">
+        <MDBContainer fluid className="box">
+          <MDBContainer className="form-group">
+            <label>Please enter your group code:</label>
+            <input className="form-control textBox" type="text" name="groupCode" onChange={this.handleChange}/>
+            <input onClick={this.handleClick} className="btn button float-right" type="submit" value="OK"/>
+          </MDBContainer>
         </MDBContainer>
+      </MDBContainer>
     );
   }
 }
