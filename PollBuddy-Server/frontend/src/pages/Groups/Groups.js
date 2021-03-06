@@ -129,14 +129,16 @@ export default class Groups extends Component {
             <Link to={"/groups/new"}>
               <button className="button">New Group</button>
             </Link>
-            <button className="btn button" onClick={(e) => this.setState({ openJoinGroupPopup: true })}>Join Group</button>
-            <Popup isOpen={this.state.openJoinGroupPopup} onClose={(e) => this.setState({ openJoinGroupPopup: false })}>
+            <Link to={"/groups/join"}>
+              <button className="btn button">Join Group</button>
+            </Link>
+            {/* <Popup isOpen={this.state.openJoinGroupPopup} onClose={(e) => this.setState({ openJoinGroupPopup: false })}>
               <form onSubmit={this.handleSubmit}>
                 <label>Please enter your group code:</label>
                 <input className="form-control textBox" type="text" name="groupCode" onChange={this.handleChange}/>
                 <input className="btn button float-right" type="submit" value="OK"/>
               </form>
-            </Popup>
+            </Popup> */}
             <button className="button" onClick={this.toggleLeaveGroup}>{this.state.leaveGroupButtonText}</button>
             {this.state.isOpen && <Dialog onClose={(e) => this.setState({isOpen: false})} />}
           </MDBContainer>
