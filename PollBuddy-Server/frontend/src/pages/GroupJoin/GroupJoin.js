@@ -12,15 +12,15 @@ export default class GroupJoin extends Component {//this class will likely need 
     //TODO check if they're logged in
     this.state = {
       groupCode: ""
-    }
+    };
   }
 
-  handleClick = (event) => {
-    var response = confirm("Are you sure you want to join this group?");
-    if (response == true) {
+  handleClick = () => {
+    var response = window.confirm("Are you sure you want to join this group?");
+    if (response === true) {
       window.location.replace("/groups/" + this.state.groupCode + "/polls");
     } else {
-      window.location.replace("/groups")
+      window.location.replace("/groups");
     }
   }
 
