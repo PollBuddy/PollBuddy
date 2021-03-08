@@ -313,3 +313,64 @@ a:hover {
 .float-right {
   float: right;
 }
+
+// Account Information Page
+
+.accountInputs {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 1rem 0;
+}
+
+.col-md-6 {
+  margin: 0 3rem 0 3rem;
+}
+
+.col-md-12 {
+  margin: 0 3rem 0 3rem;
+  width: 100%;
+}
+
+#passwordChange {
+  padding: 7px 15px;
+  display: block;
+
+  p {
+    margin: 0;
+  }
+}
+
+#passwordChange:hover {
+  text-decoration: underline;
+}
+
+#saveChanges {
+  width: 100%;
+  text-align: right;
+}
+
+@media only screen and (max-width: 800px) {
+
+  .accountInputs {
+    flex-direction: column;
+    margin: 0;
+
+    label {
+      text-align: center;
+    }
+  }
+
+  #passwordChange {
+    padding: 0;
+    margin: 10px 0;
+  }
+
+  #saveChanges {
+    text-align: center;
+  }
+}
+
+// <------------------------------>
