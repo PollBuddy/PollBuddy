@@ -27,18 +27,18 @@ export default class AccountInfo extends Component {
             </MDBRow>
 
             <MDBRow className="accountInputs">
-                <MDBCol md="6">
-                  <label htmlFor="usernametext">Username:</label>
-                  <input placeholder="mans" className="form-control textBox" id="usernametext" readOnly disabled/>
-                </MDBCol>
-                <MDBCol md="6">
-                  <label htmlFor="emailText">Email:</label>
-                  <input placeholder="sisman@rpi.edu" className="form-control textBox" id="emailText"/>
-                </MDBCol>
+              <MDBCol md="6">
+                <label htmlFor="usernametext">Username:</label>
+                <input placeholder="mans" className="form-control textBox" id="usernametext" readOnly disabled/>
+              </MDBCol>
+              <MDBCol md="6">
+                <label htmlFor="emailText">Email:</label>
+                <input placeholder="sisman@rpi.edu" className="form-control textBox" id="emailText"/>
+              </MDBCol>
             </MDBRow>
 
             <MDBRow className="accountInputs">
-            <MDBCol md="6">
+              <MDBCol md="6">
                 <label htmlFor="institution">Institution:</label>
                 <input placeholder="Rensselaer Polytechnic Institute" className="form-control textBox" id="institution"/>
               </MDBCol>
