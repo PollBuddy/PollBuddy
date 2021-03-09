@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
+import Settings from "../../components/Settings/Settings";
 
 export default class GroupPolls extends Component {
   constructor(props) {//shouldn't this be dependent on the class???? thats why i included a constructor.
@@ -9,7 +10,7 @@ export default class GroupPolls extends Component {
     //problem is there is no find in backend rn... frontend could do find but probably more resource intensive?
     //TODO: get all this from a backend call
     this.state = {
-      isMember: false,
+      isMember: true,
       class: "1200 - Data Structures",
       polls: [
         {pollId: 1, label: "Big O Notation"},
@@ -32,83 +33,14 @@ export default class GroupPolls extends Component {
     this.props.updateTitle(this.state.class);
   }
 
-  toggleTextBox(elementId, selector, text) {
-    if(document.getElementById(elementId).style.display === "block") {
-      document.getElementById(elementId).style.display = "none";
-      document.querySelector(selector).textContent = text;
-    } else {
-      document.getElementById(elementId).style.display = "block";
-      document.querySelector(selector).textContent = "Submit";
-    }
-  }
+
   render() {
     return (
       <MDBContainer className="page">
         <MDBContainer className="two-box">
           {/*TODO: put the GroupEditor component here*/}
-          {this.state.isMember ? (
-            <MDBContainer className="box">
-              <p className="fontSizeLarge">
-                Member Settings:
-              </p>
-              <p className="fontSizeSmall">
-                {"Total number of polls: " + this.state.polls.length}
-              </p>
-              <p className="fontSizeSmall">
-                {"Total questions: " + this.state.total_questions}
-              </p>
-              <p className="fontSizeSmall">
-                {"Questions answered correctly: " + this.state.member_correct}
-              </p>
+          <Settings/>
 
-              {/*TODO: add more (correct) read-only information here*/}
-
-              <Link to={"/Groups"}>
-                <button className="button">Leave Group</button>
-              </Link>
-            </MDBContainer>
-          ) : (
-            <MDBContainer className="box">
-              <p className="fontSizeLarge">
-                {/*  TODO: change this to whatever was clicked on in the last screen*/}
-                Admin Settings
-              </p>
-              <Link to={"/polls/123/edit"}>
-                <button className="button">Create New Poll</button>
-              </Link>
-              <p className="fontSizeSmall">
-                {"Total number of polls: " + this.state.polls.length}
-              </p>
-              <p className="fontSizeSmall">
-                {"Total questions: " + this.state.total_questions}
-              </p>
-              <p className="fontSizeSmall">
-                {"Average correct answers: " + this.state.avg_correct}
-              </p>
-              {/*change name, details, add people, remove people*/}
-              {/*TODO: admin should be able to select individual students and see their information here*/}
-
-              <MDBContainer>
-                <input type="GroupName" placeholder="New Group Name" className="display_none form-control textBox" id="groupText" />
-                <button id="groupBtn" className="button" onClick={() => this.toggleTextBox("groupText","#groupBtn","Change Group Name")}>Change Group Name</button>
-              </MDBContainer>
-
-              <MDBContainer>
-                <input type="AddStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="addText" />
-                <button id="addBtn" className="button" onClick={() => this.toggleTextBox("addText","#addBtn","Add Student")}>Add Student</button>
-              </MDBContainer>
-
-              <MDBContainer>
-                <input type="RemoveStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="removeText" />
-                <button id="removeBtn" className="button" onClick={() => this.toggleTextBox("removeText","#removeBtn","Remove Student")}>Remove Student</button>
-              </MDBContainer>
-
-              <Link to={"/Groups"}>
-                <button className="button">Delete this Group</button>
-              </Link>
-            </MDBContainer>
-          )
-          }
           <MDBContainer className="box">
             <p className="fontSizeLarge">
               My Polls
