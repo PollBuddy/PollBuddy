@@ -25,7 +25,17 @@ router.get("/", function (req, res, next) {
   });
 });
 
-
+/**
+ * This route is called by frontend internal JS as part of the login with Poll Buddy process. It validates the login
+ * information, then sets up some session details and sends the frontend the relevant data.
+ * @urlparams {void} None
+ * @returns {void} On success: TODO: FILL IN
+ * On failure: TODO: FILL IN
+ * @name backend/users/login_GET
+ * @param {string} path - Express path
+ * @param {middleware} middleware - Express middleware to redirect the user to CAS
+ * @param {callback} callback - function handler for data received after CAS redirection
+ */
 router.post("/login", function (req, res) {
 
   // Get email and password from request in JSON form
@@ -33,6 +43,7 @@ router.post("/login", function (req, res) {
   var password = req.body["password"];
 
   // Check if email is present
+  // TODO: This all needs to be updated to our new validation scheme
   if (email === undefined) {
     res.status(400).send({
       error: "Missing email"
