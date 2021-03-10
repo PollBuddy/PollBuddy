@@ -12,7 +12,7 @@ router.post("/new", function (req, res) {
   const validResult = schema.validate(req.body);
   // invalidate handling
   if (validResult.error) {
-    return res.status(404).send(createResponse(null, validResult.error.details[0].message));
+    return res.status(400).send(createResponse(null, validResult.error.details[0].message));
   }
 
   // Add to DB
@@ -45,7 +45,7 @@ router.post("/:id/edit", async (req, res) => {
   const validResult = schema.validate(req.body);
   // invalidate handling
   if (validResult.error) {
-    return res.status(404).send(createResponse(null, validResult.error.details[0].message));
+    return res.status(400).send(createResponse(null, validResult.error.details[0].message));
   }
   // validate id
   const id = await validateID("polls", req.params.id);
@@ -60,16 +60,18 @@ router.post("/:id/edit", async (req, res) => {
         .updateOne({"_id": id}, {"$addToSet": {Question: validResult.value.Question}});
       return res.status(200).send(createResponse());
     } catch(e) {
-      return res.status(500).send(createResponse(null, e));
+      console.log(e); // log error
+      return res.status(500).send(createResponse(null, "An error occurred while writing the database."));
     }
   } else{
     // "Action": "remove"
     try {
       await mongoConnection.getDB().collection("polls")
         .updateOne({"_id": id}, {"$pull": {Question: ""}});
-      return res.status(200).send(createResponse());
+      return res.send(createResponse());
     } catch (e) {
-      return res.status(500).send(createResponse(null, e));
+      console.log(e); // log error
+      return res.status(500).send(createResponse(null, "An error occurred while writing the database."));
     }
   }
 });
