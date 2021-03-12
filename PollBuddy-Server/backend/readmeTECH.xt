@@ -82,6 +82,21 @@ NPM Link: https://www.npmjs.com/package/bson
 -package to help hash passwords
 NPM Link: https://www.npmjs.com/package/bcrypt
 
+## cors
+-package for enabling CORS 
+    (Cross-Origin Resource Sharing: https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
+NPM Link: https://www.npmjs.com/package/cors
+
+## cas-authentication
+-package for redirecting to cas login (system RPI uses for logins)
+NPM Link: https://www.npmjs.com/package/cas-authentication
+
+## Influx
+-package to run InfluxDB in Node.js
+-InfluxDB is a full database so it's a little more complicated than these other packages
+-We mainly use it to log the time it takes to for mongoDB to run and analyse any performance issues
+NPM Link: https://www.npmjs.com/package/influx
+Also see: https://docs.influxdata.com/influxdb/cloud/ for InfluxDB full documentation
 
 ############################################################################
 
