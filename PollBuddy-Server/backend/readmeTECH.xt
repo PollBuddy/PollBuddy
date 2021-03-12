@@ -20,7 +20,7 @@ Example to get the list of classes that user "123" has in an array:
     {"_id": 0, "classes": 1})  and returns the classes data type, while excluding the id type 
     (mongodb automatically returns the id unless it is excluded)
 Please note "classes" is not actually a supported data type in "users", it is just an example for this readme
-Please refer to   https://docs.mongodb.com/   for further documentation
+See:   https://docs.mongodb.com/   for the full documentation
 
 ##############################################################################
 
@@ -32,6 +32,7 @@ Please refer to   https://docs.mongodb.com/   for further documentation
 -People have written a plethora of packages that run on Node.js that can help with your code
     find packages at: https://www.npmjs.com/
 So essentially Node.js is what allows us to run our code on the backend
+See:    https://nodejs.org/api/     for the full documentation
 
 ##############################################################################
 
@@ -53,5 +54,28 @@ So essentially Node.js is what allows us to run our code on the backend
 
     directs any calls to /api/users to the file ./routes/users, 
     which is where we store our Express functions for users information
-See https://expressjs.com/en/4x/api.html for the full documentation
+See     https://expressjs.com/en/4x/api.html    for the full documentation
 
+############################################################################
+
+#### NPM Packages Used:
+Visit each package link for full documentation, the npm website is really nice
+Package names are generally self-explanatory
+
+## http-errors
+NPM Link: https://www.npmjs.com/package/http-errors
+
+## cookie-parser
+NPM link: https://www.npmjs.com/package/cookie-parser
+
+## morgan
+-this one isn't very clear from the name but it's a logger package \
+    (controls the recording of what happens in when a program runs)
+NPM link: https://www.npmjs.com/package/morgan
+
+
+############################################################################
+
+If you have questions on something that is listed in "required" not listed here,
+it is probably a member of something listed here (like Router is a part of Express), 
+or someone forgot to add it here (please submit an issue in that case)
