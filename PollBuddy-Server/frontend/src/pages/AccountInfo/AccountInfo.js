@@ -64,18 +64,19 @@ export default class AccountInfo extends Component {
 
             { /* TODO: Hide these until the user clicks the change password button below */ }
                
-            <MDBRow id="changePasswordInputs" style={this.state.changePassword ? {display: "block"} : {display: "none"}}>
-              <MDBCol md="6">
+            <MDBContainer id="changePasswordInputs" style={this.state.changePassword ? {display: "flex"} : {display: "none"}}>
+              <MDBCol>
                 <label htmlFor="newPasswordText">New password:</label>
                 <input type="password" placeholder="••••••••••••" className="form-control textBox" id="newPasswordText"/>
               </MDBCol>
-              <div className="w-100"></div>
-              <MDBCol md="6">
-                <label htmlFor="confirmNewPassword">Confirm new password:</label>
-                <input type="password" placeholder="••••••••••••" className="form-control textBox" id="confirmNewPassword"/>
-              </MDBCol>
-            </MDBRow>
-            
+              <MDBRow>
+                <MDBCol>
+                  <label htmlFor="confirmNewPassword">Confirm new password:</label>
+                  <input type="password" placeholder="••••••••••••" className="form-control textBox" id="confirmNewPassword"/>
+                </MDBCol>
+              </MDBRow>
+            </MDBContainer>
+
           </MDBContainer>
 
           <Link id="saveChanges" to={"/login/forgot"}>
