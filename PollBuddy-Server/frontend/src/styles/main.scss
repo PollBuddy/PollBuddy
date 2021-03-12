@@ -336,15 +336,15 @@ a:hover {
 
 #passwordChange {
   padding: 7px 15px;
-  display: block;
 
   p {
     margin: 0;
   }
-}
 
-#passwordChange:hover {
-  text-decoration: underline;
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
 }
 
 #saveChanges {
@@ -371,6 +371,16 @@ a:hover {
   #saveChanges {
     text-align: center;
   }
+}
+
+#changePasswordInputs {
+
+  margin: 1rem 3rem;
+
+  .w-100 {
+    width: 100%;
+  }
+  
 }
 
 // <------------------------------>

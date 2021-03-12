@@ -5,8 +5,22 @@ import {Link} from "react-router-dom";
 
 
 export default class AccountInfo extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {changePassword: false};
+    this.changePassword = this.handleToggleClick.bind(this);
+  }
+
   componentDidMount(){
     this.props.updateTitle("Account Info");
+  }
+
+  
+  handleToggleClick() {
+    this.setState(state => ({
+      changePassword: !state.changePassword
+    }));
   }
 
   render() {
@@ -29,7 +43,7 @@ export default class AccountInfo extends Component {
             <MDBRow className="accountInputs">
               <MDBCol md="6">
                 <label htmlFor="usernametext">Username:</label>
-                <input placeholder="mans" className="form-control textBox" id="usernametext" readOnly disabled/>
+                <input value="mans" className="form-control textBox" id="usernametext" readOnly disabled/>
               </MDBCol>
               <MDBCol md="6">
                 <label htmlFor="emailText">Email:</label>
@@ -42,21 +56,26 @@ export default class AccountInfo extends Component {
                 <label htmlFor="institution">Institution:</label>
                 <input placeholder="Rensselaer Polytechnic Institute" className="form-control textBox" id="institution"/>
               </MDBCol>
-              <MDBCol md="6">
+              <MDBCol md="6" style={!this.state.changePassword ? {display: "block"} : {display: "none"}}>
                 <label htmlFor="passwordChange">Password:</label>
-                <a id="passwordChange">Click here to change</a>
+                <p id="passwordChange" onClick={this.changePassword}>Click here to change</p>
               </MDBCol>              
             </MDBRow>
 
             { /* TODO: Hide these until the user clicks the change password button below */ }
-            <MDBContainer style={{display:"none"}}>
-              <label htmlFor="newPasswordText">New password:</label>
-              <input type="password" placeholder="••••••••••••" className="form-control textBox" id="newPasswordText"/>
-              <label htmlFor="confirmNewPassword">Confirm new password:</label>
-              <input type="password" placeholder="••••••••••••" className="form-control textBox" id="confirmNewPassword"/>
-              <label htmlFor="currentPasswordText">Verify changes with current password:</label>
-              <input type="password" placeholder="••••••••••••" className="form-control textBox" id="currentPasswordText"/>
-            </MDBContainer>
+               
+            <MDBRow id="changePasswordInputs" style={this.state.changePassword ? {display: "block"} : {display: "none"}}>
+              <MDBCol md="6">
+                <label htmlFor="newPasswordText">New password:</label>
+                <input type="password" placeholder="••••••••••••" className="form-control textBox" id="newPasswordText"/>
+              </MDBCol>
+              <div className="w-100"></div>
+              <MDBCol md="6">
+                <label htmlFor="confirmNewPassword">Confirm new password:</label>
+                <input type="password" placeholder="••••••••••••" className="form-control textBox" id="confirmNewPassword"/>
+              </MDBCol>
+            </MDBRow>
+            
           </MDBContainer>
 
           <Link id="saveChanges" to={"/login/forgot"}>
