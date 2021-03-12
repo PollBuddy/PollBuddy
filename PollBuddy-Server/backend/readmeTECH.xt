@@ -63,15 +63,24 @@ Visit each package link for full documentation, the npm website is really nice
 Package names are generally self-explanatory
 
 ## http-errors
+-Package for creating error messages
 NPM Link: https://www.npmjs.com/package/http-errors
 
 ## cookie-parser
+-package for parsing cookies
 NPM link: https://www.npmjs.com/package/cookie-parser
 
 ## morgan
--this one isn't very clear from the name but it's a logger package \
-    (controls the recording of what happens in when a program runs)
+-logger package (controls the recording of what happens in when a program runs)
 NPM link: https://www.npmjs.com/package/morgan
+
+## bson
+-Binary JSON parser
+NPM Link: https://www.npmjs.com/package/bson
+
+## bcrypt
+-package to help hash passwords
+NPM Link: https://www.npmjs.com/package/bcrypt
 
 
 ############################################################################
