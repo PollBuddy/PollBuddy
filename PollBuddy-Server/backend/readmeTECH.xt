@@ -1,6 +1,9 @@
 Techonology Used:
 
-## MongoDB
+
+#############################################################################
+
+### MongoDB
 -The database that PollBuddy uses to store our information
 -At the top of the information hierarchy there are collections, e.g. "users"
 -Every collection contains .JSON files wtih unique IDs to their collection 
@@ -18,4 +21,37 @@ Example to get the list of classes that user "123" has in an array:
     (mongodb automatically returns the id unless it is excluded)
 Please note "classes" is not actually a supported data type in "users", it is just an example for this readme
 Please refer to   https://docs.mongodb.com/   for further documentation
+
+##############################################################################
+
+## Node.js
+-Node.js is an open source JavaScript runtime environment that allows code to executed outside of a browser
+-Node.js is the name of the environment, it is not the name of the file despite ending in .js like JavaScript files do
+-It runs a single-threaded event loop while optimizing code to limit blocking 
+    (blocking = waiting on one line to execute before calling the next)
+-People have written a plethora of packages that run on Node.js that can help with your code
+    find packages at: https://www.npmjs.com/
+So essentially Node.js is what allows us to run our code on the backend
+
+##############################################################################
+
+## Express
+-Express is a framework that runs within Node.js that allows for server creation and maintenance
+-app.js is where the main Express code runs, and the files in the routes folder are linked to app.js with lines like:
+    app.use("/api/users", usersRouter);
+-this uses the router application built into Express, allowing us to break up the Express calls into seperate files 
+-Express works with what it calls "middleware", which are the functions that happen when a call to the server is made
+    e.g.:   
+            app.get("/api/test", (req, res) => {
+                ...CODE...
+            }
+            
+    runs CODE whenever the call for /api/test is made
+    and:    
+            var usersRouter = require("./routes/users");
+            app.use("/api/users", usersRouter);
+
+    directs any calls to /api/users to the file ./routes/users, 
+    which is where we store our Express functions for users information
+See https://expressjs.com/en/4x/api.html for the full documentation
 
