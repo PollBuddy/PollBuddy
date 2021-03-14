@@ -10,7 +10,7 @@ export default class GroupPolls extends Component {
     //problem is there is no find in backend rn... frontend could do find but probably more resource intensive?
     //TODO: get all this from a backend call
     this.state = {
-      isMember: true,
+      isMember: false,
       class: "1200 - Data Structures",
       polls: [
         {pollId: 1, label: "Big O Notation"},
@@ -39,8 +39,7 @@ export default class GroupPolls extends Component {
       <MDBContainer className="page">
         <MDBContainer className="two-box">
           {/*TODO: put the GroupEditor component here*/}
-          <Settings/>
-
+          <Settings state={this.state}/>
           <MDBContainer className="box">
             <p className="fontSizeLarge">
               My Polls

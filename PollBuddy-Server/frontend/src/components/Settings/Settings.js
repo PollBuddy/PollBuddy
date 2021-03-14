@@ -5,23 +5,7 @@ import {Link} from "react-router-dom";
 export default class Settings extends Component{
   constructor(props) {
     super(props);
-    //TODO: get all this as input from GroupPolls
-    this.state = {
-      isMember: false,
-      class: "1200 - Data Structures",
-      polls: [
-        {pollId: 1, label: "Big O Notation"},
-        {pollId: 2, label: "Basic C++ Syntax"},
-        {pollId: 3, label: "Pointers"},
-        {pollId: 4, label: "Vectors"},
-        {pollId: 5, label: "Linked Lists"},
-        {pollId: 6, label: "Sets"},
-        {pollId: 7, label: "Maps"}
-      ],
-      total_questions: 24,
-      avg_correct: 20,
-      member_correct: 22
-    };
+    this.state = this.props.state;
   }
   toggleTextBox(elementId, selector, text) {
     if(document.getElementById(elementId).style.display === "block") {
@@ -49,8 +33,6 @@ export default class Settings extends Component{
             {"Questions answered correctly: " + this.state.member_correct}
           </p>
 
-          {/*TODO: add more (correct) read-only information here*/}
-
           <Link to={"/Groups"}>
             <button className="button">Leave Group</button>
           </Link>
@@ -66,9 +48,9 @@ export default class Settings extends Component{
         <p className="fontSizeSmall">
           {"Total number of polls: " + this.state.polls.length}
         </p>
-        <p className="fontSizeSmall">
-          {"Total questions: " + this.state.total_questions}
-        </p>
+          <p className="fontSizeSmall">
+              {"Total questions: " + this.state.total_questions}
+          </p>
         <p className="fontSizeSmall">
           {"Average correct answers: " + this.state.avg_correct}
         </p>
