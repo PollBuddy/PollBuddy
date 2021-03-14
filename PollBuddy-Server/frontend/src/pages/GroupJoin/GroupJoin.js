@@ -10,6 +10,13 @@ export default class GroupJoin extends Component {//this class will likely need 
   constructor() {
     super();
     //TODO check if they're logged in
+    console.log(localStorage.getItem("loggedIn"));
+    if (localStorage.getItem("loggedIn") == "true") {
+      console.log("Logged in");
+    } else {
+      console.log("Not logged in");
+      window.location.replace("/login");
+    }
     this.state = {
       groupCode: ""
     };
