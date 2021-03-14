@@ -38,70 +38,91 @@ router.get("/", function (req, res, next) {
  */
 router.post("/login", function (req, res) {
 
-  // Get email and password from request in JSON form
-  var email = req.body["email"];
-  var password = req.body["password"];
+  var requestBody = req.body;
 
   // Check if email is present
   // TODO: This all needs to be updated to our new validation scheme
-  if (email === undefined) {
+  if (requestBody.email === undefined) {
     res.status(400).send({
       error: "Missing email"
     });
-  } else if (password === undefined) { // Check if password is present
+  } else if (requestBody.password === undefined) { // Check if password is present
     res.status(400).send({
       error: "Missing password"
     });
-  } else {
-    mongoConnection.getDB().collection("users").findOne({ Email: email }, {
-      _id: true,
-      Password: true
-    }, (err_db, result_db) => {
-      if (err_db) {
-        console.error(err_db);
-        res.status(500).send({
-          error: "Database error"
-        });
-      } else if (result_db === null) {
-        res.status(401).send({
-          error: "Invalid credentials"
-        });
-      } else {
-        bcrypt.compare(password, result_db["Password"], (err_compare, result_compare) => {
-          if (err_compare) {
-            console.error(err_compare);
-            res.status(500).send({
-              error: "Hash comparison error"
-            });
-          } else if (result_compare) {
-            req.session.regenerate((err_regen) => {
-              if (err_regen) {
-                console.error(err_regen);
-                res.status(500).send({
-                  error: "Error regenerating session"
-                });
-              } else {
-                // successful login
-                req.session["UserName"] = result_db["_id"];
-                req.session["userData"] = {
-                  loggedIn: true, 
-                  username: result_db["UserName"],
-                  firstName: result_db["FirstName"], 
-                  lastName: result_db["LastName"],
-                  sessionID: req.session.id
-                };
-                res.sendStatus(200);
-              }
-            });
-          } else {
-            res.status(401).send({
-              error: "Invalid credentials"
-            });
-          }
-        });
-      }
-    });
   }
+
+
+  const userNameValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(requestBody.usernameEmail);
+  const emailValid = new RegExp(/^[a-zA-Z0-9_.]+@\w+\.\w+$/).test(requestBody.usernameEmail);
+  const passValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/)
+    .test(requestBody.password);
+
+  let errorMsg = {};
+
+  if(!firstnameValid){
+    errorMsg["firstName"] = "Invalid firstname format!";
+  } else if(!lastnameValid){
+    errorMsg["lastName"] = "Invalid lastname format!";
+  } else if(!userValid){
+    errorMsg["userName"] = "Invalid username format!";
+  } else if(!emailValid){
+    errorMsg["email"] = "Invalid email format!";
+  } else if(!passValid){
+    errorMsg["password"] = "Invalid password format!";
+  }
+
+
+
+
+  mongoConnection.getDB().collection("users").findOne({ Email: requestBody.email }, {
+    _id: true,
+    Password: true
+  }, (err_db, result_db) => {
+    if (err_db) {
+      console.error(err_db);
+      res.status(500).send({
+        error: "Database error"
+      });
+    } else if (result_db === null) {
+      res.status(401).send({
+        error: "Invalid credentials"
+      });
+    } else {
+      bcrypt.compare(password, result_db["Password"], (err_compare, result_compare) => {
+        if (err_compare) {
+          console.error(err_compare);
+          res.status(500).send({
+            error: "Hash comparison error"
+          });
+        } else if (result_compare) {
+          req.session.regenerate((err_regen) => {
+            if (err_regen) {
+              console.error(err_regen);
+              res.status(500).send({
+                error: "Error regenerating session"
+              });
+            } else {
+              // successful login
+              req.session["UserName"] = result_db["_id"];
+              req.session["userData"] = {
+                loggedIn: true,
+                username: result_db["UserName"],
+                firstName: result_db["FirstName"],
+                lastName: result_db["LastName"],
+                sessionID: req.session.id
+              };
+              res.sendStatus(200);
+            }
+          });
+        } else {
+          res.status(401).send({
+            error: "Invalid credentials"
+          });
+        }
+      });
+    }
+  });
 
 });
 
@@ -109,8 +130,14 @@ router.post("/login", function (req, res) {
  * This route is hit by the user's browser as part of the login with RPI process. It bounces the user to the CAS login
  * portal, then that returns here and we set up some session details and send the frontend the relevant data.
  * @urlparams {void} None
- * @returns {void} On success: a browser redirect to /login/school/step2 with GET parameters of TODO: FILL IN
- * On failure: TODO: FILL IN
+ * @returns {void} On success: a browser redirect to /login/school/step2 with GET parameters resembling typical
+ * error messages. Possible return values include:
+ * result=success&data={"firstName": <First Name>, "lastName": <Last Name>, "userName": <Username> }
+ * On failure: a browser redirect to /login/school/step2 with GET parameters resembling typical
+ * error messages. Possible return values include:
+ * result=failure&error=An error occurred while communicating with the database
+ * result=failure&error=User is not registered
+ * result=failure&error=User has not logged in with RPI
  * @name backend/users/login/rpi_GET
  * @param {string} path - Express path
  * @param {middleware} middleware - Express middleware to redirect the user to CAS
@@ -194,22 +221,22 @@ router.post("/register", function (req, res) {
 
   const firstnameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(requestBody.firstName);
   const lastnameValid = new RegExp(/^[a-zA-Z]{0,256}$/).test(requestBody.lastName);
-  const userValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(requestBody.userName);
+  const userNameValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(requestBody.userName);
   const emailValid = new RegExp(/^[a-zA-Z0-9_.]+@\w+\.\w+$/).test(requestBody.email);
-  const passValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/)
+  const passwordValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/)
     .test(requestBody.password);
 
   let errorMsg = {};
 
   if(!firstnameValid){
     errorMsg["firstName"] = "Invalid firstname format!";
-  }else if(!lastnameValid){
+  } else if(!lastnameValid){
     errorMsg["lastName"] = "Invalid lastname format!";
-  }else if(!userValid){
+  } else if(!userNameValid){
     errorMsg["userName"] = "Invalid username format!";
-  }else if(!emailValid){
+  } else if(!emailValid){
     errorMsg["email"] = "Invalid email format!";
-  }else if(!passValid){
+  } else if(!passwordValid){
     errorMsg["password"] = "Invalid password format!";
   }
 
