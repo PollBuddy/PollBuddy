@@ -242,7 +242,6 @@ router.get("/login/rpi", rpi.bounce, function (req, res, next) {
  * @param {callback} callback - function handler for data received
  */
 router.post("/register", function (req, res) {
-  
 
   const firstnameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(req.body.firstName);
   const lastnameValid = new RegExp(/^[a-zA-Z]{0,256}$/).test(req.body.lastName);
@@ -282,16 +281,25 @@ router.post("/register", function (req, res) {
       UserName: req.body.userName,
       UserNameLocked: true,
       Email: req.body.email,
-      EmailLocked: false
+      EmailLocked: false,
+      Password: bcrypt.hashSync(req.body.password, 10)
     }, (err, result) => {
       if (err) {
         // Something went wrong
-        console.log("Database Error occurred while creating a new user");
-        console.log(err);
         if(err.code === 11000) { // This code means we're trying to insert a duplicate key (aka user already registered)
-          return res.status(400).json({"result": "failure", "error": "This username is already in use"});
+          if(err.keyPattern.Email) {
+            return res.status(400).json({"result": "failure", "error": "This email is already in use."});
+          } else if(err.keyPattern.UserName) {
+            return res.status(400).json({"result": "failure", "error": "This username is already in use."});
+          } else {
+            console.log("Database Error occurred while creating a new user.");
+            console.log(err);
+            return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+          }
         } else {
-          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database"});
+          console.log("Database Error occurred while creating a new user.");
+          console.log(err);
+          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
         }
       } else {
         // No error object at least
@@ -301,9 +309,9 @@ router.post("/register", function (req, res) {
             "lastName": req.body.lastName, "userName": req.body.userName}});
         } else {
           // For some reason, the user wasn't inserted, send an error.
-          console.log("Database Error occurred while creating a new user");
+          console.log("Database Error occurred while creating a new user.");
           console.log(err);
-          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database"});
+          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
         }
       }
     });
