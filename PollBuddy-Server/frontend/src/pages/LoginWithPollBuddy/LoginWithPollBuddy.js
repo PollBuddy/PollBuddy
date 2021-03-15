@@ -9,7 +9,7 @@ export default class LoginWithPollBuddy extends Component {
   state = {
     successfulLogin: false,
     error: "",
-    usernameEmail: "",
+    userNameEmail: "",
     password: ""
   };
 
@@ -38,7 +38,7 @@ export default class LoginWithPollBuddy extends Component {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        usernameEmail: this.state.usernameEmail,
+        userNameEmail: this.state.userNameEmail,
         password: this.state.password
       })
     }).then(response => {
@@ -71,9 +71,9 @@ export default class LoginWithPollBuddy extends Component {
       <MDBContainer className="page">
         <MDBContainer className="box">
           <MDBContainer className="form-group">
-            <label htmlFor="usernameEmail">Username or Email:</label>
-            <input type="usernameEmail" placeholder="sisman@rpi.edu" className="form-control textBox" id="usernameEmail"
-              onChange={(evt) => { this.setState({usernameEmail: evt.target.value}); }}/>
+            <label htmlFor="userNameEmail">Username or Email:</label>
+            <input type="userNameEmail" placeholder="sisman@rpi.edu" className="form-control textBox" id="userNameEmail"
+              onChange={(evt) => { this.setState({userNameEmail: evt.target.value}); }}/>
             <label htmlFor="password">Password:</label>
             <input type="password" placeholder="••••••••••••" className="form-control textBox" id="password"
               onChange={(evt) => { this.setState({password: evt.target.value}); }}/>

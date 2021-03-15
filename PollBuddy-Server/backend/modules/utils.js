@@ -37,7 +37,19 @@ async function validateID(collection, id) {
   }
 }
 
+
+// Checks if a JS object is empty or not. Returns true if so, false otherwise.
+function isEmpty(obj) {
+  for(var prop in obj) {
+    if(Object.prototype.hasOwnProperty.call(obj,prop)) {
+      return false;
+    }
+  }
+  return JSON.stringify(obj) === JSON.stringify({});
+}
+
 module.exports = {
   createResponse,
-  validateID
+  validateID,
+  isEmpty
 };
