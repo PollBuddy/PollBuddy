@@ -3,6 +3,7 @@ import "mdbreact/dist/css/mdb.css";
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
 import {Link} from "react-router-dom";
 
+import "./AccountInfo.scss";
 
 export default class AccountInfo extends Component {
 
@@ -54,11 +55,11 @@ export default class AccountInfo extends Component {
             <MDBRow className="accountInputs">
               <MDBCol md="6">
                 <label htmlFor="institution">Institution:</label>
-                <input placeholder="Rensselaer Polytechnic Institute" className="form-control textBox" id="institution"/>
+                <input placeholder="RPI" className="form-control textBox" id="institution"/>
               </MDBCol>
-              <MDBCol md="6" style={!this.state.changePassword ? {display: "block"} : {display: "none"}}>
+              <MDBCol md="6">
                 <label htmlFor="passwordChange">Password:</label>
-                <p id="passwordChange" onClick={this.changePassword}>Click here to change</p>
+                <p id="passwordChange" onClick={this.changePassword}>{this.state.changePassword ? "Cancel" : "Click to change password"}</p>
               </MDBCol>              
             </MDBRow>
 

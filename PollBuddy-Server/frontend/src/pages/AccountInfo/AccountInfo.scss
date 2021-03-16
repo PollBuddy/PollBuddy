@@ -1,0 +1,79 @@
+@media only screen and (min-width: 0px) {
+   .accountInputs {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+  
+      label {
+        text-align: center;
+      }
+    }
+  
+    #passwordChange {
+      padding: 0;
+      margin: 10px 0;
+      text-decoration: underline;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+
+      &:hover {
+         text-decoration: none;
+      }
+    }
+  
+    #saveChanges {
+      text-align: center;
+    }
+
+    #changePasswordInputs {
+ 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      border-top: 0.5px solid #707070;
+      margin: 1rem 3rem;
+    
+    }
+}
+
+
+@media only screen and (min-width:992px) {
+.accountInputs {
+   display: flex;
+   justify-content: start;
+   align-items: center;
+   flex-direction: row;
+   margin: 1rem 0;
+
+   label {
+      text-align: left;
+   }
+ }
+ 
+ .col-md-6 {
+   margin: 0 3rem 0 3rem;
+   width: 50%;
+ }
+ 
+ .col-md-12 {
+   margin: 0 3rem 0 3rem;
+   width: 100%;
+ }
+ 
+ #passwordChange {
+   padding: 7px 15px;
+   text-decoration: underline;
+   cursor: pointer;
+   margin: 0;
+   text-align: left;
+ }
+ 
+ #saveChanges {
+   width: 100%;
+   text-align: right;
+ }
+}
