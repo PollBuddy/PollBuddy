@@ -30,57 +30,55 @@ export default class AccountInfo extends Component {
         <MDBContainer className="box">
           <h1>Account Settings</h1>
           <MDBContainer>
-            <MDBRow className="accountInputs">
+            <MDBRow className="AccountInfo-accountInputs">
               <MDBCol md="6">
                 <label htmlFor="firstnameText">First Name:</label>
-                <input placeholder="SIS" className="form-control textBox" id="firstnameText"/>
+                <input placeholder="SIS" className="form-control textBox" id="firstnameText" />
               </MDBCol>
               <MDBCol md="6">
                 <label htmlFor="lastnameText">Last Name:</label>
-                <input placeholder="Man" className="form-control textBox" id="lastnameText"/>
+                <input placeholder="Man" className="form-control textBox" id="lastnameText" />
               </MDBCol>
             </MDBRow>
 
-            <MDBRow className="accountInputs">
+            <MDBRow className="AccountInfo-accountInputs">
               <MDBCol md="6">
                 <label htmlFor="usernametext">Username:</label>
-                <input value="mans" className="form-control textBox" id="usernametext" readOnly disabled/>
+                <input value="mans" className="form-control textBox" id="usernametext" readOnly />
               </MDBCol>
               <MDBCol md="6">
                 <label htmlFor="emailText">Email:</label>
-                <input placeholder="sisman@rpi.edu" className="form-control textBox" id="emailText"/>
+                <input placeholder="sisman@rpi.edu" className="form-control textBox" id="emailText" />
               </MDBCol>
             </MDBRow>
 
-            <MDBRow className="accountInputs">
+            <MDBRow className="AccountInfo-accountInputs">
               <MDBCol md="6">
                 <label htmlFor="institution">Institution:</label>
-                <input placeholder="RPI" className="form-control textBox" id="institution"/>
+                <input placeholder="RPI" className="form-control textBox" id="institution" readOnly />
               </MDBCol>
               <MDBCol md="6">
                 <label htmlFor="passwordChange">Password:</label>
-                <p id="passwordChange" onClick={this.changePassword}>{this.state.changePassword ? "Cancel" : "Click to change password"}</p>
+                <p id="AccountInfo-passwordChange" onClick={this.changePassword}>{this.state.changePassword ? "Cancel" : "Click to change password"}</p>
               </MDBCol>              
             </MDBRow>
 
             { /* TODO: Hide these until the user clicks the change password button below */ }
                
-            <MDBContainer id="changePasswordInputs" style={this.state.changePassword ? {display: "flex"} : {display: "none"}}>
-              <MDBCol>
+            <MDBContainer id="AccountInfo-changePasswordInputs" style={this.state.changePassword ? {display: "flex"} : {display: "none"}}>
+              <MDBCol md="6">
                 <label htmlFor="newPasswordText">New password:</label>
                 <input type="password" placeholder="••••••••••••" className="form-control textBox" id="newPasswordText"/>
               </MDBCol>
-              <MDBRow>
-                <MDBCol>
-                  <label htmlFor="confirmNewPassword">Confirm new password:</label>
-                  <input type="password" placeholder="••••••••••••" className="form-control textBox" id="confirmNewPassword"/>
-                </MDBCol>
-              </MDBRow>
+              <MDBCol md="6">
+                <label htmlFor="confirmNewPassword">Confirm new password:</label>
+                <input type="password" placeholder="••••••••••••" className="form-control textBox" id="confirmNewPassword"/>
+              </MDBCol>
             </MDBContainer>
 
           </MDBContainer>
 
-          <Link id="saveChanges" to={"/login/forgot"}>
+          <Link id="AccountInfo-saveChanges" to={"/login/forgot"}>
             <button className="button">Save Changes</button>
           </Link>
         </MDBContainer>
