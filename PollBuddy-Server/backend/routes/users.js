@@ -107,11 +107,6 @@ router.post("/login", function (req, res) {
     return res.status(401).send(createResponse(null, "Invalid credentials."));
   }
 
-  // Make sure the password is worth checking (performance optimization as hashing is slow)
-  if(!passwordValid) {
-    return res.status(401).send(createResponse(null, "Invalid credentials."));
-  }
-
   // Define an internal function to use for validating the data returned from the DB query
   let validate = function(err, result) {
     if (err) {
@@ -129,32 +124,45 @@ router.post("/login", function (req, res) {
 
       // Make sure this isn't a school account as they can't log in here
       if(result.SchoolAffiliation) {
+        // This is a school account, don't bother trying to log in anymore.
         return res.status(406).send(createResponse(null, "This account is associated with a school."));
 
       } else {
-        // Not a school account, check the password
-        bcrypt.compare(req.body.password, result.Password, (bcryptErr, bcryptResult) => {
-          if (bcryptErr) {
-            // Something went wrong with bcrypt
-            console.error(bcryptErr);
-            return res.status(500).send(createResponse(null, "An error occurred while validating credentials."));
+        // Not a school account
 
-          } else if (bcryptResult) {
-            // Password validated and matches
+        // Make sure the password is worth checking (performance optimization as hashing is slow)
+        if(!passwordValid) {
+          return res.status(401).send(createResponse(null, "Invalid credentials."));
 
-            // Configure user data and save in session
-            req.session.userData = {};
-            req.session.userData.userName = result.UserName;
-            req.session.userData.email = result.Email;
+        } else {
+          // Check the password
+          bcrypt.compare(req.body.password, result.Password, (bcryptErr, bcryptResult) => {
+            if (bcryptErr) {
+              // Something went wrong with bcrypt
+              console.error(bcryptErr);
+              return res.status(500).send(createResponse(null, "An error occurred while validating credentials."));
 
-            // Send the user the necessary data to complete the login process
-            return res.send(createResponse({"firstName": result.FirstName, "lastName": result.LastName, "userName": result.UserName}));
+            } else if (bcryptResult) {
+              // Password validated and matches
 
-          } else {
-            // Password validated and does not match
-            return res.status(401).send(createResponse(null, "Invalid credentials."));
-          }
-        });
+              // Configure user data and save in session
+              req.session.userData = {};
+              req.session.userData.userName = result.UserName;
+              req.session.userData.email = result.Email;
+
+              // Send the user the necessary data to complete the login process
+              return res.send(createResponse({
+                "firstName": result.FirstName,
+                "lastName": result.LastName,
+                "userName": result.UserName
+              }));
+
+            } else {
+              // Password validated and does not match
+              return res.status(401).send(createResponse(null, "Invalid credentials."));
+            }
+          });
+        }
       }
     }
   };
