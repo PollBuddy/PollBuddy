@@ -54,12 +54,12 @@ router.get("/login", function (req, res) {
  * information, then sets up some session details and sends the frontend the relevant data.
  * @urlparams {void} None
  * @postdata {void} userNameEmail: string, password: string
- * @returns {void} On success: status 200, {result: success, data: {firstName: "user's first name", lastName: "user's
- *                                          last name"}, userName: "user's username" }
- * On failure: status 401, {result: failure, data: "Invalid credentials."}
- *         or: status 406, {result: failure, data: "This account is associated with a school."}
- *         or: status 500, {result: failure, data: "An error occurred while validating login details."}
- *         or: status 500, {result: failure, data: "An error occurred while communicating with the database."
+ * @returns {void} On success: status 200, {result: success, data: {"firstName": <First Name>, "lastName": <Last Name>,
+ *                                                                  "userName": <Username> }
+ * On failure: status 401, {result: failure, error: "Invalid credentials."}
+ *         or: status 406, {result: failure, error: "This account is associated with a school."}
+ *         or: status 500, {result: failure, error: "An error occurred while validating login details."}
+ *         or: status 500, {result: failure, error: "An error occurred while communicating with the database."}
  * @name backend/users/login_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
@@ -104,12 +104,12 @@ router.post("/login", function (req, res) {
   } else if(!userNameValid && emailValid) {
     mode = "email";
   } else {
-    return res.status(401).send(createResponse(null, "Invalid credentials"));
+    return res.status(401).send(createResponse(null, "Invalid credentials."));
   }
 
   // Make sure the password is worth checking (performance optimization as hashing is slow)
   if(!passwordValid) {
-    return res.status(401).send(createResponse(null, "Invalid credentials"));
+    return res.status(401).send(createResponse(null, "Invalid credentials."));
   }
 
   // Define an internal function to use for validating the data returned from the DB query
@@ -152,7 +152,7 @@ router.post("/login", function (req, res) {
 
           } else {
             // Password validated and does not match
-            return res.status(401).send(createResponse(null, "Invalid credentials"));
+            return res.status(401).send(createResponse(null, "Invalid credentials."));
           }
         });
       }
@@ -169,7 +169,8 @@ router.post("/login", function (req, res) {
       _id: true, FirstName: true, LastName: true, UserName: true, Password: true}, validate);
 
   } else {
-    return res.status(401).send(createResponse(null, "Invalid credentials"));
+    // Didn't pass validation for username or email. This shouldn't ever run anyways though.
+    return res.status(401).send(createResponse(null, "Invalid credentials."));
   }
 
 });
