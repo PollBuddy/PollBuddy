@@ -414,18 +414,18 @@ router.get("/register/rpi", rpi.bounce, function (req, res) {
   // Check to make sure the user completed the CAS registration process
   if (req.session.cas_user) {
 
-    // Configure email, username (For RPI, that is the CAS username + "@rpi.edu") and save in session
-    req.session.userData = {};
-    req.session.userData.userName = req.session.cas_user.toLowerCase();
-    req.session.userData.email = req.session.userData.userName + "@rpi.edu";
+    // Temporarily store some data
+    req.session.userDataTemp = {};
+    req.session.userDataTemp.userName = req.session.cas_user.toLowerCase();
+    req.session.userDataTemp.email = req.session.userDataTemp.userName + "@rpi.edu";
 
     // Delete session information obtained from CAS
     delete req.session.cas_return_to;
     delete req.session.cas_user;
 
     // Send the user to the registration step 2 page with relevant info to prefill
-    return res.redirect("/register/school/step2?result=success&userName=" + req.session.userData.userName +
-      "&email=" + req.session.userData.email + "&school=rpi");
+    return res.redirect("/register/school/step2?result=success&userName=" + req.session.userDataTemp.userName +
+      "&email=" + req.session.userDataTemp.email + "&school=rpi");
 
   } else {
     // Something went wrong
@@ -475,8 +475,8 @@ router.post("/register/rpi", function (req, res) {
 
   // Configure email, username (For RPI, that is the CAS username + "@rpi.edu"), overwriting whatever the user
   // may have sent as we don't want it anyways.
-  req.body.userName = req.session.userData.userName;
-  req.body.email = req.session.userData.email;
+  req.body.userName = req.session.userDataTemp.userName;
+  req.body.email = req.session.userDataTemp.email;
 
   if (isEmpty(errorMsg)) {
     // No validation errors, let's try adding the user!
@@ -519,7 +519,17 @@ router.post("/register/rpi", function (req, res) {
       } else {
         // No error object at least
         if (result.result.ok === 1) {
-          // One result changed, therefore it worked. Send the response object with some basic info for the frontend to store
+          // One result changed, therefore it worked.
+
+          // Configure email, username (For RPI, that is the CAS username + "@rpi.edu") and save in session
+          req.session.userData = {};
+          req.session.userData.userName = req.session.userDataTemp.userName;
+          req.session.userData.email = req.session.userDataTemp.email;
+
+          // Delete temporary user information
+          delete req.session.userDataTemp;
+
+          // Send the response object with some basic info for the frontend to store
           return res.json({"result": "success", "data": {"firstName": req.body.firstName,
             "lastName": req.body.lastName, "userName": req.body.userName}});
 
