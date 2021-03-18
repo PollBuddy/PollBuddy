@@ -10,11 +10,43 @@ var mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
 const {createResponse, validateID, isEmpty} = require("../modules/utils"); // object destructuring, only import desired functions
 
-// GET users listing.
-router.get("/", function (req, res, next) {
-  mongoConnection.getDB().collection("users").find({}).toArray(function (err, result) {
-    res.send(result);
-  });
+/**
+ * This route is not used. It is simply there to have some response to /api/users/
+ * @urlparams {void} None
+ * @returns {void} status 200: {result: success, data: "User Routes"}
+ * @name backend/users/_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for data received
+ */
+// eslint-disable-next-line no-unused-vars
+router.get("/", function (req, res) {
+  return res.send(createResponse("Users routes"));
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/
+ * @urlparams {void} None
+ * @returns {void} status 200: {result: success, data: "User Routes"}
+ * @name backend/users/_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for data received
+ */
+// eslint-disable-next-line no-unused-vars
+router.post("/", function (req, res) {
+  return res.send(createResponse("Users routes"));
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/login when using GET.
+ * @urlparams {void} None
+ * @returns {void} status 501: {result: "failure", error: "GET is not available for this route. Use POST."}
+ * @name backend/users/login_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for data received
+ */
+// eslint-disable-next-line no-unused-vars
+router.post("/login", function (req, res) {
+  return res.status(501).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
 /**
@@ -27,9 +59,8 @@ router.get("/", function (req, res, next) {
  * On failure: status 401, {result: failure, data: "Invalid credentials."}
  *         or: status 406, {result: failure, data: "This account is associated with a school."}
  *         or: status 500, {result: failure, data: "An error occurred while validating login details."}
- *         or: status 500, {result: failure, data: "An error occurred while communicating with the database."}
- *
- * @name backend/users/login_GET
+ *         or: status 500, {result: failure, data: "An error occurred while communicating with the database."
+ * @name backend/users/login_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
  */
@@ -46,9 +77,6 @@ router.post("/login", function (req, res) {
   });
   const validResult = schema.validate({userName: req.body.userNameEmail, email: req.body.userNameEmail,
     password: req.body.password}, {abortEarly: false});
-
-  console.log(validResult); // TODO: Remove
-  console.log(validResult.error.details);
 
   // Check the results out
   let userNameValid = true;
@@ -69,10 +97,6 @@ router.post("/login", function (req, res) {
     return res.status(500).send(createResponse(null, "An error occurred while validating login details."));
   }
 
-  console.log(userNameValid); // TODO: Remove
-  console.log(emailValid);
-  console.log(passwordValid);
-
   // Check whether to validate email or username
   let mode = "";
   if(userNameValid && !emailValid) {
@@ -83,11 +107,10 @@ router.post("/login", function (req, res) {
     return res.status(401).send(createResponse(null, "Invalid credentials"));
   }
 
-  // Make sure the password is worth checking (performance optimization)
+  // Make sure the password is worth checking (performance optimization as hashing is slow)
   if(!passwordValid) {
     return res.status(401).send(createResponse(null, "Invalid credentials"));
   }
-  console.log(mode); // TODO: Remove
 
   // Define an internal function to use for validating the data returned from the DB query
   let validate = function(err, result) {
@@ -103,7 +126,6 @@ router.post("/login", function (req, res) {
 
     } else {
       // A user was found!
-      console.log(result);
 
       // Make sure this isn't a school account as they can't log in here
       if(result.SchoolAffiliation) {
@@ -113,8 +135,10 @@ router.post("/login", function (req, res) {
         // Not a school account, check the password
         bcrypt.compare(req.body.password, result.Password, (bcryptErr, bcryptResult) => {
           if (bcryptErr) {
+            // Something went wrong with bcrypt
             console.error(bcryptErr);
             return res.status(500).send(createResponse(null, "An error occurred while validating credentials."));
+
           } else if (bcryptResult) {
             // Password validated and matches
 
@@ -132,19 +156,18 @@ router.post("/login", function (req, res) {
           }
         });
       }
-
     }
   };
 
-  // Finally, check the database for a match
+  // Finally, use that function to check the database for a match
   if(mode === "userName") {
-    console.log("Trying to log in with username"); // TODO: Remove
     mongoConnection.getDB().collection("users").findOne({ UserName: req.body.userNameEmail }, {
       _id: true, FirstName: true, LastName: true, UserName: true, Password: true}, validate);
+
   } else if(mode === "email") {
-    console.log("Trying to log in with email"); // TODO: Remove
     mongoConnection.getDB().collection("users").findOne({ Email: req.body.userNameEmail }, {
       _id: true, FirstName: true, LastName: true, UserName: true, Password: true}, validate);
+
   } else {
     return res.status(401).send(createResponse(null, "Invalid credentials"));
   }
@@ -155,14 +178,14 @@ router.post("/login", function (req, res) {
  * This route is hit by the user's browser as part of the login with RPI process. It bounces the user to the CAS login
  * portal, then that returns here and we set up some session details and send the frontend the relevant data.
  * @urlparams {void} None
- * @returns {void} On success: a browser redirect to /login/school/step2 with GET parameters resembling typical
+ * @returns {void} On success: a browser redirect to /login/school/step2 with GET parameters resembling our typical
  * error messages. Possible return values include:
- * result=success&data={"firstName": <First Name>, "lastName": <Last Name>, "userName": <Username> }
- * On failure: a browser redirect to /login/school/step2 with GET parameters resembling typical
- * error messages. Possible return values include:
- * result=failure&error=An error occurred while communicating with the database.
- * result=failure&error=User is not registered.
- * result=failure&error=User has not logged in with RPI.
+ * ?result=success&data={"firstName": <First Name>, "lastName": <Last Name>, "userName": <Username>}
+ * On failure: a browser redirect to /login/school/step2 with GET parameters resembling our typical error messages.
+ * Possible return values include:
+ * ?result=failure&error=An error occurred while communicating with the database.
+ * ?result=failure&error=User is not registered.
+ * ?result=failure&error=User has not logged in with RPI.
  * @name backend/users/login/rpi_GET
  * @param {string} path - Express path
  * @param {middleware} middleware - Express middleware to redirect the user to CAS
@@ -181,28 +204,28 @@ router.get("/login/rpi", rpi.bounce, function (req, res, next) {
     req.session.cas_user = req.session.cas_user.toLowerCase();
 
     // Check to make sure they're already registered
-    console.log(req.session.cas_user);
     mongoConnection.getDB().collection("users").findOne({ UserName: req.session.cas_user }, {
       projection: { _id: false, UserName: true, Email: true, FirstName: true, LastName: true } }, (err, result) => {
       if (err) {
         // Something went wrong
         console.log("Database Error occurred while searching for an existing user during log in with RPI.");
         console.log(err);
-        // Note: It's not impossible that this won't format correctly and will need some %20's, not sure. TODO: Test.
         // Send the user the login with school step 2 page with relevant information
         return res.redirect("/login/school/step2?result=failure&error=An error occurred while communicating with the database.");
 
       } else {
         // Something did not go wrong (yet).
+
+        // Delete session information obtained from CAS
+        delete req.session.cas_return_to;
+        delete req.session.cas_user;
+
         if (result === null) {
           // User not registered
 
-          // Delete session information obtained from CAS
-          delete req.session.cas_return_to;
-          delete req.session.cas_user;
-
           // Send the user the login with school step 2 page with relevant information
           return res.redirect("/login/school/step2?result=failure&error=User is not registered.");
+
         } else {
           // User has been found
 
@@ -221,7 +244,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res, next) {
 
   } else {
     // Something went wrong
-    console.log("Error occurred, user got to the rpi registration page without logging in. This should not happen.");
+    console.log("Error occurred, user got to the rpi login page without logging in. This should not happen.");
     return res.redirect("/login/school/step2?result=failure&error=User has not logged in with RPI.");
   }
 
@@ -286,38 +309,47 @@ router.post("/register", function (req, res) {
     }, (err, result) => {
       if (err) {
         // Something went wrong
-        if(err.code === 11000) { // This code means we're trying to insert a duplicate key (aka user already registered)
+        if(err.code === 11000) {
+          // This code means we're trying to insert a duplicate key (aka user already registered)
           if(err.keyPattern.Email) {
             return res.status(400).json({"result": "failure", "error": "This email is already in use."});
+
           } else if(err.keyPattern.UserName) {
             return res.status(400).json({"result": "failure", "error": "This username is already in use."});
+
           } else {
             console.log("Database Error occurred while creating a new user.");
             console.log(err);
             return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
           }
+
         } else {
           console.log("Database Error occurred while creating a new user.");
           console.log(err);
           return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
         }
+
       } else {
         // No error object at least
         if (result.result.ok === 1) {
           // One result changed, therefore it worked. Send the response object with some basic info for the frontend to store
           return res.json({"result": "success", "data": {"firstName": req.body.firstName,
             "lastName": req.body.lastName, "userName": req.body.userName}});
+
         } else {
           // For some reason, the user wasn't inserted, send an error.
           console.log("Database Error occurred while creating a new user.");
           console.log(err);
           return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
         }
+
       }
     });
+
   } else {
     return res.status(400).json({ "result": "failure", "error": "Validation failed", "data": errorMsg });
   }
+
 });
 
 /**
@@ -332,7 +364,7 @@ router.post("/register", function (req, res) {
  * @param {middleware} middleware - Express middleware to redirect the user to CAS
  * @param {callback} callback - function handler for data received after CAS redirection
  */
-router.get("/register/rpi", rpi.bounce2, function (req, res) {
+router.get("/register/rpi", rpi.bounce, function (req, res) {
 
   // The user is first bounced to the RPI CAS login and only after will they end up in here.
   // Therefore, this only runs if the user has logged in with CAS successfully.

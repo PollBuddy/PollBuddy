@@ -7,7 +7,7 @@ schoolList.append("Rensselaer Polytechnic Institute (RPI)", "rpi");
 const cas = new CASAuthentication({
   /* eslint-disable camelcase */
   cas_url: process.env.CAS_URL || "https://cas-auth.rpi.edu/cas",
-  service_url: process.env.CAS_SERVICE_URL || "http://localhost:7655",
+  service_url: process.env.CAS_SERVICE_URL || "http://localhost:7655", // TODO: This needs to be env based
   cas_version: "3.0",
   /* eslint-enable camelcase */
   renew: false
@@ -18,10 +18,5 @@ module.exports = {
   // eslint-disable-next-line camelcase
   bounce_redirect: cas.bounce_redirect,
   block: cas.block,
-  logout: cas.logout,
-  // Bounce user to RPI's login page if they're not logged in, then back to the login handler
-  bounce2: function (req, res, next) {
-    req.url = "/api/users/login/rpi";
-    cas.bounce(req, res, next);
-  }
+  logout: cas.logout
 };
