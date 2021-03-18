@@ -162,11 +162,11 @@ router.post("/login", function (req, res) {
   // Finally, use that function to check the database for a match
   if(mode === "userName") {
     mongoConnection.getDB().collection("users").findOne({ UserName: req.body.userNameEmail }, {
-      _id: true, FirstName: true, LastName: true, UserName: true, Password: true}, validate);
+      _id: true, FirstName: true, LastName: true, UserName: true, Password: true, SchoolAffiliation: true}, validate);
 
   } else if(mode === "email") {
     mongoConnection.getDB().collection("users").findOne({ Email: req.body.userNameEmail }, {
-      _id: true, FirstName: true, LastName: true, UserName: true, Password: true}, validate);
+      _id: true, FirstName: true, LastName: true, UserName: true, Password: true, SchoolAffiliation: true}, validate);
 
   } else {
     // Didn't pass validation for username or email. This shouldn't ever run anyways though.
