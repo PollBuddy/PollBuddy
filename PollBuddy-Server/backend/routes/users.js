@@ -16,7 +16,7 @@ const {createResponse, validateID, isEmpty} = require("../modules/utils"); // ob
  * @returns {void} status 200: {result: success, data: "User Routes"}
  * @name backend/users/_GET
  * @param {string} path - Express path
- * @param {callback} callback - function handler for data received
+ * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/", function (req, res) {
@@ -29,7 +29,7 @@ router.get("/", function (req, res) {
  * @returns {void} status 200: {result: success, data: "User Routes"}
  * @name backend/users/_POST
  * @param {string} path - Express path
- * @param {callback} callback - function handler for data received
+ * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/", function (req, res) {
@@ -42,7 +42,7 @@ router.post("/", function (req, res) {
  * @returns {void} status 501: {result: "failure", error: "GET is not available for this route. Use POST."}
  * @name backend/users/login_POST
  * @param {string} path - Express path
- * @param {callback} callback - function handler for data received
+ * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/login", function (req, res) {
@@ -257,7 +257,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res, next) {
  * @returns {void} status 501: {result: "failure", error: "POST is not available for this route. Use GET."}
  * @name backend/users/login/rpi_POST
  * @param {string} path - Express path
- * @param {callback} callback - function handler for data received
+ * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/login/rpi", function (req, res) {
@@ -270,7 +270,7 @@ router.post("/login/rpi", function (req, res) {
  * @returns {void} status 501: {result: "failure", error: "GET is not available for this route. Use POST."}
  * @name backend/users/register_GET
  * @param {string} path - Express path
- * @param {callback} callback - function handler for data received
+ * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/register", function (req, res) {
@@ -535,6 +535,38 @@ router.post("/register/rpi", function (req, res) {
     return res.status(400).json({ "result": "failure", "error": "Validation failed.", "data": errorMsg });
   }
 
+});
+
+/**
+ * This route is called by frontend internal JS as part of the logout process. It essentially just deletes the session's
+ * userData fields. The frontend should then clear out its own cache of those values, but this is not essential for
+ * the security of the logout process, it would just give a weird and bad user experience.
+ * @urlparams {void} None
+ * @returns {void} {"result": "success", "data": "User was logged out successfully."}
+ * @name backend/users/logout_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+router.get("/logout", function (req, res) {
+
+  // Delete the userData in the session
+  delete req.session.userData;
+
+  return res.send(createResponse("User was logged out successfully."));
+
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/logout when using POST.
+ * @urlparams {void} None
+ * @returns {void} status 501: {result: "failure", error: "POST is not available for this route. Use GET."}
+ * @name backend/users/logout_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+// eslint-disable-next-line no-unused-vars
+router.post("/logout", function (req, res) {
+  return res.status(501).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 // stored user session data
