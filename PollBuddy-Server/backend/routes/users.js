@@ -424,8 +424,8 @@ router.get("/register/rpi", rpi.bounce, function (req, res) {
 
     // Temporarily store some data
     req.session.userDataTemp = {};
-    req.session.userDataTemp.userName = req.session.cas_user.toLowerCase();
-    req.session.userDataTemp.email = req.session.userDataTemp.userName + "@rpi.edu";
+    req.session.userDataTemp.userName = "__rpi_" + req.session.cas_user.toLowerCase();
+    req.session.userDataTemp.email = req.session.cas_user.toLowerCase() + "@rpi.edu";
 
     // Delete session information obtained from CAS
     delete req.session.cas_return_to;
