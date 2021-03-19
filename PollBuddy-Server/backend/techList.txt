@@ -66,6 +66,12 @@ See     https://expressjs.com/en/4x/api.html    for the full documentation
 
 --------------------------------------------------------------------------------------------------------------------------
 
+## express-session
+-package for creating an express session
+NPM Link: https://www.npmjs.com/package/express-session
+
+--------------------------------------------------------------------------------------------------------------------------
+
 ## http-errors
 -Package for creating error messages
 
