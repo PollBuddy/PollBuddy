@@ -27,6 +27,6 @@ export default class instructorPolls extends Component {
           </MDBContainer>
         </MDBContainer>
       </MDBContainer>
-    )
+    );
   }
 }
