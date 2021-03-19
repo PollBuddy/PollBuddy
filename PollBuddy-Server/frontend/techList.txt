@@ -1,30 +1,67 @@
 Front-end Techonology:
 
-#############################################################################
+------------------------------------------------------------------------------
 
 ## autosize
 -package to help automatically resize text areas
 NPM Link: https://www.npmjs.com/package/autosize
 
-#############################################################################
+------------------------------------------------------------------------------
 
-## mdbreact
+## mdbreact 
 -a UI kit with thousands of designs and layouts based on React
-NPM Link: https://www.npmjs.com/package/angular-bootstrap-md
+NPM Link: https://www.npmjs.com/package/mdbreact
 See the website: https://mdbootstrap.com/docs/react/ for everything available
 
-#############################################################################
+*Be careful with the links on the github for this one, 
+the github for mdbreact links to an angular based version npm
+
+------------------------------------------------------------------------------
 
 ## react
 -a JavaScript Library for building UIs
 See full documentation at: https://reactjs.org/docs/getting-started.html
 
-#############################################################################
+------------------------------------------------------------------------------
 
 ## node-sass
 -package for connecting Node.js to LibSass, a stylesheet preprocesser Sass 
 -compiles .scss into .css file very quickly
 NPM Link: https://www.npmjs.com/package/node-sass
 
+------------------------------------------------------------------------------
+
+## react-autocomplete
+-react based tool to autocomplete text
+-useful for dropdown menus
+NPM Link: https://www.npmjs.com/package/react-autocomplete
+
+------------------------------------------------------------------------------
+
+## react-countdown
+-react based countdown tool
+-useful for timers for polls
+NPM Link: https://www.npmjs.com/package/react-countdown
+
+------------------------------------------------------------------------------
+
+## react-dom (technically this should be react-router-dom, but that isnt listed in package.json even though ResetPassword.json uses it)
+-binds DOM (documentation object model) to react
+-allows for accessing documents and files
+-part of a larger module, router
+NPM Link: https://www.npmjs.com/package/react-router-dom
+
+------------------------------------------------------------------------------
+
+## react-markdown
+-package to allow Markdown (a language to create formatted text) in react
+NPM Link: https://www.npmjs.com/package/react-markdown
+
+------------------------------------------------------------------------------
+
+## react-phone-input-2
+-package to help read in phone numbers 
+-useful for sign up information, has 
+NPM Link: https://www.npmjs.com/package/react-phone-input-2
 
 
