@@ -1,7 +1,7 @@
 Back-end Techonology:
 
 
-#########################################################################################################################
+--------------------------------------------------------------------------------------------------------------------------
 
 ### MongoDB
 -The database that PollBuddy uses to store our information
@@ -24,13 +24,13 @@ Example to get the list of classes that user "123" has in an array:
 Please note "classes" is not actually a supported data type in "users", it is just an example for this readme
 NPM link: https://www.npmjs.com/package/mongodb
 
-#########################################################################################################################
+--------------------------------------------------------------------------------------------------------------------------
 
 ## mongoConnection
 -Package for linking Express session to a mongoDB session
 NPM Link: https://www.npmjs.com/package/connect-mongo
 
-#########################################################################################################################
+--------------------------------------------------------------------------------------------------------------------------
 
 ## Node.js
 -Node.js is an open source JavaScript runtime environment that allows code to executed outside of a browser
@@ -42,7 +42,7 @@ NPM Link: https://www.npmjs.com/package/connect-mongo
 So essentially Node.js is what allows us to run our code on the backend
 See:    https://nodejs.org/api/     for the full documentation
 
-#########################################################################################################################
+--------------------------------------------------------------------------------------------------------------------------
 
 ## Express
 -Express is a framework that runs within Node.js that allows for server creation and maintenance
@@ -64,7 +64,7 @@ See:    https://nodejs.org/api/     for the full documentation
     which is where we store our Express functions for users information
 See     https://expressjs.com/en/4x/api.html    for the full documentation
 
-#########################################################################################################################
+--------------------------------------------------------------------------------------------------------------------------
 
 ## http-errors
 -Package for creating error messages
@@ -75,44 +75,44 @@ Usage:
 
 NPM Link: https://www.npmjs.com/package/http-errors
 
-#########################################################################################################################
+--------------------------------------------------------------------------------------------------------------------------
 
 ## cookie-parser
 -package for parsing cookies
 NPM link: https://www.npmjs.com/package/cookie-parser
 
-#########################################################################################################################
+--------------------------------------------------------------------------------------------------------------------------
 
 ## morgan
 -logger package (controls the recording of what happens in when a program runs)
 NPM link: https://www.npmjs.com/package/morgan
 
-#########################################################################################################################
+--------------------------------------------------------------------------------------------------------------------------
 
 ## bson
 -Binary JSON parser
 NPM Link: https://www.npmjs.com/package/bson
 
-#########################################################################################################################
+--------------------------------------------------------------------------------------------------------------------------
 
 ## bcrypt
 -package to help hash passwords
 NPM Link: https://www.npmjs.com/package/bcrypt
 
-#########################################################################################################################
+--------------------------------------------------------------------------------------------------------------------------
 
 ## cors
 -package for enabling CORS 
     (Cross-Origin Resource Sharing: https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 NPM Link: https://www.npmjs.com/package/cors
 
-#########################################################################################################################
+--------------------------------------------------------------------------------------------------------------------------
 
 ## cas-authentication
 -package for redirecting to cas login (system RPI uses for logins)
 NPM Link: https://www.npmjs.com/package/cas-authentication
 
-#########################################################################################################################
+--------------------------------------------------------------------------------------------------------------------------
 
 ## Influx
 -package to run InfluxDB in Node.js
@@ -120,22 +120,22 @@ NPM Link: https://www.npmjs.com/package/cas-authentication
 NPM Link: https://www.npmjs.com/package/influx
 Also see: https://docs.influxdata.com/influxdb/cloud/ for InfluxDB full documentation
 
-#########################################################################################################################
+--------------------------------------------------------------------------------------------------------------------------
 
 ## dotenv
 -loads environment variables from a .env file into process.env (a Node.js method for setting the user environment)
 NPM Link: https://www.npmjs.com/package/dotenv
 
-#########################################################################################################################
+--------------------------------------------------------------------------------------------------------------------------
 
 ## promise-retry
 -helps retrying a function until it runs out of retries or gets a valid result
 NPM Link: https://www.npmjs.com/package/promise-retry
 
-#########################################################################################################################
+--------------------------------------------------------------------------------------------------------------------------
 
 ## eslint
 -a tool to help keep code formatting consistent, see .eslintrc.json for the current defined formatting rules 
 NPM Link: https://www.npmjs.com/package/eslint
 
-#########################################################################################################################
+--------------------------------------------------------------------------------------------------------------------------
