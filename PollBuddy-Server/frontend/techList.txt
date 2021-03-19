@@ -9,7 +9,7 @@ NPM Link: https://www.npmjs.com/package/autosize
 -----------------------------------------------------------------------------------------
 
 ## mdbreact 
--a UI kit with thousands of designs and layouts based on React
+-a UI kit with hundreds of designs and layouts based on React
 NPM Link: https://www.npmjs.com/package/mdbreact
 See the website: https://mdbootstrap.com/docs/react/ for everything available
 
