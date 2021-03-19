@@ -32,7 +32,7 @@ docker build -t <some identifier or name> .
 
 ## Technology Lists
 
-### Front-end
+### [Front-end](https://github.com/PollBuddy/PollBuddy/blob/tech-readme/PollBuddy-Server/frontend/techList.md)
 - autosize
 - mdbreact
 - node-sass
@@ -45,7 +45,7 @@ docker build -t <some identifier or name> .
 - react-router-dom
 - react-scripts
 
-### Back-end
+### [Back-end]https://github.com/PollBuddy/PollBuddy/blob/tech-readme/PollBuddy-Server/backend/techList.md
 - bcrypt
 - bson
 - cas-authentication
