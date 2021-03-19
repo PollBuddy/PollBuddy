@@ -167,7 +167,7 @@ router.post("/id:/join", function (res, req, next) {
   });
 });
 
-function checkAccessPermission(userID, groupID) {
+function checkUserPermission(userID, groupID) {
   var cursor = mongoConnection.getDB().collection('groups').find({"_id": groupID}, {"_id":0, "Users":1})
   for (i in cursor) {
     if (i == userID) {
