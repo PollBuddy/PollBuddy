@@ -18,16 +18,16 @@ the github for mdbreact links to an angular based version npm
 
 -----------------------------------------------------------------------------------------
 
-## react
--a JavaScript Library for building UIs
-See full documentation at: https://reactjs.org/docs/getting-started.html
-
------------------------------------------------------------------------------------------
-
 ## node-sass
 -package for connecting Node.js to LibSass, a stylesheet preprocesser Sass 
 -compiles .scss into .css file very quickly
 NPM Link: https://www.npmjs.com/package/node-sass
+
+-----------------------------------------------------------------------------------------
+
+## react
+-a JavaScript Library for building UIs
+See full documentation at: https://reactjs.org/docs/getting-started.html
 
 -----------------------------------------------------------------------------------------
 
