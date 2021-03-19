@@ -2,3 +2,29 @@ Front-end Techonology:
 
 #############################################################################
 
+## autosize
+-package to help automatically resize text areas
+NPM Link: https://www.npmjs.com/package/autosize
+
+#############################################################################
+
+## mdbreact
+-a UI kit with thousands of designs and layouts based on React
+NPM Link: https://www.npmjs.com/package/angular-bootstrap-md
+See the website: https://mdbootstrap.com/docs/react/ for everything available
+
+#############################################################################
+
+## react
+-a JavaScript Library for building UIs
+See full documentation at: https://reactjs.org/docs/getting-started.html
+
+#############################################################################
+
+## node-sass
+-package for connecting Node.js to LibSass, a stylesheet preprocesser Sass 
+-compiles .scss into .css file very quickly
+NPM Link: https://www.npmjs.com/package/node-sass
+
+
+
