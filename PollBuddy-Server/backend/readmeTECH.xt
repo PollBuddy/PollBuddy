@@ -99,7 +99,3 @@ NPM Link: https://www.npmjs.com/package/influx
 Also see: https://docs.influxdata.com/influxdb/cloud/ for InfluxDB full documentation
 
 ############################################################################
-
-If you have questions on something that is listed in "required" not listed here,
-it is probably a member of something listed here (like Router is a part of Express), 
-or someone forgot to add it here (please submit an issue in that case)
