@@ -45,7 +45,7 @@ docker build -t <some identifier or name> .
 - react-router-dom
 - react-scripts
 
-### [Back-end]https://github.com/PollBuddy/PollBuddy/blob/tech-readme/PollBuddy-Server/backend/techList.md
+### [Back-end](https://github.com/PollBuddy/PollBuddy/blob/tech-readme/PollBuddy-Server/backend/techList.md)
 - bcrypt
 - bson
 - cas-authentication
