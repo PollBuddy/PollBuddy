@@ -1,7 +1,7 @@
-Backend Techonology:
+Back-end Techonology:
 
 
-#############################################################################
+#########################################################################################################################
 
 ### MongoDB
 -The database that PollBuddy uses to store our information
@@ -12,6 +12,7 @@ Backend Techonology:
     these can be called a lot of things, and every ID in a collection will have the same data types in their .JSON files
     so refer to the routes page to see the types of data each collection holds
     e.g. a user could have the data type "classes" that contains the name of their classes
+
 Example to get the list of classes that user "123" has in an array: 
     mongoConnection.getDB().collection("users").find({ "_id": "123" }, {"_id": 0, "classes": 1})
     .getDB() calls the database
@@ -19,10 +20,17 @@ Example to get the list of classes that user "123" has in an array:
     .find({ "_id": "123" }, finds the .JSON file with id "123"
     {"_id": 0, "classes": 1})  and returns the classes data type, while excluding the id type 
     (mongodb automatically returns the id unless it is excluded)
-Please note "classes" is not actually a supported data type in "users", it is just an example for this readme
-See:   https://docs.mongodb.com/   for the full documentation
 
-##############################################################################
+Please note "classes" is not actually a supported data type in "users", it is just an example for this readme
+NPM link: https://www.npmjs.com/package/mongodb
+
+#########################################################################################################################
+
+## mongoConnection
+-Package for linking Express session to a mongoDB session
+NPM Link: https://www.npmjs.com/package/connect-mongo
+
+#########################################################################################################################
 
 ## Node.js
 -Node.js is an open source JavaScript runtime environment that allows code to executed outside of a browser
@@ -34,7 +42,7 @@ See:   https://docs.mongodb.com/   for the full documentation
 So essentially Node.js is what allows us to run our code on the backend
 See:    https://nodejs.org/api/     for the full documentation
 
-##############################################################################
+#########################################################################################################################
 
 ## Express
 -Express is a framework that runs within Node.js that allows for server creation and maintenance
@@ -42,11 +50,11 @@ See:    https://nodejs.org/api/     for the full documentation
     app.use("/api/users", usersRouter);
 -this uses the router application built into Express, allowing us to break up the Express calls into seperate files 
 -Express works with what it calls "middleware", which are the functions that happen when a call to the server is made
+
     e.g.:   
             app.get("/api/test", (req, res) => {
                 ...CODE...
             }
-            
     runs CODE whenever the call for /api/test is made
     and:    
             var usersRouter = require("./routes/users");
@@ -56,46 +64,78 @@ See:    https://nodejs.org/api/     for the full documentation
     which is where we store our Express functions for users information
 See     https://expressjs.com/en/4x/api.html    for the full documentation
 
-############################################################################
-
-#### NPM Packages Used:
-Visit each package link for full documentation, the npm website is really nice
-Package names are generally self-explanatory
+#########################################################################################################################
 
 ## http-errors
 -Package for creating error messages
+
+Usage: 
+        var createError = require('http-errors')
+        if (condition) return next(createError(###, "Error message"))
+
 NPM Link: https://www.npmjs.com/package/http-errors
+
+#########################################################################################################################
 
 ## cookie-parser
 -package for parsing cookies
 NPM link: https://www.npmjs.com/package/cookie-parser
 
+#########################################################################################################################
+
 ## morgan
 -logger package (controls the recording of what happens in when a program runs)
 NPM link: https://www.npmjs.com/package/morgan
+
+#########################################################################################################################
 
 ## bson
 -Binary JSON parser
 NPM Link: https://www.npmjs.com/package/bson
 
+#########################################################################################################################
+
 ## bcrypt
 -package to help hash passwords
 NPM Link: https://www.npmjs.com/package/bcrypt
+
+#########################################################################################################################
 
 ## cors
 -package for enabling CORS 
     (Cross-Origin Resource Sharing: https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 NPM Link: https://www.npmjs.com/package/cors
 
+#########################################################################################################################
+
 ## cas-authentication
 -package for redirecting to cas login (system RPI uses for logins)
 NPM Link: https://www.npmjs.com/package/cas-authentication
 
+#########################################################################################################################
+
 ## Influx
 -package to run InfluxDB in Node.js
--InfluxDB is a full database so it's a little more complicated than these other packages
 -We mainly use it to log the time it takes to for mongoDB to run and analyse any performance issues
 NPM Link: https://www.npmjs.com/package/influx
 Also see: https://docs.influxdata.com/influxdb/cloud/ for InfluxDB full documentation
 
-############################################################################
+#########################################################################################################################
+
+## dotenv
+-loads environment variables from a .env file into process.env (a Node.js method for setting the user environment)
+NPM Link: https://www.npmjs.com/package/dotenv
+
+#########################################################################################################################
+
+## promise-retry
+-helps retrying a function until it runs out of retries or gets a valid result
+NPM Link: https://www.npmjs.com/package/promise-retry
+
+#########################################################################################################################
+
+## eslint
+-a tool to help keep code formatting consistent, see .eslintrc.json for the current defined formatting rules 
+NPM Link: https://www.npmjs.com/package/eslint
+
+#########################################################################################################################
