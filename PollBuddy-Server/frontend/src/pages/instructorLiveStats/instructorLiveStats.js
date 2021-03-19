@@ -4,7 +4,7 @@ import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import {Link} from "react-router-dom";
 import "./instructorLiveStats.scss";
-import Countdown, {zeroPad} from "react-countdown-now";
+import Countdown, {zeroPad} from "react-countdown";
 export default class instructorLiveStats extends Component {
   componentDidMount(){
     this.props.updateTitle("Instructor Live Statistics");
