@@ -30,4 +30,38 @@ Enter the container's folder (contains a `Dockerfile`) and run:
 docker build -t <some identifier or name> .
 ```
 
+## Technology Lists
+
+### Front-end
+- autosize
+- mdbreact
+- node-sass
+- react
+- react-autocomplete
+- react-countdown
+- react-dom
+- react-markdown
+- react-phone-input-2
+- react-router-dom
+- react-scripts
+
+### Back-end
+- bcrypt
+- bson
+- cas-authentication
+- connect-mongo
+- cookie-parser
+- cors
+- debug
+- eslint
+- express
+- express-session
+- http-errors
+- influx
+- mongodb
+- morgan
+- promise-retry
+
+
+
 ### More development information coming soon on the Wiki
