@@ -110,9 +110,9 @@ NPM Link: https://www.npmjs.com/package/http-errors
 
 
 ## Influx
-This is a package to run InfluxDB in Node.js
+-package to run InfluxDB in Node.js
 
-We mainly use it to log the time it takes to for mongoDB to run and analyse any performance issues
+-We mainly use it to log the time it takes to for mongoDB to run and analyse any performance issues
 
 NPM Link: https://www.npmjs.com/package/influx
 
@@ -121,33 +121,33 @@ Also see: https://docs.influxdata.com/influxdb/cloud/ for InfluxDB full document
 
 
 ## morgan
-This is a logger package (controls the recording of what happens in when a program runs)
+-logger package (controls the recording of what happens in when a program runs)
 NPM link: https://www.npmjs.com/package/morgan
 
 
 
 ### MongoDB
-This is the database that PollBuddy uses to store our information
+-The database that PollBuddy uses to store our information
 
-- At the top of the information hierarchy there are collections, e.g. "users"
+-At the top of the information hierarchy there are collections, e.g. "users"
 
-- Every collection contains .JSON files wtih unique IDs to their collection 
+-Every collection contains .JSON files wtih unique IDs to their collection 
     (these are usually strings of characters and numbers)
 
-- Every ID can then have data types linked to them
+-Every ID can then have data types linked to them
 
-        these can be called a lot of things, and every ID in a collection will have the same data types in their .JSON files
+    these can be called a lot of things, and every ID in a collection will have the same data types in their .JSON files
 
-        so refer to the routes page to see the types of data each collection holds
-        e.g. a user could have the data type "classes" that contains the name of their classes
+    so refer to the routes page to see the types of data each collection holds
+    e.g. a user could have the data type "classes" that contains the name of their classes
 
-        Example to get the list of classes that user "123" has in an array: 
-                mongoConnection.getDB().collection("users").find({ "_id": "123" }, {"_id": 0, "classes": 1})
-                .getDB() calls the database
-                .collection("users") calls the collection containing all .JSON files for users
-                .find({ "_id": "123" }, finds the .JSON file with id "123"
-                {"_id": 0, "classes": 1})  and returns the classes data type, while excluding the id type 
-                (mongodb automatically returns the id unless it is excluded)
+    Example to get the list of classes that user "123" has in an array: 
+            mongoConnection.getDB().collection("users").find({ "_id": "123" }, {"_id": 0, "classes": 1})
+            .getDB() calls the database
+            .collection("users") calls the collection containing all .JSON files for users
+            .find({ "_id": "123" }, finds the .JSON file with id "123"
+            {"_id": 0, "classes": 1})  and returns the classes data type, while excluding the id type 
+            (mongodb automatically returns the id unless it is excluded)
 
     Please note "classes" is not actually a supported data type in "users", it is just an example for this readme
 
@@ -156,16 +156,16 @@ NPM link: https://www.npmjs.com/package/mongodb
 
 
 ## Node.js
-Node.js is an open source JavaScript runtime environment that allows code to executed outside of a browser
+-Node.js is an open source JavaScript runtime environment that allows code to executed outside of a browser
 
-Node.js is the name of the environment, it is not the name of the file despite ending in .js like JavaScript files do
+-Node.js is the name of the environment, it is not the name of the file despite ending in .js like JavaScript files do
 
-It runs a single-threaded event loop while optimizing code to limit blocking 
+-It runs a single-threaded event loop while optimizing code to limit blocking 
     (blocking = waiting on one line to execute before calling the next)
 
-People have written a plethora of packages that run on Node.js that can help with your code
+-People have written a plethora of packages that run on Node.js that can help with your code
 
--find packages at: https://www.npmjs.com/
+    find packages at: https://www.npmjs.com/
 
 So essentially Node.js is what allows us to run our code on the backend
 
@@ -174,7 +174,7 @@ See:    https://nodejs.org/api/     for the full documentation
 
 
 ## promise-retry
-This tool helps with retrying a function until it runs out of retries or gets a valid result
+-helps retrying a function until it runs out of retries or gets a valid result
 
 NPM Link: https://www.npmjs.com/package/promise-retry
 
