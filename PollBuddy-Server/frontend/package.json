@@ -3,13 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "mdbreact": "^4.21.1",
+    "autosize": "^4.0.2",
+    "mdbreact": "^4.27.0",
     "node-sass": "^4.14.1",
-    "react": "^16.10.2",
-    "react-countdown-now": "^2.1.2",
-    "react-dom": "^16.10.2",
+    "react": "^16.13.1",
+    "react-autocomplete": "^1.8.1",
+    "react-countdown": "^2.2.1",
+    "react-dom": "^16.13.1",
+    "react-markdown": "^4.3.1",
+    "react-phone-input-2": "^2.13.7",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1"
+    "react-scripts": "^4.0.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -19,7 +23,6 @@
     "eject": "react-scripts eject",
     "lint": "npx eslint src"
   },
-  "proxy": "http://localhost:3001",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -31,5 +34,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "jquery": "^3.5.1"
   }
 }

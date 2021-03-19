@@ -1,0 +1,10 @@
+.Header-bar {
+  padding: 10px 40px;
+  background: var(--darkest-purple-header-color);
+  height: var(--header-inner-height);
+  margin-bottom: var(--box-margin);
+}
+.Header-bar-logo {
+  height: calc(var(--header-inner-height));
+  width: auto;
+}

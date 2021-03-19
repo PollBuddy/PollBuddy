@@ -6,6 +6,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const os = require("os");
 
 var groupsRouter = require("./routes/groups");
 var pollsRouter = require("./routes/polls");
@@ -35,15 +36,45 @@ app.use(express_session({
 app.use(cors());
 
 var mongoConnection = require("./modules/mongoConnection.js");
-mongoConnection.connect(function (err, client) {
-  if (err) {
-    console.error(err);
+mongoConnection.connect(function (res) {
+  if (res !== true) {
+    console.error(res);
   }
 });
 
+// InfluxDB
+var influxConnection = require("./modules/influx.js");
+
+// Response Time Logging to InfluxDB
+app.use((req, res, next) => {
+  const start = Date.now();
+
+  res.on("finish", () => {
+    const duration = Date.now() - start;
+    console.log(`Request to ${req.path} took ${duration}ms`);
+
+    influxConnection.log([
+      {
+        measurement: "response_times",
+        tags: {
+          host: os.hostname(),
+          platform: "backend",
+          path: req.path
+        },
+        fields: {
+          duration: duration
+        },
+        timestamp: new Date()
+      }
+    ]);
+  });
+  return next();
+});
+
+
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(usersRouter.user_middleware);
@@ -53,7 +84,7 @@ app.use("/api/polls", pollsRouter);
 app.use("/api/users", usersRouter);
 
 // When visiting /test, the database connection finds all documents in all collections, and returns them in JSON.
-app.get("/test", (req, res) => {
+app.get("/api/test", (req, res) => {
   var documents = [];
   mongoConnection.getDB().listCollections().toArray().then((data) => {
     // Here you can do something with your data
@@ -74,11 +105,18 @@ app.get("/test", (req, res) => {
   });
 });
 
+var schoolsModule = require("./modules/schoolList.js");
+app.get("/api/schools", (req, res) => {
+  var schools = schoolsModule.getList();
+  res.json(schools);
+});
+
+
 app.get("/gendata", (req, res) => {
   var log = "";
   var completes = [];
   var elements = [
-    ["test", {SIS: "Man"}],
+    ["test", { SIS: "Man" }],
     ["users", {
       FirstName: "Bill",
       LastName: "Cheese",
@@ -95,8 +133,8 @@ app.get("/gendata", (req, res) => {
       password: "password2!",
       RCS: "stev3"
     }],
-    ["groups", {Name: "RCOS", instructors: ["Turner (should be ID later)"], AssociatedPolls: []}],
-    ["groups", {Name: "Chemistry", instructors: ["Kirover-Snover (should be ID later)"], AssociatedPolls: []}],
+    ["groups", { Name: "RCOS", instructors: ["Turner (should be ID later)"], AssociatedPolls: [] }],
+    ["groups", { Name: "Chemistry", instructors: ["Kirover-Snover (should be ID later)"], AssociatedPolls: [] }],
     ["polls", {
       Name: "Chem 1 Poll 1",
       Questions: ["What is your name?", "What grade are you in?"],
@@ -114,7 +152,7 @@ app.get("/gendata", (req, res) => {
     log += "Dropping DB\n";
 
     elements.forEach(function (element) {
-      addObj(element)
+      addObj(element);
     });
   });
 
@@ -143,6 +181,12 @@ app.get("/gendata", (req, res) => {
 app.get("/", function (req, res, next) {
   next(createError(200));
 });
+
+// API Root page (aka its working)
+app.get("/api", function (req, res, next) {
+  next(createError(200));
+});
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
@@ -150,6 +194,9 @@ app.use(function (req, res, next) {
 
 // error handler
 app.use(function (err, req, res, next) {
+
+  console.log(err);
+
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get("env") === "development" ? err : {};
@@ -159,4 +206,3 @@ app.use(function (err, req, res, next) {
 });
 
 module.exports = app;
-

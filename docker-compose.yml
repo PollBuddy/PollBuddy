@@ -1,22 +1,69 @@
 version: '3'
 services:
-  frontend:
+  webproxy:
+    image: "nginx"
+    restart: unless-stopped
+    volumes:
+      - ./PollBuddy-Server/webproxy/conf.d:/etc/nginx/conf.d
     ports:
-      - "3000:3000"
+      - "7655:80"
+    networks:
+      - frontend
+      - backend
+      - logging
+
+  frontend:
     build: PollBuddy-Server/frontend
+    restart: unless-stopped
+    networks:
+      - frontend
 
   backend:
-    ports:
-      - "3001:3001"
     build: PollBuddy-Server/backend
+    restart: unless-stopped
+    networks:
+      - backend
   
   db:
     image: "mongo"
-    ports:
-      - "27017:27017"
+    restart: unless-stopped
     volumes:
       - mongodata:/data/db
+      - mongoconfig:/data/configdb
+    # Uncomment the 2 lines below if you need direct database access for some reason (ex: developing/debugging)
+    #ports:
+    #  - "27017:27017"
+    networks:
+      - backend
+
+  grafana:
+    build: PollBuddy-Server/reporting/grafana
+    restart: unless-stopped
+    networks:
+      - logging
+
+  influxdb:
+    build: PollBuddy-Server/reporting/influxdb
+    restart: unless-stopped
+    volumes:
+      - influxdata:/var/lib/influxdb
+    networks:
+      - logging
+      - backend
 
 volumes:
+  mongoconfig:
+    external: false
+
   mongodata:
     external: false
+
+  influxdata:
+    external: false
+
+networks:
+  backend:
+  frontend:
+  logging:
+
+
