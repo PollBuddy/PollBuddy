@@ -168,13 +168,19 @@ router.post("/:id/delete", function (req, res) {//use router.delete??
   });
   return res.sendStatus(200);
 });
-// GET polls listing.
-router.get("/", function (req, res, next) {
-  mongoConnection.getDB().collection("polls").find({}).toArray(function (err, result) {
-    res.send(result);
-  });
+
+// return all polls.
+router.get("/", async (req, res) => {
+  try {
+    const polls = await mongoConnection.getDB().collection("polls").find({}).toArray();
+    return res.status(500).send(createResponse(polls));
+  } catch (e) {
+    console.log(e);
+  }
+  return res.status(500).send("An error occurred while reading the database.");
 });
-router.get("/:id", function (req, res, next) {
+
+router.get("/:id", function (req, res) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
     if (err) {
