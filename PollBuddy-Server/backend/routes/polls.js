@@ -32,16 +32,19 @@ router.post("/new", function (req, res) {
   });
 
 });
+
+// Modify (add|delete|edit) Questions of a specific poll
 router.post("/:id/edit", async (req, res) => {
   // validate request body
-  const schema = Joi.object({
-    Action: Joi.string().valid("add", "remove").required(), // two mode supported: 'add' or 'remove'
-    Question: Joi.object().keys({
-      QuestionText: Joi.string().min(3).max(512).required(),  // question text capped at 512 words
-      AnswerChoices: Joi.array().items(Joi.string()).min(1).unique().required(),
-      CorrectAnswers: Joi.array().items(Joi.string()).min(1).unique().required()
-    }).required()
-  });
+  const schema = Joi.array().items(
+    Joi.object().keys({
+      QuestionNumber: Joi.number().min(1).required(), // number index starting from 1
+      QuestionText: Joi.string().min(1).max(512).required(),  // question text capped at 512 words
+      AnswerChoices: Joi.array().items(Joi.string()).unique().allow(null).required(), // null for open-ended
+      CorrectAnswers: Joi.array().items(Joi.string()).unique().allow(null).required(),  // null for no-grading
+      Visible: Joi.boolean().required()
+    })
+  );
   const validResult = schema.validate(req.body);
   // invalidate handling
   if (validResult.error) {
@@ -52,29 +55,20 @@ router.post("/:id/edit", async (req, res) => {
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
   }
-
-  if (validResult.value.Action === "add") {
-    // "Action": "add"
-    try{
-      await mongoConnection.getDB().collection("polls")
-        .updateOne({"_id": id}, {"$addToSet": {Question: validResult.value.Question}});
-      return res.status(200).send(createResponse());
-    } catch(e) {
-      console.log(e); // log error
-      return res.status(500).send(createResponse(null, "An error occurred while writing the database."));
-    }
-  } else{
-    // "Action": "remove"
-    try {
-      await mongoConnection.getDB().collection("polls")
-        .updateOne({"_id": id}, {"$pull": {Question: ""}});
-      return res.send(createResponse());
-    } catch (e) {
-      console.log(e); // log error
-      return res.status(500).send(createResponse(null, "An error occurred while writing the database."));
-    }
+  // generate ObjectID for embedded Questions
+  validResult.value.forEach((o,i,a) => {
+    a[i]["_id"] = new mongoConnection.getMongo().ObjectID();
+  });
+  // update Questions content
+  try {
+    await mongoConnection.getDB().collection("polls").updateOne({"_id": id}, {"$set": {Questions: validResult.value}});
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send(createResponse(null, "An error occurred while writing the database."));
   }
+  return res.status(200).send(createResponse());
 });
+
 router.post("/:id/submit", function (req, res) {
   const jsonContent = req.body;
   const pollId = new mongoConnection.getMongo().ObjectID(req.params.id);
