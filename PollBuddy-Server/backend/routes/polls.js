@@ -173,21 +173,28 @@ router.post("/:id/delete", function (req, res) {//use router.delete??
 router.get("/", async (req, res) => {
   try {
     const polls = await mongoConnection.getDB().collection("polls").find({}).toArray();
-    return res.status(500).send(createResponse(polls));
+    return res.status(200).send(createResponse(polls));
   } catch (e) {
     console.log(e);
   }
-  return res.status(500).send("An error occurred while reading the database.");
+  return res.status(500).send(createResponse(null, "An error occurred while reading the database."));
 });
 
-router.get("/:id", function (req, res) {
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
-    if (err) {
-      return res.sendStatus(500);
-    }
-    res.send(result);
-  });
+// return poll with a specific id
+router.get("/:id", async (req, res) => {
+  // validate id
+  const id = await validateID("polls", req.params.id);
+  if (!id) {
+    return res.status(400).send(createResponse(null, "Invalid ID."));
+  }
+  // query poll
+  try {
+    const poll = await mongoConnection.getDB().collection("polls").findOne({"_id": id});
+    return res.status(200).send(createResponse(poll));
+  } catch (e) {
+    console.log(e);
+  }
+  return res.status(500).send(createResponse(null, "An error occurred while reading the database."));
 });
 
 router.get("/:id/view", function (req, res, next) {
