@@ -15,20 +15,23 @@ export default class GroupJoin extends Component {//this class will likely need 
       console.log("Logged in");
     } else {
       console.log("Not logged in");
-      window.location.replace("/login");
+      // window.location.replace("/login");
     }
     this.state = {
-      groupCode: ""
+      groupCode: "",
+      showConfirm: false
     };
   }
 
   handleClick = () => {
-    var response = window.confirm("Are you sure you want to join this group?");
-    if (response === true) {
-      window.location.replace("/groups/" + this.state.groupCode + "/polls");
-    } else {
-      window.location.replace("/groups");
-    }
+    // var response = window.confirm("Are you sure you want to join this group?");
+    // if (response === true) {
+    //   window.location.replace("/groups/" + this.state.groupCode + "/polls");
+    // } else {
+    //   window.location.replace("/groups");
+    // }
+    this.setState({showConfirm: true});
+    console.log("hi")
   }
 
   handleChange = (e) => {
@@ -40,11 +43,20 @@ export default class GroupJoin extends Component {//this class will likely need 
     return (
       <MDBContainer className="page">
         <MDBContainer fluid className="box">
-          <MDBContainer className="form-group">
-            <label>Please enter your group code:</label>
-            <input className="form-control textBox" type="text" name="groupCode" onChange={this.handleChange}/>
-            <input onClick={this.handleClick} className="btn button float-right" type="submit" value="OK"/>
-          </MDBContainer>
+          { this.state.showConfirm
+            ?
+            <MDBContainer className="form-group">
+              <p>Are you sure you want to join this group?</p>
+              <button className="button">Yes</button>
+              <button className="button">No</button>
+            </MDBContainer>
+            :
+            <MDBContainer className="form-group">
+              <label>Please enter your group code:</label>
+              <input className="form-control textBox" type="text" name="groupCode" onChange={this.handleChange}/>
+              <input onClick={this.handleClick} className="btn button float-right" type="submit" value="OK"/>
+            </MDBContainer>
+          }
         </MDBContainer>
       </MDBContainer>
     );
