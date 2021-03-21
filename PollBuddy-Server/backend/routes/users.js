@@ -308,6 +308,7 @@ router.post("/register", function (req, res) {
   // TODO: This needs to be updated to use joi
   const firstnameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(req.body.firstName);
   const lastnameValid = new RegExp(/^[a-zA-Z]{0,256}$/).test(req.body.lastName);
+  // TODO: This will crash if userName is not supplied. Should be fixable as part of the joi change.
   const userNameValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(req.body.userName) && !req.body.userName.startsWith("__");
   const emailValid = new RegExp(/^[a-zA-Z0-9_.]+@\w+\.\w+$/).test(req.body.email);
   const passwordValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/)
