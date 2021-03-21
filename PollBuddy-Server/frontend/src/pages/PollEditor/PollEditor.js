@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import { MDBContainer, MDBDropdownToggle, MDBDropdown, MDBDropdownItem, MDBDropdownMenu } from "mdbreact";
 import Question from "../../components/Question/Question";
+import "./PollEditor.scss";
 
 export default class PollEditor extends Component {
   constructor(props) {
@@ -32,7 +33,7 @@ export default class PollEditor extends Component {
     return (
       <MDBContainer>
         <MDBContainer className="page">
-          <MDBContainer className="box">
+          <MDBContainer className="Poll_Editor_box box">
             <p>
               Poll Editor {this.props.pollID}
             </p>
