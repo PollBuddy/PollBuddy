@@ -204,7 +204,7 @@ router.post("/login", function (req, res) {
  * @param {middleware} middleware - Express middleware to redirect the user to CAS
  * @param {callback} callback - function handler for data received after CAS redirection
  */
-router.get("/login/rpi", rpi.bounce, function (req, res, next) {
+router.get("/login/rpi", rpi.bounce, function (req, res) {
 
   // The user is first bounced to the RPI CAS login and only after will they end up in here.
   // Therefore, this only runs if the user is logged in with CAS successfully.
@@ -261,7 +261,8 @@ router.get("/login/rpi", rpi.bounce, function (req, res, next) {
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/login/rpi when using POST.
- * @urlparams {void} None
+ * @getdata {void} None
+ * @postdata {void} None
  * @returns {void} status 501: {result: "failure", error: "POST is not available for this route. Use GET."}
  * @name backend/users/login/rpi_POST
  * @param {string} path - Express path
@@ -274,7 +275,8 @@ router.post("/login/rpi", function (req, res) {
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/register when using GET.
- * @urlparams {void} None
+ * @getdata {void} None
+ * @postdata {void} None
  * @returns {void} status 501: {result: "failure", error: "GET is not available for this route. Use POST."}
  * @name backend/users/register_GET
  * @param {string} path - Express path
@@ -288,7 +290,8 @@ router.get("/register", function (req, res) {
 /**
  * This route called by frontend internal JS as part of the registration with Poll Buddy process. Here, we set up some
  * session details, validate data we were sent, save it in the database if success, and send errors if there's any problems.
- * @urlparams {void} body: { firstName: string, lastName: string, userName: string, email: string, password: string }
+ * @getdata {void} None
+ * @postdata {void} body: { firstName: string, lastName: string, userName: string, email: string, password: string }
  * @returns {void} On success: status 200, {"result": "success", "data": {"firstName": <First Name>, "lastName": <Last Name>,
  *                                                                        "userName": <Username>}}
  * On failure: status 400, { "result": "failure", "error": "This username is already in use." }
@@ -305,7 +308,7 @@ router.post("/register", function (req, res) {
   // TODO: This needs to be updated to use joi
   const firstnameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(req.body.firstName);
   const lastnameValid = new RegExp(/^[a-zA-Z]{0,256}$/).test(req.body.lastName);
-  const userNameValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(req.body.userName);
+  const userNameValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(req.body.userName) && !req.body.userName.startsWith("__");
   const emailValid = new RegExp(/^[a-zA-Z0-9_.]+@\w+\.\w+$/).test(req.body.email);
   const passwordValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/)
     .test(req.body.password);
