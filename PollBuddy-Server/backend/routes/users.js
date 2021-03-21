@@ -12,7 +12,8 @@ const {createResponse, validateID, isEmpty} = require("../modules/utils"); // ob
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/
- * @urlparams {void} None
+ * @getdata {void} None
+ * @postdata {void} None
  * @returns {void} status 200: {result: success, data: "User Routes"}
  * @name backend/users/_GET
  * @param {string} path - Express path
@@ -25,7 +26,8 @@ router.get("/", function (req, res) {
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/
- * @urlparams {void} None
+ * @getdata {void} None
+ * @postdata {void} None
  * @returns {void} status 200: {result: success, data: "User Routes"}
  * @name backend/users/_POST
  * @param {string} path - Express path
@@ -38,7 +40,8 @@ router.post("/", function (req, res) {
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/login when using GET.
- * @urlparams {void} None
+ * @getdata {void} None
+ * @postdata {void} None
  * @returns {void} status 501: {result: "failure", error: "GET is not available for this route. Use POST."}
  * @name backend/users/login_POST
  * @param {string} path - Express path
@@ -52,14 +55,14 @@ router.get("/login", function (req, res) {
 /**
  * This route is called by frontend internal JS as part of the login with Poll Buddy process. It validates the login
  * information, then sets up some session details and sends the frontend the relevant data.
- * @urlparams {void} None
+ * @getdata {void} None
  * @postdata {void} userNameEmail: string, password: string
- * @returns {void} On success: status 200, {result: success, data: {"firstName": <First Name>, "lastName": <Last Name>,
+ * @returns {void} On success: status 200, {result: "success", data: {"firstName": <First Name>, "lastName": <Last Name>,
  *                                                                  "userName": <Username> }
- * On failure: status 401, {result: failure, error: "Invalid credentials."}
- *         or: status 406, {result: failure, error: "This account is associated with a school."}
- *         or: status 500, {result: failure, error: "An error occurred while validating login details."}
- *         or: status 500, {result: failure, error: "An error occurred while communicating with the database."}
+ * On failure: status 401, {result: "failure", error: "Invalid credentials."}
+ *         or: status 406, {result: "failure", error: "This account is associated with a school."}
+ *         or: status 500, {result: "failure", error: "An error occurred while validating login details."}
+ *         or: status 500, {result: "failure", error: "An error occurred while communicating with the database."}
  * @name backend/users/login_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
@@ -170,11 +173,11 @@ router.post("/login", function (req, res) {
   // Finally, use that function to check the database for a match
   if(mode === "userName") {
     mongoConnection.getDB().collection("users").findOne({ UserName: req.body.userNameEmail }, {
-      _id: true, FirstName: true, LastName: true, UserName: true, Password: true, SchoolAffiliation: true}, validate);
+      _id: true, FirstName: true, LastName: true, UserName: true, Password: true, SchoolAffiliation: true, collation: { locale: "en_US", strength: 2 }}, validate);
 
   } else if(mode === "email") {
     mongoConnection.getDB().collection("users").findOne({ Email: req.body.userNameEmail }, {
-      _id: true, FirstName: true, LastName: true, UserName: true, Password: true, SchoolAffiliation: true}, validate);
+      _id: true, FirstName: true, LastName: true, UserName: true, Password: true, SchoolAffiliation: true, collation: { locale: "en_US", strength: 2 }}, validate);
 
   } else {
     // Didn't pass validation for username or email. This shouldn't ever run anyways though.
@@ -186,7 +189,8 @@ router.post("/login", function (req, res) {
 /**
  * This route is hit by the user's browser as part of the login with RPI process. It bounces the user to the CAS login
  * portal, then that returns here and we set up some session details and send the frontend the relevant data.
- * @urlparams {void} None
+ * @getdata {void} None
+ * @postdata {void} None
  * @returns {void} On success: a browser redirect to /login/school/step2 with GET parameters resembling our typical
  * error messages. Possible return values include:
  * ?result=success&data={"firstName": <First Name>, "lastName": <Last Name>, "userName": <Username>}
@@ -208,12 +212,8 @@ router.get("/login/rpi", rpi.bounce, function (req, res, next) {
   // Make sure they succeeded in authenticating with CAS
   if (req.session.cas_user) {
 
-    // Lowercase the cas_user data first
-    // eslint-disable-next-line camelcase
-    req.session.cas_user = req.session.cas_user.toLowerCase();
-
     // Check to make sure they're already registered
-    mongoConnection.getDB().collection("users").findOne({ UserName: req.session.cas_user }, {
+    mongoConnection.getDB().collection("users").findOne({ UserName: "__rpi_" + req.session.cas_user.toLowerCase() }, {
       projection: { _id: false, UserName: true, Email: true, FirstName: true, LastName: true } }, (err, result) => {
       if (err) {
         // Something went wrong
@@ -334,9 +334,9 @@ router.post("/register", function (req, res) {
       FirstNameLocked: false,
       LastName: req.body.lastName,
       LatNameLocked: false,
-      UserName: req.body.userName,
+      UserName: req.body.userName.toLowerCase(),
       UserNameLocked: true,
-      Email: req.body.email,
+      Email: req.body.email.toLowerCase(),
       EmailLocked: false,
       Password: bcrypt.hashSync(req.body.password, 10)
     }, (err, result) => {
@@ -377,8 +377,8 @@ router.post("/register", function (req, res) {
           req.session.userData.email = result.Email;
 
           // Send the response object with some basic info for the frontend to store
-          return res.json({"result": "success", "data": {"firstName": req.body.firstName,
-            "lastName": req.body.lastName, "userName": req.body.userName}});
+          return res.json({"result": "success", "data": {"firstName": result.firstName,
+            "lastName": result.LastName, "userName": result.UserName}});
 
         } else {
           // For some reason, the user wasn't inserted, send an error.
