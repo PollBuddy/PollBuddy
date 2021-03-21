@@ -9,8 +9,17 @@ var db;
 // already exist in the database.
 function createIndexes() {
   // Create unique indexes
-  db.collection("users").createIndex({"Email": 1}, {unique: true});
-  db.collection("users").createIndex({"UserName": 1}, {unique: true});
+  // This weird chain is to delete old bad versions when we update/change the indexes. This'll probably get deleted later.
+  db.collection("users").createIndex({"UserName": 1}, {unique: true, collation: { locale: "en_US", strength: 2 }}).catch(function() {
+    db.collection("users").dropIndex("UserName_1").then(function() {
+      db.collection("users").createIndex({"UserName": 1}, {unique: true, collation: { locale: "en_US", strength: 2 }});
+    });
+  });
+  db.collection("users").createIndex({"Email": 1}, {unique: true, collation: { locale: "en_US", strength: 2 }}).catch(function() {
+    db.collection("users").dropIndex("Email_1").then(function() {
+      db.collection("users").createIndex({"Email": 1}, {unique: true, collation: { locale: "en_US", strength: 2 }});
+    });
+  });
 
   // Create non-unique indexes
   // Note: May be desirable to add other details like Name,eMail in the future to the SchoolAffiliation index
