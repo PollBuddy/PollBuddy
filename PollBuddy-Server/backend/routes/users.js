@@ -403,7 +403,8 @@ router.post("/register", function (req, res) {
  * This route is hit by the user's browser as part of the registration with RPI process. It bounces the user to the CAS login
  * portal, then that returns here and we set up some session details, then bounce them to /register/school/step2
  * with some additional data requests to finalize the registration process.
- * @urlparams {void} None
+ * @getdata {void} None
+ * @postdata {void} None
  * @returns {void} On success: a browser redirect to /register/school/step2 with GET parameters of:
  *                                                   ?result=success&userName=<username>&email=<email>&school=rpi
  * On failure: a browser redirect to /register/school/step2 with GET parameters of:
@@ -426,6 +427,8 @@ router.get("/register/rpi", rpi.bounce, function (req, res) {
   if (req.session.cas_user) {
 
     // Temporarily store some data
+    // Username is __rpi_<username from CAS>
+    // Email is <username from CAS>@rpi.edu
     req.session.userDataTemp = {};
     req.session.userDataTemp.userName = "__rpi_" + req.session.cas_user.toLowerCase();
     req.session.userDataTemp.email = req.session.cas_user.toLowerCase() + "@rpi.edu";
@@ -451,7 +454,8 @@ router.get("/register/rpi", rpi.bounce, function (req, res) {
  * This route is called by frontend internal JS as part of the register with RPI process. At this point, the user is at
  * /register/school/step2 in the frontend, and are now submitting registration data here for processing. We validate
  * and save it in the database if success, and send errors if there's any problems.
- * @urlparams {void} body: {firstName: string, lastName: string, userName: string (optional, ignored), email: string (optional, ignored)}
+ * @getdata {void} None
+ * @postdata {void} body: {firstName: string, lastName: string, userName: string (optional, ignored), email: string (optional, ignored)}
  * @returns {void} On success: status 200, {"result": "success", "data": {"firstName": <First Name>,
  *                                                              "lastName": <Last Name>, "userName": <Username>}}
  * On failure: status 400, { "result": "failure", "error": "This username is already in use."
@@ -484,8 +488,7 @@ router.post("/register/rpi", function (req, res) {
     errorMsg["lastName"] = "Invalid Last Name!";
   }
 
-  // Configure email, username (For RPI, that is the CAS username + "@rpi.edu"), overwriting whatever the user
-  // may have sent as we don't want it anyways.
+  // Configure email, username, overwriting whatever the user may have sent as we don't want it anyways.
   req.body.userName = req.session.userDataTemp.userName;
   req.body.email = req.session.userDataTemp.email;
 
@@ -532,17 +535,17 @@ router.post("/register/rpi", function (req, res) {
         if (result.result.ok === 1) {
           // One result changed, therefore it worked.
 
-          // Configure email, username (For RPI, that is the CAS username + "@rpi.edu") and save in session
-          req.session.userData = {};
-          req.session.userData.userName = req.session.userDataTemp.userName;
-          req.session.userData.email = req.session.userDataTemp.email;
-
           // Delete temporary user information
           delete req.session.userDataTemp;
 
+          // Configure email, username by copying from the result object and saving in the session
+          req.session.userData = {};
+          req.session.userData.userName = result.userName;
+          req.session.userData.email = result.email;
+
           // Send the response object with some basic info for the frontend to store
-          return res.json({"result": "success", "data": {"firstName": req.body.firstName,
-            "lastName": req.body.lastName, "userName": req.body.userName}});
+          return res.json({"result": "success", "data": {"firstName": result.firstName,
+            "lastName": result.lastName, "userName": result.userName}});
 
         } else {
           // For some reason, the user wasn't inserted, send an error.
@@ -562,7 +565,8 @@ router.post("/register/rpi", function (req, res) {
  * This route is called by frontend internal JS as part of the logout process. It essentially just deletes the session's
  * userData fields. The frontend should then clear out its own cache of those values, but this is not essential for
  * the security of the logout process, it would just give a weird and bad user experience.
- * @urlparams {void} None
+ * @getdata {void} None
+ * @postdata {void} None
  * @returns {void} {"result": "success", "data": "User was logged out successfully."}
  * @name backend/users/logout_GET
  * @param {string} path - Express path
@@ -579,7 +583,8 @@ router.get("/logout", function (req, res) {
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/logout when using POST.
- * @urlparams {void} None
+ * @getdata {void} None
+ * @postdata {void} None
  * @returns {void} status 501: {result: "failure", error: "POST is not available for this route. Use GET."}
  * @name backend/users/logout_POST
  * @param {string} path - Express path
@@ -591,6 +596,7 @@ router.post("/logout", function (req, res) {
 });
 
 // stored user session data
+// TODO: Investigate if this is even needed or not
 router.get("/session", function (req, res) {
   res.send(req.session.userData || {});
 });
