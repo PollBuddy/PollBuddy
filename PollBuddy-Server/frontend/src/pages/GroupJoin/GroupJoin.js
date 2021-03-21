@@ -23,19 +23,20 @@ export default class GroupJoin extends Component {//this class will likely need 
     };
   }
 
-  handleClick = () => {
-    // var response = window.confirm("Are you sure you want to join this group?");
-    // if (response === true) {
-    //   window.location.replace("/groups/" + this.state.groupCode + "/polls");
-    // } else {
-    //   window.location.replace("/groups");
-    // }
+  handleEnterCode = () => {
     this.setState({showConfirm: true});
-    console.log("hi")
   }
 
   handleChange = (e) => {
     this.setState({groupCode: e.target.value});
+  }
+
+  handleConfirmationResponse(response) {
+    if (response === true) {
+      window.location.replace("/groups/" + this.state.groupCode + "/polls");
+    } else {
+      window.location.replace("/groups");
+    }
   }
 
   render() {
@@ -47,14 +48,14 @@ export default class GroupJoin extends Component {//this class will likely need 
             ?
             <MDBContainer className="form-group">
               <p>Are you sure you want to join this group?</p>
-              <button className="button">Yes</button>
-              <button className="button">No</button>
+              <input onClick={this.handleConfirmationResponse.bind(this, false)} className="btn button float-left" type="submit" value="No"/>
+              <input onClick={this.handleConfirmationResponse.bind(this, true)} className="btn button float-right" type="submit" value="Yes"/>
             </MDBContainer>
             :
             <MDBContainer className="form-group">
               <label>Please enter your group code:</label>
               <input className="form-control textBox" type="text" name="groupCode" onChange={this.handleChange}/>
-              <input onClick={this.handleClick} className="btn button float-right" type="submit" value="OK"/>
+              <input onClick={this.handleEnterCode} className="btn button float-right" type="submit" value="OK"/>
             </MDBContainer>
           }
         </MDBContainer>
