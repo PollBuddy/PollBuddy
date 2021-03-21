@@ -24,8 +24,8 @@ app.use(express_session({
   cookie: {
     maxAge: 2629800000
   },
-  name: "pb_session",
-  secret: "s3cr3t",// TODO: Move this out of the code and make it secure
+  name: "pollbuddy_session",
+  secret: process.env["SESSION_SECRET"],
   secure: true,
   store: new MongoStore({
     url: process.env["DB_URL"],
