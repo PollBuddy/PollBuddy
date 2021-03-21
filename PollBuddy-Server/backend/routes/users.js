@@ -376,12 +376,12 @@ router.post("/register", function (req, res) {
 
           // Configure user data and save in session
           req.session.userData = {};
-          req.session.userData.userName = result.UserName;
-          req.session.userData.email = result.Email;
+          req.session.userData.userName = result.ops[0].UserName;
+          req.session.userData.email = result.ops[0].Email;
 
           // Send the response object with some basic info for the frontend to store
-          return res.json({"result": "success", "data": {"firstName": result.firstName,
-            "lastName": result.LastName, "userName": result.UserName}});
+          return res.json({"result": "success", "data": {"firstName": result.ops[0].FirstName,
+            "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}});
 
         } else {
           // For some reason, the user wasn't inserted, send an error.
@@ -463,6 +463,7 @@ router.get("/register/rpi", rpi.bounce, function (req, res) {
  *         or: status 400 { "result": "failure", "error": "Validation failed.", "data": (errorMsg obj with keys of firstName,
  *                           lastName, etc. as relevant and with value of error message) });
  *         or: status 500, { "result": "failure", "error": "An error occurred while communicating with the database." }
+ *         or: status 500, { "result": "failure", "error": "Prerequisite data is not available." }
  * @name backend/users/register/rpi_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
@@ -488,6 +489,10 @@ router.post("/register/rpi", function (req, res) {
     errorMsg["lastName"] = "Invalid Last Name!";
   }
 
+  // Make sure we've got data from step 1
+  if(!req.session.userDataTemp) {
+    return res.status(500).json({"result": "failure", "error": "Prerequisite data is not available."});
+  }
   // Configure email, username, overwriting whatever the user may have sent as we don't want it anyways.
   req.body.userName = req.session.userDataTemp.userName;
   req.body.email = req.session.userDataTemp.email;
@@ -540,12 +545,12 @@ router.post("/register/rpi", function (req, res) {
 
           // Configure email, username by copying from the result object and saving in the session
           req.session.userData = {};
-          req.session.userData.userName = result.userName;
-          req.session.userData.email = result.email;
+          req.session.userData.userName = result.ops[0].UserName;
+          req.session.userData.email = result.ops[0].Email;
 
           // Send the response object with some basic info for the frontend to store
-          return res.json({"result": "success", "data": {"firstName": result.firstName,
-            "lastName": result.lastName, "userName": result.userName}});
+          return res.json({"result": "success", "data": {"firstName": result.ops[0].FirstName,
+            "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}});
 
         } else {
           // For some reason, the user wasn't inserted, send an error.

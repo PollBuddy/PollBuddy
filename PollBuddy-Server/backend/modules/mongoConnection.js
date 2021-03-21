@@ -42,20 +42,20 @@ async function createIndexes() {
   });
 
   // Create non-unique indexes
-  // Note: May be desirable to add other details like Name,eMail in the future to the SchoolAffiliation index
-  db.collection("users").createIndex({"SchoolAffiliation": 1}, {name: "users_SchoolAffiliation", unique: true}).catch(function() {
-    db.collection("users").dropIndex("users_SchoolAffiliation_1").then(function() {
-      db.collection("users").createIndex({"SchoolAffiliation": 1}, {name: "users_SchoolAffiliation_1", unique: true});
+  // Note: May be desirable to add other details like Name and email in the future to the SchoolAffiliation index
+  db.collection("users").createIndex({"SchoolAffiliation": 1}, {name: "users_SchoolAffiliation"}).catch(function() {
+    db.collection("users").dropIndex("users_SchoolAffiliation").then(function() {
+      db.collection("users").createIndex({"SchoolAffiliation": 1}, {name: "users_SchoolAffiliation"});
     });
   });
-  db.collection("poll_answers").createIndex({"PollID": 1}, {name: "poll_answers_PollID_1", unique: true}).catch(function() {
-    db.collection("poll_answers").dropIndex("poll_answers_PollID_1").then(function() {
-      db.collection("poll_answers").createIndex({"PollID": 1}, {name: "poll_answers_PollID_1", unique: true});
+  db.collection("poll_answers").createIndex({"PollID": 1}, {name: "poll_answers_PollID"}).catch(function() {
+    db.collection("poll_answers").dropIndex("poll_answers_PollID").then(function() {
+      db.collection("poll_answers").createIndex({"PollID": 1}, {name: "poll_answers_PollID"});
     });
   });
-  db.collection("poll_answers").createIndex({"UserID": 1}, {name: "poll_answers_UserID_1", unique: true}).catch(function() {
-    db.collection("poll_answers").dropIndex("poll_answers_UserID_1").then(function() {
-      db.collection("poll_answers").createIndex({"UserID": 1}, {name: "poll_answers_UserID_1", unique: true});
+  db.collection("poll_answers").createIndex({"UserID": 1}, {name: "poll_answers_UserID"}).catch(function() {
+    db.collection("poll_answers").dropIndex("poll_answers_UserID").then(function() {
+      db.collection("poll_answers").createIndex({"UserID": 1}, {name: "poll_answers_UserID"});
     });
   });
 }
