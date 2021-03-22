@@ -26,7 +26,8 @@ export default class GroupPolls extends Component {
       avg_correct: 20,
       member_correct: 22,
       groupData: null,
-      doneLoading: false
+      doneLoading: false,
+      id: null
       //need to put in groupID from backend
       //need to get other shit like pollIDs and their respective information...
     };
@@ -34,9 +35,11 @@ export default class GroupPolls extends Component {
 
   componentDidMount() {
     this.props.updateTitle(this.state.class);
-    console.log(this.props.match.params.groupID);
-
-    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.match.params.groupID + "/polls", {
+    var pathname = window.location.pathname;
+    this.state.id = pathname.match("groups/(.*)/polls")[1];
+    console.log(this.state.id);
+    
+    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/polls", {
       method: "GET"
     })
       .then(response => {
