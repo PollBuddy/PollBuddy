@@ -45,26 +45,21 @@
 
 
 @media only screen and (min-width:992px) {
-.AccountInfo-accountInputs {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-direction: row;
-  margin: 1rem 0;
+  .AccountInfo-accountInputs {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    margin: 1rem 0;
 
-  label {
-    text-align: left;
+    label {
+      text-align: left;
+    }
   }
- }
- 
-  .col-md-6 {
+
+  .AccountInfo-mdbcol-6 {
     margin: 0 3rem 0 3rem;
     width: 50%;
-  }
- 
-  .col-md-12 {
-    margin: 0 3rem 0 3rem;
-    width: 100%;
   }
  
   #AccountInfo-passwordChange {

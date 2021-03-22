@@ -31,46 +31,44 @@ export default class AccountInfo extends Component {
           <h1>Account Settings</h1>
           <MDBContainer>
             <MDBRow className="AccountInfo-accountInputs">
-              <MDBCol md="6">
+              <MDBCol md="6" className="AccountInfo-mdbcol-6">
                 <label htmlFor="firstnameText">First Name:</label>
                 <input placeholder="SIS" className="form-control textBox" id="firstnameText" />
               </MDBCol>
-              <MDBCol md="6">
+              <MDBCol md="6" className="AccountInfo-mdbcol-6">
                 <label htmlFor="lastnameText">Last Name:</label>
                 <input placeholder="Man" className="form-control textBox" id="lastnameText" />
               </MDBCol>
             </MDBRow>
 
             <MDBRow className="AccountInfo-accountInputs">
-              <MDBCol md="6">
+              <MDBCol md="6" className="AccountInfo-mdbcol-6">
                 <label htmlFor="usernametext">Username:</label>
                 <input value="mans" className="form-control textBox" id="usernametext" readOnly />
               </MDBCol>
-              <MDBCol md="6">
+              <MDBCol md="6" className="AccountInfo-mdbcol-6">
                 <label htmlFor="emailText">Email:</label>
                 <input placeholder="sisman@rpi.edu" className="form-control textBox" id="emailText" />
               </MDBCol>
             </MDBRow>
 
             <MDBRow className="AccountInfo-accountInputs">
-              <MDBCol md="6">
+              <MDBCol md="6" className="AccountInfo-mdbcol-6">
                 <label htmlFor="institution">Institution:</label>
                 <input placeholder="RPI" className="form-control textBox" id="institution" readOnly />
               </MDBCol>
-              <MDBCol md="6">
+              <MDBCol md="6" className="AccountInfo-mdbcol-6">
                 <label htmlFor="passwordChange">Password:</label>
-                <p id="AccountInfo-passwordChange" onClick={this.changePassword}>{this.state.changePassword ? "Cancel" : "Click to change password"}</p>
+                <p id="AccountInfo-passwordChange" onClick={this.changePassword}>{this.state.changePassword ? "Cancel password change" : "Click to change password"}</p>
               </MDBCol>              
             </MDBRow>
 
-            { /* TODO: Hide these until the user clicks the change password button below */ }
-               
             <MDBContainer id="AccountInfo-changePasswordInputs" style={this.state.changePassword ? {display: "flex"} : {display: "none"}}>
-              <MDBCol md="6">
+              <MDBCol md="6" className="AccountInfo-mdbcol-6">
                 <label htmlFor="newPasswordText">New password:</label>
                 <input type="password" placeholder="••••••••••••" className="form-control textBox" id="newPasswordText"/>
               </MDBCol>
-              <MDBCol md="6">
+              <MDBCol md="6" className="AccountInfo-mdbcol-6">
                 <label htmlFor="confirmNewPassword">Confirm new password:</label>
                 <input type="password" placeholder="••••••••••••" className="form-control textBox" id="confirmNewPassword"/>
               </MDBCol>
@@ -78,6 +76,7 @@ export default class AccountInfo extends Component {
 
           </MDBContainer>
 
+          { /* TODO: Update this to have a backend call instead of a "to", plus some result popup */ }
           <Link id="AccountInfo-saveChanges" to={"/login/forgot"}>
             <button className="button">Save Changes</button>
           </Link>
