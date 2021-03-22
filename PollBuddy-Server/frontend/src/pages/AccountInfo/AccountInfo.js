@@ -73,7 +73,6 @@ export default class AccountInfo extends Component {
                 <input type="password" placeholder="••••••••••••" className="form-control textBox" id="confirmNewPassword"/>
               </MDBCol>
             </MDBContainer>
-
           </MDBContainer>
 
           { /* TODO: Update this to have a backend call instead of a "to", plus some result popup */ }
