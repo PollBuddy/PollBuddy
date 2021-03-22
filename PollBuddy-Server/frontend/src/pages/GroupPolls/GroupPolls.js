@@ -10,6 +10,7 @@ export default class GroupPolls extends Component {
     //problem is there is no find in backend rn... frontend could do find but probably more resource intensive?
     //TODO: get all this from a backend call
     this.state = {
+
       isMember: false,
       class: "1200 - Data Structures",
       polls: [
@@ -23,7 +24,9 @@ export default class GroupPolls extends Component {
       ],
       total_questions: 24,
       avg_correct: 20,
-      member_correct: 22
+      member_correct: 22,
+      groupData: null,
+      doneLoading: false
       //need to put in groupID from backend
       //need to get other shit like pollIDs and their respective information...
     };
@@ -31,6 +34,30 @@ export default class GroupPolls extends Component {
 
   componentDidMount() {
     this.props.updateTitle(this.state.class);
+    console.log(this.props.match.params.groupID);
+
+    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.match.params.groupID + "/polls", {
+      method: "GET"
+    })
+      .then(response => {
+        if(response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Something went wrong");
+        }
+
+      })
+      .then(response => {
+        if (response === {}) {
+          console.log("Error fetching data");
+        } else {
+          console.log("Fetching data succeeded");
+          console.log(response);
+          this.setState({"groupData": response, "doneLoading": true});
+        }
+      })
+      .catch(error => this.setState({"error": error}));
+
   }
 
 
