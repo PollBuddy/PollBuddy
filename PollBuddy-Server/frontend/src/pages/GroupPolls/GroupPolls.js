@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 import Settings from "../../components/Settings/Settings";
+import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 
 export default class GroupPolls extends Component {
   constructor(props) {//shouldn't this be dependent on the class???? thats why i included a constructor.
@@ -26,8 +27,9 @@ export default class GroupPolls extends Component {
       avg_correct: 20,
       member_correct: 22,
       groupData: null,
-      doneLoading: false,
-      id: null
+      doneLoading: true,
+      id: null,
+      error: null
       //need to put in groupID from backend
       //need to get other shit like pollIDs and their respective information...
     };
@@ -35,10 +37,13 @@ export default class GroupPolls extends Component {
 
   componentDidMount() {
     this.props.updateTitle(this.state.class);
+
+    /*
+    //TODO: uncomment the code below when the /api/groups/:id/polls route works properly
     var pathname = window.location.pathname;
     this.state.id = pathname.match("groups/(.*)/polls")[1];
     console.log(this.state.id);
-    
+
     fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/polls", {
       method: "GET"
     })
@@ -60,36 +65,56 @@ export default class GroupPolls extends Component {
         }
       })
       .catch(error => this.setState({"error": error}));
-
+    */
   }
 
 
   render() {
-    return (
-      <MDBContainer className="page">
-        <MDBContainer className="two-box">
-          {/*TODO: put the GroupEditor component here*/}
-          <Settings state={this.state}/>
-          <MDBContainer className="box">
+    if (this.state.error != null) {
+      return (
+        <MDBContainer fluid className="page">
+          <MDBContainer fluid className="box">
             <p className="fontSizeLarge">
-              My Polls
+              Error loading data! Please try again.
             </p>
-
-            {this.state.polls.length === 0 ? (
-              <p>Sorry, you don't have any polls.<br/> <br/></p>
-            ) : (
-              <React.Fragment>
-                {this.state.polls.map((e) => (
-                  <Link to={"/polls/" + e.pollId + "/view"}>
-                    <button style={{  width: "17em" }} className="button">{"Poll " + e.pollId + ": " + e.label}</button>
-                  </Link>
-                ))}
-              </React.Fragment>
-            )}
-
           </MDBContainer>
         </MDBContainer>
-      </MDBContainer>
-    );
+      );
+    } else if (!this.state.doneLoading) {
+      return (
+        <MDBContainer className="page">
+          <LoadingWheel/>
+        </MDBContainer>
+      );
+    } else {
+      return (
+        <MDBContainer className="page">
+          <MDBContainer className="two-box">
+            {/*TODO: put the GroupEditor component here*/}
+            <Settings state={this.state}/>
+            <MDBContainer className="box">
+              <p className="fontSizeLarge">
+                My Polls
+              </p>
+
+              {this.state.polls.length === 0 ? (
+                <p>Sorry, you don't have any polls.<br/> <br/></p>
+              ) : (
+                <React.Fragment>
+                  {this.state.polls.map((e) => (
+                    <Link to={"/polls/" + e.pollId + "/view"}>
+                      <button style={{width: "17em"}}
+                        className="button">{"Poll " + e.pollId + ": " + e.label}
+                      </button>
+                    </Link>
+                  ))}
+                </React.Fragment>
+              )}
+
+            </MDBContainer>
+          </MDBContainer>
+        </MDBContainer>
+      );
+    }
   }
 }
