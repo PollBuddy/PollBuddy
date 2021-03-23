@@ -37,46 +37,45 @@ export default class Settings extends Component{
             <button className="button">Leave Group</button>
           </Link>
         </MDBContainer>
-    ) : (
-      <MDBContainer className="box">
-        <p className="fontSizeLarge">
-          Admin Settings
-        </p>
-        <Link to={"/polls/123/edit"}>
-          <button className="button">Create New Poll</button>
-        </Link>
-        <p className="fontSizeSmall">
-          {"Total number of polls: " + this.state.polls.length}
-        </p>
-          <p className="fontSizeSmall">
-              {"Total questions: " + this.state.total_questions}
+      ) : (
+        <MDBContainer className="box">
+          <p className="fontSizeLarge">
+            Admin Settings
           </p>
-        <p className="fontSizeSmall">
-          {"Average correct answers: " + this.state.avg_correct}
-        </p>
-        {/*change name, details, add people, remove people*/}
-        {/*TODO: admin should be able to select individual students and see their information here*/}
+          <Link to={"/polls/123/edit"}>
+            <button className="button">Create New Poll</button>
+          </Link>
+          <p className="fontSizeSmall">
+            {"Total number of polls: " + this.state.polls.length}
+          </p>
+          <p className="fontSizeSmall">
+            {"Total questions: " + this.state.total_questions}
+          </p>
+          <p className="fontSizeSmall">
+            {"Average correct answers: " + this.state.avg_correct}
+          </p>
+          {/*change name, details, add people, remove people*/}
+          {/*TODO: admin should be able to select individual students and see their information here*/}
+          <MDBContainer>
+            <input type="GroupName" placeholder="New Group Name" className="display_none form-control textBox" id="groupText" />
+            <button id="groupBtn" className="button" onClick={() => this.toggleTextBox("groupText","#groupBtn","Change Group Name")}>Change Group Name</button>
+          </MDBContainer>
 
-        <MDBContainer>
-          <input type="GroupName" placeholder="New Group Name" className="display_none form-control textBox" id="groupText" />
-          <button id="groupBtn" className="button" onClick={() => this.toggleTextBox("groupText","#groupBtn","Change Group Name")}>Change Group Name</button>
+          <MDBContainer>
+            <input type="AddStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="addText" />
+            <button id="addBtn" className="button" onClick={() => this.toggleTextBox("addText","#addBtn","Add Student")}>Add Student</button>
+          </MDBContainer>
+
+          <MDBContainer>
+            <input type="RemoveStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="removeText" />
+            <button id="removeBtn" className="button" onClick={() => this.toggleTextBox("removeText","#removeBtn","Remove Student")}>Remove Student</button>
+          </MDBContainer>
+
+          <Link to={"/Groups"}>
+            <button className="button">Delete this Group</button>
+          </Link>
         </MDBContainer>
-
-        <MDBContainer>
-          <input type="AddStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="addText" />
-          <button id="addBtn" className="button" onClick={() => this.toggleTextBox("addText","#addBtn","Add Student")}>Add Student</button>
-        </MDBContainer>
-
-        <MDBContainer>
-          <input type="RemoveStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="removeText" />
-          <button id="removeBtn" className="button" onClick={() => this.toggleTextBox("removeText","#removeBtn","Remove Student")}>Remove Student</button>
-        </MDBContainer>
-
-        <Link to={"/Groups"}>
-          <button className="button">Delete this Group</button>
-        </Link>
-      </MDBContainer>
-    )
+      )
     );
   }
 }
