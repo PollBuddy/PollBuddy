@@ -120,7 +120,7 @@ MongoDB is the database that PollBuddy uses to store our information
 
 At the top of the information hierarchy there are collections, e.g. "users"
 
-Every collection contains .JSON files wtih unique IDs to their collection 
+Every collection contains .JSON files with unique IDs to their collection 
     (these are usually strings of characters and numbers)
 
 Every ID can then have data types linked to them
@@ -128,7 +128,7 @@ Every ID can then have data types linked to them
 These can be called a lot of things, and every ID in a collection will have the same data types in their .JSON files. So refer to the routes page to see the types of data each collection holds
 
     e.g. a user could have the data type "classes" that contains the name of their classes
-    
+
     so to get the list of classes that user "123" has in an array: 
             mongoConnection.getDB().collection("users").find({ "_id": "123" }, {"_id": 0, "classes": 1})
             .getDB() calls the database
