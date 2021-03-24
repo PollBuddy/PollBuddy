@@ -111,6 +111,7 @@ Also see: https://docs.influxdata.com/influxdb/cloud/ for InfluxDB full document
 
 ## morgan
 morgan is a logger package (controls the recording of what happens in when a program runs)
+
 NPM link: https://www.npmjs.com/package/morgan
 
 
@@ -124,12 +125,11 @@ Every collection contains .JSON files wtih unique IDs to their collection
 
 Every ID can then have data types linked to them
 
-    these can be called a lot of things, and every ID in a collection will have the same data types in their .JSON files
+These can be called a lot of things, and every ID in a collection will have the same data types in their .JSON files. So refer to the routes page to see the types of data each collection holds
 
-    so refer to the routes page to see the types of data each collection holds
     e.g. a user could have the data type "classes" that contains the name of their classes
-
-    Example to get the list of classes that user "123" has in an array: 
+    
+    so to get the list of classes that user "123" has in an array: 
             mongoConnection.getDB().collection("users").find({ "_id": "123" }, {"_id": 0, "classes": 1})
             .getDB() calls the database
             .collection("users") calls the collection containing all .JSON files for users
