@@ -42,7 +42,7 @@ NPM Link: https://www.npmjs.com/package/cors
 ## debug
 This is a package for exposing functions to pass debug statements to
 
--NPM Link: https://www.npmjs.com/package/debug
+NPM Link: https://www.npmjs.com/package/debug
 
 
 ## dotenv
