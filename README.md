@@ -13,24 +13,15 @@ Site Map: https://draft.io/jubvd. Contact PM for edit access.
 
 
 ## How to run the app
-
-(Please open an issue if these instructions are not clear enough or are outdated)
-
-Please visit [our Wiki](https://github.com/PollBuddy/PollBuddy/wiki/Installation-Instructions) for detailed instructions on how to install and run Poll Buddy locally.
-
-## How to start contributing
-New Poll Buddy members can go to [our Wiki page](https://github.com/PollBuddy/PollBuddy/wiki/Contribution-Guide) for instructions on how you can start making contributions to Poll Buddy.
+Please visit our [Wiki](https://github.com/PollBuddy/PollBuddy/wiki/Installation-Instructions) for detailed instructions on how to install and run Poll Buddy locally.
 
 
-## Development information
+## Development information / How to start contributing
+New Poll Buddy members can go to our [Wiki](https://github.com/PollBuddy/PollBuddy/wiki/Contribution-Guide) for instructions on how you can start making contributions to Poll Buddy.
 
-### Building one of the containers manually
-Enter the container's folder (contains a `Dockerfile`) and run:
-```
-docker build -t <some identifier or name> .
-```
 
 ## Technology Lists
+Please click the headers for more details.
 
 ### [Front-end](https://github.com/PollBuddy/PollBuddy/blob/tech-readme/PollBuddy-Server/frontend/techList.md)
 - autosize
@@ -61,7 +52,3 @@ docker build -t <some identifier or name> .
 - mongodb
 - morgan
 - promise-retry
-
-
-
-### More development information coming soon on the Wiki
