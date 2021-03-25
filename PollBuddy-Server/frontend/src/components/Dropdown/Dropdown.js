@@ -46,7 +46,7 @@ function DropdownMenu(props) {
   return (
     <div className="Dropdown" ref={wrapperRef}>
       <a href="/login">Login</a>
-      <a href="/">Logout</a>
+      <a onClick={localStorage.setItem("loggedIn", false)} href="/">Logout</a>
       <a href="/register">Register</a>
       <a href="/account">Account</a>
       <a href="/groups">Groups</a>
