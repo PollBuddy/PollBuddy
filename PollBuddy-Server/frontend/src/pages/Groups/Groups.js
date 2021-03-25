@@ -144,9 +144,8 @@ export default class Groups extends Component {
                 <input className="btn button float-right" type="submit" value="OK"/>
               </form>
             </Popup> */}
-            <button className="button" onClick={this.toggleLeaveGroup}>{this.state.leaveGroupButtonText}</button>
-            {this.state.isOpen && <Dialog onClose={(e) => this.setState({isOpen: false})} />}
-            <button className={"button " + (this.state.leaveGroupButtonText === "Exit Leave Group" ? "groups_exit_leave_group" : "")} onClick={this.toggleLeaveGroup}>{this.state.leaveGroupButtonText}</button>
+            <button className={"button " + (this.state.leaveGroupButtonText === "Exit Leave Group" ? "groups_exit_leave_group" : "")}
+              onClick={this.toggleLeaveGroup}>{this.state.leaveGroupButtonText}</button>
             {this.state.isOpen && <Dialog onClose={() => this.setState({isOpen: false})} />}
           </MDBContainer>
         </MDBContainer>
