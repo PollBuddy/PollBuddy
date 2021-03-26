@@ -303,7 +303,7 @@ router.get("/register", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
  */
-router.post("/register", function (req, res) {
+router.post("/register", async (req, res) => {
 
   // TODO: This needs to be updated to use joi
   const firstnameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(req.body.firstName);
@@ -333,65 +333,73 @@ router.post("/register", function (req, res) {
     // No validation errors, let's try adding the user!
 
     // Attempt to insert the user into the database
-    mongoConnection.getDB().collection("users").insertOne({
-      FirstName: req.body.firstName,
-      FirstNameLocked: false,
-      LastName: req.body.lastName,
-      LatNameLocked: false,
-      UserName: req.body.userName.toLowerCase(),
-      UserNameLocked: true,
-      Email: req.body.email.toLowerCase(),
-      EmailLocked: false,
-      Password: bcrypt.hashSync(req.body.password, 10)
-    }, (err, result) => {
-      if (err) {
-        // Something went wrong
-        if(err.code === 11000) {
-          // This code means we're trying to insert a duplicate key (aka user already registered somehow)
-          if(err.keyPattern.Email) {
-            // Email in use
-            return res.status(400).json({"result": "failure", "error": "This email is already in use."});
+    bcrypt.hash(req.body.password, 10, (error,hash) => {
 
-          } else if(err.keyPattern.UserName) {
-            // Username in use
-            return res.status(400).json({"result": "failure", "error": "This username is already in use."});
+      //Something went wrong with bcrypt hash function
+      if (error) {
+        console.log(error)
+        return res.status(500).send(createResponse(null, "An error occurred creating your account"));
+      }
+
+      mongoConnection.getDB().collection("users").insertOne({
+        FirstName: req.body.firstName,
+        FirstNameLocked: false,
+        LastName: req.body.lastName,
+        LatNameLocked: false,
+        UserName: req.body.userName.toLowerCase(),
+        UserNameLocked: true,
+        Email: req.body.email.toLowerCase(),
+        EmailLocked: false,
+        Password: hash
+      }, (err, result) => {
+        if (err) {
+          // Something went wrong
+          if(err.code === 11000) {
+            // This code means we're trying to insert a duplicate key (aka user already registered somehow)
+            if(err.keyPattern.Email) {
+              // Email in use
+              return res.status(400).json({"result": "failure", "error": "This email is already in use."});
+
+            } else if(err.keyPattern.UserName) {
+              // Username in use
+              return res.status(400).json({"result": "failure", "error": "This username is already in use."});
+
+            } else {
+              // An unknown error occurred
+              console.log("Database Error occurred while creating a new user with Poll Buddy.");
+              console.log(err);
+              return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+            }
 
           } else {
             // An unknown error occurred
-            console.log("Database Error occurred while creating a new user with Poll Buddy.");
+            console.log("Database Error occurred while creating a new user.");
             console.log(err);
             return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
           }
 
         } else {
-          // An unknown error occurred
-          console.log("Database Error occurred while creating a new user.");
-          console.log(err);
-          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+          // No error object at least
+          if (result.result.ok === 1) {
+            // One result changed, therefore it worked.
+
+            // Configure user data and save in session
+            req.session.userData = {};
+            req.session.userData.userName = result.ops[0].UserName;
+            req.session.userData.email = result.ops[0].Email;
+
+            // Send the response object with some basic info for the frontend to store
+            return res.json({"result": "success", "data": {"firstName": result.ops[0].FirstName,
+              "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}});
+
+          } else {
+            // For some reason, the user wasn't inserted, send an error.
+            console.log("Database Error occurred while creating a new user.");
+            console.log(err);
+            return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+          }
         }
-
-      } else {
-        // No error object at least
-        if (result.result.ok === 1) {
-          // One result changed, therefore it worked.
-
-          // Configure user data and save in session
-          req.session.userData = {};
-          req.session.userData.userName = result.ops[0].UserName;
-          req.session.userData.email = result.ops[0].Email;
-
-          // Send the response object with some basic info for the frontend to store
-          return res.json({"result": "success", "data": {"firstName": result.ops[0].FirstName,
-            "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}});
-
-        } else {
-          // For some reason, the user wasn't inserted, send an error.
-          console.log("Database Error occurred while creating a new user.");
-          console.log(err);
-          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
-        }
-
-      }
+      })
     });
 
   } else {
