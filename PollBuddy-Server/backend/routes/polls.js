@@ -4,6 +4,19 @@ var mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
 const {createResponse, validateID} = require("../modules/utils"); // object destructuring, only import desired functions
 
+/**
+ * Create new poll.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-new
+ * @typedef {Object} payload
+ * @property {string} Name - Name of the new poll.
+ * @typedef {Object} response
+ * @property {string} ID - Object ID of the new poll
+ * @postdata {payload} payload
+ * @returns {response}
+ * @name POST api/polls/new
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.post("/new", function (req, res) {
   // Validate request body
   const schema = Joi.object({
@@ -33,7 +46,20 @@ router.post("/new", function (req, res) {
 
 });
 
-// Modify (add|delete|edit) Questions of a specific poll
+/**
+ * Modify (add|delete|edit) Questions of a specific poll.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-idedit
+ * @typedef {Object} Questions
+ * @property {number} QuestionNumber - Number of the question.
+ * @property {string} QuestionText - Content of the question.
+ * @property {string[]} AnswerChoices - Array of possible choices or null.
+ * @property {string[]} CorrectAnswers - Array of correct answers or null.
+ * @property {string} Visible - Whether students will be able to see the graded result or not.
+ * @postdata {Questions[]} payload
+ * @name POST api/polls/{id}/edit
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.post("/:id/edit", async (req, res) => {
   // validate request body
   const schema = Joi.array().items(
@@ -169,7 +195,18 @@ router.post("/:id/delete", function (req, res) {//use router.delete??
   return res.sendStatus(200);
 });
 
-// return all polls.
+/**
+ * Get all polls.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-
+ * @typedef {Object} Poll
+ * @property {string} _id Object ID of the poll.
+ * @property {string} Name of the poll.
+ * @property {Questions[]} Array of Questions
+ * @returns {Poll[]} response
+ * @name GET api/polls
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.get("/", async (req, res) => {
   try {
     const polls = await mongoConnection.getDB().collection("polls").find({}).toArray();
@@ -180,7 +217,14 @@ router.get("/", async (req, res) => {
   return res.status(500).send(createResponse(null, "An error occurred while reading the database."));
 });
 
-// return poll with a specific id
+/**
+ * Get data of a single poll with the specified id.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-id
+ * @returns {Poll} response
+ * @name GET api/polls/{id}
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.get("/:id", async (req, res) => {
   // validate id
   const id = await validateID("polls", req.params.id);
