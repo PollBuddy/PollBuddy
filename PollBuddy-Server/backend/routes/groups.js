@@ -56,6 +56,15 @@ router.post("/:id/edit", function (req, res) {
         }
       });
     }
+    if (jsonContent.Admins !== undefined) {
+      mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Admins: jsonContent.Admins } }, function (err, res) {
+        if (err) {
+          return res.sendStatus(500);
+        } else {
+          success = true;
+        }
+      });
+    }
     if (success === false) {
       return res.sendStatus(400);
     }
@@ -80,6 +89,15 @@ router.post("/:id/edit", function (req, res) {
     }
     if (jsonContent.Users !== undefined) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Users: jsonContent.Users } }, function (err, res) {
+        if (err) {
+          return res.sendStatus(500);
+        } else {
+          success = true;
+        }
+      });
+    }
+    if (jsonContent.Admins !== undefined) {
+      mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Admins: jsonContent.Admins } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -169,6 +187,16 @@ router.post("/id:/join", function (res, req, next) {
 
 function checkUserPermission(userID, groupID) {
   var cursor = mongoConnection.getDB().collection('groups').find({"_id": groupID}, {"_id":0, "Users":1});
+  for (var i in cursor) {
+    if (i == userID) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function checkAdminPermission(adminID, groupID) {
+  var cursor = mongoConnection.getDB().collection('groups').find({"_id": groupID}, {"_id":0, "Admins":1});
   for (var i in cursor) {
     if (i == userID) {
       return true;
