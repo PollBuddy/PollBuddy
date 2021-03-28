@@ -23,8 +23,16 @@ export default class PollEditor extends Component {
       askedQuestions: [],
       questionDispatcherIndex: 0,
       pollTitle: "Sample title",
-      pollDescription: "This is a sample description"
+      pollDescription: "This is a sample description",
+      pollTitleValue: "",
+      pollDescriptionValue: ""
     };
+
+    this.state.pollTitleValue = this.state.pollTitle;
+    this.state.pollDescriptionValue = this.state.pollDescription;
+
+    this.handlePollTitleChange = this.handlePollTitleChange.bind(this);
+    this.handlePollDescriptionChange = this.handlePollDescriptionChange.bind(this);
   }
 
   askQuestion() {
@@ -53,6 +61,14 @@ export default class PollEditor extends Component {
     }
   }
 
+  handlePollTitleChange(event) {
+    this.setState({pollTitleValue: event.target.value});
+  }
+
+  handlePollDescriptionChange(event) {
+    this.setState({pollDescriptionValue: event.target.value});
+  }
+
   render() {
 
     return (
@@ -73,12 +89,12 @@ export default class PollEditor extends Component {
               </p>
 
               <MDBContainer>
-                <input type="GroupName" placeholder={this.state.pollTitle} className="display_none form-control textBox" id="groupText" />
+                <input type="GroupName" className="display_none form-control textBox" id="groupText" value={this.state.pollTitleValue} onChange={this.handlePollTitleChange}/>
                 <button id="groupBtn" className="button" onClick={() => this.toggleTextBox("groupText","#groupBtn","Change Poll Title")}>Change Poll Title</button>
               </MDBContainer>
 
               <MDBContainer class="form-group">
-                <textarea type="pollDescription" placeholder={this.state.pollDescription} className="display_none form-control textBox" id="descriptionText" maxLength="100"></textarea>
+                <textarea type="pollDescription" className="display_none form-control textBox" id="descriptionText" maxLength="100" value={this.state.pollDescriptionValue} onChange={this.handlePollDescriptionChange}></textarea>
                 <button id="descriptionBtn" className="button" onClick={() => this.toggleTextBox("descriptionText","#descriptionBtn","Change Poll Description")}>Change Poll Description</button>
               </MDBContainer>
             </MDBContainer>
