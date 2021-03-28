@@ -1,9 +1,15 @@
 import React, {Component} from "react";
 import { MDBContainer, MDBDropdownToggle, MDBDropdown, MDBDropdownItem, MDBDropdownMenu } from "mdbreact";
 import Question from "../../components/Question/Question";
+import autosize from "autosize";
 import "./PollEditor.scss";
 
 export default class PollEditor extends Component {
+  componentDidMount() {
+    autosize(document.querySelector("textarea"));
+    this.props.updateTitle("Poll Editor");
+  }
+
   constructor(props) {
     super(props);
     this.askQuestion = this.askQuestion.bind(this);
@@ -16,6 +22,8 @@ export default class PollEditor extends Component {
       questions: questions.questions,
       askedQuestions: [],
       questionDispatcherIndex: 0,
+      pollTitle: "Sample title",
+      pollDescription: "This is a sample description"
     };
   }
 
@@ -28,50 +36,94 @@ export default class PollEditor extends Component {
       ]
     }));
   }
+
+  toggleTextBox(elementId, selector, text) {
+    if(document.getElementById(elementId).style.display === "block") {
+      document.getElementById(elementId).style.display = "none";
+      document.querySelector(selector).textContent = text;
+      if (elementId === "groupText") {
+        this.setState({pollTitle: document.getElementById(elementId).value});
+      } else {
+        this.setState({pollDescription: document.getElementById(elementId).value});
+      }
+      
+    } else {
+      document.getElementById(elementId).style.display = "block";
+      document.querySelector(selector).textContent = "Submit";
+    }
+  }
+
   render() {
 
     return (
       <MDBContainer>
         <MDBContainer className="page">
-          <MDBContainer className="Poll_Editor_box box">
-            <p>
-              Poll Editor {this.props.pollID}
-            </p>
+          <MDBContainer className="two-box">
+            <MDBContainer className="Poll_Editor_box box">
+              <p className="fontSizeLarge">
+                Poll Details {this.props.pollID}
+              </p>
 
-            {this.state.askedQuestions.map((value, index) => {
-              return (
-                <Question questionObj={value} key={index} number={index} />
-              );
-            })}
+              <p className="fontSizeSmall">
+                {"Poll title: " + this.state.pollTitle}
+              </p>
 
-            <MDBDropdown>
-              <MDBDropdownToggle caret className="button">
-                {this.state.questions[this.state.questionDispatcherIndex].title}
-              </MDBDropdownToggle>
-              <MDBDropdownMenu basic>
-                {this.state.questions.map((value, index) => {
-                  let tag;
-                  if(index === this.state.questionDispatcherIndex) {
-                    tag = <MDBDropdownItem key={index} active href="#">
-                      {index+1}: {value.title}
-                    </MDBDropdownItem>;
-                  } else {
-                    tag = <MDBDropdownItem
-                      onClick={() => {
-                        this.setState({questionDispatcherIndex: index});
-                      } }
-                      key={index}
-                      href="#">
-                      {index+1}: {value.title}
-                    </MDBDropdownItem>;
-                  }
-                  return tag;
-                })}
-              </MDBDropdownMenu>
-            </MDBDropdown>
+              <p className="fontSizeSmall">
+                {"Poll description: " + this.state.pollDescription}
+              </p>
 
-            <button className="button" onClick={this.askQuestion}>Ask!</button>
+              <MDBContainer>
+                <input type="GroupName" placeholder={this.state.pollTitle} className="display_none form-control textBox" id="groupText" />
+                <button id="groupBtn" className="button" onClick={() => this.toggleTextBox("groupText","#groupBtn","Change Poll Title")}>Change Poll Title</button>
+              </MDBContainer>
+
+              <MDBContainer class="form-group">
+                <textarea type="pollDescription" placeholder={this.state.pollDescription} className="display_none form-control textBox" id="descriptionText" maxLength="100"></textarea>
+                <button id="descriptionBtn" className="button" onClick={() => this.toggleTextBox("descriptionText","#descriptionBtn","Change Poll Description")}>Change Poll Description</button>
+              </MDBContainer>
+            </MDBContainer>
+
+            <MDBContainer className="Poll_Editor_box box">
+              <p className="fontSizeLarge">
+                Poll Editor {this.props.pollID}
+              </p>
+
+              {this.state.askedQuestions.map((value, index) => {
+                return (
+                  <Question questionObj={value} key={index} number={index} />
+                );
+              })}
+
+              <MDBDropdown>
+                <MDBDropdownToggle caret className="button">
+                  {this.state.questions[this.state.questionDispatcherIndex].title}
+                </MDBDropdownToggle>
+                <MDBDropdownMenu basic>
+                  {this.state.questions.map((value, index) => {
+                    let tag;
+                    if(index === this.state.questionDispatcherIndex) {
+                      tag = <MDBDropdownItem key={index} active href="#">
+                        {index+1}: {value.title}
+                      </MDBDropdownItem>;
+                    } else {
+                      tag = <MDBDropdownItem
+                        onClick={() => {
+                          this.setState({questionDispatcherIndex: index});
+                        } }
+                        key={index}
+                        href="#">
+                        {index+1}: {value.title}
+                      </MDBDropdownItem>;
+                    }
+                    return tag;
+                  })}
+                </MDBDropdownMenu>
+              </MDBDropdown>
+
+              <button className="button" onClick={this.askQuestion}>Ask!</button>
+            </MDBContainer>
           </MDBContainer>
+          
         </MDBContainer>
       </MDBContainer>
     );
