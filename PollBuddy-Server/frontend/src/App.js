@@ -17,6 +17,7 @@ import Privacy from "./pages/Privacy/Privacy";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import RegisterDefault from "./pages/RegisterDefault/RegisterDefault";
 import RegisterWithSchool from "./pages/RegisterWithSchool/RegisterWithSchool";
+import RegisterWithSchoolStep2 from "./pages/RegisterWithSchoolStep2/RegisterWithSchoolStep2";
 import RegisterWithPollBuddy from "./pages/RegisterWithPollBuddy/RegisterWithPollBuddy";
 import PollViewer from "./pages/PollViewer/PollViewer";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
@@ -29,6 +30,7 @@ import QuestionEnded from "./pages/QuestionEnded/QuestionEnded";
 import AnswerRecorded from "./pages/AnswerRecorded/AnswerRecorded";
 import LoginDefault from "./pages/LoginDefault/LoginDefault";
 import LoginWithSchool from "./pages/LoginWithSchool/LoginWithSchool";
+import LoginWithSchoolStep2 from "./pages/LoginWithSchoolStep2/LoginWithSchoolStep2";
 import Code from "./pages/Code/Code";
 
 import Header from "./components/Header/Header.js";
@@ -143,6 +145,7 @@ export default class App extends React.Component {
             </Route>
 
             {/* Poll Results Page */}
+            {/*use the render function so that we can retrieve :groupID from inside the component*/}
             <Route exact path="/polls/:pollID/results"
               render={ (props) => (<PollResults {...props} updateTitle={this.updateTitle} />) }
             />
@@ -184,6 +187,12 @@ export default class App extends React.Component {
               <LoginWithSchool updateTitle={this.updateTitle} />
             </Route>
 
+            {/* Login with School Account Step 2 Page */}
+            <Route exact path="/login/school/step2"
+              render={ (props) => (<LoginWithSchoolStep2 {...props} updateTitle={this.updateTitle}
+                userInfo={this.state.userInfo} />) }
+            />
+
             {/* Forgot Password Page */}
             <Route exact path="/login/forgot">
               <ForgotPassword updateTitle={this.updateTitle} />
@@ -211,6 +220,13 @@ export default class App extends React.Component {
             <Route exact path="/register/school">
               <RegisterWithSchool updateTitle={this.updateTitle} />
             </Route>
+
+            {/* Register with School Account Step 2 Page */}
+            {/*use the render function so that we can retrieve :groupID from inside the component*/}
+            <Route exact path="/register/school/step2"
+              render={ (props) => (<RegisterWithSchoolStep2 {...props} updateTitle={this.updateTitle}
+                userInfo={this.state.userInfo} />) }
+            />
 
 
             {/* --- Account and User Settings Pages --- */}
