@@ -18,15 +18,16 @@ var cors = require("cors");
 var app = express();
 
 // Express Session
-const express_session = require("express-session");
-const MongoStore = require("connect-mongo")(express_session);
-app.use(express_session({
+const expressSession = require("express-session");
+const MongoStore = require("connect-mongo")(expressSession);
+app.use(expressSession({
   cookie: {
     maxAge: 2629800000
   },
   name: "pollbuddy_session",
   secret: process.env["SESSION_SECRET"],
   secure: true,
+  rolling: true,
   store: new MongoStore({
     url: process.env["DB_URL"],
     dbName: process.env["DB_NAME"]
