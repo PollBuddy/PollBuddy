@@ -9,7 +9,7 @@ export default class LoginWithPollBuddy extends Component {
   state = {
     successfulLogin: false,
     error: "",
-    email: "",
+    userNameEmail: "",
     password: ""
   };
 
@@ -38,7 +38,7 @@ export default class LoginWithPollBuddy extends Component {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        email: this.state.email,
+        userNameEmail: this.state.userNameEmail,
         password: this.state.password
       })
     }).then(response => {
@@ -47,7 +47,7 @@ export default class LoginWithPollBuddy extends Component {
         localStorage.setItem("loggedIn", true);//maybe have an admin/teacher var instead of just true
         this.setState({successfulLogin: true}); // Tell it to redirect to the next page if successful
       } else {
-        this.setState({error: "Invalid email/password combination"});
+        this.setState({error: "Invalid username/email and password combination"});
       }
     }).catch(err => {
       console.log(err);
@@ -71,11 +71,11 @@ export default class LoginWithPollBuddy extends Component {
       <MDBContainer className="page">
         <MDBContainer className="box">
           <MDBContainer className="form-group">
-            <label htmlFor="emailText">Email:</label>
-            <input type="email" placeholder="sisman@rpi.edu" className="form-control textBox" id="emailText"
-              onChange={(evt) => { this.setState({email: evt.target.value}); }}/>
-            <label htmlFor="passwordText">Password:</label>
-            <input type="password" placeholder="••••••••••••" className="form-control textBox" id="passwordText"
+            <label htmlFor="userNameEmail">Username or Email:</label>
+            <input type="userNameEmail" placeholder="sisman@rpi.edu" className="form-control textBox" id="userNameEmail"
+              onChange={(evt) => { this.setState({userNameEmail: evt.target.value}); }}/>
+            <label htmlFor="password">Password:</label>
+            <input type="password" placeholder="••••••••••••" className="form-control textBox" id="password"
               onChange={(evt) => { this.setState({password: evt.target.value}); }}/>
           </MDBContainer>
 

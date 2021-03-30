@@ -70,11 +70,11 @@ class RegisterWithPollBuddy extends Component {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
-        FirstName: this.state.firstname,
-        LastName: this.state.lastname,
-        Username: this.state.username.toLowerCase(),
-        Email: this.state.email.toLowerCase(),
-        Password: this.state.password
+        firstName: this.state.firstname,
+        lastName: this.state.lastname,
+        userName: this.state.username.toLowerCase(),
+        email: this.state.email.toLowerCase(),
+        password: this.state.password
       })
     }).then(response => response.text())
       .then(response => {
@@ -83,7 +83,7 @@ class RegisterWithPollBuddy extends Component {
         // 2. a string: Exists, which means the email address has already been registered
         // 3. status 203: everything is ok
 
-        // print and check the reponse for debugging (can be deleted later)
+        // print and check the response for debugging (can be deleted later)
         console.log(response);
         if (response === "Exists") {
           this.setState({emailExists: true});

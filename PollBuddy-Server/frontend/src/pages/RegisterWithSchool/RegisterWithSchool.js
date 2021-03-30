@@ -37,15 +37,8 @@ export default class RegisterWithSchool extends Component {
           />
 
           <form>
-            <button className="btn button" formAction={schoolLinkDict[this.state.value]}>Submit</button>
+            <button className="btn button" formAction={ "/api/users/register/" + schoolLinkDict[this.state.value] }>Submit</button>
           </form>
-
-          {/* <form>
-            <button className="btn button"
-              formAction="https://cas-auth.rpi.edu/cas/login?service=http%3A%2F%2Fcms.union.rpi.edu%2Flogin%2Fcas%2F%3Fnext%3Dhttps%253A%252F%252Fwww.google.com%252F">
-              CAS (I'm an RPI student)
-            </button>
-          </form> */}
 
         </MDBContainer>
       </MDBContainer>
