@@ -381,9 +381,9 @@ router.post("/register", (req, res) => {
           if (result.result.ok === 1) {
             // One result changed, therefore it worked.
 
-          // Configure user data and save in session
-          req.session.userData = {};
-          req.session.userData.userID = result.insertedId;
+            // Configure user data and save in session
+            req.session.userData = {};
+            req.session.userData.userID = result.insertedId;
 
             // Send the response object with some basic info for the frontend to store
             return res.json({"result": "success", "data": {"firstName": result.ops[0].FirstName,
