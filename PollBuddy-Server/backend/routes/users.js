@@ -150,8 +150,7 @@ router.post("/login", function (req, res) {
 
               // Configure user data and save in session
               req.session.userData = {};
-              req.session.userData.userName = result.UserName;
-              req.session.userData.email = result.Email;
+              req.session.userData.userID = result._id;
 
               // Send the user the necessary data to complete the login process
               return res.send(createResponse({
@@ -214,7 +213,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
 
     // Check to make sure they're already registered
     mongoConnection.getDB().collection("users").findOne({ UserName: "__rpi_" + req.session.cas_user.toLowerCase() }, {
-      projection: { _id: false, UserName: true, Email: true, FirstName: true, LastName: true } }, (err, result) => {
+      projection: { _id: false, UserName: true, FirstName: true, LastName: true } }, (err, result) => {
       if (err) {
         // Something went wrong
         console.log("Database Error occurred while searching for an existing user during log in with RPI.");
@@ -240,8 +239,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
 
           // Configure user data and save in session
           req.session.userData = {};
-          req.session.userData.userName = result.UserName;
-          req.session.userData.email = result.Email;
+          req.session.userData.userID = result._id;
 
           // Send the user the login with school step 2 page with relevant information
           return res.redirect("/login/school/step2?result=success&data=" + JSON.stringify(
@@ -383,10 +381,9 @@ router.post("/register", async (req, res) => {
           if (result.result.ok === 1) {
             // One result changed, therefore it worked.
 
-            // Configure user data and save in session
-            req.session.userData = {};
-            req.session.userData.userName = result.ops[0].UserName;
-            req.session.userData.email = result.ops[0].Email;
+          // Configure user data and save in session
+          req.session.userData = {};
+          req.session.userData.userID = result.insertedId;
 
             // Send the response object with some basic info for the frontend to store
             return res.json({"result": "success", "data": {"firstName": result.ops[0].FirstName,
@@ -554,8 +551,7 @@ router.post("/register/rpi", function (req, res) {
 
           // Configure email, username by copying from the result object and saving in the session
           req.session.userData = {};
-          req.session.userData.userName = result.ops[0].UserName;
-          req.session.userData.email = result.ops[0].Email;
+          req.session.userData.userID = result.insertedId;
 
           // Send the response object with some basic info for the frontend to store
           return res.json({"result": "success", "data": {"firstName": result.ops[0].FirstName,
