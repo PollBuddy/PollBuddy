@@ -337,7 +337,7 @@ router.post("/register", async (req, res) => {
 
       //Something went wrong with bcrypt hash function
       if (error) {
-        console.log(error)
+        console.log(error);
         return res.status(500).send(createResponse(null, "An error occurred creating your account"));
       }
 
@@ -399,7 +399,7 @@ router.post("/register", async (req, res) => {
             return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
           }
         }
-      })
+      });
     });
 
   } else {
