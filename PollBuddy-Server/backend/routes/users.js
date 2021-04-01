@@ -301,7 +301,7 @@ router.get("/register", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
  */
-router.post("/register", async (req, res) => {
+router.post("/register", (req, res) => {
 
   // TODO: This needs to be updated to use joi
   const firstnameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(req.body.firstName);
