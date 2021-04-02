@@ -90,7 +90,7 @@ router.post("/:id/edit", async (req, res) => {
     await mongoConnection.getDB().collection("polls").updateOne({"_id": id}, {"$set": {Questions: validResult.value}});
   } catch (e) {
     console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while writing the database."));
+    return res.status(500).send(createResponse(null, "An error occurred while writing to the database."));
   }
   return res.status(200).send(createResponse());
 });
