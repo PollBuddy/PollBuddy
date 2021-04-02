@@ -160,6 +160,17 @@ router.get("/:id/users", function (req, res, next) {
     return res.send(result[0]);
   });
 });
+router.get("/:id/admins", function (req, res, next) {
+  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+  mongoConnection.getDB().collection("groups").find({ "_id": id }, { projection: { _id: 0, Admins: 1 } }).map(function (item) {
+    return item.Admins;
+  }).toArray(function (err, result) {
+    if (err) {
+      return res.sendStatus(500);
+    }
+    return res.send(result[0]);
+  });
+});
 
 router.get("/id:/join", function (req, res, next) {
   return res.sendStatus(404);
@@ -198,7 +209,7 @@ function checkUserPermission(userID, groupID) {
 function checkAdminPermission(adminID, groupID) {
   var cursor = mongoConnection.getDB().collection('groups').find({"_id": groupID}, {"_id":0, "Admins":1});
   for (var i in cursor) {
-    if (i == userID) {
+    if (i == adminID) {
       return true;
     }
   }
