@@ -12,16 +12,20 @@ export default class LoginWithSchoolStep2 extends Component {
     // Process args
     if(this.props.location.search) {
       console.log("Getting things");
-      var firstName = new URLSearchParams(this.props.location.search).get("firstName");
-      var lastName = new URLSearchParams(this.props.location.search).get("lastName");
-      var userName = new URLSearchParams(this.props.location.search).get("userName");
-      console.log(firstName);
-      console.log(lastName);
-      console.log(userName);
+
+      // console.log(this.props.location);
+      var result = new URLSearchParams(this.props.location.search).get("result");
+      if(result === "success") {
+        var data = JSON.parse(new URLSearchParams(this.props.location.search).get("data"));
+        var firstName = data.firstName;
+        var lastName = data.firstName;
+        var userName = data.firstName;
+      }
     }
 
     // Set up the state
     this.state = {
+      result: result,
       firstName: firstName,
       lastName: lastName,
       userName: userName,
