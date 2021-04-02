@@ -197,7 +197,7 @@ router.post("/id:/join", function (res, req, next) {
 });
 
 function checkUserPermission(userID, groupID) {
-  var users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Users":1}).toArray();
+  var users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Users":1})[0].Users;
   for (var user in users) {
     if (user === userID) {
       return true;
@@ -207,7 +207,7 @@ function checkUserPermission(userID, groupID) {
 }
 
 function checkAdminPermission(adminID, groupID) {
-  var admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Admins":1}).toArray();
+  var admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Admins":1})[0].Admins;
   for (var admin in admins) {
     if (admin === adminID) {
       return true;
