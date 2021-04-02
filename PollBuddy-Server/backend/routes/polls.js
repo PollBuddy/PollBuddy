@@ -17,7 +17,7 @@ const {createResponse, validateID} = require("../modules/utils"); // object dest
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/new", function (req, res) {
+router.post("/new", async (req, res) => {
   // Validate request body
   const schema = Joi.object({
     Name: Joi.string().min(3).max(30).required()
@@ -27,23 +27,14 @@ router.post("/new", function (req, res) {
   if (validResult.error) {
     return res.status(400).send(createResponse(null, validResult.error.details[0].message));
   }
-
   // Add to DB
-  mongoConnection.getDB().collection("polls").insertOne({Name: validResult.value.Name}, function (err, result) {
-    if (err) {
-      console.log(err);
-      return res.sendStatus(500);
-    } else {
-      if (result.result.ok !== 1) {
-        // Failed to insert for some reason
-        return res.sendStatus(500);
-      } else {
-        // Things seemed to be ok, send result message and ID of inserted object
-        return res.send(createResponse({ID: result.insertedId}));
-      }
-    }
-  });
-
+  try {
+    const result = await mongoConnection.getDB().collection("polls").insertOne({Name: validResult.value.Name});
+    return res.send(createResponse({ID: result.insertedId}));   // return poll ID
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send(createResponse(null, "An error occurred while writing to the database."));
+  }
 });
 
 /**
