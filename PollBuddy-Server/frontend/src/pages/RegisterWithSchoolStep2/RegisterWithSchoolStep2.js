@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import {withRouter} from "react-router-dom";
+import ErrorText from "../../components/ErrorText/ErrorText";
 
 class RegisterWithSchoolStep2 extends Component {
   constructor(props) {
@@ -40,6 +41,7 @@ class RegisterWithSchoolStep2 extends Component {
       emailExists: false,
       firstNameValid: true,
       lastNameValid: true,
+      error: null,
     };
 
   }
@@ -94,11 +96,14 @@ class RegisterWithSchoolStep2 extends Component {
             if (response.error === "Validation failed") {
               // TODO: This needs to be reported better (in an error popup, for example)
               console.log(response.data.errors);
+              this.state.error = response.data.errors;
             } else {
               // TODO: This needs to be reported better (in an error popup, for example)
               console.log("You have following error:");
               console.log(response.error);
+              this.state.error = response.error;
             }
+
           }
         }
       });
@@ -106,67 +111,81 @@ class RegisterWithSchoolStep2 extends Component {
 
   render() {
     this.handleRegister = this.handleRegister.bind(this);
+    if (this.state.error != null) {
+      alert(this.state.error);
+      return (
+        <ErrorText text={this.state.error}> </ErrorText>
+      );
+    }
+    else {
 
-    return (
-      <MDBContainer fluid className="page">
-        <MDBContainer fluid className="box">
-          <p className="fontSizeLarge">
-            Register with School
-          </p>
-          <p>
-            To finish creating your account, fill in the text boxes, then press submit.
-          </p>
-          <MDBContainer className="form-group">
+      return (
+        <MDBContainer fluid className="page">
+          <MDBContainer fluid className="box">
+            <p className="fontSizeLarge">
+              Register with School
+            </p>
+            <p>
+              To finish creating your account, fill in the text boxes, then press submit.
+            </p>
+            <MDBContainer className="form-group">
 
-            <label htmlFor="firstnameText">First Name:</label>
-            <input placeholder="SIS" className="form-control textBox" id="firstnameText"
-              value={this.state.firstName} readOnly={ this.state.firstNamePrefilled }
-              onChange={(evt) => { this.setState({firstName: evt.target.value}); }}/>
-            {!this.state.firstNameValid &&
-            <ul className="error">
-              <li>First name must be between 1 and 256 characters</li>
-            </ul>
-            }
+              <label htmlFor="firstnameText">First Name:</label>
+              <input placeholder="SIS" className="form-control textBox" id="firstnameText"
+                value={this.state.firstName} readOnly={this.state.firstNamePrefilled}
+                onChange={(evt) => {
+                  this.setState({firstName: evt.target.value});
+              }}/>
+              {!this.state.firstNameValid &&
+              <ul className="error">
+                <li>First name must be between 1 and 256 characters</li>
+              </ul>
+              }
 
-            <label htmlFor="lastnameText">Last Name:</label>
-            <input placeholder="Man" className="form-control textBox" id="lastnameText"
-              value={this.state.lastName} readOnly={ this.state.lastNamePrefilled }
-              onChange={(evt) => { this.setState({lastName: evt.target.value}); }}/>
-            {!this.state.lastNameValid &&
-            <ul className="error">
-              <li>Last name must be less than 256 characters</li>
-            </ul>
-            }
+              <label htmlFor="lastnameText">Last Name:</label>
+              <input placeholder="Man" className="form-control textBox" id="lastnameText"
+                value={this.state.lastName} readOnly={this.state.lastNamePrefilled}
+                onChange={(evt) => {
+                  this.setState({lastName: evt.target.value});
+              }}/>
+              {!this.state.lastNameValid &&
+              <ul className="error">
+                <li>Last name must be less than 256 characters</li>
+              </ul>
+              }
 
-            <label htmlFor="usernameText">Username:</label>
-            <input placeholder="mans" className="form-control textBox" id="usernameText"
-              value={this.state.userName} readOnly={ this.state.userNamePrefilled }
-              onChange={(evt) => { this.setState({userName: evt.target.value}); }}/>
-            {!this.state.userNameValid &&
-            <ul className="error">
-              <li>Username must be between 3 and 32 characters</li>
-              <li>Valid characters: a-z0-9-_ (alphanumeric + underscore + dash)</li>
-            </ul>
-            }
+              <label htmlFor="usernameText">Username:</label>
+              <input placeholder="mans" className="form-control textBox" id="usernameText"
+                value={this.state.userName} readOnly={this.state.userNamePrefilled}
+                onChange={(evt) => {
+                  this.setState({userName: evt.target.value});
+              }}/>
+              {!this.state.userNameValid &&
+              <ul className="error">
+                <li>Username must be between 3 and 32 characters</li>
+                <li>Valid characters: a-z0-9-_ (alphanumeric + underscore + dash)</li>
+              </ul>
+              }
 
-            <label htmlFor="emailText">Email:</label>
-            <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText"
-              value={this.state.email} readOnly={ this.state.emailPrefilled }
-              onChange={(evt) => { this.setState({email: evt.target.value}); }}/>
-            {!this.state.emailValid &&
-            <ul className="error">
-              <li>Invalid email format!</li>
-            </ul>
-            }
-            {this.state.emailExists &&
-            <div className="error">A user with this email already exists!</div>
-            }
+              <label htmlFor="emailText">Email:</label>
+              <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText" value={this.state.email} readOnly={this.state.emailPrefilled} onChange={(evt) => {
+                this.setState({email: evt.target.value});
+              }}/>
+              {!this.state.emailValid &&
+              <ul className="error">
+                <li>Invalid email format!</li>
+              </ul>
+              }
+              {this.state.emailExists &&
+              <div className="error">A user with this email already exists!</div>
+              }
 
+            </MDBContainer>
+            <button className="button" onClick={this.handleRegister}>Submit</button>
           </MDBContainer>
-          <button className="button" onClick={this.handleRegister}>Submit</button>
         </MDBContainer>
-      </MDBContainer>
-    );
+      );
+    }
   }
 }
 
