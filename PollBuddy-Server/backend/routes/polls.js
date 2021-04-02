@@ -13,6 +13,8 @@ const {createResponse, validateID} = require("../modules/utils"); // object dest
  * @property {string} ID - Object ID of the new poll
  * @postdata {payload} payload
  * @returns {response}
+ * @throws 400 - Invalid request body, see error message for details.
+ * @throws 500 - An error occurred while writing to the database.
  * @name POST api/polls/new
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
@@ -47,6 +49,8 @@ router.post("/new", async (req, res) => {
  * @property {string[]} CorrectAnswers - Array of correct answers or null.
  * @property {string} Visible - Whether students will be able to see the graded result or not.
  * @postdata {Questions[]} payload
+ * @throws 400 - Invalid request body or ObjectID, see error message for details.
+ * @throws 500 - An error occurred while writing to the database.
  * @name POST api/polls/{id}/edit
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
@@ -194,6 +198,7 @@ router.post("/:id/delete", function (req, res) {//use router.delete??
  * @property {string} Name of the poll.
  * @property {Questions[]} Array of Questions
  * @returns {Poll[]} response
+ * @throws 500 - An error occurred while reading the database.
  * @name GET api/polls
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
@@ -212,6 +217,8 @@ router.get("/", async (req, res) => {
  * Get data of a single poll with the specified id.
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-id
  * @returns {Poll} response
+ * @throws 400 - Invalid ObjectID.
+ * @throws 500 - An error occurred while reading the database.
  * @name GET api/polls/{id}
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
