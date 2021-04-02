@@ -41,13 +41,11 @@ export default class LoginWithSchoolStep2 extends Component {
         console.log("Error: " + this.state.error);
         // Redirect to register page
         this.props.history.push("/register/school");
-      }
-      else if(this.state.error === "User has not logged in with RPI."){
+      } else if(this.state.error === "User has not logged in with RPI."){
         console.log("Error: " + this.state.error);
         // Redirect to login page
         this.props.history.push("/login/school");
-      }
-      else { //database error - show the ErrorText component
+      } else { //database error - show the ErrorText component
         return ( //for some reason, this only shows up after clicking submit twice
           <ErrorText text={this.state.error}> </ErrorText>
         );
