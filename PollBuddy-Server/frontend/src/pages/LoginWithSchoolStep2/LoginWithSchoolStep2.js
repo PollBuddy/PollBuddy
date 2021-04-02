@@ -13,39 +13,45 @@ export default class LoginWithSchoolStep2 extends Component {
     if(this.props.location.search) {
       console.log("Getting things");
 
-      // console.log(this.props.location);
       var result = new URLSearchParams(this.props.location.search).get("result");
-      if(result === "success") {
-        var data = JSON.parse(new URLSearchParams(this.props.location.search).get("data"));
-        var firstName = data.firstName;
-        var lastName = data.firstName;
-        var userName = data.firstName;
-      }
+      var data = JSON.parse(new URLSearchParams(this.props.location.search).get("data"));
+      var error = JSON.parse(new URLSearchParams(this.props.location.search).get("error"));
+
     }
 
     // Set up the state
     this.state = {
       result: result,
-      firstName: firstName,
-      lastName: lastName,
-      userName: userName,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      userName: data.userName,
+      error: error,
       doneLoading: true,
-      error: null,
     };
-
   }
 
   componentDidMount() {
     this.props.updateTitle("Login With School Step 2");
-
   }
 
   render() {
-    if (this.state.error != null) {
+    if (this.state.result === "failure") {
       alert(this.state.error);
-      return ( //for some reason, this only shows up after clicking submit twice
-        <ErrorText text={this.state.error}> </ErrorText>
-      );
+      if(this.state.error === "User is not registered"){
+        console.log("Error: " + this.state.error);
+        // Redirect to register page
+        this.props.history.push("/register/school");
+      }
+      else if(this.state.error === "User has not logged in with RPI."){
+        console.log("Error: " + this.state.error);
+        // Redirect to login page
+        this.props.history.push("/login/school");
+      }
+      else { //database error - show the ErrorText component
+        return ( //for some reason, this only shows up after clicking submit twice
+          <ErrorText text={this.state.error}> </ErrorText>
+        );
+      }
     } else if(!this.state.doneLoading){
       return (
         <MDBContainer className="page">
@@ -53,12 +59,17 @@ export default class LoginWithSchoolStep2 extends Component {
         </MDBContainer>
       );
     } else {
+      alert("everything worked!!!!");
+      console.log("everything worked; redirecting to /groups");
+      this.props.history.push("/groups");
+
+      //ideally we'll never get here
       return (
         <MDBContainer fluid className="page">
           <MDBContainer fluid className="box">
 
             <p>Logging in...</p>
-            <p> {"firstName:" + this.state.firstName}</p>
+
             { /* TODO: The returned data from the backend needs to be handled and saved somewhere */ }
             { /* TODO: This page should redirect to a relevant location. This could be
                        1. Back to /login/school if something went wrong with the login process
