@@ -3,6 +3,7 @@ import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import {withRouter} from "react-router-dom";
 import ErrorText from "../../components/ErrorText/ErrorText";
+import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 
 class RegisterWithSchoolStep2 extends Component {
   constructor(props) {
@@ -42,6 +43,7 @@ class RegisterWithSchoolStep2 extends Component {
       firstNameValid: true,
       lastNameValid: true,
       error: null,
+      doneLoading: true,
     };
 
   }
@@ -116,8 +118,13 @@ class RegisterWithSchoolStep2 extends Component {
       return (
         <ErrorText text={this.state.error}> </ErrorText>
       );
-    }
-    else {
+    } else if(this.state.doneLoading == false){
+      return (
+        <MDBContainer className="page">
+          <LoadingWheel/>
+        </MDBContainer>
+      );
+    } else {
 
       return (
         <MDBContainer fluid className="page">
