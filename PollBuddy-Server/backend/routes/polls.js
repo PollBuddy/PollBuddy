@@ -47,8 +47,6 @@ router.post("/:id/edit", function (req, res) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Groups: jsonContent.Groups } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
-        } else {
-          success = true;
         }
       });
     } 
@@ -56,8 +54,6 @@ router.post("/:id/edit", function (req, res) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Admins: jsonContent.Admins } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
-        } else {
-          success = true;
         }
       });
     } else {
@@ -75,8 +71,6 @@ router.post("/:id/edit", function (req, res) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Groups: jsonContent.Groups } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
-        } else {
-          success = true;
         }
       });
     }
@@ -84,8 +78,6 @@ router.post("/:id/edit", function (req, res) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Admins: jsonContent.Admins } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
-        } else {
-          success = true;
         }
       });
     } else {
@@ -288,11 +280,11 @@ router.get("/:id/results", function (req, res, next) {
 });
 
 function checkUserPermission(userID, pollID) {
-  var groupIDs = mongoConnection.getDB().collection('polls').find({"_id": pollID}, {"_id":0, "Groups":1}).toArray();
+  var groupIDs = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id":0, "Groups":1}).toArray();
   for (var groupID in groupIDs) { //technically groupIDs should only be one, polls shouldn't have more than one group attached to them
-    var users = mongoConnection.getDB().collection('groups').find({"_id": groupID}, {"_id":0, "Users":1}).toArray();
+    var users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Users":1}).toArray();
     for (var user in users) {
-      if (i == userID) {
+      if (user === userID) {
         return true;
       }
     }
@@ -300,22 +292,21 @@ function checkUserPermission(userID, pollID) {
   return true; //returns true anyway, something to discuss later (should anyone be able to access a poll without ?)
 }
 
-function checkAdminPermission(adminID, groupID) {
-  var groupIDs = mongoConnection.getDB().collection('polls').find({"_id": pollID}, {"_id":0, "Groups":1}).toArray();
+function checkAdminPermission(adminID, pollID) {
+  var groupIDs = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id":0, "Groups":1}).toArray();
   //if the poll doesn't have a group associated with it, check it's internal admins
-  if (groupID.length() == 0) {
-    var admins = mongoConnection.getDB().collection('polls').find({"_id": pollID}, {"_id":0, "Admins":1}).toArray();
-    for (admin in admins) {
-      if (admin == adminID) {
+  if (groupID.length() === 0) {
+    var admins = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id":0, "Admins":1}).toArray();
+    for (var admin in admins) {
+      if (admin === adminID) {
         return true;
       }
     }
-  }
-  else {
+  } else {
     for (var groupID in groupIDs) { //technically groupIDs should only be size one, polls shouldn't have more than one group attached to them
-      var users = mongoConnection.getDB().collection('groups').find({"_id": groupID}, {"_id":0, "Users":1}).toArray();
-      for (var user in users) {
-        if (user == userID) {
+      admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Admins":1}).toArray();
+      for (admin in admins) {
+        if (admin === adminID) {
           return true;
         }
       }
