@@ -105,7 +105,6 @@ class RegisterWithSchoolStep2 extends Component {
               console.log(response.error);
               this.state.error = response.error;
             }
-
           }
         }
       });
@@ -115,10 +114,10 @@ class RegisterWithSchoolStep2 extends Component {
     this.handleRegister = this.handleRegister.bind(this);
     if (this.state.error != null) {
       alert(this.state.error);
-      return (
+      return ( //for some reason, this only shows up after clicking submit twice
         <ErrorText text={this.state.error}> </ErrorText>
       );
-    } else if(this.state.doneLoading == false){
+    } else if(!this.state.doneLoading){
       return (
         <MDBContainer className="page">
           <LoadingWheel/>
