@@ -14,7 +14,7 @@ const {createResponse, validateID, isEmpty} = require("../modules/utils"); // ob
  * This route is not used. It is simply there to have some response to /api/users/
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} status 200: {result: success, data: "User Routes"}
+ * @returns {void} status 200: {result: "success", data: "User Routes"}
  * @name backend/users/_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -28,7 +28,7 @@ router.get("/", function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} status 200: {result: success, data: "User Routes"}
+ * @returns {void} status 200: {result: "success", data: "User Routes"}
  * @name backend/users/_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
