@@ -129,7 +129,7 @@ NPM Link: <https://www.npmjs.com/package/joi>
 
 ## morgan
 
-morgan is a logger package (controls the recording of what happens in when a program runs).
+morgan is a logger package (controls the recording of what happens when a program runs).
 
 NPM link: <https://www.npmjs.com/package/morgan>
 
