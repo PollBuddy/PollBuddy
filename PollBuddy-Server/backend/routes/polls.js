@@ -288,6 +288,7 @@ function checkUserPermission(userID, pollID) { //TODO add checks to make sure ID
         return true;
       }
     }
+    return false;
   }
   return true; //returns true anyway, something to discuss later (should anyone be able to access a standalone poll?)
 }
