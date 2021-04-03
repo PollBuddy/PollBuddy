@@ -21,7 +21,7 @@ const {createResponse, validateID, isEmpty} = require("../modules/utils"); // ob
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/", function (req, res) {
-  return res.send(createResponse("Users routes"));
+  return res.send(createResponse("User routes"));
 });
 
 /**
@@ -35,7 +35,7 @@ router.get("/", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/", function (req, res) {
-  return res.send(createResponse("Users routes"));
+  return res.send(createResponse("User routes"));
 });
 
 /**
