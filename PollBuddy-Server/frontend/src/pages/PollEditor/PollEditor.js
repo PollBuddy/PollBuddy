@@ -55,7 +55,6 @@ export default class PollEditor extends Component {
       } else {
         this.setState({pollDescription: document.getElementById(elementId).value});
       }
-      
     } else {
       document.getElementById(elementId).style.display = "block";
       document.querySelector(selector).textContent = "Submit";
@@ -68,6 +67,25 @@ export default class PollEditor extends Component {
 
   handlePollDescriptionChange(event) {
     this.setState({pollDescriptionValue: event.target.value});
+  }
+
+  createNewQuestion() {
+    console.log(this.state.questions);
+    console.log("Create new question");
+    if (document.getElementById("newQuestionBtn").textContent == "Submit") {
+      let newQuestion = {
+        title: document.getElementById("question_title_input").value,
+        question: document.getElementById("question_input").value
+      }
+      this.setState({questions: [...this.state.questions, newQuestion]})
+      document.getElementById("question_title_input").style.display = "none";
+      document.getElementById("question_input").style.display = "none";
+      document.getElementById("newQuestionBtn").textContent = "New Question";
+    } else {
+      document.getElementById("question_title_input").style.display = "block";
+      document.getElementById("question_input").style.display = "block";
+      document.getElementById("newQuestionBtn").textContent = "Submit";
+    }
   }
 
   render() {
@@ -115,6 +133,12 @@ export default class PollEditor extends Component {
                   ))}
                 </React.Fragment>
               )}
+
+              <MDBContainer class="form-group">
+                <input className="display_none form-control textBox" id="question_title_input" placeholder="Title"></input>
+                <input className="display_none form-control textBox" id="question_input" placeholder="Question"></input>
+                <button type="submit" id="newQuestionBtn" className="button" onClick={() => this.createNewQuestion()}>New Question</button>
+              </MDBContainer>
 
               {/* {this.state.askedQuestions.map((value, index) => {
                 return (
