@@ -72,12 +72,12 @@ export default class PollEditor extends Component {
   createNewQuestion() {
     console.log(this.state.questions);
     console.log("Create new question");
-    if (document.getElementById("newQuestionBtn").textContent == "Submit") {
+    if (document.getElementById("newQuestionBtn").textContent === "Submit") {
       let newQuestion = {
         title: document.getElementById("question_title_input").value,
         question: document.getElementById("question_input").value
-      }
-      this.setState({questions: [...this.state.questions, newQuestion]})
+      };
+      this.setState({questions: [...this.state.questions, newQuestion]});
       document.getElementById("question_title_input").style.display = "none";
       document.getElementById("question_input").style.display = "none";
       document.getElementById("newQuestionBtn").textContent = "New Question";
