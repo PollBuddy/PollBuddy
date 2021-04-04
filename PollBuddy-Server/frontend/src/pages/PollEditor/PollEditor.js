@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import { MDBContainer, MDBDropdownToggle, MDBDropdown, MDBDropdownItem, MDBDropdownMenu } from "mdbreact";
 import Question from "../../components/Question/Question";
+import {Link} from "react-router-dom";
 import autosize from "autosize";
 import "./PollEditor.scss";
 
@@ -104,7 +105,18 @@ export default class PollEditor extends Component {
                 Poll Editor {this.props.pollID}
               </p>
 
-              {this.state.askedQuestions.map((value, index) => {
+              {this.state.questions.length === 0 ? (
+                <p>Sorry, you don't have any polls.<br/> <br/></p>
+              ) : (
+                <React.Fragment>
+                  {console.log(this.state.questions)}
+                  {this.state.questions.map((value, index) => (
+                    <button style={{  width: "17em" }} className="button" onClick={this.askQuestion}>{"Question " + (index+1) + ": " + value.title}</button>
+                  ))}
+                </React.Fragment>
+              )}
+
+              {/* {this.state.askedQuestions.map((value, index) => {
                 return (
                   <Question questionObj={value} key={index} number={index} />
                 );
@@ -134,9 +146,9 @@ export default class PollEditor extends Component {
                     return tag;
                   })}
                 </MDBDropdownMenu>
-              </MDBDropdown>
+              </MDBDropdown> */}
 
-              <button className="button" onClick={this.askQuestion}>Ask!</button>
+              {/* <button className="button" onClick={this.askQuestion}>Ask!</button> */}
             </MDBContainer>
           </MDBContainer>
           
