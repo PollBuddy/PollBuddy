@@ -139,7 +139,7 @@ router.post("/login", function (req, res) {
 
         } else {
           // Check the password
-          bcrypt.compare(req.body.password, result.Password, (bcryptErr, bcryptResult) => {
+          bcrypt.compare(req.body.password, result.Password, function (bcryptErr, bcryptResult) {
             if (bcryptErr) {
               // Something went wrong with bcrypt
               console.error(bcryptErr);
@@ -301,7 +301,7 @@ router.get("/register", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
  */
-router.post("/register", (req, res) => {
+router.post("/register", function (req, res) {
 
   // TODO: This needs to be updated to use joi
   const firstnameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(req.body.firstName);
@@ -331,7 +331,7 @@ router.post("/register", (req, res) => {
     // No validation errors, let's try adding the user!
 
     // Attempt to insert the user into the database
-    bcrypt.hash(req.body.password, 10, (error,hash) => {
+    bcrypt.hash(req.body.password, 10, function (error,hash) {
 
       //Something went wrong with bcrypt hash function
       if (error) {
