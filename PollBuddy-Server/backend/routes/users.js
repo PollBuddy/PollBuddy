@@ -352,7 +352,7 @@ router.post("/register", function (req, res) {
 
           } else if(err.keyPattern.UserName) {
             // Username in use
-            return res.status(400).send(createReponse({"result": "failure", "error": "This username is already in use."}));
+            return res.status(400).send(createResponse({"result": "failure", "error": "This username is already in use."}));
 
           } else {
             // An unknown error occurred
@@ -365,7 +365,7 @@ router.post("/register", function (req, res) {
           // An unknown error occurred
           console.log("Database Error occurred while creating a new user.");
           console.log(err);
-          return res.status(500).send(createReponse({"result": "failure", "error": "An error occurred while communicating with the database."}));
+          return res.status(500).send(createResponse({"result": "failure", "error": "An error occurred while communicating with the database."}));
         }
 
       } else {
@@ -392,7 +392,7 @@ router.post("/register", function (req, res) {
     });
 
   } else {
-    return res.status(400).send(createReponse({"result": "failure", "error": "Validation failed.", "data": errorMsg }));
+    return res.status(400).send(createResponse({"result": "failure", "error": "Validation failed.", "data": errorMsg }));
   }
 
 });
@@ -553,7 +553,7 @@ router.post("/register/rpi", function (req, res) {
           // For some reason, the user wasn't inserted, send an error.
           console.log("Database Error occurred while creating a new user with RPI");
           console.log(err);
-          return res.status(500).send(createRespnose({"result": "failure", "error": "An error occurred while communicating with the database."}));
+          return res.status(500).send(createResponse({"result": "failure", "error": "An error occurred while communicating with the database."}));
         }
       }
     });
