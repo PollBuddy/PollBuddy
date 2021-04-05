@@ -335,8 +335,9 @@ router.post("/register", (req, res) => {
 
       //Something went wrong with bcrypt hash function
       if (error) {
+        console.log("Error occurred while hashing a password with bcrypt.");
         console.log(error);
-        return res.status(500).send(createResponse(null, "An error occurred creating your account"));
+        return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
       }
 
       mongoConnection.getDB().collection("users").insertOne({
@@ -371,7 +372,7 @@ router.post("/register", (req, res) => {
 
           } else {
             // An unknown error occurred
-            console.log("Database Error occurred while creating a new user.");
+            console.log("Database Error occurred while creating a new user with Poll Buddy.");
             console.log(err);
             return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
           }
