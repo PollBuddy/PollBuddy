@@ -348,24 +348,24 @@ router.post("/register", function (req, res) {
           // This code means we're trying to insert a duplicate key (aka user already registered somehow)
           if(err.keyPattern.Email) {
             // Email in use
-            return res.status(400).json({"result": "failure", "error": "This email is already in use."});
+            return res.status(400).send(createResponse({"result": "failure", "error": "This email is already in use."}));
 
           } else if(err.keyPattern.UserName) {
             // Username in use
-            return res.status(400).json({"result": "failure", "error": "This username is already in use."});
+            return res.status(400).send(createReponse({"result": "failure", "error": "This username is already in use."}));
 
           } else {
             // An unknown error occurred
             console.log("Database Error occurred while creating a new user with Poll Buddy.");
             console.log(err);
-            return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+            return res.status(500).send(createResponse({"result": "failure", "error": "An error occurred while communicating with the database."}));
           }
 
         } else {
           // An unknown error occurred
           console.log("Database Error occurred while creating a new user.");
           console.log(err);
-          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+          return res.status(500).send(createReponse({"result": "failure", "error": "An error occurred while communicating with the database."}));
         }
 
       } else {
@@ -378,21 +378,21 @@ router.post("/register", function (req, res) {
           req.session.userData.userID = result.insertedId;
 
           // Send the response object with some basic info for the frontend to store
-          return res.json({"result": "success", "data": {"firstName": result.ops[0].FirstName,
-            "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}});
+          return res.send(createResponse({"result": "success", "data": {"firstName": result.ops[0].FirstName,
+            "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}}));
 
         } else {
           // For some reason, the user wasn't inserted, send an error.
           console.log("Database Error occurred while creating a new user.");
           console.log(err);
-          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+          return res.status(500).send(createResponse({"result": "failure", "error": "An error occurred while communicating with the database."}));
         }
 
       }
     });
 
   } else {
-    return res.status(400).json({ "result": "failure", "error": "Validation failed.", "data": errorMsg });
+    return res.status(400).send(createReponse({"result": "failure", "error": "Validation failed.", "data": errorMsg }));
   }
 
 });
@@ -489,7 +489,7 @@ router.post("/register/rpi", function (req, res) {
 
   // Make sure we've got data from step 1
   if(!req.session.userDataTemp) {
-    return res.status(500).json({"result": "failure", "error": "Prerequisite data is not available."});
+    return res.status(500).send(createResponse({"result": "failure", "error": "Prerequisite data is not available."}));
   }
   // Configure email, username, overwriting whatever the user may have sent as we don't want it anyways.
   req.body.userName = req.session.userDataTemp.userName;
@@ -514,23 +514,23 @@ router.post("/register/rpi", function (req, res) {
           // This code means we're trying to insert a duplicate key (aka user already registered somehow)
           if (err.keyPattern.Email) {
             // Email in use
-            return res.status(400).json({"result": "failure", "error": "This email is already in use."});
+            return res.status(400).send(createResponse({"result": "failure", "error": "This email is already in use."}));
 
           } else if (err.keyPattern.UserName) {
             // Username in use
-            return res.status(400).json({"result": "failure", "error": "This username is already in use."});
+            return res.status(400).send(createResponse({"result": "failure", "error": "This username is already in use."}));
 
           } else {
             // An unknown error occurred
             console.log("Database Error occurred while creating a new user with RPI.");
             console.log(err);
-            return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+            return res.status(500).send(createResponse({"result": "failure", "error": "An error occurred while communicating with the database."}));
           }
         } else {
           // An unknown error occurred
           console.log("Database Error occurred while creating a new with RPI.");
           console.log(err);
-          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+          return res.status(500).send(createResponse({"result": "failure", "error": "An error occurred while communicating with the database."}));
         }
 
       } else {
@@ -546,19 +546,19 @@ router.post("/register/rpi", function (req, res) {
           req.session.userData.userID = result.insertedId;
 
           // Send the response object with some basic info for the frontend to store
-          return res.json({"result": "success", "data": {"firstName": result.ops[0].FirstName,
-            "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}});
+          return res.send(createResponse({"result": "success", "data": {"firstName": result.ops[0].FirstName,
+            "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}}));
 
         } else {
           // For some reason, the user wasn't inserted, send an error.
           console.log("Database Error occurred while creating a new user with RPI");
           console.log(err);
-          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+          return res.status(500).send(createRespnose({"result": "failure", "error": "An error occurred while communicating with the database."}));
         }
       }
     });
   } else {
-    return res.status(400).json({ "result": "failure", "error": "Validation failed.", "data": errorMsg });
+    return res.status(400).send(createResponse({ "result": "failure", "error": "Validation failed.", "data": errorMsg }));
   }
 
 });
