@@ -14,7 +14,7 @@ const {createResponse, validateID, isEmpty} = require("../modules/utils"); // ob
  * This route is not used. It is simply there to have some response to /api/users/
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} status 200: {result: "success", data: "User Routes"}
+ * @returns {void} status 200: { "result": "success", "data": "User Routes" }
  * @name backend/users/_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -28,7 +28,7 @@ router.get("/", function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} status 200: {result: "success", data: "User Routes"}
+ * @returns {void} status 200: { "result": "success", "data": "User Routes" }
  * @name backend/users/_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -42,7 +42,7 @@ router.post("/", function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/login when using GET.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} status 501: {result: "failure", error: "GET is not available for this route. Use POST."}
+ * @returns {void} status 501: { "result": "failure", "error": "GET is not available for this route. Use POST." }
  * @name backend/users/login_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -57,12 +57,12 @@ router.get("/login", function (req, res) {
  * information, then sets up some session details and sends the frontend the relevant data.
  * @getdata {void} None
  * @postdata {void} userNameEmail: string, password: string
- * @returns {void} On success: status 200, {result: "success", data: {"firstName": <First Name>, "lastName": <Last Name>,
- *                                                                  "userName": <Username> }
- * On failure: status 401, {result: "failure", error: "Invalid credentials."}
- *         or: status 406, {result: "failure", error: "This account is associated with a school."}
- *         or: status 500, {result: "failure", error: "An error occurred while validating login details."}
- *         or: status 500, {result: "failure", error: "An error occurred while communicating with the database."}
+ * @returns {void} On success: status 200: { "result": "success", "data": { "firstName": "<First Name>",
+ *                                                            "lastName": "<Last Name>", "userName": "<Username>" }
+ * On failure: status 401, { "result": "failure", "error": "Invalid credentials." }
+ *         or: status 406, { "result": "failure", "error": "This account is associated with a school." }
+ *         or: status 500, { "result": "failure", "error": "An error occurred while validating login details." }
+ *         or: status 500, { "result": "failure", "error": "An error occurred while communicating with the database." }
  * @name backend/users/login_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
