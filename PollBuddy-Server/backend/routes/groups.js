@@ -196,24 +196,28 @@ router.post("/id:/join", function (res, req, next) {
   });
 });
 
+//given a userID and a groupID, this function checks to see if the userID has access to the group
+//first it finds the list of .Users data for the given groupID, then checks to see if the given userID is in that list 
 function checkUserPermission(userID, groupID) { //TODO add checks to make sure IDs are valid
-  var users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Users":1})[0].Users;
+  var users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Users":1})[0].Users; //get list of users
   for (var user in users) {
-    if (user === userID) {
-      return true;
+    if (user === userID) { //check for existence
+      return true; //true if userID is found
     }
   }
-  return false;
+  return false; //false if userID is not found
 }
 
+//given a adminID (really just a userID) and a groupID, this function checks to see if the adminID has admin access to the group
+//first it finds the list of .Admins data for the given groupID, then checks to see if the given adminID is in that list
 function checkAdminPermission(adminID, groupID) { //TODO add checks to make sure IDs are valid
-  var admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Admins":1})[0].Admins;
+  var admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Admins":1})[0].Admins; //get list of admins
   for (var admin in admins) {
-    if (admin === adminID) {
-      return true;
+    if (admin === adminID) { //check for existence
+      return true; //true if adminID is found
     }
   }
-  return false;
+  return false; //false if adminID is not found
 }
 
 module.exports = router;
