@@ -279,10 +279,13 @@ router.get("/:id/results", function (req, res, next) {
   });
 });
 
+//Given a userID and a pollID, this function returns true if the user has permission to access the poll, and false otherwise
+//if the poll is linked to a group (there is information in the .Group data), the group is checked for user access permissions
+//if the poll is not linked, it returns true by default
 function checkUserPermission(userID, pollID) { //TODO add checks to make sure IDs are valid
-  var groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id":0, "Groups":1})[0].Group;
-  if (groupID.length !== 0 && groupID !== undefined) { //poll has a group attached to it
-    var users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Users":1})[0].Users;
+  var groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id":0, "Groups":1})[0].Group; //get groupID attached to poll
+  if (groupID.length !== 0 && groupID !== undefined) { //groupID returned something
+    var users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Users":1})[0].Users; //get list of users in group
     for (var user in users) {
       if (user === userID) {
         return true;
@@ -290,29 +293,30 @@ function checkUserPermission(userID, pollID) { //TODO add checks to make sure ID
     }
     return false;
   }
-  return true; //returns true anyway, something to discuss later (should anyone be able to access a standalone poll?)
+  return true; //returns true if the poll isn't linked to a group
 }
-
+//Given an adminID (really just a userID) and a pollID, this function returns true if the user has admin permissions for the poll, and false otherwise
+//if the poll is linked to a group (there is information in the .Group data), the group is checked for admin access
+//if the poll is not linked, it checks the internal .Admin data and returns true see if it finds the adminID, and false otherwise
 function checkAdminPermission(adminID, pollID) { //TODO add checks to make sure IDs are valid
-  var groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id":0, "Groups":1})[0].Group;
-  //if the poll doesn't have a group associated with it, check it's internal admins
-  if (groupID.length === 0 || groupID.length === undefined) {
-    var admins = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id":0, "Admins":1})[0].Admins;
-    for (var admin in admins) {
-      if (admin === adminID) {
+  var groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id":0, "Groups":1})[0].Group; //get groupID attached to the poll
+  if (groupID.length === 0 || groupID.length === undefined) { //groupID returned something
+    var admins = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id":0, "Admins":1})[0].Admins; //get list of admins in attached group
+    for (var admin in admins) { 
+      if (admin === adminID) { //check for adminID in list
         return true;
       }
     }
-  } else {
-    admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Admins":1})[0].Admins;
+  } else { //groupID didn't return something
+    admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Admins":1})[0].Admins; //get internal list of Admins
     for (admin in admins) {
-      if (admin === adminID) {
+      if (admin === adminID) { //check for adminID in list
         return true;
       }
     }
   }
   
-  return false;
+  return false; //adminID wasn't found
 }
 
 module.exports = router;
