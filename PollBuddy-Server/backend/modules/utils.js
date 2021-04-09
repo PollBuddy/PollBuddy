@@ -40,6 +40,15 @@ async function validateID(collection, id) {
   return null;
 }
 
+// Middleware to enforce log in.
+function checkLoggedIn(req, res, next) {
+  // check if user session exists
+  if (!req.session.userData || !req.session.userData.userID) {
+    return res.status(403).send(createResponse(null, "Sign-In required."));
+  }
+  next();
+}
+
 
 // Checks if a JS object is empty or not. Returns true if so, false otherwise.
 function isEmpty(obj) {
@@ -54,5 +63,6 @@ function isEmpty(obj) {
 module.exports = {
   createResponse,
   validateID,
+  checkLoggedIn,
   isEmpty
 };
