@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
-const {createResponse, validateID} = require("../modules/utils"); // object destructuring, only import desired functions
+const {createResponse, validateID, checkPollPublic, isLoggedIn} = require("../modules/utils"); // object destructuring, only import desired functions
 
 /**
  * Create new poll.
@@ -77,7 +77,7 @@ router.post("/:id/edit", async (req, res) => {
     return res.status(400).send(createResponse(null, "Invalid ID."));
   }
   // generate ObjectID for embedded Questions
-  validResult.value.forEach((o,i,a) => {
+  validResult.value.forEach((o, i, a) => {
     a[i]["_id"] = new mongoConnection.getMongo().ObjectID();
   });
   // update Questions content
@@ -90,84 +90,63 @@ router.post("/:id/edit", async (req, res) => {
   return res.status(200).send(createResponse());
 });
 
-router.post("/:id/submit", function (req, res) {
-  const jsonContent = req.body;
-  const pollId = new mongoConnection.getMongo().ObjectID(req.params.id);
-  let data = {}; // Stores data being submitted to DB
-  let insert = {}; // Stores insertion location
-
-  // Check that pollId was specified and is valid
-  if (pollId !== undefined) {
-    mongoConnection.getDB().collection("polls").find({"_id": pollId}).toArray(function (err, result) {
-      if (err) {
-        return res.sendStatus(500);
-      }
-      if (result.length === 0) {
-        return res.status(500).send({"Result": "Error", "Error": "Cannot find poll"});
-      }
-    });
+/**
+ * Submit/re-submit poll answer.
+ * Depending on the "Pubic" attribute of the poll it might requires sign-in.
+ * @typedef {Object} Answers
+ * @property {string} QuestionID - ID of the question.
+ * @property {string} Answer - Answer response, could be null or empty string.
+ * @postdata {Answers[]} payload
+ * @throws 400 - Invalid ID.
+ * @throws 403 - Sign-In required.
+ * @throws 500 - An error occurred while reading the database.
+ * @throws 500 - An error occurred while writing to the database.
+ * @name POST api/polls/{id}/submit
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.post("/:id/submit", checkPollPublic, async (req, res) => {
+  // validate request body
+  const schema = Joi.array().items(
+    Joi.object().keys({
+      QuestionID: Joi.string().required(),
+      Answer: Joi.string().allow(null, "").required() // allow empty string or null
+    })
+  );
+  const validResult = schema.validate(req.body);
+  // invalidate handling
+  if (validResult.error) {
+    return res.status(400).send(createResponse(null, validResult.error.details[0].message));
   }
-
-  // Check that answers were supplied in the correct format
-  if (!jsonContent.Answers) {
-    return res.status(500).send({"Result": "Error", "Error": "Answers not specified"});
-  }
-  if (!Array.isArray(jsonContent.Answers)) {
-    return res.status(500).send({"Result": "Error", "Error": "Answers is not an array"});
-  }
-  if (jsonContent.Answers.empty) {
-    return res.status(500).send({"Result": "Error", "Error": "Answers is empty"});
-  }
-
-  // Add timestamp to answers
-  data.Answers = jsonContent.Answers;
-  data.Timestamp = Date.now();
-
-  // Check if the user is logged in or anonymous
-  if (req.session.UserID) {
-    // User is logged in, save with their ID
-    insert["$and"] = [{"PollID": pollId}, {"UserID": jsonContent.UserID}];
+  // add poll ID
+  validResult.value.PollID = req.parsedID;
+  // add timestamp
+  validResult.value.Timestamp = Date.now();
+  // check if user is signed in
+  if (isLoggedIn(req)) {
+    // write UserID
+    validResult.value.UserID = req.session.userData.userID;
+    // check for resubmit
+    try {
+      await mongoConnection.getDB().collection("poll_answers").findOneAndUpdate({
+        PollID: validResult.value.PollID,
+        UserID: validResult.value.UserID
+      }, {...validResult.value});
+      return res.send(createResponse());
+    } catch(e) {
+      console.log(e);
+      return res.status(500).send(createResponse(null, "An error occurred while writing to the database."));
+    }
   } else {
-    insert["PollID"] = pollId;
+    // anonymous submission, no resubmit
+    try {
+      await mongoConnection.getDB().collection("poll_answers").insertOne({...validResult.value});
+      return res.send(createResponse());
+    } catch(e) {
+      console.log(e);
+      return res.status(500).send(createResponse(null, "An error occurred while writing to the database."));
+    }
   }
-
-  // Save answers function for reducing code reuse
-  let save = function () {
-    mongoConnection.getDB().collection("poll_answers").updateOne(insert, {"$push": {"Answers": data}}, function (err3, result3) {
-      if (err3) {
-        return res.sendStatus(500);
-      }
-      if (result3.result.ok === 1) {
-        return res.sendStatus(200);
-      } else {
-        return res.sendStatus(500);
-      }
-    });
-  };
-
-  // Check for existing answers and save new answers
-  mongoConnection.getDB().collection("poll_answers").find(insert).toArray(function (err, result) {
-    if (err) {
-      return res.sendStatus(500);
-    }
-    if (result.length === 0) {
-      // User/anonymous has not answered any questions in this poll yet, create a default set
-      mongoConnection.getDB().collection("poll_answers").insertOne(insert, function (err2, result2) {
-        if (err2) {
-          return res.sendStatus(500);
-        }
-        if (result2.result.ok !== 1) {
-          return res.sendStatus(500);
-        }
-        save();
-      });
-
-    } else {
-      // User/anonymous has answered questions in this poll already, add to existing set
-      save();
-    }
-  });
-
 });
 
 
