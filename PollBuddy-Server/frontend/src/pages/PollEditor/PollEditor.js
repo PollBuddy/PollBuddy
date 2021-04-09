@@ -26,7 +26,8 @@ export default class PollEditor extends Component {
       pollTitle: "Sample title",
       pollDescription: "This is a sample description",
       pollTitleValue: "",
-      pollDescriptionValue: ""
+      pollDescriptionValue: "",
+      displayQuestionEditor: false
     };
 
     this.state.pollTitleValue = this.state.pollTitle;
@@ -88,6 +89,11 @@ export default class PollEditor extends Component {
     }
   }
 
+  editQuestion() {
+    document.getElementById("poll_questions").style.display = "none";
+    this.setState({displayQuestionEditor: true});
+  }
+
   render() {
 
     return (
@@ -123,13 +129,14 @@ export default class PollEditor extends Component {
                 Poll Editor {this.props.pollID}
               </p>
 
+              <div id="poll_questions" className="Poll_Editor_center">
               {this.state.questions.length === 0 ? (
                 <p>Sorry, you don't have any polls.<br/> <br/></p>
               ) : (
                 <React.Fragment>
                   {console.log(this.state.questions)}
                   {this.state.questions.map((value, index) => (
-                    <button style={{  width: "17em" }} className="button" onClick={this.askQuestion}>{"Question " + (index+1) + ": " + value.title}</button>
+                    <button style={{  width: "17em" }} className="button" onClick={() => this.editQuestion()}>{"Question " + (index+1) + ": " + value.title}</button>
                   ))}
                 </React.Fragment>
               )}
@@ -139,6 +146,15 @@ export default class PollEditor extends Component {
                 <input className="display_none form-control textBox" id="question_input" placeholder="Question"></input>
                 <button type="submit" id="newQuestionBtn" className="button" onClick={() => this.createNewQuestion()}>New Question</button>
               </MDBContainer>
+              </div>
+
+              {this.state.displayQuestionEditor &&
+                <MDBContainer class="form-group">
+                  <input className="form-control textBox" id="edit_question_title_input" placeholder="Edit Title"></input>
+                  <input className="form-control textBox" id="edit_question_input" placeholder="Edit Question"></input>
+                  <button type="submit" id="editQuestionBtn" className="button">Submit</button>
+                </MDBContainer>
+              }
 
               {/* {this.state.askedQuestions.map((value, index) => {
                 return (
