@@ -108,19 +108,19 @@ export default class PollEditor extends Component {
     this.setState({currentQuestion: question});
     console.log("Current question: " + question.title);
     this.setState({pollQuestionTitleValue: question.title});
-    this.setState({pollQuestionValue: question.question})
+    this.setState({pollQuestionValue: question.question});
   }
 
   submitEditQuestion() {
-    console.log("submitted edit question")
+    console.log("submitted edit question");
     this.setState({displayQuestionEditor: false});
     document.getElementById("poll_questions").style.display = "flex";
-    var found = this.state.questions.find(element => element.title === this.state.currentQuestion.title)
-    console.log("found: " + found.title)
+    var found = this.state.questions.find(element => element.title === this.state.currentQuestion.title);
+    console.log("found: " + found.title);
     found.title = document.getElementById("edit_question_title_input").value;
     found.question = document.getElementById("edit_question_input").value;
-    console.log("new questions")
-    console.log(this.state.questions)
+    console.log("new questions");
+    console.log(this.state.questions);
   }
 
   render() {
