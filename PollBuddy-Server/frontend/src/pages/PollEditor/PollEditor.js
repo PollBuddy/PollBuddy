@@ -27,7 +27,10 @@ export default class PollEditor extends Component {
       pollDescription: "This is a sample description",
       pollTitleValue: "",
       pollDescriptionValue: "",
-      displayQuestionEditor: false
+      displayQuestionEditor: false,
+      currentQuestion: "",
+      pollQuestionTitleValue: "",
+      pollQuestionValue: ""
     };
 
     this.state.pollTitleValue = this.state.pollTitle;
@@ -35,6 +38,8 @@ export default class PollEditor extends Component {
 
     this.handlePollTitleChange = this.handlePollTitleChange.bind(this);
     this.handlePollDescriptionChange = this.handlePollDescriptionChange.bind(this);
+    this.handlePollQuestionTitleChange = this.handlePollQuestionTitleChange.bind(this);
+    this.handlePollQuestionChange = this.handlePollQuestionChange.bind(this);
   }
 
   askQuestion() {
@@ -70,6 +75,14 @@ export default class PollEditor extends Component {
     this.setState({pollDescriptionValue: event.target.value});
   }
 
+  handlePollQuestionTitleChange(event) {
+    this.setState({pollQuestionTitleValue: event.target.value});
+  }
+
+  handlePollQuestionChange(event) {
+    this.setState({pollQuestionValue: event.target.value});
+  }
+
   createNewQuestion() {
     console.log(this.state.questions);
     console.log("Create new question");
@@ -89,9 +102,25 @@ export default class PollEditor extends Component {
     }
   }
 
-  editQuestion() {
+  editQuestion(question) {
     document.getElementById("poll_questions").style.display = "none";
     this.setState({displayQuestionEditor: true});
+    this.setState({currentQuestion: question});
+    console.log("Current question: " + question.title);
+    this.setState({pollQuestionTitleValue: question.title});
+    this.setState({pollQuestionValue: question.question})
+  }
+
+  submitEditQuestion() {
+    console.log("submitted edit question")
+    this.setState({displayQuestionEditor: false});
+    document.getElementById("poll_questions").style.display = "flex";
+    var found = this.state.questions.find(element => element.title === this.state.currentQuestion.title)
+    console.log("found: " + found.title)
+    found.title = document.getElementById("edit_question_title_input").value;
+    found.question = document.getElementById("edit_question_input").value;
+    console.log("new questions")
+    console.log(this.state.questions)
   }
 
   render() {
@@ -130,29 +159,29 @@ export default class PollEditor extends Component {
               </p>
 
               <div id="poll_questions" className="Poll_Editor_center">
-              {this.state.questions.length === 0 ? (
-                <p>Sorry, you don't have any polls.<br/> <br/></p>
-              ) : (
-                <React.Fragment>
-                  {console.log(this.state.questions)}
-                  {this.state.questions.map((value, index) => (
-                    <button style={{  width: "17em" }} className="button" onClick={() => this.editQuestion()}>{"Question " + (index+1) + ": " + value.title}</button>
-                  ))}
-                </React.Fragment>
-              )}
+                {this.state.questions.length === 0 ? (
+                  <p>Sorry, you don't have any polls.<br/> <br/></p>
+                ) : (
+                  <React.Fragment>
+                    {console.log(this.state.questions)}
+                    {this.state.questions.map((value, index) => (
+                      <button style={{  width: "17em" }} className="button" onClick={() => this.editQuestion(value)}>{"Question " + (index+1) + ": " + value.title}</button>
+                    ))}
+                  </React.Fragment>
+                )}
 
-              <MDBContainer class="form-group">
-                <input className="display_none form-control textBox" id="question_title_input" placeholder="Title"></input>
-                <input className="display_none form-control textBox" id="question_input" placeholder="Question"></input>
-                <button type="submit" id="newQuestionBtn" className="button" onClick={() => this.createNewQuestion()}>New Question</button>
-              </MDBContainer>
+                <MDBContainer class="form-group">
+                  <input className="display_none form-control textBox" id="question_title_input" placeholder="Title"></input>
+                  <input className="display_none form-control textBox" id="question_input" placeholder="Question"></input>
+                  <button type="submit" id="newQuestionBtn" className="button" onClick={() => this.createNewQuestion()}>New Question</button>
+                </MDBContainer>
               </div>
 
               {this.state.displayQuestionEditor &&
                 <MDBContainer class="form-group">
-                  <input className="form-control textBox" id="edit_question_title_input" placeholder="Edit Title"></input>
-                  <input className="form-control textBox" id="edit_question_input" placeholder="Edit Question"></input>
-                  <button type="submit" id="editQuestionBtn" className="button">Submit</button>
+                  <input className="form-control textBox" id="edit_question_title_input" placeholder="Edit Title" value={this.state.pollQuestionTitleValue} onChange={this.handlePollQuestionTitleChange}></input>
+                  <input className="form-control textBox" id="edit_question_input" placeholder="Edit Question" value={this.state.pollQuestionValue} onChange={this.handlePollQuestionChange}></input>
+                  <button type="submit" id="editQuestionBtn" className="button" onClick={() => this.submitEditQuestion()}>Submit</button>
                 </MDBContainer>
               }
 
