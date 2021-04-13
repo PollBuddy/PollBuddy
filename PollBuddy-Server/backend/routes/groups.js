@@ -118,7 +118,7 @@ router.get("/:id", function (req, res, next) {
     if (err) {
       return res.sendStatus(500);
     }
-    return res.send(createReponse(result));
+    return res.send(createResponse(result));
   });
 });
 router.get("/:id/polls", function (req, res, next) {
