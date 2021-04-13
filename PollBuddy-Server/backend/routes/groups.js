@@ -169,7 +169,7 @@ router.get("/:id/admins", function (req, res, next) {
     if (err) {
       return res.sendStatus(500);
     }
-    return res.send(result[0]);
+    return res.send(createResponse(result[0]));
   });
 });
 
