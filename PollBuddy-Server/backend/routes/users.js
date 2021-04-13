@@ -14,35 +14,35 @@ const {createResponse, validateID, isEmpty} = require("../modules/utils"); // ob
  * This route is not used. It is simply there to have some response to /api/users/
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} status 200: {result: success, data: "User Routes"}
+ * @returns {void} Status 200: { "result": "success", "data": "User Routes" }
  * @name backend/users/_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/", function (req, res) {
-  return res.send(createResponse("Users routes"));
+  return res.send(createResponse("User routes"));
 });
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} status 200: {result: success, data: "User Routes"}
+ * @returns {void} Status 200: { "result": "success", "data": "User Routes" }
  * @name backend/users/_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/", function (req, res) {
-  return res.send(createResponse("Users routes"));
+  return res.send(createResponse("User routes"));
 });
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/login when using GET.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} status 501: {result: "failure", error: "GET is not available for this route. Use POST."}
+ * @returns {void} Status 501: { "result": "failure", "error": "GET is not available for this route. Use POST." }
  * @name backend/users/login_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -57,12 +57,12 @@ router.get("/login", function (req, res) {
  * information, then sets up some session details and sends the frontend the relevant data.
  * @getdata {void} None
  * @postdata {void} userNameEmail: string, password: string
- * @returns {void} On success: status 200, {result: "success", data: {"firstName": <First Name>, "lastName": <Last Name>,
- *                                                                  "userName": <Username> }
- * On failure: status 401, {result: "failure", error: "Invalid credentials."}
- *         or: status 406, {result: "failure", error: "This account is associated with a school."}
- *         or: status 500, {result: "failure", error: "An error occurred while validating login details."}
- *         or: status 500, {result: "failure", error: "An error occurred while communicating with the database."}
+ * @returns {void} On success: Status 200: { "result": "success", "data": { "firstName": "<First Name>",
+ *                                                            "lastName": "<Last Name>", "userName": "<Username>" }
+ * On failure: Status 401: { "result": "failure", "error": "Invalid credentials." }
+ *         or: Status 406: { "result": "failure", "error": "This account is associated with a school." }
+ *         or: Status 500: { "result": "failure", "error": "An error occurred while validating login details." }
+ *         or: Status 500: { "result": "failure", "error": "An error occurred while communicating with the database." }
  * @name backend/users/login_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
@@ -191,8 +191,8 @@ router.post("/login", function (req, res) {
  * @getdata {void} None
  * @postdata {void} None
  * @returns {void} On success: a browser redirect to /login/school/step2 with GET parameters resembling our typical
- * error messages. Possible return values include:
- * ?result=success&data={"firstName": <First Name>, "lastName": <Last Name>, "userName": <Username>}
+ * backend returned data format messages. See format below.
+ * ?result=success&data={"firstName": "<First Name>", "lastName": "<Last Name>", "userName": "<Username>"}
  * On failure: a browser redirect to /login/school/step2 with GET parameters resembling our typical error messages.
  * Possible return values include:
  * ?result=failure&error=An error occurred while communicating with the database.
@@ -261,7 +261,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/login/rpi when using POST.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} status 501: {result: "failure", error: "POST is not available for this route. Use GET."}
+ * @returns {void} Status 501: { "result": "failure", "error": "POST is not available for this route. Use GET." }
  * @name backend/users/login/rpi_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -275,7 +275,7 @@ router.post("/login/rpi", function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/register when using GET.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} status 501: {result: "failure", error: "GET is not available for this route. Use POST."}
+ * @returns {void} Status 501: { "result": "failure", "error": "GET is not available for this route. Use POST." }
  * @name backend/users/register_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -289,14 +289,14 @@ router.get("/register", function (req, res) {
  * This route called by frontend internal JS as part of the registration with Poll Buddy process. Here, we set up some
  * session details, validate data we were sent, save it in the database if success, and send errors if there's any problems.
  * @getdata {void} None
- * @postdata {void} body: { firstName: string, lastName: string, userName: string, email: string, password: string }
- * @returns {void} On success: status 200, {"result": "success", "data": {"firstName": <First Name>, "lastName": <Last Name>,
- *                                                                        "userName": <Username>}}
- * On failure: status 400, { "result": "failure", "error": "This username is already in use." }
- *         or: status 400, { "result": "failure", "error": "This email is already in use." }
- *         or: status 400 { "result": "failure", "error": "Validation failed.", "data": (errorMsg obj with keys of firstName,
- *                           lastName, etc. as relevant and with value of error message) });
- *         or: status 500, { "result": "failure", "error": "An error occurred while communicating with the database." }
+ * @postdata {void} firstName: string, lastName: string, userName: string, email: string, password: string
+ * @returns {void} On success: Status 200: { "result": "success", "data": { "firstName": "<First Name>",
+ *                                           "lastName": "<Last Name>", "userName": "<Username>" } }
+ * On failure: Status 400: { "result": "failure", "error": "This username is already in use." }
+ *         or: Status 400: { "result": "failure", "error": "This email is already in use." }
+ *         or: Status 400: { "result": "failure", "error": "Validation failed.", "data": (errorMsg obj with keys of firstName,
+ *                           lastName, etc. as relevant and with value of error message) }
+ *         or: Status 500: { "result": "failure", "error": "An error occurred while communicating with the database." }
  * @name backend/users/register_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
@@ -462,15 +462,15 @@ router.get("/register/rpi", rpi.bounce, function (req, res) {
  * /register/school/step2 in the frontend, and are now submitting registration data here for processing. We validate
  * and save it in the database if success, and send errors if there's any problems.
  * @getdata {void} None
- * @postdata {void} body: {firstName: string, lastName: string, userName: string (optional, ignored), email: string (optional, ignored)}
- * @returns {void} On success: status 200, {"result": "success", "data": {"firstName": <First Name>,
- *                                                              "lastName": <Last Name>, "userName": <Username>}}
- * On failure: status 400, { "result": "failure", "error": "This username is already in use."
- *         or: status 400, { "result": "failure", "error": "This email is already in use." }
- *         or: status 400 { "result": "failure", "error": "Validation failed.", "data": (errorMsg obj with keys of firstName,
- *                           lastName, etc. as relevant and with value of error message) });
- *         or: status 500, { "result": "failure", "error": "An error occurred while communicating with the database." }
- *         or: status 500, { "result": "failure", "error": "Prerequisite data is not available." }
+ * @postdata {void} firstName: string, lastName: string, userName: string (optional, ignored), email: string (optional, ignored)
+ * @returns {void} On success: Status 200: { "result": "success", "data": {"firstName": "<First Name>",
+ *                                                              "lastName": "<Last Name>", "userName": "<Username>" } }
+ * On failure: Status 400: { "result": "failure", "error": "This username is already in use." }
+ *         or: Status 400: { "result": "failure", "error": "This email is already in use." }
+ *         or: Status 400: { "result": "failure", "error": "Validation failed.", "data": (errorMsg obj with keys of firstName,
+ *                           lastName, etc. as relevant and with value of error message) }
+ *         or: Status 500: { "result": "failure", "error": "An error occurred while communicating with the database." }
+ *         or: Status 500: { "result": "failure", "error": "Prerequisite data is not available." }
  * @name backend/users/register/rpi_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
@@ -578,7 +578,7 @@ router.post("/register/rpi", function (req, res) {
  * the security of the logout process, it would just give a weird and bad user experience.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} {"result": "success", "data": "User was logged out successfully."}
+ * @returns {void} Status 200: { "result": "success", "data": "User was logged out successfully." }
  * @name backend/users/logout_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -596,7 +596,7 @@ router.get("/logout", function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/logout when using POST.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} status 501: {result: "failure", error: "POST is not available for this route. Use GET."}
+ * @returns {void} Status 501: { "result": "failure", "error": "POST is not available for this route. Use GET." }
  * @name backend/users/logout_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
