@@ -177,7 +177,7 @@ router.post("/:id/delete", function (req, res) {//use router.delete??
 // GET polls listing.
 router.get("/", function (req, res, next) {
   mongoConnection.getDB().collection("polls").find({}).toArray(function (err, result) {
-    res.send(result);
+    res.send(createResponse(result));
   });
 });
 router.get("/:id", function (req, res, next) {
@@ -186,7 +186,7 @@ router.get("/:id", function (req, res, next) {
     if (err) {
       return res.sendStatus(500);
     }
-    res.send(result);
+    res.send(createResponse(result));
   });
 });
 
@@ -216,7 +216,7 @@ router.get("/:id/view", function (req, res, next) {
       }
     }
     // Send the open questions
-    res.send({"Questions": openQuestions, "PollID": id});
+    res.send(createResponse({"Questions": openQuestions, "PollID": id}));
   });
 });
 
@@ -264,7 +264,7 @@ router.get("/:id/results", function (req, res, next) {
         }
       }
       // Send the open questions
-      res.send({"Results": results});
+      res.send(createResponse({"Results": results}));
     });
   });
 });

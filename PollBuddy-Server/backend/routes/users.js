@@ -600,7 +600,7 @@ router.post("/logout", function (req, res) {
 // stored user session data
 // TODO: Investigate if this is even needed or not
 router.get("/session", function (req, res) {
-  res.send(req.session.userData || {});
+  res.send(createResponse(req.session.userData || {}));
 });
 
 router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documentation
@@ -717,19 +717,19 @@ router.get("/:id", function (req, res, next) {
     if (err) {
       return res.sendStatus(500);
     }
-    return res.send(result);
+    return res.send(createResponse(result));
   });
 });
 
 router.get("/:id/groups", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("users").find({ "_id": id }, { projection: { _id: 0, Groups: 1 } }).map(function (item) {
-    return res.send(item.Groups);
+    return res.send(createResponse(item.Groups));
   }).toArray(function (err, result) {
     if (err) {
       return res.sendStatus(500);
     }
-    return res.send(result[0]);
+    return res.send(createResponse(result[0]));
   });
 });
 
@@ -746,9 +746,9 @@ module.exports.user_middleware = function (req, res, next) {
   // Callback takes two parameters: err and user
   req.getCurrentUser = function (callback) {
     if (!req.isLoggedIn()) {
-      res.status(401).send({
+      res.status(401).send(createResponse({
         error: "Not logged in"
-      });
+      }));
       if (typeof callback === "function") {
         callback(new Error("Not logged in"));
       }

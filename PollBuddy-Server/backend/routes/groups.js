@@ -2,6 +2,7 @@ const createError = require("http-errors");
 const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
+const { createResponse } = require("../modules/utils.js");
 
 router.post("/new", function (req, res) {
   const jsonContent = req.body;
@@ -108,7 +109,7 @@ router.get("/", function (req, res, next) {
   mongoConnection.getDB().collection("groups").find({}, { projection: { _id: 1 } }).map(function (item) {
     return item._id;
   }).toArray(function (err, result) {
-    res.send(result);
+    res.send(createResponse(result));
   });
 });
 router.get("/:id", function (req, res, next) {
@@ -117,18 +118,18 @@ router.get("/:id", function (req, res, next) {
     if (err) {
       return res.sendStatus(500);
     }
-    return res.send(result);
+    return res.send(createReponse(result));
   });
 });
 router.get("/:id/polls", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("groups").find({ "_id": id }, { projection: { _id: 0, Polls: 1 } }).map(function (item) {
-    return res.send(item.Polls);
+    return res.send(createResponse(item.Polls));
   }).toArray(function (err, result) {
     if (err) {
       return res.sendStatus(500);
     }
-    return res.send(result[0]);
+    return res.send(createResponse(result[0]));
   });
 });
 router.get("/:id/users", function (req, res, next) {
@@ -139,7 +140,7 @@ router.get("/:id/users", function (req, res, next) {
     if (err) {
       return res.sendStatus(500);
     }
-    return res.send(result[0]);
+    return res.send(createResponse(result[0]));
   });
 });
 
@@ -153,17 +154,17 @@ router.get("/id:/join", function (req, res, next) {
 router.post("/id:/join", function (res, req, next) {
   var userID = req.session["UserID"];
   if (userID === undefined) {
-    res.status(401).send({ error: "Not logged in" });
+    res.status(401).send(createResponse({ error: "Not logged in" }));
   }
   
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   // Add user to group, do nothing if they are already in it
   mongoConnection.getDB().collection("groups").updateOne({ "_id:": id }, { $addToSet: { Users: userID } }, (err, res) => {
     if (err) {
-      return res.status(500).send(err);
+      return res.status(500).send(createResponse(err));
     }
     // Returns 1 if it was added, 0 if it already existed
-    return res.status(200).send(res.result.nModified);
+    return res.status(200).send(createResponse(res.result.nModified));
   });
 });
 
