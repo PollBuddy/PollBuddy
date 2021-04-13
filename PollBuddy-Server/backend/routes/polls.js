@@ -4,7 +4,22 @@ var mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
 const {createResponse, validateID} = require("../modules/utils"); // object destructuring, only import desired functions
 
-router.post("/new", function (req, res) {
+/**
+ * Create new poll.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-new
+ * @typedef {Object} payload
+ * @property {string} Name - Name of the new poll.
+ * @typedef {Object} response
+ * @property {string} ID - Object ID of the new poll
+ * @postdata {payload} payload
+ * @returns {response}
+ * @throws 400 - Invalid request body, see error message for details.
+ * @throws 500 - An error occurred while writing to the database.
+ * @name POST api/polls/new
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.post("/new", async (req, res) => {
   // Validate request body
   const schema = Joi.object({
     Name: Joi.string().min(3).max(30).required()
@@ -14,34 +29,43 @@ router.post("/new", function (req, res) {
   if (validResult.error) {
     return res.status(400).send(createResponse(null, validResult.error.details[0].message));
   }
-
   // Add to DB
-  mongoConnection.getDB().collection("polls").insertOne({Name: validResult.value.Name}, function (err, result) {
-    if (err) {
-      console.log(err);
-      return res.sendStatus(500);
-    } else {
-      if (result.result.ok !== 1) {
-        // Failed to insert for some reason
-        return res.sendStatus(500);
-      } else {
-        // Things seemed to be ok, send result message and ID of inserted object
-        return res.send(createResponse({ID: result.insertedId}));
-      }
-    }
-  });
-
+  try {
+    const result = await mongoConnection.getDB().collection("polls").insertOne({Name: validResult.value.Name});
+    return res.send(createResponse({ID: result.insertedId}));   // return poll ID
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send(createResponse(null, "An error occurred while writing to the database."));
+  }
 });
+
+/**
+ * Modify (add|delete|edit) Questions of a specific poll.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-idedit
+ * @typedef {Object} Questions
+ * @property {number} QuestionNumber - Number of the question.
+ * @property {string} QuestionText - Content of the question.
+ * @property {string[]} AnswerChoices - Array of possible choices or null.
+ * @property {string[]} CorrectAnswers - Array of correct answers or null.
+ * @property {string} Visible - Whether students will be able to see the graded result or not.
+ * @postdata {Questions[]} payload
+ * @throws 400 - Invalid request body or ObjectID, see error message for details.
+ * @throws 500 - An error occurred while writing to the database.
+ * @name POST api/polls/{id}/edit
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.post("/:id/edit", async (req, res) => {
   // validate request body
-  const schema = Joi.object({
-    Action: Joi.string().valid("add", "remove").required(), // two mode supported: 'add' or 'remove'
-    Question: Joi.object().keys({
-      QuestionText: Joi.string().min(3).max(512).required(),  // question text capped at 512 words
-      AnswerChoices: Joi.array().items(Joi.string()).min(1).unique().required(),
-      CorrectAnswers: Joi.array().items(Joi.string()).min(1).unique().required()
-    }).required()
-  });
+  const schema = Joi.array().items(
+    Joi.object().keys({
+      QuestionNumber: Joi.number().min(1).required(), // number index starting from 1
+      QuestionText: Joi.string().min(1).max(512).required(),  // question text capped at 512 words
+      AnswerChoices: Joi.array().items(Joi.string()).unique().allow(null).required(), // null for open-ended
+      CorrectAnswers: Joi.array().items(Joi.string()).unique().allow(null).required(),  // null for no-grading
+      Visible: Joi.boolean().required()
+    })
+  );
   const validResult = schema.validate(req.body);
   // invalidate handling
   if (validResult.error) {
@@ -52,29 +76,74 @@ router.post("/:id/edit", async (req, res) => {
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
   }
-
-  if (validResult.value.Action === "add") {
-    // "Action": "add"
-    try{
-      await mongoConnection.getDB().collection("polls")
-        .updateOne({"_id": id}, {"$addToSet": {Question: validResult.value.Question}});
-      return res.status(200).send(createResponse());
-    } catch(e) {
-      console.log(e); // log error
-      return res.status(500).send(createResponse(null, "An error occurred while writing the database."));
-    }
-  } else{
-    // "Action": "remove"
-    try {
-      await mongoConnection.getDB().collection("polls")
-        .updateOne({"_id": id}, {"$pull": {Question: ""}});
-      return res.send(createResponse());
-    } catch (e) {
-      console.log(e); // log error
-      return res.status(500).send(createResponse(null, "An error occurred while writing the database."));
-    }
+  // generate ObjectID for embedded Questions
+  validResult.value.forEach((o,i,a) => {
+    a[i]["_id"] = new mongoConnection.getMongo().ObjectID();
+  });
+  // update Questions content
+  try {
+    await mongoConnection.getDB().collection("polls").updateOne({"_id": id}, {"$set": {Questions: validResult.value}});
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send(createResponse(null, "An error occurred while writing to the database."));
   }
+
+  var id2 = new mongoConnection.getMongo().ObjectID(req.params.id);
+  var jsonContent = req.body;
+  if (jsonContent.Action === "Add") {
+    if (jsonContent.Questions !== undefined) {//QUESTION IS AN OBJECT https://docs.google.com/document/d/1kFdjwiE4_POgcTDqXK-bcnz4RAeLG6yaF2RxLzkNDrE/edit
+      mongoConnection.getDB().collection("polls").updateOne({ "_id": id2 }, { "$addToSet": { Questions: jsonContent.Questions } }, function (err, res) {
+        if (err) {
+          return res.sendStatus(500);
+        }
+      });
+    }
+    if (jsonContent.Group !== undefined) {
+      mongoConnection.getDB().collection("groups").updateOne({ "_id": id2 }, { "$addToSet": { Group: jsonContent.Group } }, function (err, res) {
+        if (err) {
+          return res.sendStatus(500);
+        }
+      });
+    } 
+    if (jsonContent.Admins !== undefined) {
+      mongoConnection.getDB().collection("groups").updateOne({ "_id": id2 }, { "$addToSet": { Admins: jsonContent.Admins } }, function (err, res) {
+        if (err) {
+          return res.sendStatus(500);
+        }
+      });
+    } else {
+      return res.sendStatus(400);
+    }
+  } else if (jsonContent.Action === "Remove") {
+    if (jsonContent.Questions !== undefined) {
+      mongoConnection.getDB().collection("polls").updateOne({ "_id": id2 }, { "$pull": { Questions: "" } }, function (err, res) {
+        if (err) {
+          return res.sendStatus(500);
+        }
+      });
+    } 
+    if (jsonContent.Group !== undefined) {
+      mongoConnection.getDB().collection("groups").updateOne({ "_id": id2 }, { "$pull": { Group: jsonContent.Group } }, function (err, res) {
+        if (err) {
+          return res.sendStatus(500);
+        }
+      });
+    }
+    if (jsonContent.Admins !== undefined) {
+      mongoConnection.getDB().collection("groups").updateOne({ "_id": id2 }, { "$pull": { Admins: jsonContent.Admins } }, function (err, res) {
+        if (err) {
+          return res.sendStatus(500);
+        }
+      });
+    } else {
+      return res.sendStatus(400);
+    }
+  } else {
+    return res.sendStatus(400);
+  }
+  return res.status(200).send(createResponse());
 });
+
 router.post("/:id/submit", function (req, res) {
   const jsonContent = req.body;
   const pollId = new mongoConnection.getMongo().ObjectID(req.params.id);
@@ -174,20 +243,54 @@ router.post("/:id/delete", function (req, res) {//use router.delete??
   });
   return res.sendStatus(200);
 });
-// GET polls listing.
-router.get("/", function (req, res, next) {
-  mongoConnection.getDB().collection("polls").find({}).toArray(function (err, result) {
-    res.send(createResponse(result));
-  });
+
+/**
+ * Get all polls.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-
+ * @typedef {Object} Poll
+ * @property {string} _id Object ID of the poll.
+ * @property {string} Name of the poll.
+ * @property {Questions[]} Array of Questions
+ * @returns {Poll[]} response
+ * @throws 500 - An error occurred while reading the database.
+ * @name GET api/polls
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/", async (req, res) => {
+  try {
+    const polls = await mongoConnection.getDB().collection("polls").find({}).toArray();
+    return res.status(200).send(createResponse(polls));
+  } catch (e) {
+    console.log(e);
+  }
+  return res.status(500).send(createResponse(null, "An error occurred while reading the database."));
 });
-router.get("/:id", function (req, res, next) {
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
-    if (err) {
-      return res.sendStatus(500);
-    }
-    res.send(createResponse(result));
-  });
+
+/**
+ * Get data of a single poll with the specified id.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-id
+ * @returns {Poll} response
+ * @throws 400 - Invalid ObjectID.
+ * @throws 500 - An error occurred while reading the database.
+ * @name GET api/polls/{id}
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/:id", async (req, res) => {
+  // validate id
+  const id = await validateID("polls", req.params.id);
+  if (!id) {
+    return res.status(400).send(createResponse(null, "Invalid ID."));
+  }
+  // query poll
+  try {
+    const poll = await mongoConnection.getDB().collection("polls").findOne({"_id": id});
+    return res.status(200).send(createResponse(poll));
+  } catch (e) {
+    console.log(e);
+  }
+  return res.status(500).send(createResponse(null, "An error occurred while reading the database."));
 });
 
 router.get("/:id/view", function (req, res, next) {
@@ -268,5 +371,45 @@ router.get("/:id/results", function (req, res, next) {
     });
   });
 });
+
+//Given a userID and a pollID, this function returns true if the user has permission to access the poll, and false otherwise
+//if the poll is linked to a group (there is information in the .Group data), the group is checked for user access permissions
+//if the poll is not linked, it returns true by default
+function checkUserPermission(userID, pollID) { //TODO add checks to make sure IDs are valid
+  var groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id":0, "Groups":1})[0].Group; //get groupID attached to poll
+  if (groupID.length !== 0 && groupID !== undefined) { //groupID returned something
+    var users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Users":1})[0].Users; //get list of users in group
+    for (var user in users) {
+      if (user === userID) {
+        return true;
+      }
+    }
+    return false;
+  }
+  return true; //returns true if the poll isn't linked to a group
+}
+//Given an adminID (really just a userID) and a pollID, this function returns true if the user has admin permissions for the poll, and false otherwise
+//if the poll is linked to a group (there is information in the .Group data), the group is checked for admin access
+//if the poll is not linked, it checks the internal .Admin data and returns true see if it finds the adminID, and false otherwise
+function checkAdminPermission(adminID, pollID) { //TODO add checks to make sure IDs are valid
+  var groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id":0, "Groups":1})[0].Group; //get groupID attached to the poll
+  if (groupID.length === 0 || groupID.length === undefined) { //groupID returned something
+    var admins = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id":0, "Admins":1})[0].Admins; //get list of admins in attached group
+    for (var admin in admins) { 
+      if (admin === adminID) { //check for adminID in list
+        return true;
+      }
+    }
+  } else { //groupID didn't return something
+    admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Admins":1})[0].Admins; //get internal list of Admins
+    for (admin in admins) {
+      if (admin === adminID) { //check for adminID in list
+        return true;
+      }
+    }
+  }
+  
+  return false; //adminID wasn't found
+}
 
 module.exports = router;

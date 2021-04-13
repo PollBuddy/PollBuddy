@@ -29,12 +29,15 @@ function createResponse(data, error) {
 async function validateID(collection, id) {
   try {
     const objId = new mongoConnection.getMongo().ObjectID(id);
-    await mongoConnection.getDB().collection(collection) // find id cursor
+    const res = await mongoConnection.getDB().collection(collection) // find id cursor
       .find({_id: objId}, {limit: 1});
-    return objId;  // exists
+    if (await res.hasNext()) {
+      return objId;  // exists
+    }
   } catch (e) {
-    return null; // doesn't exists
+    console.log(e);
   }
+  return null;
 }
 
 
