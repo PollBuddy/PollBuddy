@@ -56,6 +56,15 @@ router.post("/:id/edit", function (req, res) {
         }
       });
     }
+    if (jsonContent.Admins !== undefined) {
+      mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Admins: jsonContent.Admins } }, function (err, res) {
+        if (err) {
+          return res.sendStatus(500);
+        } else {
+          success = true;
+        }
+      });
+    }
     if (success === false) {
       return res.sendStatus(400);
     }
@@ -80,6 +89,15 @@ router.post("/:id/edit", function (req, res) {
     }
     if (jsonContent.Users !== undefined) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Users: jsonContent.Users } }, function (err, res) {
+        if (err) {
+          return res.sendStatus(500);
+        } else {
+          success = true;
+        }
+      });
+    }
+    if (jsonContent.Admins !== undefined) {
+      mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Admins: jsonContent.Admins } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -142,6 +160,17 @@ router.get("/:id/users", function (req, res, next) {
     return res.send(result[0]);
   });
 });
+router.get("/:id/admins", function (req, res, next) {
+  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+  mongoConnection.getDB().collection("groups").find({ "_id": id }, { projection: { _id: 0, Admins: 1 } }).map(function (item) {
+    return item.Admins;
+  }).toArray(function (err, result) {
+    if (err) {
+      return res.sendStatus(500);
+    }
+    return res.send(result[0]);
+  });
+});
 
 router.get("/id:/join", function (req, res, next) {
   return res.sendStatus(404);
@@ -166,5 +195,29 @@ router.post("/id:/join", function (res, req, next) {
     return res.status(200).send(res.result.nModified);
   });
 });
+
+//given a userID and a groupID, this function checks to see if the userID has access to the group
+//first it finds the list of .Users data for the given groupID, then checks to see if the given userID is in that list 
+function checkUserPermission(userID, groupID) { //TODO add checks to make sure IDs are valid
+  var users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Users":1})[0].Users; //get list of users
+  for (var user in users) {
+    if (user === userID) { //check for existence
+      return true; //true if userID is found
+    }
+  }
+  return false; //false if userID is not found
+}
+
+//given a adminID (really just a userID) and a groupID, this function checks to see if the adminID has admin access to the group
+//first it finds the list of .Admins data for the given groupID, then checks to see if the given adminID is in that list
+function checkAdminPermission(adminID, groupID) { //TODO add checks to make sure IDs are valid
+  var admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Admins":1})[0].Admins; //get list of admins
+  for (var admin in admins) {
+    if (admin === adminID) { //check for existence
+      return true; //true if adminID is found
+    }
+  }
+  return false; //false if adminID is not found
+}
 
 module.exports = router;
