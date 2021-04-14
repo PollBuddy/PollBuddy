@@ -163,19 +163,25 @@ router.post("/:id/edit", function (req, res) {
  * @property {String} id
  * @postdata {payload} payload
  * @throws 500 - An error occured while accessing the database
+ * @throws 400 - Invalid group id
  * @name POST api/groups/{id}/delete
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/:id/delete", function (req, res) {//use router.delete??
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  mongoConnection.getDB().collection("groups").deleteOne({ "_id": id }, function (err, res) {
-    if (err) {
-      return res.sendStatus(500);
-    }
-  });
-  res.sendStatus(200);
+  const id = await validateID("groups", req.params.id);
+  if (!id) {
+    return res.status(400).send(createResponse(null, "Invalid ID."));
+  }
+  try {
+    mongoConnection.getDB().collection("groups").deleteOne({ "_id": id });
+  } catch(e) {
+    console.log(e);
+    return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
+  }
 });
+
+
 router.get("/", function (req, res, next) {
   mongoConnection.getDB().collection("groups").find({}, { projection: { _id: 1 } }).map(function (item) {
     return item._id;
@@ -183,25 +189,59 @@ router.get("/", function (req, res, next) {
     res.send(result);
   });
 });
-router.get("/:id", function (req, res, next) {
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  mongoConnection.getDB().collection("groups").find({ "_id": id }).toArray(function (err, result) {
-    if (err) {
-      return res.sendStatus(500);
-    }
-    return res.send(result);
-  });
+
+/**
+ * Get all group information
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-iddelete
+ * @typedef {Object} payload
+ * @property {String} id
+ * @getdata {payload} payload
+ * @returns {Group} response
+ * @throws 500 - An error occured while accessing the database
+ * @throws 400 - Invalid group id
+ * @name POST api/groups/{id}
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/:id", async (req, res, next) => {
+  const id = await validateID("groups", req.params.id);
+  if (!id) {
+    return res.status(400).send(createResponse(null, "Invalid ID."));
+  }
+  try {
+    const group = await mongoConnection.getDB().collection("polls").findOne({"_id": id});
+    return res.status(200).send(createResponse(group));
+  } catch(e) {
+    console.log(e);
+  }
+  return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
 });
+
+/**
+ * Get all polls linked to a group
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-iddelete
+ * @typedef {Object} payload
+ * @property {String} id
+ * @getdata {payload} payload
+ * @returns {String[]} response
+ * @throws 500 - An error occured while accessing the database
+ * @throws 400 - Invalid group id
+ * @name POST api/groups/{id}/polls
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.get("/:id/polls", function (req, res, next) {
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  mongoConnection.getDB().collection("groups").find({ "_id": id }, { projection: { _id: 0, Polls: 1 } }).map(function (item) {
-    return res.send(item.Polls);
-  }).toArray(function (err, result) {
-    if (err) {
-      return res.sendStatus(500);
-    }
-    return res.send(result[0]);
-  });
+  const id = await validateID("groups", req.params.id);
+  if (!id) {
+    return res.status(400).send(createResponse(null, "Invalid ID."));
+  }
+  try {
+    var Users = mongoConnection.getDB().collection("groups").find({ "_id": id })[0].Polls
+    return res.status(200).send(createResponse(Users));
+  } catch(e) {
+    console.log(e);
+  }
+  return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
 });
 
 /**
@@ -212,7 +252,8 @@ router.get("/:id/polls", function (req, res, next) {
  * @getdata {payload} payload
  * @returns {String[]} response
  * @throws 500 - An error occured while accessing the database
- * @name POST api/groups/{id}/delete
+ * @throws 400 - Invalid group id
+ * @name POST api/groups/{id}/users
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
@@ -227,17 +268,28 @@ router.get("/:id/users", function (req, res, next) {
   return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
 });
 
-
+/**
+ * Get all admins in a group
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-iddelete
+ * @typedef {Object} payload
+ * @property {String} id
+ * @getdata {payload} payload
+ * @returns {String[]} response
+ * @throws 500 - An error occured while accessing the database
+ * @throws 400 - Invalid group id
+ * @name POST api/groups/{id}/admins
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.get("/:id/admins", function (req, res, next) {
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  mongoConnection.getDB().collection("groups").find({ "_id": id }, { projection: { _id: 0, Admins: 1 } }).map(function (item) {
-    return item.Admins;
-  }).toArray(function (err, result) {
-    if (err) {
-      return res.sendStatus(500);
-    }
-    return res.send(result[0]);
-  });
+  try {
+    var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+    var Users = mongoConnection.getDB().collection("groups").find({ "_id": id })[0].Admins
+    return res.status(200).send(createResponse(Users));
+  } catch(e) {
+    console.log(e);
+  }
+  return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
 });
 
 router.get("/id:/join", function (req, res, next) {
