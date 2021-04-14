@@ -181,13 +181,24 @@ router.post("/:id/delete", async (req, res) => {//use router.delete??
   }
 });
 
-
-router.get("/", function (req, res, next) {
-  mongoConnection.getDB().collection("groups").find({}, { projection: { _id: 1 } }).map(function (item) {
-    return item._id;
-  }).toArray(function (err, result) {
-    res.send(result);
-  });
+/**
+ * Get all groups in the database. This is a debug only endpoint
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-iddelete
+ * @returns {Group[]} response
+ * @throws 500 - An error occurred while reading the database.
+ * @name GET api/polls/{id}
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/", async (req, res) => {
+  //TODO: add debug mode verification
+  try {
+    const groups = await mongoConnection.getDB().collection("groups").find({}).toArray();
+    return res.status(200).send(createResponse(groups));
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send(createResponse(null, "An error occurred while reading the database."));
+  }
 });
 
 /**
@@ -199,7 +210,7 @@ router.get("/", function (req, res, next) {
  * @returns {Group} response
  * @throws 500 - An error occured while accessing the database
  * @throws 400 - Invalid group id
- * @name POST api/groups/{id}
+ * @name GET api/groups/{id}
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
@@ -226,7 +237,7 @@ router.get("/:id", async (req, res) => {
  * @returns {String[]} response
  * @throws 500 - An error occured while accessing the database
  * @throws 400 - Invalid group id
- * @name POST api/groups/{id}/polls
+ * @name GET api/groups/{id}/polls
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
@@ -253,11 +264,11 @@ router.get("/:id/polls", async (req, res) => {
  * @returns {String[]} response
  * @throws 500 - An error occured while accessing the database
  * @throws 400 - Invalid group id
- * @name POST api/groups/{id}/users
+ * @name GET api/groups/{id}/users
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/users", async (req, res, next) => {
+router.get("/:id/users", async (req, res) => {
   const id = await validateID("groups", req.params.id);
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
@@ -280,7 +291,7 @@ router.get("/:id/users", async (req, res, next) => {
  * @returns {String[]} response
  * @throws 500 - An error occured while accessing the database
  * @throws 400 - Invalid group id
- * @name POST api/groups/{id}/admins
+ * @name GET api/groups/{id}/admins
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
@@ -298,32 +309,58 @@ router.get("/:id/admins", async (req, res, next) => {
   return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
 });
 
-router.get("/id:/join", function (req, res, next) {
+/**
+ * This route is not used. 
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-iddelete
+ * @throws 404 - Not found
+ * @name GET api/groups/{id}/join
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/:id/join", function (req, res, next) {
   return res.sendStatus(404);
 });
 
 /**
- * Adds user to group with given id
+ * Adds a user to the group
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-iddelete
+ * @typedef {Object} payload
+ * @property {String} userID - id of the user to add
+ * @property {String} groupID - id of the group to add a user to
+ * @getdata {payload} payload
+ * @returns {int} response - Returns 1 if it was added, 0 if it already existed
+ * @throws 500 - An error occured while accessing the database
+ * @throws 400 - Invalid inputs
+ * @name POST api/groups/{id}/join
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
  */
-router.post("/id:/join", function (res, req, next) {
-  var userID = req.session["UserID"];
-  if (userID === undefined) {
-    res.status(401).send({ error: "Not logged in" });
+router.post("/:id/join", async (res, req, next) => {
+  const userID = await validateID("groups", req.params.userID);
+  if (!userID) {
+    return res.status(400).send(createResponse(null, "Invalid user ID."));
   }
-  
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+  const groupID = await validateID("groups", req.params.groupID);
+  if (!id) {
+    return res.status(400).send(createResponse(null, "Invalid group ID."));
+  }
   // Add user to group, do nothing if they are already in it
-  mongoConnection.getDB().collection("groups").updateOne({ "_id:": id }, { $addToSet: { Users: userID } }, (err, res) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
-    // Returns 1 if it was added, 0 if it already existed
+  try {
+    await mongoConnection.getDB().collection("groups").updateOne({ "_id:": id }, { $addToSet: { Users: userID } }, (err, res));
     return res.status(200).send(res.result.nModified);
-  });
+  } catch(e) {
+    console.log(e);
+    return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
+  }
 });
 
-//given a userID and a groupID, this function checks to see if the userID has access to the group
-//first it finds the list of .Users data for the given groupID, then checks to see if the given userID is in that list 
+/**
+ * Checks to see if the given user has access to the given group
+ * @typedef {Object} payload
+ * @property {String} userID - id of the user to look for
+ * @property {String} groupID - id of the group to check
+ * @returns {Boolean} response - True if the user has access, false otherwise
+ */
 function checkUserPermission(userID, groupID) { //TODO add checks to make sure IDs are valid
   var users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Users":1})[0].Users; //get list of users
   for (var user in users) {
@@ -334,8 +371,13 @@ function checkUserPermission(userID, groupID) { //TODO add checks to make sure I
   return false; //false if userID is not found
 }
 
-//given a adminID (really just a userID) and a groupID, this function checks to see if the adminID has admin access to the group
-//first it finds the list of .Admins data for the given groupID, then checks to see if the given adminID is in that list
+/**
+ * Checks to see if the given user has admin access to the given group
+ * @typedef {Object} payload
+ * @property {String} adminID - id of the user to look for
+ * @property {String} groupID - id of the group to check
+ * @returns {Boolean} response - True if the user has admin access, false otherwise
+ */
 function checkAdminPermission(adminID, groupID) { //TODO add checks to make sure IDs are valid
   var admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Admins":1})[0].Admins; //get list of admins
   for (var admin in admins) {
