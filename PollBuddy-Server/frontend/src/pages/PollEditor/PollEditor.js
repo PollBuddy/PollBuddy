@@ -30,7 +30,8 @@ export default class PollEditor extends Component {
       displayQuestionEditor: false,
       currentQuestion: "",
       pollQuestionTitleValue: "",
-      pollQuestionValue: ""
+      pollQuestionValue: "",
+      reorderQuestions: false
     };
 
     this.state.pollTitleValue = this.state.pollTitle;
@@ -123,6 +124,35 @@ export default class PollEditor extends Component {
     console.log(this.state.questions);
   }
 
+  reorderQuestions() {
+    this.setState({reorderQuestions: !this.state.reorderQuestions});
+  }
+
+  moveQuestionUp(index) {
+    console.log("move question up");
+    var reorderedQuestions = this.move(index, index-1);
+    console.log(reorderedQuestions);
+    this.setState({questions: reorderedQuestions});
+  }
+
+  moveQuestionDown(index) {
+    console.log("move question down");
+    var reorderedQuestions = this.move(index, index+1);
+    console.log(reorderedQuestions);
+    this.setState({questions: reorderedQuestions});
+  }
+
+  move(old_index, new_index) {
+    if (old_index > new_index && old_index == 0) {
+      new_index = this.state.questions.length - 1;
+    }
+    if (old_index < new_index && old_index == this.state.questions.length - 1) {
+      new_index = 0;
+    }
+    this.state.questions.splice(new_index, 0, this.state.questions.splice(old_index, 1)[0]);
+    return this.state.questions;
+  }
+
   render() {
 
     return (
@@ -165,7 +195,11 @@ export default class PollEditor extends Component {
                   <React.Fragment>
                     {console.log(this.state.questions)}
                     {this.state.questions.map((value, index) => (
-                      <button style={{  width: "17em" }} className="button" onClick={() => this.editQuestion(value)}>{"Question " + (index+1) + ": " + value.title}</button>
+                      <div id={"question-" + (index+1)}>
+                        {this.state.reorderQuestions && <span className="Poll_Editor_reorder" onClick={() => this.moveQuestionUp(index)}>↑</span>}
+                        <button style={{  width: "17em" }} className="button" onClick={() => this.editQuestion(value)}>{"Question " + (index+1) + ": " + value.title}</button>
+                        {this.state.reorderQuestions && <span className="Poll_Editor_reorder" onClick={() => this.moveQuestionDown(index)}>↓</span>}
+                      </div>
                     ))}
                   </React.Fragment>
                 )}
@@ -176,6 +210,8 @@ export default class PollEditor extends Component {
                   <button type="submit" id="newQuestionBtn" className="button" onClick={() => this.createNewQuestion()}>New Question</button>
                 </MDBContainer>
               </div>
+
+              <button type="submit" id="newQuestionBtn" className="button" onClick={() => this.reorderQuestions()}>Reorder Questions</button>
 
               {this.state.displayQuestionEditor &&
                 <MDBContainer class="form-group">
