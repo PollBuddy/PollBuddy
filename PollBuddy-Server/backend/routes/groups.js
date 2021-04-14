@@ -3,18 +3,58 @@ const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
 
-router.post("/new", function (req, res) {
-  const jsonContent = req.body;
-  if (jsonContent.Name == null || jsonContent.Name === "") {
-    return res.sendStatus(400);
-  }
-  mongoConnection.getDB().collection("groups").insertOne({ Name: jsonContent.Name }, function (err, res) {
-    if (err) {
-      return res.sendStatus(500);
-    }
+/**
+ * Modify the group information 
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-new
+ * @typedef {Object} payload
+ * @property {string} Name - Name of the new poll.
+ * @typedef {Object} response
+ * @property {string} ID - Object ID of the new poll
+ * @postdata {payload} payload
+ * @returns {response}
+ * @throws 400 - Invalid request body, see error message for details.
+ * @throws 500 - An error occurred while writing to the database.
+ * @name POST api/polls/new
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+ router.post("/new", async (req, res) => {
+  // Validate request body
+  const schema = Joi.object({
+    Name: Joi.string().min(3).max(30).required()
   });
-  return res.sendStatus(200);
+  const validResult = schema.validate(req.body);
+  // invalidate handling
+  if (validResult.error) {
+    return res.status(400).send(createResponse(null, validResult.error.details[0].message));
+  }
+  // Add to DB
+  try {
+    const result = await mongoConnection.getDB().collection("groups").insertOne({Name: validResult.value.Name});
+    return res.send(createResponse({ID: result.insertedId}));   // return poll ID
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send(createResponse(null, "An error occurred while writing to the database."));
+  }
 });
+
+/**
+ * Modify the group information 
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-id-edit
+ * @typedef {Object} payload
+ * @property {String} Action
+ * @property {String} Name
+ * @property {String} Instructors
+ * @property {String} Polls
+ * @property {String} Users
+ * @property {String} Admins
+ * @postdata {payload} payload
+ * @throws 500 - An error occured while writing to the database
+ * @throws 400 - Invalid request body or ObjectID
+ * @name POST api/groups/{id}/edit
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.post("/:id/edit", function (req, res) {
   const id = new mongoConnection.getMongo().ObjectID(req.params.id);
   const jsonContent = req.body;
