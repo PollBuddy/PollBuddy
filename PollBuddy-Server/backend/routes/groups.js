@@ -2,6 +2,8 @@ const createError = require("http-errors");
 const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
+const Joi = require("joi");
+const {createResponse, validateID} = require("../modules/utils"); // object destructuring, only import desired functions
 
 /**
  * Modify the group information 
@@ -31,7 +33,7 @@ const mongoConnection = require("../modules/mongoConnection.js");
   // Add to DB
   try {
     const result = await mongoConnection.getDB().collection("groups").insertOne({Name: validResult.value.Name});
-    return res.send(createResponse({ID: result.insertedId}));   // return poll ID
+    return res.send(createResponse({ID: result.insertedId}));   // return group ID
   } catch (e) {
     console.log(e);
     return res.status(500).send(createResponse(null, "An error occurred while writing to the database."));
@@ -40,7 +42,7 @@ const mongoConnection = require("../modules/mongoConnection.js");
 
 /**
  * Modify the group information 
- * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-id-edit
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-idedit
  * @typedef {Object} payload
  * @property {String} Action
  * @property {String} Name
@@ -153,6 +155,18 @@ router.post("/:id/edit", function (req, res) {
   }
   return res.sendStatus(200);
 });
+
+/**
+ * Delete a group from the database
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-iddelete
+ * @typedef {Object} payload
+ * @property {String} id
+ * @postdata {payload} payload
+ * @throws 500 - An error occured while accessing the database
+ * @name POST api/groups/{id}/delete
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.post("/:id/delete", function (req, res) {//use router.delete??
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("groups").deleteOne({ "_id": id }, function (err, res) {
@@ -189,17 +203,31 @@ router.get("/:id/polls", function (req, res, next) {
     return res.send(result[0]);
   });
 });
+
+/**
+ * Get all users in a group
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-iddelete
+ * @typedef {Object} payload
+ * @property {String} id
+ * @getdata {payload} payload
+ * @returns {String[]} response
+ * @throws 500 - An error occured while accessing the database
+ * @name POST api/groups/{id}/delete
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.get("/:id/users", function (req, res, next) {
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  mongoConnection.getDB().collection("groups").find({ "_id": id }, { projection: { _id: 0, Users: 1 } }).map(function (item) {
-    return item.Users;
-  }).toArray(function (err, result) {
-    if (err) {
-      return res.sendStatus(500);
-    }
-    return res.send(result[0]);
-  });
+  try {
+    var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+    var Users = mongoConnection.getDB().collection("groups").find({ "_id": id })[0].Users
+    return res.status(200).send(createResponse(Users));
+  } catch(e) {
+    console.log(e);
+  }
+  return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
 });
+
+
 router.get("/:id/admins", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("groups").find({ "_id": id }, { projection: { _id: 0, Admins: 1 } }).map(function (item) {
