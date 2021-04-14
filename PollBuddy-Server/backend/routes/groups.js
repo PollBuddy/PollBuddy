@@ -20,7 +20,7 @@ const {createResponse, validateID} = require("../modules/utils"); // object dest
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
- router.post("/new", async (req, res) => {
+router.post("/new", async (req, res) => {
   // Validate request body
   const schema = Joi.object({
     Name: Joi.string().min(3).max(30).required()
@@ -44,12 +44,12 @@ const {createResponse, validateID} = require("../modules/utils"); // object dest
  * Modify the group information 
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-idedit
  * @typedef {Object} payload
- * @property {String} Action
- * @property {String} Name
- * @property {String} Instructors
- * @property {String} Polls
- * @property {String} Users
- * @property {String} Admins
+ * @property {String} Action - the action to be performed (should be "add" or "delete")
+ * @property {String} Name - optional, the new name for the group
+ * @property {String} Instructors - optional, the new instructor list for the group
+ * @property {String} Polls - optional, the new list of poll ids for the group
+ * @property {String} Users - optional, the new list of user ids for the group
+ * @property {String} Admins - optional, the new list of admin ids for the group
  * @postdata {payload} payload
  * @throws 500 - An error occured while writing to the database
  * @throws 400 - Invalid request body or ObjectID
@@ -160,7 +160,7 @@ router.post("/:id/edit", function (req, res) {
  * Delete a group from the database
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-iddelete
  * @typedef {Object} payload
- * @property {String} id
+ * @property {String} id - id of the group to get information from
  * @postdata {payload} payload
  * @throws 500 - An error occured while accessing the database
  * @throws 400 - Invalid group id
@@ -194,7 +194,7 @@ router.get("/", function (req, res, next) {
  * Get all group information
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-iddelete
  * @typedef {Object} payload
- * @property {String} id
+ * @property {String} id - id of the group to get information from
  * @getdata {payload} payload
  * @returns {Group} response
  * @throws 500 - An error occured while accessing the database
@@ -221,7 +221,7 @@ router.get("/:id", async (req, res) => {
  * Get all polls linked to a group
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-iddelete
  * @typedef {Object} payload
- * @property {String} id
+ * @property {String} id - id of the group to get information from
  * @getdata {payload} payload
  * @returns {String[]} response
  * @throws 500 - An error occured while accessing the database
@@ -236,7 +236,7 @@ router.get("/:id/polls", async (req, res) => {
     return res.status(400).send(createResponse(null, "Invalid ID."));
   }
   try {
-    const Users = await mongoConnection.getDB().collection("groups").findOne({ "_id": id }).Polls
+    const Users = await mongoConnection.getDB().collection("groups").findOne({ "_id": id }).Polls;
     return res.status(200).send(createResponse(Users));
   } catch(e) {
     console.log(e);
@@ -248,7 +248,7 @@ router.get("/:id/polls", async (req, res) => {
  * Get all users in a group
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-iddelete
  * @typedef {Object} payload
- * @property {String} id
+ * @property {String} id - id of the group to get information from
  * @getdata {payload} payload
  * @returns {String[]} response
  * @throws 500 - An error occured while accessing the database
@@ -263,7 +263,7 @@ router.get("/:id/users", async (req, res, next) => {
     return res.status(400).send(createResponse(null, "Invalid ID."));
   }
   try {
-    var Users = await mongoConnection.getDB().collection("groups").findOne({ "_id": id }).Users
+    var Users = await mongoConnection.getDB().collection("groups").findOne({ "_id": id }).Users;
     return res.status(200).send(createResponse(Users));
   } catch(e) {
     console.log(e);
@@ -275,7 +275,7 @@ router.get("/:id/users", async (req, res, next) => {
  * Get all admins in a group
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-iddelete
  * @typedef {Object} payload
- * @property {String} id
+ * @property {String} id - id of the group to get information from
  * @getdata {payload} payload
  * @returns {String[]} response
  * @throws 500 - An error occured while accessing the database
@@ -290,7 +290,7 @@ router.get("/:id/admins", async (req, res, next) => {
     return res.status(400).send(createResponse(null, "Invalid ID."));
   }
   try {
-    var Users = await mongoConnection.getDB().collection("groups").findOne({ "_id": id }).Admins
+    var Users = await mongoConnection.getDB().collection("groups").findOne({ "_id": id }).Admins;
     return res.status(200).send(createResponse(Users));
   } catch(e) {
     console.log(e);
