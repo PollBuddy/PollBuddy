@@ -168,13 +168,13 @@ router.post("/:id/edit", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/delete", function (req, res) {//use router.delete??
+router.post("/:id/delete", async (req, res) => {//use router.delete??
   const id = await validateID("groups", req.params.id);
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
   }
   try {
-    mongoConnection.getDB().collection("groups").deleteOne({ "_id": id });
+    await mongoConnection.getDB().collection("groups").deleteOne({ "_id": id });
   } catch(e) {
     console.log(e);
     return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
@@ -203,7 +203,7 @@ router.get("/", function (req, res, next) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id", async (req, res, next) => {
+router.get("/:id", async (req, res) => {
   const id = await validateID("groups", req.params.id);
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
@@ -213,8 +213,8 @@ router.get("/:id", async (req, res, next) => {
     return res.status(200).send(createResponse(group));
   } catch(e) {
     console.log(e);
+    return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
   }
-  return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
 });
 
 /**
@@ -230,18 +230,18 @@ router.get("/:id", async (req, res, next) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/polls", function (req, res, next) {
+router.get("/:id/polls", async (req, res) => {
   const id = await validateID("groups", req.params.id);
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
   }
   try {
-    var Users = mongoConnection.getDB().collection("groups").find({ "_id": id })[0].Polls
+    const Users = await mongoConnection.getDB().collection("groups").findOne({ "_id": id }).Polls
     return res.status(200).send(createResponse(Users));
   } catch(e) {
     console.log(e);
+    return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
   }
-  return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
 });
 
 /**
@@ -257,15 +257,18 @@ router.get("/:id/polls", function (req, res, next) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/users", function (req, res, next) {
+router.get("/:id/users", async (req, res, next) => {
+  const id = await validateID("groups", req.params.id);
+  if (!id) {
+    return res.status(400).send(createResponse(null, "Invalid ID."));
+  }
   try {
-    var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-    var Users = mongoConnection.getDB().collection("groups").find({ "_id": id })[0].Users
+    var Users = await mongoConnection.getDB().collection("groups").findOne({ "_id": id }).Users
     return res.status(200).send(createResponse(Users));
   } catch(e) {
     console.log(e);
+    return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
   }
-  return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
 });
 
 /**
@@ -281,10 +284,13 @@ router.get("/:id/users", function (req, res, next) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/admins", function (req, res, next) {
+router.get("/:id/admins", async (req, res, next) => {
+  const id = await validateID("groups", req.params.id);
+  if (!id) {
+    return res.status(400).send(createResponse(null, "Invalid ID."));
+  }
   try {
-    var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-    var Users = mongoConnection.getDB().collection("groups").find({ "_id": id })[0].Admins
+    var Users = await mongoConnection.getDB().collection("groups").findOne({ "_id": id }).Admins
     return res.status(200).send(createResponse(Users));
   } catch(e) {
     console.log(e);
