@@ -7,14 +7,14 @@ const { createResponse } = require("../modules/utils.js");
 router.post("/new", function (req, res) {
   const jsonContent = req.body;
   if (jsonContent.Name == null || jsonContent.Name === "") {
-    return res.sendStatus(400);
+    return res.status(400).send(createResponse("","")); // TODO: Error message
   }
   mongoConnection.getDB().collection("groups").insertOne({ Name: jsonContent.Name }, function (err, res) {
     if (err) {
-      return res.sendStatus(500);
+      return res.status(500).send(createResponse("","")); // TODO: Error message
     }
   });
-  return res.sendStatus(200);
+  return res.status(200).send(createResponse("","")); // TODO: Success message
 });
 router.post("/:id/edit", function (req, res) {
   const id = new mongoConnection.getMongo().ObjectID(req.params.id);
@@ -24,7 +24,7 @@ router.post("/:id/edit", function (req, res) {
     if (jsonContent.Name !== undefined) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$set": { Name: jsonContent.Name } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
@@ -33,7 +33,7 @@ router.post("/:id/edit", function (req, res) {
     if (jsonContent.Instructors !== undefined) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Instructors: jsonContent.Instructors } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
@@ -42,7 +42,7 @@ router.post("/:id/edit", function (req, res) {
     if (jsonContent.Polls !== undefined) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Polls: jsonContent.Polls } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
@@ -51,7 +51,7 @@ router.post("/:id/edit", function (req, res) {
     if (jsonContent.Users !== undefined) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Users: jsonContent.Users } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
@@ -60,20 +60,20 @@ router.post("/:id/edit", function (req, res) {
     if (jsonContent.Admins !== undefined) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Admins: jsonContent.Admins } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
       });
     }
     if (success === false) {
-      return res.sendStatus(400);
+      return res.status(400).send(createResponse("","")); // TODO: Error message
     }
   } else if (jsonContent.Action === "Remove") {
     if (jsonContent.Instructors !== undefined) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Instructors: jsonContent.Instructors } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
@@ -82,7 +82,7 @@ router.post("/:id/edit", function (req, res) {
     if (jsonContent.Polls !== undefined) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Polls: jsonContent.Polls } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
@@ -91,7 +91,7 @@ router.post("/:id/edit", function (req, res) {
     if (jsonContent.Users !== undefined) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Users: jsonContent.Users } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
@@ -100,28 +100,28 @@ router.post("/:id/edit", function (req, res) {
     if (jsonContent.Admins !== undefined) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Admins: jsonContent.Admins } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
       });
     }
     if (success === false) {
-      return res.sendStatus(400);
+      return res.status(400).send(createResponse("","")); // TODO: Error message
     }
   } else {
-    return res.sendStatus(400);
+    return res.status(400).send(createResponse("","")); // TODO: Error message
   }
-  return res.sendStatus(200);
+  return res.status(200).send(createResponse("","")); // TODO: Success message
 });
 router.post("/:id/delete", function (req, res) {//use router.delete??
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("groups").deleteOne({ "_id": id }, function (err, res) {
     if (err) {
-      return res.sendStatus(500);
+      return res.status(500).send(createResponse("","")); // TODO: Error message
     }
   });
-  res.sendStatus(200);
+  res.status(200).send(createResponse("","")); // TODO: Success message
 });
 router.get("/", function (req, res, next) {
   mongoConnection.getDB().collection("groups").find({}, { projection: { _id: 1 } }).map(function (item) {
@@ -134,7 +134,7 @@ router.get("/:id", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("groups").find({ "_id": id }).toArray(function (err, result) {
     if (err) {
-      return res.sendStatus(500);
+      return res.status(500).send(createResponse("","")); // TODO: Error message
     }
     return res.send(createResponse(result));
   });
@@ -145,7 +145,7 @@ router.get("/:id/polls", function (req, res, next) {
     return res.send(createResponse(item.Polls));
   }).toArray(function (err, result) {
     if (err) {
-      return res.sendStatus(500);
+      return res.status(500).send(createResponse("","")); // TODO: Error message
     }
     return res.send(createResponse(result[0]));
   });
@@ -156,7 +156,7 @@ router.get("/:id/users", function (req, res, next) {
     return item.Users;
   }).toArray(function (err, result) {
     if (err) {
-      return res.sendStatus(500);
+      return res.status(500).send(createResponse("","")); // TODO: Error message
     }
     return res.send(createResponse(result[0]));
   });
@@ -167,14 +167,14 @@ router.get("/:id/admins", function (req, res, next) {
     return item.Admins;
   }).toArray(function (err, result) {
     if (err) {
-      return res.sendStatus(500);
+      return res.status(500).send(createResponse("","")); // TODO: Error message
     }
     return res.send(createResponse(result[0]));
   });
 });
 
 router.get("/id:/join", function (req, res, next) {
-  return res.sendStatus(404);
+  return res.status(404).send(createResponse("","")); // TODO: Error message
 });
 
 /**
@@ -190,7 +190,7 @@ router.post("/id:/join", function (res, req, next) {
   // Add user to group, do nothing if they are already in it
   mongoConnection.getDB().collection("groups").updateOne({ "_id:": id }, { $addToSet: { Users: userID } }, (err, res) => {
     if (err) {
-      return res.status(500).send(createResponse(err));
+      return res.status(500).send(createResponse(null,err));
     }
     // Returns 1 if it was added, 0 if it already existed
     return res.status(200).send(createResponse(res.result.nModified));

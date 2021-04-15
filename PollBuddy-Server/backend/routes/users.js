@@ -620,7 +620,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.FirstName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { FirstName: jsonContent.FirstName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("",err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -629,7 +629,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.LastName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { LastName: jsonContent.LastName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("",err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -638,7 +638,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.UserName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { UserName: jsonContent.UserName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("",err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -647,7 +647,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.Email !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { Email: jsonContent.Email } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("",err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -656,20 +656,20 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.Password !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { Password: bcrypt.hashSync(jsonContent.Password, 10) } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("",err)); // TODO: Error message
         } else {
           success = true;
         }
       });
     }
     if (success === false) {
-      return res.sendStatus(400);
+      return res.status(400).send(createResponse("","")); // TODO: Error message;
     }
   } else if (jsonContent.Action === "Remove") {
     if (jsonContent.FirstName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { FirstName: jsonContent.FirstName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("",err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -678,7 +678,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.LastName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { LastName: jsonContent.LastName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("",err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -687,7 +687,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.UserName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { UserName: jsonContent.UserName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("",err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -696,7 +696,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.Email !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { Email: jsonContent.Email } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("",err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -705,26 +705,26 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.Password !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { Password: jsonContent.Password } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("",err)); // TODO: Error message
         } else {
           success = true;
         }
       });
     }
     if (success === false) {
-      return res.sendStatus(400);
+      return res.status(400).send(createResponse("","")); // TODO: Error message;
     }
   } else {
-    return res.sendStatus(400);
+    return res.status(400).send(createResponse("","")); // TODO: Error message;
   }
-  return res.sendStatus(200); // TODO: Ensure this is true
+  return res.status(200).send(createResponse("","")); // TODO: Success message // TODO: Ensure this is true
 });
 
 router.get("/:id", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("users").find({ "_id": id }).toArray(function (err, result) {
     if (err) {
-      return res.sendStatus(500);
+      return res.status(500).send(createResponse("",err)); // TODO: Error message
     }
     return res.send(createResponse(result));
   });
@@ -736,7 +736,7 @@ router.get("/:id/groups", function (req, res, next) {
     return res.send(createResponse(item.Groups));
   }).toArray(function (err, result) {
     if (err) {
-      return res.sendStatus(500);
+      return res.status(500).send(createResponse("","")); // TODO: Error message
     }
     return res.send(createResponse(result[0]));
   });
