@@ -43,13 +43,16 @@ router.post("/new", async (req, res) => {
 /**
  * Modify the group information 
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-idedit
- * @typedef {Object} payload
- * @property {String} Action - the action to be performed (should be "add" or "delete")
+ * @typedef {Object} content
+ * @property {String} Action - the action to be performed (should be "add" or "remove")
  * @property {String} Name - optional, the new name for the group
  * @property {String} Instructors - optional, the new instructor list for the group
  * @property {String} Polls - optional, the new list of poll ids for the group
  * @property {String} Users - optional, the new list of user ids for the group
  * @property {String} Admins - optional, the new list of admin ids for the group
+ * @typedef {Object} payload
+ * @param {String} id - the id of the group to edit
+ * @param {content} body
  * @postdata {payload} payload
  * @throws 500 - An error occured while writing to the database
  * @throws 400 - Invalid request body or ObjectID
@@ -57,7 +60,7 @@ router.post("/new", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/edit", function (req, res) {
+router.post("/:id/edit", async (req, res) => {
   const id = await validateID("groups", req.params.id);
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
@@ -66,7 +69,7 @@ router.post("/:id/edit", function (req, res) {
   let success = false;
   if (jsonContent.Action === "Add") {
     if (jsonContent.Name !== undefined) {
-      mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$set": { Name: jsonContent.Name } }, function (err, res) {
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$set": { Name: jsonContent.Name } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -75,7 +78,7 @@ router.post("/:id/edit", function (req, res) {
       });
     }
     if (jsonContent.Instructors !== undefined) {
-      mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Instructors: jsonContent.Instructors } }, function (err, res) {
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Instructors: jsonContent.Instructors } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -84,7 +87,7 @@ router.post("/:id/edit", function (req, res) {
       });
     }
     if (jsonContent.Polls !== undefined) {
-      mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Polls: jsonContent.Polls } }, function (err, res) {
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Polls: jsonContent.Polls } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -93,7 +96,7 @@ router.post("/:id/edit", function (req, res) {
       });
     }
     if (jsonContent.Users !== undefined) {
-      mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Users: jsonContent.Users } }, function (err, res) {
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Users: jsonContent.Users } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -102,7 +105,7 @@ router.post("/:id/edit", function (req, res) {
       });
     }
     if (jsonContent.Admins !== undefined) {
-      mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Admins: jsonContent.Admins } }, function (err, res) {
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Admins: jsonContent.Admins } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -115,7 +118,7 @@ router.post("/:id/edit", function (req, res) {
     }
   } else if (jsonContent.Action === "Remove") {
     if (jsonContent.Instructors !== undefined) {
-      mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Instructors: jsonContent.Instructors } }, function (err, res) {
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Instructors: jsonContent.Instructors } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -124,7 +127,7 @@ router.post("/:id/edit", function (req, res) {
       });
     }
     if (jsonContent.Polls !== undefined) {
-      mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Polls: jsonContent.Polls } }, function (err, res) {
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Polls: jsonContent.Polls } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -133,7 +136,7 @@ router.post("/:id/edit", function (req, res) {
       });
     }
     if (jsonContent.Users !== undefined) {
-      mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Users: jsonContent.Users } }, function (err, res) {
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Users: jsonContent.Users } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
@@ -142,7 +145,7 @@ router.post("/:id/edit", function (req, res) {
       });
     }
     if (jsonContent.Admins !== undefined) {
-      mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Admins: jsonContent.Admins } }, function (err, res) {
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Admins: jsonContent.Admins } }, function (err, res) {
         if (err) {
           return res.sendStatus(500);
         } else {
