@@ -6,7 +6,7 @@ const Joi = require("joi");
 const {createResponse, validateID} = require("../modules/utils"); // object destructuring, only import desired functions
 
 /**
- * Modify the group information 
+ * Create a new group
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-new
  * @typedef {Object} payload
  * @property {string} Name - Name of the new poll.
@@ -54,7 +54,7 @@ router.post("/new", async (req, res) => {
  * @param {String} id - the id of the group to edit
  * @param {content} body
  * @postdata {payload} payload
- * @throws 500 - An error occured while writing to the database
+ * @throws 500 - An error occurred while writing to the database
  * @throws 400 - Invalid request body or ObjectID
  * @name POST api/groups/{id}/edit
  * @param {string} path - Express path.
@@ -168,8 +168,8 @@ router.post("/:id/edit", async (req, res) => {
  * @typedef {Object} payload
  * @property {String} id - id of the group to get information from
  * @postdata {payload} payload
- * @throws 500 - An error occured while accessing the database
- * @throws 400 - Invalid group id
+ * @throws 500 - An error occurred while accessing the database.
+ * @throws 400 - Invalid ID.
  * @name POST api/groups/{id}/delete
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
@@ -183,7 +183,7 @@ router.post("/:id/delete", async (req, res) => {//use router.delete??
     await mongoConnection.getDB().collection("groups").deleteOne({ "_id": id });
   } catch(e) {
     console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
+    return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
   }
 });
 
@@ -228,8 +228,8 @@ router.get("/", async (req, res) => {
  * @property {String[]} Admins
  * @getdata {payload} payload
  * @returns {Group} response
- * @throws 500 - An error occured while accessing the database
- * @throws 400 - Invalid group id
+ * @throws 500 - An error occurred while accessing the database
+ * @throws 400 - Invalid ID.
  * @name GET api/groups/{id}
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
@@ -244,7 +244,7 @@ router.get("/:id", async (req, res) => {
     return res.status(200).send(createResponse(group));
   } catch(e) {
     console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
+    return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
   }
 });
 
@@ -257,8 +257,8 @@ router.get("/:id", async (req, res) => {
  * @property {String[]} Polls
  * @getdata {payload} payload
  * @returns {Group} response
- * @throws 500 - An error occured while accessing the database
- * @throws 400 - Invalid group id
+ * @throws 500 - An error occurred while accessing the database.
+ * @throws 400 - Invalid Invalid ID.
  * @name GET api/groups/{id}/polls
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
@@ -273,7 +273,7 @@ router.get("/:id/polls", async (req, res) => {
     return res.status(200).send(createResponse(Polls));
   } catch(e) {
     console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
+    return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
   }
 });
 
@@ -286,8 +286,8 @@ router.get("/:id/polls", async (req, res) => {
  * @property {String[]} Users
  * @getdata {payload} payload
  * @returns {Group} response
- * @throws 500 - An error occured while accessing the database
- * @throws 400 - Invalid group id
+ * @throws 500 - An error occurred while accessing the database.
+ * @throws 400 - Invalid ID.
  * @name GET api/groups/{id}/users
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
@@ -302,7 +302,7 @@ router.get("/:id/users", async (req, res) => {
     return res.status(200).send(createResponse(Users));
   } catch(e) {
     console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
+    return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
   }
 });
 
@@ -315,13 +315,13 @@ router.get("/:id/users", async (req, res) => {
  * @property {String[]} Admins
  * @getdata {payload} payload
  * @returns {Group} response
- * @throws 500 - An error occured while accessing the database
- * @throws 400 - Invalid group id
+ * @throws 500 - An error occurred while accessing the database.
+ * @throws 400 - Invalid ID.
  * @name GET api/groups/{id}/admins
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/admins", async (req, res, next) => {
+router.get("/:id/admins", async (req, res) => {
   const id = await validateID("groups", req.params.id);
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
@@ -332,7 +332,7 @@ router.get("/:id/admins", async (req, res, next) => {
   } catch(e) {
     console.log(e);
   }
-  return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
+  return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
 });
 
 /**
@@ -343,7 +343,7 @@ router.get("/:id/admins", async (req, res, next) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/join", async (req, res, next) => {
+router.get("/:id/join", async (req, res) => {
   return res.sendStatus(404);
 });
 
@@ -354,13 +354,14 @@ router.get("/:id/join", async (req, res, next) => {
  * @property {String} userID - id of the user to add
  * @property {String} groupID - id of the group to add a user to
  * @postdata {payload} inputs
- * @throws 500 - An error occured while accessing the database
- * @throws 400 - Invalid inputs
+ * @throws 500 - An error occurred while accessing the database.
+ * @throws 400 - Invalid user ID.
+ * @throws 400 - Invalid group ID.
  * @name POST api/groups/{id}/join
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/join", async (res, req, next) => {
+router.post("/:id/join", async (res, req) => {
   const userID = await validateID("groups", req.params.userID);
   if (!userID) {
     return res.status(400).send(createResponse(null, "Invalid user ID."));
@@ -374,7 +375,7 @@ router.post("/:id/join", async (res, req, next) => {
     await mongoConnection.getDB().collection("groups").updateOne({ "_id:": groupID }, { $addToSet: { Users: userID } });
   } catch(e) {
     console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
+    return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
   }
 });
 
