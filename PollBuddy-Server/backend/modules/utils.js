@@ -57,16 +57,17 @@ async function checkPollPublic(req, res, next) {
   req.parsedID = id;
   // check poll publicity
   try {
-    const poll = await mongoConnection.getDB().collection("polls").findOne({"_id": id});
+    const poll = await mongoConnection.getDB().collection("polls").findOne({_id: id}, {projection: {Public: 1}});
+    console.log(poll);
     if (!poll.Public) { // poll not public
       // check logged in
-      if (isLoggedIn(req)) {
+      if (!isLoggedIn(req)) {
         return res.status(403).send(createResponse(null, "Sign-In required."));
       }
     }
   } catch (e) {
     console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while reading the database."));
+    return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
   }
   next();
 }
