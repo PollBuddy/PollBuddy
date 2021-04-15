@@ -58,7 +58,10 @@ router.post("/new", async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/:id/edit", function (req, res) {
-  const id = new mongoConnection.getMongo().ObjectID(req.params.id);
+  const id = await validateID("groups", req.params.id);
+  if (!id) {
+    return res.status(400).send(createResponse(null, "Invalid ID."));
+  }
   const jsonContent = req.body;
   let success = false;
   if (jsonContent.Action === "Add") {
