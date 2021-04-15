@@ -117,10 +117,16 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
   if (validResult.error) {
     return res.status(400).send(createResponse(null, validResult.error.details[0].message));
   }
-  // add poll ID
-  validResult.value.PollID = req.parsedID;
-  // add timestamp
-  validResult.value.Timestamp = Date.now();
+  // create new entry
+  const entry = {
+    Answers: validResult.value,
+    PollID: req.parsedID,
+    Timestamp: Date.now()
+  };
+  // // add poll ID
+  // validResult.value.PollID = req.parsedID;
+  // // add timestamp
+  // validResult.value.Timestamp = Date.now();
   // check if user is signed in
   if (isLoggedIn(req)) {
     // write UserID
@@ -128,9 +134,9 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
     // check for resubmit
     try {
       await mongoConnection.getDB().collection("poll_answers").findOneAndUpdate({
-        PollID: validResult.value.PollID,
-        UserID: validResult.value.UserID
-      }, {...validResult.value});
+        PollID: entry.PollID,
+        UserID: entry.UserID
+      }, entry);
       return res.send(createResponse());
     } catch(e) {
       console.log(e);
@@ -139,7 +145,7 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
   } else {
     // anonymous submission, no resubmit
     try {
-      await mongoConnection.getDB().collection("poll_answers").insertOne({...validResult.value});
+      await mongoConnection.getDB().collection("poll_answers").insertOne(entry);
       return res.send(createResponse());
     } catch(e) {
       console.log(e);
