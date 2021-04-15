@@ -347,10 +347,7 @@ router.get("/:id/join", async (req, res, next) => {
  * @typedef {Object} payload
  * @property {String} userID - id of the user to add
  * @property {String} groupID - id of the group to add a user to
- * @typedef {Object} int
- * @property {Integer} success - Returns 1 if it was added, 0 if it already existed
  * @postdata {payload} inputs
- * @returns {int} response
  * @throws 500 - An error occured while accessing the database
  * @throws 400 - Invalid inputs
  * @name POST api/groups/{id}/join
@@ -363,13 +360,12 @@ router.post("/:id/join", async (res, req, next) => {
     return res.status(400).send(createResponse(null, "Invalid user ID."));
   }
   const groupID = await validateID("groups", req.params.groupID);
-  if (!id) {
+  if (!groupID) {
     return res.status(400).send(createResponse(null, "Invalid group ID."));
   }
   // Add user to group, do nothing if they are already in it
   try {
-    await mongoConnection.getDB().collection("groups").updateOne({ "_id:": id }, { $addToSet: { Users: userID } }, (err, res));
-    return res.status(200).send({ "success": res.result.nModified});
+    await mongoConnection.getDB().collection("groups").updateOne({ "_id:": groupID }, { $addToSet: { Users: userID } });
   } catch(e) {
     console.log(e);
     return res.status(500).send(createResponse(null, "An error occurred while accessing the database"));
