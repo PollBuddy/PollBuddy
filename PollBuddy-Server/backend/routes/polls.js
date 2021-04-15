@@ -14,7 +14,7 @@ const {createResponse, validateID, checkPollPublic, isLoggedIn} = require("../mo
  * @postdata {payload} payload
  * @returns {response}
  * @throws 400 - Invalid request body, see error message for details.
- * @throws 500 - An error occurred while writing to the database.
+ * @throws 500 - An error occurred while communicating with the database.
  * @name POST api/polls/new
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
@@ -35,7 +35,7 @@ router.post("/new", async (req, res) => {
     return res.send(createResponse({ID: result.insertedId}));   // return poll ID
   } catch (e) {
     console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while writing to the database."));
+    return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
   }
 });
 
@@ -50,7 +50,7 @@ router.post("/new", async (req, res) => {
  * @property {string} Visible - Whether students will be able to see the graded result or not.
  * @postdata {Questions[]} payload
  * @throws 400 - Invalid request body or ObjectID, see error message for details.
- * @throws 500 - An error occurred while writing to the database.
+ * @throws 500 - An error occurred while communicating with the database.
  * @name POST api/polls/{id}/edit
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
@@ -85,7 +85,7 @@ router.post("/:id/edit", async (req, res) => {
     await mongoConnection.getDB().collection("polls").updateOne({"_id": id}, {"$set": {Questions: validResult.value}});
   } catch (e) {
     console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while writing to the database."));
+    return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
   }
   return res.status(200).send(createResponse());
 });
@@ -99,8 +99,7 @@ router.post("/:id/edit", async (req, res) => {
  * @postdata {Answers[]} payload
  * @throws 400 - Invalid ID.
  * @throws 403 - Sign-In required.
- * @throws 500 - An error occurred while reading the database.
- * @throws 500 - An error occurred while writing to the database.
+ * @throws 500 - An error occurred while communicating with the database.
  * @name POST api/polls/{id}/submit
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
@@ -135,7 +134,7 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
       return res.send(createResponse());
     } catch(e) {
       console.log(e);
-      return res.status(500).send(createResponse(null, "An error occurred while writing to the database."));
+      return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
     }
   } else {
     // anonymous submission, no resubmit
@@ -144,7 +143,7 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
       return res.send(createResponse());
     } catch(e) {
       console.log(e);
-      return res.status(500).send(createResponse(null, "An error occurred while writing to the database."));
+      return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
     }
   }
 });
@@ -177,7 +176,7 @@ router.post("/:id/delete", function (req, res) {//use router.delete??
  * @property {string} Name of the poll.
  * @property {Questions[]} Array of Questions
  * @returns {Poll[]} response
- * @throws 500 - An error occurred while reading the database.
+ * @throws 500 - An error occurred while communicating with the database.
  * @name GET api/polls
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
@@ -189,7 +188,7 @@ router.get("/", async (req, res) => {
   } catch (e) {
     console.log(e);
   }
-  return res.status(500).send(createResponse(null, "An error occurred while reading the database."));
+  return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
 });
 
 /**
@@ -197,7 +196,7 @@ router.get("/", async (req, res) => {
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-id
  * @returns {Poll} response
  * @throws 400 - Invalid ObjectID.
- * @throws 500 - An error occurred while reading the database.
+ * @throws 500 - An error occurred while communicating with the database.
  * @name GET api/polls/{id}
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
@@ -215,7 +214,7 @@ router.get("/:id", async (req, res) => {
   } catch (e) {
     console.log(e);
   }
-  return res.status(500).send(createResponse(null, "An error occurred while reading the database."));
+  return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
 });
 
 router.get("/:id/view", function (req, res, next) {
