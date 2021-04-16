@@ -95,16 +95,15 @@ class RegisterWithSchoolStep2 extends Component {
             this.props.history.push("/groups");
           } else {
             // Something went wrong, handle it
+
             if (response.error === "Validation failed") {
-              // TODO: This needs to be reported better (in an error popup, for example)
-              console.log(response.data.errors);
               this.state.error = response.data.errors;
             } else {
-              // TODO: This needs to be reported better (in an error popup, for example)
-              console.log("You have following error:");
-              console.log(response.error);
               this.state.error = response.error;
             }
+            console.log("ERROR: " + this.state.error);
+            // alert("Error: " + this.state.error + " Please try again.");
+
           }
         }
       });

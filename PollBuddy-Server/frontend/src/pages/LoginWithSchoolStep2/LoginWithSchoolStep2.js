@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import { Link } from "react-router-dom";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 
@@ -36,7 +35,7 @@ export default class LoginWithSchoolStep2 extends Component {
 
   render() {
     if (this.state.result === "failure") {
-      alert(this.state.error);
+      alert("Error: " + this.state.error + " Please try again.");
       if(this.state.error === "User is not registered"){
         console.log("Error: " + this.state.error);
         // Redirect to register page
@@ -57,27 +56,12 @@ export default class LoginWithSchoolStep2 extends Component {
         </MDBContainer>
       );
     } else {
-      alert("everything worked!!!!");
       console.log("everything worked; redirecting to /groups");
       this.props.history.push("/groups");
 
-      //ideally we'll never get here
+      //technically we'll never get here, but this makes react happy
       return (
-        <MDBContainer fluid className="page">
-          <MDBContainer fluid className="box">
-
-            <p>Logging in...</p>
-
-            { /* TODO: The returned data from the backend needs to be handled and saved somewhere */ }
-            { /* TODO: This page should redirect to a relevant location. This could be
-                       1. Back to /login/school if something went wrong with the login process
-                       2. To /register/school if the user is unregistered
-                       3. To /groups if all went well
-                       Each of these options should show a message to the user indicating what's happening.
-             */ }
-
-          </MDBContainer>
-        </MDBContainer>
+        <p>Logging in...</p>
       );
     }
   }
