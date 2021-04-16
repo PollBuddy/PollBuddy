@@ -102,7 +102,6 @@ class RegisterWithSchoolStep2 extends Component {
               this.state.error = response.error;
             }
             console.log("ERROR: " + this.state.error);
-            // alert("Error: " + this.state.error + " Please try again.");
 
           }
         }
@@ -140,7 +139,8 @@ class RegisterWithSchoolStep2 extends Component {
                 value={this.state.firstName} readOnly={this.state.firstNamePrefilled}
                 onChange={(evt) => {
                   this.setState({firstName: evt.target.value});
-              }}/>
+                }}
+              />
               {!this.state.firstNameValid &&
               <ul className="error">
                 <li>First name must be between 1 and 256 characters</li>
@@ -152,7 +152,8 @@ class RegisterWithSchoolStep2 extends Component {
                 value={this.state.lastName} readOnly={this.state.lastNamePrefilled}
                 onChange={(evt) => {
                   this.setState({lastName: evt.target.value});
-              }}/>
+                }}
+              />
               {!this.state.lastNameValid &&
               <ul className="error">
                 <li>Last name must be less than 256 characters</li>
@@ -164,7 +165,8 @@ class RegisterWithSchoolStep2 extends Component {
                 value={this.state.userName} readOnly={this.state.userNamePrefilled}
                 onChange={(evt) => {
                   this.setState({userName: evt.target.value});
-              }}/>
+                }}
+              />
               {!this.state.userNameValid &&
               <ul className="error">
                 <li>Username must be between 3 and 32 characters</li>
