@@ -56,6 +56,12 @@ export default class LoginWithSchoolStep2 extends Component {
         </MDBContainer>
       );
     } else {
+      // Save data about the user
+      localStorage.setItem("loggedIn", true);
+      localStorage.setItem("firstName", this.state.firstName);
+      localStorage.setItem("lastName", this.state.lastName);
+      localStorage.setItem("userName", this.state.userName);
+
       console.log("everything worked; redirecting to /groups");
       this.props.history.push("/groups");
 
