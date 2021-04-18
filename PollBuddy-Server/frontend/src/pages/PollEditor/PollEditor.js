@@ -201,6 +201,7 @@ export default class PollEditor extends Component {
                         {this.state.reorderQuestions && <span className="Poll_Editor_reorder" onClick={() => this.moveQuestionDown(index)}>↓</span>}
                       </div>
                     ))}
+                    <button type="submit" id="reorderQuestionsBtn" className="button" onClick={() => this.reorderQuestions()}>Reorder Questions</button>
                   </React.Fragment>
                 )}
 
@@ -210,8 +211,6 @@ export default class PollEditor extends Component {
                   <button type="submit" id="newQuestionBtn" className="button" onClick={() => this.createNewQuestion()}>New Question</button>
                 </MDBContainer>
               </div>
-
-              <button type="submit" id="newQuestionBtn" className="button" onClick={() => this.reorderQuestions()}>Reorder Questions</button>
 
               {this.state.displayQuestionEditor &&
                 <MDBContainer class="form-group">
