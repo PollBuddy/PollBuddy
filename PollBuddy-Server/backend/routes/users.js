@@ -21,7 +21,7 @@ const {createResponse, validateID, isEmpty} = require("../modules/utils"); // ob
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/", function (req, res) {
-  return res.send(createResponse("User routes"));
+  return res.status(200).send(createResponse("User routes"));
 });
 
 /**
@@ -35,7 +35,7 @@ router.get("/", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/", function (req, res) {
-  return res.send(createResponse("User routes"));
+  return res.status(200).send(createResponse("User routes"));
 });
 
 /**
@@ -153,7 +153,7 @@ router.post("/login", function (req, res) {
               req.session.userData.userID = result._id;
 
               // Send the user the necessary data to complete the login process
-              return res.send(createResponse({
+              return res.status(200).send(createResponse({
                 "firstName": result.FirstName,
                 "lastName": result.LastName,
                 "userName": result.UserName
@@ -357,24 +357,24 @@ router.post("/register", function (req, res) {
             // This code means we're trying to insert a duplicate key (aka user already registered somehow)
             if(err.keyPattern.Email) {
               // Email in use
-              return res.status(400).json({"result": "failure", "error": "This email is already in use."});
+              return res.status(400).send(createResponse(null, "This email is already in use."));
 
             } else if(err.keyPattern.UserName) {
               // Username in use
-              return res.status(400).json({"result": "failure", "error": "This username is already in use."});
+              return res.status(400).send(createResponse(null, "This username is already in use."));
 
             } else {
               // An unknown error occurred
               console.log("Database Error occurred while creating a new user with Poll Buddy.");
               console.log(err);
-              return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+              return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
             }
 
           } else {
             // An unknown error occurred
             console.log("Database Error occurred while creating a new user with Poll Buddy.");
             console.log(err);
-            return res.status(500).send(createResponse({"result": "failure", "error": "An error occurred while communicating with the database."}));
+            return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
           }
 
         } else {
@@ -387,21 +387,21 @@ router.post("/register", function (req, res) {
             req.session.userData.userID = result.insertedId;
 
             // Send the response object with some basic info for the frontend to store
-            return res.send(createResponse({"result": "success", "data": {"firstName": result.ops[0].FirstName,
-              "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}}));
+            return res.status(200).send(createResponse({ "firstName": result.ops[0].FirstName,
+              "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}));
 
           } else {
           // For some reason, the user wasn't inserted, send an error.
             console.log("Database Error occurred while creating a new user.");
             console.log(err);
-            return res.status(500).send(createResponse({"result": "failure", "error": "An error occurred while communicating with the database."}));
+            return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
           }
         }
       });
     });
 
   } else {
-    return res.status(400).send(createResponse({"result": "failure", "error": "Validation failed.", "data": errorMsg }));
+    return res.status(400).send(createResponse(errorMsg, "Validation failed."));
   }
 
 });
@@ -498,7 +498,7 @@ router.post("/register/rpi", function (req, res) {
 
   // Make sure we've got data from step 1
   if(!req.session.userDataTemp) {
-    return res.status(500).send(createResponse({"result": "failure", "error": "Prerequisite data is not available."}));
+    return res.status(500).send(createResponse(null, "Prerequisite data is not available."));
   }
   // Configure email, username, overwriting whatever the user may have sent as we don't want it anyways.
   req.body.userName = req.session.userDataTemp.userName;
@@ -523,23 +523,23 @@ router.post("/register/rpi", function (req, res) {
           // This code means we're trying to insert a duplicate key (aka user already registered somehow)
           if (err.keyPattern.Email) {
             // Email in use
-            return res.status(400).send(createResponse({"result": "failure", "error": "This email is already in use."}));
+            return res.status(400).send(createResponse(null, "This email is already in use."));
 
           } else if (err.keyPattern.UserName) {
             // Username in use
-            return res.status(400).send(createResponse({"result": "failure", "error": "This username is already in use."}));
+            return res.status(400).send(createResponse(null, "This username is already in use."));
 
           } else {
             // An unknown error occurred
             console.log("Database Error occurred while creating a new user with RPI.");
             console.log(err);
-            return res.status(500).send(createResponse({"result": "failure", "error": "An error occurred while communicating with the database."}));
+            return res.status(500).send(createResponse(null,"An error occurred while communicating with the database."));
           }
         } else {
           // An unknown error occurred
           console.log("Database Error occurred while creating a new with RPI.");
           console.log(err);
-          return res.status(500).send(createResponse({"result": "failure", "error": "An error occurred while communicating with the database."}));
+          return res.status(500).send(createResponse(null,"An error occurred while communicating with the database."));
         }
 
       } else {
@@ -555,19 +555,19 @@ router.post("/register/rpi", function (req, res) {
           req.session.userData.userID = result.insertedId;
 
           // Send the response object with some basic info for the frontend to store
-          return res.send(createResponse({"result": "success", "data": {"firstName": result.ops[0].FirstName,
-            "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}}));
+          return res.status(200).send(createResponse({ "firstName": result.ops[0].FirstName,
+            "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName }));
 
         } else {
           // For some reason, the user wasn't inserted, send an error.
           console.log("Database Error occurred while creating a new user with RPI");
           console.log(err);
-          return res.status(500).send(createResponse({"result": "failure", "error": "An error occurred while communicating with the database."}));
+          return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
         }
       }
     });
   } else {
-    return res.status(400).send(createResponse({ "result": "failure", "error": "Validation failed.", "data": errorMsg }));
+    return res.status(400).send(createResponse(errorMsg, "Validation failed."));
   }
 
 });
@@ -588,7 +588,7 @@ router.get("/logout", function (req, res) {
   // Delete the userData in the session
   delete req.session.userData;
 
-  return res.send(createResponse("User was logged out successfully."));
+  return res.status(200).send(createResponse("User was logged out successfully."));
 
 });
 
@@ -609,7 +609,7 @@ router.post("/logout", function (req, res) {
 // stored user session data
 // TODO: Investigate if this is even needed or not
 router.get("/session", function (req, res) {
-  res.send(createResponse(req.session.userData || {}));
+  res.status(200).send(createResponse(req.session.userData || {}));
 });
 
 router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documentation
@@ -620,7 +620,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.FirstName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { FirstName: jsonContent.FirstName } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("",err)); // TODO: Error message
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -629,7 +629,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.LastName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { LastName: jsonContent.LastName } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("",err)); // TODO: Error message
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -638,7 +638,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.UserName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { UserName: jsonContent.UserName } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("",err)); // TODO: Error message
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -647,7 +647,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.Email !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { Email: jsonContent.Email } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("",err)); // TODO: Error message
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -656,7 +656,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.Password !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { Password: bcrypt.hashSync(jsonContent.Password, 10) } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("",err)); // TODO: Error message
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -669,7 +669,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.FirstName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { FirstName: jsonContent.FirstName } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("",err)); // TODO: Error message
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -678,7 +678,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.LastName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { LastName: jsonContent.LastName } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("",err)); // TODO: Error message
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -687,7 +687,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.UserName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { UserName: jsonContent.UserName } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("",err)); // TODO: Error message
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -696,7 +696,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.Email !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { Email: jsonContent.Email } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("",err)); // TODO: Error message
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -705,7 +705,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.Password !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { Password: jsonContent.Password } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("",err)); // TODO: Error message
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -726,19 +726,19 @@ router.get("/:id", function (req, res, next) {
     if (err) {
       return res.status(500).send(createResponse("",err)); // TODO: Error message
     }
-    return res.send(createResponse(result));
+    return res.status(200).send(createResponse(result));
   });
 });
 
 router.get("/:id/groups", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("users").find({ "_id": id }, { projection: { _id: 0, Groups: 1 } }).map(function (item) {
-    return res.send(createResponse(item.Groups));
+    return res.status(200).send(createResponse(item.Groups));
   }).toArray(function (err, result) {
     if (err) {
       return res.status(500).send(createResponse("","")); // TODO: Error message
     }
-    return res.send(createResponse(result[0]));
+    return res.status(200).send(createResponse(result[0]));
   });
 });
 

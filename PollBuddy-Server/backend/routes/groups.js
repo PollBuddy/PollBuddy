@@ -183,14 +183,14 @@ router.get("/id:/join", function (req, res, next) {
 router.post("/id:/join", function (res, req, next) {
   var userID = req.session["UserID"];
   if (userID === undefined) {
-    res.status(401).send(createResponse({ error: "Not logged in" }));
+    res.status(401).send(createResponse(null, "Not logged in" ));
   }
   
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   // Add user to group, do nothing if they are already in it
   mongoConnection.getDB().collection("groups").updateOne({ "_id:": id }, { $addToSet: { Users: userID } }, (err, res) => {
     if (err) {
-      return res.status(500).send(createResponse(null,err));
+      return res.status(500).send(createResponse(null, err));
     }
     // Returns 1 if it was added, 0 if it already existed
     return res.status(200).send(createResponse(res.result.nModified));

@@ -157,20 +157,20 @@ router.post("/:id/submit", function (req, res) {
         return res.status(500).send(createResponse("","")); // TODO: Error message
       }
       if (result.length === 0) {
-        return res.status(500).send(createResponse({"Result": "Error", "Error": "Cannot find poll"}));
+        return res.status(500).send(createResponse(null, "Cannot find poll"));
       }
     });
   }
 
   // Check that answers were supplied in the correct format
   if (!jsonContent.Answers) {
-    return res.status(500).send(createResponse({"Result": "Error", "Error": "Answers not specified"}));
+    return res.status(500).send(createResponse(null, "Answers not specified"));
   }
   if (!Array.isArray(jsonContent.Answers)) {
-    return res.status(500).send(createResponse({"Result": "Error", "Error": "Answers is not an array"}));
+    return res.status(500).send(createResponse(null, "Answers is not an array"));
   }
   if (jsonContent.Answers.empty) {
-    return res.status(500).send(createResponse({"Result": "Error", "Error": "Answers is empty"}));
+    return res.status(500).send(createResponse(null, "Answers is empty"));
   }
 
   // Add timestamp to answers
@@ -189,7 +189,7 @@ router.post("/:id/submit", function (req, res) {
   let save = function () {
     mongoConnection.getDB().collection("poll_answers").updateOne(insert, {"$push": {"Answers": data}}, function (err3, result3) {
       if (err3) {
-        return res.status(500).send(createResponse("",err3)); // TODO: Error message
+        return res.status(500).send(createResponse("", err3)); // TODO: Error message
       }
       if (result3.result.ok === 1) {
         return res.status(200).send(createResponse("","")); // TODO: Success message
@@ -202,13 +202,13 @@ router.post("/:id/submit", function (req, res) {
   // Check for existing answers and save new answers
   mongoConnection.getDB().collection("poll_answers").find(insert).toArray(function (err, result) {
     if (err) {
-      return res.status(500).send(createResponse("",err)); // TODO: Error message
+      return res.status(500).send(createResponse("", err)); // TODO: Error message
     }
     if (result.length === 0) {
       // User/anonymous has not answered any questions in this poll yet, create a default set
       mongoConnection.getDB().collection("poll_answers").insertOne(insert, function (err2, result2) {
         if (err2) {
-          return res.status(500).send(createResponse("",err2)); // TODO: Error message
+          return res.status(500).send(createResponse("", err2)); // TODO: Error message
         }
         if (result2.result.ok !== 1) {
           return res.status(500).send(createResponse("","")); // TODO: Error message
@@ -229,7 +229,7 @@ router.get("/pollAnswers", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("poll_answers").deleteOne({"_id": id}, function (err, res) {
     if (err) {
-      return res.status(500).send(createResponse("",err)); // TODO: Error message
+      return res.status(500).send(createResponse("", err)); // TODO: Error message
     }
   });
   return res.status(200).send(createResponse("","")); // TODO: Success message;
@@ -238,7 +238,7 @@ router.post("/:id/delete", function (req, res) {//use router.delete??
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("polls").deleteOne({"_id": id}, function (err, res) {
     if (err) {
-      return res.status(500).send(createResponse("",err)); // TODO: Error message;
+      return res.status(500).send(createResponse("", err)); // TODO: Error message;
     }
   });
   return res.status(200).send(createResponse("","")); // TODO: Success message;
@@ -301,7 +301,7 @@ router.get("/:id/view", function (req, res, next) {
 
   mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
     if (err) {
-      return res.status(500).send(createResponse("",err)); // TODO: Error message;
+      return res.status(500).send(createResponse("", err)); // TODO: Error message;
     }
 
     // Loop through the poll's questions and add to openQuestions the Question Number, Text and Answer Choices if
@@ -331,12 +331,12 @@ router.get("/:id/results", function (req, res, next) {
 
   mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
     if (err) {
-      return res.status(500).send(createResponse("",err)); // TODO: Error message;
+      return res.status(500).send(createResponse("", err)); // TODO: Error message;
     }
 
     mongoConnection.getDB().collection("poll_answers").find({"PollID": id}).toArray(function (err2, result2) {
       if (err2) {
-        return res.status(500).send(createResponse("",err2)); // TODO: Error message;
+        return res.status(500).send(createResponse("", err2)); // TODO: Error message;
       }
 
       // Loop through the poll's questions and add to openQuestions the Question Number, Text and Answer Choices if
@@ -367,7 +367,7 @@ router.get("/:id/results", function (req, res, next) {
         }
       }
       // Send the open questions
-      res.send(createResponse({"Results": results}));
+      res.status(200).send(createResponse(results));
     });
   });
 });
@@ -377,7 +377,7 @@ router.get("/:id/results", function (req, res, next) {
 //if the poll is not linked, it returns true by default
 function checkUserPermission(userID, pollID) { //TODO add checks to make sure IDs are valid
   var groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id":0, "Groups":1})[0].Group; //get groupID attached to poll
-  if (groupID.length !== 0 && groupID !== undefined) { //groupID returned something
+  if (groupID.length !== 0) { //groupID returned something
     var users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Users":1})[0].Users; //get list of users in group
     for (var user in users) {
       if (user === userID) {
