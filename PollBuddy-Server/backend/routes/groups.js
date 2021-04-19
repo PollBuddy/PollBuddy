@@ -71,7 +71,7 @@ router.post("/:id/edit", async (req, res) => {
     if (jsonContent.Name !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$set": { Name: jsonContent.Name } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
@@ -80,7 +80,7 @@ router.post("/:id/edit", async (req, res) => {
     if (jsonContent.Instructors !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Instructors: jsonContent.Instructors } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
@@ -89,7 +89,7 @@ router.post("/:id/edit", async (req, res) => {
     if (jsonContent.Polls !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Polls: jsonContent.Polls } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
@@ -98,7 +98,7 @@ router.post("/:id/edit", async (req, res) => {
     if (jsonContent.Users !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Users: jsonContent.Users } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
@@ -107,20 +107,20 @@ router.post("/:id/edit", async (req, res) => {
     if (jsonContent.Admins !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Admins: jsonContent.Admins } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
       });
     }
     if (success === false) {
-      return res.sendStatus(400);
+      return res.status(400).send(createResponse("","")); // TODO: Error message
     }
   } else if (jsonContent.Action === "Remove") {
     if (jsonContent.Instructors !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Instructors: jsonContent.Instructors } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
@@ -129,7 +129,7 @@ router.post("/:id/edit", async (req, res) => {
     if (jsonContent.Polls !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Polls: jsonContent.Polls } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
@@ -138,7 +138,7 @@ router.post("/:id/edit", async (req, res) => {
     if (jsonContent.Users !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Users: jsonContent.Users } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
@@ -147,19 +147,19 @@ router.post("/:id/edit", async (req, res) => {
     if (jsonContent.Admins !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Admins: jsonContent.Admins } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("","")); // TODO: Error message
         } else {
           success = true;
         }
       });
     }
     if (success === false) {
-      return res.sendStatus(400);
+      return res.status(400).send(createResponse("","")); // TODO: Error message
     }
   } else {
-    return res.sendStatus(400);
+    return res.status(400).send(createResponse("","")); // TODO: Error message
   }
-  return res.sendStatus(200);
+  return res.status(200).send(createResponse("","")); // TODO: Success message
 });
 
 /**
@@ -361,6 +361,7 @@ router.get("/:id/join", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+  const userID = await validateID("groups", req.params.userData.userID);
 router.post("/:id/join", async (res, req) => {
   const userID = await validateID("groups", req.params.userID);
   if (!userID) {

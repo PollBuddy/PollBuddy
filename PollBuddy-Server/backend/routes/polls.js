@@ -94,52 +94,52 @@ router.post("/:id/edit", async (req, res) => {
     if (jsonContent.Questions !== undefined) {//QUESTION IS AN OBJECT https://docs.google.com/document/d/1kFdjwiE4_POgcTDqXK-bcnz4RAeLG6yaF2RxLzkNDrE/edit
       mongoConnection.getDB().collection("polls").updateOne({ "_id": id2 }, { "$addToSet": { Questions: jsonContent.Questions } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("",err)); // TODO: Error message
         }
       });
     }
     if (jsonContent.Group !== undefined) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id2 }, { "$addToSet": { Group: jsonContent.Group } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("",err)); // TODO: Error message
         }
       });
     } 
     if (jsonContent.Admins !== undefined) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id2 }, { "$addToSet": { Admins: jsonContent.Admins } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("",err)); // TODO: Error message
         }
       });
     } else {
-      return res.sendStatus(400);
+      return res.status(400).send(createResponse("","")); // TODO: Error message
     }
   } else if (jsonContent.Action === "Remove") {
     if (jsonContent.Questions !== undefined) {
       mongoConnection.getDB().collection("polls").updateOne({ "_id": id2 }, { "$pull": { Questions: "" } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("",err)); // TODO: Error message
         }
       });
     } 
     if (jsonContent.Group !== undefined) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id2 }, { "$pull": { Group: jsonContent.Group } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("",err)); // TODO: Error message
         }
       });
     }
     if (jsonContent.Admins !== undefined) {
       mongoConnection.getDB().collection("groups").updateOne({ "_id": id2 }, { "$pull": { Admins: jsonContent.Admins } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("",err)); // TODO: Error message
         }
       });
     } else {
-      return res.sendStatus(400);
+      return res.status(400).send(createResponse("","")); // TODO: Error message
     }
   } else {
-    return res.sendStatus(400);
+    return res.status(400).send(createResponse("","")); // TODO: Error message
   }
   return res.status(200).send(createResponse());
 });
@@ -213,19 +213,19 @@ router.get("/pollAnswers", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("poll_answers").deleteOne({"_id": id}, function (err, res) {
     if (err) {
-      return res.sendStatus(500);
+      return res.status(500).send(createResponse("", err)); // TODO: Error message
     }
   });
-  return res.sendStatus(200);
+  return res.status(200).send(createResponse("","")); // TODO: Success message;
 });
 router.post("/:id/delete", function (req, res) {//use router.delete??
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("polls").deleteOne({"_id": id}, function (err, res) {
     if (err) {
-      return res.sendStatus(500);
+      return res.status(500).send(createResponse("", err)); // TODO: Error message;
     }
   });
-  return res.sendStatus(200);
+  return res.status(200).send(createResponse("","")); // TODO: Success message;
 });
 
 /**
@@ -285,7 +285,7 @@ router.get("/:id/view", function (req, res, next) {
 
   mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
     if (err) {
-      return res.sendStatus(500);
+      return res.status(500).send(createResponse("", err)); // TODO: Error message;
     }
 
     // Loop through the poll's questions and add to openQuestions the Question Number, Text and Answer Choices if
@@ -303,7 +303,7 @@ router.get("/:id/view", function (req, res, next) {
       }
     }
     // Send the open questions
-    res.send({"Questions": openQuestions, "PollID": id});
+    res.send(createResponse({"Questions": openQuestions, "PollID": id}));
   });
 });
 
@@ -315,12 +315,12 @@ router.get("/:id/results", function (req, res, next) {
 
   mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
     if (err) {
-      return res.sendStatus(500);
+      return res.status(500).send(createResponse("", err)); // TODO: Error message;
     }
 
     mongoConnection.getDB().collection("poll_answers").find({"PollID": id}).toArray(function (err2, result2) {
       if (err2) {
-        return res.sendStatus(500);
+        return res.status(500).send(createResponse("", err2)); // TODO: Error message;
       }
 
       // Loop through the poll's questions and add to openQuestions the Question Number, Text and Answer Choices if
@@ -351,7 +351,7 @@ router.get("/:id/results", function (req, res, next) {
         }
       }
       // Send the open questions
-      res.send({"Results": results});
+      res.status(200).send(createResponse(results));
     });
   });
 });
@@ -361,7 +361,7 @@ router.get("/:id/results", function (req, res, next) {
 //if the poll is not linked, it returns true by default
 function checkUserPermission(userID, pollID) { //TODO add checks to make sure IDs are valid
   var groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id":0, "Groups":1})[0].Group; //get groupID attached to poll
-  if (groupID.length !== 0 && groupID !== undefined) { //groupID returned something
+  if (groupID.length !== 0) { //groupID returned something
     var users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Users":1})[0].Users; //get list of users in group
     for (var user in users) {
       if (user === userID) {
