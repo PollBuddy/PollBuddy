@@ -18,14 +18,24 @@ export default class PollResults extends Component {
           {
             data: [],
             backgroundColor: [
-              "rgba(255, 134,159,0.5)",
-              "rgba(98,  182, 239,0.5)",
-              "rgba(255, 218, 128,0.5)",
-              "rgba(113, 205, 205,0.5)",
-              "rgba(170, 128, 252,0.5)",
+              "rgba(255, 134, 159, 0.5)", // TODO: These need to be generated in some way
+              "rgba(98,  182, 239, 0.5)", // Probably through the backend tbh so the poll admin can pick the colors
+              "rgba(255, 218, 128, 0.5)", // But also make a random generator so they don't have to
+              "rgba(113, 205, 205, 0.5)",
+              "rgba(170, 128, 252, 0.5)",
+              "rgba(255, 134, 159, 0.5)",
+              "rgba(98,  182, 239, 0.5)",
+              "rgba(255, 218, 128, 0.5)",
+              "rgba(113, 205, 205, 0.5)",
+              "rgba(170, 128, 252, 0.5)",
             ],
             borderWidth: 5,
             borderColor: [
+              "rgba(255, 134, 159, 1)",
+              "rgba(98,  182, 239, 1)",
+              "rgba(255, 218, 128, 1)",
+              "rgba(113, 205, 205, 1)",
+              "rgba(170, 128, 252, 1)",
               "rgba(255, 134, 159, 1)",
               "rgba(98,  182, 239, 1)",
               "rgba(255, 218, 128, 1)",

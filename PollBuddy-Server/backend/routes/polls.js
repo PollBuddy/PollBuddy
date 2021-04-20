@@ -194,7 +194,7 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
         UserID: entry.UserID
       }, entry);
       return res.send(createResponse());
-    } catch(e) {
+    } catch (e) {
       console.log(e);
       return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
     }
@@ -203,7 +203,7 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
     try {
       await mongoConnection.getDB().collection("poll_answers").insertOne(entry);
       return res.send(createResponse());
-    } catch(e) {
+    } catch (e) {
       console.log(e);
       return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
     }
@@ -218,7 +218,7 @@ router.get("/pollAnswers", function (req, res, next) {
       return res.status(500).send(createResponse("", err)); // TODO: Error message
     }
   });
-  return res.status(200).send(createResponse("","")); // TODO: Success message;
+  return res.status(200).send(createResponse("", "")); // TODO: Success message;
 });
 router.post("/:id/delete", function (req, res) {//use router.delete??
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
@@ -227,7 +227,7 @@ router.post("/:id/delete", function (req, res) {//use router.delete??
       return res.status(500).send(createResponse("", err)); // TODO: Error message;
     }
   });
-  return res.status(200).send(createResponse("","")); // TODO: Success message;
+  return res.status(200).send(createResponse("", "")); // TODO: Success message;
 });
 
 /**
@@ -345,18 +345,27 @@ router.get("/:id/results", async function (req, res, next) {
           q.Tallies = [];
 
           // Add and tally answers
+
+          // For each answer choice
           for (let k = 0; k < result[0].Questions[i].AnswerChoices.length; k++) {
             q.AnswerChoices.push(result[0].Questions[i].AnswerChoices[k]);
             let tally = 0;
-            if(result2.length > 0) {
-              for (let j = 0; j < result2[0].Answers.length; j++) {
-                if (result2[0].Answers[j].Answer === q.AnswerChoices[k]) {
+            //if(result2.length > 0) {
+            // Check all the answers
+            console.log(q.AnswerChoices);
+            // For each poll_answer object
+            for (let p = 0; p < result2.length; p++) {
+              console.log(result2[p].Answers);
+              for (let j = 0; j < result2[p].Answers.length; j++) {
+                if (result2[p].Answers[j].Answer === q.AnswerChoices[k]) {
                   tally++;
                 }
               }
+              //}
             }
             q.Tallies.push(tally);
           }
+
 
           results.push(q);
         }
@@ -371,9 +380,9 @@ router.get("/:id/results", async function (req, res, next) {
 //if the poll is linked to a group (there is information in the .Group data), the group is checked for user access permissions
 //if the poll is not linked, it returns true by default
 function checkUserPermission(userID, pollID) { //TODO add checks to make sure IDs are valid
-  var groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id":0, "Groups":1})[0].Group; //get groupID attached to poll
+  var groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id": 0, "Groups": 1})[0].Group; //get groupID attached to poll
   if (groupID.length !== 0) { //groupID returned something
-    var users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Users":1})[0].Users; //get list of users in group
+    var users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id": 0, "Users": 1})[0].Users; //get list of users in group
     for (var user in users) {
       if (user === userID) {
         return true;
@@ -383,27 +392,28 @@ function checkUserPermission(userID, pollID) { //TODO add checks to make sure ID
   }
   return true; //returns true if the poll isn't linked to a group
 }
+
 //Given an adminID (really just a userID) and a pollID, this function returns true if the user has admin permissions for the poll, and false otherwise
 //if the poll is linked to a group (there is information in the .Group data), the group is checked for admin access
 //if the poll is not linked, it checks the internal .Admin data and returns true see if it finds the adminID, and false otherwise
 function checkAdminPermission(adminID, pollID) { //TODO add checks to make sure IDs are valid
-  var groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id":0, "Groups":1})[0].Group; //get groupID attached to the poll
+  var groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id": 0, "Groups": 1})[0].Group; //get groupID attached to the poll
   if (groupID.length === 0 || groupID.length === undefined) { //groupID returned something
-    var admins = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id":0, "Admins":1})[0].Admins; //get list of admins in attached group
-    for (var admin in admins) { 
+    var admins = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id": 0, "Admins": 1})[0].Admins; //get list of admins in attached group
+    for (var admin in admins) {
       if (admin === adminID) { //check for adminID in list
         return true;
       }
     }
   } else { //groupID didn't return something
-    admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Admins":1})[0].Admins; //get internal list of Admins
+    admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id": 0, "Admins": 1})[0].Admins; //get internal list of Admins
     for (admin in admins) {
       if (admin === adminID) { //check for adminID in list
         return true;
       }
     }
   }
-  
+
   return false; //adminID wasn't found
 }
 
