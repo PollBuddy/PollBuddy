@@ -14,35 +14,35 @@ const {createResponse, validateID, isEmpty} = require("../modules/utils"); // ob
  * This route is not used. It is simply there to have some response to /api/users/
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} status 200: {result: success, data: "User Routes"}
+ * @returns {void} Status 200: { "result": "success", "data": "User Routes" }
  * @name backend/users/_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/", function (req, res) {
-  return res.send(createResponse("Users routes"));
+  return res.status(200).send(createResponse("User routes"));
 });
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} status 200: {result: success, data: "User Routes"}
+ * @returns {void} Status 200: { "result": "success", "data": "User Routes" }
  * @name backend/users/_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/", function (req, res) {
-  return res.send(createResponse("Users routes"));
+  return res.status(200).send(createResponse("User routes"));
 });
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/login when using GET.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} status 501: {result: "failure", error: "GET is not available for this route. Use POST."}
+ * @returns {void} Status 501: { "result": "failure", "error": "GET is not available for this route. Use POST." }
  * @name backend/users/login_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -57,12 +57,12 @@ router.get("/login", function (req, res) {
  * information, then sets up some session details and sends the frontend the relevant data.
  * @getdata {void} None
  * @postdata {void} userNameEmail: string, password: string
- * @returns {void} On success: status 200, {result: "success", data: {"firstName": <First Name>, "lastName": <Last Name>,
- *                                                                  "userName": <Username> }
- * On failure: status 401, {result: "failure", error: "Invalid credentials."}
- *         or: status 406, {result: "failure", error: "This account is associated with a school."}
- *         or: status 500, {result: "failure", error: "An error occurred while validating login details."}
- *         or: status 500, {result: "failure", error: "An error occurred while communicating with the database."}
+ * @returns {void} On success: Status 200: { "result": "success", "data": { "firstName": "<First Name>",
+ *                                                            "lastName": "<Last Name>", "userName": "<Username>" }
+ * On failure: Status 401: { "result": "failure", "error": "Invalid credentials." }
+ *         or: Status 406: { "result": "failure", "error": "This account is associated with a school." }
+ *         or: Status 500: { "result": "failure", "error": "An error occurred while validating login details." }
+ *         or: Status 500: { "result": "failure", "error": "An error occurred while communicating with the database." }
  * @name backend/users/login_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
@@ -139,7 +139,7 @@ router.post("/login", function (req, res) {
 
         } else {
           // Check the password
-          bcrypt.compare(req.body.password, result.Password, (bcryptErr, bcryptResult) => {
+          bcrypt.compare(req.body.password, result.Password, function (bcryptErr, bcryptResult) {
             if (bcryptErr) {
               // Something went wrong with bcrypt
               console.error(bcryptErr);
@@ -153,7 +153,7 @@ router.post("/login", function (req, res) {
               req.session.userData.userID = result._id;
 
               // Send the user the necessary data to complete the login process
-              return res.send(createResponse({
+              return res.status(200).send(createResponse({
                 "firstName": result.FirstName,
                 "lastName": result.LastName,
                 "userName": result.UserName
@@ -191,8 +191,8 @@ router.post("/login", function (req, res) {
  * @getdata {void} None
  * @postdata {void} None
  * @returns {void} On success: a browser redirect to /login/school/step2 with GET parameters resembling our typical
- * error messages. Possible return values include:
- * ?result=success&data={"firstName": <First Name>, "lastName": <Last Name>, "userName": <Username>}
+ * backend returned data format messages. See format below.
+ * ?result=success&data={"firstName": "<First Name>", "lastName": "<Last Name>", "userName": "<Username>"}
  * On failure: a browser redirect to /login/school/step2 with GET parameters resembling our typical error messages.
  * Possible return values include:
  * ?result=failure&error=An error occurred while communicating with the database.
@@ -261,7 +261,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/login/rpi when using POST.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} status 501: {result: "failure", error: "POST is not available for this route. Use GET."}
+ * @returns {void} Status 501: { "result": "failure", "error": "POST is not available for this route. Use GET." }
  * @name backend/users/login/rpi_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -275,7 +275,7 @@ router.post("/login/rpi", function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/register when using GET.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} status 501: {result: "failure", error: "GET is not available for this route. Use POST."}
+ * @returns {void} Status 501: { "result": "failure", "error": "GET is not available for this route. Use POST." }
  * @name backend/users/register_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -289,14 +289,14 @@ router.get("/register", function (req, res) {
  * This route called by frontend internal JS as part of the registration with Poll Buddy process. Here, we set up some
  * session details, validate data we were sent, save it in the database if success, and send errors if there's any problems.
  * @getdata {void} None
- * @postdata {void} body: { firstName: string, lastName: string, userName: string, email: string, password: string }
- * @returns {void} On success: status 200, {"result": "success", "data": {"firstName": <First Name>, "lastName": <Last Name>,
- *                                                                        "userName": <Username>}}
- * On failure: status 400, { "result": "failure", "error": "This username is already in use." }
- *         or: status 400, { "result": "failure", "error": "This email is already in use." }
- *         or: status 400 { "result": "failure", "error": "Validation failed.", "data": (errorMsg obj with keys of firstName,
- *                           lastName, etc. as relevant and with value of error message) });
- *         or: status 500, { "result": "failure", "error": "An error occurred while communicating with the database." }
+ * @postdata {void} firstName: string, lastName: string, userName: string, email: string, password: string
+ * @returns {void} On success: Status 200: { "result": "success", "data": { "firstName": "<First Name>",
+ *                                           "lastName": "<Last Name>", "userName": "<Username>" } }
+ * On failure: Status 400: { "result": "failure", "error": "This username is already in use." }
+ *         or: Status 400: { "result": "failure", "error": "This email is already in use." }
+ *         or: Status 400: { "result": "failure", "error": "Validation failed.", "data": (errorMsg obj with keys of firstName,
+ *                           lastName, etc. as relevant and with value of error message) }
+ *         or: Status 500: { "result": "failure", "error": "An error occurred while communicating with the database." }
  * @name backend/users/register_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
@@ -331,68 +331,77 @@ router.post("/register", function (req, res) {
     // No validation errors, let's try adding the user!
 
     // Attempt to insert the user into the database
-    mongoConnection.getDB().collection("users").insertOne({
-      FirstName: req.body.firstName,
-      FirstNameLocked: false,
-      LastName: req.body.lastName,
-      LatNameLocked: false,
-      UserName: req.body.userName.toLowerCase(),
-      UserNameLocked: true,
-      Email: req.body.email.toLowerCase(),
-      EmailLocked: false,
-      Password: bcrypt.hashSync(req.body.password, 10)
-    }, (err, result) => {
-      if (err) {
-        // Something went wrong
-        if(err.code === 11000) {
-          // This code means we're trying to insert a duplicate key (aka user already registered somehow)
-          if(err.keyPattern.Email) {
-            // Email in use
-            return res.status(400).json({"result": "failure", "error": "This email is already in use."});
+    bcrypt.hash(req.body.password, 10, function (error,hash) {
 
-          } else if(err.keyPattern.UserName) {
-            // Username in use
-            return res.status(400).json({"result": "failure", "error": "This username is already in use."});
+      //Something went wrong with bcrypt hash function
+      if (error) {
+        console.log("Error occurred while hashing a password with bcrypt.");
+        console.log(error);
+        return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
+      }
+
+      mongoConnection.getDB().collection("users").insertOne({
+        FirstName: req.body.firstName,
+        FirstNameLocked: false,
+        LastName: req.body.lastName,
+        LatNameLocked: false,
+        UserName: req.body.userName.toLowerCase(),
+        UserNameLocked: true,
+        Email: req.body.email.toLowerCase(),
+        EmailLocked: false,
+        Password: hash
+      }, (err, result) => {
+        if (err) {
+          // Something went wrong
+          if(err.code === 11000) {
+            // This code means we're trying to insert a duplicate key (aka user already registered somehow)
+            if(err.keyPattern.Email) {
+              // Email in use
+              return res.status(400).send(createResponse(null, "This email is already in use."));
+
+            } else if(err.keyPattern.UserName) {
+              // Username in use
+              return res.status(400).send(createResponse(null, "This username is already in use."));
+
+            } else {
+              // An unknown error occurred
+              console.log("Database Error occurred while creating a new user with Poll Buddy.");
+              console.log(err);
+              return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
+            }
 
           } else {
             // An unknown error occurred
             console.log("Database Error occurred while creating a new user with Poll Buddy.");
             console.log(err);
-            return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+            return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
           }
 
         } else {
-          // An unknown error occurred
-          console.log("Database Error occurred while creating a new user.");
-          console.log(err);
-          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
-        }
+          // No error object at least
+          if (result.result.ok === 1) {
+            // One result changed, therefore it worked.
 
-      } else {
-        // No error object at least
-        if (result.result.ok === 1) {
-          // One result changed, therefore it worked.
+            // Configure user data and save in session
+            req.session.userData = {};
+            req.session.userData.userID = result.insertedId;
 
-          // Configure user data and save in session
-          req.session.userData = {};
-          req.session.userData.userID = result.insertedId;
+            // Send the response object with some basic info for the frontend to store
+            return res.status(200).send(createResponse({ "firstName": result.ops[0].FirstName,
+              "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}));
 
-          // Send the response object with some basic info for the frontend to store
-          return res.json({"result": "success", "data": {"firstName": result.ops[0].FirstName,
-            "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}});
-
-        } else {
+          } else {
           // For some reason, the user wasn't inserted, send an error.
-          console.log("Database Error occurred while creating a new user.");
-          console.log(err);
-          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+            console.log("Database Error occurred while creating a new user.");
+            console.log(err);
+            return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
+          }
         }
-
-      }
+      });
     });
 
   } else {
-    return res.status(400).json({ "result": "failure", "error": "Validation failed.", "data": errorMsg });
+    return res.status(400).send(createResponse(errorMsg, "Validation failed."));
   }
 
 });
@@ -453,15 +462,15 @@ router.get("/register/rpi", rpi.bounce, function (req, res) {
  * /register/school/step2 in the frontend, and are now submitting registration data here for processing. We validate
  * and save it in the database if success, and send errors if there's any problems.
  * @getdata {void} None
- * @postdata {void} body: {firstName: string, lastName: string, userName: string (optional, ignored), email: string (optional, ignored)}
- * @returns {void} On success: status 200, {"result": "success", "data": {"firstName": <First Name>,
- *                                                              "lastName": <Last Name>, "userName": <Username>}}
- * On failure: status 400, { "result": "failure", "error": "This username is already in use."
- *         or: status 400, { "result": "failure", "error": "This email is already in use." }
- *         or: status 400 { "result": "failure", "error": "Validation failed.", "data": (errorMsg obj with keys of firstName,
- *                           lastName, etc. as relevant and with value of error message) });
- *         or: status 500, { "result": "failure", "error": "An error occurred while communicating with the database." }
- *         or: status 500, { "result": "failure", "error": "Prerequisite data is not available." }
+ * @postdata {void} firstName: string, lastName: string, userName: string (optional, ignored), email: string (optional, ignored)
+ * @returns {void} On success: Status 200: { "result": "success", "data": {"firstName": "<First Name>",
+ *                                                              "lastName": "<Last Name>", "userName": "<Username>" } }
+ * On failure: Status 400: { "result": "failure", "error": "This username is already in use." }
+ *         or: Status 400: { "result": "failure", "error": "This email is already in use." }
+ *         or: Status 400: { "result": "failure", "error": "Validation failed.", "data": (errorMsg obj with keys of firstName,
+ *                           lastName, etc. as relevant and with value of error message) }
+ *         or: Status 500: { "result": "failure", "error": "An error occurred while communicating with the database." }
+ *         or: Status 500: { "result": "failure", "error": "Prerequisite data is not available." }
  * @name backend/users/register/rpi_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
@@ -489,7 +498,7 @@ router.post("/register/rpi", function (req, res) {
 
   // Make sure we've got data from step 1
   if(!req.session.userDataTemp) {
-    return res.status(500).json({"result": "failure", "error": "Prerequisite data is not available."});
+    return res.status(500).send(createResponse(null, "Prerequisite data is not available."));
   }
   // Configure email, username, overwriting whatever the user may have sent as we don't want it anyways.
   req.body.userName = req.session.userDataTemp.userName;
@@ -514,23 +523,23 @@ router.post("/register/rpi", function (req, res) {
           // This code means we're trying to insert a duplicate key (aka user already registered somehow)
           if (err.keyPattern.Email) {
             // Email in use
-            return res.status(400).json({"result": "failure", "error": "This email is already in use."});
+            return res.status(400).send(createResponse(null, "This email is already in use."));
 
           } else if (err.keyPattern.UserName) {
             // Username in use
-            return res.status(400).json({"result": "failure", "error": "This username is already in use."});
+            return res.status(400).send(createResponse(null, "This username is already in use."));
 
           } else {
             // An unknown error occurred
             console.log("Database Error occurred while creating a new user with RPI.");
             console.log(err);
-            return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+            return res.status(500).send(createResponse(null,"An error occurred while communicating with the database."));
           }
         } else {
           // An unknown error occurred
           console.log("Database Error occurred while creating a new with RPI.");
           console.log(err);
-          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+          return res.status(500).send(createResponse(null,"An error occurred while communicating with the database."));
         }
 
       } else {
@@ -546,19 +555,19 @@ router.post("/register/rpi", function (req, res) {
           req.session.userData.userID = result.insertedId;
 
           // Send the response object with some basic info for the frontend to store
-          return res.json({"result": "success", "data": {"firstName": result.ops[0].FirstName,
-            "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}});
+          return res.status(200).send(createResponse({ "firstName": result.ops[0].FirstName,
+            "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName }));
 
         } else {
           // For some reason, the user wasn't inserted, send an error.
           console.log("Database Error occurred while creating a new user with RPI");
           console.log(err);
-          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+          return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
         }
       }
     });
   } else {
-    return res.status(400).json({ "result": "failure", "error": "Validation failed.", "data": errorMsg });
+    return res.status(400).send(createResponse(errorMsg, "Validation failed."));
   }
 
 });
@@ -569,7 +578,7 @@ router.post("/register/rpi", function (req, res) {
  * the security of the logout process, it would just give a weird and bad user experience.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} {"result": "success", "data": "User was logged out successfully."}
+ * @returns {void} Status 200: { "result": "success", "data": "User was logged out successfully." }
  * @name backend/users/logout_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -579,7 +588,7 @@ router.get("/logout", function (req, res) {
   // Delete the userData in the session
   delete req.session.userData;
 
-  return res.send(createResponse("User was logged out successfully."));
+  return res.status(200).send(createResponse("User was logged out successfully."));
 
 });
 
@@ -587,7 +596,7 @@ router.get("/logout", function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/logout when using POST.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} status 501: {result: "failure", error: "POST is not available for this route. Use GET."}
+ * @returns {void} Status 501: { "result": "failure", "error": "POST is not available for this route. Use GET." }
  * @name backend/users/logout_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -600,7 +609,7 @@ router.post("/logout", function (req, res) {
 // stored user session data
 // TODO: Investigate if this is even needed or not
 router.get("/session", function (req, res) {
-  res.send(req.session.userData || {});
+  res.status(200).send(createResponse(req.session.userData || {}));
 });
 
 router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documentation
@@ -611,7 +620,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.FirstName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { FirstName: jsonContent.FirstName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -620,7 +629,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.LastName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { LastName: jsonContent.LastName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -629,7 +638,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.UserName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { UserName: jsonContent.UserName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -638,7 +647,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.Email !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { Email: jsonContent.Email } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -647,20 +656,20 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.Password !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { Password: bcrypt.hashSync(jsonContent.Password, 10) } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
       });
     }
     if (success === false) {
-      return res.sendStatus(400);
+      return res.status(400).send(createResponse("","")); // TODO: Error message;
     }
   } else if (jsonContent.Action === "Remove") {
     if (jsonContent.FirstName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { FirstName: jsonContent.FirstName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -669,7 +678,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.LastName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { LastName: jsonContent.LastName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -678,7 +687,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.UserName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { UserName: jsonContent.UserName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -687,7 +696,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.Email !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { Email: jsonContent.Email } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -696,40 +705,40 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.Password !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { Password: jsonContent.Password } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
       });
     }
     if (success === false) {
-      return res.sendStatus(400);
+      return res.status(400).send(createResponse("","")); // TODO: Error message;
     }
   } else {
-    return res.sendStatus(400);
+    return res.status(400).send(createResponse("","")); // TODO: Error message;
   }
-  return res.sendStatus(200); // TODO: Ensure this is true
+  return res.status(200).send(createResponse("","")); // TODO: Success message // TODO: Ensure this is true
 });
 
 router.get("/:id", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("users").find({ "_id": id }).toArray(function (err, result) {
     if (err) {
-      return res.sendStatus(500);
+      return res.status(500).send(createResponse("",err)); // TODO: Error message
     }
-    return res.send(result);
+    return res.status(200).send(createResponse(result));
   });
 });
 
 router.get("/:id/groups", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("users").find({ "_id": id }, { projection: { _id: 0, Groups: 1 } }).map(function (item) {
-    return res.send(item.Groups);
+    return res.status(200).send(createResponse(item.Groups));
   }).toArray(function (err, result) {
     if (err) {
-      return res.sendStatus(500);
+      return res.status(500).send(createResponse("","")); // TODO: Error message
     }
-    return res.send(result[0]);
+    return res.status(200).send(createResponse(result[0]));
   });
 });
 
@@ -746,9 +755,9 @@ module.exports.user_middleware = function (req, res, next) {
   // Callback takes two parameters: err and user
   req.getCurrentUser = function (callback) {
     if (!req.isLoggedIn()) {
-      res.status(401).send({
+      res.status(401).send(createResponse({
         error: "Not logged in"
-      });
+      }));
       if (typeof callback === "function") {
         callback(new Error("Not logged in"));
       }
