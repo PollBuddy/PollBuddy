@@ -606,12 +606,6 @@ router.post("/logout", function (req, res) {
   return res.status(501).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
-// stored user session data
-// TODO: Investigate if this is even needed or not
-router.get("/session", function (req, res) {
-  res.status(200).send(createResponse(req.session.userData || {}));
-});
-
 router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documentation
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   var jsonContent = req.body;
