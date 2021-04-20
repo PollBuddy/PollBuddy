@@ -159,7 +159,9 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
   // check if user is signed in
   if (isLoggedIn(req)) {
     // write UserID
-    validResult.value.UserID = req.session.userData.userID;
+    //validResult.value.UserID = req.session.userData.userID;
+    entry.UserID = req.session.userData.userID;
+    console.log("UserID: " + entry.UserID);
     // check for resubmit
     try {
       await mongoConnection.getDB().collection("poll_answers").findOneAndUpdate({
@@ -258,17 +260,17 @@ router.get("/:id/view", async function (req, res, next) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
   }
 
-  console.log(id);
-  console.log(req.params.id);
+  //console.log(id);
+  //console.log(req.params.id);
 
   mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
     if (err) {
       return res.status(500).send(createResponse("", err)); // TODO: Error message;
     }
 
-    console.log(result);
-    console.log(result[0]);
-    console.log(result[0].Questions[0]);
+    //console.log(result);
+    //console.log(result[0]);
+    //console.log(result[0].Questions[0]);
 
     // Loop through the poll's questions and add to openQuestions the Question Number, Text and Answer Choices if
     // the question is set as Visible.
@@ -325,10 +327,10 @@ router.get("/:id/results", async function (req, res, next) {
             let tally = 0;
             //if(result2.length > 0) {
             // Check all the answers
-            console.log(q.AnswerChoices);
+            //console.log(q.AnswerChoices);
             // For each poll_answer object
             for (let p = 0; p < result2.length; p++) {
-              console.log(result2[p].Answers);
+              //console.log(result2[p].Answers);
               for (let j = 0; j < result2[p].Answers.length; j++) {
                 if (result2[p].Answers[j].Answer === q.AnswerChoices[k]) {
                   tally++;
