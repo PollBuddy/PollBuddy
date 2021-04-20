@@ -97,9 +97,9 @@ class RegisterWithSchoolStep2 extends Component {
             // Something went wrong, handle it
 
             if (response.error === "Validation failed") {
-              this.state.error = response.data.errors;
+              this.setState({error: response.data.errors});
             } else {
-              this.state.error = response.error;
+              this.setState({error: response.error});
             }
             console.log("ERROR: " + this.state.error);
 
