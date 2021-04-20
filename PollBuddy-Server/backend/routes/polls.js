@@ -56,59 +56,38 @@ router.post("/new", async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/:id/edit", async (req, res) => {
-
-  // Validate id
+  // validate request body
+  const schema = Joi.array().items(
+    Joi.object().keys({
+      QuestionNumber: Joi.number().min(1).required(), // number index starting from 1
+      QuestionText: Joi.string().min(1).max(512).required(),  // question text capped at 512 words
+      AnswerChoices: Joi.array().items(Joi.string()).unique().allow(null).required(), // null for open-ended
+      CorrectAnswers: Joi.array().items(Joi.string()).unique().allow(null).required(),  // null for no-grading
+      Visible: Joi.boolean().required()
+    })
+  );
+  const validResult = schema.validate(req.body);
+  // invalidate handling
+  if (validResult.error) {
+    return res.status(400).send(createResponse(null, validResult.error.details[0].message));
+  }
+  // validate id
   const id = await validateID("polls", req.params.id);
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
   }
-
-  switch(req.body.action) {
-    case "add_question":
-      // validate request body
-      let schema = Joi.array().items(
-        Joi.object().keys({
-          QuestionNumber: Joi.number().min(1).required(), // number index starting from 1
-          QuestionText: Joi.string().min(1).max(512).required(),  // question text capped at 512 words
-          AnswerChoices: Joi.array().items(Joi.string()).unique().allow(null).required(), // null for open-ended
-          CorrectAnswers: Joi.array().items(Joi.string()).unique().allow(null).required(),  // null for no-grading
-          Visible: Joi.boolean().required()
-        })
-      );
-      let validResult = schema.validate(req.body);
-      // invalidate handling
-      if (validResult.error) {
-        return res.status(400).send(createResponse(null, validResult.error.details[0].message));
-      }
-      // generate ObjectID for embedded Questions
-      validResult.value.forEach((o, i, a) => {
-        a[i]["_id"] = new mongoConnection.getMongo().ObjectID();
-      });
-      // update Questions content
-      try {
-        await mongoConnection.getDB().collection("polls").updateOne({"_id": id}, {"$set": {Questions: validResult.value}});
-      } catch (e) {
-        console.log(e);
-        return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
-      }
-      break;
-
-    case "remove_question":
-      break;
-
-    case "update_question":
-      break;
-
-    case "update_poll":
-      break;
-
-    default:
-      return res.status(400).send(createResponse(null, "Invalid action."));
+  // generate ObjectID for embedded Questions
+  validResult.value.forEach((o, i, a) => {
+    a[i]["_id"] = new mongoConnection.getMongo().ObjectID();
+  });
+  // update Questions content
+  try {
+    await mongoConnection.getDB().collection("polls").updateOne({"_id": id}, {"$set": {Questions: validResult.value}});
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
   }
 
-
-
-  
   var id2 = new mongoConnection.getMongo().ObjectID(req.params.id);
   var jsonContent = req.body;
   if (jsonContent.Action === "Add") {
