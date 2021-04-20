@@ -606,21 +606,6 @@ router.post("/logout", function (req, res) {
   return res.status(501).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
-/**
- * This route is called by frontend internal JS when attempting to retrieve a past session. It sends userData for a past session if it exists.
- * @getdata {void} None
- * @postdata {void} None
- * @returns {void} None
- * @name backend/users/session_GET
- * @param {string} path - Express path
- * @param {callback} callback - function handler for route
- */
-// stored user session data
-// TODO: Investigate if this is even needed or not
-router.get("/session", function (req, res) {
-  res.status(200).send(createResponse(req.session.userData || {}));
-});
-
 router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documentation
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   var jsonContent = req.body;

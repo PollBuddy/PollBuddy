@@ -16,18 +16,6 @@ export default class Homepage extends Component {
 
   constructor(props) {
     super(props);
-
-    // get past session if it exists
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/session")
-      .then(response => response.json())
-      .then(json => {
-        // store user variables in local storage for global-component use
-        console.log(json);
-        localStorage.setItem("loggedIn", json.loggedIn);
-        localStorage.setItem("username", json.username);
-        localStorage.setItem("firstName", json.firstName);
-        localStorage.setItem("lastName", json.lastName);
-      });
   }
 
   componentDidMount() {
