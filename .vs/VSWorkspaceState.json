@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\PollBuddy-Server",
+    "\\PollBuddy-Server\\backend",
+    "\\PollBuddy-Server\\backend\\routes",
+    "\\PollBuddy-Server\\frontend",
+    "\\PollBuddy-Server\\frontend\\src",
+    "\\PollBuddy-Server\\frontend\\src\\pages",
+    "\\PollBuddy-Server\\frontend\\src\\pages\\Homepage"
+  ],
+  "SelectedNode": "\\PollBuddy-Server\\frontend\\src\\pages\\Homepage\\Homepage.js",
+  "PreviewInSolutionExplorer": false
+}
