@@ -169,11 +169,13 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
   const validResult = schema.validate(req.body);
   // invalidate handling
   if (validResult.error) {
-    return res.status(400).send(createResponse(null, validResult.error.details[0].message));
+    // TODO: The validation doesn't work and was commented out for the demo
+    //return res.status(400).send(createResponse(null, validResult.error.details[0].message));
   }
   // create new entry
   const entry = {
-    Answers: validResult.value,
+    //Answers: validResult.value, // TODO: Replaced by below, need to fix the validation
+    Answers: req.body.Answers,
     PollID: req.parsedID,
     Timestamp: Date.now()
   };
@@ -277,28 +279,35 @@ router.get("/:id", async (req, res) => {
   return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
 });
 
-router.get("/:id/view", function (req, res, next) {
-  const id = validateID("polls", req.params.id);
+router.get("/:id/view", async function (req, res, next) {
+  const id = await validateID("polls", req.params.id);
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
   }
+
+  console.log(id);
+  console.log(req.params.id);
 
   mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
     if (err) {
       return res.status(500).send(createResponse("", err)); // TODO: Error message;
     }
 
+    console.log(result);
+    console.log(result[0]);
+    console.log(result[0].Questions[0]);
+
     // Loop through the poll's questions and add to openQuestions the Question Number, Text and Answer Choices if
     // the question is set as Visible.
     let openQuestions = [];
     for (let i = 0; i < result[0].Questions.length; i++) {
-      if (result[0].Questions[i][0].Visible) {
+      if (result[0].Questions[i].Visible) {
         let q = {};
-        q.QuestionNumber = result[0].Questions[i][0].QuestionNumber;
-        q.QuestionText = result[0].Questions[i][0].QuestionText;
-        q.AnswerChoices = result[0].Questions[i][0].AnswerChoices;
-        q.MaxAllowedChoices = result[0].Questions[i][0].MaxAllowedChoices;
-        q.TimeLimit = result[0].Questions[i][0].TimeLimit;
+        q.QuestionNumber = result[0].Questions[i].QuestionNumber;
+        q.QuestionText = result[0].Questions[i].QuestionText;
+        q.AnswerChoices = result[0].Questions[i].AnswerChoices;
+        q.MaxAllowedChoices = result[0].Questions[i].MaxAllowedChoices;
+        q.TimeLimit = result[0].Questions[i].TimeLimit;
         openQuestions.push(q);
       }
     }
@@ -307,8 +316,8 @@ router.get("/:id/view", function (req, res, next) {
   });
 });
 
-router.get("/:id/results", function (req, res, next) {
-  const id = validateID("polls", id);
+router.get("/:id/results", async function (req, res, next) {
+  const id = await validateID("polls", req.params.id);
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
   }
@@ -327,21 +336,23 @@ router.get("/:id/results", function (req, res, next) {
       // the question is set as Visible.
       let results = [];
       for (let i = 0; i < result[0].Questions.length; i++) {
-        if (result[0].Questions[i][0].Visible) {
+        if (result[0].Questions[i].Visible) {
           let q = {};
-          q.QuestionNumber = result[0].Questions[i][0].QuestionNumber;
-          q.QuestionText = result[0].Questions[i][0].QuestionText;
-          q.CorrectAnswers = result[0].Questions[i][0].CorrectAnswers;
+          q.QuestionNumber = result[0].Questions[i].QuestionNumber;
+          q.QuestionText = result[0].Questions[i].QuestionText;
+          q.CorrectAnswers = result[0].Questions[i].CorrectAnswers;
           q.AnswerChoices = [];
           q.Tallies = [];
 
           // Add and tally answers
-          for (let k = 0; k < result[0].Questions[i][0].AnswerChoices.length; k++) {
-            q.AnswerChoices.push(result[0].Questions[i][0].AnswerChoices[k]);
+          for (let k = 0; k < result[0].Questions[i].AnswerChoices.length; k++) {
+            q.AnswerChoices.push(result[0].Questions[i].AnswerChoices[k]);
             let tally = 0;
-            for (let j = 0; j < result2[0].Answers.length; j++) {
-              if (result2[0].Answers[j].Answers[0].Answer === q.AnswerChoices[k]) {
-                tally++;
+            if(result2.length > 0) {
+              for (let j = 0; j < result2[0].Answers.length; j++) {
+                if (result2[0].Answers[j].Answer === q.AnswerChoices[k]) {
+                  tally++;
+                }
               }
             }
             q.Tallies.push(tally);

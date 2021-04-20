@@ -60,6 +60,8 @@ export default class Question extends Component {
 
     // TODO: Update so that this can handle multiple questions, or do it in PollViewer.js
     // Manual override is below
+    console.log("data");
+    console.log(data);
     data = data.Questions[0];
 
     //set up an array of booleans (representing the student's answer choices)

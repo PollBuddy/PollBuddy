@@ -94,19 +94,20 @@ export default class PollResults extends Component {
           console.log("Error fetching data");
         } else {
           console.log("Fetching data succeeded");
+          response = response.data[0]; // TODO: This needs to be fixed for the general case and not just the demo
           console.log(response);
 
           // eslint-disable-next-line no-sequences
           this.setState(state => {
             state.questionData = response;
-            state.dataBar.labels = response.Results[0].AnswerChoices;
-            state.dataBar.datasets[0].data = response.Results[0].Tallies;
+            state.dataBar.labels = response.AnswerChoices;
+            state.dataBar.datasets[0].data = response.Tallies;
             return state;
           });
-          for(let i = 0; i < this.state.questionData.Results[0].CorrectAnswers.length-1; i++){
-            this.state.correctAnswers = this.state.correctAnswers + this.state.questionData.Results[0].CorrectAnswers[i] + ", ";
+          for(let i = 0; i < this.state.questionData.CorrectAnswers.length-1; i++){
+            this.state.correctAnswers = this.state.correctAnswers + this.state.questionData.CorrectAnswers[i] + ", ";
           }
-          this.state.correctAnswers+= this.state.questionData.Results[0].CorrectAnswers[this.state.questionData.Results[0].CorrectAnswers.length-1];
+          this.state.correctAnswers+= this.state.questionData.CorrectAnswers[this.state.questionData.CorrectAnswers.length-1];
           this.setState({"doneLoading": true});
         }
       })
@@ -134,7 +135,7 @@ export default class PollResults extends Component {
         <MDBContainer fluid className="page">
           <MDBContainer fluid className="box">
             <p className="fontSizeLarge">
-              {"Question " + this.state.questionData.Results[0].QuestionNumber + ": " + this.state.questionData.Results[0].QuestionText}
+              {"Question " + this.state.questionData.QuestionNumber + ": " + this.state.questionData.QuestionText}
             </p>
             <p>
               {"Correct Answers: " + this.state.correctAnswers}
