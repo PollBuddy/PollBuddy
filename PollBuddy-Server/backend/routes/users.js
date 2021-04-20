@@ -213,7 +213,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
 
     // Check to make sure they're already registered
     mongoConnection.getDB().collection("users").findOne({ UserName: "__rpi_" + req.session.cas_user.toLowerCase() }, {
-      projection: { _id: false, UserName: true, FirstName: true, LastName: true } }, (err, result) => {
+      projection: { _id: true, UserName: true, FirstName: true, LastName: true } }, (err, result) => {
       if (err) {
         // Something went wrong
         console.log("Database Error occurred while searching for an existing user during log in with RPI.");
