@@ -9,6 +9,7 @@ export default class LoginWithPollBuddy extends Component {
   state = {
     successfulLogin: false,
     error: "",
+    numLoginAttempts: 0,
     userNameEmail: "",
     password: ""
   };
@@ -48,6 +49,10 @@ export default class LoginWithPollBuddy extends Component {
         this.setState({successfulLogin: true}); // Tell it to redirect to the next page if successful
       } else {
         this.setState({error: "Invalid username/email and password combination"});
+        this.setState({numLoginAttempts: this.state.numLoginAttempts + 1});
+        if (this.state.numLoginAttempts >= 5) { // If too many login attempts, offer to reset password
+          this.setState({error: this.state.error + "\nForgot your password? Try clicking \"Forgot Password?\" to reset your password."});
+        }
       }
     }).catch(err => {
       console.log(err);
@@ -86,7 +91,7 @@ export default class LoginWithPollBuddy extends Component {
             Register
           </a>
           <a className="Login-link" href = "/login/forgot">
-            Forgot Password
+            Forgot Password?
           </a>
         </MDBContainer>
       </MDBContainer>

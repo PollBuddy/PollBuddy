@@ -1,0 +1,15 @@
+.page .Poll_Editor_box {
+    width: 40%;
+}
+
+.page .Poll_Editor_center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.Poll_Editor_reorder {
+    cursor: pointer;
+    font-size: 24px;
+}
