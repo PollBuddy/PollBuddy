@@ -157,7 +157,9 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
   // // add timestamp
   // validResult.value.Timestamp = Date.now();
   // check if user is signed in
-  if (isLoggedIn(req)) {
+  //console.log(req.session);
+  // eslint-disable-next-line no-constant-condition
+  if (false && isLoggedIn(req)) { // This needs to be fixed, it was disabled for the demo. Throws: Update document requires atomic operators
     // write UserID
     //validResult.value.UserID = req.session.userData.userID;
     entry.UserID = req.session.userData.userID;
