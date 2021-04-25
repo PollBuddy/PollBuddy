@@ -53,31 +53,27 @@ export default class PollEditor extends Component {
     }));
   }
 
-  toggleTextBox(elementId, selector, text) {
-    if(document.getElementById(elementId).style.display === "block") {
-      document.getElementById(elementId).style.display = "none";
-      document.querySelector(selector).textContent = text;
-      if (elementId === "groupText") {
-        this.setState({pollTitle: document.getElementById(elementId).value});
-      } else {
-        this.setState({pollDescription: document.getElementById(elementId).value});
-      }
-    } else {
-      document.getElementById(elementId).style.display = "block";
-      document.querySelector(selector).textContent = "Submit";
-    }
-  }
+  // toggleTextBox(elementId, selector, text) {
+  //   if(document.getElementById(elementId).style.display === "block") {
+  //     document.getElementById(elementId).style.display = "none";
+  //     document.querySelector(selector).textContent = text;
+  //     if (elementId === "groupText") {
+  //       this.setState({pollTitle: document.getElementById(elementId).value});
+  //     } else {
+  //       this.setState({pollDescription: document.getElementById(elementId).value});
+  //     }
+  //   } else {
+  //     document.getElementById(elementId).style.display = "block";
+  //     document.querySelector(selector).textContent = "Submit";
+  //   }
+  // }
 
   savePollTitle() {
-    console.log("Save poll title");
     this.setState({pollTitle: document.getElementById("pollTitle").value});
-    console.log("Saved poll title: " + this.state.pollTitle);
   }
 
   savePollDescription() {
-    console.log("Save poll description");
     this.setState({pollDescription: document.getElementById("pollDescription").value});
-    console.log("Saved poll description: " + this.state.pollDescription);
   }
 
   handlePollTitleChange(event) {
@@ -108,11 +104,20 @@ export default class PollEditor extends Component {
       document.getElementById("question_title_input").style.display = "none";
       document.getElementById("question_input").style.display = "none";
       document.getElementById("newQuestionBtn").textContent = "New Question";
+      document.getElementById("newQuestionCancelButton").style.display = "none";
     } else {
       document.getElementById("question_title_input").style.display = "block";
       document.getElementById("question_input").style.display = "block";
       document.getElementById("newQuestionBtn").textContent = "Submit";
+      document.getElementById("newQuestionCancelButton").style.display = "inline";
     }
+  }
+
+  cancelNewQuestion() {
+    document.getElementById("question_title_input").style.display = "none";
+    document.getElementById("question_input").style.display = "none";
+    document.getElementById("newQuestionBtn").textContent = "New Question";
+    document.getElementById("newQuestionCancelButton").style.display = "none";
   }
 
   editQuestion(question) {
@@ -221,6 +226,7 @@ export default class PollEditor extends Component {
                   <input className="display_none form-control textBox" id="question_title_input" placeholder="Title"></input>
                   <input className="display_none form-control textBox" id="question_input" placeholder="Question"></input>
                   <button type="submit" id="newQuestionBtn" className="button" onClick={() => this.createNewQuestion()}>New Question</button>
+                  <button type="submit" id="newQuestionCancelButton" className="button display_none Poll_Editor_cancel_button" onClick={() => this.cancelNewQuestion()}>Cancel</button>
                 </MDBContainer>
               </div>
 
@@ -228,7 +234,7 @@ export default class PollEditor extends Component {
                 <MDBContainer class="form-group">
                   <input className="form-control textBox" id="edit_question_title_input" placeholder="Edit Title" value={this.state.pollQuestionTitleValue} onChange={this.handlePollQuestionTitleChange}></input>
                   <input className="form-control textBox" id="edit_question_input" placeholder="Edit Question" value={this.state.pollQuestionValue} onChange={this.handlePollQuestionChange}></input>
-                  <button type="submit" id="editQuestionBtn" className="button" onClick={() => this.submitEditQuestion()}>Submit</button>
+                  <button type="submit" id="editQuestionBtn" className="button" onClick={() => this.submitEditQuestion()}>Save</button>
                 </MDBContainer>
               }
 
