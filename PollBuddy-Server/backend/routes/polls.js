@@ -119,7 +119,7 @@ router.post("/:id/edit", async (req, res) => {
 
 /**
  * Submit/re-submit poll answer.
- * Depending on the "Pubic" attribute of the poll it might requires sign-in.
+ * Depending on the "Public" attribute of the poll, it might require sign-in.
  * @typedef {Object} Answers
  * @property {string} QuestionID - ID of the question.
  * @property {string} Answer - Answer response, could be null or empty string.
