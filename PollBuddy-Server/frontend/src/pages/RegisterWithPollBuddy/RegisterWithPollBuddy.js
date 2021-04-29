@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import "./RegisterWithPollBuddy.scss";
 import {withRouter} from "react-router-dom";
 const Joi = require('joi');
 
