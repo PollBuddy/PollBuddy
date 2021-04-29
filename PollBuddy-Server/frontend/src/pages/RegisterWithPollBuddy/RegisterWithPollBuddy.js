@@ -32,11 +32,13 @@ class RegisterWithPollBuddy extends Component {
       username: Joi.string()
         .pattern(new RegExp('^(?=.{3,32}$)[a-zA-Z0-9\-._]+$'))
         .error(new Error('Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscore, and dash.')),
-      email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2}).max(320)
+      email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2})
+        .max(320)
         .error(new Error('Invalid email format.')),
       password: Joi.string()
-        .min(10)
-        .max(256)
+        .pattern(new RegExp('^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$'))
+        .pattern(new RegExp('^.*[0-9].*$'))
+        .pattern(new RegExp('^.*[A-Z].*$'))
         .error(new Error('Invalid password. Must contain 10 or more characters, ' +
           'at least 1 uppercase letter, and at least 1 number. ' +
           'Cannot have 4 of the same characters in a row.')),
@@ -56,28 +58,12 @@ class RegisterWithPollBuddy extends Component {
     var firstnameValid = schema.validate({ firstname: this.state.firstname});
     var lastnameValid = schema.validate({ lastname: this.state.lastname});
 
-    // disallow more than 4 of the same characters in a row for password
-    const passWord = this.state.password;
-    var count = 0;
-    var lastChara = "";
-    for (var i = 0; i < passWord.length; i++){
-      if (passWord.charAt(i) === lastChara) {
-        count += 1;
-        if (count > 4) {
-          passValid.error = "Cannot have more than 4 of the same characters in a row.";
-          break;
-        }
-      } else {
-        lastChara = passWord.charAt(i);
-        count = 1;
-      }
-    }
-
     // update component's state
     this.setState({
       userValid: userValid,
-      passValid: passValid,
+      emailValid: emailValid,
       emailExists: false,
+      passValid: passValid,
       firstnameValid: firstnameValid,
       lastnameValid: lastnameValid
     });

@@ -42,10 +42,10 @@ export default class LoginWithPollBuddy extends Component {
       email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2}).max(320)
         .error(new Error('Please enter a valid username or email.')),
       password: Joi.string()
-        .min(10)
-        .max(256)
+        .pattern(new RegExp('^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$'))
+        .pattern(new RegExp('^.*[0-9].*$'))
+        .pattern(new RegExp('^.*[A-Z].*$'))
         .error(new Error('Please enter a valid password.')),
-
     });
     //we need to validate each separately because either username or email could work
     const validUsername = schema.validate({ username: this.state.userNameEmail });
