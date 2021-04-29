@@ -73,14 +73,14 @@ class RegisterWithPollBuddy extends Component {
       }
     }
 
-
     // update component's state
-    this.setState({userValid: userValid});
-    this.setState({emailValid: emailValid});
-    this.setState({passValid: passValid});
-    this.setState({emailExists: false});
-    this.setState({firstnameValid: firstnameValid});
-    this.setState({lastnameValid: lastnameValid});
+    this.setState({
+      userValid: userValid,
+      passValid: passValid,
+      emailExists: false,
+      firstnameValid: firstnameValid,
+      lastnameValid: lastnameValid
+    });
 
 
     if (userValid.error || emailValid.error || passValid.error || lastnameValid.error || firstnameValid.error) {
