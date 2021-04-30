@@ -32,7 +32,7 @@ router.post("/new", async (req, res) => {
   // Add to DB
   try {
     const result = await mongoConnection.getDB().collection("polls").insertOne({Name: validResult.value.Name});
-    return res.send(createResponse({ID: result.insertedId}));   // return poll ID
+    return res.status(200).send(createResponse({ID: result.insertedId}));   // return poll ID
   } catch (e) {
     console.log(e);
     return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
@@ -170,7 +170,7 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
         PollID: entry.PollID,
         UserID: entry.UserID
       }, entry);
-      return res.send(createResponse());
+      return res.status(200).send(createResponse());
     } catch (e) {
       console.log(e);
       return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
@@ -179,7 +179,7 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
     // anonymous submission, no resubmit
     try {
       await mongoConnection.getDB().collection("poll_answers").insertOne(entry);
-      return res.send(createResponse());
+      return res.status(200).send(createResponse());
     } catch (e) {
       console.log(e);
       return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
