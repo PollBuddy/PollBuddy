@@ -5,6 +5,18 @@ const Joi = require("joi");
 const {createResponse, validateID, checkPollPublic, isLoggedIn} = require("../modules/utils"); // object destructuring, only import desired functions
 
 /**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-new
+ * @throws 405 - Route not used
+ * @name GET api/polls/new
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+ router.get("/new", function (req, res) {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+});
+
+/**
  * Create new poll.
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-new
  * @typedef {Object} payload
@@ -39,8 +51,15 @@ router.post("/new", async (req, res) => {
   }
 });
 
-//Endpoint not available, this is used to not drop the endpoint
-router.get("/new", function (req, res) {
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-idedit
+ * @throws 405 - Route not used
+ * @name GET api/polls/{id}/edit
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/:id/edit", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
@@ -122,8 +141,15 @@ router.post("/:id/edit", async (req, res) => {
   return res.status(200).send(createResponse());
 });
 
-//Endpoint not available, this is used to not drop the endpoint
-router.get("/:id/edit", function (req, res) {
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-idsubmit
+ * @throws 405 - Route not used
+ * @name GET api/polls/{id}/submit
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/:id/submit", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
@@ -197,12 +223,7 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
   }
 });
 
-//Endpoint not available, this is used to not drop the endpoint
-router.get("/:id/submit", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
-});
-
-
+//TODO: documentaion
 router.get("/pollAnswers", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("poll_answers").deleteOne({"_id": id}, function (err, res) {
@@ -213,11 +234,31 @@ router.get("/pollAnswers", function (req, res, next) {
   return res.status(200).send(createResponse("", "")); // TODO: Success message;
 });
 
-//Endpoint not available, this is used to not drop the endpoint
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-pollAnswers
+ * @throws 405 - Route not used
+ * @name POST api/polls/pollAnswers
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.post("/pollAnswers", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
+v/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-iddelete
+ * @throws 405 - Route not used
+ * @name GET api/polls/{id}/delete
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/:id/delete", function (req, res) {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+});
+
+//TODO: documentaion
 router.post("/:id/delete", function (req, res) {//use router.delete??
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("polls").deleteOne({"_id": id}, function (err, res) {
@@ -226,11 +267,6 @@ router.post("/:id/delete", function (req, res) {//use router.delete??
     }
   });
   return res.status(200).send(createResponse("", "")); // TODO: Success message;
-});
-
-//Endpoint not available, this is used to not drop the endpoint
-router.get("/:id/delete", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
 /**
@@ -256,7 +292,14 @@ router.get("/", async (req, res) => {
   return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
 });
 
-//Endpoint not available, this is used to not drop the endpoint
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-
+ * @throws 405 - Route not used
+ * @name POST api/polls/
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.post("/", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
@@ -287,11 +330,19 @@ router.get("/:id", async (req, res) => {
   return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
 });
 
-//Endpoint not available, this is used to not drop the endpoint
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-id
+ * @throws 405 - Route not used
+ * @name POST api/polls/{id}
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.post("/:id", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
+//TODO: documentation
 router.get("/:id/view", async function (req, res, next) {
   const id = await validateID("polls", req.params.id);
   if (!id) {
@@ -329,11 +380,19 @@ router.get("/:id/view", async function (req, res, next) {
   });
 });
 
-//Endpoint not available, this is used to not drop the endpoint
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-idview
+ * @throws 405 - Route not used
+ * @name POST api/polls/{id}/view
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.post("/:id/view", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
+//TODO: documentaion
 router.get("/:id/results", async function (req, res, next) {
   const id = await validateID("polls", req.params.id);
   if (!id) {
@@ -394,7 +453,14 @@ router.get("/:id/results", async function (req, res, next) {
   });
 });
 
-//Endpoint not available, this is used to not drop the endpoint
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-idresults
+ * @throws 405 - Route not used
+ * @name POST api/polls/{id}/results
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.post("/:id/results", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
