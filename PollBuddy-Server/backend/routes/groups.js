@@ -60,7 +60,7 @@ router.post("/new", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
- router.get("/:id/edit", function (req, res) {
+router.get("/:id/edit", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
