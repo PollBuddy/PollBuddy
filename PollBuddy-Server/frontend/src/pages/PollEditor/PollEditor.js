@@ -32,7 +32,7 @@ export default class PollEditor extends Component {
       reorderQuestions: false
     };
 
-    this.getPoll()
+    this.getPoll();
 
     // this.state.pollTitleValue = this.state.pollTitle;
     this.state.pollDescriptionValue = this.state.pollDescription;
@@ -44,15 +44,13 @@ export default class PollEditor extends Component {
   }
 
   getPoll() {
-    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/")
-    .then(response => response.json())
-    .then(data => {
-      console.log(data)
+    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/").then(response => response.json()).then(data => {
+      console.log(data);
       console.log(data[0].Questions);
-      this.setState({pollTitle: data[0].Name})
-      this.setState({pollTitleValue: data[0].Name})
-      this.setState({questions: data[0].Questions})
-    }) //this should return the correct information on that specific pollID
+      this.setState({pollTitle: data[0].Name});
+      this.setState({pollTitleValue: data[0].Name});
+      this.setState({questions: data[0].Questions});
+    }); //this should return the correct information on that specific pollID
   }
 
   askQuestion() {
@@ -90,8 +88,6 @@ export default class PollEditor extends Component {
   }
 
   createNewQuestion() {
-    console.log(this.state.questions);
-    console.log("Create new question");
     if (document.getElementById("newQuestionBtn").textContent === "Submit") {
       let newQuestion = [{
         QuestionText: document.getElementById("question_input").value
@@ -120,25 +116,16 @@ export default class PollEditor extends Component {
     document.getElementById("poll_questions").style.display = "none";
     this.setState({displayQuestionEditor: true});
     this.setState({currentQuestion: question});
-    console.log("Current question: " + question.QuestionText);
     this.setState({pollQuestionTitleValue: question.QuestionText});
     this.setState({pollQuestionValue: question.QuestionText});
   }
 
   submitEditQuestion() {
-    console.log("submitted edit question");
     this.setState({displayQuestionEditor: false});
     document.getElementById("poll_questions").style.display = "flex";
-    console.log("Current question")
-    console.log(this.state.currentQuestion)
     var found = this.state.questions.find(element => element[0].QuestionText === this.state.currentQuestion.QuestionText);
-    console.log("found");
-    console.log(found);
     found[0].QuestionText = document.getElementById("edit_question_title_input").value;
     found[0].QuestionText = document.getElementById("edit_question_input").value;
-    console.log(found);
-    console.log("new questions");
-    console.log(this.state.questions);
   }
 
   reorderQuestions() {
@@ -146,16 +133,12 @@ export default class PollEditor extends Component {
   }
 
   moveQuestionUp(index) {
-    console.log("move question up");
     var reorderedQuestions = this.move(index, index-1);
-    console.log(reorderedQuestions);
     this.setState({questions: reorderedQuestions});
   }
 
   moveQuestionDown(index) {
-    console.log("move question down");
     var reorderedQuestions = this.move(index, index+1);
-    console.log(reorderedQuestions);
     this.setState({questions: reorderedQuestions});
   }
 
