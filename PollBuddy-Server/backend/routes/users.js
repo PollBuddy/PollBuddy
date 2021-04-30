@@ -21,7 +21,7 @@ const {createResponse, validateID, isEmpty} = require("../modules/utils"); // ob
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/", function (req, res) {
-  return res.status(200).send(createResponse("User routes"));
+  return res.status(405).send(createResponse(null, "Route is not available"));
 });
 
 /**
@@ -35,7 +35,7 @@ router.get("/", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/", function (req, res) {
-  return res.status(200).send(createResponse("User routes"));
+  return res.status(405).send(createResponse(null, "Route is not available"));
 });
 
 /**
@@ -49,7 +49,7 @@ router.post("/", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/login", function (req, res) {
-  return res.status(501).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
 /**
@@ -268,7 +268,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/login/rpi", function (req, res) {
-  return res.status(501).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 /**
@@ -282,7 +282,7 @@ router.post("/login/rpi", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/register", function (req, res) {
-  return res.status(501).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
 /**
@@ -603,7 +603,7 @@ router.get("/logout", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/logout", function (req, res) {
-  return res.status(501).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documentation
@@ -714,6 +714,11 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
   return res.status(200).send(createResponse("","")); // TODO: Success message // TODO: Ensure this is true
 });
 
+//Endpoint not available, this is used to not drop the endpoint
+router.get("/:id/edit", function (req, res) {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+});
+
 router.get("/:id", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("users").find({ "_id": id }).toArray(function (err, result) {
@@ -722,6 +727,11 @@ router.get("/:id", function (req, res, next) {
     }
     return res.status(200).send(createResponse(result));
   });
+});
+
+//Endpoint not available, this is used to not drop the endpoint
+router.POST("/:id/edit", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 router.get("/:id/groups", function (req, res, next) {
@@ -734,6 +744,11 @@ router.get("/:id/groups", function (req, res, next) {
     }
     return res.status(200).send(createResponse(result[0]));
   });
+});
+
+//Endpoint not available, this is used to not drop the endpoint
+router.POST("/:id/edit", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 module.exports = router;
