@@ -33,7 +33,7 @@ router.post("/new", async (req, res) => {
   // Add to DB
   try {
     const result = await mongoConnection.getDB().collection("groups").insertOne({Name: validResult.value.Name});
-    return res.send(createResponse({ID: result.insertedId}));   // return group ID
+    return res.status(200).send(createResponse({ID: result.insertedId}));   // return group ID
   } catch (e) {
     console.log(e);
     return res.status(500).send(createResponse(null, "An error occurred while writing to the database."));
@@ -344,7 +344,7 @@ router.get("/:id/admins", async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/:id/join", async (req, res) => {
-  return res.sendStatus(404);
+  return res.status(404).send(createResponse(null, "Invalid endpoint"));
 });
 
 /**
