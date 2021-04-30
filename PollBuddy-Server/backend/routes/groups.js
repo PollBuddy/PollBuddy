@@ -40,6 +40,11 @@ router.post("/new", async (req, res) => {
   }
 });
 
+//Endpoint not available, this is used to not drop the endpoint
+router.get("/new", function (req, res) {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+});
+
 /**
  * Modify the group information 
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-idedit
@@ -162,6 +167,11 @@ router.post("/:id/edit", async (req, res) => {
   return res.status(200).send(createResponse("","")); // TODO: Success message
 });
 
+//Endpoint not available, this is used to not drop the endpoint
+router.get("/:id/edit", function (req, res) {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+});
+
 /**
  * Delete a group from the database
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-iddelete
@@ -185,6 +195,11 @@ router.post("/:id/delete", async (req, res) => {//use router.delete??
     console.log(e);
     return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
   }
+});
+
+//Endpoint not available, this is used to not drop the endpoint
+router.get("/:id/delete", function (req, res) {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
 /**
@@ -212,6 +227,11 @@ router.get("/", async (req, res) => {
     console.log(e);
     return res.status(500).send(createResponse(null, "An error occurred while reading the database."));
   }
+});
+
+//Endpoint not available, this is used to not drop the endpoint
+router.post("/login", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 /**
@@ -248,6 +268,11 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+//Endpoint not available, this is used to not drop the endpoint
+router.post("/:id", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+});
+
 /**
  * Get all polls linked to a group
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-idpolls
@@ -275,6 +300,11 @@ router.get("/:id/polls", async (req, res) => {
     console.log(e);
     return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
   }
+});
+
+//Endpoint not available, this is used to not drop the endpoint
+router.post("/:id/polls", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 /**
@@ -306,6 +336,11 @@ router.get("/:id/users", async (req, res) => {
   }
 });
 
+//Endpoint not available, this is used to not drop the endpoint
+router.post("/:id/polls", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+});
+
 /**
  * Get all admins in a group
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-idadmins
@@ -335,8 +370,13 @@ router.get("/:id/admins", async (req, res) => {
   return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
 });
 
+//Endpoint not available, this is used to not drop the endpoint
+router.post("/:id/admins", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+});
+
 /**
- * This route is not used. 
+ * This route is not used. (change this to match other invalid endpoints?)
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-idjoin
  * @throws 404 - Not found
  * @name GET api/groups/{id}/join
@@ -344,7 +384,7 @@ router.get("/:id/admins", async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/:id/join", async (req, res) => {
-  return res.status(404).send(createResponse(null, "Invalid endpoint"));
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
 /**
