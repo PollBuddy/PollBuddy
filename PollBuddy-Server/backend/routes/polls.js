@@ -12,7 +12,7 @@ const {createResponse, validateID, checkPollPublic, isLoggedIn} = require("../mo
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
- router.get("/new", function (req, res) {
+router.get("/new", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
@@ -246,7 +246,7 @@ router.post("/pollAnswers", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
-v/**
+/**
  * This route is not used.
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-iddelete
  * @throws 405 - Route not used
