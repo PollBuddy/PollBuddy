@@ -14,7 +14,7 @@ const {createResponse, validateID, isEmpty} = require("../modules/utils"); // ob
  * This route is not used. It is simply there to have some response to /api/users/
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 200: { "result": "success", "data": "User Routes" }
+ * @returns {void} Status 405: { "result": "success", "data": "User Routes" }
  * @name backend/users/_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -28,7 +28,7 @@ router.get("/", function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 200: { "result": "success", "data": "User Routes" }
+ * @returns {void} Status 405: { "result": "success", "data": "User Routes" }
  * @name backend/users/_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -42,7 +42,7 @@ router.post("/", function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/login when using GET.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 501: { "result": "failure", "error": "GET is not available for this route. Use POST." }
+ * @returns {void} Status 405: { "result": "failure", "error": "GET is not available for this route. Use POST." }
  * @name backend/users/login_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -261,7 +261,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/login/rpi when using POST.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 501: { "result": "failure", "error": "POST is not available for this route. Use GET." }
+ * @returns {void} Status 405: { "result": "failure", "error": "POST is not available for this route. Use GET." }
  * @name backend/users/login/rpi_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -275,7 +275,7 @@ router.post("/login/rpi", function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/register when using GET.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 501: { "result": "failure", "error": "GET is not available for this route. Use POST." }
+ * @returns {void} Status 405: { "result": "failure", "error": "GET is not available for this route. Use POST." }
  * @name backend/users/register_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -596,7 +596,7 @@ router.get("/logout", function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/logout when using POST.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 501: { "result": "failure", "error": "POST is not available for this route. Use GET." }
+ * @returns {void} Status 405: { "result": "failure", "error": "POST is not available for this route. Use GET." }
  * @name backend/users/logout_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -604,6 +604,20 @@ router.get("/logout", function (req, res) {
 // eslint-disable-next-line no-unused-vars
 router.post("/logout", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/:id/edit when using GET.
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405: { "result": "failure", "error": "GET is not available for this route. Use POST." }
+ * @name backend/users/:id/edit_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+// eslint-disable-next-line no-unused-vars
+router.get("/:id/edit", function (req, res) {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
 router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documentation
@@ -714,11 +728,6 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
   return res.status(200).send(createResponse("","")); // TODO: Success message // TODO: Ensure this is true
 });
 
-//Endpoint not available, this is used to not drop the endpoint
-router.get("/:id/edit", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
-});
-
 router.get("/:id", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("users").find({ "_id": id }).toArray(function (err, result) {
@@ -729,8 +738,17 @@ router.get("/:id", function (req, res, next) {
   });
 });
 
-//Endpoint not available, this is used to not drop the endpoint
-router.POST("/:id/edit", function (req, res) {
+/**
+ * This route is not used. It is simply there to have some response to /api/users/:id when using POST.
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405: { "result": "failure", "error": "POST is not available for this route. Use GET." }
+ * @name backend/users/:id_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+// eslint-disable-next-line no-unused-vars
+router.POST("/:id", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
@@ -746,8 +764,17 @@ router.get("/:id/groups", function (req, res, next) {
   });
 });
 
-//Endpoint not available, this is used to not drop the endpoint
-router.POST("/:id/edit", function (req, res) {
+/**
+ * This route is not used. It is simply there to have some response to /api/users/:id/groups when using POST.
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405: { "result": "failure", "error": "POST is not available for this route. Use GET." }
+ * @name backend/users/:id/groups_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+// eslint-disable-next-line no-unused-vars
+router.POST("/:id/groups", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
