@@ -164,13 +164,15 @@ export default class PollEditor extends Component {
                 Poll Details {this.props.pollID}
               </p>
 
-              <MDBContainer>
-                <input type="GroupName" className="form-control textBox" id="pollTitle" value={this.state.pollTitleValue} onChange={this.handlePollTitleChange}/>
+              <MDBContainer class="form-group">
+                <p>Poll Title</p>
+                <input type="GroupName" placeholder="Poll title" className="form-control textBox" id="pollTitle" maxLength="100" value={this.state.pollTitleValue} onChange={this.handlePollTitleChange}/>
                 <button id="groupBtn" className="button" onClick={() => this.savePollTitle()}>Save</button>
               </MDBContainer>
 
               <MDBContainer class="form-group">
-                <textarea type="pollDescription" className="form-control textBox" id="pollDescription" maxLength="100" value={this.state.pollDescriptionValue} onChange={this.handlePollDescriptionChange}></textarea>
+                <p>Poll Description</p>
+                <textarea type="pollDescription" placeholder="Poll description" className="form-control textBox" id="pollDescription" maxLength="100" value={this.state.pollDescriptionValue} onChange={this.handlePollDescriptionChange}></textarea>
                 <button id="descriptionBtn" className="button" onClick={() => this.savePollDescription()}>Save</button>
               </MDBContainer>
             </MDBContainer>
