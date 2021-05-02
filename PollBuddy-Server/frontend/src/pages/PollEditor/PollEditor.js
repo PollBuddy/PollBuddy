@@ -9,6 +9,34 @@ export default class PollEditor extends Component {
   componentDidMount() {
     autosize(document.querySelector("textarea"));
     this.props.updateTitle("Poll Editor");
+
+    console.log(this.props.match.params.pollID);
+
+    // Test pollID: 6089fb33145365b82e93717a
+
+    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.match.params.pollID, {
+      method: "GET"
+    })
+      .then(response => {
+        if(response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Something went wrong");
+        }
+
+      })
+      .then(response => {
+        if (response === {}) {
+          console.log("Error fetching data");
+        } else {
+          console.log("Fetching data succeeded");
+          console.log(response);
+          this.setState({pollTitle: response[0].Name});
+          this.setState({pollTitleValue: response[0].Name});
+          this.setState({questions: response[0].Questions});
+        }
+      })
+      .catch(error => this.setState({"error": error}));
   }
 
   constructor(props) {
@@ -32,8 +60,6 @@ export default class PollEditor extends Component {
       reorderQuestions: false
     };
 
-    this.getPoll();
-
     // this.state.pollTitleValue = this.state.pollTitle;
     this.state.pollDescriptionValue = this.state.pollDescription;
 
@@ -41,16 +67,6 @@ export default class PollEditor extends Component {
     this.handlePollDescriptionChange = this.handlePollDescriptionChange.bind(this);
     this.handlePollQuestionTitleChange = this.handlePollQuestionTitleChange.bind(this);
     this.handlePollQuestionChange = this.handlePollQuestionChange.bind(this);
-  }
-
-  getPoll() {
-    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/").then(response => response.json()).then(data => {
-      console.log(data);
-      console.log(data[0].Questions);
-      this.setState({pollTitle: data[0].Name});
-      this.setState({pollTitleValue: data[0].Name});
-      this.setState({questions: data[0].Questions});
-    }); //this should return the correct information on that specific pollID
   }
 
   askQuestion() {

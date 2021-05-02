@@ -133,9 +133,9 @@ export default class App extends React.Component {
             />
 
             {/* Poll Editor Page */}
-            <Route exact path="/polls/:pollID/edit">
-              <PollEditor updateTitle={this.updateTitle}/>
-            </Route>
+            <Route exact path="/polls/:pollID/edit"
+              render={ (props) => (<PollEditor {...props} updateTitle={this.updateTitle}/>) }
+            />
 
             {/* Poll Manager Page */}
             <Route exact path="/polls/:pollID/manage">
