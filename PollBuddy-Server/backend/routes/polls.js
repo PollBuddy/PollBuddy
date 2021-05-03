@@ -5,6 +5,18 @@ const Joi = require("joi");
 const {createResponse, validateID, checkPollPublic, isLoggedIn} = require("../modules/utils"); // object destructuring, only import desired functions
 
 /**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-new
+ * @throws 405 - Route not used
+ * @name GET api/polls/new
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/new", function (req, res) {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+});
+
+/**
  * Create new poll.
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-new
  * @typedef {Object} payload
@@ -32,11 +44,23 @@ router.post("/new", async (req, res) => {
   // Add to DB
   try {
     const result = await mongoConnection.getDB().collection("polls").insertOne({Name: validResult.value.Name});
-    return res.send(createResponse({ID: result.insertedId}));   // return poll ID
+    return res.status(200).send(createResponse({ID: result.insertedId}));   // return poll ID
   } catch (e) {
     console.log(e);
     return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
   }
+});
+
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-idedit
+ * @throws 405 - Route not used
+ * @name GET api/polls/{id}/edit
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/:id/edit", function (req, res) {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
 /**
@@ -118,8 +142,20 @@ router.post("/:id/edit", async (req, res) => {
 });
 
 /**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-idsubmit
+ * @throws 405 - Route not used
+ * @name GET api/polls/{id}/submit
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/:id/submit", function (req, res) {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+});
+
+/**
  * Submit/re-submit poll answer.
- * Depending on the "Pubic" attribute of the poll it might requires sign-in.
+ * Depending on the "Public" attribute of the poll, it might require sign-in.
  * @typedef {Object} Answers
  * @property {string} QuestionID - ID of the question.
  * @property {string} Answer - Answer response, could be null or empty string.
@@ -170,7 +206,7 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
         PollID: entry.PollID,
         UserID: entry.UserID
       }, entry);
-      return res.send(createResponse());
+      return res.status(200).send(createResponse());
     } catch (e) {
       console.log(e);
       return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
@@ -179,7 +215,7 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
     // anonymous submission, no resubmit
     try {
       await mongoConnection.getDB().collection("poll_answers").insertOne(entry);
-      return res.send(createResponse());
+      return res.status(200).send(createResponse());
     } catch (e) {
       console.log(e);
       return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
@@ -187,7 +223,7 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
   }
 });
 
-
+//TODO: documentaion
 router.get("/pollAnswers", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("poll_answers").deleteOne({"_id": id}, function (err, res) {
@@ -197,6 +233,32 @@ router.get("/pollAnswers", function (req, res, next) {
   });
   return res.status(200).send(createResponse("", "")); // TODO: Success message;
 });
+
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-pollAnswers
+ * @throws 405 - Route not used
+ * @name POST api/polls/pollAnswers
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.post("/pollAnswers", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+});
+
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-iddelete
+ * @throws 405 - Route not used
+ * @name GET api/polls/{id}/delete
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/:id/delete", function (req, res) {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+});
+
+//TODO: documentaion
 router.post("/:id/delete", function (req, res) {//use router.delete??
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("polls").deleteOne({"_id": id}, function (err, res) {
@@ -231,6 +293,18 @@ router.get("/", async (req, res) => {
 });
 
 /**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-
+ * @throws 405 - Route not used
+ * @name POST api/polls/
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.post("/", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+});
+
+/**
  * Get data of a single poll with the specified id.
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-id
  * @returns {Poll} response
@@ -256,6 +330,19 @@ router.get("/:id", async (req, res) => {
   return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
 });
 
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-id
+ * @throws 405 - Route not used
+ * @name POST api/polls/{id}
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.post("/:id", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+});
+
+//TODO: documentation
 router.get("/:id/view", async function (req, res, next) {
   const id = await validateID("polls", req.params.id);
   if (!id) {
@@ -293,6 +380,19 @@ router.get("/:id/view", async function (req, res, next) {
   });
 });
 
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-idview
+ * @throws 405 - Route not used
+ * @name POST api/polls/{id}/view
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.post("/:id/view", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+});
+
+//TODO: documentaion
 router.get("/:id/results", async function (req, res, next) {
   const id = await validateID("polls", req.params.id);
   if (!id) {
@@ -351,6 +451,18 @@ router.get("/:id/results", async function (req, res, next) {
       res.status(200).send(createResponse(results));
     });
   });
+});
+
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-idresults
+ * @throws 405 - Route not used
+ * @name POST api/polls/{id}/results
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.post("/:id/results", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 //Given a userID and a pollID, this function returns true if the user has permission to access the poll, and false otherwise
