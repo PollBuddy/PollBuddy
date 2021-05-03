@@ -748,7 +748,7 @@ router.get("/:id", function (req, res, next) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.POST("/:id", function (req, res) {
+router.post("/:id", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
@@ -774,7 +774,7 @@ router.get("/:id/groups", function (req, res, next) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.POST("/:id/groups", function (req, res) {
+router.post("/:id/groups", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
