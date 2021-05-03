@@ -6,6 +6,18 @@ const Joi = require("joi");
 const {createResponse, validateID} = require("../modules/utils"); // object destructuring, only import desired functions
 
 /**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-new
+ * @throws 405 - Route not used
+ * @name GET api/groups/new
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/new", function (req, res) {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+});
+
+/**
  * Create a new group
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-new
  * @typedef {Object} payload
@@ -33,11 +45,23 @@ router.post("/new", async (req, res) => {
   // Add to DB
   try {
     const result = await mongoConnection.getDB().collection("groups").insertOne({Name: validResult.value.Name});
-    return res.send(createResponse({ID: result.insertedId}));   // return group ID
+    return res.status(200).send(createResponse({ID: result.insertedId}));   // return group ID
   } catch (e) {
     console.log(e);
     return res.status(500).send(createResponse(null, "An error occurred while writing to the database."));
   }
+});
+
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-idedit
+ * @throws 405 - Route not used
+ * @name GET api/groups/{id}/edit
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/:id/edit", function (req, res) {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
 /**
@@ -71,7 +95,7 @@ router.post("/:id/edit", async (req, res) => {
     if (jsonContent.Name !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$set": { Name: jsonContent.Name } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("","")); // TODO: Error message
+          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
           success = true;
         }
@@ -80,7 +104,7 @@ router.post("/:id/edit", async (req, res) => {
     if (jsonContent.Instructors !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Instructors: jsonContent.Instructors } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("","")); // TODO: Error message
+          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
           success = true;
         }
@@ -89,7 +113,7 @@ router.post("/:id/edit", async (req, res) => {
     if (jsonContent.Polls !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Polls: jsonContent.Polls } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("","")); // TODO: Error message
+          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
           success = true;
         }
@@ -98,7 +122,7 @@ router.post("/:id/edit", async (req, res) => {
     if (jsonContent.Users !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Users: jsonContent.Users } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("","")); // TODO: Error message
+          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
           success = true;
         }
@@ -107,20 +131,20 @@ router.post("/:id/edit", async (req, res) => {
     if (jsonContent.Admins !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Admins: jsonContent.Admins } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("","")); // TODO: Error message
+          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
           success = true;
         }
       });
     }
     if (success === false) {
-      return res.status(400).send(createResponse("","")); // TODO: Error message
+      return res.status(400).send(createResponse(null,"Invalid request body or ObjectID"));
     }
   } else if (jsonContent.Action === "Remove") {
     if (jsonContent.Instructors !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Instructors: jsonContent.Instructors } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("","")); // TODO: Error message
+          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
           success = true;
         }
@@ -129,7 +153,7 @@ router.post("/:id/edit", async (req, res) => {
     if (jsonContent.Polls !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Polls: jsonContent.Polls } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("","")); // TODO: Error message
+          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
           success = true;
         }
@@ -138,7 +162,7 @@ router.post("/:id/edit", async (req, res) => {
     if (jsonContent.Users !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Users: jsonContent.Users } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("","")); // TODO: Error message
+          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
           success = true;
         }
@@ -147,19 +171,31 @@ router.post("/:id/edit", async (req, res) => {
     if (jsonContent.Admins !== undefined) {
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Admins: jsonContent.Admins } }, function (err, res) {
         if (err) {
-          return res.status(500).send(createResponse("","")); // TODO: Error message
+          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
           success = true;
         }
       });
     }
     if (success === false) {
-      return res.status(400).send(createResponse("","")); // TODO: Error message
+      return res.status(400).send(createResponse(null,"Invalid request body or ObjectID"));
     }
   } else {
-    return res.status(400).send(createResponse("","")); // TODO: Error message
+    return res.status(400).send(createResponse(null,"Invalid request body or ObjectID"));
   }
-  return res.status(200).send(createResponse("","")); // TODO: Success message
+  return res.status(200).send(createResponse("Success",));
+});
+
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-iddelete
+ * @throws 405 - Route not used
+ * @name GET api/groups/{id}/delete
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/:id/delete", function (req, res) {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
 /**
@@ -181,6 +217,7 @@ router.post("/:id/delete", async (req, res) => {//use router.delete??
   }
   try {
     await mongoConnection.getDB().collection("groups").deleteOne({ "_id": id });
+    return res.status(200).send(createResponse("Success"));
   } catch(e) {
     console.log(e);
     return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
@@ -199,7 +236,7 @@ router.post("/:id/delete", async (req, res) => {//use router.delete??
  * @property {String[]} Admins
  * @returns {Group[]} response
  * @throws 500 - An error occurred while reading the database.
- * @name GET api/polls/{id}
+ * @name GET api/groups/
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
@@ -212,6 +249,18 @@ router.get("/", async (req, res) => {
     console.log(e);
     return res.status(500).send(createResponse(null, "An error occurred while reading the database."));
   }
+});
+
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-
+ * @throws 405 - Route not used
+ * @name POST api/groups/
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.post("/", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 /**
@@ -249,6 +298,18 @@ router.get("/:id", async (req, res) => {
 });
 
 /**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-id
+ * @throws 405 - Route not used
+ * @name POST api/groups/{id}
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.post("/:id", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+});
+
+/**
  * Get all polls linked to a group
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-idpolls
  * @typedef {Object} payload
@@ -275,6 +336,18 @@ router.get("/:id/polls", async (req, res) => {
     console.log(e);
     return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
   }
+});
+
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-idpolls
+ * @throws 405 - Route not used
+ * @name POST api/groups/{id}/polls
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.post("/:id/polls", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 /**
@@ -307,6 +380,18 @@ router.get("/:id/users", async (req, res) => {
 });
 
 /**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-idusers
+ * @throws 405 - Route not used
+ * @name POST api/groups/{id}/users
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.post("/:id/users", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+});
+
+/**
  * Get all admins in a group
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-idadmins
  * @typedef {Object} payload
@@ -336,15 +421,27 @@ router.get("/:id/admins", async (req, res) => {
 });
 
 /**
- * This route is not used. 
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-idadmins
+ * @throws 405 - Route not used
+ * @name POST api/groups/{id}/admins
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.post("/:id/admins", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+});
+
+/**
+ * This route is not used.
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-idjoin
- * @throws 404 - Not found
+ * @throws 405 - Route not used
  * @name GET api/groups/{id}/join
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/:id/join", async (req, res) => {
-  return res.sendStatus(404);
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
 /**
@@ -373,6 +470,7 @@ router.post("/:id/join", async (res, req) => {
   // Add user to group, do nothing if they are already in it
   try {
     await mongoConnection.getDB().collection("groups").updateOne({ "_id:": groupID }, { $addToSet: { Users: userID } });
+    return res.status(200).send(createResponse("Success"));
   } catch(e) {
     console.log(e);
     return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
