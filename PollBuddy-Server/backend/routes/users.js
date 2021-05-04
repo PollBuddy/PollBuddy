@@ -612,6 +612,17 @@ router.get("/session", function (req, res) {
   res.send(req.session.userData || {});
 });
 
+/**
+ * This route is used to modify user information
+ * @getdata {void} None
+ * @postdata {void} Action: string, FirstName: string, LastName: string, UserName: string, Email: string, Password: string
+ * @returns {void} On success: Status 200
+ * On failure: Status 400  //TODO add error msg
+ *         or: Status 500
+ * @name backend/users/id/edit_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for data received
+ */
 router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documentation
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   var jsonContent = req.body;

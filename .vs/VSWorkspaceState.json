@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\PollBuddy-Server",
+    "\\PollBuddy-Server\\backend",
+    "\\PollBuddy-Server\\backend\\public",
+    "\\PollBuddy-Server\\backend\\public\\stylesheets",
+    "\\PollBuddy-Server\\frontend",
+    "\\PollBuddy-Server\\frontend\\src",
+    "\\PollBuddy-Server\\frontend\\src\\pages",
+    "\\PollBuddy-Server\\frontend\\src\\pages\\Code",
+    "\\PollBuddy-Server\\frontend\\src\\pages\\LoginDefault"
+  ],
+  "PreviewInSolutionExplorer": false
+}
