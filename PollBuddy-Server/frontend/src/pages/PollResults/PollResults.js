@@ -18,14 +18,24 @@ export default class PollResults extends Component {
           {
             data: [],
             backgroundColor: [
-              "rgba(255, 134,159,0.5)",
-              "rgba(98,  182, 239,0.5)",
-              "rgba(255, 218, 128,0.5)",
-              "rgba(113, 205, 205,0.5)",
-              "rgba(170, 128, 252,0.5)",
+              "rgba(255, 134, 159, 0.5)", // TODO: These need to be generated in some way
+              "rgba(98,  182, 239, 0.5)", // Probably through the backend tbh so the poll admin can pick the colors
+              "rgba(255, 218, 128, 0.5)", // But also make a random generator so they don't have to
+              "rgba(113, 205, 205, 0.5)",
+              "rgba(170, 128, 252, 0.5)",
+              "rgba(255, 134, 159, 0.5)",
+              "rgba(98,  182, 239, 0.5)",
+              "rgba(255, 218, 128, 0.5)",
+              "rgba(113, 205, 205, 0.5)",
+              "rgba(170, 128, 252, 0.5)",
             ],
             borderWidth: 5,
             borderColor: [
+              "rgba(255, 134, 159, 1)",
+              "rgba(98,  182, 239, 1)",
+              "rgba(255, 218, 128, 1)",
+              "rgba(113, 205, 205, 1)",
+              "rgba(170, 128, 252, 1)",
               "rgba(255, 134, 159, 1)",
               "rgba(98,  182, 239, 1)",
               "rgba(255, 218, 128, 1)",
@@ -94,19 +104,20 @@ export default class PollResults extends Component {
           console.log("Error fetching data");
         } else {
           console.log("Fetching data succeeded");
+          response = response.data[0]; // TODO: This needs to be fixed for the general case and not just the demo
           console.log(response);
 
           // eslint-disable-next-line no-sequences
           this.setState(state => {
             state.questionData = response;
-            state.dataBar.labels = response.Results[0].AnswerChoices;
-            state.dataBar.datasets[0].data = response.Results[0].Tallies;
+            state.dataBar.labels = response.AnswerChoices;
+            state.dataBar.datasets[0].data = response.Tallies;
             return state;
           });
-          for(let i = 0; i < this.state.questionData.Results[0].CorrectAnswers.length-1; i++){
-            this.state.correctAnswers = this.state.correctAnswers + this.state.questionData.Results[0].CorrectAnswers[i] + ", ";
+          for(let i = 0; i < this.state.questionData.CorrectAnswers.length-1; i++){
+            this.state.correctAnswers = this.state.correctAnswers + this.state.questionData.CorrectAnswers[i] + ", ";
           }
-          this.state.correctAnswers+= this.state.questionData.Results[0].CorrectAnswers[this.state.questionData.Results[0].CorrectAnswers.length-1];
+          this.state.correctAnswers+= this.state.questionData.CorrectAnswers[this.state.questionData.CorrectAnswers.length-1];
           this.setState({"doneLoading": true});
         }
       })
@@ -134,7 +145,7 @@ export default class PollResults extends Component {
         <MDBContainer fluid className="page">
           <MDBContainer fluid className="box">
             <p className="fontSizeLarge">
-              {"Question " + this.state.questionData.Results[0].QuestionNumber + ": " + this.state.questionData.Results[0].QuestionText}
+              {"Question " + this.state.questionData.QuestionNumber + ": " + this.state.questionData.QuestionText}
             </p>
             <p>
               {"Correct Answers: " + this.state.correctAnswers}

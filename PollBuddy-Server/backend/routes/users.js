@@ -14,42 +14,42 @@ const {createResponse, validateID, isEmpty} = require("../modules/utils"); // ob
  * This route is not used. It is simply there to have some response to /api/users/
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 200: { "result": "success", "data": "User Routes" }
+ * @returns {void} Status 405: { "result": "success", "data": "User Routes" }
  * @name backend/users/_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/", function (req, res) {
-  return res.send(createResponse("User routes"));
+  return res.status(405).send(createResponse(null, "Route is not available"));
 });
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 200: { "result": "success", "data": "User Routes" }
+ * @returns {void} Status 405: { "result": "success", "data": "User Routes" }
  * @name backend/users/_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/", function (req, res) {
-  return res.send(createResponse("User routes"));
+  return res.status(405).send(createResponse(null, "Route is not available"));
 });
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/login when using GET.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 501: { "result": "failure", "error": "GET is not available for this route. Use POST." }
+ * @returns {void} Status 405: { "result": "failure", "error": "GET is not available for this route. Use POST." }
  * @name backend/users/login_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/login", function (req, res) {
-  return res.status(501).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
 /**
@@ -153,7 +153,7 @@ router.post("/login", function (req, res) {
               req.session.userData.userID = result._id;
 
               // Send the user the necessary data to complete the login process
-              return res.send(createResponse({
+              return res.status(200).send(createResponse({
                 "firstName": result.FirstName,
                 "lastName": result.LastName,
                 "userName": result.UserName
@@ -213,7 +213,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
 
     // Check to make sure they're already registered
     mongoConnection.getDB().collection("users").findOne({ UserName: "__rpi_" + req.session.cas_user.toLowerCase() }, {
-      projection: { _id: false, UserName: true, FirstName: true, LastName: true } }, (err, result) => {
+      projection: { _id: true, UserName: true, FirstName: true, LastName: true } }, (err, result) => {
       if (err) {
         // Something went wrong
         console.log("Database Error occurred while searching for an existing user during log in with RPI.");
@@ -261,28 +261,28 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/login/rpi when using POST.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 501: { "result": "failure", "error": "POST is not available for this route. Use GET." }
+ * @returns {void} Status 405: { "result": "failure", "error": "POST is not available for this route. Use GET." }
  * @name backend/users/login/rpi_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/login/rpi", function (req, res) {
-  return res.status(501).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/register when using GET.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 501: { "result": "failure", "error": "GET is not available for this route. Use POST." }
+ * @returns {void} Status 405: { "result": "failure", "error": "GET is not available for this route. Use POST." }
  * @name backend/users/register_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/register", function (req, res) {
-  return res.status(501).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
 /**
@@ -357,24 +357,24 @@ router.post("/register", function (req, res) {
             // This code means we're trying to insert a duplicate key (aka user already registered somehow)
             if(err.keyPattern.Email) {
               // Email in use
-              return res.status(400).json({"result": "failure", "error": "This email is already in use."});
+              return res.status(400).send(createResponse(null, "This email is already in use."));
 
             } else if(err.keyPattern.UserName) {
               // Username in use
-              return res.status(400).json({"result": "failure", "error": "This username is already in use."});
+              return res.status(400).send(createResponse(null, "This username is already in use."));
 
             } else {
               // An unknown error occurred
               console.log("Database Error occurred while creating a new user with Poll Buddy.");
               console.log(err);
-              return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+              return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
             }
 
           } else {
             // An unknown error occurred
             console.log("Database Error occurred while creating a new user with Poll Buddy.");
             console.log(err);
-            return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+            return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
           }
 
         } else {
@@ -387,21 +387,21 @@ router.post("/register", function (req, res) {
             req.session.userData.userID = result.insertedId;
 
             // Send the response object with some basic info for the frontend to store
-            return res.json({"result": "success", "data": {"firstName": result.ops[0].FirstName,
-              "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}});
+            return res.status(200).send(createResponse({ "firstName": result.ops[0].FirstName,
+              "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}));
 
           } else {
-            // For some reason, the user wasn't inserted, send an error.
+          // For some reason, the user wasn't inserted, send an error.
             console.log("Database Error occurred while creating a new user.");
             console.log(err);
-            return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+            return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
           }
         }
       });
     });
 
   } else {
-    return res.status(400).json({ "result": "failure", "error": "Validation failed.", "data": errorMsg });
+    return res.status(400).send(createResponse(errorMsg, "Validation failed."));
   }
 
 });
@@ -498,7 +498,7 @@ router.post("/register/rpi", function (req, res) {
 
   // Make sure we've got data from step 1
   if(!req.session.userDataTemp) {
-    return res.status(500).json({"result": "failure", "error": "Prerequisite data is not available."});
+    return res.status(500).send(createResponse(null, "Prerequisite data is not available."));
   }
   // Configure email, username, overwriting whatever the user may have sent as we don't want it anyways.
   req.body.userName = req.session.userDataTemp.userName;
@@ -523,23 +523,23 @@ router.post("/register/rpi", function (req, res) {
           // This code means we're trying to insert a duplicate key (aka user already registered somehow)
           if (err.keyPattern.Email) {
             // Email in use
-            return res.status(400).json({"result": "failure", "error": "This email is already in use."});
+            return res.status(400).send(createResponse(null, "This email is already in use."));
 
           } else if (err.keyPattern.UserName) {
             // Username in use
-            return res.status(400).json({"result": "failure", "error": "This username is already in use."});
+            return res.status(400).send(createResponse(null, "This username is already in use."));
 
           } else {
             // An unknown error occurred
             console.log("Database Error occurred while creating a new user with RPI.");
             console.log(err);
-            return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+            return res.status(500).send(createResponse(null,"An error occurred while communicating with the database."));
           }
         } else {
           // An unknown error occurred
           console.log("Database Error occurred while creating a new with RPI.");
           console.log(err);
-          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+          return res.status(500).send(createResponse(null,"An error occurred while communicating with the database."));
         }
 
       } else {
@@ -555,19 +555,19 @@ router.post("/register/rpi", function (req, res) {
           req.session.userData.userID = result.insertedId;
 
           // Send the response object with some basic info for the frontend to store
-          return res.json({"result": "success", "data": {"firstName": result.ops[0].FirstName,
-            "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}});
+          return res.status(200).send(createResponse({ "firstName": result.ops[0].FirstName,
+            "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName }));
 
         } else {
           // For some reason, the user wasn't inserted, send an error.
           console.log("Database Error occurred while creating a new user with RPI");
           console.log(err);
-          return res.status(500).json({"result": "failure", "error": "An error occurred while communicating with the database."});
+          return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
         }
       }
     });
   } else {
-    return res.status(400).json({ "result": "failure", "error": "Validation failed.", "data": errorMsg });
+    return res.status(400).send(createResponse(errorMsg, "Validation failed."));
   }
 
 });
@@ -588,7 +588,7 @@ router.get("/logout", function (req, res) {
   // Delete the userData in the session
   delete req.session.userData;
 
-  return res.send(createResponse("User was logged out successfully."));
+  return res.status(200).send(createResponse("User was logged out successfully."));
 
 });
 
@@ -596,20 +596,28 @@ router.get("/logout", function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/logout when using POST.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 501: { "result": "failure", "error": "POST is not available for this route. Use GET." }
+ * @returns {void} Status 405: { "result": "failure", "error": "POST is not available for this route. Use GET." }
  * @name backend/users/logout_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/logout", function (req, res) {
-  return res.status(501).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
-// stored user session data
-// TODO: Investigate if this is even needed or not
-router.get("/session", function (req, res) {
-  res.send(req.session.userData || {});
+/**
+ * This route is not used. It is simply there to have some response to /api/users/:id/edit when using GET.
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405: { "result": "failure", "error": "GET is not available for this route. Use POST." }
+ * @name backend/users/:id/edit_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+// eslint-disable-next-line no-unused-vars
+router.get("/:id/edit", function (req, res) {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
 /**
@@ -631,7 +639,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.FirstName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { FirstName: jsonContent.FirstName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -640,7 +648,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.LastName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { LastName: jsonContent.LastName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -649,7 +657,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.UserName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { UserName: jsonContent.UserName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -658,7 +666,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.Email !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { Email: jsonContent.Email } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -667,20 +675,20 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.Password !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { Password: bcrypt.hashSync(jsonContent.Password, 10) } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
       });
     }
     if (success === false) {
-      return res.sendStatus(400);
+      return res.status(400).send(createResponse("","")); // TODO: Error message;
     }
   } else if (jsonContent.Action === "Remove") {
     if (jsonContent.FirstName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { FirstName: jsonContent.FirstName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -689,7 +697,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.LastName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { LastName: jsonContent.LastName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -698,7 +706,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.UserName !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { UserName: jsonContent.UserName } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -707,7 +715,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.Email !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { Email: jsonContent.Email } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
@@ -716,41 +724,69 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     if (jsonContent.Password !== undefined) {
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { Password: jsonContent.Password } }, function (err, res) {
         if (err) {
-          return res.sendStatus(500);
+          return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
           success = true;
         }
       });
     }
     if (success === false) {
-      return res.sendStatus(400);
+      return res.status(400).send(createResponse("","")); // TODO: Error message;
     }
   } else {
-    return res.sendStatus(400);
+    return res.status(400).send(createResponse("","")); // TODO: Error message;
   }
-  return res.sendStatus(200); // TODO: Ensure this is true
+  return res.status(200).send(createResponse("","")); // TODO: Success message // TODO: Ensure this is true
 });
 
 router.get("/:id", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("users").find({ "_id": id }).toArray(function (err, result) {
     if (err) {
-      return res.sendStatus(500);
+      return res.status(500).send(createResponse("",err)); // TODO: Error message
     }
-    return res.send(result);
+    return res.status(200).send(createResponse(result));
   });
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/:id when using POST.
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405: { "result": "failure", "error": "POST is not available for this route. Use GET." }
+ * @name backend/users/:id_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+// eslint-disable-next-line no-unused-vars
+router.post("/:id", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 router.get("/:id/groups", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("users").find({ "_id": id }, { projection: { _id: 0, Groups: 1 } }).map(function (item) {
-    return res.send(item.Groups);
+    return res.status(200).send(createResponse(item.Groups));
   }).toArray(function (err, result) {
     if (err) {
-      return res.sendStatus(500);
+      return res.status(500).send(createResponse("","")); // TODO: Error message
     }
-    return res.send(result[0]);
+    return res.status(200).send(createResponse(result[0]));
   });
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/:id/groups when using POST.
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405: { "result": "failure", "error": "POST is not available for this route. Use GET." }
+ * @name backend/users/:id/groups_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+// eslint-disable-next-line no-unused-vars
+router.post("/:id/groups", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 module.exports = router;
@@ -766,9 +802,9 @@ module.exports.user_middleware = function (req, res, next) {
   // Callback takes two parameters: err and user
   req.getCurrentUser = function (callback) {
     if (!req.isLoggedIn()) {
-      res.status(401).send({
+      res.status(401).send(createResponse({
         error: "Not logged in"
-      });
+      }));
       if (typeof callback === "function") {
         callback(new Error("Not logged in"));
       }

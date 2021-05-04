@@ -2,6 +2,9 @@ import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import {withRouter} from "react-router-dom";
+import ErrorText from "../../components/ErrorText/ErrorText";
+import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+const Joi = require('joi');
 
 class RegisterWithSchoolStep2 extends Component {
   constructor(props) {
@@ -40,6 +43,8 @@ class RegisterWithSchoolStep2 extends Component {
       emailExists: false,
       firstNameValid: true,
       lastNameValid: true,
+      error: null,
+      doneLoading: true,
     };
 
   }
@@ -51,16 +56,37 @@ class RegisterWithSchoolStep2 extends Component {
 
   handleRegister() {
     // do input validation
-    const firstNameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(this.state.firstName);
-    const lastNameValid = new RegExp(/^[a-zA-Z]{0,256}$/).test(this.state.lastName);
-    const userNameValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(this.state.userName);
-    const emailValid = new RegExp(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/).test(this.state.email);
+    const schema = Joi.object({
+      username: Joi.string()
+        .pattern(new RegExp('^(?=.{3,32}$)[a-zA-Z0-9\-._]+$'))
+        .error(new Error('Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.')),
+      email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2}).max(320)
+        .error(new Error('Invalid email format.')),
+      firstname: Joi.string()
+        .min(1)
+        .max(256)
+        .error(new Error('First name must be between 1 and 256 characters.')),
+      lastname: Joi.string()
+        .allow('')
+        .max(256)
+        .error(new Error('Last name must be less than 256 characters.')),
+    });
+    var userNameValid = schema.validate({ username: this.state.username });
+    var emailValid = schema.validate({ email: this.state.email });
+    var firstNameValid = schema.validate({ firstname: this.state.firstname});
+    var lastNameValid = schema.validate({ lastname: this.state.lastname});
+
 
     // Update component's state
-    this.setState({ firstNameValid: firstNameValid, lastNameValid: lastNameValid, userNameValid: userNameValid,
-      emailValid: emailValid, emailExists: false });
+    this.setState({
+      firstNameValid: firstNameValid,
+      lastNameValid: lastNameValid,
+      userNameValid: userNameValid,
+      emailValid: emailValid,
+      emailExists: false
+    });
 
-    if (!userNameValid || !emailValid || !lastNameValid || !firstNameValid) {
+    if (userNameValid.error || emailValid.error || lastNameValid.error || firstNameValid.error) {
       return;
     }
 
@@ -91,14 +117,14 @@ class RegisterWithSchoolStep2 extends Component {
             this.props.history.push("/groups");
           } else {
             // Something went wrong, handle it
+
             if (response.error === "Validation failed") {
-              // TODO: This needs to be reported better (in an error popup, for example)
-              console.log(response.data.errors);
+              this.setState({error: response.data.errors});
             } else {
-              // TODO: This needs to be reported better (in an error popup, for example)
-              console.log("You have following error:");
-              console.log(response.error);
+              this.setState({error: response.error});
             }
+            console.log("ERROR: " + this.state.error);
+
           }
         }
       });
@@ -106,67 +132,76 @@ class RegisterWithSchoolStep2 extends Component {
 
   render() {
     this.handleRegister = this.handleRegister.bind(this);
-
-    return (
-      <MDBContainer fluid className="page">
-        <MDBContainer fluid className="box">
-          <p className="fontSizeLarge">
-            Register with School
-          </p>
-          <p>
-            To finish creating your account, fill in the text boxes, then press submit.
-          </p>
-          <MDBContainer className="form-group">
-
-            <label htmlFor="firstnameText">First Name:</label>
-            <input placeholder="SIS" className="form-control textBox" id="firstnameText"
-              value={this.state.firstName} readOnly={ this.state.firstNamePrefilled }
-              onChange={(evt) => { this.setState({firstName: evt.target.value}); }}/>
-            {!this.state.firstNameValid &&
-            <ul className="error">
-              <li>First name must be between 1 and 256 characters</li>
-            </ul>
-            }
-
-            <label htmlFor="lastnameText">Last Name:</label>
-            <input placeholder="Man" className="form-control textBox" id="lastnameText"
-              value={this.state.lastName} readOnly={ this.state.lastNamePrefilled }
-              onChange={(evt) => { this.setState({lastName: evt.target.value}); }}/>
-            {!this.state.lastNameValid &&
-            <ul className="error">
-              <li>Last name must be less than 256 characters</li>
-            </ul>
-            }
-
-            <label htmlFor="usernameText">Username:</label>
-            <input placeholder="mans" className="form-control textBox" id="usernameText"
-              value={this.state.userName} readOnly={ this.state.userNamePrefilled }
-              onChange={(evt) => { this.setState({userName: evt.target.value}); }}/>
-            {!this.state.userNameValid &&
-            <ul className="error">
-              <li>Username must be between 3 and 32 characters</li>
-              <li>Valid characters: a-z0-9-_ (alphanumeric + underscore + dash)</li>
-            </ul>
-            }
-
-            <label htmlFor="emailText">Email:</label>
-            <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText"
-              value={this.state.email} readOnly={ this.state.emailPrefilled }
-              onChange={(evt) => { this.setState({email: evt.target.value}); }}/>
-            {!this.state.emailValid &&
-            <ul className="error">
-              <li>Invalid email format!</li>
-            </ul>
-            }
-            {this.state.emailExists &&
-            <div className="error">A user with this email already exists!</div>
-            }
-
-          </MDBContainer>
-          <button className="button" onClick={this.handleRegister}>Submit</button>
+    if (this.state.error != null) {
+      return (
+        <ErrorText text={this.state.error}> </ErrorText>
+      );
+    } else if(!this.state.doneLoading){
+      return (
+        <MDBContainer className="page">
+          <LoadingWheel/>
         </MDBContainer>
-      </MDBContainer>
-    );
+      );
+    } else {
+
+      return (
+        <MDBContainer fluid className="page">
+          <MDBContainer fluid className="box">
+            <p className="fontSizeLarge">
+              Register with School
+            </p>
+            <p>
+              To finish creating your account, fill in the text boxes, then press submit.
+            </p>
+            <MDBContainer className="form-group">
+
+              <label htmlFor="firstnameText">First Name:</label>
+              <input placeholder="SIS" className="form-control textBox" id="firstnameText"
+                value={this.state.firstName} readOnly={this.state.firstNamePrefilled}
+                onChange={(evt) => {
+                  this.setState({firstName: evt.target.value});
+                }}
+              />
+              {this.state.firstNameValid.error &&
+                <p style={{color: "red"}}>{ this.state.firstNameValid.error.toString() }</p>
+              }
+              <label htmlFor="lastnameText">Last Name:</label>
+              <input placeholder="Man" className="form-control textBox" id="lastnameText"
+                value={this.state.lastName} readOnly={this.state.lastNamePrefilled}
+                onChange={(evt) => {
+                  this.setState({lastName: evt.target.value});
+                }}
+              />
+              {this.state.lastNameValid.error &&
+                <p style={{color: "red"}}>{ this.state.lastNameValid.error.toString() }</p>
+              }
+              <label htmlFor="usernameText">Username:</label>
+              <input placeholder="mans" className="form-control textBox" id="usernameText"
+                value={this.state.userName} readOnly={this.state.userNamePrefilled}
+                onChange={(evt) => {
+                  this.setState({userName: evt.target.value});
+                }}
+              />
+              {this.state.userNameValid.error &&
+                <p style={{color: "red"}}>{ this.state.userNameValid.error.toString() }</p>
+              }
+              <label htmlFor="emailText">Email:</label>
+              <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText" value={this.state.email} readOnly={this.state.emailPrefilled} onChange={(evt) => {
+                this.setState({email: evt.target.value});
+              }}/>
+              {this.state.emailValid.error &&
+                <p style={{color: "red"}}>{ this.state.emailValid.error.toString() }</p>
+              }
+              {this.state.emailExists &&
+                <p style={{color: "red"}}>A user with this email already exists!</p>
+              }
+
+            </MDBContainer>
+            <button className="button" onClick={this.handleRegister}>Submit</button>
+          </MDBContainer>
+        </MDBContainer>
+      );
+    }
   }
 }
 
