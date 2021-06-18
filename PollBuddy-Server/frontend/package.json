@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "autosize": "^4.0.2",
-    "mdbreact": "^4.27.0",
+    "autosize": "^5.0.0",
+    "joi": "^17.4.0",
+    "mdbreact": "^5.0.2",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-autocomplete": "^1.8.1",
@@ -13,8 +14,7 @@
     "react-markdown": "^4.3.1",
     "react-phone-input-2": "^2.13.7",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "^4.0.0",
-    "joi": "^17.4.0"
+    "react-scripts": "4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -37,6 +37,6 @@
     ]
   },
   "devDependencies": {
-    "jquery": "^3.5.1"
+    "jquery": "^3.6.0"
   }
 }
