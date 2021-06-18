@@ -9,20 +9,20 @@
   "dependencies": {
     "bcrypt": "^5.0.1",
     "bson": "^4.4.0",
-    "connect-mongo": "^3.2.0",
+    "connect-mongo": "^4.4.1",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
-    "debug": "~2.6.9",
-    "dotenv": "^8.6.0",
+    "debug": "^4.3.1",
+    "dotenv": "^10.0.0",
     "eslint": "^7.29.0",
-    "express": "~4.16.1",
+    "express": "^4.17.1",
     "express-cas-authentication": "^0.1.0",
     "express-session": "^1.17.2",
-    "http-errors": "~1.6.3",
+    "http-errors": "^1.8.0",
     "influx": "^5.9.2",
     "joi": "^17.4.0",
     "mongodb": "^3.6.9",
-    "morgan": "~1.9.1",
-    "promise-retry": "^1.1.1"
+    "morgan": "^1.10.0",
+    "promise-retry": "^2.0.1"
   }
 }
