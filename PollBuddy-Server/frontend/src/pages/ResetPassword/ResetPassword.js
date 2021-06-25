@@ -10,7 +10,7 @@ class ResetPassword extends Component {
     super(props);
 
     if(this.props.location.search) {
-      var resetCode = new URLSearchParams(this.props.location.search).get("resetCode");
+      var resetCode = new URLSearchParams(this.props.location.search).get("resetcode");
       var resetCodePrefilled = true;
 
       if(resetCode == null) {resetCode = ""; resetCodePrefilled = false; }
