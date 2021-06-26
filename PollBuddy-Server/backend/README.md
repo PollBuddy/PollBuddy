@@ -1,4 +1,3 @@
-
 ### Scripts
 
 The backend of this project is composed of JavaScript files, along with other files 
