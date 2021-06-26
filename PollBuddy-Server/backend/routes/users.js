@@ -633,15 +633,30 @@ router.get("/:id/edit", function (req, res) {
  * @param {callback} callback - function handler for data received
  */
 router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documentation
+  // Get user info with the matching userID
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+  // User action:
+  // ->  Add | Remove
+  // ->  FirstName | LastName | UserName | Email | Password
   var jsonContent = req.body;
+  // Flag indicates success or not
   var success = false;
+
+  // User action = Add
   if (jsonContent.Action === "Add") {
+    // Checks which information the user want to add
+    //   and update the information, mark the "success" flag
+
+    // User action = Add + FirstName
     if (jsonContent.FirstName !== undefined) {
+      // Update the FirstName in the database
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { FirstName: jsonContent.FirstName } }, function (err, res) {
+        // Error add into to database
         if (err) {
-          return res.status(500).send(createResponse("", err)); // TODO: Error message
+          // Return an Error message
+          return res.status(500).send(createResponse("Error: Adding FirstName failed.", err));
         } else {
+          // Mark the "success" flag
           success = true;
         }
       });
