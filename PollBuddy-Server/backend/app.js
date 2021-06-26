@@ -19,7 +19,7 @@ var app = express();
 
 // Express Session
 const expressSession = require("express-session");
-const MongoStore = require("connect-mongo")(expressSession);
+const MongoStore = require("connect-mongo");
 app.use(expressSession({
   cookie: {
     maxAge: 2629800000
@@ -28,8 +28,8 @@ app.use(expressSession({
   secret: process.env["SESSION_SECRET"],
   secure: true,
   rolling: true,
-  store: new MongoStore({
-    url: process.env["DB_URL"],
+  store: MongoStore.create({
+    mongoUrl: process.env["DB_URL"],
     dbName: process.env["DB_NAME"]
   })
 }));

@@ -26,7 +26,7 @@ export default class FAQ extends Component {
       <MDBContainer fluid className="page">
         <MDBContainer className="box box-body-text">
           <h1>Frequently Asked Questions</h1>
-          <ReactMarkdown source={this.state.questions}/>
+          <ReactMarkdown children={this.state.questions}/>
         </MDBContainer>
       </MDBContainer>
     );

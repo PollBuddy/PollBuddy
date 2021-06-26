@@ -1,7 +1,7 @@
 version: '3'
 services:
   webproxy:
-    image: "nginx"
+    image: "nginx:latest"
     restart: unless-stopped
     volumes:
       - ./PollBuddy-Server/webproxy/conf.d:/etc/nginx/conf.d
@@ -43,7 +43,7 @@ services:
       - backend
   
   db:
-    image: "mongo"
+    image: "mongo:latest"
     restart: unless-stopped
     volumes:
       - mongodata:/data/db

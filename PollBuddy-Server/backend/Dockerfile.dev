@@ -1,6 +1,6 @@
 # Development Dockerfile
 
-FROM node
+FROM node:current
 
 # Create app directory
 WORKDIR /usr/src/app

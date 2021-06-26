@@ -620,6 +620,18 @@ router.get("/:id/edit", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
+/**
+ * This route is used to modify user information
+ * @getdata {void} None
+ * @postdata {void} Action: string, FirstName: string, LastName: string, UserName: string, Email: string, Password: string
+ * @returns {void} On success: Status 200
+ * On failure: Status 400 // TODO: Endpoint requires reworking and these will be filled in then
+ *         or: Status 500 // TODO: Endpoint requires reworking and these will be filled in then
+ *         or: Status 200: { "result": "success" }
+ * @name backend/users/:id/edit_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for data received
+ */
 router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documentation
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   var jsonContent = req.body;
@@ -725,7 +737,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
   } else {
     return res.status(400).send(createResponse("","")); // TODO: Error message;
   }
-  return res.status(200).send(createResponse("","")); // TODO: Success message // TODO: Ensure this is true
+  return res.status(200).send(createResponse()); // TODO: Ensure success actually occurred / move this within somewhere else
 });
 
 router.get("/:id", function (req, res, next) {
