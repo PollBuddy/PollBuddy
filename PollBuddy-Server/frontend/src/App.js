@@ -1,5 +1,5 @@
 import React from "react";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 
 import Group from "./pages/Groups/Groups";
@@ -134,6 +134,12 @@ export default class App extends React.Component {
 
 
             {/* --- Poll Pages --- */}
+
+            {/* Poll ID Redirect */}
+            {/* Redirects from poll ID page (404) to view page */}
+            <Route exact path="/polls/:pollID"
+              render={ (props) => (<Redirect to={"/polls/"+ props.match.params.pollID + "/view"}/>)}
+            />
 
             {/* Poll Viewer Page */}
             <Route exact path="/polls/:pollID/view"
