@@ -633,110 +633,197 @@ router.get("/:id/edit", function (req, res) {
  * @param {callback} callback - function handler for data received
  */
 router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documentation
+  // Get user info with the matching userID
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+  // User action:
+  // ->  Add | Remove
+  // ->  FirstName | LastName | UserName | Email | Password
   var jsonContent = req.body;
+  // Flag indicates success or not
   var success = false;
+
+  // User action = Add
   if (jsonContent.Action === "Add") {
+    // Checks which information the user want to add
+    //   and update the information, mark the "success" flag
+
+    // User action = Add + FirstName
     if (jsonContent.FirstName !== undefined) {
+      // Update the FirstName in the database
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { FirstName: jsonContent.FirstName } }, function (err, res) {
+        // Error add into to database
         if (err) {
-          return res.status(500).send(createResponse("", err)); // TODO: Error message
+          // Return an Error message
+          return res.status(500).send(createResponse("", err)); // TODO: Error message;
         } else {
+          // Mark the "success" flag
           success = true;
         }
       });
     }
+
+    // User action = Add + LastName
     if (jsonContent.LastName !== undefined) {
+      // Update the LastName in the database
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { LastName: jsonContent.LastName } }, function (err, res) {
+        // Error add into to database
         if (err) {
-          return res.status(500).send(createResponse("", err)); // TODO: Error message
+          // Return an Error message
+          return res.status(500).send(createResponse("", err)); // TODO: Error message;
         } else {
+          // Mark the "success" flag
           success = true;
         }
       });
     }
+
+    // User action = Add + UserName
     if (jsonContent.UserName !== undefined) {
+      // Update the UserName in the database
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { UserName: jsonContent.UserName } }, function (err, res) {
+        // Error add into to database
         if (err) {
-          return res.status(500).send(createResponse("", err)); // TODO: Error message
+          // Return an Error message
+          return res.status(500).send(createResponse("", err)); // TODO: Error message;
         } else {
+          // Mark the "success" flag
           success = true;
         }
       });
     }
+
+    // User action = Add + Email
     if (jsonContent.Email !== undefined) {
+      // Update the Email in the database
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { Email: jsonContent.Email } }, function (err, res) {
+        // Error add into to database
         if (err) {
-          return res.status(500).send(createResponse("", err)); // TODO: Error message
+          // Return an Error message
+          return res.status(500).send(createResponse("", err)); // TODO: Error message;
         } else {
+          // Mark the "success" flag
           success = true;
         }
       });
     }
+
+    // User action = Add + Password
     if (jsonContent.Password !== undefined) {
+      // Update the Password in the database
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { Password: bcrypt.hashSync(jsonContent.Password, 10) } }, function (err, res) {
+        // Error add into to database
         if (err) {
-          return res.status(500).send(createResponse("", err)); // TODO: Error message
+          // Return an Error message
+          return res.status(500).send(createResponse("", err)); // TODO: Error message;
         } else {
+          // Mark the "success" flag
           success = true;
         }
       });
     }
+
+    // If user action is neither to Add
+    // ->  FirstName | LastName | UserName | Email | Password
     if (success === false) {
+      // Return an Error message
       return res.status(400).send(createResponse("","")); // TODO: Error message;
     }
+
+  // User action = Remove
   } else if (jsonContent.Action === "Remove") {
+    // Checks which information the user want to remove
+    //   and update the information, mark the "success" flag
+
+    // User action = Remove + FirstName
     if (jsonContent.FirstName !== undefined) {
+      // Update the FirstName in the database
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { FirstName: jsonContent.FirstName } }, function (err, res) {
+        // Error add into to database
         if (err) {
+          // Return an Error message
           return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
+          // Mark the "success" flag
           success = true;
         }
       });
     }
+
+    // User action = Remove + LastName
     if (jsonContent.LastName !== undefined) {
+      // Update the LastName in the database
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { LastName: jsonContent.LastName } }, function (err, res) {
+        // Error add into to database
         if (err) {
+          // Return an Error message
           return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
+          // Mark the "success" flag
           success = true;
         }
       });
     }
+
+    // User action = Remove + UserName
     if (jsonContent.UserName !== undefined) {
+      // Update the UserName in the database
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { UserName: jsonContent.UserName } }, function (err, res) {
+        // Error add into to database
         if (err) {
+          // Return an Error message
           return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
+          // Mark the "success" flag
           success = true;
         }
       });
     }
+
+    // User action = Remove + Email
     if (jsonContent.Email !== undefined) {
+      // Update the Email in the database
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { Email: jsonContent.Email } }, function (err, res) {
+        // Error add into to database
         if (err) {
+          // Return an Error message
           return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
+          // Mark the "success" flag
           success = true;
         }
       });
     }
+
+    // User action = Remove + Password
     if (jsonContent.Password !== undefined) {
+      // Update the Password in the database
       mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { Password: jsonContent.Password } }, function (err, res) {
+        // Error add into to database
         if (err) {
+          // Return an Error message
           return res.status(500).send(createResponse("", err)); // TODO: Error message
         } else {
+          // Mark the "success" flag
           success = true;
         }
       });
     }
+
+    // If user action is neither to Remove
+    // ->  FirstName | LastName | UserName | Email | Password
     if (success === false) {
+      // Return an Error message
       return res.status(400).send(createResponse("","")); // TODO: Error message;
     }
+
+  // If user action is neither
+  // -> Add | Remove
   } else {
+    // Return an Error message
     return res.status(400).send(createResponse("","")); // TODO: Error message;
   }
+
+  // Successfully updated the database as user requested
   return res.status(200).send(createResponse()); // TODO: Ensure success actually occurred / move this within somewhere else
 });
 
