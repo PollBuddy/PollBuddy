@@ -14,11 +14,11 @@ Site Map: <https://draft.io/jubvd>. Contact PM for edit access.
 
 ## How to run the app
 
-Please visit our [Wiki](https://github.com/PollBuddy/PollBuddy/wiki/Installation-Instructions) for detailed instructions on how to install and run Poll Buddy locally.
+Please visit our [Wiki](https://github.com/PollBuddy/PollBuddy/wiki/Installation-(For-Production)-Instructions) for detailed instructions on how to install and run Poll Buddy locally.
 
 ## Development information / How to start contributing
 
-New Poll Buddy members can go to our [Wiki](https://github.com/PollBuddy/PollBuddy/wiki/Contribution-Guide) for instructions on how you can start making contributions to Poll Buddy.
+New Poll Buddy members can go to our [Wiki](https://github.com/PollBuddy/PollBuddy/wiki/Contribution-(Development)-Guide) for instructions on how you can start making contributions to Poll Buddy.
 
 ## Technology Lists
 
