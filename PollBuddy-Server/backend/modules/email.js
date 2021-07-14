@@ -24,7 +24,7 @@ const smtpTransport = nodemailer.createTransport({
   service: "gmail",
   auth: {
     type: "OAuth2",
-    user: "pollbuddy.app@gmail.com",
+    user: process.env.EMAIL_ADDRESS_INTERNAL,
     clientId: process.env.EMAIL_CLIENT_ID,
     clientSecret: process.env.EMAIL_CLIENT_SECRET,
     refreshToken: process.env.EMAIL_REFRESH_TOKEN,
@@ -39,7 +39,7 @@ module.exports = {
   send: function (destination, subject, body) {
     // Create our email
     const mailOptions = {
-      from: "pollbuddy.app@gmail.com",
+      from: process.env.EMAIL_ADDRESS_EXTERNAL,
       to: destination,
       subject: subject,
       generateTextFromHTML: true,
