@@ -70,7 +70,6 @@ module.exports = {
   // If the email system is not configured via the .env file, messages will be logged to console and always succeed.
   // eslint-disable-next-line no-unused-vars
   send: async function (destination, subject, body, callback = function(success, messages){}) {
-
     if(enabled) {
       // Create our email
       const mailOptions = {
@@ -84,13 +83,14 @@ module.exports = {
       // Send the email
       smtpTransport.sendMail(mailOptions, (error, response) => {
         if (error) {
+          console.log("Email failed to send to " + destination + ", subject: " + subject);
           callback(false, error);
         } else {
+          console.log("Email sent to " + destination + ", subject: " + subject);
           callback(true, response);
         }
         smtpTransport.close();
       });
-      console.log("Email sent to " + destination + ", subject: " + subject);
     } else {
       console.log("Email NOT sent to " + destination + ", subject: " + subject + ", body: " + body + emailSigHTML);
       callback(true, "Email sent to console");
