@@ -392,7 +392,17 @@ router.post("/:id/view", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
-//TODO: documentaion
+/**
+ * Calculate and output the correct results or error-handling messages 
+ * for the poll answers
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-idresults
+ * @returns {Poll} results
+ * @throws 400 - Invalid ObjectID.
+ * @throws 500 - ObjectID could not be found in polls or poll_answers.
+ * @name GET api/polls/{id}/results
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.get("/:id/results", async function (req, res, next) {
   const id = await validateID("polls", req.params.id);
   if (!id) {
