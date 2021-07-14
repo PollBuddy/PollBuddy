@@ -1,11 +1,12 @@
 import React from "react";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 
 import Group from "./pages/Groups/Groups";
 import Homepage from "./pages/Homepage/Homepage";
 import LoginWithPollBuddy from "./pages/LoginWithPollBuddy/LoginWithPollBuddy";
 import GroupCreation from "./pages/GroupCreation/GroupCreation";
+import GroupJoin from "./pages/GroupJoin/GroupJoin";
 import GroupEdit from "./pages/GroupEdit/GroupEdit";
 import GroupPolls from "./pages/GroupPolls/GroupPolls";
 import PollEditor from "./pages/PollEditor/PollEditor";
@@ -17,6 +18,7 @@ import Privacy from "./pages/Privacy/Privacy";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
 import RegisterDefault from "./pages/RegisterDefault/RegisterDefault";
 import RegisterWithSchool from "./pages/RegisterWithSchool/RegisterWithSchool";
+import RegisterWithSchoolStep2 from "./pages/RegisterWithSchoolStep2/RegisterWithSchoolStep2";
 import RegisterWithPollBuddy from "./pages/RegisterWithPollBuddy/RegisterWithPollBuddy";
 import PollViewer from "./pages/PollViewer/PollViewer";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
@@ -29,6 +31,7 @@ import QuestionEnded from "./pages/QuestionEnded/QuestionEnded";
 import AnswerRecorded from "./pages/AnswerRecorded/AnswerRecorded";
 import LoginDefault from "./pages/LoginDefault/LoginDefault";
 import LoginWithSchool from "./pages/LoginWithSchool/LoginWithSchool";
+import LoginWithSchoolStep2 from "./pages/LoginWithSchoolStep2/LoginWithSchoolStep2";
 import Code from "./pages/Code/Code";
 
 import Header from "./components/Header/Header.js";
@@ -124,8 +127,19 @@ export default class App extends React.Component {
               render={ (props) => (<GroupEdit {...props} updateTitle={this.updateTitle} />) }
             />
 
+            {/* Group Join Page */}
+            <Route exact path="/groups/join">
+              <GroupJoin updateTitle={this.updateTitle} />
+            </Route>
+
 
             {/* --- Poll Pages --- */}
+
+            {/* Poll ID Redirect */}
+            {/* Redirects from poll ID page (404) to view page */}
+            <Route exact path="/polls/:pollID"
+              render={ (props) => (<Redirect to={"/polls/"+ props.match.params.pollID + "/view"}/>)}
+            />
 
             {/* Poll Viewer Page */}
             <Route exact path="/polls/:pollID/view"
@@ -133,9 +147,9 @@ export default class App extends React.Component {
             />
 
             {/* Poll Editor Page */}
-            <Route exact path="/polls/:pollID/edit">
-              <PollEditor updateTitle={this.updateTitle}/>
-            </Route>
+            <Route exact path="/polls/:pollID/edit"
+              render={ (props) => (<PollEditor {...props} updateTitle={this.updateTitle}/>) }
+            />
 
             {/* Poll Manager Page */}
             <Route exact path="/polls/:pollID/manage">
@@ -143,6 +157,7 @@ export default class App extends React.Component {
             </Route>
 
             {/* Poll Results Page */}
+            {/*use the render function so that we can retrieve :groupID from inside the component*/}
             <Route exact path="/polls/:pollID/results"
               render={ (props) => (<PollResults {...props} updateTitle={this.updateTitle} />) }
             />
@@ -184,6 +199,12 @@ export default class App extends React.Component {
               <LoginWithSchool updateTitle={this.updateTitle} />
             </Route>
 
+            {/* Login with School Account Step 2 Page */}
+            <Route exact path="/login/school/step2"
+              render={ (props) => (<LoginWithSchoolStep2 {...props} updateTitle={this.updateTitle}
+                userInfo={this.state.userInfo} />) }
+            />
+
             {/* Forgot Password Page */}
             <Route exact path="/login/forgot">
               <ForgotPassword updateTitle={this.updateTitle} />
@@ -211,6 +232,13 @@ export default class App extends React.Component {
             <Route exact path="/register/school">
               <RegisterWithSchool updateTitle={this.updateTitle} />
             </Route>
+
+            {/* Register with School Account Step 2 Page */}
+            {/*use the render function so that we can retrieve :groupID from inside the component*/}
+            <Route exact path="/register/school/step2"
+              render={ (props) => (<RegisterWithSchoolStep2 {...props} updateTitle={this.updateTitle}
+                userInfo={this.state.userInfo} />) }
+            />
 
 
             {/* --- Account and User Settings Pages --- */}

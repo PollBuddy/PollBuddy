@@ -3,13 +3,15 @@ import {Redirect} from "react-router-dom";
 import "mdbreact/dist/css/mdb.css";
 import "./LoginWithPollBuddy.scss";
 import { MDBContainer } from "mdbreact";
+const Joi = require('joi');
 
 export default class LoginWithPollBuddy extends Component {
 
   state = {
     successfulLogin: false,
     error: "",
-    email: "",
+    numLoginAttempts: 0,
+    userNameEmail: "",
     password: ""
   };
 
@@ -33,12 +35,42 @@ export default class LoginWithPollBuddy extends Component {
       });
   }
   handleLogin() {
+    const schema = Joi.object({
+      username: Joi.string()
+        .pattern(new RegExp('^(?=.{3,32}$)[a-zA-Z0-9\-._]+$'))
+        .error(new Error('Please enter a valid username or email.')),
+      email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2}).max(320)
+        .error(new Error('Please enter a valid username or email.')),
+      password: Joi.string()
+        .pattern(new RegExp('^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$'))
+        .pattern(new RegExp('^.*[0-9].*$'))
+        .pattern(new RegExp('^.*[A-Z].*$'))
+        .error(new Error('Please enter a valid password.')),
+    });
+    //we need to validate each separately because either username or email could work
+    const validUsername = schema.validate({ username: this.state.userNameEmail });
+    const validEmail = schema.validate({ email: this.state.userNameEmail });
+    const validPassword = schema.validate({ password: this.state.password });
+
+    //error in username/email
+    if(validUsername.error && validEmail.error){
+      this.setState({error: validUsername.error.toString()});
+      return;
+    }
+    //error in password
+    if(validPassword.error){
+      this.setState({error:validPassword.error.toString()});
+      return;
+    }
+    //no errors
+    this.setState({error: ""});
+
     // login request to backend
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        email: this.state.email,
+        userNameEmail: this.state.userNameEmail,
         password: this.state.password
       })
     }).then(response => {
@@ -47,7 +79,11 @@ export default class LoginWithPollBuddy extends Component {
         localStorage.setItem("loggedIn", true);//maybe have an admin/teacher var instead of just true
         this.setState({successfulLogin: true}); // Tell it to redirect to the next page if successful
       } else {
-        this.setState({error: "Invalid email/password combination"});
+        this.setState({error: "Invalid username/email and password combination"});
+        this.setState({numLoginAttempts: this.state.numLoginAttempts + 1});
+        if (this.state.numLoginAttempts >= 5) { // If too many login attempts, offer to reset password
+          this.setState({error: this.state.error + "\nForgot your password? Try clicking \"Forgot Password?\" to reset your password."});
+        }
       }
     }).catch(err => {
       console.log(err);
@@ -71,11 +107,11 @@ export default class LoginWithPollBuddy extends Component {
       <MDBContainer className="page">
         <MDBContainer className="box">
           <MDBContainer className="form-group">
-            <label htmlFor="emailText">Email:</label>
-            <input type="email" placeholder="sisman@rpi.edu" className="form-control textBox" id="emailText"
-              onChange={(evt) => { this.setState({email: evt.target.value}); }}/>
-            <label htmlFor="passwordText">Password:</label>
-            <input type="password" placeholder="••••••••••••" className="form-control textBox" id="passwordText"
+            <label htmlFor="userNameEmail">Username or Email:</label>
+            <input type="userNameEmail" placeholder="sisman@rpi.edu" className="form-control textBox" id="userNameEmail"
+              onChange={(evt) => { this.setState({userNameEmail: evt.target.value}); }}/>
+            <label htmlFor="password">Password:</label>
+            <input type="password" placeholder="••••••••••••" className="form-control textBox" id="password"
               onChange={(evt) => { this.setState({password: evt.target.value}); }}/>
           </MDBContainer>
 
@@ -86,7 +122,7 @@ export default class LoginWithPollBuddy extends Component {
             Register
           </a>
           <a className="Login-link" href = "/login/forgot">
-            Forgot Password
+            Forgot Password?
           </a>
         </MDBContainer>
       </MDBContainer>

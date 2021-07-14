@@ -1,7 +1,7 @@
 version: '3'
 services:
   webproxy:
-    image: "nginx"
+    image: "nginx:latest"
     restart: unless-stopped
     volumes:
       - ./PollBuddy-Server/webproxy/conf.d:/etc/nginx/conf.d
@@ -25,14 +25,11 @@ services:
       - backend
   
   db:
-    image: "mongo"
+    image: "mongo:latest"
     restart: unless-stopped
     volumes:
       - mongodata:/data/db
       - mongoconfig:/data/configdb
-    # Uncomment the 2 lines below if you need direct database access for some reason (ex: developing/debugging)
-    #ports:
-    #  - "27017:27017"
     networks:
       - backend
 

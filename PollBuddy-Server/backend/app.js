@@ -18,16 +18,18 @@ var cors = require("cors");
 var app = express();
 
 // Express Session
-const express_session = require("express-session");
-const MongoStore = require("connect-mongo")(express_session);
-app.use(express_session({
+const expressSession = require("express-session");
+const MongoStore = require("connect-mongo");
+app.use(expressSession({
   cookie: {
-    maxAge: 3600000
+    maxAge: 2629800000
   },
-  name: "pb_session",
-  secret: "s3cr3t",// TODO: Move this out of the code and make it secure
-  store: new MongoStore({
-    url: process.env["DB_URL"],
+  name: "pollbuddy_session",
+  secret: process.env["SESSION_SECRET"],
+  secure: true,
+  rolling: true,
+  store: MongoStore.create({
+    mongoUrl: process.env["DB_URL"],
     dbName: process.env["DB_NAME"]
   })
 }));

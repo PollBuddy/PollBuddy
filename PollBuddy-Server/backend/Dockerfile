@@ -1,6 +1,6 @@
 # Production Dockerfile
 
-FROM node
+FROM node:current-alpine
 
 # Create app directory
 WORKDIR /usr/src/app

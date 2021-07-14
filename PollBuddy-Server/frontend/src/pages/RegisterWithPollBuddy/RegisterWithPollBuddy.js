@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import "./RegisterWithPollBuddy.scss";
 import {withRouter} from "react-router-dom";
+const Joi = require('joi');
 
 class RegisterWithPollBuddy extends Component {
   constructor(props) {
@@ -28,41 +28,48 @@ class RegisterWithPollBuddy extends Component {
 
   handleRegister() {
     // do input validation
-    const userValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(this.state.username);
-    const emailValid = new RegExp(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/).test(this.state.email);
-    var passValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{10,256}$/)
-      .test(this.state.password);
-    const firstnameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(this.state.firstname);
-    const lastnameValid = new RegExp(/^[a-zA-Z]{0,256}$/).test(this.state.lastname);
+    const schema = Joi.object({
+      username: Joi.string()
+        .pattern(new RegExp('^(?=.{3,32}$)[a-zA-Z0-9\-._]+$'))
+        .error(new Error('Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.')),
+      email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2})
+        .max(320)
+        .error(new Error('Invalid email format.')),
+      password: Joi.string()
+        .pattern(new RegExp('^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$'))
+        .pattern(new RegExp('^.*[0-9].*$'))
+        .pattern(new RegExp('^.*[A-Z].*$'))
+        .error(new Error('Invalid password. Must contain 10 or more characters, ' +
+          'at least 1 uppercase letter, and at least 1 number. ' +
+          'Cannot have 4 of the same characters in a row.')),
+      firstname: Joi.string()
+        .min(1)
+        .max(256)
+        .error(new Error('First name must be between 1 and 256 characters.')),
+      lastname: Joi.string()
+        .allow('')
+        .max(256)
+        .error(new Error('Last name must be less than 256 characters.')),
+    });
 
-    // disallow more than 4 of the same characters in a row for password
-    const passWord = this.state.password;
-    var count = 0;
-    var lastChara = "";
-    for (var i = 0; i < passWord.length; i++){
-      if (passWord.charAt(i) === lastChara) {
-        count += 1;
-        if (count > 4) {
-          passValid = false;
-          break;
-        }
-      } else {
-        lastChara = passWord.charAt(i);
-        count = 1;
-      }
-    }
-
+    var userValid = schema.validate({ username: this.state.username });
+    var emailValid = schema.validate({ email: this.state.email });
+    var passValid = schema.validate({ password: this.state.password });
+    var firstnameValid = schema.validate({ firstname: this.state.firstname});
+    var lastnameValid = schema.validate({ lastname: this.state.lastname});
 
     // update component's state
-    this.setState({userValid: userValid});
-    this.setState({emailValid: emailValid});
-    this.setState({passValid: passValid});
-    this.setState({emailExists: false});
-    this.setState({firstnameValid: firstnameValid});
-    this.setState({lastnameValid: lastnameValid});
+    this.setState({
+      userValid: userValid,
+      emailValid: emailValid,
+      emailExists: false,
+      passValid: passValid,
+      firstnameValid: firstnameValid,
+      lastnameValid: lastnameValid
+    });
 
 
-    if (!userValid || !emailValid || !passValid || !lastnameValid || !firstnameValid) {
+    if (userValid.error || emailValid.error || passValid.error || lastnameValid.error || firstnameValid.error) {
       return;
     }
 
@@ -70,11 +77,11 @@ class RegisterWithPollBuddy extends Component {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
-        FirstName: this.state.firstname,
-        LastName: this.state.lastname,
-        Username: this.state.username.toLowerCase(),
-        Email: this.state.email.toLowerCase(),
-        Password: this.state.password
+        firstName: this.state.firstname,
+        lastName: this.state.lastname,
+        userName: this.state.username.toLowerCase(),
+        email: this.state.email.toLowerCase(),
+        password: this.state.password
       })
     }).then(response => response.text())
       .then(response => {
@@ -83,7 +90,7 @@ class RegisterWithPollBuddy extends Component {
         // 2. a string: Exists, which means the email address has already been registered
         // 3. status 203: everything is ok
 
-        // print and check the reponse for debugging (can be deleted later)
+        // print and check the response for debugging (can be deleted later)
         console.log(response);
         if (response === "Exists") {
           this.setState({emailExists: true});
@@ -117,47 +124,35 @@ class RegisterWithPollBuddy extends Component {
             <label htmlFor="firstnameText">First Name:</label>
             <input placeholder="SIS" className="form-control textBox" id="firstnameText"
               onChange={(evt) => { this.setState({firstname: evt.target.value}); }}/>
-            {!this.state.firstnameValid &&
-              <ul className="error">
-                <li>First name must be between 1 and 256 characters</li>
-              </ul>
+            {this.state.firstnameValid.error &&
+              <p style={{color: "red"}}>{ this.state.firstnameValid.error.toString() }</p>
             }
             <label htmlFor="lastnameText">Last Name:</label>
             <input placeholder="Man" className="form-control textBox" id="lastnameText"
               onChange={(evt) => { this.setState({lastname: evt.target.value}); }}/>
-            {!this.state.lastnameValid &&
-              <ul className="error">
-                <li>Last name must be less than 256 characters</li>
-              </ul>
+            {this.state.lastnameValid.error &&
+              <p style={{color: "red"}}>{ this.state.lastnameValid.error.toString() }</p>
             }
             <label htmlFor="usernameText">Username:</label>
             <input placeholder="mans" className="form-control textBox" id="usernameText"
               onChange={(evt) => { this.setState({username: evt.target.value}); }}/>
-            {!this.state.userValid &&
-              <ul className="error">
-                <li>Username must be between 3 and 32 characters</li>
-                <li>Valid characters: a-z0-9-_ (alphanumeric + underscore + dash)</li>
-              </ul>
+            {this.state.userValid.error &&
+              <p style={{color: "red"}}>{ this.state.userValid.error.toString() }</p>
             }
             <label htmlFor="emailText">Email:</label>
             <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText"
               onChange={(evt) => { this.setState({email: evt.target.value}); }}/>
-            {!this.state.emailValid &&
-              <ul className="error">
-                <li>Invalid email format!</li>
-              </ul>
+            {this.state.emailValid.error &&
+              <p style={{color: "red"}}>{ this.state.emailValid.error.toString() }</p>
             }
-            {this.state.emailExists && <div className="error">A user with this email already exists!</div>}
+            {this.state.emailExists &&
+              <p style={{color: "red"}}> A user with this email already exists. </p>
+            }
             <label htmlFor="passwordText">Password:</label>
             <input type="password" placeholder="••••••••••••" className="form-control textBox" id="passwordText"
               onChange= {(evt) => { this.setState({password: evt.target.value}); }}/>
-            {!this.state.passValid &&
-              <ul className="error">
-                <li>Invalid password. Must contain:</li>
-                <li>10 or more characters</li>
-                <li>At least 1 uppercase letter</li>
-                <li>At least 1 number</li>
-              </ul>
+            {this.state.passValid.error &&
+              <p style={{color: "red"}}>{ this.state.passValid.error.toString() }</p>
             }
           </MDBContainer>
           <button className="button" onClick={this.handleRegister}>Submit</button>

@@ -37,7 +37,7 @@ export default class PollViewer extends Component {
         } else {
           console.log("Fetching data succeeded");
           console.log(response);
-          this.setState({"questionData": response, "doneLoading": true});
+          this.setState({"questionData": response.data, "doneLoading": true});
         }
       })
       .catch(error => this.setState({"error": error}));

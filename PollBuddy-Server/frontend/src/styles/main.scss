@@ -9,6 +9,10 @@
   --light-gray: #EEEEEE;
   --gray-placeholder-text: #707070;
 
+  // for readonly text box
+  --light-gray-readonly-text: #9e9e9e;
+  --light-red-readonly-text: #F50057;
+
   --main-font: 'Baloo 2';
   --font-size-small: 1rem;
   --font-size: 1.2rem;
@@ -122,6 +126,14 @@ button:focus {
 
 input.textBox:focus, textarea.textBox:focus {
   border-color: var(--base-purple-logo-bg);
+}
+
+// for readonly text box
+input:read-only.textBox, textarea:read-only.textBox {
+  background-color: var(--light-gray-readonly-text);
+}
+input:read-only.textBox:focus, textarea:read-only.textBox:focus {
+  border-color: var(--light-red-readonly-text);
 }
 
 input.textBox:focus::placeholder, textarea.textBox:focus::placeholder {
@@ -298,6 +310,7 @@ label {
 a {
   color: var(--light-purple-logo-text);
   transition: var(--default-transition);
+  font-style: italic;
 }
 
 a:hover {
@@ -312,4 +325,8 @@ a:hover {
 
 .float-right {
   float: right;
+}
+
+.float-left {
+  float: left;
 }
