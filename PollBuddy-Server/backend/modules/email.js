@@ -1,6 +1,14 @@
 // This email system was built with the help of the following tutorial:
 // https://medium.com/@nickroach_50526/sending-emails-with-node-js-using-smtp-gmail-and-oauth2-316fe9c790a1
 
+const emailSigHTML =
+  "<br /><br /> -- " +
+  "<br />This message was sent via an automated system at <a href='https://pollbuddy.app'>pollbuddy.app</a>." +
+  "<br />A reply is not guaranteed at this address." +
+  "<br />Please direct any questions/comments/concerns to <a href='mailto:help@pollbuddy.app'>help@pollbuddy.app</a>." +
+  "<br />Thank you for using Poll Buddy!" +
+  "<br /><img src='https://github.com/PollBuddy/Resources/raw/main/Branding/Poll%20Buddy%20Logo.png' width='240px' alt='Poll Buddy Logo'/>";
+
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
@@ -36,19 +44,29 @@ const smtpTransport = nodemailer.createTransport({
 
 module.exports = {
 
-  send: function (destination, subject, body) {
+  // To use this function, call it with your destination email address (such as "user@domain.com"), your subject
+  // (such as "Password Reset Confirmation"), the email body (such as "Click this link to reset your password",
+  // HTML tags are supported, the signature at the top of the file will be appended), and a callback function
+  // that accepts a boolean success value and a messages object with error messages or success messages as relevant.
+  // Omitting the callback function will ignore any results.
+  // eslint-disable-next-line no-unused-vars
+  send: async function (destination, subject, body, callback = function(success, messages){}) {
     // Create our email
     const mailOptions = {
       from: process.env.EMAIL_ADDRESS_EXTERNAL,
       to: destination,
       subject: subject,
       generateTextFromHTML: true,
-      html: body
+      html: body + emailSigHTML
     };
 
     // Send the email
     smtpTransport.sendMail(mailOptions, (error, response) => {
-      error ? console.log(error) : console.log(response);
+      if(error) {
+        callback(false, error);
+      } else {
+        callback(true, response);
+      }
       smtpTransport.close();
     });
   }
