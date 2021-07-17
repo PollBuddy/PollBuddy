@@ -276,7 +276,7 @@ router.post("/:id/delete", function (req, res) {//use router.delete??
  * @property {string} _id Object ID of the poll.
  * @property {string} Name of the poll.
  * @property {Questions[]} Array of Questions
- * @returns {Poll[]} response
+ * @returns {Poll} response
  * @throws 500 - An error occurred while communicating with the database.
  * @name GET api/polls
  * @param {string} path - Express path.
@@ -307,7 +307,7 @@ router.post("/", function (req, res) {
 /**
  * Get data of a single poll with the specified id.
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-id
- * @returns {Poll} response
+ * @returns {Poll} poll
  * @throws 400 - Invalid ObjectID.
  * @throws 500 - An error occurred while communicating with the database.
  * @name GET api/polls/{id}
@@ -342,7 +342,16 @@ router.post("/:id", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
-//TODO: documentation
+/**
+ * Validate a specified ID for a poll, and send questions to the poll.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-idview
+ * @returns {Poll} openQuestions 
+ * @throws 400 - Invalid Poll ID
+ * @throws 500 - Failed connection to the poll database
+ * @name POST api/polls/{id}/view
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.get("/:id/view", async function (req, res, next) {
   const id = await validateID("polls", req.params.id);
   if (!id) {
