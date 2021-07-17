@@ -33,6 +33,13 @@ function useOutsideAlerter(ref, menuProps) {
     }
     // Bind the event listener
     document.addEventListener("click", handleClickOutside);
+    // Stop propogation to Logout (so we don't log out every menu click) only if logged in
+    if(localStorage.getItem("loggedIn") == "true") {
+      document.getElementById("logout").addEventListener("click",function(e) {
+        e.stopPropagation();
+        localStorage.setItem("loggedIn",false);
+      });
+    }
     return () => {
       // Unbind the event listener on clean up
       document.removeEventListener("click", handleClickOutside);
@@ -40,38 +47,40 @@ function useOutsideAlerter(ref, menuProps) {
   }, [ref]);
 }
 
-function LoggedInMenu() {
+function LoggedInMenu(props) {
   const wrapperRef = useRef(null);
+  useOutsideAlerter(wrapperRef, props);
   return (
-    <div className = "Dropdown" ref = {wrapperRef}>
-      <a onClick={localStorage.setItem("loggedIn",false)} href="/">Logout</a>
+    <div className = "Dropdown" ref={wrapperRef}>
       <a href="/account">Account</a>
+      <a href="/code">Enter Poll Code</a>
       <a href="/groups">Groups</a>
       <a href="polls/history">History</a>
-      <a href="/">Settings</a>
-    </div>
+      <a href="/">Settings</a> 
+      <a href="/" id="logout">Logout</a>
+    </div> // settings page will probably be the account info page which will have to be renamed "Account Settings"
   );
 }
 
-function LoggedOutMenu() {
+function LoggedOutMenu(props) {
   const wrapperRef = useRef(null);
+  useOutsideAlerter(wrapperRef, props);
   return (
     <div className = "Dropdown" ref={wrapperRef}>
       <a href="/login">Login</a>
       <a href="/register">Register</a>
+      <a href="/code">Enter Poll Code</a>
     </div>
   );
 }
 
 function DropdownMenu(props) {
   console.log("Status: " + localStorage.getItem("loggedIn"))
-  const wrapperRef = useRef(null);
-  useOutsideAlerter(wrapperRef, props);
   if(localStorage.getItem("loggedIn") == "true") {
-    return <LoggedInMenu />
+    return LoggedInMenu(props);
   }
   else {
-    return <LoggedOutMenu />
+    return LoggedOutMenu(props);
   }
   // return (
   //   <div className="Dropdown" ref={wrapperRef}>
