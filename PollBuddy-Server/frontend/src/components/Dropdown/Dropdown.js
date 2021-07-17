@@ -40,19 +40,49 @@ function useOutsideAlerter(ref, menuProps) {
   }, [ref]);
 }
 
-function DropdownMenu(props) {
+function LoggedInMenu() {
   const wrapperRef = useRef(null);
-  useOutsideAlerter(wrapperRef, props);
   return (
-    <div className="Dropdown" ref={wrapperRef}>
-      <a href="/login">Login</a>
-      <a onClick={localStorage.setItem("loggedIn", false)} href="/">Logout</a>
-      <a href="/register">Register</a>
+    <div className = "Dropdown" ref = {wrapperRef}>
+      <a onClick={localStorage.setItem("loggedIn",false)} href="/">Logout</a>
       <a href="/account">Account</a>
       <a href="/groups">Groups</a>
-      <a href="/polls/history">History</a>
-      <a href="/code">Enter Poll Code</a>
-      {/* <a href="/">Settings</a> */}
+      <a href="polls/history">History</a>
+      <a href="/">Settings</a>
     </div>
-  ); // settings page will probably be the account info page which will have to be renamed "Account Settings"
+  );
+}
+
+function LoggedOutMenu() {
+  const wrapperRef = useRef(null);
+  return (
+    <div className = "Dropdown" ref={wrapperRef}>
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    </div>
+  );
+}
+
+function DropdownMenu(props) {
+  console.log("Status: " + localStorage.getItem("loggedIn"))
+  const wrapperRef = useRef(null);
+  useOutsideAlerter(wrapperRef, props);
+  if(localStorage.getItem("loggedIn") == "true") {
+    return <LoggedInMenu />
+  }
+  else {
+    return <LoggedOutMenu />
+  }
+  // return (
+  //   <div className="Dropdown" ref={wrapperRef}>
+  //     <a href="/login">Login</a>
+  //     <a onClick={localStorage.setItem("loggedIn", false)} href="/">Logout</a>
+  //     <a href="/register">Register</a>
+  //     <a href="/account">Account</a>
+  //     <a href="/groups">Groups</a>
+  //     <a href="/polls/history">History</a>
+  //     <a href="/code">Enter Poll Code</a>
+  //     {/* <a href="/">Settings</a> */}
+  //   </div>
+  // ); // settings page will probably be the account info page which will have to be renamed "Account Settings"
 }
