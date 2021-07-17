@@ -59,6 +59,8 @@ function LoggedInMenu(props) {
       <a href="/">Settings</a> 
       <a href="/" id="logout">Logout</a>
     </div> // settings page will probably be the account info page which will have to be renamed "Account Settings"
+    //History currently directs to the same place as My Poll History Page in App.js
+    //Settings seems to no longer be used, seems covered by Account, as described by old comment above
   );
 }
 
@@ -75,23 +77,9 @@ function LoggedOutMenu(props) {
 }
 
 function DropdownMenu(props) {
-  console.log("Status: " + localStorage.getItem("loggedIn"))
   if(localStorage.getItem("loggedIn") == "true") {
     return LoggedInMenu(props);
-  }
-  else {
+  } else {
     return LoggedOutMenu(props);
   }
-  // return (
-  //   <div className="Dropdown" ref={wrapperRef}>
-  //     <a href="/login">Login</a>
-  //     <a onClick={localStorage.setItem("loggedIn", false)} href="/">Logout</a>
-  //     <a href="/register">Register</a>
-  //     <a href="/account">Account</a>
-  //     <a href="/groups">Groups</a>
-  //     <a href="/polls/history">History</a>
-  //     <a href="/code">Enter Poll Code</a>
-  //     {/* <a href="/">Settings</a> */}
-  //   </div>
-  // ); // settings page will probably be the account info page which will have to be renamed "Account Settings"
 }
