@@ -8,7 +8,7 @@ import "mdbreact/dist/css/mdb.css";
 export default class ResetPassword extends Component {
   constructor() {
     super();
-    this.state = {logOutCheck: true}
+    this.state = {logOutCheck: true};
     this.handleLogOutCheck = this.handleLogOutCheck.bind(this);
   }
 
