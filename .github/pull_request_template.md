@@ -3,12 +3,13 @@
 <!-- 
 ### Things to do before creating a pull request:
 1. Make sure that your PR is not a duplicate.
-2. You have done your changes in a separate branch that's based off of either frontend or backend.
+2. You have done your changes in a separate branch that's based on either frontend or backend.
 3. You have used descriptive commit messages.
-4. You've tested your changes
+4. You have tested your changes.
 5. Your pull request should be from your branch into either frontend or backend. 
 6. Your pull request should have a descriptive title, and fill out everything below.
-7. Assign someone to review this PR, plus the PM
+7. Your code should either include proper documentation or leave it as a Todo item and open an issue with label `documentation`.
+8. Assign someone to review this PR, plus the PM.
 
 -->
 
