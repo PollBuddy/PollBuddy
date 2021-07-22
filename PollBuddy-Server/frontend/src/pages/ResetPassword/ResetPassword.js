@@ -9,7 +9,6 @@ import "mdbreact/dist/css/mdb.css";
 class ResetPassword extends Component {
   constructor(props) {
     super(props);
-    this.state = {logOutCheck: true};
     this.handleLogOutCheck = this.handleLogOutCheck.bind(this);
 
     if(this.props.location.search) {
@@ -20,9 +19,11 @@ class ResetPassword extends Component {
     }
 
     this.state = {
+      logOutCheck: true,
       resetCode: resetCode,
       resetCodePrefilled: resetCodePrefilled,
     };
+  }
 
   handleLogOutCheck() {
     this.setState({logOutCheck: !this.state.logOutCheck});
