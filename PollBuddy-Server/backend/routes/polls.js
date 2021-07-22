@@ -343,9 +343,10 @@ router.post("/:id", function (req, res) {
 });
 
 /**
- * Validate a specified ID for a poll, and send questions to the poll.
+ * Returns an array containing details about the currently open/available question(s) for a given poll ID.
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-idview
- * @returns {Poll} openQuestions 
+ * @returns {Polls[]} Questions
+ * @returns {PollID} PollID
  * @throws 400 - Invalid Poll ID
  * @throws 500 - Failed connection to the poll database
  * @name POST api/polls/{id}/view
