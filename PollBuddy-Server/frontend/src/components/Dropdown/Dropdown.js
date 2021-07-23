@@ -37,6 +37,9 @@ function useOutsideAlerter(ref, menuProps) {
     if(localStorage.getItem("loggedIn") == "true") {
       document.getElementById("logout").addEventListener("click",function(e) {
         e.stopPropagation();
+        fetch(process.env.REACT_APP_BACKEND_URL + "/users/logout", {
+          method: "GET"
+        }); 
         localStorage.setItem("loggedIn",false);
       });
     }
