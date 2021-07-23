@@ -41,6 +41,9 @@ function useOutsideAlerter(ref, menuProps) {
           method: "GET"
         }); 
         localStorage.setItem("loggedIn",false);
+        localStorage.removeItem("lastName");
+        localStorage.removeItem("userName");
+        localStorage.removeItem("firstName");
       });
     }
     return () => {
