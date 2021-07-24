@@ -73,6 +73,11 @@ app.use((req, res, next) => {
   return next();
 });
 
+// Automated Email System
+const email = require("./modules/email.js");
+email.initialize();
+// TODO: Remove this example after the system gets used somewhere (likely in the forgot password system)
+// email.send("user@domain.com", "This is a cool email!", "HTML <b>tags</b> work too!");
 
 app.use(logger("dev"));
 app.use(express.json());
