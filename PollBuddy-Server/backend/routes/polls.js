@@ -258,12 +258,20 @@ router.get("/:id/delete", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
-//TODO: documentaion
+/**
+ * Delete a poll from the collection of polls, using its specified id 
+ * @property {string} id - ID of the poll.
+ * @throws 500 - An error occurred while communicating with the database.
+ * @returns {Poll} response
+ * @name POST api/polls/{id}/delete
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.post("/:id/delete", function (req, res) {//use router.delete??
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("polls").deleteOne({"_id": id}, function (err, res) {
     if (err) {
-      return res.status(500).send(createResponse("", err)); // TODO: Error message;
+      return res.status(500).send(createResponse(null, "An error occurred while communicating with the database.")); // TODO: Error message;
     }
   });
   return res.status(200).send(createResponse("", "")); // TODO: Success message;
@@ -363,7 +371,7 @@ router.get("/:id/view", async function (req, res, next) {
 
   mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
     if (err) {
-      return res.status(500).send(createResponse("", err)); // TODO: Error message;
+      return res.status(500).send(createResponse(null, "Failed connection to the poll database")); // TODO: Error message;
     }
 
     //console.log(result);
@@ -420,12 +428,12 @@ router.get("/:id/results", async function (req, res, next) {
 
   mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
     if (err) {
-      return res.status(500).send(createResponse("", err)); // TODO: Error message;
+      return res.status(500).send(createResponse(null, "ObjectID could not be found in polls")); // TODO: Error message;
     }
 
     mongoConnection.getDB().collection("poll_answers").find({"PollID": id}).toArray(function (err2, result2) {
       if (err2) {
-        return res.status(500).send(createResponse("", err2)); // TODO: Error message;
+        return res.status(500).send(createResponse(null, "PollID could not be found in poll_answers")); // TODO: Error message;
       }
 
       // Loop through the poll's questions and add to openQuestions the Question Number, Text and Answer Choices if
