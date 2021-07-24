@@ -223,12 +223,21 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
   }
 });
 
-//TODO: documentaion
+ /**
+ * Get the answers of a poll, using its specified id 
+ * For full documentation see the wiki 
+ * @property {string} id - ID of the poll.
+ * @throws 500 - An error occurred while communicating with the database.
+ * @returns {Poll} response
+ * @name GET api/polls/pollAnswers
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.get("/pollAnswers", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("poll_answers").deleteOne({"_id": id}, function (err, res) {
     if (err) {
-      return res.status(500).send(createResponse("", err)); // TODO: Error message
+      return res.status(500).send(createResponse(null, "An error occurred while communicating with the database.")); // TODO: Error message
     }
   });
   return res.status(200).send(createResponse("", "")); // TODO: Success message;
