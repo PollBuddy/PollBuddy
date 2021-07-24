@@ -280,7 +280,7 @@ router.post("/:id/delete", function (req, res) {//use router.delete??
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("polls").deleteOne({"_id": id}, function (err, res) {
     if (err) {
-      return res.status(500).send(createResponse(null, "An error occurred while communicating with the database.")); // TODO: Error message;
+      return res.status(500).send(createResponse("", err)); // TODO: Error message;
     }
   });
   return res.status(200).send(createResponse("", "")); // TODO: Success message;
@@ -293,7 +293,7 @@ router.post("/:id/delete", function (req, res) {//use router.delete??
  * @property {string} _id Object ID of the poll.
  * @property {string} Name of the poll.
  * @property {Questions[]} Array of Questions
- * @returns {Poll} response
+ * @returns {Poll[]} response
  * @throws 500 - An error occurred while communicating with the database.
  * @name GET api/polls
  * @param {string} path - Express path.
@@ -324,7 +324,7 @@ router.post("/", function (req, res) {
 /**
  * Get data of a single poll with the specified id.
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-id
- * @returns {Poll} poll
+ * @returns {Poll} response
  * @throws 400 - Invalid ObjectID.
  * @throws 500 - An error occurred while communicating with the database.
  * @name GET api/polls/{id}
@@ -360,10 +360,9 @@ router.post("/:id", function (req, res) {
 });
 
 /**
- * Returns an array containing details about the currently open/available question(s) for a given poll ID.
+ * Validate a specified ID for a poll, and send questions to the poll.
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-idview
- * @returns {Polls[]} Questions
- * @returns {PollID} PollID
+ * @returns {Poll} openQuestions 
  * @throws 400 - Invalid Poll ID
  * @throws 500 - Failed connection to the poll database
  * @name POST api/polls/{id}/view
@@ -381,7 +380,7 @@ router.get("/:id/view", async function (req, res, next) {
 
   mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
     if (err) {
-      return res.status(500).send(createResponse(null, "Failed connection to the poll database")); // TODO: Error message;
+      return res.status(500).send(createResponse("", err)); // TODO: Error message;
     }
 
     //console.log(result);
@@ -438,12 +437,12 @@ router.get("/:id/results", async function (req, res, next) {
 
   mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
     if (err) {
-      return res.status(500).send(createResponse(null, "ObjectID could not be found in polls")); // TODO: Error message;
+      return res.status(500).send(createResponse("", err)); // TODO: Error message;
     }
 
     mongoConnection.getDB().collection("poll_answers").find({"PollID": id}).toArray(function (err2, result2) {
       if (err2) {
-        return res.status(500).send(createResponse(null, "PollID could not be found in poll_answers")); // TODO: Error message;
+        return res.status(500).send(createResponse("", err2)); // TODO: Error message;
       }
 
       // Loop through the poll's questions and add to openQuestions the Question Number, Text and Answer Choices if
