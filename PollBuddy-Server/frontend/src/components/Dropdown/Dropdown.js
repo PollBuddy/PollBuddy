@@ -74,11 +74,9 @@ function LoggedInMenu(props) {
       <a href="/code">Enter Poll Code</a>
       <a href="/groups">Groups</a>
       <a href="polls/history">History</a>
-      <a href="/">Settings</a> 
-      <a id="logout">Logout</a>
-    </div> // settings page will probably be the account info page which will have to be renamed "Account Settings"
-    //History currently directs to the same place as My Poll History Page in App.js
-    //Settings seems to no longer be used, seems covered by Account, as described by old comment above
+      <a id="logout">Logout</a> 
+    </div>
+    //Logout routes to '/' in the event listeners above
   );
 }
 
