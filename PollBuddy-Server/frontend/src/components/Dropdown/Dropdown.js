@@ -42,19 +42,19 @@ function useOutsideAlerter(ref, menuProps) {
         fetch(process.env.REACT_APP_BACKEND_URL + "/users/logout", {
           method: "GET"
         }).then(response => {
-            if(response.ok) {
-              //Logout has succeeded, Clear frontend user data
-              localStorage.setItem("loggedIn",false);
-              localStorage.removeItem("lastName");
-              localStorage.removeItem("userName");
-              localStorage.removeItem("firstName");
-            } else {
-              console.log("Error Logging Out");
-            }
-            //Navigates after response so that the redirect does not interrupt response
-            history.push('/');
-            //Reloads the page so that the logged-in menu closes
-            history.go(0);
+          if(response.ok) {
+            //Logout has succeeded, Clear frontend user data
+            localStorage.setItem("loggedIn",false);
+            localStorage.removeItem("lastName");
+            localStorage.removeItem("userName");
+            localStorage.removeItem("firstName");
+          } else {
+            console.log("Error Logging Out");
+          }
+          //Navigates after response so that the redirect does not interrupt response
+          history.push('/');
+          //Reloads the page so that the logged-in menu closes
+          history.go(0);
         });
       });
     }
