@@ -35,27 +35,29 @@ function useOutsideAlerter(ref, menuProps) {
     }
     // Bind the event listener
     document.addEventListener("click", handleClickOutside);
-    // Stop propogation to Logout (so we don't log out every menu click) only if logged in
+    // Stop propagation to Logout (so we don't log out every menu click) only if logged in
     if(localStorage.getItem("loggedIn") === "true") {
       document.getElementById("logout").addEventListener("click",function(e) {
         e.stopPropagation();
         fetch(process.env.REACT_APP_BACKEND_URL + "/users/logout", {
           method: "GET"
-        }).then(response => {
-          if(response.ok) {
-            //Logout has succeeded, Clear frontend user data
-            localStorage.setItem("loggedIn",false);
-            localStorage.removeItem("lastName");
-            localStorage.removeItem("userName");
-            localStorage.removeItem("firstName");
-          } else {
-            console.log("Error Logging Out");
-          }
-          //Navigates after response so that the redirect does not interrupt response
-          history.push('/');
-          //Reloads the page so that the logged-in menu closes
-          history.go(0);
-        });
+        }).then(response => response.json())
+          .then(response => {
+            console.log(response);
+            if(response.result === "success") {
+              //Logout has succeeded, Clear frontend user data
+              localStorage.setItem("loggedIn", false);
+              localStorage.removeItem("lastName");
+              localStorage.removeItem("userName");
+              localStorage.removeItem("firstName");
+            } else {
+              console.log("Error Logging Out");
+            }
+            //Navigates after response so that the redirect does not interrupt response
+            history.push("/");
+            //Reloads the page so that the logged-in menu closes
+            history.go(0);
+          });
       });
     }
     return () => {
