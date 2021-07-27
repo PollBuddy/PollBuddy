@@ -223,7 +223,7 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
   }
 });
 
- /**
+/**
  * Get the answers of a poll, using its specified id 
  * For full documentation see the wiki 
  * @property {string} id - ID of the poll.
