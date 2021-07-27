@@ -223,7 +223,16 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
   }
 });
 
-//TODO: documentaion
+/**
+ * Get the answers of a poll, using its specified id 
+ * For full documentation see the wiki 
+ * @property {string} id - ID of the poll.
+ * @throws 500 - An error occurred while communicating with the database.
+ * @returns {Poll} response
+ * @name GET api/polls/pollAnswers
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.get("/pollAnswers", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("poll_answers").deleteOne({"_id": id}, function (err, res) {
@@ -258,7 +267,15 @@ router.get("/:id/delete", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
-//TODO: documentaion
+/**
+ * Delete a poll from the collection of polls, using its specified id 
+ * @property {string} id - ID of the poll.
+ * @throws 500 - An error occurred while communicating with the database.
+ * @returns {Poll} response
+ * @name POST api/polls/{id}/delete
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.post("/:id/delete", function (req, res) {//use router.delete??
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("polls").deleteOne({"_id": id}, function (err, res) {
@@ -342,7 +359,16 @@ router.post("/:id", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
-//TODO: documentation
+/**
+ * Validate a specified ID for a poll, and send questions to the poll.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-idview
+ * @returns {Poll} openQuestions 
+ * @throws 400 - Invalid Poll ID
+ * @throws 500 - Failed connection to the poll database
+ * @name POST api/polls/{id}/view
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.get("/:id/view", async function (req, res, next) {
   const id = await validateID("polls", req.params.id);
   if (!id) {
