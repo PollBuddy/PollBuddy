@@ -1,6 +1,7 @@
 import React, { Component, useState, useRef, useEffect } from "react";
 import "mdbreact/dist/css/mdb.css";
 import "./Dropdown.scss";
+import { useHistory } from "react-router-dom";
 
 export default class Dropdown extends Component {
   render() {
@@ -24,6 +25,7 @@ function DropdownButton() {
 }
 
 function useOutsideAlerter(ref, menuProps) {
+  let history = useHistory();
   useEffect(() => {
     // Close menu if click outside
     function handleClickOutside(event) {
@@ -33,6 +35,36 @@ function useOutsideAlerter(ref, menuProps) {
     }
     // Bind the event listener
     document.addEventListener("click", handleClickOutside);
+    // Stop propagation to Logout (so we don't log out every menu click) only if logged in
+    if(localStorage.getItem("loggedIn") === "true") {
+      document.getElementById("logout").addEventListener("click",function(e) {
+        e.stopPropagation();
+        fetch(process.env.REACT_APP_BACKEND_URL + "/users/logout", {
+          method: "GET"
+        }).then(response => {
+          if(response.ok) {
+            return response.json();
+          } else {
+            console.log("Error Logging Out");
+          }
+        }).then(response => {
+          console.log(response);
+          if(response.result === "success") {
+            //Logout has succeeded, Clear frontend user data
+            localStorage.setItem("loggedIn", false);
+            localStorage.removeItem("lastName");
+            localStorage.removeItem("userName");
+            localStorage.removeItem("firstName");
+          } else {
+            console.log("Error Logging Out");
+          }
+          //Navigates after response so that the redirect does not interrupt response
+          history.push("/");
+          //Reloads the page so that the logged-in menu closes
+          history.go(0);
+        });
+      });
+    }
     return () => {
       // Unbind the event listener on clean up
       document.removeEventListener("click", handleClickOutside);
@@ -40,19 +72,37 @@ function useOutsideAlerter(ref, menuProps) {
   }, [ref]);
 }
 
-function DropdownMenu(props) {
+function LoggedInMenu(props) {
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef, props);
   return (
-    <div className="Dropdown" ref={wrapperRef}>
-      <a href="/login">Login</a>
-      <a onClick={localStorage.setItem("loggedIn", false)} href="/">Logout</a>
-      <a href="/register">Register</a>
+    <div className = "Dropdown" ref={wrapperRef}>
       <a href="/account">Account</a>
-      <a href="/groups">Groups</a>
-      <a href="/polls/history">History</a>
       <a href="/code">Enter Poll Code</a>
-      {/* <a href="/">Settings</a> */}
+      <a href="/groups">Groups</a>
+      <a href="polls/history">History</a>
+      <a id="logout">Logout</a> 
     </div>
-  ); // settings page will probably be the account info page which will have to be renamed "Account Settings"
+    //Logout routes to '/' in the event listeners above
+  );
+}
+
+function LoggedOutMenu(props) {
+  const wrapperRef = useRef(null);
+  useOutsideAlerter(wrapperRef, props);
+  return (
+    <div className = "Dropdown" ref={wrapperRef}>
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+      <a href="/code">Enter Poll Code</a>
+    </div>
+  );
+}
+
+function DropdownMenu(props) {
+  if(localStorage.getItem("loggedIn") === "true") {
+    return LoggedInMenu(props);
+  } else {
+    return LoggedOutMenu(props);
+  }
 }
