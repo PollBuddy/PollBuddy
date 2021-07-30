@@ -135,6 +135,14 @@ export default class App extends React.Component {
 
             {/* --- Poll Pages --- */}
 
+            {/* My Poll Histories Page */}
+            {/* This route (and any others that route through /polls/that are not polls)
+                need to be lsited BEFORE the Poll ID Redirect to ensure they are not
+                treated like a :pollID */}
+            <Route exact path="/polls/history">
+              <PollHistory updateTitle={this.updateTitle} />
+            </Route>
+
             {/* Poll ID Redirect */}
             {/* Redirects from poll ID page (404) to view page */}
             <Route exact path="/polls/:pollID"
@@ -161,11 +169,6 @@ export default class App extends React.Component {
             <Route exact path="/polls/:pollID/results"
               render={ (props) => (<PollResults {...props} updateTitle={this.updateTitle} />) }
             />
-
-            {/* My Poll Histories Page */}
-            <Route exact path="/polls/history">
-              <PollHistory updateTitle={this.updateTitle} />
-            </Route>
 
             {/* Question Ended Page */}
             {/* A page that shows when a question is closed by an instructor
