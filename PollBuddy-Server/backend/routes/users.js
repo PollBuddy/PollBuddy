@@ -832,7 +832,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
  * which will be only available when running in development mode soon.
  * Full documentation: https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Users)#apiusersid
  * ---
- * This route is used to get the full user information
+ * This route is used to get the full user information stored in the database
  * full user information: { Username, eMail, Password, FirstName, LastName }
  * ^^^ Refer to: https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-User-Data
  * @getdata {void} None
@@ -841,7 +841,7 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
  * On failure: Status 500 // TODO: Error message
  * @name backend/users/:id
  * @param {string} path - Express path
- * @param {callback} callback - function handler for data received
+ * @param {callback} callback - function handler for route
  */
 router.get("/:id", function (req, res, next) {
   // Gets all user info with the matching userID and stores the info in an array
