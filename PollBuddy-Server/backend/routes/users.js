@@ -851,6 +851,17 @@ router.post("/:id", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
+/**
+ * This route obtains the group of users by id, and returns a network response depending on whether 
+ * the network communication was successful or not
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} On success: Status 200
+ * On failure: Status 500 // TODO: Endpoint requires error message 
+ * @name backend/users/:id/GROUPS
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
 router.get("/:id/groups", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("users").find({ "_id": id }, { projection: { _id: 0, Groups: 1 } }).map(function (item) {
