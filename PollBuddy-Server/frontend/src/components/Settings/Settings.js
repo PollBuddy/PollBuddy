@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { MDBContainer } from "mdbreact";
 import {Link} from "react-router-dom";
 
-import "./Settings.scss"
+import "./Settings.scss";
 
 export default class Settings extends Component{
   constructor(props) {

@@ -59,7 +59,7 @@ export default class PollEditor extends Component {
       pollQuestionTitleValue: "",
       pollQuestionValue: "",
       reorderQuestions: false,
-      randomQuestions: false,
+      randomQuestions: false
     };
 
     // this.state.pollTitleValue = this.state.pollTitle;
