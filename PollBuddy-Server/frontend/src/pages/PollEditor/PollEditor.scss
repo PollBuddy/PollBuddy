@@ -1,5 +1,6 @@
 .page .Poll_Editor_box {
     width: 40%;
+    text-align: center;
 }
 
 .page .Poll_Editor_center {
@@ -21,3 +22,14 @@
 .Poll_Editor_cancel_button {
     float: right;
 }
+
+#randomizeContainer {
+    .randomizeBox, .randomizeLabel {
+      display: inline-block;
+    }
+  
+    .randomizeBox {
+      height: 25px;
+      width: 25px;
+    }
+  }

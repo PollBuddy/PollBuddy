@@ -42,6 +42,7 @@ export default class PollEditor extends Component {
   constructor(props) {
     super(props);
     this.askQuestion = this.askQuestion.bind(this);
+    this.handleRandomize = this.handleRandomize.bind(this);
 
     // let questions = require("./placeholder");//./placeholder will need to be changed into the json file in the get call or something
 
@@ -57,7 +58,8 @@ export default class PollEditor extends Component {
       currentQuestion: "",
       pollQuestionTitleValue: "",
       pollQuestionValue: "",
-      reorderQuestions: false
+      reorderQuestions: false,
+      randomQuestions: false,
     };
 
     // this.state.pollTitleValue = this.state.pollTitle;
@@ -67,6 +69,10 @@ export default class PollEditor extends Component {
     this.handlePollDescriptionChange = this.handlePollDescriptionChange.bind(this);
     this.handlePollQuestionTitleChange = this.handlePollQuestionTitleChange.bind(this);
     this.handlePollQuestionChange = this.handlePollQuestionChange.bind(this);
+  }
+
+  handleRandomize() {
+    this.setState({randomQuestions: !this.state.randomQuestions});
   }
 
   askQuestion() {
@@ -223,7 +229,13 @@ export default class PollEditor extends Component {
                   <button type="submit" id="newQuestionCancelButton" className="button display_none Poll_Editor_cancel_button" onClick={() => this.cancelNewQuestion()}>Cancel</button>
                 </MDBContainer>
               </div>
-
+                
+              {this.state.questions.length > 1 && !this.displayQuestionEditor &&
+                <div id="randomizeContainer">
+                  <input type="checkbox" onChange={this.handleRandomize} className="randomizeBox" id="randomizeQuestions" checked={this.randomQuestions}/>
+                  <label className="randomizeLabel" for="randomizeQuestions">Randomize Questions</label>
+                </div>
+              }
               {this.state.displayQuestionEditor &&
                 <MDBContainer class="form-group">
                   <input className="form-control textBox" id="edit_question_title_input" placeholder="Edit Title" value={this.state.pollQuestionTitleValue} onChange={this.handlePollQuestionTitleChange}></input>
