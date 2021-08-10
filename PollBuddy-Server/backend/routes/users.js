@@ -9,6 +9,7 @@ const Joi = require("joi");
 var mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
 const {createResponse, validateID, isEmpty} = require("../modules/utils"); // object destructuring, only import desired functions
+const e = require("express");
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/
@@ -607,6 +608,24 @@ router.post("/logout", function (req, res) {
 });
 
 /**
+ * 
+ */
+router.get("/me", async function (req,res,next) {
+  var collection = mongoConnection.getDB().collection("users");
+  const userID = req.session.userData.userID;
+  var idCode = new bson.ObjectID(userID);
+  const user = await collection.findOne({"_id" : idCode});
+  if(user) {
+    return res.status(200).send(createResponse(JSON.stringify(user)));
+  }
+  return res.status(400).send(createResponse(null,"Invalid User"));
+});
+
+router.post("/me",function(req,res) {
+  return res.status(200).send(createResponse("Made it to Me POST"));
+});
+
+/**
  * This route is not used. It is simply there to have some response to /api/users/:id/edit when using GET.
  * @getdata {void} None
  * @postdata {void} None
@@ -877,6 +896,8 @@ router.post("/:id/groups", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
+
+
 module.exports = router;
 
 // Middleware for getting user information
@@ -911,3 +932,6 @@ module.exports.user_middleware = function (req, res, next) {
 
   next();
 };
+
+
+
