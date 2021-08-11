@@ -224,15 +224,15 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
 });
 
 /**
- * Get the answers of a poll, using its specified id 
- * For full documentation see the wiki 
- * @property {string} id - ID of the poll.
- * @throws 500 - An error occurred while communicating with the database.
- * @returns {Poll} response
- * @name GET api/polls/pollAnswers
- * @param {string} path - Express path.
- * @param {function} callback - Function handler for endpoint.
- */
+* Get the answers of a poll, using its specified id
+* For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-pollAnswers
+* @property {string} id - ID of the poll.
+* @throws 500 - An error occurred while communicating with the database.
+* @returns {Poll} response
+* @param {string} path - Express path.
+* @name GET api/polls/pollAnswers
+* @param {function} callback - Function handler for endpoint.
+*/
 router.get("/pollAnswers", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("poll_answers").deleteOne({"_id": id}, function (err, res) {
@@ -269,6 +269,7 @@ router.get("/:id/delete", function (req, res) {
 
 /**
  * Delete a poll from the collection of polls, using its specified id 
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-iddelete
  * @property {string} id - ID of the poll.
  * @throws 500 - An error occurred while communicating with the database.
  * @returns {Poll} response
