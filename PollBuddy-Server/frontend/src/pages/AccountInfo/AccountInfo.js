@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
+
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
 import {Link} from "react-router-dom";
 
@@ -76,9 +77,11 @@ export default class AccountInfo extends Component {
           </MDBContainer>
 
           { /* TODO: Update this to have a backend call instead of a "to", plus some result popup */ }
-          <Link id="AccountInfo-saveChanges" to={"/login/forgot"}>
-            <button className="button">Save Changes</button>
-          </Link>
+          <div id="AccountInfo-saveChanges">
+            <Link to={"/login/forgot"}>
+              <button className="button">Save Changes</button>
+            </Link>
+          </div>
         </MDBContainer>
       </MDBContainer>
     );

@@ -1,13 +1,15 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
-import {Link, withRouter} from "react-router-dom";
 
+import {Link, withRouter} from "react-router-dom";
+import './ResetPassword.scss';
 
 import "mdbreact/dist/css/mdb.css";
 
 class ResetPassword extends Component {
   constructor(props) {
     super(props);
+    this.handleLogOutCheck = this.handleLogOutCheck.bind(this);
 
     if(this.props.location.search) {
       var resetCode = new URLSearchParams(this.props.location.search).get("resetcode");
@@ -17,10 +19,14 @@ class ResetPassword extends Component {
     }
 
     this.state = {
+      logOutCheck: true,
       resetCode: resetCode,
       resetCodePrefilled: resetCodePrefilled,
     };
+  }
 
+  handleLogOutCheck() {
+    this.setState({logOutCheck: !this.state.logOutCheck});
   }
 
   componentDidMount() {
@@ -42,6 +48,10 @@ class ResetPassword extends Component {
             <input type="password" placeholder="••••••••••••" className="form-control textBox" id="newPasswordText"/>
             <label htmlFor="confirmPasswordText">Confirm password:</label>
             <input type="password" placeholder="••••••••••••" className="form-control textBox" id="confirmPasswordText"/>
+            <div id="logOutEverywhereContainer">
+              <input type="checkbox" onChange={this.handleLogOutCheck} className="logOutBox" id="logOutEverywhere" checked={this.logOutCheck}/>
+              <label className="logOutLabel" for="logOutEverywhere">Log out everywhere</label>
+            </div>
           </MDBContainer>
 
           <Link to={"/Groups"}>
