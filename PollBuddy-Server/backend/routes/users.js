@@ -827,7 +827,24 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
   return res.status(200).send(createResponse()); // TODO: Ensure success actually occurred / move this within somewhere else
 });
 
+/**
+ * Note: This is a debug route,
+ * which will be only available when running in development mode soon.
+ * Full documentation: https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Users)#apiusersid
+ * ---
+ * This route is used to get the full user information stored in the database
+ * full user information: { Username, eMail, Password, FirstName, LastName }
+ * ^^^ Refer to: https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-User-Data
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} On success: Status 200: *Username,eMail,Password,FirstName,LastName* in an Array
+ * On failure: Status 500 // TODO: Error message
+ * @name backend/users/:id
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
 router.get("/:id", function (req, res, next) {
+  // Gets all user info with the matching userID and stores the info in an array
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("users").find({ "_id": id }).toArray(function (err, result) {
     if (err) {
@@ -851,6 +868,17 @@ router.post("/:id", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
+/**
+ * This route obtains the group of users by id, and returns a network response depending on whether 
+ * the network communication was successful or not
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} On success: Status 200
+ * On failure: Status 500 // TODO: Endpoint requires error message 
+ * @name backend/users/:id/GROUPS
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
 router.get("/:id/groups", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("users").find({ "_id": id }, { projection: { _id: 0, Groups: 1 } }).map(function (item) {
