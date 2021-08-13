@@ -691,40 +691,40 @@ router.post("/me/edit",function(req,res) {
       collection.updateOne({"_id":id},{"$set": {FirstName: jsonContent.FirstName}})
         .then( success = true)
         .catch((err) => {
-          return res.status(500).send(createResponse(err,"Error updating database information"))
+          return res.status(500).send(createResponse(err,"Error updating database information"));
         });
     }
     if(jsonContent.LastName !== undefined) {
       //Update the LastName field in the database
       collection.updateOne({"_id":id},{"$set": {LastName: jsonContent.LastName}})
-      .then( success = true)
-      .catch((err) => {
-        return res.status(500).send(createResponse(err,"Error updating database information"))
-      });
+        .then( success = true)
+        .catch((err) => {
+          return res.status(500).send(createResponse(err,"Error updating database information"));
+        });
     }
     if(jsonContent.UserName !== undefined) {
       //Update the UserName field in the database
       collection.updateOne({"_id":id},{"$set": {UserName: jsonContent.UserName}})
-      .then( success = true)
-      .catch((err) => {
-        return res.status(500).send(createResponse(err,"Error updating database information"))
-      });
+        .then( success = true)
+        .catch((err) => {
+          return res.status(500).send(createResponse(err,"Error updating database information"));
+        });
     }
     if(jsonContent.Email !== undefined) {
       //Update the Email field in the database
       collection.updateOne({"_id":id},{"$set": {Email: jsonContent.Email}})
-      .then( success = true)
-      .catch((err) => {
-        return res.status(500).send(createResponse(err,"Error updating database information"))
-      });
+        .then( success = true)
+        .catch((err) => {
+          return res.status(500).send(createResponse(err,"Error updating database information"));
+        });
     }
-    if(jsonContent.Password != undefined) {
+    if(jsonContent.Password !== undefined) {
       //Update the Password field in the database
       collection.updateOne({"_id":id},{"$set": {Password: bcrypt.hashSync(jsonContent.Password, 10) }})
-      .then( success = true)
-      .catch((err) => {
-        return res.status(500).send(createResponse(err,"Error updating database information"))
-      });
+        .then( success = true)
+        .catch((err) => {
+          return res.status(500).send(createResponse(err,"Error updating database information"));
+        });
     }
     if(success === false) {
       //None of the updates were successful, so the data provieded in not valid for an add operation
@@ -738,40 +738,40 @@ router.post("/me/edit",function(req,res) {
       collection.updateOne({"_id":id},{"$pull": {FirstName: jsonContent.FirstName}})
         .then( success = true)
         .catch((err) => {
-          return res.status(500).send(createResponse(err,"Error updating database information"))
+          return res.status(500).send(createResponse(err,"Error updating database information"));
         });
     }
     if(jsonContent.LastName !== undefined) {
       //Remove the LastName field from the database
       collection.updateOne({"_id":id},{"$pull": {LastName: jsonContent.LastName}})
-      .then( success = true)
-      .catch((err) => {
-        return res.status(500).send(createResponse(err,"Error updating database information"))
-      });
+        .then( success = true)
+        .catch((err) => {
+          return res.status(500).send(createResponse(err,"Error updating database information"));
+        });
     }
     if(jsonContent.UserName !== undefined) {
       //Remove the UserName field from the database
       collection.updateOne({"_id":id},{"$pull": {UserName: jsonContent.UserName}})
-      .then( success = true)
-      .catch((err) => {
-        return res.status(500).send(createResponse(err,"Error updating database information"))
-      });
+        .then( success = true)
+        .catch((err) => {
+          return res.status(500).send(createResponse(err,"Error updating database information"));
+        });
     }
     if(jsonContent.Email !== undefined) {
       //Remove the Email field from the database
       collection.updateOne({"_id":id},{"$pull": {Email: jsonContent.Email}})
-      .then( success = true)
-      .catch((err) => {
-        return res.status(500).send(createResponse(err,"Error updating database information"))
-      });
+        .then( success = true)
+        .catch((err) => {
+          return res.status(500).send(createResponse(err,"Error updating database information"));
+        });
     }
     if(jsonContent.Password != undefined) {
       //Remove the Password Field from the database
       collection.updateOne({"_id":id},{"$pull": {Password: bcrypt.hashSync(jsonContent.Password, 10) }})
-      .then( success = true)
-      .catch((err) => {
-        return res.status(500).send(createResponse(err,"Error updating database information"))
-      });
+        .then( success = true)
+        .catch((err) => {
+          return res.status(500).send(createResponse(err,"Error updating database information"));
+        });
     }
     if(success === false) {
       //No Remove actions were performed, meaning none of the provided fields were effected, so throw an error
@@ -818,7 +818,7 @@ router.get("/me/groups", function(req,res) {
  */
 router.post("/me/groups",function (req,res) {
   return res.status(405).send(createResponse(null,"POST is not available for this route. Use GET."));
-})
+});
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/:id/edit when using GET.
