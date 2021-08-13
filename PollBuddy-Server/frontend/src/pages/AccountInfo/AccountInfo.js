@@ -34,7 +34,7 @@ class AccountInfo extends Component {
       school: "RPI"
     };
     this.changePassword = this.handleToggleClick.bind(this);
-    //Bounce back to log in if they are not logged 
+    // Bounce back to log in if they are not logged
     if(localStorage.getItem("loggedIn") !== "true"){
       this.props.history.push("/login");
     }
@@ -47,7 +47,7 @@ class AccountInfo extends Component {
       method: "GET"
     }).then(response => response.json())
       .then(response => {
-        //Load states from database values
+        // Load states from database values
         const data = JSON.parse(response.data);
         if(data.UserName) {
           this.setState({
@@ -94,7 +94,7 @@ class AccountInfo extends Component {
     }));
   }
 
-  //Update the input states when inputs change
+  // Update the input states when inputs change
   handleInputChange(event) {
     const target = event.target;
     const value = target.value;
@@ -129,8 +129,8 @@ class AccountInfo extends Component {
     var lastNameValid = undefined;
     var lastNameInput = "";
 
-    //Ensure that the inputs are valid, if not return
-    //Then assign Input value to validated input, or state if the input is not filled in
+    // Ensure that the inputs are valid, if not return
+    // Then assign Input value to validated input, or state if the input is not filled in
     if(this.state.usernameText) {
       userValid = schema.validate({username: this.state.usernameText});
       if(userValid.error) {
@@ -169,7 +169,7 @@ class AccountInfo extends Component {
     }
 
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
-      method: 'POST',
+      method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         Action: "Add",
@@ -200,7 +200,7 @@ class AccountInfo extends Component {
               <MDBRow className="AccountInfo-accountInputs">
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="firstnameText">First Name:</label>
-                  <input placeholder={this.state.firstName} defaultValue={this.state.firstNameLoaded ? this.state.firstName : undefined }className="form-control textBox" id="firstnameText" readOnly={this.state.firstNameLocked} onChange={this.handleInputChange}/>
+                  <input placeholder={this.state.firstName} defaultValue={this.state.firstNameLoaded ? this.state.firstName : undefined } className="form-control textBox" id="firstnameText" readOnly={this.state.firstNameLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="lastnameText">Last Name:</label>
