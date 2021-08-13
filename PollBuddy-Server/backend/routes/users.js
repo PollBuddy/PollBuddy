@@ -10,6 +10,8 @@ var mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
 const {createResponse, validateID, isEmpty} = require("../modules/utils"); // object destructuring, only import desired functions
 const e = require("express");
+const { route } = require("./groups.js");
+const { json } = require("express");
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/
@@ -621,8 +623,111 @@ router.get("/me", async function (req,res,next) {
   return res.status(400).send(createResponse(null,"Invalid User"));
 });
 
-router.post("/me",function(req,res) {
-  return res.status(200).send(createResponse("Made it to Me POST"));
+router.post("/me", function (req,res) {
+  return res.status(405).send(createResponse(null,"POST is not available for this route. Use GET."));
+});
+
+router.get("/me/edit", function (req,res) {
+  return res.status(405).send(createResponse(null,"GET is not available for this route. Use POST."));
+});
+
+router.post("/me/edit",function(req,res) {
+  // Get user info with the matching userID
+  const idCode = req.session.userData.userID;
+  var id = new bson.ObjectID(idCode);
+  // User action:
+  // ->  Add | Remove
+  // ->  FirstName | LastName | UserName | Email | Password
+  var jsonContent = req.body;
+  // Flag indicates success or not
+  var success = false;
+
+  const collection = mongoConnection.getDB().collection("users");
+
+  if(jsonContent.Action === "Add") {
+    if(jsonContent.FirstName !== undefined) {
+      collection.updateOne({"_id":id},{"$set": {FirstName: jsonContent.FirstName}})
+        .then( success = true)
+        .catch((err) => {
+          return res.status(500).send(createResponse(err,"Error updating database information"))
+        });
+    }
+    if(jsonContent.LastName !== undefined) {
+      collection.updateOne({"_id":id},{"$set": {LastName: jsonContent.LastName}})
+      .then( success = true)
+      .catch((err) => {
+        return res.status(500).send(createResponse(err,"Error updating database information"))
+      });
+    }
+    if(jsonContent.UserName !== undefined) {
+      collection.updateOne({"_id":id},{"$set": {UserName: jsonContent.UserName}})
+      .then( success = true)
+      .catch((err) => {
+        return res.status(500).send(createResponse(err,"Error updating database information"))
+      });
+    }
+    if(jsonContent.Email !== undefined) {
+      collection.updateOne({"_id":id},{"$set": {Email: jsonContent.Email}})
+      .then( success = true)
+      .catch((err) => {
+        return res.status(500).send(createResponse(err,"Error updating database information"))
+      });
+    }
+    if(jsonContent.Password != undefined) {
+      collection.updateOne({"_id":id},{"$set": {Password: bcrypt.hashSync(jsonContent.Password, 10) }})
+      .then( success = true)
+      .catch((err) => {
+        return res.status(500).send(createResponse(err,"Error updating database information"))
+      });
+    }
+    if(success === false) {
+      return res.status(400).send(createResponse("Error","Error: No Valid Add fields provided"));
+    }
+
+  } else if (jsonContent.Action === "Remove") {
+    if(jsonContent.FirstName !== undefined) {
+      collection.updateOne({"_id":id},{"$pull": {FirstName: jsonContent.FirstName}})
+        .then( success = true)
+        .catch((err) => {
+          return res.status(500).send(createResponse(err,"Error updating database information"))
+        });
+    }
+    if(jsonContent.LastName !== undefined) {
+      collection.updateOne({"_id":id},{"$pull": {LastName: jsonContent.LastName}})
+      .then( success = true)
+      .catch((err) => {
+        return res.status(500).send(createResponse(err,"Error updating database information"))
+      });
+    }
+    if(jsonContent.UserName !== undefined) {
+      collection.updateOne({"_id":id},{"$pull": {UserName: jsonContent.UserName}})
+      .then( success = true)
+      .catch((err) => {
+        return res.status(500).send(createResponse(err,"Error updating database information"))
+      });
+    }
+    if(jsonContent.Email !== undefined) {
+      collection.updateOne({"_id":id},{"$pull": {Email: jsonContent.Email}})
+      .then( success = true)
+      .catch((err) => {
+        return res.status(500).send(createResponse(err,"Error updating database information"))
+      });
+    }
+    if(jsonContent.Password != undefined) {
+      collection.updateOne({"_id":id},{"$pull": {Password: bcrypt.hashSync(jsonContent.Password, 10) }})
+      .then( success = true)
+      .catch((err) => {
+        return res.status(500).send(createResponse(err,"Error updating database information"))
+      });
+    }
+    if(success === false) {
+      return res.status(400).send(createResponse("Error","Error: No Valid Add fields provided"));
+    }
+  } else {
+    return res.status(400).send(createResponse("Error","Error: Invalid Action, must be either Add or Remove"));
+  }
+  // Successfully updated the database as user requested
+  return res.status(200).send(createResponse()); // TODO: Ensure success actually occurred / move this within somewhere else
 });
 
 /**
