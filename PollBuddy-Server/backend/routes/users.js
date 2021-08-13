@@ -9,9 +9,6 @@ const Joi = require("joi");
 var mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
 const {createResponse, validateID, isEmpty} = require("../modules/utils"); // object destructuring, only import desired functions
-const e = require("express");
-const { route } = require("./groups.js");
-const { json } = require("express");
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/
