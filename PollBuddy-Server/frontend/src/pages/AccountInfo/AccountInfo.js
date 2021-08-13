@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
-import {Link, Redirect, withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-const Joi = require('joi');
-
 import "./AccountInfo.scss";
+const Joi = require("joi");
+
 
 class AccountInfo extends Component {
 
@@ -34,8 +34,8 @@ class AccountInfo extends Component {
     };
     this.changePassword = this.handleToggleClick.bind(this);
     //Bounce back to log in if they are not logged 
-    if(localStorage.getItem("loggedIn") != "true"){
-      this.props.history.push('/login');
+    if(localStorage.getItem("loggedIn") !== "true"){
+      this.props.history.push("/login");
     }
     this.handleInputChange = this.handleInputChange.bind(this);
   }
@@ -46,8 +46,8 @@ class AccountInfo extends Component {
       method: "GET"
     }).then(response => response.json())
       .then(response => {
+        //Load states from database values
         const data = JSON.parse(response.data);
-        console.log(data);
         if(data.UserName) {
           this.setState({
             userName: data.UserName,
@@ -84,7 +84,7 @@ class AccountInfo extends Component {
         this.setState({
           doneLoading: true
         });
-      })
+      });
   }
   
   handleToggleClick() {
@@ -93,12 +93,11 @@ class AccountInfo extends Component {
     }));
   }
 
+  //Update the input states when inputs change
   handleInputChange(event) {
     const target = event.target;
     const value = target.value;
     const id = target.id;
-    console.log("value: " + value);
-    console.log("id: " + id);
     this.setState({
       [id]: value
     });
@@ -107,17 +106,17 @@ class AccountInfo extends Component {
   saveChanges(){
     const schema = Joi.object({
       username: Joi.string()
-        .pattern(new RegExp('^(?=.{3,32}$)[a-zA-Z0-9\-._]+$'))
-        .error(new Error('Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.')),
+        .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9\-._]+$"))
+        .error(new Error("Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.")),
       email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2})
         .max(320)
-        .error(new Error('Invalid email format.')),
+        .error(new Error("Invalid email format.")),
       firstname: Joi.string()
         .min(1).max(256)
-        .error(new Error('Invalid first name format.')),
+        .error(new Error("Invalid first name format.")),
       lastname: Joi.string()
-        .allow(' ').max(256)
-        .error(new Error('Invalid last name format.'))
+        .allow(" ").max(256)
+        .error(new Error("Invalid last name format."))
     });
 
     var userValid = undefined;
@@ -129,6 +128,8 @@ class AccountInfo extends Component {
     var lastNameValid = undefined;
     var lastNameInput = "";
 
+    //Ensure that the inputs are valid, if not return
+    //Then assign Input value to validated input, or state if the input is not filled in
     if(this.state.usernameText) {
       userValid = schema.validate({username: this.state.usernameText});
       if(userValid.error) {
@@ -165,19 +166,10 @@ class AccountInfo extends Component {
     } else {
       emailInput = this.state.email;
     }
-    
-    console.log(JSON.stringify({
-      Action: "Add",
-      FirstName: firstNameInput,
-      LastName: lastNameInput,
-      UserName: userInput,
-      Email: emailInput,
-      Password: undefined
-    }));
 
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         Action: "Add",
         FirstName: firstNameInput,
@@ -187,8 +179,8 @@ class AccountInfo extends Component {
         Password: undefined
       })
     }).then(response => {
-        console.log(response);
-      });
+      console.log(response);
+    });
   }
 
   render() {
