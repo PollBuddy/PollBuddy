@@ -27,3 +27,11 @@
   float: right;
   margin: calc((var(--header-inner-height) - var(--font-size-small) * var(--line-height) - 24px) / 2) 0 0 0 !important;
 }
+
+#logout {
+  color: var(--light-purple-logo-text);
+}
+
+#logout:hover {
+  color: var(--white-most-text);
+}
