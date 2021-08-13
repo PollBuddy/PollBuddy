@@ -610,27 +610,67 @@ router.post("/logout", function (req, res) {
 });
 
 /**
- * 
+ * This route is used to retrieve user information.
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} On success: Status 200
+ * On failure: Status 400: { "result": "failure", "error": "Error: Invalid User, Session ID does not match any"}
+ * @name backend/users/me_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
  */
 router.get("/me", async function (req,res,next) {
   var collection = mongoConnection.getDB().collection("users");
+  //Gather user ID from session (set during login/register)
   const userID = req.session.userData.userID;
   var idCode = new bson.ObjectID(userID);
+  //Locate user data in database
   const user = await collection.findOne({"_id" : idCode});
   if(user) {
+    //Found user, and return the user data in a JSON Object
     return res.status(200).send(createResponse(JSON.stringify(user)));
   }
-  return res.status(400).send(createResponse(null,"Invalid User"));
+  //Could not find user associated with this ID, something has gone wrong
+  return res.status(400).send(createResponse(null,"Error: Invalid User, Session ID does not match any user"));
 });
 
+/**
+ * This route is not used. It is simply there to have some resposne to /api/users/me when using POST.
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405: { "result": "failure", "error": "POST is not availble for this route. Use GET."}
+ * @name backend/users/me_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
 router.post("/me", function (req,res) {
   return res.status(405).send(createResponse(null,"POST is not available for this route. Use GET."));
 });
 
+/**
+ * This route is not used. It is simply there to have some resposne to /api/users/me/edit when using GET.
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405: { "result": "failure", "error": "GET is not availble for this route. Use POST."}
+ * @name backend/users/me/edit_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
 router.get("/me/edit", function (req,res) {
   return res.status(405).send(createResponse(null,"GET is not available for this route. Use POST."));
 });
 
+/**
+ * This route is used to modify user information
+ * @getdata {void} None
+ * @postdata {void} Action: string, FirstName: string, LastName: string, UserName: string, Email: string, Password: string
+ * @returns {void} On success: Status 200
+ * On failure: Status 400: { "result": "failure", "error": "Invalid Action | Add Field | Remove Field" }
+ *             Status 500: { "result": "failure", "error": "Error updating database information"}
+ * @name backend/users/me/edit_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route 
+ */
 router.post("/me/edit",function(req,res) {
   // Get user info with the matching userID
   const idCode = req.session.userData.userID;
@@ -644,8 +684,10 @@ router.post("/me/edit",function(req,res) {
 
   const collection = mongoConnection.getDB().collection("users");
 
+  //Add provied fields to the database
   if(jsonContent.Action === "Add") {
     if(jsonContent.FirstName !== undefined) {
+      //Update the FirstName field in the database
       collection.updateOne({"_id":id},{"$set": {FirstName: jsonContent.FirstName}})
         .then( success = true)
         .catch((err) => {
@@ -653,6 +695,7 @@ router.post("/me/edit",function(req,res) {
         });
     }
     if(jsonContent.LastName !== undefined) {
+      //Update the LastName field in the database
       collection.updateOne({"_id":id},{"$set": {LastName: jsonContent.LastName}})
       .then( success = true)
       .catch((err) => {
@@ -660,6 +703,7 @@ router.post("/me/edit",function(req,res) {
       });
     }
     if(jsonContent.UserName !== undefined) {
+      //Update the UserName field in the database
       collection.updateOne({"_id":id},{"$set": {UserName: jsonContent.UserName}})
       .then( success = true)
       .catch((err) => {
@@ -667,6 +711,7 @@ router.post("/me/edit",function(req,res) {
       });
     }
     if(jsonContent.Email !== undefined) {
+      //Update the Email field in the database
       collection.updateOne({"_id":id},{"$set": {Email: jsonContent.Email}})
       .then( success = true)
       .catch((err) => {
@@ -674,6 +719,7 @@ router.post("/me/edit",function(req,res) {
       });
     }
     if(jsonContent.Password != undefined) {
+      //Update the Password field in the database
       collection.updateOne({"_id":id},{"$set": {Password: bcrypt.hashSync(jsonContent.Password, 10) }})
       .then( success = true)
       .catch((err) => {
@@ -681,11 +727,14 @@ router.post("/me/edit",function(req,res) {
       });
     }
     if(success === false) {
+      //None of the updates were successful, so the data provieded in not valid for an add operation
       return res.status(400).send(createResponse("Error","Error: No Valid Add fields provided"));
     }
 
+  //Remove provided fields from the database
   } else if (jsonContent.Action === "Remove") {
     if(jsonContent.FirstName !== undefined) {
+      //Remove the FirstName field from the database
       collection.updateOne({"_id":id},{"$pull": {FirstName: jsonContent.FirstName}})
         .then( success = true)
         .catch((err) => {
@@ -693,6 +742,7 @@ router.post("/me/edit",function(req,res) {
         });
     }
     if(jsonContent.LastName !== undefined) {
+      //Remove the LastName field from the database
       collection.updateOne({"_id":id},{"$pull": {LastName: jsonContent.LastName}})
       .then( success = true)
       .catch((err) => {
@@ -700,6 +750,7 @@ router.post("/me/edit",function(req,res) {
       });
     }
     if(jsonContent.UserName !== undefined) {
+      //Remove the UserName field from the database
       collection.updateOne({"_id":id},{"$pull": {UserName: jsonContent.UserName}})
       .then( success = true)
       .catch((err) => {
@@ -707,6 +758,7 @@ router.post("/me/edit",function(req,res) {
       });
     }
     if(jsonContent.Email !== undefined) {
+      //Remove the Email field from the database
       collection.updateOne({"_id":id},{"$pull": {Email: jsonContent.Email}})
       .then( success = true)
       .catch((err) => {
@@ -714,6 +766,7 @@ router.post("/me/edit",function(req,res) {
       });
     }
     if(jsonContent.Password != undefined) {
+      //Remove the Password Field from the database
       collection.updateOne({"_id":id},{"$pull": {Password: bcrypt.hashSync(jsonContent.Password, 10) }})
       .then( success = true)
       .catch((err) => {
@@ -721,15 +774,27 @@ router.post("/me/edit",function(req,res) {
       });
     }
     if(success === false) {
-      return res.status(400).send(createResponse("Error","Error: No Valid Add fields provided"));
+      //No Remove actions were performed, meaning none of the provided fields were effected, so throw an error
+      return res.status(400).send(createResponse("Error","Error: No Valid Remove fields provided"));
     }
   } else {
+    //Action is not "Add" or "Remove", so throw an error
     return res.status(400).send(createResponse("Error","Error: Invalid Action, must be either Add or Remove"));
   }
   // Successfully updated the database as user requested
   return res.status(200).send(createResponse()); // TODO: Ensure success actually occurred / move this within somewhere else
 });
 
+/**
+ * This route is used to retrieve all the groups this user is a part of
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} On success: Status 200
+ * On failure: Status 500: { "result": "failure", "error": "Error: Unable to retireve groups from database"}
+ * @name backend/users/me/groups_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
 router.get("/me/groups", function(req,res) {
   var id = new bson.ObjectID(req.session.userData.userID);
   mongoConnection.getDB().collection("users").find({ "_id": id }, { projection: { _id: 0, Groups: 1 } }).map(function (item) {
@@ -742,6 +807,15 @@ router.get("/me/groups", function(req,res) {
   });
 });
 
+/**
+ * This route is not used. It is simply there to have some resposne to /api/users/me/groups when using POST.
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405: { "result": "failure", "error": "POST is not availble for this route. Use GET."}
+ * @name backend/users/me/groups_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
 router.post("/me/groups",function (req,res) {
   return res.status(405).send(createResponse(null,"POST is not available for this route. Use GET."));
 })
