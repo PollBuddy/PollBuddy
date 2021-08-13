@@ -730,6 +730,22 @@ router.post("/me/edit",function(req,res) {
   return res.status(200).send(createResponse()); // TODO: Ensure success actually occurred / move this within somewhere else
 });
 
+router.get("/me/groups", function(req,res) {
+  var id = new bson.ObjectID(req.session.userData.userID);
+  mongoConnection.getDB().collection("users").find({ "_id": id }, { projection: { _id: 0, Groups: 1 } }).map(function (item) {
+    return res.status(200).send(createResponse(item.Groups));
+  }).toArray(function (err, result) {
+    if (err) {
+      return res.status(500).send(createResponse(err,"Error: Unable to retrieve groups from database"));
+    }
+    return res.status(200).send(createResponse(result[0]));
+  });
+});
+
+router.post("/me/groups",function (req,res) {
+  return res.status(405).send(createResponse(null,"POST is not available for this route. Use GET."));
+})
+
 /**
  * This route is not used. It is simply there to have some response to /api/users/:id/edit when using GET.
  * @getdata {void} None
