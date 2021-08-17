@@ -36,6 +36,7 @@ import Code from "./pages/Code/Code";
 
 import Header from "./components/Header/Header.js";
 import Footer from "./components/Footer/Footer.js";
+import Popup2 from "./components/Popup2/Popup2"
 
 import "./styles/main.scss";
 
@@ -59,6 +60,7 @@ export default class App extends React.Component {
       <BrowserRouter>
 
         <MDBContainer id="wrapper">
+          <Popup2 title="testing this"/>
 
           <Header userInfo={this.state.userInfo} />
 
