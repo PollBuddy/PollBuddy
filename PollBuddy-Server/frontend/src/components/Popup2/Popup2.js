@@ -1,14 +1,8 @@
-import React from 'react';
+import React from "react";
 
-import './Popup2.scss'
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTags } from '@fortawesome/free-solid-svg-icons'
+import "./Popup2.scss";
 
 export default class Popup2 extends React.Component {
-    constructor(props) {
-        super(props);
-    }
    
     render() {
         return (

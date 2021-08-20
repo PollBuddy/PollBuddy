@@ -36,7 +36,7 @@ import Code from "./pages/Code/Code";
 
 import Header from "./components/Header/Header.js";
 import Footer from "./components/Footer/Footer.js";
-import Popup2 from "./components/Popup2/Popup2"
+//import Popup2 from "./components/Popup2/Popup2";
 
 import "./styles/main.scss";
 
