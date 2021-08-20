@@ -6,97 +6,93 @@
     z-index: 1000;
 }
 
-.modal {
+.modal_dim {
     width: 450px;
     max-width: 100%;
-    height: 350px;
-    max-height: 100%;
     z-index: 1000;
     position: fixed;
     display: block;
     top: 50%;
     left: 50%;
+    background: #25162c;
     transform: translate(-50%, -50%);
-    background: white;
-    border-radius: 1.25rem;
-    color: #438AA9;
+    border-radius: 1rem;
+}
+
+.modal_nodim {
+    width: 450px;
+    max-width: 100%;
+    display: block;
+    background: #25162c;
+    border-radius: 1rem;
+}
+
+.modal-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 1rem;
 }
 
 .modal-container {
-    width: 90%;
     margin: 0 auto;
-    height: calc(100% - 2rem);
+    height: calc(100% - 1.5rem);
     display: flex;
     flex-direction: column;
-    padding: 3rem;
-}
-
-.modal-search {
-    margin-bottom: 3rem;
-}
-
-.filter-button {
-    padding: 1rem 4rem;
-    border: none;
-    background: #50A1A6;
-    color: white;
-    border-radius: 3rem;
+    padding: 1.5rem;
 }
 
 .modal-topbar {
     width: 100%;
-    height: 2rem;
-    background: var(--darkest-purple-header-color);
-    border-radius: 1.25rem 1.25rem 0 0;
+    height: 1.5rem;
+    background: #7f6491;
+    border-radius: 1rem 1rem 0 0;
 }
 
-.modal-title {
-    font-size: 2.5rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
+.modal-text {
+    font-size: 1rem;
+    margin-top: 0;
 }
 
-.modal-guts .search-label {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    font-weight: 100;
-}
-
-.modal-guts .apply-button {
+.modal-bottombar .apply-button {
     border: none;
-    background: #50A1A6;
+    background: #55acd1;
     color: white;
-    padding: 1rem 4rem;
-    border-radius: 2rem;
+    padding: 1rem 0 1rem 0;
+    border-radius: .25rem;
     cursor: pointer;
+    width: 30%;
+    transition: .3s;
+
+    &:hover {
+        background: #438AA9;
+    }
 }
 
 #modal-search {
     margin-bottom: 1.5rem;
-    text-align: center;
 }
 
-.modal-topbar .close-button {
-    font-size: 2.5rem;
-    width: 2rem;
-    height: 2rem;
+.modal-guts .close-button {
+    font-size: 1rem;
     border: none;
-    background: none;
-    border-radius: 0 1.25rem 0 0;
+    background: #7f6491;
+    border-radius: 2rem;
+    width: 60%;
     color: white;
-    position: absolute;
     right: 0;
     cursor: pointer;
+    padding: .5rem;
+    font-family: var(--main-font);
+    font-weight: 700;
+}
+
+.modal-guts .modal-text {
+    margin-bottom: 1rem;
 }
 
 .modal-guts {
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow: auto;
-}
-
-.modal-guts .button-container {
-    display: flex;
-    flex-wrap: wrap;
 }

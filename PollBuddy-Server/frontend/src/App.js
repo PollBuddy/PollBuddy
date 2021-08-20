@@ -60,7 +60,8 @@ export default class App extends React.Component {
       <BrowserRouter>
 
         <MDBContainer id="wrapper">
-          <Popup2 title="testing this"/>
+          {/* Popup2 test: Popup2 still needs a handleClose function that will activate onClick of the button, this handle func should probably be a prop passed from parent component*/}
+          {/*<Popup2 dim={true} text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."/>*/}
 
           <Header userInfo={this.state.userInfo} />
 
