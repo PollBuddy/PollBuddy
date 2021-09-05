@@ -8,6 +8,9 @@ export default class Settings extends Component{
   constructor(props) {
     super(props);
     this.state = this.props.state;
+    if (!this.state.groupData) {
+      this.state.groupData = {}; // This shouldn't happen, but if it does this line will prevent a crash.
+    }
   }
   toggleTextBox(elementId, selector, text) {
     if(document.getElementById(elementId).style.display === "block") {
@@ -74,7 +77,7 @@ export default class Settings extends Component{
           </MDBContainer>
 
           <Link to={"/Groups"}>
-            <button className="button">Delete this Group</button>
+            <button className="button" onClick={() => fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.groupData._id + "/delete",{method:"POST"})}>Delete this Group</button>
           </Link>
         </MDBContainer>
       )

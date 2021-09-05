@@ -25,10 +25,10 @@ function createResponse(data, error) {
 }
 
 // Check if ID exists for a specific Collection
-// returns objectID if valid or null if nothing is found.
+// returns ObjectId if valid or null if nothing is found.
 async function validateID(collection, id) {
   try {
-    const objId = new mongoConnection.getMongo().ObjectID(id);
+    const objId = new mongoConnection.getMongo().ObjectId(id);
     const res = await mongoConnection.getDB().collection(collection) // find id cursor
       .find({_id: objId}, {limit: 1});
     if (await res.hasNext()) {
@@ -47,7 +47,7 @@ function isLoggedIn(req) {
 
 // Middleware to check if login is required for the poll.
 // poll ID must be present in req.params.id (in the url).
-// will attach a valid objectID on req.valid.id.
+// will attach a valid ObjectId on req.valid.id.
 async function checkPollPublic(req, res, next) {
   // validate poll id
   const id = await validateID("polls", req.params.id);
