@@ -35,7 +35,10 @@ router.get("/new", function (req, res) {
 router.post("/new", async (req, res) => {
   // Validate request body
   const schema = Joi.object({
-    Name: Joi.string().min(3).max(30).required()
+    Name: Joi.string().min(3).max(30).required(),
+    InstructorID: Joi.string(),  // The format for this field is not yet specified.
+    PollID: Joi.string(),        // The format for this field is not yet specified.
+    UserID: Joi.string()         // The format for this field is not yet specified.
   });
   const validResult = schema.validate(req.body);
   // invalidate handling
@@ -44,7 +47,10 @@ router.post("/new", async (req, res) => {
   }
   // Add to DB
   try {
-    const result = await mongoConnection.getDB().collection("groups").insertOne({Name: validResult.value.Name});
+    const result = await mongoConnection.getDB().collection("groups").insertOne({Name: validResult.value.Name,
+                                                                                 IntructorID: validResult.value.IntructorID,
+                                                                                 PollID: validResult.value.PollID,
+                                                                                 UserID: validResult.value.UserID});
     return res.status(200).send(createResponse({ID: result.insertedId}));   // return group ID
   } catch (e) {
     console.log(e);
