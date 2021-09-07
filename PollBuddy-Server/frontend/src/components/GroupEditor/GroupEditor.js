@@ -78,11 +78,11 @@ export default class GroupEditor extends Component {
       headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
       body: JSON.stringify(this.getAPIJSON())
     });
+    let json = await response.json();
     if(response.status === 200){
       if(this.props.new){
         //if the component is in new mode, redirect the user to the group's page
-        //TODO get id from backend and add it to props
-        this.setState({redirectToGroup: true, id: "temporary"});
+        this.setState({redirectToGroup: true, id: json.data.ID});
       }
     }else{
       //let user know that something went wrong
