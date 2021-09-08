@@ -89,6 +89,13 @@ router.post("/:id/edit", async (req, res) => {
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
   }
+  /* // We should validate that the user is allowed to edit this group. 
+     // This is not possible under the current specs, but the code is below when the specs and frontend are updated.
+     let group = await mongoConnection.getDB().collection("groups").findOne({"_id" : id});
+     if (!group.Admins.includes(req.params.user)) {
+       return res.status(400).send(createResponse(null, "User does not have edit permissions for this group."));
+     }
+  */
   const jsonContent = req.body;
   db_commands = {};
   if (jsonContent.Action === "Add") {
