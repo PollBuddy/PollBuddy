@@ -90,99 +90,68 @@ router.post("/:id/edit", async (req, res) => {
     return res.status(400).send(createResponse(null, "Invalid ID."));
   }
   const jsonContent = req.body;
-  let success = false;
+  db_commands = {};
   if (jsonContent.Action === "Add") {
     if (jsonContent.Name !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$set": { Name: jsonContent.Name } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
+      db_commands["$set"] = {Name : jsonContent.Name};
     }
     if (jsonContent.Instructors !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Instructors: jsonContent.Instructors } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
+      db_commands["$addToSet"] = {Instructors : jsonContent.Instructors};
     }
     if (jsonContent.Polls !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Polls: jsonContent.Polls } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
+      if (db_commands["$addToSet"]) {
+        db_commands["$addToSet"].Polls = jsonContent.Polls;
+      } else {
+        db_commands["$addToSet"] = {Polls : jsonContent.Polls};
+      }
     }
     if (jsonContent.Users !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Users: jsonContent.Users } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
+      if (db_commands["$addToSet"]) {
+        db_commands["$addToSet"].Users = jsonContent.Users;
+      } else {
+        db_commands["$addToSet"] = {Users : jsonContent.Users};
+      }
     }
     if (jsonContent.Admins !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Admins: jsonContent.Admins } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (success === false) {
-      return res.status(400).send(createResponse(null,"Invalid request body or ObjectID"));
+      if (db_commands["$addToSet"]) {
+        db_commands["$addToSet"].Admins = jsonContent.Admins;
+      } else {
+        db_commands["$addToSet"] = {Admins : jsonContent.Admins};
+      }
+
     }
   } else if (jsonContent.Action === "Remove") {
     if (jsonContent.Instructors !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Instructors: jsonContent.Instructors } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
+      db_commands["$pull"] = { Instructors : jsonContent.Instructors };
     }
     if (jsonContent.Polls !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Polls: jsonContent.Polls } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
+      if (db_commands["$pull"]) {
+        db_commands["$pull"].Polls = jsonContent.Polls;
+      } else {
+        db_commands["$pull"] = { Polls : jsonContent.Polls };
+      }
     }
     if (jsonContent.Users !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Users: jsonContent.Users } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
+      if (db_commands["$pull"]) {
+        db_commands["$pull"].Users = jsonContent.Users;
+      } else {
+        db_commands["$pull"] = { Users : jsonContent.Users };
+      }
     }
     if (jsonContent.Admins !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Admins: jsonContent.Admins } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (success === false) {
-      return res.status(400).send(createResponse(null,"Invalid request body or ObjectID"));
+      if (db_commands["$pull"]) {
+        db_commands["$pull"].Admins = jsonContent.Admins;
+      } else {
+        db_commands["$pull"] = { Admins : jsonContent.Admins };
+      }
     }
   } else {
     return res.status(400).send(createResponse(null,"Invalid request body or ObjectID"));
   }
+  await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, db_commands, function (err, res) {
+    if (err) {
+      return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
+    }});
   return res.status(200).send(createResponse("Success",));
 });
 
