@@ -45,12 +45,19 @@ router.post("/new", async (req, res) => {
   if (validResult.error) {
     return res.status(400).send(createResponse(null, validResult.error.details[0].message));
   }
+  // check that user is a valid user
+  const userID = await mongoConnection.getDB().collection("users").findOne({"_id" : req.params.userID});
+  if (!userID) {
+    return res.status(400).send(createResponse(null, "Invalid user ID."));
+  }
   // Add to DB
   try {
     const result = await mongoConnection.getDB().collection("groups").insertOne({Name: validResult.value.Name,
                                                                                  IntructorID: validResult.value.IntructorID,
                                                                                  PollID: validResult.value.PollID,
-                                                                                 UserID: validResult.value.UserID});
+                                                                                 UserID: validResult.value.UserID,
+                                                                                 Users:  [req.params.userData.userID],
+                                                                                 Admins: [req.params.userData.userID]});
     return res.status(200).send(createResponse({ID: result.insertedId}));   // return group ID
   } catch (e) {
     console.log(e);
