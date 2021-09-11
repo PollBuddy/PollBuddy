@@ -283,20 +283,23 @@ router.post("/:id/delete", function (req, res) {
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
   }
-  /* 
+
   // We should validate that the user is allowed to edit this group. 
-  // This is not possible under the current specs, but the code is below when the specs and frontend are updated.
+  const userID = await validateID("users", req.params.userData.userID);
+  if (!userID) {
+    return res.status(400).send(createResponse(null, "Invalid user ID."));
+  }
   let poll = await mongoConnection.getDB().collection("polls").findOne({"_id" : id});
-  if (!poll.Admins.includes(req.params.user)) {
+  if (!poll.Admins.includes(req.params.userData.userID)) {
     return res.status(400).send(createResponse(null, "User does not have permission to delete this poll."));
   }
-  */
+  
   mongoConnection.getDB().collection("polls").deleteOne({"_id": id}, function (err, res) {
     if (err) {
-      return res.status(500).send(createResponse("", err)); // TODO: Error message;
+      return res.status(500).send(createResponse(null, "Error deleting poll from database."));
     }
   });
-  return res.status(200).send(createResponse("", "")); // TODO: Success message;
+  return res.status(200).send(createResponse("Success"));
 });
 
 /**

@@ -459,7 +459,7 @@ router.get("/:id/join", async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/:id/join", async (res, req) => {
-  const userID = await validateID("groups", req.params.userData.userID);
+  const userID = await validateID("users", req.params.userData.userID);
   if (!userID) {
     return res.status(400).send(createResponse(null, "Invalid user ID."));
   }
