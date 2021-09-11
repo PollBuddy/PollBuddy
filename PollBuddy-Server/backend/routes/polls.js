@@ -272,13 +272,25 @@ router.get("/:id/delete", function (req, res) {
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-iddelete
  * @property {string} id - ID of the poll.
  * @throws 500 - An error occurred while communicating with the database.
+ * @throws 400 - The request is invalid in some way.
  * @returns {Poll} response
  * @name POST api/polls/{id}/delete
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/delete", function (req, res) {//use router.delete??
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+router.post("/:id/delete", function (req, res) {
+  var id = validateID("polls", req.params.id);
+  if (!id) {
+    return res.status(400).send(createResponse(null, "Invalid ID."));
+  }
+  /* 
+  // We should validate that the user is allowed to edit this group. 
+  // This is not possible under the current specs, but the code is below when the specs and frontend are updated.
+  let poll = await mongoConnection.getDB().collection("polls").findOne({"_id" : id});
+  if (!poll.Admins.includes(req.params.user)) {
+    return res.status(400).send(createResponse(null, "User does not have permission to delete this poll."));
+  }
+  */
   mongoConnection.getDB().collection("polls").deleteOne({"_id": id}, function (err, res) {
     if (err) {
       return res.status(500).send(createResponse("", err)); // TODO: Error message;
