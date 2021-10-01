@@ -3,6 +3,8 @@ import { MDBContainer } from "mdbreact";
 import {Link} from "react-router-dom";
 import "./Settings.scss";
 
+import "./Settings.scss";
+
 export default class Settings extends Component{
   constructor(props) {
     super(props);
@@ -57,17 +59,17 @@ export default class Settings extends Component{
           </p>
           {/*change name, details, add people, remove people*/}
           {/*TODO: admin should be able to select individual students and see their information here*/}
-          <MDBContainer className="inputContainer">
+          <MDBContainer className="groupEditBox">
             <input type="GroupName" placeholder="New Group Name" className="display_none form-control textBox" id="groupText" />
             <button id="groupBtn" className="button" onClick={() => this.toggleTextBox("groupText","#groupBtn","Change Group Name")}>Change Group Name</button>
           </MDBContainer>
 
-          <MDBContainer className="inputContainer">
+          <MDBContainer className="groupEditBox">
             <input type="AddStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="addText" />
             <button id="addBtn" className="button" onClick={() => this.toggleTextBox("addText","#addBtn","Add Student")}>Add Student</button>
           </MDBContainer>
 
-          <MDBContainer className="inputContainer">
+          <MDBContainer className="groupEditBox">
             <input type="RemoveStudent" placeholder="Input RCSID or RIN" className="display_none form-control textBox" id="removeText" />
             <button id="removeBtn" className="button" onClick={() => this.toggleTextBox("removeText","#removeBtn","Remove Student")}>Remove Student</button>
           </MDBContainer>
