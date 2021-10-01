@@ -184,12 +184,18 @@ app.get("/gendata", (req, res) => {
 });
 
 
-// Root page (aka its working)
+// Root(home) page
+// backend isn't *supposed* to get this request
+// defined here as a gracefull handling of a bare request
+// simply returns an OK message to indicate the backend handled the request
 app.get("/", function (req, res, next) {
   next(createError(200));
 });
 
-// API Root page (aka its working)
+// API Root page
+// no data comes from here
+// defined as a graceful response to the api root
+// simply returns an OK message to indicate the backend did handle the request
 app.get("/api", function (req, res, next) {
   next(createError(200));
 });
