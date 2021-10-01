@@ -50,7 +50,7 @@ export default class Contact extends Component {
           </button>
         </MDBContainer>
         <MDBContainer fluid className="box"
-          style={{ display: this.state.formUp ? "flex" : "none" }}
+          style={{ display: this.state.formUp ? "flex" : "none", width: "50%" }}
         >
           <p className="fontSizeLarge">Support Ticket Information</p>
           <MDBContainer className="form-group">
