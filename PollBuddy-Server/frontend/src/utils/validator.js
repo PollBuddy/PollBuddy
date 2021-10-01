@@ -24,23 +24,19 @@ const schema = Joi.object({
     .error(new Error('Last name must be less than 256 characters.')),
 });
 
+
 function validateFieldJOI(field, val) {
   switch(field.toString()) {
     case 'firstName':
       return schema.validate({ firstname: val });
-      break;
     case 'lastName':
       return schema.validate({ lastname: val });
-      break;
     case 'userName':
       return schema.validate({ username: val });
-      break;
     case 'password':
       return schema.validate({ password: val });
-      break;
     case 'email':
       return schema.validate({ email: val });
-      break;
     default:
       break;
   }
@@ -49,9 +45,11 @@ function validateFieldJOI(field, val) {
 export default function validateUserData(userData) {
   let userObj = {};
 
-  for(field in userData) {
+  for(let field in userData) {
     let valid = validateFieldJOI(field, userData[field]);
 
-    userObj[field] = { valid: valid, value: valid ? userData[field] : null, error: !valid ? userData[field] : null  }
+    userObj[field] = { valid: !valid.error ? true : false, value: valid ? userData[field] : null, error: valid.error ? valid.error.toString() : null  }
   }
+
+  return userObj;
 }
