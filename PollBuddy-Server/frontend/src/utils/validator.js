@@ -1,5 +1,6 @@
 const Joi = require('joi');
 
+/* Define Schema as per Wiki requirements for each field */
 const schema = Joi.object({
   username: Joi.string()
     .pattern(new RegExp('^(?=.{3,32}$)[a-zA-Z0-9\-._]+$'))
@@ -24,8 +25,14 @@ const schema = Joi.object({
     .error(new Error('Last name must be less than 256 characters.')),
 });
 
-
+/**
+ * Validate a value based on schema field given
+ * @param {string} field - The field from the schema that you want to validate
+ * @param {string} val - The value that you want to validate
+ * @returns {object} - the validation object from Joi
+ */
 function validateFieldJOI(field, val) {
+  // Validate value with corresponding field
   switch(field.toString()) {
     case 'firstName':
       return schema.validate({ firstname: val });
@@ -42,6 +49,11 @@ function validateFieldJOI(field, val) {
   }
 }
 
+/**
+ * Create a userObj that validates the user data provided
+ * @param {object} userData - Data provided that needs to be validated with schema
+ * @returns {object} - Contains valid {boolean}, value {object}, and error {string}
+ */
 export default function validateUserData(userData) {
   let userObj = {};
 
