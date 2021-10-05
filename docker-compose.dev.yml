@@ -43,7 +43,7 @@ services:
       - backend
   
   db:
-    image: "mongo:latest"
+    image: "mongo:4"
     restart: unless-stopped
     volumes:
       - mongodata:/data/db
