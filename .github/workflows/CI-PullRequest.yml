@@ -47,7 +47,7 @@ jobs:
 
       - name: Share Link on PR
         continue-on-error: true
-        uses: thollander/actions-comment-pull-request@master
+        uses: thollander/actions-comment-pull-request@v1.0.4
         with:
           message: |
             Live version has been created!
