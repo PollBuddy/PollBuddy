@@ -543,9 +543,9 @@ router.post("/register/rpi", function (req, res) {
 
         // Send the response object with some basic info for the frontend to store
         return res.status(200).send(createResponse({
-          "firstName": req.body.firstName,
-          "lastName": req.body.lastName, 
-          "userName": req.body.userName
+          "firstName": user.FirstName,
+          "lastName": user.LastName, 
+          "userName": user.UserName
         }));
 
       }
