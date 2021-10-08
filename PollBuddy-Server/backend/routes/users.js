@@ -293,15 +293,15 @@ router.get("/register", function (req, res) {
 router.post("/register", function (req, res) {
 
   const validResult = userRegisterValidator.validate({
-    userName: req.body.userNameEmail, 
-    email: req.body.userNameEmail,
+    userName: req.body.userName, 
+    email: req.body.email,
     password: req.body.password,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
   }, { abortEarly: false });
 
   let errors = getResultErrors(validResult);
-  if (!validResult.value.userName.startsWith("__")) {
+  if (validResult.value.userName.startsWith("__")) {
     errors["userName"] = true;
   }
 
@@ -321,6 +321,7 @@ router.post("/register", function (req, res) {
   if (errors["lastName"]) {
     errorMsg["lastName"] = "Invalid lastname format!";
   }
+  console.log(errorMsg)
 
   if (isEmpty(errorMsg)) {
     // No validation errors, let's try adding the user!
@@ -470,17 +471,18 @@ router.post("/register/rpi", function (req, res) {
   // At this point, the user should be submitting extra data to complete registration. We want to validate it
   // and complete the registration, or send an error back.
 
-  // TODO: This validation needs to be updated to joi
-  const firstNameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(req.body.firstName);
-  const lastNameValid = new RegExp(/^[a-zA-Z]{0,256}$/).test(req.body.lastName);
+  const validResult = userInformationValidator.validate({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+  }, { abortEarly: false });
 
-
+  let errors = getResultErrors(validResult);
   let errorMsg = {};
 
-  if (!firstNameValid) {
+  if (errors["firstName"]) {
     errorMsg["firstName"] = "Invalid First Name!";
   }
-  if (!lastNameValid) {
+  if (errors["lastName"]) {
     errorMsg["lastName"] = "Invalid Last Name!";
   }
 
@@ -492,19 +494,18 @@ router.post("/register/rpi", function (req, res) {
   req.body.userName = req.session.userDataTemp.userName;
   req.body.email = req.session.userDataTemp.email;
 
-  if (isEmpty(errorMsg)) {
+  if (isEmpty(errors)) {
     // No validation errors, let's try adding the user!
-    mongoConnection.getDB().collection("users").insertOne({
+    let user = createUser({
       FirstName: req.body.firstName,
-      FirstNameLocked: false,
       LastName: req.body.lastName,
-      LatNameLocked: false,
       UserName: req.body.userName,
-      UserNameLocked: true,
       Email: req.body.email,
+      SchoolAffiliation: "RPI",
       EmailLocked: true,
-      SchoolAffiliation: "RPI"
-    }, (err, result) => {
+    });
+
+    mongoConnection.getDB().collection("users").insertOne(user, (err, result) => {
       if (err) {
         // Something went wrong
         if (err.code === 11000) {
@@ -531,29 +532,23 @@ router.post("/register/rpi", function (req, res) {
         }
 
       } else {
-        // No error object at least
-        if (result.result.ok === 1) {
-          // One result changed, therefore it worked.
 
-          // Delete temporary user information
-          delete req.session.userDataTemp;
+        // One result changed, therefore it worked.
 
-          // Configure email, username by copying from the result object and saving in the session
-          req.session.userData = {};
-          req.session.userData.userID = result.insertedId;
+        // Delete temporary user information
+        delete req.session.userDataTemp;
 
-          // Send the response object with some basic info for the frontend to store
-          return res.status(200).send(createResponse({
-            "firstName": result.ops[0].FirstName,
-            "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName
-          }));
+        // Configure email, username by copying from the result object and saving in the session
+        req.session.userData = {};
+        req.session.userData.userID = result.insertedId.str;
 
-        } else {
-          // For some reason, the user wasn't inserted, send an error.
-          console.log("Database Error occurred while creating a new user with RPI");
-          console.log(err);
-          return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
-        }
+        // Send the response object with some basic info for the frontend to store
+        return res.status(200).send(createResponse({
+          "firstName": req.body.firstName,
+          "lastName": req.body.lastName, 
+          "userName": req.body.userName
+        }));
+
       }
     });
   } else {
