@@ -46,8 +46,25 @@ export default class Groups extends Component {
     //localStorage.removeItem("loggedIn");//todo if admin -- more specifically make diff states if the user who logged in is an admin... or teacher. wouldn't want teacher accessing user things or vice versa...
     //Redirect("/login");
   }
+
+  async getGroups() {
+    let data = await fetch(`${process.env.REACT_APP_BACKEND_URL}/me/groups`);
+    let json = await data.json();
+
+    if(json.groups) {
+      return {
+        groups: json.groups
+      };
+    }
+
+    else {
+      return "error";
+    }
+  }
+
   componentDidMount() {
     this.props.updateTitle("My Groups");
+    this.getGroups();
   }
   toggleLeaveGroup = () => {
     this.setState(prevState => ({ showXs: !prevState.showXs }));
