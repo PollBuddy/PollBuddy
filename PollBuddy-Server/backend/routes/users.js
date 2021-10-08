@@ -8,8 +8,8 @@ const Joi = require("joi");
 
 var mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
-const {createResponse, validateID, isEmpty} = require("../modules/utils"); // object destructuring, only import desired functions
-
+const { createResponse, validateID, isEmpty, getResultErrors } = require("../modules/utils"); // object destructuring, only import desired functions
+const { userLoginValidator, userInformationValidator, userRegisterValidator, createUser } = require("../models/User.js")
 /**
  * This route is not used. It is simply there to have some response to /api/users/
  * @getdata {void} None
@@ -73,45 +73,31 @@ router.post("/login", function (req, res) {
   // sure that a username and a password were even supplied and worth trying to validate. This is probably a
   // micro-optimization to not even bother checking some passwords to save some DB calls, but why not?
   // Please note: This schema is up to date with the wiki as of 2021/03/14, but is NOT a comprehensive test.
-  const schema = Joi.object({
-    userName: Joi.string().pattern(new RegExp(/^[a-zA-Z0-9-._]+$/)).min(3).max(32).required(),
-    email: Joi.string().email({minDomainSegments: 2}).max(320).required(),
-    password: Joi.string().min(10).max(256).required()
-  });
-  const validResult = schema.validate({userName: req.body.userNameEmail, email: req.body.userNameEmail,
-    password: req.body.password}, {abortEarly: false});
+  const validResult = userLoginValidator.validate({
+    userName: req.body.userNameEmail, 
+    email: req.body.userNameEmail,
+    password: req.body.password
+  }, { abortEarly: false });
 
   // Check the results out
-  let userNameValid = true;
-  let emailValid = true;
-  let passwordValid = true;
-  if (validResult.error) {
-    for(let i = 0; i < validResult.error.details.length; i++) {
-      if(validResult.error.details[i].context.key === "userName") {
-        userNameValid = false;
-      } else if(validResult.error.details[i].context.key === "email") {
-        emailValid = false;
-      } else if(validResult.error.details[i].context.key === "password") {
-        passwordValid = false;
-      }
-    }
-  } else {
+  let errors = getResultErrors(validResult);
+  if (isEmpty(errors)) {
     console.log("Error: No validation errors when checking details in /login. This should not happen.");
     return res.status(500).send(createResponse(null, "An error occurred while validating login details."));
   }
-
+  console.log("Login Errors", errors);
   // Check whether to validate email or username
   let mode = "";
-  if(userNameValid && !emailValid) {
+  if (!errors["userName"] && errors["email"]) {
     mode = "userName";
-  } else if(!userNameValid && emailValid) {
+  } else if (errors["userName"] && !errors["email"]) {
     mode = "email";
   } else {
     return res.status(401).send(createResponse(null, "Invalid credentials."));
   }
 
   // Define an internal function to use for validating the data returned from the DB query
-  let validate = function(err, result) {
+  let validate = function (err, result) {
     if (err) {
       // Something went wrong
       console.log("Database Error occurred while locating a user to log in with Poll Buddy");
@@ -126,7 +112,7 @@ router.post("/login", function (req, res) {
       // A user was found!
 
       // Make sure this isn't a school account as they can't log in here
-      if(result.SchoolAffiliation) {
+      if (result.SchoolAffiliation) {
         // This is a school account, don't bother trying to log in anymore.
         return res.status(406).send(createResponse(null, "This account is associated with a school."));
 
@@ -134,7 +120,7 @@ router.post("/login", function (req, res) {
         // Not a school account
 
         // Make sure the password is worth checking (performance optimization as hashing is slow)
-        if(!passwordValid) {
+        if (errors["password"]) {
           return res.status(401).send(createResponse(null, "Invalid credentials."));
 
         } else {
@@ -170,13 +156,15 @@ router.post("/login", function (req, res) {
   };
 
   // Finally, use that function to check the database for a match
-  if(mode === "userName") {
+  if (mode === "userName") {
     mongoConnection.getDB().collection("users").findOne({ UserName: req.body.userNameEmail }, {
-      _id: true, FirstName: true, LastName: true, UserName: true, Password: true, SchoolAffiliation: true, collation: { locale: "en_US", strength: 2 }}, validate);
+      _id: true, FirstName: true, LastName: true, UserName: true, Password: true, SchoolAffiliation: true, collation: { locale: "en_US", strength: 2 }
+    }, validate);
 
-  } else if(mode === "email") {
+  } else if (mode === "email") {
     mongoConnection.getDB().collection("users").findOne({ Email: req.body.userNameEmail }, {
-      _id: true, FirstName: true, LastName: true, UserName: true, Password: true, SchoolAffiliation: true, collation: { locale: "en_US", strength: 2 }}, validate);
+      _id: true, FirstName: true, LastName: true, UserName: true, Password: true, SchoolAffiliation: true, collation: { locale: "en_US", strength: 2 }
+    }, validate);
 
   } else {
     // Didn't pass validation for username or email. This shouldn't ever run anyways though.
@@ -213,7 +201,8 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
 
     // Check to make sure they're already registered
     mongoConnection.getDB().collection("users").findOne({ UserName: "__rpi_" + req.session.cas_user.toLowerCase() }, {
-      projection: { _id: true, UserName: true, FirstName: true, LastName: true } }, (err, result) => {
+      projection: { _id: true, UserName: true, FirstName: true, LastName: true }
+    }, (err, result) => {
       if (err) {
         // Something went wrong
         console.log("Database Error occurred while searching for an existing user during log in with RPI.");
@@ -243,7 +232,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
 
           // Send the user the login with school step 2 page with relevant information
           return res.redirect("/login/school/step2?result=success&data=" + JSON.stringify(
-            {"firstName": result.FirstName, "lastName": result.LastName, "userName": result.UserName}
+            { "firstName": result.FirstName, "lastName": result.LastName, "userName": result.UserName }
           ));
         }
       }
@@ -303,35 +292,41 @@ router.get("/register", function (req, res) {
  */
 router.post("/register", function (req, res) {
 
-  // TODO: This needs to be updated to use joi
-  const firstnameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(req.body.firstName);
-  const lastnameValid = new RegExp(/^[a-zA-Z]{0,256}$/).test(req.body.lastName);
-  // TODO: This will crash if userName is not supplied. Should be fixable as part of the joi change.
-  const userNameValid = new RegExp(/^[a-zA-Z0-9_.-]{3,32}$/).test(req.body.userName) && !req.body.userName.startsWith("__");
-  const emailValid = new RegExp(/^[a-zA-Z0-9_.]+@\w+\.\w+$/).test(req.body.email);
-  const passwordValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/)
-    .test(req.body.password);
+  const validResult = userRegisterValidator.validate({
+    userName: req.body.userNameEmail, 
+    email: req.body.userNameEmail,
+    password: req.body.password,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+  }, { abortEarly: false });
+
+  let errors = getResultErrors(validResult);
+  if (!validResult.value.userName.startsWith("__")) {
+    errors["userName"] = true;
+  }
 
   let errorMsg = {};
-
-  // Todo: This too, it should return a bunch of errors, not just 1.
-  if(!firstnameValid){
-    errorMsg["firstName"] = "Invalid firstname format!";
-  } else if(!lastnameValid){
-    errorMsg["lastName"] = "Invalid lastname format!";
-  } else if(!userNameValid){
+  if (errors["userName"]) {
     errorMsg["userName"] = "Invalid username format!";
-  } else if(!emailValid){
+  }
+  if (errors["email"]) {
     errorMsg["email"] = "Invalid email format!";
-  } else if(!passwordValid){
+  }
+  if (errors["password"]) {
     errorMsg["password"] = "Invalid password format!";
+  }
+  if (errors["firstName"]) {
+    errorMsg["firstName"] = "Invalid firstname format!";
+  }
+  if (errors["lastName"]) {
+    errorMsg["lastName"] = "Invalid lastname format!";
   }
 
   if (isEmpty(errorMsg)) {
     // No validation errors, let's try adding the user!
 
     // Attempt to insert the user into the database
-    bcrypt.hash(req.body.password, 10, function (error,hash) {
+    bcrypt.hash(req.body.password, 10, function (error, hash) {
 
       //Something went wrong with bcrypt hash function
       if (error) {
@@ -340,26 +335,24 @@ router.post("/register", function (req, res) {
         return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
       }
 
-      mongoConnection.getDB().collection("users").insertOne({
+      let user = createUser({
         FirstName: req.body.firstName,
-        FirstNameLocked: false,
         LastName: req.body.lastName,
-        LatNameLocked: false,
         UserName: req.body.userName.toLowerCase(),
-        UserNameLocked: true,
         Email: req.body.email.toLowerCase(),
-        EmailLocked: false,
-        Password: hash
-      }, (err, result) => {
+        Password: hash,
+      });
+
+      mongoConnection.getDB().collection("users").insertOne(user, (err, result) => {
         if (err) {
           // Something went wrong
-          if(err.code === 11000) {
+          if (err.code === 11000) {
             // This code means we're trying to insert a duplicate key (aka user already registered somehow)
-            if(err.keyPattern.Email) {
+            if (err.keyPattern.Email) {
               // Email in use
               return res.status(400).send(createResponse(null, "This email is already in use."));
 
-            } else if(err.keyPattern.UserName) {
+            } else if (err.keyPattern.UserName) {
               // Username in use
               return res.status(400).send(createResponse(null, "This username is already in use."));
 
@@ -378,24 +371,18 @@ router.post("/register", function (req, res) {
           }
 
         } else {
-          // No error object at least
-          if (result.result.ok === 1) {
-            // One result changed, therefore it worked.
 
-            // Configure user data and save in session
-            req.session.userData = {};
-            req.session.userData.userID = result.insertedId;
+          // One result changed, therefore it worked.
+          // Configure user data and save in session
+          req.session.userData = {};
+          req.session.userData.userID = result.insertedId.str;
 
-            // Send the response object with some basic info for the frontend to store
-            return res.status(200).send(createResponse({ "firstName": result.ops[0].FirstName,
-              "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName}));
-
-          } else {
-          // For some reason, the user wasn't inserted, send an error.
-            console.log("Database Error occurred while creating a new user.");
-            console.log(err);
-            return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
-          }
+          // Send the response object with some basic info for the frontend to store
+          return res.status(200).send(createResponse({
+            "firstName": user.FirstName,
+            "lastName": user.LastName,
+            "userName": user.UserName
+          }));
         }
       });
     });
@@ -487,17 +474,18 @@ router.post("/register/rpi", function (req, res) {
   const firstNameValid = new RegExp(/^[a-zA-Z]{1,256}$/).test(req.body.firstName);
   const lastNameValid = new RegExp(/^[a-zA-Z]{0,256}$/).test(req.body.lastName);
 
+
   let errorMsg = {};
 
-  if(!firstNameValid){
+  if (!firstNameValid) {
     errorMsg["firstName"] = "Invalid First Name!";
   }
-  if(!lastNameValid){
+  if (!lastNameValid) {
     errorMsg["lastName"] = "Invalid Last Name!";
   }
 
   // Make sure we've got data from step 1
-  if(!req.session.userDataTemp) {
+  if (!req.session.userDataTemp) {
     return res.status(500).send(createResponse(null, "Prerequisite data is not available."));
   }
   // Configure email, username, overwriting whatever the user may have sent as we don't want it anyways.
@@ -519,7 +507,7 @@ router.post("/register/rpi", function (req, res) {
     }, (err, result) => {
       if (err) {
         // Something went wrong
-        if(err.code === 11000) {
+        if (err.code === 11000) {
           // This code means we're trying to insert a duplicate key (aka user already registered somehow)
           if (err.keyPattern.Email) {
             // Email in use
@@ -533,13 +521,13 @@ router.post("/register/rpi", function (req, res) {
             // An unknown error occurred
             console.log("Database Error occurred while creating a new user with RPI.");
             console.log(err);
-            return res.status(500).send(createResponse(null,"An error occurred while communicating with the database."));
+            return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
           }
         } else {
           // An unknown error occurred
           console.log("Database Error occurred while creating a new with RPI.");
           console.log(err);
-          return res.status(500).send(createResponse(null,"An error occurred while communicating with the database."));
+          return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
         }
 
       } else {
@@ -555,8 +543,10 @@ router.post("/register/rpi", function (req, res) {
           req.session.userData.userID = result.insertedId;
 
           // Send the response object with some basic info for the frontend to store
-          return res.status(200).send(createResponse({ "firstName": result.ops[0].FirstName,
-            "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName }));
+          return res.status(200).send(createResponse({
+            "firstName": result.ops[0].FirstName,
+            "lastName": result.ops[0].LastName, "userName": result.ops[0].UserName
+          }));
 
         } else {
           // For some reason, the user wasn't inserted, send an error.
@@ -726,10 +716,10 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     // ->  FirstName | LastName | UserName | Email | Password
     if (success === false) {
       // Return an Error message
-      return res.status(400).send(createResponse("","")); // TODO: Error message;
+      return res.status(400).send(createResponse("", "")); // TODO: Error message;
     }
 
-  // User action = Remove
+    // User action = Remove
   } else if (jsonContent.Action === "Remove") {
     // Checks which information the user want to remove
     //   and update the information, mark the "success" flag
@@ -813,14 +803,14 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
     // ->  FirstName | LastName | UserName | Email | Password
     if (success === false) {
       // Return an Error message
-      return res.status(400).send(createResponse("","")); // TODO: Error message;
+      return res.status(400).send(createResponse("", "")); // TODO: Error message;
     }
 
-  // If user action is neither
-  // -> Add | Remove
+    // If user action is neither
+    // -> Add | Remove
   } else {
     // Return an Error message
-    return res.status(400).send(createResponse("","")); // TODO: Error message;
+    return res.status(400).send(createResponse("", "")); // TODO: Error message;
   }
 
   // Successfully updated the database as user requested
@@ -848,7 +838,7 @@ router.get("/:id", function (req, res, next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
   mongoConnection.getDB().collection("users").find({ "_id": id }).toArray(function (err, result) {
     if (err) {
-      return res.status(500).send(createResponse("",err)); // TODO: Error message
+      return res.status(500).send(createResponse("", err)); // TODO: Error message
     }
     return res.status(200).send(createResponse(result));
   });
@@ -885,7 +875,7 @@ router.get("/:id/groups", function (req, res, next) {
     return res.status(200).send(createResponse(item.Groups));
   }).toArray(function (err, result) {
     if (err) {
-      return res.status(500).send(createResponse("","")); // TODO: Error message
+      return res.status(500).send(createResponse("", "")); // TODO: Error message
     }
     return res.status(200).send(createResponse(result[0]));
   });
