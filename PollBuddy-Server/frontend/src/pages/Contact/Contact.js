@@ -15,6 +15,18 @@ export default class Contact extends Component {
 
   constructor(props) {
     super(props);
+    fetch(process.env.REACT_APP_BACKEND_URL + "/users/me", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+    }).then(response => response.json())
+      // handle response
+      .then(data => {
+        console.log("Yoo we got data :D");
+        console.log(data);
+      })
+      .catch(err => {
+        console.log("There is no data :(");
+      });
     this.state = {
       formUp: false,
       phone: "",
