@@ -9,7 +9,7 @@ const Joi = require("joi");
 var mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
 const { createResponse, validateID, isEmpty, getResultErrors } = require("../modules/utils"); // object destructuring, only import desired functions
-const { userLoginValidator, userInformationValidator, userRegisterValidator, createUser } = require("../models/User.js")
+const { userLoginValidator, userInformationValidator, userRegisterValidator, createUser } = require("../models/User.js");
 /**
  * This route is not used. It is simply there to have some response to /api/users/
  * @getdata {void} None
@@ -321,7 +321,6 @@ router.post("/register", function (req, res) {
   if (errors["lastName"]) {
     errorMsg["lastName"] = "Invalid lastname format!";
   }
-  console.log(errorMsg)
 
   if (isEmpty(errorMsg)) {
     // No validation errors, let's try adding the user!
