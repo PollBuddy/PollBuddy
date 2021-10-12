@@ -17,6 +17,7 @@ RUN npm ci --only=production
 # Bundle app source
 # Folders
 COPY bin ./bin
+COPY models ./models
 COPY modules ./modules
 COPY public ./public
 COPY routes ./routes

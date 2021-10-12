@@ -83,10 +83,23 @@ function isEmpty(obj) {
   return JSON.stringify(obj) === JSON.stringify({});
 }
 
+function getResultErrors(result) {
+  let errors = {};
+  if (result.error) {
+    for (let i = 0; i < result.error.details.length; i++) {
+      if (result.error.details[i].context.key in result.value) {
+        errors[result.error.details[i].context.key] = true;
+      }
+    }
+  }
+  return errors;
+}
+
 module.exports = {
   createResponse,
   validateID,
   isLoggedIn,
   checkPollPublic,
-  isEmpty
+  isEmpty,
+  getResultErrors
 };
