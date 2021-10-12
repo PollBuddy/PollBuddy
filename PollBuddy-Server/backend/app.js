@@ -166,7 +166,7 @@ app.get("/gendata", (req, res) => {
   var checkClose = setInterval(function () {
     if (completes.length === elements.length) {
       clearInterval(checkClose);
-      res.send(log);
+      res.status(200).send(log);
     }
   }, 1000);
 
