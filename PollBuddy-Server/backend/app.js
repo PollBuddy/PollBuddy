@@ -185,11 +185,11 @@ app.get("/gendata", (req, res) => {
 
 
 /**
- * Root(home) page
- * backend isn't *supposed* to get this request
- * defined here as a gracefull handling of a bare request
- * simply returns an OK message to indicate the backend handled the request
- * For full documnetation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Overview)
+ * Root (home) page
+ * backend isn't *supposed* to get this request normally.
+ * It's defined here as a graceful handling of a bare request.
+ * Returns a status 200 OK message to indicate the backend handled the request and is working.
+ * For full documentation, see the wiki: https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Overview)
  * @throws 200 - OK
  * @name GET /
  * @param {string} path - Express path.
@@ -201,12 +201,11 @@ app.get("/", function (req, res, next) {
 
 /**
  * API Root page
- * no data comes from here
- * defined as a graceful response to the api root
- * simply returns an OK message to indicate the backend did handle the request
- * For full documnetation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Overview)
+ * Does not do anything by itself, defined as a graceful response to the api root
+ * Returns a status 200 OK message to indicate the backend handled the request and is working.
+ * For full documentation, see the wiki: https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Overview)
  * @throws 200 - OK
- * @name GET /
+ * @name GET /api
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
