@@ -28,6 +28,8 @@ app.use(expressSession({
   secret: process.env["SESSION_SECRET"],
   secure: true,
   rolling: true,
+  resave: false,
+  saveUninitialized: true,
   store: MongoStore.create({
     mongoUrl: process.env["DB_URL"],
     dbName: process.env["DB_NAME"]
