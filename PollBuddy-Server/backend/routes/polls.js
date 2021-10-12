@@ -403,7 +403,7 @@ router.get("/:id/view", async function (req, res, next) {
       }
     }
     // Send the open questions
-    res.send(createResponse({"Questions": openQuestions, "PollID": id}));
+    res.status(200).send(createResponse({"Questions": openQuestions, "PollID": id}));
   });
 });
 
