@@ -609,7 +609,7 @@ router.get("/me", async function (req,res) {
   const user = await collection.findOne({"_id" : idCode});
   if(user) {
     // Found user, and return the user data in a JSON Object
-    return res.status(200).send(createResponse(JSON.stringify(user)));
+    return res.status(200).send(createResponse(user));
   }
   // Could not find user associated with this ID, something has gone wrong
   return res.status(400).send(createResponse(null,"Error: Invalid User, Session ID does not match any user."));
