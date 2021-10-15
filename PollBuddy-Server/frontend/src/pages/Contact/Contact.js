@@ -23,6 +23,7 @@ export default class Contact extends Component {
       .then(data => {
         console.log("Yoo we got data :D");
         console.log(data);
+        this.setState({fullName: data.data.FirstName+' '+data.data.LastName, school: data.data.SchoolAffiliation})
       })
       .catch(err => {
         console.log("There is no data :(");
@@ -71,6 +72,7 @@ export default class Contact extends Component {
               className="form-control textBox"
               id="name"
               placeholder="Name"
+              value={this.state.fullName}
               onChange={(evt) => { this.setState({fullName: evt.target.value}); }}
             />
             <label htmlFor="school">School (if applicable):</label>
