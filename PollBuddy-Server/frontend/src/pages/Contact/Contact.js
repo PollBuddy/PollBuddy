@@ -22,7 +22,7 @@ export default class Contact extends Component {
       .then(data => {
         console.log("Yoo we got data :D");
         console.log(data);
-        this.setState({fullName: data.data.FirstName+' '+data.data.LastName, school: data.data.SchoolAffiliation, email: data.data.Email})
+        this.setState({fullName: data.data.FirstName+' '+data.data.LastName, school: data.data.SchoolAffiliation, email: data.data.Email});
       })
       .catch(err => {
         console.log("There is no data :(");
