@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import autosize from "autosize";
 import {MDBContainer} from "mdbreact";
-import PhoneInput from "react-phone-input-2";
 import "mdbreact/dist/css/mdb.css";
 
 import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";
@@ -23,14 +22,14 @@ export default class Contact extends Component {
       .then(data => {
         console.log("Yoo we got data :D");
         console.log(data);
-        this.setState({fullName: data.data.FirstName+' '+data.data.LastName, school: data.data.SchoolAffiliation})
+        this.setState({fullName: data.data.FirstName+' '+data.data.LastName, school: data.data.SchoolAffiliation, email: data.data.Email})
       })
       .catch(err => {
         console.log("There is no data :(");
       });
     this.state = {
       formUp: false,
-      phone: "",
+      email: "",
       value: "",
       fullName: "",
       descriptionOfIssue: ""
@@ -81,13 +80,13 @@ export default class Contact extends Component {
               onChange={e => this.setState({ value: e.target.value })}
               onSelect={value => this.setState({ value })}
             />
-            <label htmlFor="phone">Phone number:</label>
-            <PhoneInput
-              inputProps={{ className: "form-control textBox", id: "phone" }}
-              disableDropdown={true}
-              country={"us"}
-              value={this.state.phone}
-              onChange={phone => this.setState({ phone })}
+            <label htmlFor="email">Email:</label>
+            <input required
+              className="form-control textBox"
+              id="email"
+              placeholder="Email"
+              value={this.state.email}
+              onChange={(evt) => { this.setState({email: evt.target.value}); }}
             />
             <label htmlFor="description">Description of the issue:</label>
             <textarea required
