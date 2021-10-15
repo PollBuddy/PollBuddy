@@ -2,6 +2,9 @@ import React from "react";
 import Autocomplete from "react-autocomplete";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
+import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import "../../components/LoadingWheel/LoadingWheel.scss";
+
 
 var schools = [];
 var schoolLinkDict = {};
@@ -38,7 +41,21 @@ const renderDropdownItem = (item) => (
   </div>
 );
 
+const checkWheel = () => {
+  if (Object.keys(schoolLinkDict).length < 1) {
+    return (
+      <MDBContainer className="page">
+        <LoadingWheel/>
+      </MDBContainer>
+    )
+  }
+  else {
+    return
+  }
+};
+
 export default ({ value, onChange, onSelect}) => (
+
   <MDBContainer className="form-group">
     <Autocomplete
       items={schools}
@@ -46,11 +63,8 @@ export default ({ value, onChange, onSelect}) => (
       getItemValue={item => item.label}
       shouldItemRender={(item, value2) => item.label.toLowerCase().indexOf(value2.toLowerCase()) >= 0}
       inputProps={{
-        className: "form-control textBox",
-        placeholder: "Enter school name",
-        "aria-labelledby": "schoolNameText"
+        className: "LoadingWheel-loader"
       }}
-      wrapperStyle={{ display: "block" }}
       value={value}
       onChange={onChange}
       onSelect={onSelect}
