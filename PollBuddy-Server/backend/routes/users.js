@@ -10,6 +10,8 @@ var mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
 const {createResponse, validateID, isEmpty} = require("../modules/utils"); // object destructuring, only import desired functions
 
+// This file handles /api/users URLs
+
 /**
  * This route is not used. It is simply there to have some response to /api/users/
  * @getdata {void} None
