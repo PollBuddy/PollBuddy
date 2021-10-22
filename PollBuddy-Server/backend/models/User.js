@@ -27,19 +27,9 @@ const userSchema = {
   SchoolAffiliation: "",
 };
 
-function createUser(data){
-  let user = userSchema;
-  for (let [key, value] of Object.entries(user)) {
-    if (data[key]) {
-      user[key] = data[key];
-    }
-  }
-  return user;
-}
-
 module.exports = {
   userLoginValidator,
   userInformationValidator,
   userRegisterValidator,
-  createUser
+  userSchema
 };
