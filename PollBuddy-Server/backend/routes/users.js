@@ -435,7 +435,7 @@ router.get("/register/rpi", rpi.bounce, function (req, res) {
     //return res.redirect("/register/school/step2?result=success&userName=" + req.session.userDataTemp.userName +
     //  "&email=" + req.session.userDataTemp.email + "&school=rpi");
     return res.redirect("/register/school/step2?result=success&data=" + JSON.stringify(
-       { "email": req.session.userDataTemp.email, "school": "rpi", "userName": req.session.userDataTemp.userName }
+      { "email": req.session.userDataTemp.email, "school": "rpi", "userName": req.session.userDataTemp.userName }
     ));
 
   } else {

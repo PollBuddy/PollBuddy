@@ -15,14 +15,13 @@ class RegisterWithSchoolStep2 extends Component {
     if(this.props.location.search) {
       console.log("Getting things");
       var data = JSON.parse(new URLSearchParams(this.props.location.search).get("data"));
-      console.log(data)
       var firstName = data["firstName"];
       var firstNamePrefilled = true;
-      var lastName = data["lastName"]
+      var lastName = data["lastName"];
       var lastNamePrefilled = true;
-      var userName = data["userName"]
+      var userName = data["userName"];
       var userNamePrefilled = true;
-      var email = data["email"]
+      var email = data["email"];
       var emailPrefilled = true;
 
       if(firstName == null) { firstName = ""; firstNamePrefilled = false; }
