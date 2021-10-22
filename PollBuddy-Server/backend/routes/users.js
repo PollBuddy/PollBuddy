@@ -217,7 +217,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
         delete req.session.cas_return_to;
         delete req.session.cas_user;
 
-        if (result === null) {
+        if (!result) {
           // User not registered
 
           // Send the user the login with school step 2 page with relevant information
@@ -225,7 +225,6 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
 
         } else {
           // User has been found
-          console.log(result)
 
           // Configure user data and save in session
           req.session.userData = {};
