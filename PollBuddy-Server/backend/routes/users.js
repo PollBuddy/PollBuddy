@@ -217,7 +217,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
         delete req.session.cas_return_to;
         delete req.session.cas_user;
 
-        if (result === null) {
+        if (!result) {
           // User not registered
 
           // Send the user the login with school step 2 page with relevant information
@@ -432,8 +432,11 @@ router.get("/register/rpi", rpi.bounce, function (req, res) {
     delete req.session.cas_user;
 
     // Send the user to the registration step 2 page with relevant info to prefill
-    return res.redirect("/register/school/step2?result=success&userName=" + req.session.userDataTemp.userName +
-      "&email=" + req.session.userDataTemp.email + "&school=rpi");
+    //return res.redirect("/register/school/step2?result=success&userName=" + req.session.userDataTemp.userName +
+    //  "&email=" + req.session.userDataTemp.email + "&school=rpi");
+    return res.redirect("/register/school/step2?result=success&data=" + JSON.stringify(
+      { "email": req.session.userDataTemp.email, "school": "rpi", "userName": req.session.userDataTemp.userName }
+    ));
 
   } else {
     // Something went wrong
