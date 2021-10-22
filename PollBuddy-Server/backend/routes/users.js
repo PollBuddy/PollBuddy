@@ -225,6 +225,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
 
         } else {
           // User has been found
+          console.log(result)
 
           // Configure user data and save in session
           req.session.userData = {};
