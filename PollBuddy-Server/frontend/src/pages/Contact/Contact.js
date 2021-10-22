@@ -22,13 +22,14 @@ export default class Contact extends Component {
       .then(data => {
         console.log("Yoo we got data :D");
         console.log(data);
-        this.setState({fullName: data.data.FirstName+' '+data.data.LastName, school: data.data.SchoolAffiliation, email: data.data.Email});
+        this.setState({fullName: data.data.FirstName+' '+data.data.LastName, value: data.data.SchoolAffiliation, email: data.data.Email});
       })
       .catch(err => {
         console.log("There is no data :(");
       });
     this.state = {
       formUp: false,
+      done: false,
       email: "",
       value: "",
       fullName: "",
@@ -37,7 +38,7 @@ export default class Contact extends Component {
   }
 
   handleSendTicket() {
-    this.setState({ formUp: false });
+    this.setState({ formUp: false, done : true });
   }
 
   render() {
@@ -56,7 +57,7 @@ export default class Contact extends Component {
           <button
             className="button"
             style={{ display: this.state.formUp ? "none" : ""}}
-            onClick={() => this.setState({ formUp: true })}
+            onClick={() => this.setState({ formUp: true, done: false })}
           >
             File Support Ticket
           </button>
@@ -100,6 +101,13 @@ export default class Contact extends Component {
               Send Ticket
             </button>
           </MDBContainer>
+        </MDBContainer>
+        <MDBContainer fluid className = "box"
+          style={{ display: this.state.done ? "flex" : "none", width: "50%" }}
+        >
+          <p className = "fontSizeLarge">
+            Your Form has been submitted. Thank you for your support! if you have any other issues please file another support form.
+          </p>
         </MDBContainer>
       </MDBContainer>
     );
