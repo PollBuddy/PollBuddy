@@ -104,7 +104,7 @@ export default class Groups extends Component {
               <React.Fragment>
                 {this.state.adminGroups.map((e) => (
                   <Link to={"/groups/" + e.groupId + "/polls"}>
-                    <button style={{  width: "20em" }} className="button">{e.label}</button>
+                    <button id={e.groupId} style={{  width: "20em" }} className="button" >  {e.label}</button>
                   </Link>
                 ))}
               </React.Fragment>
@@ -168,4 +168,29 @@ function Dialog(props) {
       <button onClick={props.onClose} className="button groups_leave_group_button">Yes</button>
     </div>
   );
+}
+
+function leaveGroup(props) {
+   //submit a request to the backend to remove a group
+   fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + e.id + "/delete/", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+  }).then(response => response.json())
+    .then(response => {
+      // TODO: Debug print, delete
+      console.log(response);
+      if (response != null) {
+        if (response.result === "success") {
+          // Refresh page and deleted group should be gone
+        } else {
+          // Handle errors
+            if (response.error === "Validation failed") {
+              this.setState({error: response.data.errors});
+            } else {
+              this.setState({error: response.error});
+            }
+            console.log("ERROR: " + this.state.error);
+        }
+      }
+    }); 
 }
