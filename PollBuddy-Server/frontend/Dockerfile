@@ -22,7 +22,12 @@ RUN npm ci --only=production
 COPY public ./public
 COPY src ./src
 # Files
-COPY .env ./
+# copy both the example file and any existing custom .env 
+COPY .env* ./
+# attempt to move the example .env to the name ".env"
+# if .env is already there, this fails and the custom instance is used
+# if not, the example instance is used
+RUN ["mv","-n", ".env.example", ".env"]
 
 # Build command
 RUN npm run build
