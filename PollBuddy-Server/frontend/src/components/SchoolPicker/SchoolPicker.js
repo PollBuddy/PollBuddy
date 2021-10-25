@@ -8,6 +8,7 @@ import "../../components/LoadingWheel/LoadingWheel.scss";
 
 var schools = [];
 var schoolLinkDict = {};
+var doneLoading = false;
 
 fetch(process.env.REACT_APP_BACKEND_URL + "/schools", {
   method: "GET",
@@ -20,6 +21,8 @@ fetch(process.env.REACT_APP_BACKEND_URL + "/schools", {
       schools.push({ key: i, label: data[i][0] });
       schoolLinkDict[data[i][0]] = data[i][1];
     }
+    doneLoading = true; //sets to true when data is finished collecting
+    console.log(doneLoading)
     console.log(schools); // for testing, can be deleted later
     console.log(schoolLinkDict); // for testing, can be deleted later
   });
@@ -41,29 +44,17 @@ const renderDropdownItem = (item) => (
   </div>
 );
 
-const checkWheel = () => {
-  if (Object.keys(schoolLinkDict).length < 1) {
-    return (
-      <MDBContainer className="page">
-        <LoadingWheel/>
-      </MDBContainer>
-    );
-  } else {
-    return;
-  }
-};
-
 export default ({ value, onChange, onSelect}) => (
-
   <MDBContainer className="form-group">
     <Autocomplete
       items={schools}
       sortItems={sortItems}
       getItemValue={item => item.label}
       shouldItemRender={(item, value2) => item.label.toLowerCase().indexOf(value2.toLowerCase()) >= 0}
-      inputProps={{
-        className: "LoadingWheel-loader"
-      }}
+      inputProps={{doneLoading} ? {className: "form-control textBox",
+        placeholder: "Enter school name",
+        "aria-labelledby": "schoolNameText"
+        } : {className: "LoadingWheel-loader"}}
       value={value}
       onChange={onChange}
       onSelect={onSelect}
