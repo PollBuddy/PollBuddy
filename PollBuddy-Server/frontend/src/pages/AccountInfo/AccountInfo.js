@@ -246,6 +246,9 @@ class AccountInfo extends Component {
             <Link id="AccountInfo-saveChanges" onClick={ () => this.saveChanges()}>
               <button className="button">Save Changes</button>
             </Link>
+            <Link id="AccountInfo-logOutEverywhere" onClick={ () => true}>
+              <button className="button">Log Out Everywhere</button>
+            </Link>
           </MDBContainer>
         </MDBContainer>
       );
