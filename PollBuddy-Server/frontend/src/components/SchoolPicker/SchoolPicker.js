@@ -47,10 +47,9 @@ const checkWheel = () => {
       <MDBContainer className="page">
         <LoadingWheel/>
       </MDBContainer>
-    )
-  }
-  else {
-    return
+    );
+    } else {
+    return;
   }
 };
 
@@ -62,9 +61,12 @@ export default ({ value, onChange, onSelect}) => (
       sortItems={sortItems}
       getItemValue={item => item.label}
       shouldItemRender={(item, value2) => item.label.toLowerCase().indexOf(value2.toLowerCase()) >= 0}
+      open={false}
+      onMenuVisibilityChange={open}
       inputProps={{
         className: "LoadingWheel-loader"
       }}
+      wrapperStyle={{style: "LoadingWheel-loader"}}
       value={value}
       onChange={onChange}
       onSelect={onSelect}
