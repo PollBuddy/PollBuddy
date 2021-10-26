@@ -11,6 +11,14 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY package*.json ./
 
+# Files
+# copy both the example file and any existing custom .env 
+COPY .env* ./
+# attempt to move the example .env to the name ".env"
+# if .env is already there, this fails and the custom instance is used
+# if not, the example instance is used
+RUN ["mv","-n", ".env.example", ".env"]
+
 # Install all dependencies
 RUN npm install
 
