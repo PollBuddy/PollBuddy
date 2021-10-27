@@ -1121,7 +1121,17 @@ router.post("/:id/groups", function (req, res) {
 
 module.exports = router;
 
-// Middleware for getting user information
+/**
+ * This route is intended to fire before all other responses for each request
+ * This augments the request object to include a getCurrentUser method
+ * getCurrentuser gets userdata of the logged in user from the database and passes it to a callback function
+ * getCurrentUser method passes a 401 error to the callback if there is no useer logged in
+ * @returns {void} 
+ * @name backend/user_middleware
+ * @param {req} req request object
+ * @param {res} res response object (untouched)
+ * @param {next} next next middleware in stack
+ */
 module.exports.user_middleware = function (req, res, next) {
 
   req.isLoggedIn = function () {
