@@ -11,7 +11,7 @@ const groupSchema = {
   Admins: [],
   Polls: [],
   Users: [],
-}
+};
 
 const inviteSchema = {
   Code: "",
@@ -19,5 +19,5 @@ const inviteSchema = {
   ValidTo: "",
   ValidUsers: [],
   UseCounter: 0,
-}
+};
 

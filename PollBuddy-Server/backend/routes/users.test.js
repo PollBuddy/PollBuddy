@@ -37,7 +37,7 @@ afterAll(() => {
 describe('/api/users/register', () => {
   it('GET: fail', async () => {
     await supertest(app).get("/api/users/register")
-    .expect(405);
+      .expect(405);
   });
 
   it('POST: register user success', async () => {
@@ -47,24 +47,24 @@ describe('/api/users/register', () => {
       password: "K9g95p$?E@t3A$#4",
       firstName: "test",
       lastName: "account"
-    }
+    };
     await supertest(app).post("/api/users/register")
-    .send(user)
-    .expect(200)
-    .then(async (response) => {
-      expect(response.body.result).toBe("success");
-      expect(response.body.data.firstName).toBe(user.firstName);
-      expect(response.body.data.lastName).toBe(user.lastName);
-      expect(response.body.data.userName).toBe(user.userName);
+      .send(user)
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        expect(response.body.data.firstName).toBe(user.firstName);
+        expect(response.body.data.lastName).toBe(user.lastName);
+        expect(response.body.data.userName).toBe(user.userName);
 
-      let res = await mongoConnection.getDB().collection('users').findOne({ 
-        UserName: user.userName,
-        Email: user.email,
-        FirstName: user.firstName,
-        LastName: user.lastName
-      });
+        let res = await mongoConnection.getDB().collection('users').findOne({ 
+          UserName: user.userName,
+          Email: user.email,
+          FirstName: user.firstName,
+          LastName: user.lastName
+        });
 
-      expect(res).toBeTruthy();
-    });    
+        expect(res).toBeTruthy();
+      });    
   });
 });
