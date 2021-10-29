@@ -172,25 +172,35 @@ function Dialog(props) {
 
 function leaveGroup(props) {
    //submit a request to the backend to remove a group
-   fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + e.id + "/delete/", {
+  fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + e.id + "/delete/", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
-  }).then(response => response.json())
+  })
     .then(response => {
-      // TODO: Debug print, delete
+      if (response === {}) {
+        console.log("Error fetching data");
+      } else {
+        console.log("Fetching data succeeded");
+        console.log(response);
+      }
+    })
+    .catch(error => this.setState({"error": error}));
+  /*
+  .then(response => response.json())
+    .then(response => {
       console.log(response);
       if (response != null) {
-        if (response.result === "success") {
+        if (response.result === "Success") {
           // Refresh page and deleted group should be gone
+
         } else {
           // Handle errors
-            if (response.error === "Validation failed") {
-              this.setState({error: response.data.errors});
-            } else {
+            if (response.error === "Invalid ID.") {
               this.setState({error: response.error});
             }
             console.log("ERROR: " + this.state.error);
         }
       }
-    }); 
+    });
+  */ 
 }
