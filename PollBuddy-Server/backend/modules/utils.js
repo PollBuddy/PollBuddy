@@ -45,6 +45,20 @@ function isLoggedIn(req) {
   return req.session.userData && req.session.userData.userID;
 }
 
+/**
+ * Convenience function to get the currently logged in user
+ * Dumps result into passed callback function
+ * @returns {void} 
+ * @name getCurrentUser
+ * @param {req} req request object
+ * @param {callback} callback handler for (err,result) returned by database query
+ */
+function getCurrentUser(req,callback) {
+  mongoConnection.getDB().collection("users").findOne({ _id: bson.ObjectId(req.session["UserName"]) }, { projection: { Password: false } }, (err, result) => {
+      callback(err,result)
+    });
+};
+
 // Middleware to check if login is required for the poll.
 // poll ID must be present in req.params.id (in the url).
 // will attach a valid objectID on req.valid.id.
@@ -87,6 +101,7 @@ module.exports = {
   createResponse,
   validateID,
   isLoggedIn,
+  getCurrentUser,
   checkPollPublic,
   isEmpty
 };

@@ -84,7 +84,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(usersRouter.user_middleware);
 
 app.use("/api/groups", groupsRouter);
 app.use("/api/polls", pollsRouter);
