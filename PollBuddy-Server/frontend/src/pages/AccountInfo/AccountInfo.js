@@ -245,7 +245,18 @@ class AccountInfo extends Component {
             </MDBContainer>
   
             { /* TODO: Update this to have a backend call instead of a "to", plus some result popup */ }
-            <button className="button" onClick={ () => this.saveChanges()}>Save Changes</button>
+            <p 
+              className="fontSizeLarge"
+              style={{ display: this.state.done ? "" : "none"}}
+            > 
+              Your changes have been submitted. Thank you.
+            </p>
+            <button
+              className="button"
+              onClick={ () => this.saveChanges()}
+            >
+              Save Changes
+            </button>
 
           </MDBContainer>
         </MDBContainer>
