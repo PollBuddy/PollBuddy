@@ -1,3 +1,4 @@
+const bson = require("bson");
 const mongoConnection = require("../modules/mongoConnection.js");
 
 /**
@@ -55,9 +56,9 @@ function isLoggedIn(req) {
  */
 function getCurrentUser(req,callback) {
   mongoConnection.getDB().collection("users").findOne({ _id: bson.ObjectId(req.session["UserName"]) }, { projection: { Password: false } }, (err, result) => {
-      callback(err,result)
-    });
-};
+    callback(err,result);
+  });
+}
 
 // Middleware to check if login is required for the poll.
 // poll ID must be present in req.params.id (in the url).
