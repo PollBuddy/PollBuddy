@@ -375,11 +375,12 @@ router.post("/register", function (req, res) {
           // One result changed, therefore it worked.
           // Configure user data and save in session
           req.session.userData = {};
-          req.session.userData.userID = result.insertedId;
+          req.session.userData.userID = result.insertedId.toString();
           console.log("P1");
           console.log(result);
           console.log(result._id);
           console.log(result.insertedId);
+          console.log(result.insertedId.toString());
           console.log("P2");
 
           // Send the response object with some basic info for the frontend to store
@@ -545,7 +546,7 @@ router.post("/register/rpi", function (req, res) {
 
         // Configure email, username by copying from the result object and saving in the session
         req.session.userData = {};
-        req.session.userData.userID = result.insertedId.str;
+        req.session.userData.userID = result.insertedId.toString();
 
         console.log("P1");
         console.log(result);
