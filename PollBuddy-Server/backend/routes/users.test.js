@@ -1,7 +1,6 @@
 require("dotenv").config();
 const express = require("express");
 const supertest = require("supertest");
-const {MongoClient} = require('mongodb');
 
 var mongoConnection = require("../modules/mongoConnection.js");
 var usersRouter = require("./users");
@@ -10,35 +9,38 @@ let app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/api/users", usersRouter);
+app.use("/api/users", usersRouter); 
 
-describe('insert', () => {
-  beforeAll(() => {
-    process.env.DB_URL = global.__MONGO_URI__;
-    process.env.DB_NAME = global.__MONGO_DB_NAME__;
-    process.env.JEST = "true";
+beforeAll(() => {
+  process.env.DB_URL = global.__MONGO_URI__;
+  process.env.DB_NAME = global.__MONGO_DB_NAME__;
+  process.env.JEST = "true";
 
-    mongoConnection.connect(function (res) {
-      if (res !== true) {
-        console.error(res);
-      }
-    });
+  console.log(global.__MONGO_URI__);
+  console.log(global.__MONGO_DB_NAME__);
+
+  mongoConnection.connect(function (res) {
+    if (res !== true) {
+      console.error(res);
+    }
   });
+});
 
-  afterAll(() => {
-    mongoConnection.disconnect(function (res) {
-      if (res !== true) {
-        console.error(res);
-      }
-    });
+afterAll(() => {
+  mongoConnection.disconnect(function (res) {
+    if (res !== true) {
+      console.error(res);
+    }
   });
+});
 
-  it('GET /api/users/register Fail', async () => {
+describe('/api/users/register', () => {
+  it('GET: fail', async () => {
     await supertest(app).get("/api/users/register")
     .expect(405);
   });
 
-  it('POST /api/users/register Success', async () => {
+  it('POST: register user success', async () => {
     let user = {
       userName: "test.account",
       email: "test@account.com",
@@ -63,6 +65,6 @@ describe('insert', () => {
       });
 
       expect(res).toBeTruthy();
-    });
+    });    
   });
 });
