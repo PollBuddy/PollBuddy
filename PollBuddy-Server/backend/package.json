@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^2.1.0",
+    "eslint-plugin-jest": "^25.2.2",
     "jest": "^27.2.5",
     "supertest": "^6.1.6"
   }
