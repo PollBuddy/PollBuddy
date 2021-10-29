@@ -102,7 +102,7 @@ class RegisterWithPollBuddy extends Component {
           } catch(e) {
             localStorage.setItem("loggedIn", true);
             // redirect to groups page
-            this.props.history.push("/groups");
+            return <Redirect to="/groups" push={true}/>;
           } 
         }
       });

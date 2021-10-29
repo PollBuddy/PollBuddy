@@ -39,11 +39,11 @@ export default class LoginWithSchoolStep2 extends Component {
       if(this.state.error === "User is not registered"){
         console.log("Error: " + this.state.error);
         // Redirect to register page
-        this.props.history.push("/register/school");
+        return <Redirect to="/register/school" push={true}/>;
       } else if(this.state.error === "User has not logged in with RPI."){
         console.log("Error: " + this.state.error);
         // Redirect to login page
-        this.props.history.push("/login/school");
+        return <Redirect to="/login/school" push={true}/>;
       } else { //database error - show the ErrorText component
         return ( //for some reason, this only shows up after clicking submit twice
           <ErrorText text={this.state.error}> </ErrorText>
@@ -63,7 +63,7 @@ export default class LoginWithSchoolStep2 extends Component {
       localStorage.setItem("userName", this.state.userName);
 
       console.log("everything worked; redirecting to /groups");
-      this.props.history.push("/groups");
+      return <Redirect to="/groups" push={true}/>;
 
       //technically we'll never get here, but this makes react happy
       return (

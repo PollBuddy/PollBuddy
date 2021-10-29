@@ -34,11 +34,12 @@ class AccountInfo extends Component {
       school: "RPI"
     };
     this.changePassword = this.handleToggleClick.bind(this);
+    
+    this.handleInputChange = this.handleInputChange.bind(this);
     // Bounce back to log in if they are not logged
     if(localStorage.getItem("loggedIn") !== "true"){
-      this.props.history.push("/login");
+      return <Redirect to="/login" push={true}/>;
     }
-    this.handleInputChange = this.handleInputChange.bind(this);
   }
 
   componentDidMount(){
