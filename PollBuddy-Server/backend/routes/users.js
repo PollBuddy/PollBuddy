@@ -217,7 +217,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
         delete req.session.cas_return_to;
         delete req.session.cas_user;
 
-        if (result === null) {
+        if (!result) {
           // User not registered
 
           // Send the user the login with school step 2 page with relevant information
@@ -375,7 +375,7 @@ router.post("/register", function (req, res) {
           // One result changed, therefore it worked.
           // Configure user data and save in session
           req.session.userData = {};
-          req.session.userData.userID = result.insertedId.str;
+          req.session.userData.userID = result.insertedId.toString();
 
           // Send the response object with some basic info for the frontend to store
           return res.status(200).send(createResponse({
@@ -432,8 +432,9 @@ router.get("/register/rpi", rpi.bounce, function (req, res) {
     delete req.session.cas_user;
 
     // Send the user to the registration step 2 page with relevant info to prefill
-    return res.redirect("/register/school/step2?result=success&userName=" + req.session.userDataTemp.userName +
-      "&email=" + req.session.userDataTemp.email + "&school=rpi");
+    return res.redirect("/register/school/step2?result=success&data=" + JSON.stringify(
+      { "email": req.session.userDataTemp.email, "school": "rpi", "userName": req.session.userDataTemp.userName }
+    ));
 
   } else {
     // Something went wrong
@@ -539,7 +540,7 @@ router.post("/register/rpi", function (req, res) {
 
         // Configure email, username by copying from the result object and saving in the session
         req.session.userData = {};
-        req.session.userData.userID = result.insertedId.str;
+        req.session.userData.userID = result.insertedId.toString();
 
         // Send the response object with some basic info for the frontend to store
         return res.status(200).send(createResponse({
@@ -609,7 +610,7 @@ router.get("/me", async function (req,res) {
   const user = await collection.findOne({"_id" : idCode});
   if(user) {
     // Found user, and return the user data in a JSON Object
-    return res.status(200).send(createResponse(JSON.stringify(user)));
+    return res.status(200).send(createResponse(user));
   }
   // Could not find user associated with this ID, something has gone wrong
   return res.status(400).send(createResponse(null,"Error: Invalid User, Session ID does not match any user."));
