@@ -547,6 +547,12 @@ router.post("/register/rpi", function (req, res) {
         req.session.userData = {};
         req.session.userData.userID = result.insertedId.str;
 
+        console.log("P1");
+        console.log(result);
+        console.log(result._id);
+        console.log(result.insertedId);
+        console.log("P2");
+
         // Send the response object with some basic info for the frontend to store
         return res.status(200).send(createResponse({
           "firstName": user.FirstName,
