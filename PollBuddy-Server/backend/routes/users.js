@@ -375,7 +375,9 @@ router.post("/register", function (req, res) {
           // One result changed, therefore it worked.
           // Configure user data and save in session
           req.session.userData = {};
-          req.session.userData.userID = result.insertedId.str;
+          req.session.userData.userID = result._id;
+          console.log(result);
+          console.log(result._id);
 
           // Send the response object with some basic info for the frontend to store
           return res.status(200).send(createResponse({
