@@ -1,4 +1,4 @@
-FROM node:current
+FROM node:16
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -13,6 +13,7 @@ RUN npm install
 # Bundle app source
 # Folders
 COPY bin ./bin
+COPY models ./models
 COPY modules ./modules
 COPY public ./public
 COPY routes ./routes

@@ -2,7 +2,7 @@
 # dev mode. This grants us a few optimizations desirable in a production environment.
 
 # Build Stage 1 - Used to transpile and minimize
-FROM node:current AS builder
+FROM node:16 AS builder
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -35,7 +35,7 @@ RUN npm run build
 
 
 # Build Stage 2 - Run previously built files
-FROM node:current-alpine
+FROM node:16-alpine
 WORKDIR /usr/src/app/
 
 # Install serve to serve the files

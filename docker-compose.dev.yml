@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   webproxy:
     image: "nginx:latest"
@@ -34,6 +34,7 @@ services:
     restart: unless-stopped
     volumes:
       - "./PollBuddy-Server/backend/bin:/usr/src/app/bin"
+      - "./PollBuddy-Server/backend/models:/usr/src/app/models"
       - "./PollBuddy-Server/backend/modules:/usr/src/app/modules"
       - "./PollBuddy-Server/backend/public:/usr/src/app/public"
       - "./PollBuddy-Server/backend/routes:/usr/src/app/routes"
@@ -41,9 +42,9 @@ services:
       - "./PollBuddy-Server/backend/.env:/usr/src/app/.env"
     networks:
       - backend
-  
+
   db:
-    image: "mongo:latest"
+    image: "mongo:4"
     restart: unless-stopped
     volumes:
       - mongodata:/data/db
@@ -82,5 +83,3 @@ networks:
   backend:
   frontend:
   logging:
-
-
