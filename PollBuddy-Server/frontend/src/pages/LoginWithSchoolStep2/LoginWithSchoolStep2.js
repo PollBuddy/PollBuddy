@@ -47,13 +47,11 @@ export default class LoginWithSchoolStep2 extends Component {
         console.log("Error: " + this.state.error);
         alert("Error: You are not registered! Redirecting to registration page...");
         // Redirect to register page
-        //this.props.history.push("/register/school");
         return (<Redirect to="/register/school" />);
       } else if(this.state.error === "User has not logged in with RPI."){
         console.log("Error: " + this.state.error);
         alert("Error: Something went wrong with the school login process. Please try again, redirecting to login page...");
         // Redirect to login page
-        //this.props.history.push("/login/school");
         return (<Redirect to="/login/school" />);
       } else { //database error - show the ErrorText component
         alert("Error: Something went wrong. Details: " + this.state.error);
@@ -75,13 +73,7 @@ export default class LoginWithSchoolStep2 extends Component {
       localStorage.setItem("userName", this.state.userName);
 
       console.log("everything worked; redirecting to /groups");
-      //this.props.history.push("/groups");
       return (<Redirect to="/groups" />);
-
-      //technically we'll never get here, but this makes react happy
-      return (
-        <p>Logging in...</p>
-      );
     }
   }
 }

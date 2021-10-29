@@ -20,12 +20,7 @@ export default class Contact extends Component {
     }).then(response => response.json())
       // handle response
       .then(data => {
-        console.log("Yoo we got data :D");
-        console.log(data);
         this.setState({fullName: data.data.FirstName+' '+data.data.LastName, value: data.data.SchoolAffiliation, email: data.data.Email});
-      })
-      .catch(err => {
-        console.log("There is no data :(");
       });
     this.state = {
       formUp: false,
@@ -95,8 +90,10 @@ export default class Contact extends Component {
               id="description"
               maxLength="500"
               placeholder="500 character limit"
-              onChange={(evt) => { this.setState({descriptionOfIssue: evt.target.value}); }}
-            ></textarea>
+              onChange={(evt) => {
+                this.setState({descriptionOfIssue: evt.target.value});
+              }}
+            />
             <button className="button" onClick={this.handleSendTicket}>
               Send Ticket
             </button>
@@ -106,7 +103,7 @@ export default class Contact extends Component {
           style={{ display: this.state.done ? "flex" : "none", width: "50%" }}
         >
           <p className = "fontSizeLarge">
-            Your Form has been submitted. Thank you for your support! if you have any other issues please file another support form.
+            Thank you for your support! Your form has been submitted. If you have any other issues, please file another support form.
           </p>
         </MDBContainer>
       </MDBContainer>
