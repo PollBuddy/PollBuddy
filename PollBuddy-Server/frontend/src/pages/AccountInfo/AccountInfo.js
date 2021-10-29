@@ -31,7 +31,8 @@ class AccountInfo extends Component {
       emailLoaded: false,
       emailLocked: false,
       emailText: null,
-      school: "RPI"
+      school: "RPI",
+      done: false
     };
     this.changePassword = this.handleToggleClick.bind(this);
     // Bounce back to log in if they are not logged
@@ -182,6 +183,7 @@ class AccountInfo extends Component {
     }).then(response => {
       console.log(response);
     });
+    this.setState({done: true});
   }
 
   render() {
@@ -243,9 +245,8 @@ class AccountInfo extends Component {
             </MDBContainer>
   
             { /* TODO: Update this to have a backend call instead of a "to", plus some result popup */ }
-            <Link id="AccountInfo-saveChanges" onClick={ () => this.saveChanges()}>
-              <button className="button">Save Changes</button>
-            </Link>
+            <button className="button" onClick={ () => this.saveChanges()}>Save Changes</button>
+
           </MDBContainer>
         </MDBContainer>
       );
