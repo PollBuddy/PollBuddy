@@ -376,12 +376,6 @@ router.post("/register", function (req, res) {
           // Configure user data and save in session
           req.session.userData = {};
           req.session.userData.userID = result.insertedId.toString();
-          console.log("P1");
-          console.log(result);
-          console.log(result._id);
-          console.log(result.insertedId);
-          console.log(result.insertedId.toString());
-          console.log("P2");
 
           // Send the response object with some basic info for the frontend to store
           return res.status(200).send(createResponse({
@@ -547,12 +541,6 @@ router.post("/register/rpi", function (req, res) {
         // Configure email, username by copying from the result object and saving in the session
         req.session.userData = {};
         req.session.userData.userID = result.insertedId.toString();
-
-        console.log("P1");
-        console.log(result);
-        console.log(result._id);
-        console.log(result.insertedId);
-        console.log("P2");
 
         // Send the response object with some basic info for the frontend to store
         return res.status(200).send(createResponse({
