@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "lint": "npx eslint ."
+    "lint": "npx eslint .",
+    "test": "jest"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
