@@ -177,6 +177,13 @@ function leaveGroup(props) {
     headers: {"Content-Type": "application/json"},
   })
     .then(response => {
+      if(response.ok) {
+        return response.json();
+      } else {
+        throw new Error("Something went wrong");
+      }
+    })
+    .then(response => {
       if (response === {}) {
         console.log("Error fetching data");
       } else {
@@ -185,22 +192,4 @@ function leaveGroup(props) {
       }
     })
     .catch(error => this.setState({"error": error}));
-  /*
-  .then(response => response.json())
-    .then(response => {
-      console.log(response);
-      if (response != null) {
-        if (response.result === "Success") {
-          // Refresh page and deleted group should be gone
-
-        } else {
-          // Handle errors
-            if (response.error === "Invalid ID.") {
-              this.setState({error: response.error});
-            }
-            console.log("ERROR: " + this.state.error);
-        }
-      }
-    });
-  */ 
 }
