@@ -199,8 +199,8 @@ class AccountInfo extends Component {
       headers: {"Content-Type": "application/json"}
       //TODO: figure out what to put for the body
     }).then(response => {
-    console.log(response);
-    })
+      console.log(response);
+    });
   }
 
   render() {
