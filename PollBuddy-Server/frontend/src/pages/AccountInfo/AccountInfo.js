@@ -31,7 +31,8 @@ class AccountInfo extends Component {
       emailLoaded: false,
       emailLocked: false,
       emailText: null,
-      school: "RPI"
+      school: "RPI",
+      logOutEverywhere: false
     };
     this.changePassword = this.handleToggleClick.bind(this);
     // Bounce back to log in if they are not logged
@@ -80,6 +81,11 @@ class AccountInfo extends Component {
         if(data.SchoolAffiliation) {
           this.setState({
             school: data.SchoolAffiliation
+          });
+        }
+        if(data.logOutEverywhere) {
+          this.setState({
+            logOutEverywhere: data.logOutEverywhere 
           });
         }
         this.setState({
@@ -184,6 +190,19 @@ class AccountInfo extends Component {
     });
   }
 
+  logOutEverywhere(){
+    this.setState(state => ({
+      logOutEverywhere: !state.logOutEverywhere
+    }));
+    fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"}
+      //TODO: figure out what to put for the body
+    }).then(response => {
+    console.log(response);
+    })
+  }
+
   render() {
     if(!this.state.doneLoading){
       return ( 
@@ -246,7 +265,7 @@ class AccountInfo extends Component {
             <Link id="AccountInfo-saveChanges" onClick={ () => this.saveChanges()}>
               <button className="button">Save Changes</button>
             </Link>
-            <Link id="AccountInfo-logOutEverywhere" onClick={ () => true}>
+            <Link id="AccountInfo-logOutEverywhere" onClick={ () => this.logOutEverywhere()}>
               <button className="button">Log Out Everywhere</button>
             </Link>
           </MDBContainer>
