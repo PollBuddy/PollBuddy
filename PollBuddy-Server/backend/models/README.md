@@ -1,6 +1,8 @@
 # Information
 
-This folder contains a single file, User.js, which handles the constructer for initializing the data for a new user. The following data is stored when initializing a user:
+This folder contains a single file, User.js, which handles the constructer for initializing the data for a new user.
+
+The following data is stored when initializing a user:
 
 FirstName: String storing the user's first name
 LastName: String storing the user's last name
