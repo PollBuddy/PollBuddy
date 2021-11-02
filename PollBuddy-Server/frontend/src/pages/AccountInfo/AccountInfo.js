@@ -118,7 +118,14 @@ class AccountInfo extends Component {
         .error(new Error("Invalid first name format.")),
       lastname: Joi.string()
         .allow(" ").max(256)
-        .error(new Error("Invalid last name format."))
+        .error(new Error("Invalid last name format.")),
+      password: Joi.string()
+        .pattern(new RegExp("^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$"))
+        .pattern(new RegExp("^.*[0-9].*$"))
+        .pattern(new RegExp("^.*[A-Z].*$"))
+        .error(new Error("Invalid password. Must contain 10 or more characters, " +
+          "at least 1 uppercase letter, and at least 1 number. " +
+          "Cannot have 4 of the same characters in a row."))
     });
 
     var userValid = undefined;
@@ -202,11 +209,11 @@ class AccountInfo extends Component {
               <MDBRow className="AccountInfo-accountInputs">
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="firstnameText">First Name:</label>
-                  <input placeholder={this.state.firstName} defaultValue={this.state.firstNameLoaded ? this.state.firstName : undefined } className="form-control textBox" id="firstnameText" readOnly={this.state.firstNameLocked} onChange={this.handleInputChange}/>
+                  <input defaultValue={this.state.firstNameLoaded ? this.state.firstName : undefined } className="form-control textBox" id="firstnameText" readOnly={this.state.firstNameLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="lastnameText">Last Name:</label>
-                  <input placeholder={this.state.lastName} defaultValue={this.state.lastNameLoaded ? this.state.lastName : undefined } className="form-control textBox" id="lastnameText" readOnly={this.state.lastNameLocked} onChange={this.handleInputChange}/>
+                  <input defaultValue={this.state.lastNameLoaded ? this.state.lastName : undefined } className="form-control textBox" id="lastnameText" readOnly={this.state.lastNameLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
               </MDBRow>
   
@@ -217,7 +224,7 @@ class AccountInfo extends Component {
                 </MDBCol>
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="emailText">Email:</label>
-                  <input placeholder={this.state.email} defaultValue={this.state.emailLoaded ? this.state.email : undefined } className="form-control textBox" id="emailText" readOnly={this.state.emailLocked} onChange={this.handleInputChange}/>
+                  <input defaultValue={this.state.emailLoaded ? this.state.email : undefined } className="form-control textBox" id="emailText" readOnly={this.state.emailLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
               </MDBRow>
   
