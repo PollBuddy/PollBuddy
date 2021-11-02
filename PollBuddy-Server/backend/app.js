@@ -90,28 +90,6 @@ app.use("/api/groups", groupsRouter);
 app.use("/api/polls", pollsRouter);
 app.use("/api/users", usersRouter);
 
-// When visiting /test, the database connection finds all documents in all collections, and returns them in JSON.
-app.get("/api/test", (req, res) => {
-  var documents = [];
-  mongoConnection.getDB().listCollections().toArray().then((data) => {
-    // Here you can do something with your data
-    var itemsProcessed = 0;
-    data.forEach(function (c) {
-      mongoConnection.getDB().collection(c["name"]).find({}).toArray(function (err, document) {
-        documents.push(document);
-        itemsProcessed++;
-        if (itemsProcessed === data.length) {
-          callback();
-        }
-      });
-    });
-
-    function callback() {
-      res.json(documents);
-    }
-  });
-});
-
 var schoolsModule = require("./modules/schoolList.js");
 app.get("/api/schools", (req, res) => {
   var schools = schoolsModule.getList();
