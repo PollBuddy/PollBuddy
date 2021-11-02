@@ -2,14 +2,17 @@ require("dotenv").config();
 const express = require("express");
 const supertest = require("supertest");
 
+var { userSchema } = require("../models/User.js");
+var { createModel } = require("../modules/utils.js");
 var mongoConnection = require("../modules/mongoConnection.js");
 var usersRouter = require("./users");
 
-let app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+let mockApp = express();
+mockApp.use(express.json());
+mockApp.use(express.urlencoded({ extended: false }));
+mockApp.use("/api/users", usersRouter); 
 
-app.use("/api/users", usersRouter); 
+let app = supertest(mockApp);
 
 beforeAll(() => {
   process.env.DB_URL = global.__MONGO_URI__;
@@ -27,20 +30,96 @@ beforeAll(() => {
 });
 
 afterAll(() => {
-  mongoConnection.disconnect(function (res) {
+  mongoConnection.disconnect(function(res) {
     if (res !== true) {
       console.error(res);
     }
   });
 });
 
-describe('/api/users/register', () => {
-  it('GET: fail', async () => {
-    await supertest(app).get("/api/users/register")
-      .expect(405);
+afterEach(async () => {
+  await mongoConnection.getDB().listCollections().toArray()
+    .then((collections) => {
+      collections.forEach((collection) => {
+        mongoConnection.getDB().collection(collection.name).deleteMany({});
+      });
+    });
+});
+
+describe("/api/users/login", () => {
+  
+  it("GET: fail", async () => {
+    await app.get("/api/users/login")
+      .expect(405)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
   });
 
-  it('POST: register user success', async () => {
+  it("POST: login with username success", async () => {
+    let user = createModel({
+      UserName: "test.account",
+      Email: "test@account.com",
+      Password: "$2a$12$8Guj3IMNNVWk/GM4q0xeleExT3QBdPe5dWpSRYvk2elRkkWPMlOPG",
+      FirstName: "test",
+      LastName: "account"
+    }, userSchema);
+    await mongoConnection.getDB().collection("users").insertOne(user);
+
+    let userLogin = {
+      userNameEmail: "test.account",
+      password: "K9g95p$?E@t3A$#4",
+    };
+
+    await app.post("/api/users/login")
+      .send(userLogin)
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        expect(response.body.data.firstName).toBe(user.FirstName);
+        expect(response.body.data.lastName).toBe(user.LastName);
+        expect(response.body.data.userName).toBe(user.UserName);
+      });    
+  });
+
+  it("POST: login with email success", async () => {
+    let user = createModel({
+      UserName: "test.account",
+      Email: "test@account.com",
+      Password: "$2a$12$8Guj3IMNNVWk/GM4q0xeleExT3QBdPe5dWpSRYvk2elRkkWPMlOPG",
+      FirstName: "test",
+      LastName: "account"
+    }, userSchema);
+    await mongoConnection.getDB().collection("users").insertOne(user);
+
+    let userLogin = {
+      userNameEmail: "test@account.com",
+      password: "K9g95p$?E@t3A$#4",
+    };
+
+    await app.post("/api/users/login")
+      .send(userLogin)
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        expect(response.body.data.firstName).toBe(user.FirstName);
+        expect(response.body.data.lastName).toBe(user.LastName);
+        expect(response.body.data.userName).toBe(user.UserName);
+      });    
+  });
+});
+
+describe("/api/users/register", () => {
+  
+  it("GET: fail", async () => {
+    await app.get("/api/users/register")
+      .expect(405)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("POST: register user success", async () => {
     let user = {
       userName: "test.account",
       email: "test@account.com",
@@ -48,7 +127,7 @@ describe('/api/users/register', () => {
       firstName: "test",
       lastName: "account"
     };
-    await supertest(app).post("/api/users/register")
+    await app.post("/api/users/register")
       .send(user)
       .expect(200)
       .then(async (response) => {
@@ -57,7 +136,7 @@ describe('/api/users/register', () => {
         expect(response.body.data.lastName).toBe(user.lastName);
         expect(response.body.data.userName).toBe(user.userName);
 
-        let res = await mongoConnection.getDB().collection('users').findOne({ 
+        let res = await mongoConnection.getDB().collection("users").findOne({ 
           UserName: user.userName,
           Email: user.email,
           FirstName: user.firstName,
@@ -68,3 +147,4 @@ describe('/api/users/register', () => {
       });    
   });
 });
+

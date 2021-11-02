@@ -85,7 +85,6 @@ router.post("/login", function (req, res) {
     console.log("Error: No validation errors when checking details in /login. This should not happen.");
     return res.status(500).send(createResponse(null, "An error occurred while validating login details."));
   }
-  console.log("Login Errors", errors);
   // Check whether to validate email or username
   let mode = "";
   if (!errors["userName"] && errors["email"]) {
@@ -133,10 +132,15 @@ router.post("/login", function (req, res) {
 
             } else if (bcryptResult) {
               // Password validated and matches
-
-              // Configure user data and save in session
-              req.session.userData = {};
-              req.session.userData.userID = result._id;
+              
+              // TODO: Currently ignores session when testing with Jest. This
+              // is temporary and Jest should be able to test for session data as 
+              // well.
+              if (process.env.JEST === "false") {
+                // Configure user data and save in session
+                req.session.userData = {};
+                req.session.userData.userID = result._id;
+              }
 
               // Send the user the necessary data to complete the login process
               return res.status(200).send(createResponse({
@@ -371,7 +375,7 @@ router.post("/register", function (req, res) {
 
         } else {
           
-          if (process.env.JEST == "false") {
+          if (process.env.JEST === "false") {
             // One result changed, therefore it worked.
             // Configure user data and save in session
             req.session.userData = {};
