@@ -2,6 +2,9 @@
 
 FROM node:16-alpine
 
+# Install curl
+RUN apk --no-cache add curl
+
 # Create app directory
 WORKDIR /usr/src/app
 
