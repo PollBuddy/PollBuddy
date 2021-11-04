@@ -32,5 +32,5 @@ EXPOSE 3000
 CMD ["node", "bin/www"]
 
 # Health Check
-HEALTHCHECK --interval=5m --timeout=3s \
+HEALTHCHECK --interval=15s --timeout=3s \
   CMD curl -f http://localhost:7655/api || exit 1

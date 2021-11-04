@@ -46,5 +46,5 @@ EXPOSE 3000
 CMD ["serve", "-s", "build", "-l", "3000"]
 
 # Health Check
-HEALTHCHECK --interval=5m --timeout=3s \
+HEALTHCHECK --interval=15s --timeout=3s \
   CMD curl -f http://localhost:7655 || exit 1
