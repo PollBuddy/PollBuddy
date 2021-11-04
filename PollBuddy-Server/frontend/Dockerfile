@@ -47,4 +47,4 @@ CMD ["serve", "-s", "build", "-l", "3000"]
 
 # Health Check
 HEALTHCHECK --interval=15s --timeout=3s \
-  CMD curl -f http://localhost:7655 || exit 1
+  CMD curl -f http://localhost:3000 || exit 1

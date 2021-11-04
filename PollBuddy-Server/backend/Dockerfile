@@ -33,4 +33,4 @@ CMD ["node", "bin/www"]
 
 # Health Check
 HEALTHCHECK --interval=15s --timeout=3s \
-  CMD curl -f http://localhost:7655/api || exit 1
+  CMD curl -f http://localhost:3001/api || exit 1
