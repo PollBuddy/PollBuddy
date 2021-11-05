@@ -27,3 +27,6 @@ yarn-error.log*
 .vs
 
 *~
+
+# Testing-related things
+PollBuddy-Server/backend/globalConfig.json
