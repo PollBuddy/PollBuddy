@@ -1,6 +1,6 @@
 # This dockerfile is merely to launch a lint test. The app will not run afterwards.
 
-FROM node:current
+FROM node:16
 
 # Create app directory
 WORKDIR /usr/src/app

@@ -28,7 +28,7 @@ const userSchema = {
 };
 
 function createUser(data){
-  let user = userSchema;
+  let user = Object.assign({}, userSchema);
   for (let [key, value] of Object.entries(user)) {
     if (data[key]) {
       user[key] = data[key];

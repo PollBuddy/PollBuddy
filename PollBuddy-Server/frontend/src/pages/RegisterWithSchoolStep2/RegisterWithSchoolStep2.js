@@ -11,15 +11,17 @@ class RegisterWithSchoolStep2 extends Component {
     super(props);
 
     // Process args
+    // TODO: Some of this should probably be in a try/catch or something for robustness
     if(this.props.location.search) {
       console.log("Getting things");
-      var firstName = new URLSearchParams(this.props.location.search).get("firstName");
+      var data = JSON.parse(new URLSearchParams(this.props.location.search).get("data"));
+      var firstName = data["firstName"];
       var firstNamePrefilled = true;
-      var lastName = new URLSearchParams(this.props.location.search).get("lastName");
+      var lastName = data["lastName"];
       var lastNamePrefilled = true;
-      var userName = new URLSearchParams(this.props.location.search).get("userName");
+      var userName = data["userName"];
       var userNamePrefilled = true;
-      var email = new URLSearchParams(this.props.location.search).get("email");
+      var email = data["email"];
       var emailPrefilled = true;
 
       if(firstName == null) { firstName = ""; firstNamePrefilled = false; }
