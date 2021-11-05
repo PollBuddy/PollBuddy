@@ -34,7 +34,6 @@ class AccountInfo extends Component {
       school: "RPI",
       passwordLocked: false,
       newPasswordText: null,
-      confirmNewPassword: null,
       done: false
     };
     this.changePassword = this.handleToggleClick.bind(this);
@@ -198,7 +197,7 @@ class AccountInfo extends Component {
         LastName: lastNameInput,
         UserName: userInput,
         Email: emailInput,
-        Password: undefined
+        Password: passwordInput
       })
     }).then(response => {
       console.log(response);
@@ -256,10 +255,6 @@ class AccountInfo extends Component {
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="newPasswordText">New password:</label>
                   <input type="password" placeholder="••••••••••••" className="form-control textBox" id="newPasswordText" readOnly={this.state.passwordLocked} onChange={this.handleInputChange}/>
-                </MDBCol>
-                <MDBCol md="6" className="AccountInfo-mdbcol-6">
-                  <label htmlFor="confirmNewPassword">Confirm new password:</label>
-                  <input type="password" placeholder="••••••••••••" className="form-control textBox" id="confirmNewPassword" readOnly={this.state.passwordLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
               </MDBContainer>
             </MDBContainer>
