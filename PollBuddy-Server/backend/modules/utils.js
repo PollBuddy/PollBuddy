@@ -83,10 +83,27 @@ function isEmpty(obj) {
   return JSON.stringify(obj) === JSON.stringify({});
 }
 
+// augments a route's behavior with generic behaviour when outside of development mode
+// for routes that should only be active in development mode
+function debugRoute(reg,res,body){
+  console.log("environment variable" + process.env.DEBUG_MODE)
+  if(process.env.DEBUG_MODE === "true"){
+    if(body){
+      body(reg,res);
+    }
+    else{
+      return res.status(200).send(createResponse(null, "Route is debug only"));
+    }
+  }else{
+    return res.status(500).send(createResponse(null, "Route is not available"));
+  }
+}
+
 module.exports = {
   createResponse,
   validateID,
   isLoggedIn,
   checkPollPublic,
-  isEmpty
+  isEmpty,
+  debugRoute
 };

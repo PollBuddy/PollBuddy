@@ -8,7 +8,7 @@ const Joi = require("joi");
 
 var mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
-const {createResponse, validateID, isEmpty} = require("../modules/utils"); // object destructuring, only import desired functions
+const {createResponse, validateID, isEmpty, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/
@@ -21,7 +21,7 @@ const {createResponse, validateID, isEmpty} = require("../modules/utils"); // ob
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/", function (req, res) {
-  return res.status(405).send(createResponse(null, "Route is not available"));
+  debugRoute(req,res);
 });
 
 /**
@@ -35,7 +35,7 @@ router.get("/", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/", function (req, res) {
-  return res.status(405).send(createResponse(null, "Route is not available"));
+  debugRoute(req,res);
 });
 
 /**

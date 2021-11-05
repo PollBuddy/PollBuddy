@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
-const {createResponse, validateID, checkPollPublic, isLoggedIn} = require("../modules/utils"); // object destructuring, only import desired functions
+const {createResponse, validateID, checkPollPublic, isLoggedIn, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
 
 /**
  * This route is not used.
@@ -301,13 +301,15 @@ router.post("/:id/delete", function (req, res) {//use router.delete??
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/", async (req, res) => {
-  try {
-    const polls = await mongoConnection.getDB().collection("polls").find({}).toArray();
-    return res.status(200).send(createResponse(polls));
-  } catch (e) {
-    console.log(e);
-  }
-  return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
+  debugRoute(reg,res,(reg,res) =>{
+    try {
+      const polls = await mongoConnection.getDB().collection("polls").find({}).toArray();
+      return res.status(200).send(createResponse(polls));
+    } catch (e) {
+      console.log(e);
+    }
+    return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
+  });
 });
 
 /**
@@ -319,7 +321,9 @@ router.get("/", async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  debugRoute(req,res,(req,res) => {
+    res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."))
+  });
 });
 
 /**
