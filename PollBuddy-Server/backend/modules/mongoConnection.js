@@ -77,11 +77,11 @@ module.exports = {
           db = client.db(process.env.DB_NAME);
           console.log("Database connected");
 
-          createIndexes();
-          callback(true);
+          createIndexes().then(function() {
+            callback(true);
+          });
         }
       });
-
     }
   },
   disconnect: function(callback) {
