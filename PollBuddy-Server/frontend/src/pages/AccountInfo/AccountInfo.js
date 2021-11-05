@@ -185,7 +185,7 @@ class AccountInfo extends Component {
       if(passwordValid.error) {
         return;
 	  }
-      passwordInput = passwordValid.value.password
+      passwordInput = passwordValid.value.password;
 	}
 
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
