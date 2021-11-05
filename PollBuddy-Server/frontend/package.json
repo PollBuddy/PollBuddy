@@ -23,7 +23,7 @@
     "start": "react-scripts start",
     "docker-start": "CI=true react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject",
     "lint": "npx eslint src"
   },
