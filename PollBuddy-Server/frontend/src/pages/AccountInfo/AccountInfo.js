@@ -32,6 +32,9 @@ class AccountInfo extends Component {
       emailLocked: false,
       emailText: null,
       school: "RPI",
+      passwordLocked: false,
+      newPasswordText: null,
+      confirmNewPassword: null,
       done: false
     };
     this.changePassword = this.handleToggleClick.bind(this);
@@ -80,7 +83,8 @@ class AccountInfo extends Component {
         }
         if(data.SchoolAffiliation) {
           this.setState({
-            school: data.SchoolAffiliation
+            school: data.SchoolAffiliation,
+            passwordLocked: true
           });
         }
         this.setState({
@@ -136,6 +140,8 @@ class AccountInfo extends Component {
     var firstNameInput = "";
     var lastNameValid = undefined;
     var lastNameInput = "";
+    var passwordValid = undefined;
+    var passwordInput = undefined;
 
     // Ensure that the inputs are valid, if not return
     // Then assign Input value to validated input, or state if the input is not filled in
@@ -175,6 +181,13 @@ class AccountInfo extends Component {
     } else {
       emailInput = this.state.email;
     }
+    if(this.state.newPasswordText) {
+      passwordValid = schema.validate({password: this.state.newPasswordText});
+      if(passwordValid.error) {
+        return;
+	  }
+      passwordInput = passwordValid.value.password
+	}
 
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
       method: "POST",
@@ -242,11 +255,11 @@ class AccountInfo extends Component {
               <MDBContainer id="AccountInfo-changePasswordInputs" style={this.state.changePassword ? {display: "flex"} : {display: "none"}}>
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="newPasswordText">New password:</label>
-                  <input type="password" placeholder="••••••••••••" className="form-control textBox" id="newPasswordText"/>
+                  <input type="password" placeholder="••••••••••••" className="form-control textBox" id="newPasswordText" readOnly={this.state.passwordLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="confirmNewPassword">Confirm new password:</label>
-                  <input type="password" placeholder="••••••••••••" className="form-control textBox" id="confirmNewPassword"/>
+                  <input type="password" placeholder="••••••••••••" className="form-control textBox" id="confirmNewPassword" readOnly={this.state.passwordLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
               </MDBContainer>
             </MDBContainer>
