@@ -2,6 +2,9 @@
 
 FROM node:16-alpine
 
+# Install curl
+RUN apk --no-cache add curl
+
 # Create app directory
 WORKDIR /usr/src/app
 
@@ -30,3 +33,7 @@ EXPOSE 3000
 
 # Start command
 CMD ["node", "bin/www"]
+
+# Health Check
+HEALTHCHECK --interval=15s --timeout=3s \
+  CMD curl -f http://localhost:3001/api || exit 1

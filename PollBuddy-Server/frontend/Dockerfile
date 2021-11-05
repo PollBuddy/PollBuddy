@@ -31,6 +31,11 @@ RUN npm run build
 
 # Build Stage 2 - Run previously built files
 FROM node:16-alpine
+
+# Install curl
+RUN apk --no-cache add curl
+
+# Create app directory
 WORKDIR /usr/src/app/
 
 # Install serve to serve the files
@@ -44,3 +49,7 @@ EXPOSE 3000
 
 # Start command
 CMD ["serve", "-s", "build", "-l", "3000"]
+
+# Health Check
+HEALTHCHECK --interval=15s --timeout=3s \
+  CMD curl -f http://localhost:3000 || exit 1
