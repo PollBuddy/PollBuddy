@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import {Redirect, withRouter} from "react-router-dom";
+import "./RegisterWithPollBuddy.scss";
+
 const Joi = require('joi');
 
 class RegisterWithPollBuddy extends Component {
@@ -19,8 +21,17 @@ class RegisterWithPollBuddy extends Component {
       passValid: true,
       firstnameValid: true,
       lastnameValid: true,
-      registrationSuccessful: false
+      registrationSuccessful: false,
+      showPassword: false
     };
+
+    this.showPassword = this.showPassword.bind(this)
+  }
+
+  showPassword() {
+    this.setState({
+      showPassword: !this.state.showPassword
+    })
   }
 
   componentDidMount() {
@@ -146,8 +157,12 @@ class RegisterWithPollBuddy extends Component {
               <p style={{color: "red"}}> A user with this email already exists. </p>
             }
             <label htmlFor="passwordText">Password:</label>
-            <input type="password" placeholder="••••••••••••" className="form-control textBox" id="passwordText"
+            <p class="password_container">
+              <input type={this.state.showPassword ? "text" : "password"} placeholder="••••••••••••" className="form-control textBox" id="passwordText"
               onChange= {(evt) => { this.setState({password: evt.target.value}); }}/>
+              <i class="fas fa-eye" onClick={this.showPassword}></i>
+            </p>
+            
             {this.state.passValid.error &&
               <p style={{color: "red"}}>{ this.state.passValid.error.toString() }</p>
             }
