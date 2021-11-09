@@ -55,7 +55,7 @@ function isLoggedIn(req) {
  * @param {callback} callback handler for (err,result) returned by database query
  */
 function getCurrentUser(req,callback) {
-  mongoConnection.getDB().collection("users").findOne({ _id: bson.ObjectId(req.session["UserName"]) }, { projection: { Password: false } }, (err, result) => {
+  mongoConnection.getDB().collection("users").findOne({ _id: bson.ObjectId(req.session.userData.userID) }, { projection: { Password: false } }, (err, result) => {
     callback(err,result);
   });
 }
