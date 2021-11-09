@@ -184,9 +184,9 @@ class AccountInfo extends Component {
       passwordValid = schema.validate({password: this.state.newPasswordText});
       if(passwordValid.error) {
         return;
-	  }
+      }
       passwordInput = passwordValid.value.password;
-	}
+    }
 
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
       method: "POST",
