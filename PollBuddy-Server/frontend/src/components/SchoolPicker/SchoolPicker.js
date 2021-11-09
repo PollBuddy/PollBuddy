@@ -8,7 +8,7 @@ import "../../components/LoadingWheel/LoadingWheel.scss";
 
 var schools = [];
 var schoolLinkDict = {};
-var doneLoading = false;
+var doneLoading;
 
 fetch(process.env.REACT_APP_BACKEND_URL + "/schools", {
   method: "GET",
@@ -17,12 +17,13 @@ fetch(process.env.REACT_APP_BACKEND_URL + "/schools", {
   // handle response
   .then(data => {
     console.log(data); // for testing, can be deleted later
+    doneLoading = false;
     for (var i = 0; i < data.length; i++) {
       schools.push({ key: i, label: data[i][0] });
       schoolLinkDict[data[i][0]] = data[i][1];
     }
     doneLoading = true; //sets to true when data is finished collecting
-    console.log(doneLoading)
+    console.log(doneLoading); //for testing, can be deleted later
     console.log(schools); // for testing, can be deleted later
     console.log(schoolLinkDict); // for testing, can be deleted later
   });
@@ -55,6 +56,7 @@ export default ({ value, onChange, onSelect}) => (
         placeholder: "Enter school name",
         "aria-labelledby": "schoolNameText"
         } : {className: "LoadingWheel-loader"}}
+      wrapperStyle={(doneLoading) ? {display: "block"} : {display: "LoadingWheel-loader"}}
       value={value}
       onChange={onChange}
       onSelect={onSelect}
