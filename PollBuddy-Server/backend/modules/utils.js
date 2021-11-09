@@ -86,12 +86,10 @@ function isEmpty(obj) {
 // augments a route's behavior with generic behaviour when outside of development mode
 // for routes that should only be active in development mode
 function debugRoute(reg,res,body){
-  console.log("environment variable" + process.env.DEBUG_MODE)
   if(process.env.DEBUG_MODE === "true"){
     if(body){
       body(reg,res);
-    }
-    else{
+    }else{
       return res.status(200).send(createResponse(null, "Route is debug only"));
     }
   }else{

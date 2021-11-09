@@ -241,7 +241,7 @@ router.post("/:id/delete", async (req, res) => {//use router.delete??
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/", async (req, res) => {
-  debugRoute(req,res,(reg,res) => {
+  debugRoute(req,res,async (req,res) => {
     try {
       const groups = await mongoConnection.getDB().collection("groups").find({}).toArray();
       return res.status(200).send(createResponse(groups));
@@ -262,7 +262,7 @@ router.get("/", async (req, res) => {
  */
 router.post("/", function (req, res) {
   debugRoute(req,res,(req,res) => {
-    res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."))
+    res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
   });
 });
 
