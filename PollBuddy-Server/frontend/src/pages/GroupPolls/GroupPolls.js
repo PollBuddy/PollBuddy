@@ -23,9 +23,9 @@ export default class GroupPolls extends Component {
         {pollId: 6, label: "Sets"},
         {pollId: 7, label: "Maps"}
       ],
-      total_questions: 24,
-      avg_correct: 20,
-      member_correct: 22,
+      totalQuestions: 24,
+      avgCorrect: 20,
+      memberCorrect: 22,
       groupData: null,
       doneLoading: true,
       id: null,

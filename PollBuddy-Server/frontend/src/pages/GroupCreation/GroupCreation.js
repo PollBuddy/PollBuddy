@@ -8,10 +8,7 @@ export default class GroupCreation extends Component {//this class will likely n
     this.props.updateTitle("Group Creation");
   }
 
-  constructor() {
-    super();
-    //TODO check if they're logged in
-  }
+
 
   render() {
     //TODO check if they're logged in

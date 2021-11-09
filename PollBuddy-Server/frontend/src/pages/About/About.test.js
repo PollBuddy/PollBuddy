@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import About from './About';
+import About from "./About";
 
 // Create basic render test
 it("renders without crashing", () => {

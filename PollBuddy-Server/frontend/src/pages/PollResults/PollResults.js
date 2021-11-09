@@ -59,7 +59,7 @@ export default class PollResults extends Component {
               ticks: {
                 fontColor: "white",
                 fontSize: 20,
-                fontFamily: 'Baloo 2',
+                fontFamily: "Baloo 2",
               }
             }
           ],
@@ -73,7 +73,7 @@ export default class PollResults extends Component {
                 beginAtZero: true,
                 fontColor: "white",
                 fontSize: 20,
-                fontFamily: 'Baloo 2',
+                fontFamily: "Baloo 2",
                 precision: 0
               }
             }

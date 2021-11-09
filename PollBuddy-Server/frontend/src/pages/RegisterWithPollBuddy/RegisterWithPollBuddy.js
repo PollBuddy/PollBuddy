@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import {Redirect, withRouter} from "react-router-dom";
-const Joi = require('joi');
+const Joi = require("joi");
 
 class RegisterWithPollBuddy extends Component {
   constructor(props) {
@@ -31,26 +31,26 @@ class RegisterWithPollBuddy extends Component {
     // do input validation
     const schema = Joi.object({
       username: Joi.string()
-        .pattern(new RegExp('^(?=.{3,32}$)[a-zA-Z0-9\-._]+$'))
-        .error(new Error('Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.')),
+        .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9\-._]+$"))
+        .error(new Error("Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.")),
       email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2})
         .max(320)
-        .error(new Error('Invalid email format.')),
+        .error(new Error("Invalid email format.")),
       password: Joi.string()
-        .pattern(new RegExp('^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$'))
-        .pattern(new RegExp('^.*[0-9].*$'))
-        .pattern(new RegExp('^.*[A-Z].*$'))
-        .error(new Error('Invalid password. Must contain 10 or more characters, ' +
-          'at least 1 uppercase letter, and at least 1 number. ' +
-          'Cannot have 4 of the same characters in a row.')),
+        .pattern(new RegExp("^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$"))
+        .pattern(new RegExp("^.*[0-9].*$"))
+        .pattern(new RegExp("^.*[A-Z].*$"))
+        .error(new Error("Invalid password. Must contain 10 or more characters, " +
+          "at least 1 uppercase letter, and at least 1 number. " +
+          "Cannot have 4 of the same characters in a row.")),
       firstname: Joi.string()
         .min(1)
         .max(256)
-        .error(new Error('First name must be between 1 and 256 characters.')),
+        .error(new Error("First name must be between 1 and 256 characters.")),
       lastname: Joi.string()
-        .allow('')
+        .allow("")
         .max(256)
-        .error(new Error('Last name must be less than 256 characters.')),
+        .error(new Error("Last name must be less than 256 characters.")),
     });
 
     var userValid = schema.validate({ username: this.state.username });

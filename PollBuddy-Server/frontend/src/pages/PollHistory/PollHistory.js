@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Link, Redirect} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 
 //TODO This page can only be access when one is logged in
@@ -14,11 +14,11 @@ export default class Groups extends Component {
 
   //TODO, this state needs to be dynamically updated according to each user
   state = {
-    polls_admin: [
+    pollsAdmin: [
       {id:"1", title:"CSCI 1200 - Data Structures"},
       {id:"2", title:"CSCI 2200 - Foundations of Computer Science"}
     ],
-    polls_member: [
+    pollsMember: [
       {id:"3", title:"CSCI 2300 - Intro to Algorithms"},
       {id:"4", title:"CSCI 2500 - Computer Organization"},
       {id:"5", title:"CSCI 2960 - RCOS"}
@@ -27,30 +27,30 @@ export default class Groups extends Component {
 
   render() {
     //These if else statement chooses what to display depending on if you are in groups or not
-    let admin_display;
-    let member_display;
+    let adminDisplay;
+    let memberDisplay;
     {
-      if (this.state.polls_admin.length == 0) {
-        admin_display = <p className="">Looks like you have not created any groups!</p>;
+      if (this.state.pollsAdmin.length == 0) {
+        adminDisplay = <p className="">Looks like you have not created any groups!</p>;
       } else {
-        admin_display = <React.Fragment>
-          {this.state.polls_admin.map(polls_admin => (
-            <div key={polls_admin.id} className={polls_admin.title}>
-              <Link to={"/polls/" + polls_admin.id + "/results"}>
-                <button style={{  width: "20em" }} className="button">{polls_admin.title}</button>
+        adminDisplay = <React.Fragment>
+          {this.state.pollsAdmin.map(pollsAdmin => (
+            <div key={pollsAdmin.id} className={pollsAdmin.title}>
+              <Link to={"/polls/" + pollsAdmin.id + "/results"}>
+                <button style={{  width: "20em" }} className="button">{pollsAdmin.title}</button>
               </Link>
             </div>
           ))}
         </React.Fragment>;
       }
-      if (this.state.polls_member.length == 0) {
-        member_display = <p className="">Looks like you are not in any groups!</p>;
+      if (this.state.pollsMember.length == 0) {
+        memberDisplay = <p className="">Looks like you are not in any groups!</p>;
       } else {
-        member_display = <React.Fragment>
-          {this.state.polls_member.map(polls_member => (
-            <div key={polls_member.id} className={polls_member.title}>
-              <Link to={"/polls/" + polls_member.id + "/results"}>
-                <button style={{  width: "20em" }} className="button">{polls_member.title}</button>
+        memberDisplay = <React.Fragment>
+          {this.state.pollsMember.map(pollsMember => (
+            <div key={pollsMember.id} className={pollsMember.title}>
+              <Link to={"/polls/" + pollsMember.id + "/results"}>
+                <button style={{  width: "20em" }} className="button">{pollsMember.title}</button>
               </Link>
             </div>
           ))}
@@ -64,11 +64,11 @@ export default class Groups extends Component {
           <p className="fontSizeLarge">
             As a Group Admin:
           </p>
-          {admin_display}
+          {adminDisplay}
           <p className="fontSizeLarge">
             As a Group Member:
           </p>
-          {member_display}
+          {memberDisplay}
         </MDBContainer>
       </MDBContainer>
     );

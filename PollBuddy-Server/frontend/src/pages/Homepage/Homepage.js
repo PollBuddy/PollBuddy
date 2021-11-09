@@ -14,9 +14,6 @@ export default class Homepage extends Component {
     errMsg: ""
   };
 
-  constructor(props) {
-    super(props);
-  }
 
   componentDidMount() {
     this.props.updateTitle("Home");
