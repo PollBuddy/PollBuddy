@@ -34,7 +34,9 @@ class AccountInfo extends Component {
       school: "RPI",
       passwordLocked: false,
       newPasswordText: null,
-      done: false
+      done: false,
+      error: false,
+      errorMessage: "Unkown Error"
     };
     this.changePassword = this.handleToggleClick.bind(this);
     // Bounce back to log in if they are not logged
@@ -49,9 +51,9 @@ class AccountInfo extends Component {
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/me", {
       method: "GET"
     }).then(response => response.json())
-      .then(response => {
+      .then(data => {
         // Load states from database values
-        const data = JSON.parse(response.data);
+        data = data.data
         if(data.UserName) {
           this.setState({
             userName: data.UserName,
@@ -142,6 +144,8 @@ class AccountInfo extends Component {
     var passwordValid = undefined;
     var passwordInput = undefined;
 
+    this.setState({done: false, error: false});
+
     // Ensure that the inputs are valid, if not return
     // Then assign Input value to validated input, or state if the input is not filled in
     if(this.state.usernameText) {
@@ -183,6 +187,7 @@ class AccountInfo extends Component {
     if(this.state.newPasswordText) {
       passwordValid = schema.validate({password: this.state.newPasswordText});
       if(passwordValid.error) {
+        this.setState({error: true, errorMessage: passwordValid.error})
         return;
       }
       passwordInput = passwordValid.value.password;
@@ -266,6 +271,7 @@ class AccountInfo extends Component {
             > 
               Your changes have been submitted. Thank you.
             </p>
+            <p className="fontSizeLarge" style={{display: this.state.error ? "": "none"}}>{this.state.errorMessage.toString()}</p>
             <button
               className="button"
               onClick={ () => this.saveChanges()}
