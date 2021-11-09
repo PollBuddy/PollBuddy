@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
-import Settings from "../../components/Settings/Settings";
+import GroupSettings from "../../components/GroupSettings/GroupSettings";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 
 export default class GroupPolls extends Component {
@@ -91,7 +91,7 @@ export default class GroupPolls extends Component {
         <MDBContainer className="page">
           <MDBContainer className="two-box">
             {/*TODO: put the GroupEditor component here*/}
-            <Settings state={this.state}/>
+            <GroupSettings state={this.state}/>
             <MDBContainer className="box">
               <p className="fontSizeLarge">
                 My Polls
