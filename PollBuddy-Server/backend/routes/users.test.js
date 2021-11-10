@@ -1,12 +1,15 @@
 require("dotenv").config();
 const express = require("express");
 const supertest = require("supertest");
+const mongo = require("mongodb");
+const MongoClient = mongo.MongoClient;
 
 var { userSchema } = require("../models/User.js");
 var { createModel } = require("../modules/utils.js");
 var mongoConnection = require("../modules/mongoConnection.js");
 var usersRouter = require("./users");
 const { createTestScheduler } = require("@jest/core");
+const { ExpectationFailed } = require("http-errors");
 
 let mockApp = express();
 let session = {};
@@ -29,35 +32,30 @@ mockApp.use("/api/users", usersRouter);
 
 let app = supertest(mockApp);
 
-beforeAll(() => {
+beforeAll(async () => {
   process.env.DB_URL = global.__MONGO_URI__;
   process.env.DB_NAME = global.__MONGO_DB_NAME__;
   process.env.JEST = "true";
 
-  mongoConnection.connect(function (res) {
-    if (res !== true) {
-      console.error(res);
-    }
-  });
+  const client = await MongoClient.connect(process.env.DB_URL);
+  const db = client.db(process.env.DB_NAME);
+  mongoConnection.setClient(client);
+  mongoConnection.setDB(db);
 });
 
 afterAll(() => {
-  mongoConnection.disconnect(function(res) {
-    if (res !== true) {
-      console.error(res);
-    }
-  });
+  setTimeout(() => {
+    mongoConnection.getClient().close();
+  }, 1000);
 });
 
 afterEach(async () => {
   session = {};
 
-  await mongoConnection.getDB().listCollections().toArray()
-    .then((collections) => {
-      collections.forEach((collection) => {
-        mongoConnection.getDB().collection(collection.name).deleteMany({});
-      });
-    });
+  let collections = await mongoConnection.getDB().listCollections().toArray();
+  collections.forEach(async (collection) => {
+    await mongoConnection.getDB().collection(collection.name).deleteMany({});
+  });
 });
 
 let createUser = async function(userData) {
@@ -76,7 +74,7 @@ let createUser = async function(userData) {
 };
 
 describe("/api/users/login", () => {
-  
+
   it("GET: fail", async () => {
     await app.get("/api/users/login")
       .expect(405)
@@ -95,32 +93,32 @@ describe("/api/users/login", () => {
     await app.post("/api/users/login")
       .send(userLogin)
       .expect(200)
-      .then(async (response) => {
+      .then((response) => {
         expect(response.body.result).toBe("success");
         expect(response.body.data.firstName).toBe(testUser.FirstName);
         expect(response.body.data.lastName).toBe(testUser.LastName);
         expect(response.body.data.userName).toBe(testUser.UserName);
-        expect(session).toHaveProperty("userData.userID", res.insertedId);
-      });    
+        expect(session).toHaveProperty("userData.userID", res.insertedId);  
+      });
   });
 
   it("POST: login with email success", async () => {
     let res = await createUser();
     let userLogin = {
-      userNameEmail: testUser.Email,
+      userNameEmail: testUser.UserName,
       password: testUser.Password,
     };
 
     await app.post("/api/users/login")
       .send(userLogin)
       .expect(200)
-      .then(async (response) => {
+      .then((response) => {
         expect(response.body.result).toBe("success");
         expect(response.body.data.firstName).toBe(testUser.FirstName);
         expect(response.body.data.lastName).toBe(testUser.LastName);
         expect(response.body.data.userName).toBe(testUser.UserName);
-        expect(session).toHaveProperty("userData.userID", res.insertedId);
-      });    
+        expect(session).toHaveProperty("userData.userID", res.insertedId);  
+      });
   });
 
 });

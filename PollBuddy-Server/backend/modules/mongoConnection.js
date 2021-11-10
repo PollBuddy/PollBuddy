@@ -61,6 +61,7 @@ async function createIndexes() {
 }
 
 module.exports = {
+  //Todo: Use Async/Await
   connect: function(callback) {
 
     con();
@@ -88,6 +89,15 @@ module.exports = {
     client.close(function() {
       callback(true);
     });
+  },
+  setClient: function(_client) {
+    client = _client;
+  },
+  getClient: function() {
+    return client;
+  },
+  setDB: function(_db){
+    db = _db;
   },
   getDB: function(){
     return db;

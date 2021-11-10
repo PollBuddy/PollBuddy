@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   frontend:
     build:
@@ -9,15 +9,6 @@ services:
     build:
       context: PollBuddy-Server/backend
       dockerfile: "Dockerfile.test"
-
-  db:
-    image: "mongo:4"
-    restart: unless-stopped
-    volumes:
-      - test_mongodata:/data/db
-      - test_mongoconfig:/data/configdb
-    networks:
-      - backend
 
 volumes:
   test_mongoconfig:
