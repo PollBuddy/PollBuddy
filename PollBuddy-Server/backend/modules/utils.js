@@ -96,7 +96,7 @@ function getResultErrors(result) {
 }
 
 function createModel(data, schema){
-  let model = JSON.parse(JSON.stringify(schema));
+  let model = Object.assign({}, schema);
   for (let key of Object.keys(model)) {
     if (data[key]) {
       model[key] = data[key];
