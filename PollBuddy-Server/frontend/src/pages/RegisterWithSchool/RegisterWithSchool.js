@@ -23,7 +23,7 @@ export default class RegisterWithSchool extends Component {
             Register with School
           </p>
           <p>
-            To create an account, enter your school name or login using RPI's CAS.
+            To create an account, select your school name.
           </p>
           <p>
             { /* TODO: Add label here */}
