@@ -2,6 +2,9 @@
 
 FROM node:16-alpine
 
+# Install curl
+RUN apk --no-cache add curl
+
 # Create app directory
 WORKDIR /usr/src/app
 
@@ -23,10 +26,19 @@ COPY public ./public
 COPY routes ./routes
 # Files
 COPY app.js ./
-COPY .env ./
+# copy both the example file and any existing custom .env 
+COPY .env* ./
+# attempt to move the example .env to the name ".env"
+# if .env is already there, this fails and the custom instance is used
+# if not, the example instance is used
+RUN ["mv","-n", ".env.example", ".env"]
 
 # Port
 EXPOSE 3000
 
 # Start command
 CMD ["node", "bin/www"]
+
+# Health Check
+HEALTHCHECK --interval=15s --timeout=3s \
+  CMD curl -f http://localhost:3001/api || exit 1

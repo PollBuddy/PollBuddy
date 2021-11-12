@@ -27,7 +27,7 @@ export default class Footer extends Component {
           </a></span>
         </MDBContainer>
         <MDBContainer className = "Footer-foot-links Footer-copy">
-          <span>&copy; 2020 Poll Buddy</span>
+          <span>&copy; 2019-{new Date().getFullYear()} Poll Buddy</span>
         </MDBContainer>
         <MDBContainer className = "Footer-foot-links">
           <a href = "https://rcos.io/" target = "_blank" rel="noopener noreferrer">

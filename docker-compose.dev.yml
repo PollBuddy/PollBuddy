@@ -23,7 +23,6 @@ services:
     volumes:
       - "./PollBuddy-Server/frontend/src:/usr/src/app/src"
       - "./PollBuddy-Server/frontend/public:/usr/src/app/public"
-      - "./PollBuddy-Server/frontend/.env:/usr/src/app/.env"
     networks:
       - frontend
 
@@ -39,7 +38,6 @@ services:
       - "./PollBuddy-Server/backend/public:/usr/src/app/public"
       - "./PollBuddy-Server/backend/routes:/usr/src/app/routes"
       - "./PollBuddy-Server/backend/app.js:/usr/src/app/app.js"
-      - "./PollBuddy-Server/backend/.env:/usr/src/app/.env"
     networks:
       - backend
 
