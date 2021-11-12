@@ -37,7 +37,7 @@ export default class LoginWithPollBuddy extends Component {
   handleLogin() {
     const schema = Joi.object({
       username: Joi.string()
-        .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9\-._]+$"))
+        .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$"))
         .error(new Error("Please enter a valid username or email.")),
       email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2}).max(320)
         .error(new Error("Please enter a valid username or email.")),

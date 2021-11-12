@@ -29,34 +29,34 @@ export default class Groups extends Component {
     //These if else statement chooses what to display depending on if you are in groups or not
     let adminDisplay;
     let memberDisplay;
-    {
-      if (this.state.pollsAdmin.length == 0) {
-        adminDisplay = <p className="">Looks like you have not created any groups!</p>;
-      } else {
-        adminDisplay = <React.Fragment>
-          {this.state.pollsAdmin.map(pollsAdmin => (
-            <div key={pollsAdmin.id} className={pollsAdmin.title}>
-              <Link to={"/polls/" + pollsAdmin.id + "/results"}>
-                <button style={{  width: "20em" }} className="button">{pollsAdmin.title}</button>
-              </Link>
-            </div>
-          ))}
-        </React.Fragment>;
-      }
-      if (this.state.pollsMember.length == 0) {
-        memberDisplay = <p className="">Looks like you are not in any groups!</p>;
-      } else {
-        memberDisplay = <React.Fragment>
-          {this.state.pollsMember.map(pollsMember => (
-            <div key={pollsMember.id} className={pollsMember.title}>
-              <Link to={"/polls/" + pollsMember.id + "/results"}>
-                <button style={{  width: "20em" }} className="button">{pollsMember.title}</button>
-              </Link>
-            </div>
-          ))}
-        </React.Fragment>;
-      }
+    
+    if (this.state.pollsAdmin.length === 0) {
+      adminDisplay = <p className="">Looks like you have not created any groups!</p>;
+    } else {
+      adminDisplay = <React.Fragment>
+        {this.state.pollsAdmin.map(pollsAdmin => (
+          <div key={pollsAdmin.id} className={pollsAdmin.title}>
+            <Link to={"/polls/" + pollsAdmin.id + "/results"}>
+              <button style={{  width: "20em" }} className="button">{pollsAdmin.title}</button>
+            </Link>
+          </div>
+        ))}
+      </React.Fragment>;
     }
+    if (this.state.pollsMember.length === 0) {
+      memberDisplay = <p className="">Looks like you are not in any groups!</p>;
+    } else {
+      memberDisplay = <React.Fragment>
+        {this.state.pollsMember.map(pollsMember => (
+          <div key={pollsMember.id} className={pollsMember.title}>
+            <Link to={"/polls/" + pollsMember.id + "/results"}>
+              <button style={{  width: "20em" }} className="button">{pollsMember.title}</button>
+            </Link>
+          </div>
+        ))}
+      </React.Fragment>;
+    }
+    
     return (
 
       <MDBContainer className="page">

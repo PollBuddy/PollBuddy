@@ -107,7 +107,7 @@ class AccountInfo extends Component {
   saveChanges(){
     const schema = Joi.object({
       username: Joi.string()
-        .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9\-._]+$"))
+        .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$"))
         .error(new Error("Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.")),
       email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2})
         .max(320)
