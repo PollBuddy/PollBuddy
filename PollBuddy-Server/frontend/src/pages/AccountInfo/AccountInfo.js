@@ -53,7 +53,7 @@ class AccountInfo extends Component {
     }).then(response => response.json())
       .then(data => {
         // Load states from database values
-        data = data.data
+        data = data.data;
         if(data.UserName) {
           this.setState({
             userName: data.UserName,
@@ -187,7 +187,7 @@ class AccountInfo extends Component {
     if(this.state.newPasswordText) {
       passwordValid = schema.validate({password: this.state.newPasswordText});
       if(passwordValid.error) {
-        this.setState({error: true, errorMessage: passwordValid.error})
+        this.setState({error: true, errorMessage: passwordValid.error});
         return;
       }
       passwordInput = passwordValid.value.password;
