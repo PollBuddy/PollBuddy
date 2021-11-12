@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const supertest = require("supertest");
+const bcrypt = require("bcrypt");
 const mongo = require("mongodb");
 const MongoClient = mongo.MongoClient;
 
@@ -20,6 +21,15 @@ let testUser = {
   PasswordHash: "$2a$12$8Guj3IMNNVWk/GM4q0xeleExT3QBdPe5dWpSRYvk2elRkkWPMlOPG",
   FirstName: "test",
   LastName: "account"
+};
+
+let testUser2 = {
+  UserName: "test.account.2",
+  Email: "test@account2.com",
+  Password: "fbdbxsDzPBo6m68$",
+  PasswordHash: "$2a$12$BQKM4Ml3ag38KacRJRrZhO9FRt5yg4hbp3pg3zF.2ZZPQkn5QIAV2",
+  FirstName: "test.2",
+  LastName: "account.2"
 };
 
 mockApp.use(express.json());
@@ -58,16 +68,21 @@ afterEach(async () => {
   });
 });
 
-let createUser = async function(userData) {
-  if (!userData) {
-    userData = {
-      UserName: testUser.UserName,
-      Email: testUser.Email,
-      Password: testUser.PasswordHash,
-      FirstName: testUser.FirstName,
-      LastName: testUser.LastName
-    };
+let createUser = async function(update) {
+  let userData = {
+    UserName: testUser.UserName,
+    Email: testUser.Email,
+    Password: testUser.PasswordHash,
+    FirstName: testUser.FirstName,
+    LastName: testUser.LastName
+  };
+
+  if (update) {
+    for (let [key, value] of Object.entries(update)) {
+      userData[key] = value;
+    }
   }
+  
   let user = createModel(userData, userSchema);
   let res = await mongoConnection.getDB().collection("users").insertOne(user);
   return res;
@@ -224,29 +239,94 @@ describe("/api/users/me/edit", () => {
       });
   });
 
-  it("POST: update user data", async () => {
-    let res = await createUser();
+  it("POST: update user data all unlocked", async () => {
+    let res = await createUser({
+      UserNameLocked: false,
+      FirstNameLocked: false,
+      LastNameLocked: false,
+      EmailLocked: false,
+      SchoolAffiliation: "",
+    });
     session = { userData: { userID: res.insertedId } };
     await app.post("/api/users/me/edit")
       .send({
-        Action: "Add",
-        FirstName: "test.2",
-        LastName: "account.2",
-        UserName: "test.account.2",
-        Email: "test@account2.com"
+        firstName: testUser2.FirstName,
+        lastName: testUser2.LastName,
+        userName: testUser2.UserName,
+        email: testUser2.Email,
+        password: testUser2.Password,
+        logOutEverywhere: false,
       })
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
+        expect(response.body.data.firstName).toBe(testUser2.FirstName);
+        expect(response.body.data.lastName).toBe(testUser2.LastName);
+        expect(response.body.data.userName).toBe(testUser2.UserName);
+        expect(response.body.data.email).toBe(testUser2.Email);
 
         let updatedUser = await mongoConnection.getDB().collection("users").findOne({ 
           _id: res.insertedId,
         });
         
-        expect(updatedUser.FirstName).toBe("test.2");
-        expect(updatedUser.LastName).toBe("account.2");
-        expect(updatedUser.UserName).toBe("test.account.2");
-        expect(updatedUser.Email).toBe("test@account2.com");
+        expect(updatedUser.FirstName).toBe(testUser2.FirstName);
+        expect(updatedUser.LastName).toBe(testUser2.LastName);
+        expect(updatedUser.UserName).toBe(testUser2.UserName);
+        expect(updatedUser.Email).toBe(testUser2.Email);
+        expect(bcrypt.compareSync(testUser2.Password, updatedUser.Password)).toBe(true);
+      });    
+  });
+
+  it("POST: update user data all locked", async () => {
+    let res = await createUser({
+      UserNameLocked: true,
+      FirstNameLocked: true,
+      LastNameLocked: true,
+      EmailLocked: true,
+      SchoolAffiliation: "RPI",
+    });
+    session = { userData: { userID: res.insertedId } };
+    await app.post("/api/users/me/edit")
+      .send({
+        firstName: testUser2.FirstName,
+        lastName: testUser2.LastName,
+        userName: testUser2.UserName,
+        email: testUser2.Email,
+        password: testUser2.Password,
+        logOutEverywhere: false,
+      })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        expect(response.body.data.firstName).toBe(testUser.FirstName);
+        expect(response.body.data.lastName).toBe(testUser.LastName);
+        expect(response.body.data.userName).toBe(testUser.UserName);
+        expect(response.body.data.email).toBe(testUser.Email);
+
+        let updatedUser = await mongoConnection.getDB().collection("users").findOne({ 
+          _id: res.insertedId,
+        });
+        
+        expect(updatedUser.FirstName).toBe(testUser.FirstName);
+        expect(updatedUser.LastName).toBe(testUser.LastName);
+        expect(updatedUser.UserName).toBe(testUser.UserName);
+        expect(updatedUser.Email).toBe(testUser.Email);
+        expect(bcrypt.compareSync(testUser.Password, updatedUser.Password)).toBe(true);
+      });    
+  });
+
+  it("POST: logOutEverywhere not included with password", async () => {
+    let res = await createUser({
+      SchoolAffiliation: "",
+    });
+    session = { userData: { userID: res.insertedId } };
+    await app.post("/api/users/me/edit")
+      .send({
+        password: testUser2.Password,
+      })
+      .expect(400)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
       });    
   });
 
@@ -264,11 +344,6 @@ describe("/api/users/me/groups", () => {
 
   it("GET: get logged in user groups success", async () => {
     let res = await createUser({
-      UserName: testUser.UserName,
-      Email: testUser.Email,
-      Password: testUser.PasswordHash,
-      FirstName: testUser.FirstName,
-      LastName: testUser.LastName,
       Groups: ["12345"]
     });
     session = { userData: { userID: res.insertedId } };
@@ -328,7 +403,7 @@ describe("/api/users/:id", () => {
 });
 
 describe("/api/users/:id/edit", () => {
-  
+
   it("GET: fail", async () => {
     await app.get("/api/users/0/edit")
       .expect(405)
@@ -337,28 +412,92 @@ describe("/api/users/:id/edit", () => {
       });
   });
 
-  it("POST: update user data", async () => {
-    let res = await createUser();
+  it("POST: update user data all unlocked", async () => {
+    let res = await createUser({
+      UserNameLocked: false,
+      FirstNameLocked: false,
+      LastNameLocked: false,
+      EmailLocked: false,
+      SchoolAffiliation: "",
+    });
     await app.post("/api/users/" + res.insertedId + "/edit")
       .send({
-        Action: "Add",
-        FirstName: "test.2",
-        LastName: "account.2",
-        UserName: "test.account.2",
-        Email: "test@account2.com"
+        firstName: testUser2.FirstName,
+        lastName: testUser2.LastName,
+        userName: testUser2.UserName,
+        email: testUser2.Email,
+        password: testUser2.Password,
+        logOutEverywhere: false,
       })
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
+        expect(response.body.data.firstName).toBe(testUser2.FirstName);
+        expect(response.body.data.lastName).toBe(testUser2.LastName);
+        expect(response.body.data.userName).toBe(testUser2.UserName);
+        expect(response.body.data.email).toBe(testUser2.Email);
 
         let updatedUser = await mongoConnection.getDB().collection("users").findOne({ 
           _id: res.insertedId,
         });
         
-        expect(updatedUser.FirstName).toBe("test.2");
-        expect(updatedUser.LastName).toBe("account.2");
-        expect(updatedUser.UserName).toBe("test.account.2");
-        expect(updatedUser.Email).toBe("test@account2.com");
+        expect(updatedUser.FirstName).toBe(testUser2.FirstName);
+        expect(updatedUser.LastName).toBe(testUser2.LastName);
+        expect(updatedUser.UserName).toBe(testUser2.UserName);
+        expect(updatedUser.Email).toBe(testUser2.Email);
+        expect(bcrypt.compareSync(testUser2.Password, updatedUser.Password)).toBe(true);
+      });    
+  });
+
+  it("POST: update user data all locked", async () => {
+    let res = await createUser({
+      UserNameLocked: true,
+      FirstNameLocked: true,
+      LastNameLocked: true,
+      EmailLocked: true,
+      SchoolAffiliation: "RPI",
+    });
+    await app.post("/api/users/" + res.insertedId + "/edit")
+      .send({
+        firstName: testUser2.FirstName,
+        lastName: testUser2.LastName,
+        userName: testUser2.UserName,
+        email: testUser2.Email,
+        password: testUser2.Password,
+        logOutEverywhere: false,
+      })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        expect(response.body.data.firstName).toBe(testUser.FirstName);
+        expect(response.body.data.lastName).toBe(testUser.LastName);
+        expect(response.body.data.userName).toBe(testUser.UserName);
+        expect(response.body.data.email).toBe(testUser.Email);
+
+        let updatedUser = await mongoConnection.getDB().collection("users").findOne({ 
+          _id: res.insertedId,
+        });
+        
+        expect(updatedUser.FirstName).toBe(testUser.FirstName);
+        expect(updatedUser.LastName).toBe(testUser.LastName);
+        expect(updatedUser.UserName).toBe(testUser.UserName);
+        expect(updatedUser.Email).toBe(testUser.Email);
+        expect(bcrypt.compareSync(testUser.Password, updatedUser.Password)).toBe(true);
+      });    
+  });
+
+  it("POST: logOutEverywhere not included with password", async () => {
+    let res = await createUser({
+      SchoolAffiliation: "",
+    });
+    session = { userData: { userID: res.insertedId } };
+    await app.post("/api/users/" + res.insertedId + "/edit")
+      .send({
+        password: testUser2.Password,
+      })
+      .expect(400)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
       });    
   });
 
@@ -376,11 +515,6 @@ describe("/api/users/:id/groups", () => {
 
   it("GET: get user groups success", async () => {
     let res = await createUser({
-      UserName: testUser.UserName,
-      Email: testUser.Email,
-      Password: testUser.PasswordHash,
-      FirstName: testUser.FirstName,
-      LastName: testUser.LastName,
       Groups: ["12345"]
     });
     session = { userData: { userID: res.insertedId } };

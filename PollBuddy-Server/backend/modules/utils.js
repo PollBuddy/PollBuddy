@@ -98,7 +98,7 @@ function getResultErrors(result) {
 function createModel(data, schema){
   let model = Object.assign({}, schema);
   for (let key of Object.keys(model)) {
-    if (data[key]) {
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
       model[key] = data[key];
     }
   }
@@ -112,5 +112,5 @@ module.exports = {
   checkPollPublic,
   isEmpty,
   getResultErrors,
-  createModel
+  createModel,
 };
