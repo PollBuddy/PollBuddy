@@ -1,10 +1,11 @@
-import React, {Component} from "react";
+import React, {Component, lazy} from "react";
 import {Link} from "react-router-dom";
 import { MDBContainer } from "mdbreact";
-import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import Popup from "../../components/Popup/Popup";
 import "../../styles/main.scss";
 import "./Groups.scss";
+
+const LoadingWheel = lazy(() => "../../components/LoadingWheel/LoadingWheel");
+const Popup = lazy(() => import("../../components/Popup/Popup"));
 
 export default class Groups extends Component {
 

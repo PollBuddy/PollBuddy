@@ -1,10 +1,10 @@
-import React, {Component} from "react";
+import React, {Component, lazy} from "react";
 import "mdbreact/dist/css/mdb.css";
 import "./Homepage.scss";
 import { MDBContainer } from "mdbreact";
 import logo from "../../images/logo.png";
 import {Link} from "react-router-dom";
-import PollCode from "../../components/PollCode/PollCode";
+const PollCode = lazy(() => import("../../components/PollCode/PollCode"));
 
 export default class Homepage extends Component {
 
@@ -14,12 +14,14 @@ export default class Homepage extends Component {
     errMsg: ""
   };
 
+
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
     this.props.updateTitle("Home");
+    console.log(logo);
   }
 
   render() {
