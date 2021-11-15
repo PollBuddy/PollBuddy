@@ -15,42 +15,42 @@ Site Map: <https://draft.io/jubvd>. Contact PM for edit access.
 ## Images and Descriptions
 Home Page:
 <p align="center">
-  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_homepage.png" width="50%" title="Poll Buddy Home Page">
+  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_homepage.png" width="100%" title="Poll Buddy Home Page">
 </p>
 
 About Page:
 <p align="center">
-  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_about_page.png" width="50%" title="Poll Buddy About Page">
+  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_about_page.png" width="100%" title="Poll Buddy About Page">
 </p>
 
 FAQ Page:
 <p align="center">
-  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_faq.png" width="50%" title="Poll Buddy FAQ Page">
+  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_faq.png" width="100%" title="Poll Buddy FAQ Page">
 </p>
 
 FAQ Page:
 <p align="center">
-  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_faq.png" width="50%" title="Poll Buddy FAQ Page">
+  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_faq.png" width="100%" title="Poll Buddy FAQ Page">
 </p>
 
 Login Page:
 <p align="center">
-  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_login.png" width="50%" title="Poll Buddy FAQ Page">
+  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_login.png" width="100%" title="Poll Buddy FAQ Page">
 </p>
 
 Groups Page:
 <p align="center">
-  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_groups_page.png" width="50%" title="Poll Buddy Groups Page">
+  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_groups_page.png" width="100%" title="Poll Buddy Groups Page">
 </p>
 
 Example Poll:
 <p align="center">
-  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_example_poll.png" width="50%" title="Poll Buddy Example Poll">
+  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_example_poll.png" width="100%" title="Poll Buddy Example Poll">
 </p>
 
 Example Results:
 <p align="center">
-  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_example_results.png" width="50%" title="Poll Buddy Example Results">
+  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_example_results.png" width="100%" title="Poll Buddy Example Results">
 </p>
 
 ## How to run the app
