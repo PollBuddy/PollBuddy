@@ -73,7 +73,12 @@
   }
 
   #AccountInfo-logOutEverywhere {
-    width: 100%;
-    text-align: center;
+    .logOutBox {
+      height: 25px;
+      width: 25px;
+    }
+    .logOutLabel {
+      display: inline-block;
+    }
   }
 }

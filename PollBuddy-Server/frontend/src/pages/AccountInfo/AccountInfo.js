@@ -40,6 +40,7 @@ class AccountInfo extends Component {
       this.props.history.push("/login");
     }
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleLogOutEverywhere = this.handleLogOutEverywhere.bind(this);
   }
 
   componentDidMount(){
@@ -178,26 +179,29 @@ class AccountInfo extends Component {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
-        Action: "Add",
-        FirstName: firstNameInput,
-        LastName: lastNameInput,
-        UserName: userInput,
-        Email: emailInput,
-        Password: undefined
+        firstName: firstNameInput, //TODO: keep track of each of the inital states of these
+        lastName: lastNameInput,  //only want to put in the changed values
+        userName: userInput,
+        email: emailInput,
+        password: undefined,
+        logOutEverywhere: Boolean
       })
     }).then(response => {
       console.log(response);
     });
   }
 
-  logOutEverywhere(){
+  handleLogOutEverywhere(){
     this.setState(state => ({
       logOutEverywhere: !state.logOutEverywhere
     }));
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
       method: "POST",
-      headers: {"Content-Type": "application/json"}
-      //TODO: figure out what to put for the body
+      headers: {"Content-Type": "application/json"},
+      body: {
+        Password: String,
+        logOutEverywhere: Boolean
+      }
     }).then(response => {
       console.log(response);
     });
@@ -260,13 +264,15 @@ class AccountInfo extends Component {
                 </MDBCol>
               </MDBContainer>
             </MDBContainer>
-  
+
+            <div id="AccountInfo-logOutEverywhere" style={this.state.changePassword ? {display: "flex"} : {display: "none"}}>
+              <input type="checkbox" onChange={this.handleLogOutEverywhere} className="logOutBox" id="logOutEverywhere" checked={this.logOutEverywhere}/>
+              <label className="logOutLabel" for="logOutEverywhere">Log out Everywhere</label>
+            </div>
+          
             { /* TODO: Update this to have a backend call instead of a "to", plus some result popup */ }
             <Link id="AccountInfo-saveChanges" onClick={ () => this.saveChanges()}>
               <button className="button">Save Changes</button>
-            </Link>
-             <Link id="AccountInfo-logOutEverywhere" onClick={ () => this.logOutEverywhere()}>
-              <button className="button">Log Out Everywhere</button>
             </Link>
           </MDBContainer>
         </MDBContainer>
