@@ -95,7 +95,7 @@ function getResultErrors(result) {
   return errors;
 }
 
-function createModel(data, schema){
+function createModel(schema, data){
   let model = Object.assign({}, schema);
   for (let key of Object.keys(model)) {
     if (Object.prototype.hasOwnProperty.call(data, key)) {

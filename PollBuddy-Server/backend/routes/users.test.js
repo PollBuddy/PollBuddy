@@ -59,7 +59,7 @@ afterAll(() => {
   }, 1000);
 });
 
-afterEach(async () => {
+beforeEach(async () => {
   session = {};
 
   let collections = await mongoConnection.getDB().listCollections().toArray();
@@ -83,14 +83,14 @@ let createUser = async function(update) {
     }
   }
   
-  let user = createModel(userData, userSchema);
+  let user = createModel(userSchema, userData);
   let res = await mongoConnection.getDB().collection("users").insertOne(user);
   return res;
 };
 
 describe("/api/users/login", () => {
 
-  it("GET: fail", async () => {
+  it("GET: route unavailable", async () => {
     await app.get("/api/users/login")
       .expect(405)
       .then((response) => {
@@ -120,7 +120,7 @@ describe("/api/users/login", () => {
   it("POST: login with email success", async () => {
     let res = await createUser();
     let userLogin = {
-      userNameEmail: testUser.UserName,
+      userNameEmail: testUser.Email,
       password: testUser.Password,
     };
 
@@ -140,7 +140,7 @@ describe("/api/users/login", () => {
 
 describe("/api/users/register", () => {
   
-  it("GET: fail", async () => {
+  it("GET: route unavailable", async () => {
     await app.get("/api/users/register")
       .expect(405)
       .then((response) => {
@@ -186,11 +186,11 @@ describe("/api/users/logout", () => {
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
-        expect(session).toEqual({});
+        expect(session).not.toHaveProperty("userData");
       });    
   });
 
-  it("POST: fail", async () => {
+  it("POST: route unavailable", async () => {
     await app.post("/api/users/logout")
       .expect(405)
       .then((response) => {
@@ -209,6 +209,10 @@ describe("/api/users/me", () => {
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
+        expect(response.body.data.firstName).toBe(testUser.FirstName);
+        expect(response.body.data.lastName).toBe(testUser.LastName);
+        expect(response.body.data.userName).toBe(testUser.UserName);
+        expect(response.body.data.email).toBe(testUser.Email);
       });    
   });
 
@@ -220,7 +224,7 @@ describe("/api/users/me", () => {
       });    
   });
 
-  it("POST: fail", async () => {
+  it("POST: route unavailable", async () => {
     await app.post("/api/users/me")
       .expect(405)
       .then((response) => {
@@ -231,7 +235,7 @@ describe("/api/users/me", () => {
 
 describe("/api/users/me/edit", () => {
 
-  it("GET: fail", async () => {
+  it("GET: route unavailable", async () => {
     await app.get("/api/users/me/edit")
       .expect(405)
       .then((response) => {
@@ -363,7 +367,7 @@ describe("/api/users/me/groups", () => {
       });    
   });
 
-  it("POST: fail", async () => {
+  it("POST: route unavailable", async () => {
     await app.post("/api/users/me/groups")
       .expect(405)
       .then((response) => {
@@ -381,6 +385,10 @@ describe("/api/users/:id", () => {
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
+        expect(response.body.data.firstName).toBe(testUser.FirstName);
+        expect(response.body.data.lastName).toBe(testUser.LastName);
+        expect(response.body.data.userName).toBe(testUser.UserName);
+        expect(response.body.data.email).toBe(testUser.Email);
       });    
   });
 
@@ -392,7 +400,7 @@ describe("/api/users/:id", () => {
       });
   });
 
-  it("POST: fail", async () => {
+  it("POST: route unavailable", async () => {
     await app.post("/api/users/0")
       .expect(405)
       .then((response) => {
@@ -404,7 +412,7 @@ describe("/api/users/:id", () => {
 
 describe("/api/users/:id/edit", () => {
 
-  it("GET: fail", async () => {
+  it("GET: route unavailable", async () => {
     await app.get("/api/users/0/edit")
       .expect(405)
       .then((response) => {
@@ -534,7 +542,7 @@ describe("/api/users/:id/groups", () => {
       });
   });
 
-  it("POST: fail", async () => {
+  it("POST: route unavailable", async () => {
     await app.post("/api/users/0/groups")
       .expect(405)
       .then((response) => {

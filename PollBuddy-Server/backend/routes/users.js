@@ -131,16 +131,9 @@ router.post("/login", function (req, res) {
               return res.status(500).send(createResponse(null, "An error occurred while validating credentials."));
 
             } else if (bcryptResult) {
-              // Password validated and matches
-              
-              // TODO: Currently ignores session when testing with Jest. This
-              // is temporary and Jest should be able to test for session data as 
-              // well.
-              // if (process.env.JEST === "false") {
-              // Configure user data and save in session
+
               req.session.userData = {};
               req.session.userData.userID = result._id;
-              // }
 
               // Send the user the necessary data to complete the login process
               return res.status(200).send(createResponse({
@@ -338,13 +331,13 @@ router.post("/register", function (req, res) {
         return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
       }
 
-      let user = createModel({
+      let user = createModel(userSchema, {
         FirstName: req.body.firstName,
         LastName: req.body.lastName,
         UserName: req.body.userName.toLowerCase(),
         Email: req.body.email.toLowerCase(),
         Password: hash,
-      }, userSchema);
+      });
 
       mongoConnection.getDB().collection("users").insertOne(user, (err, result) => {
         if (err) {
@@ -498,14 +491,14 @@ router.post("/register/rpi", function (req, res) {
 
   if (isEmpty(errors)) {
     // No validation errors, let's try adding the user!
-    let user = createModel({
+    let user = createModel(userSchema, {
       FirstName: req.body.firstName,
       LastName: req.body.lastName,
       UserName: req.body.userName,
       Email: req.body.email,
       SchoolAffiliation: "RPI",
       EmailLocked: true,
-    }, userSchema);
+    });
 
     mongoConnection.getDB().collection("users").insertOne(user, (err, result) => {
       if (err) {
