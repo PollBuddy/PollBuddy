@@ -1,8 +1,7 @@
 import React, {Component} from "react";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import { MDBContainer } from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import Popup from "../../components/Popup/Popup";
 import "../../styles/main.scss";
 import "./Groups.scss";
 
@@ -13,6 +12,7 @@ export default class Groups extends Component {
     this.state = {
       //TODO: fetch this data from api/users/:id/groups when that functionality works
       error: null,
+      redirect: false,
       doneLoading: false,
       adminGroups: [
         {groupId: 123, label: "CSCI 1200 - Data Structures"},
@@ -48,6 +48,9 @@ export default class Groups extends Component {
   }
   componentDidMount() {
     this.props.updateTitle("My Groups");
+    fetch("/me").then((res) => res.json()).then(() => {}).catch(() => {
+      this.setState({ redirect: true });
+    });
   }
   toggleLeaveGroup = () => {
     this.setState(prevState => ({ showXs: !prevState.showXs }));
@@ -74,6 +77,9 @@ export default class Groups extends Component {
 
   render() {
     const { showXs } = this.state;
+    if(this.state.redirect) {
+      return <Redirect to='/login'  />;
+    }
     if(this.state.error != null){
       return (
         <MDBContainer fluid className="page">
