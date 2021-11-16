@@ -36,7 +36,8 @@ class AccountInfo extends Component {
       newPasswordText: null,
       done: false,
       error: false,
-      errorMessage: "Unkown Error"
+      errorMessage: "Error: Unkown Error",
+      showPassword: false
     };
     this.changePassword = this.handleToggleClick.bind(this);
     // Bounce back to log in if they are not logged
@@ -151,6 +152,7 @@ class AccountInfo extends Component {
     if(this.state.usernameText) {
       userValid = schema.validate({username: this.state.usernameText});
       if(userValid.error) {
+        this.setState({error: true, errorMessage: userValid.error.toString()})
         return;
       }
       userInput = userValid.value.username;
@@ -160,6 +162,7 @@ class AccountInfo extends Component {
     if(this.state.firstnameText) {
       firstNameValid = schema.validate({firstname: this.state.firstnameText});
       if(firstNameValid.error) {
+        this.setState({error: true, errorMessage: firstNameValid.toString()})
         return;
       }
       firstNameInput = firstNameValid.value.firstname;
@@ -169,6 +172,7 @@ class AccountInfo extends Component {
     if(this.state.lastnameText) {
       lastNameValid = schema.validate({lastname: this.state.lastnameText});
       if(lastNameValid.error) {
+        this.setState({error: true, errorMessage: lastNameValid.error.toString()})
         return;
       }
       lastNameInput = lastNameValid.value.lastname;
@@ -178,6 +182,7 @@ class AccountInfo extends Component {
     if(this.state.emailText) {
       emailValid = schema.validate({email: this.state.emailText});
       if(emailValid.error) {
+        this.setState({error: true, errorMessage: emailValid.error.toString()})
         return;
       }
       emailInput = emailValid.value.email;
@@ -187,7 +192,7 @@ class AccountInfo extends Component {
     if(this.state.newPasswordText) {
       passwordValid = schema.validate({password: this.state.newPasswordText});
       if(passwordValid.error) {
-        this.setState({error: true, errorMessage: passwordValid.error});
+        this.setState({error: true, errorMessage: passwordValid.error.toString()});
         return;
       }
       passwordInput = passwordValid.value.password;
@@ -271,7 +276,7 @@ class AccountInfo extends Component {
             > 
               Your changes have been submitted. Thank you.
             </p>
-            <p className="fontSizeLarge" style={{display: this.state.error ? "": "none"}}>{this.state.errorMessage.toString()}</p>
+            <p className="fontSizeLarge" style={{display: this.state.error ? "": "none"}}>{this.state.errorMessage}</p>
             <button
               className="button"
               onClick={ () => this.saveChanges()}
