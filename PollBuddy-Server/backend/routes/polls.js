@@ -4,6 +4,8 @@ var mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
 const {createResponse, validateID, checkPollPublic, isLoggedIn, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
 
+// This file handles /api/polls URLs
+
 /**
  * This route is not used.
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-new
@@ -407,7 +409,7 @@ router.get("/:id/view", async function (req, res, next) {
       }
     }
     // Send the open questions
-    res.send(createResponse({"Questions": openQuestions, "PollID": id}));
+    res.status(200).send(createResponse({"Questions": openQuestions, "PollID": id}));
   });
 });
 

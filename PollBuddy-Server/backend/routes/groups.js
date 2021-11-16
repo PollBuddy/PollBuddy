@@ -5,6 +5,8 @@ const mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
 const {createResponse, validateID, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
 
+// This file handles /api/groups URLs
+
 /**
  * This route is not used.
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-new
