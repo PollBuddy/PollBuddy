@@ -152,7 +152,7 @@ class AccountInfo extends Component {
     if(this.state.usernameText) {
       userValid = schema.validate({username: this.state.usernameText});
       if(userValid.error) {
-        this.setState({error: true, errorMessage: userValid.error.toString()})
+        this.setState({error: true, errorMessage: userValid.error.toString()});
         return;
       }
       userInput = userValid.value.username;
@@ -162,7 +162,7 @@ class AccountInfo extends Component {
     if(this.state.firstnameText) {
       firstNameValid = schema.validate({firstname: this.state.firstnameText});
       if(firstNameValid.error) {
-        this.setState({error: true, errorMessage: firstNameValid.toString()})
+        this.setState({error: true, errorMessage: firstNameValid.toString()});
         return;
       }
       firstNameInput = firstNameValid.value.firstname;
@@ -172,7 +172,7 @@ class AccountInfo extends Component {
     if(this.state.lastnameText) {
       lastNameValid = schema.validate({lastname: this.state.lastnameText});
       if(lastNameValid.error) {
-        this.setState({error: true, errorMessage: lastNameValid.error.toString()})
+        this.setState({error: true, errorMessage: lastNameValid.error.toString()});
         return;
       }
       lastNameInput = lastNameValid.value.lastname;
@@ -182,7 +182,7 @@ class AccountInfo extends Component {
     if(this.state.emailText) {
       emailValid = schema.validate({email: this.state.emailText});
       if(emailValid.error) {
-        this.setState({error: true, errorMessage: emailValid.error.toString()})
+        this.setState({error: true, errorMessage: emailValid.error.toString()});
         return;
       }
       emailInput = emailValid.value.email;
