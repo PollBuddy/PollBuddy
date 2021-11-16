@@ -2,7 +2,7 @@
 
 This folder stores files that handle the three primary routes for the backend
 
-groups.js - Handles the initialization,modification, and functionality of user groups 
+groups.js - Handles the initialization, modification, and functionality of groups 
 
 polls.js - Handles the initialization, modification, and functionality of polls
 
