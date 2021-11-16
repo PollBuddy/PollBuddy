@@ -14,15 +14,8 @@ export default class Groups extends Component {
       error: null,
       redirect: false,
       doneLoading: false,
-      adminGroups: [
-        {groupId: 123, label: "CSCI 1200 - Data Structures"},
-        {groupId: 123, label: "CSCI 2200 - Foundations of Computer Science"}
-      ],
-      memberGroups: [
-        {groupId: 123, label: "CSCI 2300 - Intro to Algorithms"},
-        {groupId: 123, label: "CSCI 2500 - Computer Organization"},
-        {groupId: 123, label: "CSCI 2960 - RCOS"}
-      ],
+      adminGroups: [],
+      memberGroups: [],
       openJoinGroupPopup: false,
       groupCode: "",
       leaveGroupButtonText: "Leave Group",
@@ -48,7 +41,10 @@ export default class Groups extends Component {
   }
   componentDidMount() {
     this.props.updateTitle("My Groups");
-    fetch("/me").then((res) => res.json()).then(() => {}).catch(() => {
+    fetch("/me/groups").then((res) => res.json()).then((json) => {
+      this.setState({ adminGroups: json["data"]["admin"] });
+      this.setState({ memberGroups: json["data"]["member"] });
+    }).catch(() => {
       this.setState({ redirect: true });
     });
   }
@@ -109,8 +105,8 @@ export default class Groups extends Component {
             ) : (
               <React.Fragment>
                 {this.state.adminGroups.map((e) => (
-                  <Link to={"/groups/" + e.groupId + "/polls"}>
-                    <button style={{  width: "20em" }} className="button">{e.label}</button>
+                  <Link to={"/groups/" + e.id + "/polls"}>
+                    <button style={{  width: "20em" }} className="button">{e.name}</button>
                   </Link>
                 ))}
               </React.Fragment>
@@ -125,8 +121,8 @@ export default class Groups extends Component {
               <React.Fragment>
                 {this.state.memberGroups.map((e) => (
                   <div>
-                    <Link to={"/groups/" + e.groupId + "/polls"}>
-                      <button style={{  width: "20em" }} className="button">{e.label}</button>
+                    <Link to={"/groups/" + e.id + "/polls"}>
+                      <button style={{  width: "20em" }} className="button">{e.name}</button>
                     </Link>
                     {showXs && <LeaveGroupIcon openDialog={() => this.setState({ isOpen: true })} />}
                   </div>
