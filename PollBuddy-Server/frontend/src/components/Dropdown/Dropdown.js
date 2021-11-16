@@ -40,7 +40,7 @@ function useOutsideAlerter(ref, menuProps) {
       document.getElementById("logout").addEventListener("click",function(e) {
         e.stopPropagation();
         fetch(process.env.REACT_APP_BACKEND_URL + "/users/logout", {
-          method: "GET"
+          method: "POST"
         }).then(response => {
           if(response.ok) {
             return response.json();
