@@ -9,10 +9,3 @@ services:
     build:
       context: PollBuddy-Server/backend
       dockerfile: "Dockerfile.test"
-
-volumes:
-  test_mongoconfig:
-    external: false
-
-  test_mongodata:
-    external: false
