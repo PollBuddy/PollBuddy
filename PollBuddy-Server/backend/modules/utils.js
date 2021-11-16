@@ -40,11 +40,6 @@ async function validateID(collection, id) {
   return null;
 }
 
-// check if user is logged in. returns true or false.
-function isLoggedIn(req) {
-  return req.session.userData && req.session.userData.userID;
-}
-
 // Middleware to check if login is required for the poll.
 // poll ID must be present in req.params.id (in the url).
 // will attach a valid objectID on req.valid.id.
@@ -72,7 +67,6 @@ async function checkPollPublic(req, res, next) {
   next();
 }
 
-
 // Checks if a JS object is empty or not. Returns true if so, false otherwise.
 function isEmpty(obj) {
   for(var prop in obj) {
@@ -82,6 +76,35 @@ function isEmpty(obj) {
   }
   return JSON.stringify(obj) === JSON.stringify({});
 }
+
+// check if user is logged in. returns true or false.
+isLoggedIn = promote((req) => {
+  if(req.session.userData && req.session.userData.userID)
+  {
+    return true;
+  } else {
+    req.status(401).send(createResponse(null, "User is not logged in."));
+    return false;
+  }
+})
+
+
+function promote(p) {
+  or([p]);
+}
+// takes in a list of functions of a request object
+// produces middleware that runs each of the functions on its req in order
+// if any of the functions return true, calls next, otherwise drops the request
+function or(ps) {
+  return (req,res,next) => {
+    for(var i = 0; i < ps.length ; i++){
+      if(ps(req) == true){
+        next()
+      }
+    }
+  }
+}
+
 
 module.exports = {
   createResponse,
