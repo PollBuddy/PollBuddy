@@ -215,6 +215,10 @@ class AccountInfo extends Component {
     this.setState({done: true});
   }
 
+  showPassword() {
+    this.setState(state => ({showPassword: !state.showPassword}));
+  }
+
   render() {
     if(!this.state.doneLoading){
       return ( 
@@ -264,7 +268,8 @@ class AccountInfo extends Component {
               <MDBContainer id="AccountInfo-changePasswordInputs" style={this.state.changePassword ? {display: "flex"} : {display: "none"}}>
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="newPasswordText">New password:</label>
-                  <input type="password" placeholder="••••••••••••" className="form-control textBox" id="newPasswordText" readOnly={this.state.passwordLocked} onChange={this.handleInputChange}/>
+                  <input type={this.state.showPassword ? "text" : "password"} placeholder="••••••••••••" className="form-control textBox" id="newPasswordText" readOnly={this.state.passwordLocked} onChange={this.handleInputChange}/>
+                  <i className="fas fa-eye" onClick={this.showPassword.bind(this)}></i>
                 </MDBCol>
               </MDBContainer>
             </MDBContainer>
