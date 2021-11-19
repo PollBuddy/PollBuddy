@@ -78,7 +78,7 @@ function isEmpty(obj) {
 }
 
 // check if user is logged in. returns true or false.
-isLoggedIn = promote((req) => {
+isLoggedIn = (req) => {
   if(req.session.userData && req.session.userData.userID)
   {
     return true;
@@ -86,8 +86,11 @@ isLoggedIn = promote((req) => {
     req.status(401).send(createResponse(null, "User is not logged in."));
     return false;
   }
-})
+}
 
+isDevelopmentMode = (req) => {
+  return process.env.DEVELOPMENT_MODE === "true"
+}
 
 function promote(p) {
   or([p]);
