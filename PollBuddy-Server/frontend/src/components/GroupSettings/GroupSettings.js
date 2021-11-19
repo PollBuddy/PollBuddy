@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { MDBContainer } from "mdbreact";
 import {Link} from "react-router-dom";
-import "./Settings.scss";
+import "./GroupSettings.scss";
 
-export default class Settings extends Component{
+export default class GroupSettings extends Component{
   constructor(props) {
     super(props);
     this.state = this.props.state;

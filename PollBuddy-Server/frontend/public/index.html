@@ -28,10 +28,44 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Poll Buddy</title>
+    <style>
+        .blank-page-app-loading {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+        }
+
+        .blank-page-app-loading > img {
+            animation: 2.5s infinite heartbeat;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.05); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .blank-page-app-loading > span {
+            font-size: 125%;
+        }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root">
+      <div class="blank-page-app-loading">
+        <img width="200" src="logo512.png" alt="Poll Buddy Logo" />
+        <span>Loading, please wait...</span>
+      </div>
+    </div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

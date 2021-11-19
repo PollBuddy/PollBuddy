@@ -24,7 +24,7 @@ export default class LoginWithSchool extends Component {
             Login with School
           </p>
           <p className="fontSizeSmall">
-            To login, enter your school name or login using RPI's CAS.
+            To login, select your school name.
           </p>
           <p className="fontSizeSmall" id="schoolNameText">
             School Name:

@@ -6,7 +6,7 @@ Many professors use iClickers in the classroom to create polls, ask questions, t
 - Limited to five buttons (A, B, C, D, E)
 - Bulky
 - Outdated
-- Students are susceptible to forgetting bring them to class
+- Students are susceptible to forgetting to bring them to class
 - Difficult to integrate with other programs
 - Only professors can track answers
 
