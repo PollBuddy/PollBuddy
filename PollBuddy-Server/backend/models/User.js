@@ -117,22 +117,25 @@ const editUser = async function(userID, jsonContent) {
     errors["Password"] = "LogOutEverywhere is required when Password is passed";
   }
 
-  if (!isEmpty(errors)) {
-    return [400, createResponse(errors, "Validation Failed")];
-  }
-
   Object.keys(updatedUser.value).forEach((key) => {
-    if (!Object.prototype.hasOwnProperty.call(userSchema, key) || updatedUser.value[key] === undefined || user[key + "Locked"]) {
+    if (!Object.prototype.hasOwnProperty.call(userSchema, key) || updatedUser.value[key] === undefined) {
       delete updatedUser.value[key];
+    } else if(user[key + "Locked"]) {
+      errors[key] = key + " locked.";
     }
   });
 
+
   if (updatedUser.value["Password"]) {
     if (user.SchoolAffiliation) {
-      delete updatedUser.value["Password"];
+      errors["Password"] = "Password locked.";
     } else {
       updatedUser.value["Password"] = bcrypt.hashSync(updatedUser.value["Password"], 10);
     }
+  }
+
+  if (!isEmpty(errors)) {
+    return [400, createResponse(errors, "Validation Failed")];
   }
 
   users.updateOne({ "_id": idCode }, { "$set": updatedUser.value })

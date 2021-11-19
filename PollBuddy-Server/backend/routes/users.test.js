@@ -302,23 +302,9 @@ describe("/api/users/me/edit", () => {
         password: testUser2.Password,
         logOutEverywhere: false,
       })
-      .expect(200)
+      .expect(400)
       .then(async (response) => {
-        expect(response.body.result).toBe("success");
-        expect(response.body.data.firstName).toBe(testUser.FirstName);
-        expect(response.body.data.lastName).toBe(testUser.LastName);
-        expect(response.body.data.userName).toBe(testUser.UserName);
-        expect(response.body.data.email).toBe(testUser.Email);
-
-        let updatedUser = await mongoConnection.getDB().collection("users").findOne({ 
-          _id: res.insertedId,
-        });
-        
-        expect(updatedUser.FirstName).toBe(testUser.FirstName);
-        expect(updatedUser.LastName).toBe(testUser.LastName);
-        expect(updatedUser.UserName).toBe(testUser.UserName);
-        expect(updatedUser.Email).toBe(testUser.Email);
-        expect(bcrypt.compareSync(testUser.Password, updatedUser.Password)).toBe(true);
+        expect(response.body.result).toBe("failure");
       });    
   });
 
@@ -477,23 +463,9 @@ describe("/api/users/:id/edit", () => {
         password: testUser2.Password,
         logOutEverywhere: false,
       })
-      .expect(200)
+      .expect(400)
       .then(async (response) => {
-        expect(response.body.result).toBe("success");
-        expect(response.body.data.firstName).toBe(testUser.FirstName);
-        expect(response.body.data.lastName).toBe(testUser.LastName);
-        expect(response.body.data.userName).toBe(testUser.UserName);
-        expect(response.body.data.email).toBe(testUser.Email);
-
-        let updatedUser = await mongoConnection.getDB().collection("users").findOne({ 
-          _id: res.insertedId,
-        });
-        
-        expect(updatedUser.FirstName).toBe(testUser.FirstName);
-        expect(updatedUser.LastName).toBe(testUser.LastName);
-        expect(updatedUser.UserName).toBe(testUser.UserName);
-        expect(updatedUser.Email).toBe(testUser.Email);
-        expect(bcrypt.compareSync(testUser.Password, updatedUser.Password)).toBe(true);
+        expect(response.body.result).toBe("failure");
       });    
   });
 
