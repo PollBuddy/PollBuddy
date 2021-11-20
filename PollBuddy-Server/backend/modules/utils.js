@@ -96,6 +96,7 @@ function debugRoute(reg,res,body){
   }else{
     return res.status(500).send(createResponse(null, "Route is not available"));
   }
+}
 
 function getResultErrors(result) {
   let errors = {};

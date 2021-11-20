@@ -9,7 +9,7 @@ const Joi = require("joi");
 var mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
 
-const { createResponse, validateID, isEmpty, getResultErrors } = require("../modules/utils"); // object destructuring, only import desired functions
+const { createResponse, validateID, isEmpty, getResultErrors, debugRoute } = require("../modules/utils"); // object destructuring, only import desired functions
 const { userLoginValidator, userInformationValidator, userRegisterValidator, createUser } = require("../models/User.js");
 
 // This file handles /api/users URLs
