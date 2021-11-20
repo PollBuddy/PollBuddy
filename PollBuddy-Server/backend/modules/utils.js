@@ -77,7 +77,6 @@ function isEmpty(obj) {
   return JSON.stringify(obj) === JSON.stringify({});
 }
 
-
 // check if user is logged in. returns true or false.
 isLoggedIn = (req) => {
   if(req.session.userData && req.session.userData.userID)
@@ -159,6 +158,19 @@ function and(ps) {
 }
 
 
+
+function getResultErrors(result) {
+  let errors = {};
+  if (result.error) {
+    for (let i = 0; i < result.error.details.length; i++) {
+      if (result.error.details[i].context.key in result.value) {
+        errors[result.error.details[i].context.key] = true;
+      }
+    }
+  }
+  return errors;
+}
+
 module.exports = {
   createResponse,
   validateID,
@@ -170,4 +182,5 @@ module.exports = {
   promote,
   or,
   and,
-};
+  getResultErrors
+}

@@ -36,6 +36,7 @@ import Code from "./pages/Code/Code";
 
 import Header from "./components/Header/Header.js";
 import Footer from "./components/Footer/Footer.js";
+//import Popup2 from "./components/Popup2/Popup2";
 
 import "./styles/main.scss";
 
@@ -59,6 +60,8 @@ export default class App extends React.Component {
       <BrowserRouter>
 
         <MDBContainer id="wrapper">
+          {/* Popup2 test: Popup2 still needs a handleClose function that will activate onClick of the button, this handle func should probably be a prop passed from parent component*/}
+          {/*<Popup2 dim={true} text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."/>*/}
 
           <Header userInfo={this.state.userInfo} />
 
