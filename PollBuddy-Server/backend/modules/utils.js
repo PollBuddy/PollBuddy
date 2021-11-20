@@ -77,34 +77,84 @@ function isEmpty(obj) {
   return JSON.stringify(obj) === JSON.stringify({});
 }
 
+
 // check if user is logged in. returns true or false.
 isLoggedIn = (req) => {
   if(req.session.userData && req.session.userData.userID)
   {
-    return true;
+    return null;
   } else {
-    req.status(401).send(createResponse(null, "User is not logged in."));
-    return false;
+    return "User is not logged in.";
+  }
+}
+
+isSiteAdmin = (req) => {
+  var userID = req.session.userData.userID;
+  var user = mongoConnection.getDB().collection("users").findOne({_id : userID});
+  if(user.SiteAdmin)
+  {
+    return null;
+  } else {
+    return "User is not a site admin.";
   }
 }
 
 isDevelopmentMode = (req) => {
-  return process.env.DEVELOPMENT_MODE === "true"
+  if(process.env.DEVELOPMENT_MODE === "true")
+  {
+    return null;
+  } else {
+    return "App is not running in development mode.";
+  }
 }
 
+//elevates predicate to a middleware that runs it on the request
+// if it returns null : allows execution to go to next middleware
+// if it returns a msg : responds with this message and ends execution
 function promote(p) {
-  or([p]);
-}
-// takes in a list of functions of a request object
-// produces middleware that runs each of the functions on its req in order
-// if any of the functions return true, calls next, otherwise drops the request
-function or(ps) {
   return (req,res,next) => {
+    var response = p(req)
+    if(response == null)
+    {
+      next()
+    } else {
+      res.status(401).send(createResponse(null,response));
+    }
+
+  }
+}
+
+// takes in a list of functions of a request object
+// produces the disjunction of all the predicates
+function or(ps) {
+  return (req) => {
+    var response = "empty or()"
     for(var i = 0; i < ps.length ; i++){
-      if(ps(req) == true){
-        next()
+      // the first predicate that succeeds ends the testing 
+      response = ps[i](req)
+      if(response == null){
+        return null
       }
     }
+    // if all predicates fail, return the last error
+    return response
+  }
+}
+
+// takes in a list of functions of a request object
+// produces the conjunction of all the predicates
+function and(ps) {
+  return (req) => {
+    var response = "empty and()"
+    for(var i = 0; i < ps.length ; i++){
+      // the first predicate that fails ends the testing 
+      response = ps[i](req)
+      if(response != null){
+        return response
+      }
+    }
+    // if all predicates pass, 
+    return null
   }
 }
 
@@ -112,7 +162,12 @@ function or(ps) {
 module.exports = {
   createResponse,
   validateID,
-  isLoggedIn,
   checkPollPublic,
-  isEmpty
+  isEmpty,
+  isLoggedIn,
+  isSiteAdmin,
+  isDevelopmentMode,
+  promote,
+  or,
+  and,
 };
