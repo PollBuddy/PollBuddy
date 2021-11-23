@@ -16,41 +16,41 @@ Site Map: <https://draft.io/jubvd>. Contact PM for edit access.
 Home Page:
 Provides the option to login/register, enter a code to join a poll, and access the menu.
 <p align="center">
-  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_homepage.png" width="100%" title="Poll Buddy Home Page">
+  <img src="https://github.com/PollBuddy/Resources/raw/main/README%20DATA/Images/pollboddy_home.png" width="100%" title="Poll Buddy Home Page">
 </p>
 
 About Page:
 Describes the context behind Poll Buddy's creation and the website's purpose as a tool in academic settings.
 <p align="center">
-  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_about_page.png" width="100%" title="Poll Buddy About Page">
+  <img src="https://github.com/PollBuddy/Resources/raw/main/README%20DATA/Images/pollbuddy_about.png" width="100%" title="Poll Buddy About Page">
 </p>
 
 FAQ Page:
 Addreses frequently asked questions.
 <p align="center">
-  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_faq.png" width="100%" title="Poll Buddy FAQ Page">
+  <img src="https://github.com/PollBuddy/Resources/raw/main/README%20DATA/Images/pollbuddy_faq.png" width="100%" title="Poll Buddy FAQ Page">
 </p>
 
 Login Page:
 User can login through a school account or a Poll Buddy account.
 <p align="center">
-  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_login.png" width="100%" title="Poll Buddy FAQ Page">
+  <img src="https://github.com/PollBuddy/Resources/raw/main/README%20DATA/Images/pollbuddy_login.png" width="100%" title="Poll Buddy FAQ Page">
 </p>
 
 Groups Page:
 A page that displays the groups that the user is a part of (admin/member) and options to manage groups.
 <p align="center">
-  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_groups_page.png" width="100%" title="Poll Buddy Groups Page">
+  <img src="https://github.com/PollBuddy/Resources/raw/main/README%20DATA/Images/pollbuddy_groups.png" width="100%" title="Poll Buddy Groups Page">
 </p>
 
 Example Poll:
 <p align="center">
-  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_example_poll.png" width="100%" title="Poll Buddy Example Poll">
+  <img src="https://github.com/PollBuddy/Resources/raw/main/README%20DATA/Images/pollbuddy_example_poll.png" width="100%" title="Poll Buddy Example Poll">
 </p>
 
 Example Results:
 <p align="center">
-  <img src="https://github.com/PollBuddy/Resources/blob/main/App%20Images/pollbuddy_example_results.png" width="100%" title="Poll Buddy Example Results">
+  <img src="https://github.com/PollBuddy/Resources/raw/main/README%20DATA/Images/pollbuddy_example_results.png" width="100%" title="Poll Buddy Example Results">
 </p>
 
 ## How to run the app
