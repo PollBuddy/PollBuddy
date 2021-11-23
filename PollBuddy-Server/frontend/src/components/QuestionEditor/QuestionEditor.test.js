@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import questionEditor from "./questionEditor";
+import QuestionEditor from "./QuestionEditor";
 
 it("renders without crashing", () => {
   const div = document.createElement("div");
-  ReactDOM.render(<questionEditor />, div);
+  ReactDOM.render(<QuestionEditor />, div);
   ReactDOM.unmountComponentAtNode(div);
 });

@@ -20,6 +20,8 @@ COPY src ./src
 # Files
 COPY .env ./
 COPY .eslint* ./
+COPY babel.config.js ./
+COPY jest.config.js ./
 
 # Start command
 CMD ["sh", "-c", "echo 'Running frontend tests:' ; npm run test"]
