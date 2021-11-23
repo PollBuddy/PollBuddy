@@ -1,3 +1,4 @@
+const bson = require("bson");
 const mongoConnection = require("../modules/mongoConnection.js");
 
 /**
@@ -38,6 +39,20 @@ async function validateID(collection, id) {
     console.log(e);
   }
   return null;
+}
+
+/**
+ * Convenience function to get the currently logged in user
+ * Dumps result into passed callback function
+ * @returns {void} 
+ * @name getCurrentUser
+ * @param {req} req request object
+ * @param {callback} callback handler for (err,result) returned by database query
+ */
+function getCurrentUser(req,callback) {
+  mongoConnection.getDB().collection("users").findOne({ _id: bson.ObjectId(req.session.userData.userID) }, { projection: { Password: false } }, (err, result) => {
+    callback(err,result);
+  });
 }
 
 // Middleware to check if login is required for the poll.
@@ -204,6 +219,7 @@ function getResultErrors(result) {
 module.exports = {
   createResponse,
   validateID,
+  getCurrentUser,
   checkPollPublic,
   isEmpty,
   isLoggedIn,
