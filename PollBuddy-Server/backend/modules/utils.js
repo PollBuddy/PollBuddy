@@ -47,7 +47,7 @@ function isLoggedIn(req) {
 
 // check if app is running in development mode.
 function inDevMode() {
-  return process.env.DEV_MODE;
+  return process.env.DEVELOPMENT_MODE;
 }
 
 // Middleware to check if login is required for the poll.
