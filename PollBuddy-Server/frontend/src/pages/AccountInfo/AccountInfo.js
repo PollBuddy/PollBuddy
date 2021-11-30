@@ -162,7 +162,7 @@ class AccountInfo extends Component {
     if(this.state.firstnameText) {
       firstNameValid = schema.validate({firstname: this.state.firstnameText});
       if(firstNameValid.error) {
-        this.setState({error: true, errorMessage: firstNameValid.toString()});
+        this.setState({error: true, errorMessage: firstNameValid.error.toString()});
         return;
       }
       firstNameInput = firstNameValid.value.firstname;
