@@ -94,6 +94,9 @@ app.use("/api/polls", pollsRouter);
 app.use("/api/users", usersRouter);
 
 var schoolsModule = require("./modules/schoolList.js");
+
+const {createResponse} = require("./modules/utils");
+
 app.get("/api/schools", (req, res) => {
   var schools = schoolsModule.getList();
   res.json(schools);
@@ -110,8 +113,8 @@ app.get("/api/schools", (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-app.get("/", function (req, res, next) {
-  next(createError(200));
+app.get("/", function (req, res) {
+  return res.status(200).send(createResponse("Backend is up."))
 });
 
 /**
@@ -124,8 +127,8 @@ app.get("/", function (req, res, next) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-app.get("/api", function (req, res, next) {
-  next(createError(200));
+app.get("/api", function (req, res) {
+  return res.status(200).send(createResponse("Backend is up."))
 });
 
 /**
