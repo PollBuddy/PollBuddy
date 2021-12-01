@@ -75,3 +75,15 @@
     text-align: right;
   }
 }
+
+i {
+    position: relative;
+    left: 90%;
+    bottom: 45px;
+    color: #4d3658;
+}
+
+i:hover {
+    color: #25162c;
+    cursor: pointer;
+}

@@ -31,7 +31,13 @@ class AccountInfo extends Component {
       emailLoaded: false,
       emailLocked: false,
       emailText: null,
-      school: "RPI"
+      school: "RPI",
+      passwordLocked: false,
+      newPasswordText: null,
+      done: false,
+      error: false,
+      errorMessage: "Error: Unkown Error",
+      showPassword: false
     };
     this.changePassword = this.handleToggleClick.bind(this);
     // Bounce back to log in if they are not logged
@@ -46,9 +52,9 @@ class AccountInfo extends Component {
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/me", {
       method: "GET"
     }).then(response => response.json())
-      .then(response => {
+      .then(data => {
         // Load states from database values
-        const data = JSON.parse(response.data);
+        data = data.data;
         if(data.UserName) {
           this.setState({
             userName: data.UserName,
@@ -79,7 +85,8 @@ class AccountInfo extends Component {
         }
         if(data.SchoolAffiliation) {
           this.setState({
-            school: data.SchoolAffiliation
+            school: data.SchoolAffiliation,
+            passwordLocked: true
           });
         }
         this.setState({
@@ -117,7 +124,14 @@ class AccountInfo extends Component {
         .error(new Error("Invalid first name format.")),
       lastname: Joi.string()
         .allow(" ").max(256)
-        .error(new Error("Invalid last name format."))
+        .error(new Error("Invalid last name format.")),
+      password: Joi.string()
+        .pattern(new RegExp("^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$"))
+        .pattern(new RegExp("^.*[0-9].*$"))
+        .pattern(new RegExp("^.*[A-Z].*$"))
+        .error(new Error("Invalid password. Must contain 10 or more characters, " +
+          "at least 1 uppercase letter, and at least 1 number. " +
+          "Cannot have 4 of the same characters in a row."))
     });
 
     var userValid = undefined;
@@ -128,12 +142,17 @@ class AccountInfo extends Component {
     var firstNameInput = "";
     var lastNameValid = undefined;
     var lastNameInput = "";
+    var passwordValid = undefined;
+    var passwordInput = undefined;
+
+    this.setState({done: false, error: false});
 
     // Ensure that the inputs are valid, if not return
     // Then assign Input value to validated input, or state if the input is not filled in
     if(this.state.usernameText) {
       userValid = schema.validate({username: this.state.usernameText});
       if(userValid.error) {
+        this.setState({error: true, errorMessage: userValid.error.toString()});
         return;
       }
       userInput = userValid.value.username;
@@ -143,6 +162,7 @@ class AccountInfo extends Component {
     if(this.state.firstnameText) {
       firstNameValid = schema.validate({firstname: this.state.firstnameText});
       if(firstNameValid.error) {
+        this.setState({error: true, errorMessage: firstNameValid.error.toString()});
         return;
       }
       firstNameInput = firstNameValid.value.firstname;
@@ -152,6 +172,7 @@ class AccountInfo extends Component {
     if(this.state.lastnameText) {
       lastNameValid = schema.validate({lastname: this.state.lastnameText});
       if(lastNameValid.error) {
+        this.setState({error: true, errorMessage: lastNameValid.error.toString()});
         return;
       }
       lastNameInput = lastNameValid.value.lastname;
@@ -161,11 +182,20 @@ class AccountInfo extends Component {
     if(this.state.emailText) {
       emailValid = schema.validate({email: this.state.emailText});
       if(emailValid.error) {
+        this.setState({error: true, errorMessage: emailValid.error.toString()});
         return;
       }
       emailInput = emailValid.value.email;
     } else {
       emailInput = this.state.email;
+    }
+    if(this.state.newPasswordText) {
+      passwordValid = schema.validate({password: this.state.newPasswordText});
+      if(passwordValid.error) {
+        this.setState({error: true, errorMessage: passwordValid.error.toString()});
+        return;
+      }
+      passwordInput = passwordValid.value.password;
     }
 
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
@@ -177,11 +207,16 @@ class AccountInfo extends Component {
         LastName: lastNameInput,
         UserName: userInput,
         Email: emailInput,
-        Password: undefined
+        Password: passwordInput
       })
     }).then(response => {
       console.log(response);
     });
+    this.setState({done: true});
+  }
+
+  showPassword() {
+    this.setState(state => ({showPassword: !state.showPassword}));
   }
 
   render() {
@@ -200,11 +235,11 @@ class AccountInfo extends Component {
               <MDBRow className="AccountInfo-accountInputs">
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="firstnameText">First Name:</label>
-                  <input placeholder={this.state.firstName} defaultValue={this.state.firstNameLoaded ? this.state.firstName : undefined } className="form-control textBox" id="firstnameText" readOnly={this.state.firstNameLocked} onChange={this.handleInputChange}/>
+                  <input defaultValue={this.state.firstNameLoaded ? this.state.firstName : undefined } className="form-control textBox" id="firstnameText" readOnly={this.state.firstNameLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="lastnameText">Last Name:</label>
-                  <input placeholder={this.state.lastName} defaultValue={this.state.lastNameLoaded ? this.state.lastName : undefined } className="form-control textBox" id="lastnameText" readOnly={this.state.lastNameLocked} onChange={this.handleInputChange}/>
+                  <input defaultValue={this.state.lastNameLoaded ? this.state.lastName : undefined } className="form-control textBox" id="lastnameText" readOnly={this.state.lastNameLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
               </MDBRow>
   
@@ -215,7 +250,7 @@ class AccountInfo extends Component {
                 </MDBCol>
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="emailText">Email:</label>
-                  <input placeholder={this.state.email} defaultValue={this.state.emailLoaded ? this.state.email : undefined } className="form-control textBox" id="emailText" readOnly={this.state.emailLocked} onChange={this.handleInputChange}/>
+                  <input defaultValue={this.state.emailLoaded ? this.state.email : undefined } className="form-control textBox" id="emailText" readOnly={this.state.emailLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
               </MDBRow>
   
@@ -233,19 +268,27 @@ class AccountInfo extends Component {
               <MDBContainer id="AccountInfo-changePasswordInputs" style={this.state.changePassword ? {display: "flex"} : {display: "none"}}>
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="newPasswordText">New password:</label>
-                  <input type="password" placeholder="••••••••••••" className="form-control textBox" id="newPasswordText"/>
-                </MDBCol>
-                <MDBCol md="6" className="AccountInfo-mdbcol-6">
-                  <label htmlFor="confirmNewPassword">Confirm new password:</label>
-                  <input type="password" placeholder="••••••••••••" className="form-control textBox" id="confirmNewPassword"/>
+                  <input type={this.state.showPassword ? "text" : "password"} placeholder="••••••••••••" className="form-control textBox" id="newPasswordText" readOnly={this.state.passwordLocked} onChange={this.handleInputChange}/>
+                  <i className="fas fa-eye" onClick={this.showPassword.bind(this)}></i>
                 </MDBCol>
               </MDBContainer>
             </MDBContainer>
   
             { /* TODO: Update this to have a backend call instead of a "to", plus some result popup */ }
-            <Link id="AccountInfo-saveChanges" onClick={ () => this.saveChanges()}>
-              <button className="button">Save Changes</button>
-            </Link>
+            <p 
+              className="fontSizeLarge"
+              style={{ display: this.state.done ? "" : "none"}}
+            > 
+              Your changes have been submitted. Thank you.
+            </p>
+            <p className="fontSizeLarge" style={{display: this.state.error ? "": "none"}}>{this.state.errorMessage}</p>
+            <button
+              className="button"
+              onClick={ () => this.saveChanges()}
+            >
+              Save Changes
+            </button>
+
           </MDBContainer>
         </MDBContainer>
       );
