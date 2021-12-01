@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
-import "./questionEditor.scss";
+import "./QuestionEditor.scss";
 
 export default class QuestionEditor extends Component {
 

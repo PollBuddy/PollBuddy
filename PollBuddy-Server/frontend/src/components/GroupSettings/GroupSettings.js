@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { MDBContainer } from "mdbreact";
 import {Link} from "react-router-dom";
-import "./Settings.scss";
+import "./GroupSettings.scss";
 
-export default class Settings extends Component{
+export default class GroupSettings extends Component{
   constructor(props) {
     super(props);
     this.state = this.props.state;
@@ -19,7 +19,7 @@ export default class Settings extends Component{
   }
   render(){
     return (
-      this.state.isMember ? (
+      this.state.isMember !== null && this.state.isMember ? (
         <MDBContainer className="box">
           <p className="fontSizeLarge">
             Member Settings:
