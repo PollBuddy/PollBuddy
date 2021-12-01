@@ -24,5 +24,7 @@ EXPOSE 3000
 # Install nodemon
 RUN npm install -g nodemon
 
+ENV DEVELOPMENT_MODE="true"
+
 # Start command
 CMD ["nodemon", "--legacy-watch", "bin/www"]
