@@ -1,0 +1,11 @@
+version: "3"
+services:
+  frontend:
+    build:
+      context: PollBuddy-Server/frontend
+      dockerfile: "Dockerfile.test"
+
+  backend:
+    build:
+      context: PollBuddy-Server/backend
+      dockerfile: "Dockerfile.test"

@@ -8,10 +8,8 @@ const Joi = require("joi");
 
 var mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
-const { createResponse, validateID, isEmpty, getResultErrors } = require("../modules/utils"); // object destructuring, only import desired functions
-const { userLoginValidator, userInformationValidator, userRegisterValidator, createUser } = require("../models/User.js");
-
-// This file handles /api/users URLs
+const { createResponse, validateID, isEmpty, getResultErrors, createModel, isLoggedIn } = require("../modules/utils"); // object destructuring, only import desired functions
+const { userLoginValidator, userInformationValidator, userRegisterValidator, userSchema, getUser, getUserGroups, editUser } = require("../models/User.js");
 /**
  * This route is not used. It is simply there to have some response to /api/users/
  * @getdata {void} None
@@ -76,7 +74,7 @@ router.post("/login", function (req, res) {
   // micro-optimization to not even bother checking some passwords to save some DB calls, but why not?
   // Please note: This schema is up to date with the wiki as of 2021/03/14, but is NOT a comprehensive test.
   const validResult = userLoginValidator.validate({
-    userName: req.body.userNameEmail, 
+    userName: req.body.userNameEmail,
     email: req.body.userNameEmail,
     password: req.body.password
   }, { abortEarly: false });
@@ -87,7 +85,6 @@ router.post("/login", function (req, res) {
     console.log("Error: No validation errors when checking details in /login. This should not happen.");
     return res.status(500).send(createResponse(null, "An error occurred while validating login details."));
   }
-  console.log("Login Errors", errors);
   // Check whether to validate email or username
   let mode = "";
   if (!errors["userName"] && errors["email"]) {
@@ -134,9 +131,7 @@ router.post("/login", function (req, res) {
               return res.status(500).send(createResponse(null, "An error occurred while validating credentials."));
 
             } else if (bcryptResult) {
-              // Password validated and matches
 
-              // Configure user data and save in session
               req.session.userData = {};
               req.session.userData.userID = result._id;
 
@@ -219,7 +214,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
         delete req.session.cas_return_to;
         delete req.session.cas_user;
 
-        if (!result) {
+        if (result === null) {
           // User not registered
 
           // Send the user the login with school step 2 page with relevant information
@@ -293,9 +288,8 @@ router.get("/register", function (req, res) {
  * @param {callback} callback - function handler for data received
  */
 router.post("/register", function (req, res) {
-
   const validResult = userRegisterValidator.validate({
-    userName: req.body.userName, 
+    userName: req.body.userName,
     email: req.body.email,
     password: req.body.password,
     firstName: req.body.firstName,
@@ -337,7 +331,7 @@ router.post("/register", function (req, res) {
         return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
       }
 
-      let user = createUser({
+      let user = createModel(userSchema, {
         FirstName: req.body.firstName,
         LastName: req.body.lastName,
         UserName: req.body.userName.toLowerCase(),
@@ -373,11 +367,11 @@ router.post("/register", function (req, res) {
           }
 
         } else {
-
+          
           // One result changed, therefore it worked.
           // Configure user data and save in session
           req.session.userData = {};
-          req.session.userData.userID = result.insertedId.toString();
+          req.session.userData.userID = result.insertedId;
 
           // Send the response object with some basic info for the frontend to store
           return res.status(200).send(createResponse({
@@ -434,9 +428,8 @@ router.get("/register/rpi", rpi.bounce, function (req, res) {
     delete req.session.cas_user;
 
     // Send the user to the registration step 2 page with relevant info to prefill
-    return res.redirect("/register/school/step2?result=success&data=" + JSON.stringify(
-      { "email": req.session.userDataTemp.email, "school": "rpi", "userName": req.session.userDataTemp.userName }
-    ));
+    return res.redirect("/register/school/step2?result=success&userName=" + req.session.userDataTemp.userName +
+      "&email=" + req.session.userDataTemp.email + "&school=rpi");
 
   } else {
     // Something went wrong
@@ -498,7 +491,7 @@ router.post("/register/rpi", function (req, res) {
 
   if (isEmpty(errors)) {
     // No validation errors, let's try adding the user!
-    let user = createUser({
+    let user = createModel(userSchema, {
       FirstName: req.body.firstName,
       LastName: req.body.lastName,
       UserName: req.body.userName,
@@ -542,12 +535,12 @@ router.post("/register/rpi", function (req, res) {
 
         // Configure email, username by copying from the result object and saving in the session
         req.session.userData = {};
-        req.session.userData.userID = result.insertedId.toString();
+        req.session.userData.userID = result.insertedId.str;
 
         // Send the response object with some basic info for the frontend to store
         return res.status(200).send(createResponse({
           "firstName": user.FirstName,
-          "lastName": user.LastName, 
+          "lastName": user.LastName,
           "userName": user.UserName
         }));
 
@@ -603,19 +596,12 @@ router.post("/logout", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/me", async function (req,res) {
-  var collection = mongoConnection.getDB().collection("users");
-  // Gather user ID from session (set during login/register)
-  const userID = req.session.userData.userID; // TODO: Ensure this works if a user isn't logged in
-  var idCode = new bson.ObjectID(userID);
-  // Locate user data in database
-  const user = await collection.findOne({"_id" : idCode});
-  if(user) {
-    // Found user, and return the user data in a JSON Object
-    return res.status(200).send(createResponse(user));
+router.get("/me", async function (req, res) {
+  if (!isLoggedIn(req)) {
+    return res.status(400).send(createResponse(null, "Error: User not logged in."));
   }
-  // Could not find user associated with this ID, something has gone wrong
-  return res.status(400).send(createResponse(null,"Error: Invalid User, Session ID does not match any user."));
+  let response = await getUser(req.session.userData.userID);
+  return res.status(response[0]).send(response[1]);
 });
 
 /**
@@ -628,8 +614,8 @@ router.get("/me", async function (req,res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/me", function (req,res) {
-  return res.status(405).send(createResponse(null,"POST is not available for this route. Use GET."));
+router.post("/me", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 /**
@@ -641,8 +627,8 @@ router.post("/me", function (req,res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/me/edit", function (req,res) {
-  return res.status(405).send(createResponse(null,"GET is not available for this route. Use POST."));
+router.get("/me/edit", function (req, res) {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
 /**
@@ -656,118 +642,12 @@ router.get("/me/edit", function (req,res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route 
  */
-router.post("/me/edit",function(req,res) {
-  // Get user info with the matching userID
-  const idCode = req.session.userData.userID;
-  var id = new bson.ObjectID(idCode);
-  // User action:
-  // ->  Add | Remove
-  // ->  FirstName | LastName | UserName | Email | Password
-  var jsonContent = req.body;
-  // Flag indicates success or not
-  var success = false;
-
-  const collection = mongoConnection.getDB().collection("users");
-
-  // Add provided fields to the database
-  if(jsonContent.Action === "Add") {
-    if(jsonContent.FirstName !== undefined) {
-      // Update the FirstName field in the database
-      collection.updateOne({"_id":id},{"$set": {FirstName: jsonContent.FirstName}})
-        .then( success = true)
-        .catch((err) => {
-          return res.status(500).send(createResponse(err,"Error updating database information"));
-        });
-    }
-    if(jsonContent.LastName !== undefined) {
-      // Update the LastName field in the database
-      collection.updateOne({"_id":id},{"$set": {LastName: jsonContent.LastName}})
-        .then( success = true)
-        .catch((err) => {
-          return res.status(500).send(createResponse(err,"Error updating database information"));
-        });
-    }
-    if(jsonContent.UserName !== undefined) {
-      // Update the UserName field in the database
-      collection.updateOne({"_id":id},{"$set": {UserName: jsonContent.UserName}})
-        .then( success = true)
-        .catch((err) => {
-          return res.status(500).send(createResponse(err,"Error updating database information"));
-        });
-    }
-    if(jsonContent.Email !== undefined) {
-      // Update the Email field in the database
-      collection.updateOne({"_id":id},{"$set": {Email: jsonContent.Email}})
-        .then( success = true)
-        .catch((err) => {
-          return res.status(500).send(createResponse(err,"Error updating database information"));
-        });
-    }
-    if(jsonContent.Password !== undefined) {
-      // Update the Password field in the database
-      collection.updateOne({"_id":id},{"$set": {Password: bcrypt.hashSync(jsonContent.Password, 10) }})
-        .then( success = true)
-        .catch((err) => {
-          return res.status(500).send(createResponse(err,"Error updating database information"));
-        });
-    }
-    if(success === false) {
-      // None of the updates were successful, so the data provieded in not valid for an add operation
-      return res.status(400).send(createResponse("Error","Error: No Valid Add fields provided"));
-    }
-
-  // Remove provided fields from the database
-  } else if (jsonContent.Action === "Remove") {
-    if(jsonContent.FirstName !== undefined) {
-      // Remove the FirstName field from the database
-      collection.updateOne({"_id":id},{"$pull": {FirstName: jsonContent.FirstName}})
-        .then( success = true)
-        .catch((err) => {
-          return res.status(500).send(createResponse(err,"Error updating database information"));
-        });
-    }
-    if(jsonContent.LastName !== undefined) {
-      // Remove the LastName field from the database
-      collection.updateOne({"_id":id},{"$pull": {LastName: jsonContent.LastName}})
-        .then( success = true)
-        .catch((err) => {
-          return res.status(500).send(createResponse(err,"Error updating database information"));
-        });
-    }
-    if(jsonContent.UserName !== undefined) {
-      // Remove the UserName field from the database
-      collection.updateOne({"_id":id},{"$pull": {UserName: jsonContent.UserName}})
-        .then( success = true)
-        .catch((err) => {
-          return res.status(500).send(createResponse(err,"Error updating database information"));
-        });
-    }
-    if(jsonContent.Email !== undefined) {
-      // Remove the Email field from the database
-      collection.updateOne({"_id":id},{"$pull": {Email: jsonContent.Email}})
-        .then( success = true)
-        .catch((err) => {
-          return res.status(500).send(createResponse(err,"Error updating database information"));
-        });
-    }
-    if(jsonContent.Password !== undefined) {
-      // Remove the Password Field from the database
-      collection.updateOne({"_id":id},{"$pull": {Password: bcrypt.hashSync(jsonContent.Password, 10) }})
-        .then( success = true)
-        .catch((err) => {
-          return res.status(500).send(createResponse(err,"Error updating database information"));
-        });
-    }
-    if(success === false) {
-      // No Remove actions were performed, meaning none of the provided fields were effected, so throw an error
-      return res.status(400).send(createResponse("Error","Error: No Valid Remove fields provided"));
-    }
-  } else {
-    // Action is not "Add" or "Remove", so throw an error
-    return res.status(400).send(createResponse("Error","Error: Invalid Action, must be either Add or Remove"));
+router.post("/me/edit", async function (req, res) {
+  if (!isLoggedIn(req)) {
+    return res.status(400).send(createResponse(null, "Error: User not logged in."));
   }
-  // Successfully updated the database as user requested
-  return res.status(200).send(createResponse()); // TODO: Ensure success actually occurred / move this within somewhere else
+  let response = await editUser(req.session.userData.userID, req.body);
+  return res.status(response[0]).send(response[1]);
 });
 
 /**
@@ -780,16 +660,12 @@ router.post("/me/edit",function(req,res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/me/groups", function(req,res) {
-  var id = new bson.ObjectID(req.session.userData.userID);
-  mongoConnection.getDB().collection("users").find({ "_id": id }, { projection: { _id: 0, Groups: 1 } }).map(function (item) {
-    return res.status(200).send(createResponse(item.Groups));
-  }).toArray(function (err, result) {
-    if (err) {
-      return res.status(500).send(createResponse(err,"Error: Unable to retrieve groups from database"));
-    }
-    return res.status(200).send(createResponse(result[0]));
-  });
+router.get("/me/groups", async function (req, res) {
+  if (!isLoggedIn(req)) {
+    return res.status(400).send(createResponse(null, "Error: User not logged in."));
+  }
+  let response = await getUserGroups(req.session.userData.userID);
+  return res.status(response[0]).send(response[1]);
 });
 
 /**
@@ -801,8 +677,43 @@ router.get("/me/groups", function(req,res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.post("/me/groups",function (req,res) {
-  return res.status(405).send(createResponse(null,"POST is not available for this route. Use GET."));
+router.post("/me/groups", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+});
+
+/**
+ * Note: This is a debug route,
+ * which will be only available when running in development mode soon.
+ * Full documentation: https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Users)#apiusersid
+ * ---
+ * This route is used to get the full user information stored in the database
+ * full user information: { Username, eMail, Password, FirstName, LastName }
+ * ^^^ Refer to: https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-User-Data
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} On success: Status 200: *Username,eMail,Password,FirstName,LastName* in an Array
+ * On failure: Status 500 // TODO: Error message
+ * @name backend/users/:id
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+router.get("/:id", async function (req, res) {
+  let response = await getUser(req.params.id);
+  return res.status(response[0]).send(response[1]);
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/:id when using POST.
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405: { "result": "failure", "error": "POST is not available for this route. Use GET." }
+ * @name backend/users/:id_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+// eslint-disable-next-line no-unused-vars
+router.post("/:id", function (req, res) {
+  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 /**
@@ -831,240 +742,9 @@ router.get("/:id/edit", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
  */
-router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documentation
-  // Get user info with the matching userID
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  // User action:
-  // ->  Add | Remove
-  // ->  FirstName | LastName | UserName | Email | Password
-  var jsonContent = req.body;
-  // Flag indicates success or not
-  var success = false;
-
-  // User action = Add
-  if (jsonContent.Action === "Add") {
-    // Checks which information the user want to add
-    //   and update the information, mark the "success" flag
-
-    // User action = Add + FirstName
-    if (jsonContent.FirstName !== undefined) {
-      // Update the FirstName in the database
-      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { FirstName: jsonContent.FirstName } }, function (err, res) {
-        // Error add into to database
-        if (err) {
-          // Return an Error message
-          return res.status(500).send(createResponse("", err)); // TODO: Error message;
-        } else {
-          // Mark the "success" flag
-          success = true;
-        }
-      });
-    }
-
-    // User action = Add + LastName
-    if (jsonContent.LastName !== undefined) {
-      // Update the LastName in the database
-      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { LastName: jsonContent.LastName } }, function (err, res) {
-        // Error add into to database
-        if (err) {
-          // Return an Error message
-          return res.status(500).send(createResponse("", err)); // TODO: Error message;
-        } else {
-          // Mark the "success" flag
-          success = true;
-        }
-      });
-    }
-
-    // User action = Add + UserName
-    if (jsonContent.UserName !== undefined) {
-      // Update the UserName in the database
-      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { UserName: jsonContent.UserName } }, function (err, res) {
-        // Error add into to database
-        if (err) {
-          // Return an Error message
-          return res.status(500).send(createResponse("", err)); // TODO: Error message;
-        } else {
-          // Mark the "success" flag
-          success = true;
-        }
-      });
-    }
-
-    // User action = Add + Email
-    if (jsonContent.Email !== undefined) {
-      // Update the Email in the database
-      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { Email: jsonContent.Email } }, function (err, res) {
-        // Error add into to database
-        if (err) {
-          // Return an Error message
-          return res.status(500).send(createResponse("", err)); // TODO: Error message;
-        } else {
-          // Mark the "success" flag
-          success = true;
-        }
-      });
-    }
-
-    // User action = Add + Password
-    if (jsonContent.Password !== undefined) {
-      // Update the Password in the database
-      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$addToSet": { Password: bcrypt.hashSync(jsonContent.Password, 10) } }, function (err, res) {
-        // Error add into to database
-        if (err) {
-          // Return an Error message
-          return res.status(500).send(createResponse("", err)); // TODO: Error message;
-        } else {
-          // Mark the "success" flag
-          success = true;
-        }
-      });
-    }
-
-    // If user action is neither to Add
-    // ->  FirstName | LastName | UserName | Email | Password
-    if (success === false) {
-      // Return an Error message
-      return res.status(400).send(createResponse("", "")); // TODO: Error message;
-    }
-
-    // User action = Remove
-  } else if (jsonContent.Action === "Remove") {
-    // Checks which information the user want to remove
-    //   and update the information, mark the "success" flag
-
-    // User action = Remove + FirstName
-    if (jsonContent.FirstName !== undefined) {
-      // Update the FirstName in the database
-      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { FirstName: jsonContent.FirstName } }, function (err, res) {
-        // Error add into to database
-        if (err) {
-          // Return an Error message
-          return res.status(500).send(createResponse("", err)); // TODO: Error message
-        } else {
-          // Mark the "success" flag
-          success = true;
-        }
-      });
-    }
-
-    // User action = Remove + LastName
-    if (jsonContent.LastName !== undefined) {
-      // Update the LastName in the database
-      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { LastName: jsonContent.LastName } }, function (err, res) {
-        // Error add into to database
-        if (err) {
-          // Return an Error message
-          return res.status(500).send(createResponse("", err)); // TODO: Error message
-        } else {
-          // Mark the "success" flag
-          success = true;
-        }
-      });
-    }
-
-    // User action = Remove + UserName
-    if (jsonContent.UserName !== undefined) {
-      // Update the UserName in the database
-      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { UserName: jsonContent.UserName } }, function (err, res) {
-        // Error add into to database
-        if (err) {
-          // Return an Error message
-          return res.status(500).send(createResponse("", err)); // TODO: Error message
-        } else {
-          // Mark the "success" flag
-          success = true;
-        }
-      });
-    }
-
-    // User action = Remove + Email
-    if (jsonContent.Email !== undefined) {
-      // Update the Email in the database
-      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { Email: jsonContent.Email } }, function (err, res) {
-        // Error add into to database
-        if (err) {
-          // Return an Error message
-          return res.status(500).send(createResponse("", err)); // TODO: Error message
-        } else {
-          // Mark the "success" flag
-          success = true;
-        }
-      });
-    }
-
-    // User action = Remove + Password
-    if (jsonContent.Password !== undefined) {
-      // Update the Password in the database
-      mongoConnection.getDB().collection("users").updateOne({ "_id": id }, { "$pull": { Password: jsonContent.Password } }, function (err, res) {
-        // Error add into to database
-        if (err) {
-          // Return an Error message
-          return res.status(500).send(createResponse("", err)); // TODO: Error message
-        } else {
-          // Mark the "success" flag
-          success = true;
-        }
-      });
-    }
-
-    // If user action is neither to Remove
-    // ->  FirstName | LastName | UserName | Email | Password
-    if (success === false) {
-      // Return an Error message
-      return res.status(400).send(createResponse("", "")); // TODO: Error message;
-    }
-
-    // If user action is neither
-    // -> Add | Remove
-  } else {
-    // Return an Error message
-    return res.status(400).send(createResponse("", "")); // TODO: Error message;
-  }
-
-  // Successfully updated the database as user requested
-  return res.status(200).send(createResponse()); // TODO: Ensure success actually occurred / move this within somewhere else
-});
-
-/**
- * Note: This is a debug route,
- * which will be only available when running in development mode soon.
- * Full documentation: https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Users)#apiusersid
- * ---
- * This route is used to get the full user information stored in the database
- * full user information: { Username, eMail, Password, FirstName, LastName }
- * ^^^ Refer to: https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-User-Data
- * @getdata {void} None
- * @postdata {void} None
- * @returns {void} On success: Status 200: *Username,eMail,Password,FirstName,LastName* in an Array
- * On failure: Status 500 // TODO: Error message
- * @name backend/users/:id
- * @param {string} path - Express path
- * @param {callback} callback - function handler for route
- */
-router.get("/:id", function (req, res, next) {
-  // Gets all user info with the matching userID and stores the info in an array
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  mongoConnection.getDB().collection("users").find({ "_id": id }).toArray(function (err, result) {
-    if (err) {
-      return res.status(500).send(createResponse("", err)); // TODO: Error message
-    }
-    return res.status(200).send(createResponse(result));
-  });
-});
-
-/**
- * This route is not used. It is simply there to have some response to /api/users/:id when using POST.
- * @getdata {void} None
- * @postdata {void} None
- * @returns {void} Status 405: { "result": "failure", "error": "POST is not available for this route. Use GET." }
- * @name backend/users/:id_POST
- * @param {string} path - Express path
- * @param {callback} callback - function handler for route
- */
-// eslint-disable-next-line no-unused-vars
-router.post("/:id", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+router.post("/:id/edit", async function (req, res) {
+  let response = await editUser(req.params.id, req.body);
+  return res.status(response[0]).send(response[1]);
 });
 
 /**
@@ -1078,16 +758,9 @@ router.post("/:id", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/:id/groups", function (req, res, next) {
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  mongoConnection.getDB().collection("users").find({ "_id": id }, { projection: { _id: 0, Groups: 1 } }).map(function (item) {
-    return res.status(200).send(createResponse(item.Groups));
-  }).toArray(function (err, result) {
-    if (err) {
-      return res.status(500).send(createResponse("", "")); // TODO: Error message
-    }
-    return res.status(200).send(createResponse(result[0]));
-  });
+router.get("/:id/groups", async function (req, res) {
+  let response = await getUserGroups(req.params.id);
+  return res.status(response[0]).send(response[1]);
 });
 
 /**
@@ -1103,8 +776,6 @@ router.get("/:id/groups", function (req, res, next) {
 router.post("/:id/groups", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
-
-
 
 module.exports = router;
 

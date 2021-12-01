@@ -95,11 +95,22 @@ function getResultErrors(result) {
   return errors;
 }
 
+function createModel(schema, data){
+  let model = Object.assign({}, schema);
+  for (let key of Object.keys(model)) {
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
+      model[key] = data[key];
+    }
+  }
+  return model;
+}
+
 module.exports = {
   createResponse,
   validateID,
   isLoggedIn,
   checkPollPublic,
   isEmpty,
-  getResultErrors
+  getResultErrors,
+  createModel,
 };
