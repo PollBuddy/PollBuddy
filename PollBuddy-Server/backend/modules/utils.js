@@ -41,11 +41,6 @@ async function validateID(collection, id) {
   return null;
 }
 
-// check if user is logged in. returns true or false.
-function isLoggedIn(req) {
-  return req.session.userData && req.session.userData.userID;
-}
-
 /**
  * Convenience function to get the currently logged in user
  * Dumps result into passed callback function
@@ -87,7 +82,6 @@ async function checkPollPublic(req, res, next) {
   next();
 }
 
-
 // Checks if a JS object is empty or not. Returns true if so, false otherwise.
 function isEmpty(obj) {
   for(var prop in obj) {
@@ -98,6 +92,114 @@ function isEmpty(obj) {
   return JSON.stringify(obj) === JSON.stringify({});
 }
 
+/**
+ * @typedef {Predicate} - function from request object to either null or an error string
+ * returns null on success
+ * returns string containing error on failure
+ */
+
+
+/**
+ * predicate to check If user is logged in in the request
+ * @see {Predicate}
+ */
+var isLoggedIn = (req) => {
+  if(req.session.userData && req.session.userData.userID){
+    return null;
+  } else {
+    return "User is not logged in.";
+  }
+};
+
+/**
+ * predicate to check If user is siteAdmin
+ * subcondition of isLoggedIn, all siteAdmins are also logged in
+ * @see {Predicate}
+ */
+var isSiteAdmin = 
+  and([
+    isLoggedIn,
+
+    (req) => {
+      var userID = req.session.userData.userID;
+      var user = mongoConnection.getDB().collection("users").findOne({_id : userID});
+      if(user.SiteAdmin){
+        return null;
+      } else {
+        return "User is not a site admin.";
+      }
+    }
+  ]);
+
+/**
+ * predicate to check if the running image is in development mode
+ * @see {Predicate}
+ */
+var isDevelopmentMode = (req) => {
+  if(process.env.DEVELOPMENT_MODE === "true"){
+    return null;
+  } else {
+    return "App is not running in development mode.";
+  }
+};
+
+/**
+ * elevates predicate to a middleware that runs it on the request
+ * if it returns null : allows execution to go to next middleware
+ * if it returns a msg : responds with this message and ends execution
+ * @param {Predicate} p - input predicate 
+ * @return {Middleware} - Middlewre version of predicate
+ */
+function promote(p) {
+  return (req,res,next) => {
+    var response = p(req);
+    if(response === null){
+      next();
+    } else {
+      res.status(401).send(createResponse(null,response));
+    }
+  };
+}
+
+/**
+ * combines a list of predicates into a single predicate that succeeds on a given request if at least one of the input predicates succeed
+ * @param {Array} ps - list of predicates 
+ * @return {Predicate} - composite predicate
+ */
+function or(ps) {
+  return (req) => {
+    var response = "empty or()";
+    for(var i = 0; i < ps.length ; i++){
+      // the first predicate that succeeds ends the testing 
+      response = ps[i](req);
+      if(response === null){
+        return null;
+      }
+    }
+    // if all predicates fail, return the last error
+    return response;
+  };
+}
+
+/**
+ * combines a list of predicates into a single predicate that succeeds on a given request iff all input predicates succeed
+ * @param {Array} ps - list of predicates 
+ * @return {Predicate} - composite predicate
+ */
+function and(ps) {
+  return (req) => {
+    var response = "empty and()";
+    for(var i = 0; i < ps.length ; i++){
+      // the first predicate that fails ends the testing 
+      response = ps[i](req);
+      if(response !== null){
+        return response;
+      }
+    }
+    // if all predicates pass, 
+    return null;
+  };
+}
 
 // augments a route's behavior with generic behaviour when outside of development mode
 // for routes that should only be active in development mode
@@ -129,10 +231,15 @@ function getResultErrors(result) {
 module.exports = {
   createResponse,
   validateID,
-  isLoggedIn,
   getCurrentUser,
   checkPollPublic,
   isEmpty,
+  isLoggedIn,
+  isSiteAdmin,
+  isDevelopmentMode,
+  promote,
+  or,
+  and,
   debugRoute,
   getResultErrors
 };
