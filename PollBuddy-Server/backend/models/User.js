@@ -77,10 +77,9 @@ const getUserGroups = async function(userID) {
     // TODO: needs to be updated via issue #591
     return [200, createResponse({ "admin": [
       { "id": 1, "name": "Example Group 1" },
-      { "id": 2, "name": "Example Group 2" }
-      ], "member": [
-        { "id": 3, "name": "Example Group 3" },
-        { "id": 4, "name": "Example Group 4" }] })];
+      { "id": 2, "name": "Example Group 2" }], "member": [
+      { "id": 3, "name": "Example Group 3" },
+      { "id": 4, "name": "Example Group 4" }] })];
     //return [200, createResponse(user.Groups)];
   } else {
     // Could not find user associated with this ID, something has gone wrong

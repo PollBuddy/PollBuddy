@@ -114,7 +114,7 @@ app.get("/api/schools", (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 app.get("/", function (req, res) {
-  return res.status(200).send(createResponse("Backend is up."))
+  return res.status(200).send(createResponse("Backend is up."));
 });
 
 /**
@@ -128,7 +128,7 @@ app.get("/", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 app.get("/api", function (req, res) {
-  return res.status(200).send(createResponse("Backend is up."))
+  return res.status(200).send(createResponse("Backend is up."));
 });
 
 /**
