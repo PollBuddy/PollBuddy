@@ -45,6 +45,11 @@ function isLoggedIn(req) {
   return req.session.userData && req.session.userData.userID;
 }
 
+// check if app is running in development mode.
+function inDevMode() {
+  return process.env.DEVELOPMENT_MODE;
+}
+
 // Middleware to check if login is required for the poll.
 // poll ID must be present in req.params.id (in the url).
 // will attach a valid objectID on req.valid.id.
