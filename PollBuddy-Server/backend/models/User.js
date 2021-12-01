@@ -74,7 +74,14 @@ const getUserGroups = async function(userID) {
   const user = await mongoConnection.getDB().collection("users").findOne({ "_id": idCode });
   if (user) {
     // Found user, and return the list of groups
-    return [200, createResponse(user.Groups)];
+    // TODO: needs to be updated via issue #591
+    return [200, createResponse({ "admin": [
+      { "id": 1, "name": "Example Group 1" },
+      { "id": 2, "name": "Example Group 2" }
+      ], "member": [
+        { "id": 3, "name": "Example Group 3" },
+        { "id": 4, "name": "Example Group 4" }] })];
+    //return [200, createResponse(user.Groups)];
   } else {
     // Could not find user associated with this ID, something has gone wrong
     return [400, createResponse(null, "Error: Invalid User, ID does not match any user.")];

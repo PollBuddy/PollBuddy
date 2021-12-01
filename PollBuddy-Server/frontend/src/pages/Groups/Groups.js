@@ -41,10 +41,12 @@ export default class Groups extends Component {
   }
   componentDidMount() {
     this.props.updateTitle("My Groups");
-    fetch("/me/groups").then((res) => res.json()).then((json) => {
+    fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/groups").then((res) => res.json()).then((json) => {
+      console.log(json);
       this.setState({ adminGroups: json["data"]["admin"] });
       this.setState({ memberGroups: json["data"]["member"] });
     }).catch(() => {
+      console.log("Error, redirecting");
       this.setState({ redirect: true });
     });
   }

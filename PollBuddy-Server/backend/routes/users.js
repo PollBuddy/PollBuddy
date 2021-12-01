@@ -9,7 +9,7 @@ const Joi = require("joi");
 var mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
 
-const { createResponse, validateID, isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute } = require("../modules/utils"); // object destructuring, only import desired functions
+const { createResponse, validateID, isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute, promote } = require("../modules/utils"); // object destructuring, only import desired functions
 const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups, createUser, editUser } = require("../models/User.js");
 
 // This file handles /api/users URLs
@@ -666,9 +666,7 @@ router.post("/me/edit", async function (req, res) {
  * @param {callback} callback - function handler for route
  */
 router.get("/me/groups", async function (req, res) {
-  if (!isLoggedIn(req)) {
-    return res.status(400).send(createResponse(null, "Error: User not logged in."));
-  }
+  // TODO: Reimplement login check
   let response = await getUserGroups(req.session.userData.userID);
   return res.status(response[0]).send(response[1]);
 });
