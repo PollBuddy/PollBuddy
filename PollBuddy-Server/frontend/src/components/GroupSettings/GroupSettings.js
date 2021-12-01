@@ -19,7 +19,7 @@ export default class GroupSettings extends Component{
   }
   render(){
     return (
-      this.state.isMember ? (
+      this.state.isMember !== null && this.state.isMember ? (
         <MDBContainer className="box">
           <p className="fontSizeLarge">
             Member Settings:
