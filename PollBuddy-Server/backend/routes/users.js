@@ -8,7 +8,8 @@ const Joi = require("joi");
 
 var mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
-const { createResponse, validateID, isEmpty, getResultErrors } = require("../modules/utils"); // object destructuring, only import desired functions
+
+const { createResponse, validateID, isEmpty, getResultErrors, debugRoute } = require("../modules/utils"); // object destructuring, only import desired functions
 const { userLoginValidator, userInformationValidator, userRegisterValidator, createUser } = require("../models/User.js");
 
 // This file handles /api/users URLs
@@ -23,7 +24,7 @@ const { userLoginValidator, userInformationValidator, userRegisterValidator, cre
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/", function (req, res) {
-  return res.status(405).send(createResponse(null, "Route is not available"));
+  debugRoute(req,res);
 });
 
 /**
@@ -37,7 +38,7 @@ router.get("/", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/", function (req, res) {
-  return res.status(405).send(createResponse(null, "Route is not available"));
+  debugRoute(req,res);
 });
 
 /**
@@ -560,37 +561,38 @@ router.post("/register/rpi", function (req, res) {
 });
 
 /**
+ * This route is not used. It is simply there to have some response to /api/users/logout when using GET.
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405: { "result": "failure", "error": "GET is not available for this route. Use POST." }
+ * @name backend/users/register_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+// eslint-disable-next-line no-unused-vars
+router.get("/logout", function (req, res) {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+});
+
+/**
  * This route is called by frontend internal JS as part of the logout process. It essentially just deletes the session's
  * userData fields. The frontend should then clear out its own cache of those values, but this is not essential for
  * the security of the logout process, it would just give a weird and bad user experience.
  * @getdata {void} None
  * @postdata {void} None
  * @returns {void} Status 200: { "result": "success", "data": "User was logged out successfully." }
- * @name backend/users/logout_GET
- * @param {string} path - Express path
- * @param {callback} callback - function handler for route
- */
-router.get("/logout", function (req, res) {
-
-  // Delete the userData in the session
-  delete req.session.userData;
-
-  return res.status(200).send(createResponse("User was logged out successfully."));
-
-});
-
-/**
- * This route is not used. It is simply there to have some response to /api/users/logout when using POST.
- * @getdata {void} None
- * @postdata {void} None
- * @returns {void} Status 405: { "result": "failure", "error": "POST is not available for this route. Use GET." }
  * @name backend/users/logout_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/logout", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+
+  // Delete the userData in the session
+  delete req.session.userData;
+
+  return res.status(200).send(createResponse("User was logged out successfully."));
+
 });
 
 /**
