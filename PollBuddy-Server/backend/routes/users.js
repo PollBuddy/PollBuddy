@@ -8,7 +8,8 @@ const Joi = require("joi");
 
 var mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
-const { createResponse, validateID, isEmpty, getResultErrors } = require("../modules/utils"); // object destructuring, only import desired functions
+
+const { createResponse, validateID, isEmpty, getResultErrors, debugRoute } = require("../modules/utils"); // object destructuring, only import desired functions
 const { userLoginValidator, userInformationValidator, userRegisterValidator, createUser } = require("../models/User.js");
 
 // This file handles /api/users URLs
@@ -23,7 +24,7 @@ const { userLoginValidator, userInformationValidator, userRegisterValidator, cre
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/", function (req, res) {
-  return res.status(405).send(createResponse(null, "Route is not available"));
+  debugRoute(req,res);
 });
 
 /**
@@ -37,7 +38,7 @@ router.get("/", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/", function (req, res) {
-  return res.status(405).send(createResponse(null, "Route is not available"));
+  debugRoute(req,res);
 });
 
 /**

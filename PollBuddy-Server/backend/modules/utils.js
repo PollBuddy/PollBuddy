@@ -98,6 +98,21 @@ function isEmpty(obj) {
   return JSON.stringify(obj) === JSON.stringify({});
 }
 
+
+// augments a route's behavior with generic behaviour when outside of development mode
+// for routes that should only be active in development mode
+function debugRoute(reg,res,body){
+  if(process.env.DEVELOPMENT_MODE === "true"){
+    if(body){
+      body(reg,res);
+    }else{
+      return res.status(200).send(createResponse(null, "Route is debug only"));
+    }
+  }else{
+    return res.status(500).send(createResponse(null, "Route is not available"));
+  }
+}
+
 function getResultErrors(result) {
   let errors = {};
   if (result.error) {
@@ -108,6 +123,7 @@ function getResultErrors(result) {
     }
   }
   return errors;
+
 }
 
 module.exports = {
@@ -117,5 +133,6 @@ module.exports = {
   getCurrentUser,
   checkPollPublic,
   isEmpty,
+  debugRoute,
   getResultErrors
 };

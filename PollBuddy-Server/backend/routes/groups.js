@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
-const {createResponse, validateID} = require("../modules/utils"); // object destructuring, only import desired functions
+const {createResponse, validateID, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
 
 // This file handles /api/groups URLs
 
@@ -243,14 +243,15 @@ router.post("/:id/delete", async (req, res) => {//use router.delete??
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/", async (req, res) => {
-  //TODO: add debug mode verification
-  try {
-    const groups = await mongoConnection.getDB().collection("groups").find({}).toArray();
-    return res.status(200).send(createResponse(groups));
-  } catch (e) {
-    console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while reading the database."));
-  }
+  debugRoute(req,res,async (req,res) => {
+    try {
+      const groups = await mongoConnection.getDB().collection("groups").find({}).toArray();
+      return res.status(200).send(createResponse(groups));
+    } catch (e) {
+      console.log(e);
+      return res.status(500).send(createResponse(null, "An error occurred while reading the database."));
+    }
+  });
 });
 
 /**
@@ -262,7 +263,9 @@ router.get("/", async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  debugRoute(req,res,(req,res) => {
+    res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  });
 });
 
 /**
