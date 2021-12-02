@@ -101,5 +101,6 @@ module.exports = {
   isLoggedIn,
   checkPollPublic,
   isEmpty,
-  getResultErrors
+  getResultErrors,
+  inDevMode
 };

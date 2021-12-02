@@ -8,7 +8,7 @@ const Joi = require("joi");
 
 var mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
-const { createResponse, validateID, isEmpty, getResultErrors } = require("../modules/utils"); // object destructuring, only import desired functions
+const { createResponse, validateID, isEmpty, getResultErrors, inDevMode } = require("../modules/utils"); // object destructuring, only import desired functions
 const { userLoginValidator, userInformationValidator, userRegisterValidator, createUser } = require("../models/User.js");
 
 // This file handles /api/users URLs
@@ -1043,14 +1043,18 @@ router.post("/:id/edit", function (req, res) {//TODO RCS BOOL refer to documenta
  * @param {callback} callback - function handler for route
  */
 router.get("/:id", function (req, res, next) {
-  // Gets all user info with the matching userID and stores the info in an array
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  mongoConnection.getDB().collection("users").find({ "_id": id }).toArray(function (err, result) {
-    if (err) {
-      return res.status(500).send(createResponse("", err)); // TODO: Error message
-    }
-    return res.status(200).send(createResponse(result));
-  });
+  if (inDevMode()) {
+      // Gets all user info with the matching userID and stores the info in an array
+    var id = new mongoConnection.getMongo().ObjectID(req.params.id);
+    mongoConnection.getDB().collection("users").find({ "_id": id }).toArray(function (err, result) {
+      if (err) {
+        return res.status(500).send(createResponse("", err)); // TODO: Error message
+      }
+      return res.status(200).send(createResponse(result));
+    });
+  } else {
+    return res.status(400).send(createResponse(null, "Development mode only route"));
+  }
 });
 
 /**

@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
-const {createResponse, validateID} = require("../modules/utils"); // object destructuring, only import desired functions
+const {createResponse, validateID, inDevMode} = require("../modules/utils"); // object destructuring, only import desired functions
 
 // This file handles /api/groups URLs
 
@@ -243,13 +243,16 @@ router.post("/:id/delete", async (req, res) => {//use router.delete??
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/", async (req, res) => {
-  //TODO: add debug mode verification
-  try {
-    const groups = await mongoConnection.getDB().collection("groups").find({}).toArray();
-    return res.status(200).send(createResponse(groups));
-  } catch (e) {
-    console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while reading the database."));
+  if (inDevMode()) {
+    try {
+      const groups = await mongoConnection.getDB().collection("groups").find({}).toArray();
+      return res.status(200).send(createResponse(groups));
+    } catch (e) {
+      console.log(e);
+      return res.status(500).send(createResponse(null, "An error occurred while reading the database."));
+    }
+  } else {
+    return res.status(400).send(createResponse(null, "Development only route"));
   }
 });
 
