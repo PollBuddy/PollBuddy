@@ -97,7 +97,7 @@ var schoolsModule = require("./modules/schoolList.js");
 
 const {createResponse} = require("./modules/utils");
 
-app.get("/api/schools", (req, res) => {
+app.get("/api/schools", (_req, res) => {
   var schools = schoolsModule.getList();
   res.json(schools);
 });
@@ -113,7 +113,7 @@ app.get("/api/schools", (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-app.get("/", function (req, res) {
+app.get("/", function (_req, res) {
   return res.status(200).send(createResponse("Backend is up."));
 });
 
@@ -127,7 +127,7 @@ app.get("/", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-app.get("/api", function (req, res) {
+app.get("/api", function (_req, res) {
   return res.status(200).send(createResponse("Backend is up."));
 });
 
@@ -138,7 +138,7 @@ app.get("/api", function (req, res) {
  * @throws 404 - Not Found
  * @param {function} callback - Function handler for endpoint.
  */
-app.use(function (req, res, next) {
+app.use(function (_req, _res, next) {
   next(createError(404));
 });
 
@@ -154,7 +154,7 @@ app.use(function (req, res, next) {
  * @throws error code of given error, or 500 - server error
  * @param {function} callback - Function handler for endpoint.
  */
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res, _next) {
 
   console.log(err);
 

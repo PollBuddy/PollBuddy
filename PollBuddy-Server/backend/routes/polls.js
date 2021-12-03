@@ -61,7 +61,7 @@ router.post("/new", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/edit", function (req, res) {
+router.get("/:id/edit", function (_req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
@@ -129,7 +129,7 @@ router.post("/:id/edit", async (req, res) => {
   }
   // generate ObjectID for embedded Questions
   if (validResult.value.Questions) {  // check if Questions exists
-    validResult.value.Questions.forEach((o, i, a) => {
+    validResult.value.Questions.forEach((_o, i, a) => {
       a[i]["_id"] = new mongoConnection.getMongo().ObjectID();
     });
   }
@@ -151,7 +151,7 @@ router.post("/:id/edit", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/submit", function (req, res) {
+router.get("/:id/submit", function (_req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
@@ -235,9 +235,9 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
 * @name GET api/polls/pollAnswers
 * @param {function} callback - Function handler for endpoint.
 */
-router.get("/pollAnswers", function (req, res, next) {
+router.get("/pollAnswers", function (req, res, _next) {
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  mongoConnection.getDB().collection("poll_answers").deleteOne({"_id": id}, function (err, res) {
+  mongoConnection.getDB().collection("poll_answers").deleteOne({"_id": id}, function (err, _res) {
     if (err) {
       return res.status(500).send(createResponse("", err)); // TODO: Error message
     }
@@ -253,7 +253,7 @@ router.get("/pollAnswers", function (req, res, next) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/pollAnswers", function (req, res) {
+router.post("/pollAnswers", function (_req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
@@ -265,7 +265,7 @@ router.post("/pollAnswers", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/delete", function (req, res) {
+router.get("/:id/delete", function (_req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
@@ -281,7 +281,7 @@ router.get("/:id/delete", function (req, res) {
  */
 router.post("/:id/delete", function (req, res) {//use router.delete??
   var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  mongoConnection.getDB().collection("polls").deleteOne({"_id": id}, function (err, res) {
+  mongoConnection.getDB().collection("polls").deleteOne({"_id": id}, function (err, _res) {
     if (err) {
       return res.status(500).send(createResponse("", err)); // TODO: Error message;
     }
@@ -303,7 +303,7 @@ router.post("/:id/delete", function (req, res) {//use router.delete??
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/", async (req, res) => {
-  debugRoute(req,res,async (req,res) =>{
+  debugRoute(req,res,async (_req,res) =>{
     try {
       const polls = await mongoConnection.getDB().collection("polls").find({}).toArray();
       return res.status(200).send(createResponse(polls));
@@ -323,7 +323,7 @@ router.get("/", async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/", function (req, res) {
-  debugRoute(req,res,(req,res) => {
+  debugRoute(req,res,(_req,res) => {
     res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
   });
 });
@@ -362,7 +362,7 @@ router.get("/:id", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id", function (req, res) {
+router.post("/:id", function (_req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
@@ -376,7 +376,7 @@ router.post("/:id", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/view", async function (req, res, next) {
+router.get("/:id/view", async function (req, res, _next) {
   const id = await validateID("polls", req.params.id);
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
@@ -421,7 +421,7 @@ router.get("/:id/view", async function (req, res, next) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/view", function (req, res) {
+router.post("/:id/view", function (_req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
@@ -436,7 +436,7 @@ router.post("/:id/view", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/results", async function (req, res, next) {
+router.get("/:id/results", async function (req, res, _next) {
   const id = await validateID("polls", req.params.id);
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
@@ -504,7 +504,7 @@ router.get("/:id/results", async function (req, res, next) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/results", function (req, res) {
+router.post("/:id/results", function (_req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
