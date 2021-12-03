@@ -269,7 +269,7 @@ class AccountInfo extends Component {
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="newPasswordText">New password:</label>
                   <input type={this.state.showPassword ? "text" : "password"} placeholder="••••••••••••" className="form-control textBox" id="newPasswordText" readOnly={this.state.passwordLocked} onChange={this.handleInputChange}/>
-                  <i className="fas fa-eye" onClick={this.showPassword.bind(this)}></i>
+                  <i className="AccountInfo-i fas fa-eye" onClick={this.showPassword.bind(this)}/>
                 </MDBCol>
               </MDBContainer>
             </MDBContainer>
