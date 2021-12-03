@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS } from 'chart.js/auto'
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
@@ -16,6 +17,7 @@ export default class PollResults extends Component {
         labels: [],
         datasets: [
           {
+            label: "Number of Votes",
             data: [],
             backgroundColor: [
               "rgba(255, 134, 159, 0.5)", // TODO: These need to be generated in some way
@@ -54,20 +56,23 @@ export default class PollResults extends Component {
             {
               barPercentage: 1,
               gridLines: {
-                display: false,
+                gridLines: {
+                  display: true,
+                  color: "rgba(255, 255, 255, 0.9)"
+                }
               },
               ticks: {
                 fontColor: "white",
                 fontSize: 20,
                 fontFamily: 'Baloo 2',
-              }
+              },
             }
           ],
           yAxes: [
             {
               gridLines: {
                 display: true,
-                color: "rgba(255, 255, 255, 0.5)"
+                color: "rgba(255, 255, 255, 0.9)"
               },
               ticks: {
                 beginAtZero: true,
