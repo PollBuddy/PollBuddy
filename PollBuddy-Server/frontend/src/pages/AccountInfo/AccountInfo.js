@@ -184,7 +184,7 @@ class AccountInfo extends Component {
         userName: userInput,
         email: emailInput,
         password: undefined,
-        logOutEverywhere: Boolean
+        logOutEverywhere: this.state.logOutEverywhere
       })
     }).then(response => {
       console.log(response);
@@ -199,8 +199,8 @@ class AccountInfo extends Component {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: {
-        Password: String,
-        logOutEverywhere: Boolean
+        password: this.state.password, // TODO: needs to be verified to function
+        logOutEverywhere: this.state.logOutEverywhere
       }
     }).then(response => {
       console.log(response);
@@ -267,7 +267,7 @@ class AccountInfo extends Component {
 
             <div id="AccountInfo-logOutEverywhere" style={this.state.changePassword ? {display: "flex"} : {display: "none"}}>
               <input type="checkbox" onChange={this.handleLogOutEverywhere} className="logOutBox" id="logOutEverywhere" checked={this.logOutEverywhere}/>
-              <label className="logOutLabel" for="logOutEverywhere">Log out Everywhere</label>
+              <label className="logOutLabel" for="logOutEverywhere">Log out everywhere?</label>
             </div>
           
             { /* TODO: Update this to have a backend call instead of a "to", plus some result popup */ }
