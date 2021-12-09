@@ -3,6 +3,8 @@ import Autocomplete from "react-autocomplete";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 
+let schoolLinkDict = {};
+
 const sortItems = (itemA, itemB, value) => {
   const lowA = itemA.label.toLowerCase();
   const lowB = itemB.label.toLowerCase();
@@ -24,7 +26,7 @@ const renderDropdownItem = (item) => (
 export default ({ value, onChange, onSelect}) => {
   // Create reactive variables
   var [schools, setSchools] = useState([]);
-  var [schoolLinkDict, setLinkDict] = useState({});
+  var [localSchoolLinkDict, setLinkDict] = useState({});
 
   // On mount
   useEffect(() => {
