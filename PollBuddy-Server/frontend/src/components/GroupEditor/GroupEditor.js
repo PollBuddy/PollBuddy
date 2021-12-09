@@ -9,7 +9,7 @@ import ErrorText from "../ErrorText/ErrorText";
 //allows the user to edit an existing class. Pass new=true into props if you want to use the new version of the component
 //and pass new=false if you want to use the edit version
 export default class GroupEditor extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.onInput = this.onInput.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -28,16 +28,16 @@ export default class GroupEditor extends Component {
     };
 
     //we only need to read data from the backend if the component is in edit mode
-    if(!this.props.new) {
+    if (!this.props.new) {
       this.getInitialData();
-    }else{
+    } else {
       //if the component is in create mode, don't show the loading indicator since we don't have to fetch anything from
       //the backend
       this.state["loadingon"] = false;
     }
   }
 
-  async getInitialData(){
+  async getInitialData() {
     //once the component is created, fetch the data from the given group from the backend
     //get the info for the specific id in props from the json
     let response = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.id + "/");
@@ -71,36 +71,36 @@ export default class GroupEditor extends Component {
 
   async onSubmit() {
     //hide the error message if it was showing
-    this.setState({showError: false});
+    this.setState({ showError: false });
     //create new group or edit group based on the given mode and data in state
     let response = await fetch(this.getAPIURL(), {
       method: "POST",
       headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
       body: JSON.stringify(this.getAPIJSON())
     });
-    if(response.status === 200){
-      if(this.props.new){
+    if (response.status === 200) {
+      if (this.props.new) {
         //if the component is in new mode, redirect the user to the group's page
         //TODO get id from backend and add it to props
-        this.setState({redirectToGroup: true, id: "temporary"});
+        this.setState({ redirectToGroup: true, id: "temporary" });
       }
-    }else{
+    } else {
       //let user know that something went wrong
-      this.setState({showError: true});
+      this.setState({ showError: true });
     }
   }
 
   //get the correct api url based on whether we're in create mode or not
-  getAPIURL(){
+  getAPIURL() {
     return this.props.new ?
-    //api/groups/new allows us to create a new entry
+      //api/groups/new allows us to create a new entry
       process.env.REACT_APP_BACKEND_URL + "/groups/new" :
-    //api/groups/groupID/edit allows us to edit an entry
+      //api/groups/groupID/edit allows us to edit an entry
       process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.id + "/edit";
   }
 
   //get the correct api json based on whether we're in create mode or not
-  getAPIJSON(){
+  getAPIJSON() {
     return this.props.new ?
       {
         Name: this.state.name,
@@ -121,7 +121,7 @@ export default class GroupEditor extends Component {
   }
 
   checkError() {
-    return this.state.showError ? <ErrorText/> : null;
+    return this.state.showError ? <ErrorText /> : null;
   }
 
   render() {
@@ -129,13 +129,13 @@ export default class GroupEditor extends Component {
     if (this.state.redirectToGroup) {
       return <Redirect to={`/groups/${this.state.id}/polls`} />;
     }
-    if(this.state.loadingon === true){
+    if (this.state.loadingon === true) {
       return (
         <MDBContainer>
-          <LoadingWheel/>
+          <LoadingWheel />
         </MDBContainer>
       );
-    }else{
+    } else {
       return (
         <MDBContainer fluid className="box">
           <MDBContainer className="form-group">
@@ -144,12 +144,12 @@ export default class GroupEditor extends Component {
               name="name"
               id="groupName"
               className="form-control textBox"
-              value={this.props.new ? null: this.state.name}
+              value={this.props.new ? null : this.state.name}
               onInput={this.onInput} />
           </MDBContainer>
           {this.checkError()}
           <button className="button" onClick={this.onSubmit}>
-            {this.props.new ? "Create Group": "Save Changes"}
+            {this.props.new ? "Create Group" : "Save Changes"}
           </button>
         </MDBContainer>
       );

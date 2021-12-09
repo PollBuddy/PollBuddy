@@ -4,8 +4,8 @@ import { MDBContainer } from "mdbreact";
 import GroupEditor from "../../components/GroupEditor/GroupEditor";
 
 export default class GroupCreation extends Component {//this class will likely need to call Groups/new and do more with that...
-  componentDidMount(){
-  this.props.updateTitle("Group Creation");
+  componentDidMount() {
+    this.props.updateTitle("Group Creation");
     this.props.updateTitle("My Groups");
     fetch("/me/groups").then((res) => res.json()).then((json) => {
       this.setState({ adminGroups: json["data"]["admin"] });
@@ -25,7 +25,7 @@ export default class GroupCreation extends Component {//this class will likely n
     return (
       <MDBContainer className="page">
         {/*set new to true so we can use the creation version of the class editor component*/}
-        <GroupEditor new={true}/>
+        <GroupEditor new={true} />
       </MDBContainer>
     );
   }
