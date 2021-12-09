@@ -41,11 +41,15 @@ export default class Groups extends Component {
   }
 
   componentDidMount() {
+    // Update title variable
     this.props.updateTitle("My Groups");
+    // Fetch from /me/group. On success break down json
     fetch("/me/groups").then((res) => res.json()).then((json) => {
+      // Set admin and member groups to corresponding
       this.setState({ adminGroups: json["data"]["admin"] });
       this.setState({ memberGroups: json["data"]["member"] });
     }).catch(() => {
+      // On error redirect
       this.setState({ redirect: true });
     });
   }
@@ -74,6 +78,7 @@ export default class Groups extends Component {
 
   render() {
     const { showXs } = this.state;
+    // If redirect go to login page
     if(this.state.redirect) {
       return <Redirect to='/login'  />;
     }
