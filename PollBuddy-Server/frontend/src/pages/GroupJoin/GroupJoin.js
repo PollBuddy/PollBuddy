@@ -3,15 +3,15 @@ import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 
 export default class GroupJoin extends Component {//this class will likely need to call Groups/new and do more with that...
-  componentDidMount(){
+  componentDidMount() {
     this.props.updateTitle("Join Group");
-      this.props.updateTitle("My Groups");
-      fetch("/me/groups").then((res) => res.json()).then((json) => {
-        this.setState({ adminGroups: json["data"]["admin"] });
-        this.setState({ memberGroups: json["data"]["member"] });
-      }).catch(() => {
-        this.setState({ redirect: true });
-      });
+    this.props.updateTitle("My Groups");
+    fetch("/me/groups").then((res) => res.json()).then((json) => {
+      this.setState({ adminGroups: json["data"]["admin"] });
+      this.setState({ memberGroups: json["data"]["member"] });
+    }).catch(() => {
+      this.setState({ redirect: true });
+    });
   }
 
   constructor() {
@@ -31,11 +31,11 @@ export default class GroupJoin extends Component {//this class will likely need 
   }
 
   handleEnterCode = () => {
-    this.setState({showConfirm: true});
+    this.setState({ showConfirm: true });
   }
 
   handleChange = (e) => {
-    this.setState({groupCode: e.target.value});
+    this.setState({ groupCode: e.target.value });
   }
 
   handleConfirmationResponse(response) {
@@ -51,18 +51,18 @@ export default class GroupJoin extends Component {//this class will likely need 
     return (
       <MDBContainer className="page">
         <MDBContainer fluid className="box">
-          { this.state.showConfirm
+          {this.state.showConfirm
             ?
             <MDBContainer className="form-group">
               <p>Are you sure you want to join this group?</p>
-              <input onClick={this.handleConfirmationResponse.bind(this, false)} className="btn button float-left" type="submit" value="No"/>
-              <input onClick={this.handleConfirmationResponse.bind(this, true)} className="btn button float-right" type="submit" value="Yes"/>
+              <input onClick={this.handleConfirmationResponse.bind(this, false)} className="btn button float-left" type="submit" value="No" />
+              <input onClick={this.handleConfirmationResponse.bind(this, true)} className="btn button float-right" type="submit" value="Yes" />
             </MDBContainer>
             :
             <MDBContainer className="form-group">
               <label>Please enter your group code:</label>
-              <input className="form-control textBox" type="text" name="groupCode" onChange={this.handleChange}/>
-              <input onClick={this.handleEnterCode} className="btn button float-right" type="submit" value="OK"/>
+              <input className="form-control textBox" type="text" name="groupCode" onChange={this.handleChange} />
+              <input onClick={this.handleEnterCode} className="btn button float-right" type="submit" value="OK" />
             </MDBContainer>
           }
         </MDBContainer>
