@@ -39,6 +39,7 @@ export default class Groups extends Component {
     //localStorage.removeItem("loggedIn");//todo if admin -- more specifically make diff states if the user who logged in is an admin... or teacher. wouldn't want teacher accessing user things or vice versa...
     //Redirect("/login");
   }
+
   componentDidMount() {
     this.props.updateTitle("My Groups");
     fetch("/me/groups").then((res) => res.json()).then((json) => {
