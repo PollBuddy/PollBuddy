@@ -20,17 +20,22 @@ const renderDropdownItem = (item) => (
   </div>
 );
 
+// Default Component
 export default ({ value, onChange, onSelect}) => {
+  // Create reactive variables
   var [schools, setSchools] = useState([]);
   var [schoolLinkDict, setLinkDict] = useState({});
 
+  // On mount
   useEffect(() => {
+    // Fetch from schools route then unwrap json
     fetch(process.env.REACT_APP_BACKEND_URL + "/schools", {
       method: "GET",
       headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
     }).then(response => response.json())
       // handle response
       .then(data => {
+        // set schools and data accordingly
         console.log(data); // for testing, can be deleted later
         for (var i = 0; i < data.length; i++) {
           setSchools(schools.push({ key: i, label: data[i][0] }));
