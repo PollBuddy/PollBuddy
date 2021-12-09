@@ -1,10 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Autocomplete from "react-autocomplete";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-
-var schools = [];
-var schoolLinkDict = {};
 
 const sortItems = (itemA, itemB, value) => {
   const lowA = itemA.label.toLowerCase();
@@ -24,6 +21,9 @@ const renderDropdownItem = (item) => (
 );
 
 export default ({ value, onChange, onSelect}) => {
+  var [schools, setSchools] = useState([]);
+  var [schoolLinkDict, setLinkDict] = useState({});
+
   useEffect(() => {
     fetch(process.env.REACT_APP_BACKEND_URL + "/schools", {
       method: "GET",
@@ -33,8 +33,9 @@ export default ({ value, onChange, onSelect}) => {
       .then(data => {
         console.log(data); // for testing, can be deleted later
         for (var i = 0; i < data.length; i++) {
-          schools.push({ key: i, label: data[i][0] });
+          setSchools(schools.push({ key: i, label: data[i][0] }));
           schoolLinkDict[data[i][0]] = data[i][1];
+          setLinkDict(schoolLinkDict);
         }
         console.log(schools); // for testing, can be deleted later
         console.log(schoolLinkDict); // for testing, can be deleted later
