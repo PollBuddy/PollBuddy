@@ -1,10 +1,9 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import {withRouter} from "react-router-dom";
+import {withRouter, Redirect} from "react-router-dom";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import {Redirect} from "react-router-dom";
 const Joi = require('joi');
 
 class RegisterWithSchoolStep2 extends Component {
