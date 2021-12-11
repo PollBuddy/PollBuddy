@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import {withRouter} from "react-router-dom";
+import {Redirect, withRouter} from "react-router-dom";
 const Joi = require('joi');
 
 class RegisterWithPollBuddy extends Component {
@@ -19,6 +19,7 @@ class RegisterWithPollBuddy extends Component {
       passValid: true,
       firstnameValid: true,
       lastnameValid: true,
+      registrationSuccessful: false
     };
   }
 
@@ -83,33 +84,29 @@ class RegisterWithPollBuddy extends Component {
         email: this.state.email.toLowerCase(),
         password: this.state.password
       })
-    }).then(response => response.text())
-      .then(response => {
-        // the backend api (user/register) has three return values:
-        // 1. an error array: {firstname: "Invalid firstname format!", lastname: "Invalid lastname format!"}
-        // 2. a string: Exists, which means the email address has already been registered
-        // 3. status 203: everything is ok
-
-        // print and check the response for debugging (can be deleted later)
-        console.log(response);
-        if (response === "Exists") {
-          this.setState({emailExists: true});
-        } else {
-          try {
-            let result2 = JSON.parse(response);
-            console.log("You have following errors:");
-            console.log(result2);
-          } catch(e) {
-            localStorage.setItem("loggedIn", true);
-            // redirect to groups page
-            return <Redirect to="/groups" push={true}/>;
-          } 
-        }
-      });
+    }).then(response => {
+      if (response.status === 200) {
+        //needs some authentication before and if authentication passes then set local storage and such refer to GroupCreation page to see the way to make POST requests to the backend
+        localStorage.setItem("loggedIn", true);
+        this.setState({registrationSuccessful: true});
+        // TODO: firstName, lastName, and userName are returned. They should probably be stored.
+      } else {
+        // TODO: This needs to be handled
+      }
+    }).catch(err => {
+      console.log(err);
+      this.setState({error: "An error occurred during login. Please try again"});
+    });
   }
 
   render() {
     this.handleRegister = this.handleRegister.bind(this);
+
+    if(this.state.registrationSuccessful) {
+      return (
+        <Redirect to="/groups" />
+      );
+    }
 
     return (
       <MDBContainer fluid className="page">

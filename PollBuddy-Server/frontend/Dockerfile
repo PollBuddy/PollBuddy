@@ -2,7 +2,7 @@
 # dev mode. This grants us a few optimizations desirable in a production environment.
 
 # Build Stage 1 - Used to transpile and minimize
-FROM node:current AS builder
+FROM node:16 AS builder
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -22,7 +22,12 @@ RUN npm ci --only=production
 COPY public ./public
 COPY src ./src
 # Files
-COPY .env ./
+# copy both the example file and any existing custom .env 
+COPY .env* ./
+# attempt to move the example .env to the name ".env"
+# if .env is already there, this fails and the custom instance is used
+# if not, the example instance is used
+RUN ["mv","-n", ".env.example", ".env"]
 
 # Build command
 RUN npm run build
@@ -30,7 +35,12 @@ RUN npm run build
 
 
 # Build Stage 2 - Run previously built files
-FROM node:current-alpine
+FROM node:16-alpine
+
+# Install curl
+RUN apk --no-cache add curl
+
+# Create app directory
 WORKDIR /usr/src/app/
 
 # Install serve to serve the files
@@ -44,3 +54,7 @@ EXPOSE 3000
 
 # Start command
 CMD ["serve", "-s", "build", "-l", "3000"]
+
+# Health Check
+HEALTHCHECK --interval=15s --timeout=3s \
+  CMD curl -f http://localhost:3000 || exit 1
