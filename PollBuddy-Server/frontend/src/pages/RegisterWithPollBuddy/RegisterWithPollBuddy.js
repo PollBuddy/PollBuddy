@@ -25,13 +25,13 @@ class RegisterWithPollBuddy extends Component {
       showPassword: false
     };
 
-    this.showPassword = this.showPassword.bind(this)
+    this.showPassword = this.showPassword.bind(this);
   }
 
   showPassword() {
     this.setState({
       showPassword: !this.state.showPassword
-    })
+    });
   }
 
   componentDidMount() {
@@ -159,7 +159,7 @@ class RegisterWithPollBuddy extends Component {
             <label htmlFor="passwordText">Password:</label>
             <p class="password_container">
               <input type={this.state.showPassword ? "text" : "password"} placeholder="••••••••••••" className="form-control textBox" id="passwordText"
-              onChange= {(evt) => { this.setState({password: evt.target.value}); }}/>
+                onChange= {(evt) => { this.setState({password: evt.target.value}); }}/>
               <i class="fas fa-eye" onClick={this.showPassword}></i>
             </p>
             
