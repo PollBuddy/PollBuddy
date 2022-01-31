@@ -601,10 +601,7 @@ router.post("/logout", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/me", async function (req, res) {
-  if (!isLoggedIn(req)) {
-    return res.status(400).send(createResponse(null, "Error: User not logged in."));
-  }
+router.get("/me", promote(isLoggedIn), async function (req, res) {
   let response = await getUser(req.session.userData.userID);
   return res.status(response[0]).send(response[1]);
 });
@@ -647,10 +644,7 @@ router.get("/me/edit", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route 
  */
-router.post("/me/edit", async function (req, res) {
-  if (!isLoggedIn(req)) {
-    return res.status(400).send(createResponse(null, "Error: User not logged in."));
-  }
+router.post("/me/edit", promote(isLoggedIn), async function (req, res) {
   let response = await editUser(req.session.userData.userID, req.body);
   return res.status(response[0]).send(response[1]);
 });
@@ -665,8 +659,7 @@ router.post("/me/edit", async function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/me/groups", async function (req, res) {
-  // TODO: Reimplement login check
+router.get("/me/groups", promote(isLoggedIn), async function (req, res) {
   let response = await getUserGroups(req.session.userData.userID);
   return res.status(response[0]).send(response[1]);
 });
