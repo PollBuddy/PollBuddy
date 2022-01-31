@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 
 import {Link, withRouter} from "react-router-dom";
-import './ResetPassword.scss';
+import "./ResetPassword.scss";
 
 import "mdbreact/dist/css/mdb.css";
 
