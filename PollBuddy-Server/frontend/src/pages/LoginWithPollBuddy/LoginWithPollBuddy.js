@@ -3,7 +3,7 @@ import {Redirect} from "react-router-dom";
 import "mdbreact/dist/css/mdb.css";
 import "./LoginWithPollBuddy.scss";
 import { MDBContainer } from "mdbreact";
-const Joi = require('joi');
+const Joi = require("joi");
 
 export default class LoginWithPollBuddy extends Component {
 
@@ -37,15 +37,15 @@ export default class LoginWithPollBuddy extends Component {
   handleLogin() {
     const schema = Joi.object({
       username: Joi.string()
-        .pattern(new RegExp('^(?=.{3,32}$)[a-zA-Z0-9\-._]+$'))
-        .error(new Error('Please enter a valid username or email.')),
+        .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$"))
+        .error(new Error("Please enter a valid username or email.")),
       email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2}).max(320)
-        .error(new Error('Please enter a valid username or email.')),
+        .error(new Error("Please enter a valid username or email.")),
       password: Joi.string()
-        .pattern(new RegExp('^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$'))
-        .pattern(new RegExp('^.*[0-9].*$'))
-        .pattern(new RegExp('^.*[A-Z].*$'))
-        .error(new Error('Please enter a valid password.')),
+        .pattern(new RegExp("^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$"))
+        .pattern(new RegExp("^.*[0-9].*$"))
+        .pattern(new RegExp("^.*[A-Z].*$"))
+        .error(new Error("Please enter a valid password.")),
     });
     //we need to validate each separately because either username or email could work
     const validUsername = schema.validate({ username: this.state.userNameEmail });

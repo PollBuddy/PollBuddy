@@ -4,7 +4,7 @@ import "mdbreact/dist/css/mdb.css";
 import {withRouter, Redirect} from "react-router-dom";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-const Joi = require('joi');
+const Joi = require("joi");
 
 class RegisterWithSchoolStep2 extends Component {
   constructor(props) {
@@ -60,18 +60,18 @@ class RegisterWithSchoolStep2 extends Component {
     // do input validation
     const schema = Joi.object({
       username: Joi.string()
-        .pattern(new RegExp('^(?=.{3,32}$)[a-zA-Z0-9\-._]+$'))
-        .error(new Error('Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.')),
+        .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$"))
+        .error(new Error("Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.")),
       email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2}).max(320)
-        .error(new Error('Invalid email format.')),
+        .error(new Error("Invalid email format.")),
       firstname: Joi.string()
         .min(1)
         .max(256)
-        .error(new Error('First name must be between 1 and 256 characters.')),
+        .error(new Error("First name must be between 1 and 256 characters.")),
       lastname: Joi.string()
-        .allow('')
+        .allow("")
         .max(256)
-        .error(new Error('Last name must be less than 256 characters.')),
+        .error(new Error("Last name must be less than 256 characters.")),
     });
     var userNameValid = schema.validate({ username: this.state.username });
     var emailValid = schema.validate({ email: this.state.email });
