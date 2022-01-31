@@ -37,7 +37,7 @@ class AccountInfo extends Component {
       done: false,
       error: false,
       errorMessage: "Error: Unkown Error",
-      showPassword: false
+      showPassword: false,
       logOutEverywhere: false
     };
     this.changePassword = this.handleToggleClick.bind(this);
