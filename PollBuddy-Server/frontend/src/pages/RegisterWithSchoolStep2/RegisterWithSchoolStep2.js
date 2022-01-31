@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import {withRouter} from "react-router-dom";
+import {withRouter, Redirect} from "react-router-dom";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 const Joi = require('joi');
@@ -116,7 +116,7 @@ class RegisterWithSchoolStep2 extends Component {
             localStorage.setItem("lastName", response.data.lastName);
             localStorage.setItem("userName", response.data.userName);
             // Redirect to groups page
-            this.props.history.push("/groups");
+            return <Redirect to="/groups" push={true}/>;
           } else {
             // Something went wrong, handle it
 

@@ -47,12 +47,12 @@ export default class LoginWithSchoolStep2 extends Component {
         console.log("Error: " + this.state.error);
         alert("Error: You are not registered! Redirecting to registration page...");
         // Redirect to register page
-        return (<Redirect to="/register/school" />);
+        return (<Redirect to="/register/school" push={true}/>);
       } else if(this.state.error === "User has not logged in with RPI."){
         console.log("Error: " + this.state.error);
         alert("Error: Something went wrong with the school login process. Please try again, redirecting to login page...");
         // Redirect to login page
-        return (<Redirect to="/login/school" />);
+        return (<Redirect to="/login/school" push={true}/>);
       } else { //database error - show the ErrorText component
         alert("Error: Something went wrong. Details: " + this.state.error);
         return ( //for some reason, this only shows up after clicking submit twice
@@ -73,7 +73,7 @@ export default class LoginWithSchoolStep2 extends Component {
       localStorage.setItem("userName", this.state.userName);
 
       console.log("everything worked; redirecting to /groups");
-      return (<Redirect to="/groups" />);
+      return (<Redirect to="/groups" push={true}/>);
     }
   }
 }

@@ -100,7 +100,7 @@ export default class LoginWithPollBuddy extends Component {
 
     if(this.state.successfulLogin) { // Basically redirect if the person is logged in or if their login succeeds
       return (
-        <Redirect to="/groups" />
+        <Redirect to="/groups" push={true}/>
       );
     }
     return (
