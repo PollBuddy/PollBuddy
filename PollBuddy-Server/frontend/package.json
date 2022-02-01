@@ -8,8 +8,10 @@
     "@fortawesome/react-fontawesome": "^0.1.15",
     "autosize": "^5.0.1",
     "chart.js": "^3.6.1",
+    "cross-fetch": "^3.1.5",
     "joi": "^17.4.2",
     "mdbreact": "^5.1.0",
+    "node-fetch": "^3.2.0",
     "react": "^17.0.2",
     "react-autocomplete": "^1.8.1",
     "react-chartjs-2": "^4.0.0",
@@ -25,7 +27,7 @@
     "start": "react-scripts start",
     "docker-start": "CI=true react-scripts start",
     "build": "react-scripts build",
-    "test": "jest",
+    "test": "jest --silent",
     "eject": "react-scripts eject",
     "lint": "npx eslint src"
   },
@@ -42,6 +44,7 @@
     ]
   },
   "devDependencies": {
+    "jest-fetch-mock": "^3.0.3",
     "jquery": "^3.6.0",
     "react-test-renderer": "^17.0.2"
   }
