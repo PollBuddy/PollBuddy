@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import {Redirect, withRouter} from "react-router-dom";
+import "./RegisterWithPollBuddy.scss";
+
 const Joi = require('joi');
 
 class RegisterWithPollBuddy extends Component {
@@ -19,8 +21,17 @@ class RegisterWithPollBuddy extends Component {
       passValid: true,
       firstnameValid: true,
       lastnameValid: true,
-      registrationSuccessful: false
+      registrationSuccessful: false,
+      showPassword: false
     };
+
+    this.showPassword = this.showPassword.bind(this);
+  }
+
+  showPassword() {
+    this.setState({
+      showPassword: !this.state.showPassword
+    });
   }
 
   componentDidMount() {
@@ -31,26 +42,26 @@ class RegisterWithPollBuddy extends Component {
     // do input validation
     const schema = Joi.object({
       username: Joi.string()
-        .pattern(new RegExp('^(?=.{3,32}$)[a-zA-Z0-9\-._]+$'))
-        .error(new Error('Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.')),
+        .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$"))
+        .error(new Error("Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.")),
       email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2})
         .max(320)
-        .error(new Error('Invalid email format.')),
+        .error(new Error("Invalid email format.")),
       password: Joi.string()
-        .pattern(new RegExp('^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$'))
-        .pattern(new RegExp('^.*[0-9].*$'))
-        .pattern(new RegExp('^.*[A-Z].*$'))
-        .error(new Error('Invalid password. Must contain 10 or more characters, ' +
-          'at least 1 uppercase letter, and at least 1 number. ' +
-          'Cannot have 4 of the same characters in a row.')),
+        .pattern(new RegExp("^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$"))
+        .pattern(new RegExp("^.*[0-9].*$"))
+        .pattern(new RegExp("^.*[A-Z].*$"))
+        .error(new Error("Invalid password. Must contain 10 or more characters, " +
+          "at least 1 uppercase letter, and at least 1 number. " +
+          "Cannot have 4 of the same characters in a row.")),
       firstname: Joi.string()
         .min(1)
         .max(256)
-        .error(new Error('First name must be between 1 and 256 characters.')),
+        .error(new Error("First name must be between 1 and 256 characters.")),
       lastname: Joi.string()
-        .allow('')
+        .allow("")
         .max(256)
-        .error(new Error('Last name must be less than 256 characters.')),
+        .error(new Error("Last name must be less than 256 characters.")),
     });
 
     var userValid = schema.validate({ username: this.state.username });
@@ -146,8 +157,12 @@ class RegisterWithPollBuddy extends Component {
               <p style={{color: "red"}}> A user with this email already exists. </p>
             }
             <label htmlFor="passwordText">Password:</label>
-            <input type="password" placeholder="••••••••••••" className="form-control textBox" id="passwordText"
-              onChange= {(evt) => { this.setState({password: evt.target.value}); }}/>
+            <p class="password_container">
+              <input type={this.state.showPassword ? "text" : "password"} placeholder="••••••••••••" className="form-control textBox" id="passwordText"
+                onChange= {(evt) => { this.setState({password: evt.target.value}); }}/>
+              <i class="fas fa-eye" onClick={this.showPassword}></i>
+            </p>
+            
             {this.state.passValid.error &&
               <p style={{color: "red"}}>{ this.state.passValid.error.toString() }</p>
             }

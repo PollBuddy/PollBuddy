@@ -10,7 +10,7 @@
       text-align: center;
     }
   }
-  
+
   #AccountInfo-passwordChange {
     padding: 0;
     margin: 10px 0;
@@ -20,16 +20,15 @@
     text-align: center;
 
     &:hover {
-        text-decoration: none;
+      text-decoration: none;
     }
   }
-  
+
   #AccountInfo-saveChanges {
     text-align: center;
   }
 
   #AccountInfo-changePasswordInputs {
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -39,12 +38,10 @@
     label {
       text-align: center;
     }
-  
   }
 }
 
-
-@media only screen and (min-width:992px) {
+@media only screen and (min-width: 992px) {
   .AccountInfo-accountInputs {
     display: flex;
     justify-content: flex-start;
@@ -61,7 +58,7 @@
     margin: 0 3rem 0 3rem;
     width: 50%;
   }
- 
+
   #AccountInfo-passwordChange {
     padding: 7px 15px;
     text-decoration: underline;
@@ -69,10 +66,21 @@
     margin: 0;
     text-align: left;
   }
- 
+
   #AccountInfo-saveChanges {
     width: 100%;
-    text-align: right;
+    text-align: center;
+  }
+
+  #AccountInfo-logOutEverywhere {
+    .logOutBox {
+      height: 25px;
+      width: 25px;
+      cursor: pointer;
+    }
+    .logOutLabel {
+      display: inline-block;
+    }
   }
 }
 
