@@ -20,7 +20,7 @@ export default class Homepage extends Component {
   }
 
   render() {
-    const isLoggedIn = localStorage.getItem("loggedIn") === "true"
+    const isLoggedIn = localStorage.getItem("loggedIn") === "true";
     return (
       <MDBContainer fluid className="page">
         <img src={logo} alt="logo" className="Homepage-logo img-fluid" />
