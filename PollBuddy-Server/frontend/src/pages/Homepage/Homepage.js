@@ -39,6 +39,16 @@ export default class Homepage extends Component {
                 </Link>
               </MDBContainer>
             }
+            {isLoggedIn &&
+              <MDBContainer>
+                <Link to={"/account"}>
+                  <button className = "button">My Account</button>
+                </Link>
+                <Link to={"/groups"}>
+                  <button className = "button">My Groups</button>
+                </Link>
+              </MDBContainer>
+            }
           </MDBContainer>
           <PollCode/>
         </MDBContainer>
