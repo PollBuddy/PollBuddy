@@ -20,6 +20,7 @@ export default class Homepage extends Component {
   }
 
   render() {
+    const isLoggedIn = localStorage.getItem("loggedIn") === "true"
     return (
       <MDBContainer fluid className="page">
         <img src={logo} alt="logo" className="Homepage-logo img-fluid" />
@@ -28,14 +29,16 @@ export default class Homepage extends Component {
             <p>
               Poll Buddy is an interactive questionnaire platform that aims to be an enjoyable and easy to use way to collect answers and insights from a group of people.
             </p>
-            <MDBContainer>
-              <Link to={"/login"}>
-                <button className = "button">Login</button>
-              </Link>
-              <Link to={"/register"}>
-                <button className = "button">Register</button>
-              </Link>
-            </MDBContainer>
+            {!isLoggedIn &&
+              <MDBContainer>
+                <Link to={"/login"}>
+                  <button className = "button">Login</button>
+                </Link>
+                <Link to={"/register"}>
+                  <button className = "button">Register</button>
+                </Link>
+              </MDBContainer>
+            }
           </MDBContainer>
           <PollCode/>
         </MDBContainer>
