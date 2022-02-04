@@ -3,6 +3,7 @@ import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 import Question from "../../components/Question/Question";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import {useParams} from "react-router-dom";
 
 export default class PollViewer extends Component {
 
@@ -18,9 +19,11 @@ export default class PollViewer extends Component {
   componentDidMount(){
     this.props.updateTitle("Poll Viewer");
 
-    console.log(this.props.match.params.pollID);
+    const {pollID} = useParams();
 
-    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.match.params.pollID + "/view", {
+    console.log(pollID);
+
+    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + pollID + "/view", {
       method: "GET"
     })
       .then(response => {

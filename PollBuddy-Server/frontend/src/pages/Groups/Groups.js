@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Link, Redirect} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
 import { MDBContainer } from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import "../../styles/main.scss";
@@ -76,7 +76,7 @@ export default class Groups extends Component {
   render() {
     const { showXs } = this.state;
     if(this.state.redirect) {
-      return <Redirect to='/login'  />;
+      return <Navigate to='/login'  />;
     }
     if(this.state.error != null){
       return (

@@ -1,5 +1,5 @@
 import React from "react";
-import {BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
+import {BrowserRouter, Route, Routes, Navigate} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 
 import Group from "./pages/Groups/Groups";
@@ -72,57 +72,39 @@ export default class App extends React.Component {
             We will likely want to nest a lot of these later, this link has some details how
           */}
 
-          <Switch>
+          <Routes>
 
             {/* --- Main Site Pages --- */}
 
             {/* Home Page */}
-            <Route exact path="/">
-              <Homepage updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/" element={<Homepage updateTitle={this.updateTitle} />} />
 
             {/* About Poll Buddy Page */}
-            <Route exact path="/about">
-              <About updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/about" element={<About updateTitle={this.updateTitle} />} />
 
             {/* Contact Us Page */}
-            <Route exact path="/contact">
-              <Contact updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/contact" element={<Contact />} />
 
             {/* Frequently Asked Questions (FAQ) Page */}
-            <Route exact path="/faq">
-              <FAQ updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/faq" element={<FAQ updateTitle={this.updateTitle} />}/>
 
             {/* Data Privacy Page */}
-            <Route exact path="/privacy">
-              <Privacy updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/privacy" element={<Privacy updateTitle={this.updateTitle} />} />
 
             {/* Enter Poll Code Page */}
-            <Route exact path="/code">
-              <Code updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/code" element={<Code updateTitle={this.updateTitle} />} />
 
 
             {/* --- Group Pages --- */}
 
             {/* My Groups Page */}
-            <Route exact path="/groups">
-              <Group updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/groups" element={<Group updateTitle={this.updateTitle} />}/>
 
             {/* Group Creation Page */}
-            <Route exact path="/groups/new">
-              <GroupCreation updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/groups/new" element={<GroupCreation updateTitle={this.updateTitle} />}/>
 
             {/* Group's Polls Page */}
-            <Route exact path="/groups/:groupID/polls">
-              <GroupPolls updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/groups/:groupID/polls" element={<GroupPolls updateTitle={this.updateTitle} />}/>
 
             {/* Group Edit Page */}
             {/*use the render function so that we can retrieve :groupID from inside the component*/}
@@ -131,31 +113,23 @@ export default class App extends React.Component {
             />
 
             {/* Group Join Page */}
-            <Route exact path="/groups/join">
-              <GroupJoin updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/groups/join" element={<GroupJoin updateTitle={this.updateTitle} />}/>
 
 
             {/* --- Poll Pages --- */}
 
             {/* My Poll Histories Page */}
             {/* This route (and any others that route through /polls/that are not polls)
-                need to be lsited BEFORE the Poll ID Redirect to ensure they are not
+                need to be listed BEFORE the Poll ID Redirect to ensure they are not
                 treated like a :pollID */}
-            <Route exact path="/polls/history">
-              <PollHistory updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/polls/history" element={<PollHistory updateTitle={this.updateTitle} />}/>
 
             {/* Poll ID Redirect */}
             {/* Redirects from poll ID page (404) to view page */}
-            <Route exact path="/polls/:pollID"
-              render={ (props) => (<Redirect to={"/polls/"+ props.match.params.pollID + "/view"} push={true}/>)}
-            />
+            <Route exact path="/polls/:pollID" element={<Navigate to={"view"} push={true}/>}/>
 
             {/* Poll Viewer Page */}
-            <Route exact path="/polls/:pollID/view"
-              render={ (props) => (<PollViewer {...props} updateTitle={this.updateTitle} />) }
-            />
+            <Route exact path="/polls/:pollID/view" element={<PollViewer updateTitle={this.updateTitle} />}/>
 
             {/* Poll Editor Page */}
             <Route exact path="/polls/:pollID/edit"
@@ -163,9 +137,7 @@ export default class App extends React.Component {
             />
 
             {/* Poll Manager Page */}
-            <Route exact path="/polls/:pollID/manage">
-              <PollManager updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/polls/:pollID/manage" element={<PollManager updateTitle={this.updateTitle} />}/>
 
             {/* Poll Results Page */}
             {/*use the render function so that we can retrieve :groupID from inside the component*/}
@@ -176,34 +148,24 @@ export default class App extends React.Component {
             {/* Question Ended Page */}
             {/* A page that shows when a question is closed by an instructor
                 Note: this will be removed soon I believe. */}
-            <Route exact path="/questionEnded">
-              <QuestionEnded updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/questionEnded" element={<QuestionEnded updateTitle={this.updateTitle} />}/>
 
             {/* Answer Recorded Page */}
             {/* A page that shows after you answered the question, or after time runs out.
              Note: this will be removed soon I believe. */}
-            <Route exact path="/answerRecorded">
-              <AnswerRecorded updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/answerRecorded" element={<AnswerRecorded updateTitle={this.updateTitle} />}/>
 
 
             {/* --- Login Pages --- */}
 
             {/* Login Main Page */}
-            <Route exact path="/login">
-              <LoginDefault updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/login" element={<LoginDefault updateTitle={this.updateTitle} />}/>
 
             {/* Login with Poll Buddy Account Page */}
-            <Route exact path="/login/pollbuddy">
-              <LoginWithPollBuddy updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/login/pollbuddy" element={<LoginWithPollBuddy updateTitle={this.updateTitle} />}/>
 
             {/* Login with School Account Page */}
-            <Route exact path="/login/school">
-              <LoginWithSchool updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/login/school" element={<LoginWithSchool updateTitle={this.updateTitle} />}/>
 
             {/* Login with School Account Step 2 Page */}
             <Route exact path="/login/school/step2"
@@ -212,32 +174,22 @@ export default class App extends React.Component {
             />
 
             {/* Forgot Password Page */}
-            <Route exact path="/login/forgot">
-              <ForgotPassword updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/login/forgot" element={<ForgotPassword updateTitle={this.updateTitle} />}/>
 
             {/* Reset Password Page */}
-            <Route exact path="/login/reset">
-              <ResetPassword updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/login/reset" element={<ResetPassword updateTitle={this.updateTitle} />}/>
 
 
             {/* --- Registration Pages --- */}
 
             {/* Register Main Page */}
-            <Route exact path="/register">
-              <RegisterDefault updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/register" element={<RegisterDefault updateTitle={this.updateTitle} />}/>
 
             {/* Register with Poll Buddy Account Page */}
-            <Route exact path="/register/pollbuddy">
-              <RegisterWithPollBuddy updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/register/pollbuddy" element={<RegisterWithPollBuddy updateTitle={this.updateTitle} />}/>
 
             {/* Register with School Account Page */}
-            <Route exact path="/register/school">
-              <RegisterWithSchool updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/register/school" element={<RegisterWithSchool updateTitle={this.updateTitle} />}/>
 
             {/* Register with School Account Step 2 Page */}
             {/*use the render function so that we can retrieve :groupID from inside the component*/}
@@ -250,23 +202,17 @@ export default class App extends React.Component {
             {/* --- Account and User Settings Pages --- */}
 
             {/* Account Info Page */}
-            <Route exact path="/account">
-              <AccountInfo updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/account" element={<AccountInfo updateTitle={this.updateTitle} />}/>
 
 
             {/* --- Other Pages --- */}
 
             {/* Template Page */}
-            <Route exact path="/template">
-              <Template updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/template" element={<Template updateTitle={this.updateTitle} />}/>
 
             {/* Default Route/Error 404 Page */}
-            <Route>
-              <Notfound updateTitle={this.updateTitle} />
-            </Route>
-          </Switch>
+            <Route element={<Notfound updateTitle={this.updateTitle} />}/>
+          </Routes>
 
           <Footer/>
 

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {Redirect} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import "mdbreact/dist/css/mdb.css";
 import "./LoginWithPollBuddy.scss";
 import { MDBContainer } from "mdbreact";
@@ -100,7 +100,7 @@ export default class LoginWithPollBuddy extends Component {
 
     if(this.state.successfulLogin) { // Basically redirect if the person is logged in or if their login succeeds
       return (
-        <Redirect to="/groups" push={true}/>
+        <Navigate to="/groups" push={true}/>
       );
     }
     return (

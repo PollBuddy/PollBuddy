@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import {withRouter, Redirect} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 const Joi = require("joi");
 
-class RegisterWithSchoolStep2 extends Component {
+export default class RegisterWithSchoolStep2 extends Component {
   constructor(props) {
     super(props);
 
@@ -116,7 +116,7 @@ class RegisterWithSchoolStep2 extends Component {
             localStorage.setItem("lastName", response.data.lastName);
             localStorage.setItem("userName", response.data.userName);
             // Redirect to groups page
-            return <Redirect to="/groups" push={true}/>;
+            return <Navigate to="/groups" push={true}/>;
           } else {
             // Something went wrong, handle it
 
@@ -206,5 +206,3 @@ class RegisterWithSchoolStep2 extends Component {
     }
   }
 }
-
-export default withRouter(RegisterWithSchoolStep2);
