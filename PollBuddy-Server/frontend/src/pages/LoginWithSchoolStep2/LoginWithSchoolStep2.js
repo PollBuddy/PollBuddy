@@ -4,33 +4,41 @@ import "mdbreact/dist/css/mdb.css";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {Navigate} from "react-router-dom";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
-export default class LoginWithSchoolStep2 extends Component {
+class LoginWithSchoolStep2 extends Component {
   constructor(props) {
     super(props);
 
     // Process args
     // TODO: Some of this should probably be in a try/catch or something for robustness
-    if(this.props.location.search) {
+    if(this.props.router.location.search) {
       console.log("Getting things");
-      var result = new URLSearchParams(this.props.location.search).get("result");
-      var data = JSON.parse(new URLSearchParams(this.props.location.search).get("data"));
-      var error = new URLSearchParams(this.props.location.search).get("error");
-    }
+      let result = new URLSearchParams(this.props.router.location.search).get("result");
+      let data = JSON.parse(new URLSearchParams(this.props.router.location.search).get("data"));
+      let error = new URLSearchParams(this.props.router.location.search).get("error");
 
-    // Set up the state
-    if(error) {
-      this.state = {
-        result: result,
-        error: error,
-        doneLoading: true,
-      };
+      // Set up the state
+      if(error) {
+        this.state = {
+          result: result,
+          error: error,
+          doneLoading: true,
+        };
+      } else {
+        this.state = {
+          result: result,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          userName: data.userName,
+          doneLoading: true,
+        };
+      }
     } else {
+      console.log("Failed to locate search parameters");
       this.state = {
-        result: result,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        userName: data.userName,
+        result: "failure",
+        error: "Failed to load data from the URL.",
         doneLoading: true,
       };
     }
@@ -77,3 +85,5 @@ export default class LoginWithSchoolStep2 extends Component {
     }
   }
 }
+
+export default withRouter(LoginWithSchoolStep2);

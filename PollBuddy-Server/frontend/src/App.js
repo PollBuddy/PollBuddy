@@ -83,7 +83,7 @@ export default class App extends React.Component {
             <Route exact path="/about" element={<About updateTitle={this.updateTitle} />} />
 
             {/* Contact Us Page */}
-            <Route exact path="/contact" element={<Contact />} />
+            <Route exact path="/contact" element={<Contact updateTitle={this.updateTitle} />} />
 
             {/* Frequently Asked Questions (FAQ) Page */}
             <Route exact path="/faq" element={<FAQ updateTitle={this.updateTitle} />}/>
@@ -107,10 +107,7 @@ export default class App extends React.Component {
             <Route exact path="/groups/:groupID/polls" element={<GroupPolls updateTitle={this.updateTitle} />}/>
 
             {/* Group Edit Page */}
-            {/*use the render function so that we can retrieve :groupID from inside the component*/}
-            <Route exact path="/groups/:groupID/edit"
-              render={ (props) => (<GroupEdit {...props} updateTitle={this.updateTitle} />) }
-            />
+            <Route exact path="/groups/:groupID/edit" element={<GroupEdit updateTitle={this.updateTitle} />} />
 
             {/* Group Join Page */}
             <Route exact path="/groups/join" element={<GroupJoin updateTitle={this.updateTitle} />}/>
@@ -132,18 +129,14 @@ export default class App extends React.Component {
             <Route exact path="/polls/:pollID/view" element={<PollViewer updateTitle={this.updateTitle} />}/>
 
             {/* Poll Editor Page */}
-            <Route exact path="/polls/:pollID/edit"
-              render={ (props) => (<PollEditor {...props} updateTitle={this.updateTitle}/>) }
-            />
+            <Route exact path="/polls/:pollID/edit" element={<PollEditor updateTitle={this.updateTitle}/>} />
 
             {/* Poll Manager Page */}
             <Route exact path="/polls/:pollID/manage" element={<PollManager updateTitle={this.updateTitle} />}/>
 
             {/* Poll Results Page */}
             {/*use the render function so that we can retrieve :groupID from inside the component*/}
-            <Route exact path="/polls/:pollID/results"
-              render={ (props) => (<PollResults {...props} updateTitle={this.updateTitle} />) }
-            />
+            <Route exact path="/polls/:pollID/results" element={<PollResults updateTitle={this.updateTitle} />}/>
 
             {/* Question Ended Page */}
             {/* A page that shows when a question is closed by an instructor
@@ -168,10 +161,7 @@ export default class App extends React.Component {
             <Route exact path="/login/school" element={<LoginWithSchool updateTitle={this.updateTitle} />}/>
 
             {/* Login with School Account Step 2 Page */}
-            <Route exact path="/login/school/step2"
-              render={ (props) => (<LoginWithSchoolStep2 {...props} updateTitle={this.updateTitle}
-                userInfo={this.state.userInfo} />) }
-            />
+            <Route exact path="/login/school/step2" element={<LoginWithSchoolStep2 updateTitle={this.updateTitle} />}/>
 
             {/* Forgot Password Page */}
             <Route exact path="/login/forgot" element={<ForgotPassword updateTitle={this.updateTitle} />}/>
@@ -192,11 +182,7 @@ export default class App extends React.Component {
             <Route exact path="/register/school" element={<RegisterWithSchool updateTitle={this.updateTitle} />}/>
 
             {/* Register with School Account Step 2 Page */}
-            {/*use the render function so that we can retrieve :groupID from inside the component*/}
-            <Route exact path="/register/school/step2"
-              render={ (props) => (<RegisterWithSchoolStep2 {...props} updateTitle={this.updateTitle}
-                userInfo={this.state.userInfo} />) }
-            />
+            <Route exact path="/register/school/step2" element={<RegisterWithSchoolStep2 updateTitle={this.updateTitle} />}/>
 
 
             {/* --- Account and User Settings Pages --- */}

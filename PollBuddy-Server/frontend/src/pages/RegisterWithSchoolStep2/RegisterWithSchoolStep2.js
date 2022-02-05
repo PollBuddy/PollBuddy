@@ -4,17 +4,19 @@ import "mdbreact/dist/css/mdb.css";
 import {Navigate} from "react-router-dom";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 const Joi = require("joi");
 
-export default class RegisterWithSchoolStep2 extends Component {
+
+class RegisterWithSchoolStep2 extends Component {
   constructor(props) {
     super(props);
 
     // Process args
     // TODO: Some of this should probably be in a try/catch or something for robustness
-    if(this.props.location.search) {
+    if(this.props.router.location.search) {
       console.log("Getting things");
-      var data = JSON.parse(new URLSearchParams(this.props.location.search).get("data"));
+      var data = JSON.parse(new URLSearchParams(this.props.router.location.search).get("data"));
       var firstName = data["firstName"];
       var firstNamePrefilled = true;
       var lastName = data["lastName"];
@@ -206,3 +208,5 @@ export default class RegisterWithSchoolStep2 extends Component {
     }
   }
 }
+
+export default withRouter(RegisterWithSchoolStep2);

@@ -4,8 +4,9 @@ import { Chart as ChartJS } from 'chart.js/auto';
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
-export default class PollResults extends Component {
+class PollResults extends Component {
   constructor() {
     super();
     this.state = {
@@ -91,9 +92,7 @@ export default class PollResults extends Component {
   componentDidMount() {
     this.props.updateTitle("Poll Results");
 
-    console.log(this.props.match.params.pollID);
-
-    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.match.params.pollID + "/results", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.router.params.pollID + "/results", {
       method: "GET"
     })
       .then(response => {
@@ -167,3 +166,5 @@ export default class PollResults extends Component {
     }
   }
 }
+
+export default withRouter(PollResults);
