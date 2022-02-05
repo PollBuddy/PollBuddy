@@ -1,6 +1,5 @@
 import React, { Component, useState, useRef, useEffect } from "react";
 import "mdbreact/dist/css/mdb.css";
-import "../../styles/main.scss"
 import "./Dropdown.scss";
 import { useNavigate } from "react-router-dom";
 
