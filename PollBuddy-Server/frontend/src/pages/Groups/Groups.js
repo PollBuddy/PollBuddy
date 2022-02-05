@@ -64,14 +64,14 @@ export default class Groups extends Component {
     const groupCode = prompt("Please enter your group code");
     // combine the group code into URL and redirect to the next page
     window.location.replace("/groups/" + groupCode + "/polls");
-  }
+  };
   handleSubmit = (e) => {
     e.preventDefault();
     window.location.href = "/groups/" + this.state.groupCode + "/polls";
-  }
+  };
   handleChange = (e) => {
     this.setState({groupCode: e.target.value});
-  }
+  };
 
   render() {
     const { showXs } = this.state;
