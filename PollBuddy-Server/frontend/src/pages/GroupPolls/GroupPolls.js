@@ -3,8 +3,9 @@ import {Link} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 import GroupSettings from "../../components/GroupSettings/GroupSettings";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
-export default class GroupPolls extends Component {
+class GroupPolls extends Component {
   constructor(props) {//shouldn't this be dependent on the class???? thats why i included a constructor.
     super(props);
     //need to connect to backend probably here and then store data until it can be stored in state.
@@ -31,7 +32,7 @@ export default class GroupPolls extends Component {
       id: null,
       error: null
       //need to put in groupID from backend
-      //need to get other shit like pollIDs and their respective information...
+      //need to get other things like pollIDs and their respective information...
     };
   }
 
@@ -118,3 +119,5 @@ export default class GroupPolls extends Component {
     }
   }
 }
+
+export default withRouter(GroupPolls);

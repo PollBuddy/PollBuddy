@@ -2,17 +2,16 @@ import React, {Component} from "react";
 import { MDBContainer } from "mdbreact";
 import autosize from "autosize";
 import "./PollEditor.scss";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
-export default class PollEditor extends Component {
+class PollEditor extends Component {
   componentDidMount() {
     autosize(document.querySelector("textarea"));
     this.props.updateTitle("Poll Editor");
 
-    console.log(this.props.match.params.pollID);
-
     // Test pollID: 6089fb33145365b82e93717a
 
-    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.match.params.pollID, {
+    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.router.params.pollID, {
       method: "GET"
     })
       .then(response => {
@@ -181,25 +180,25 @@ export default class PollEditor extends Component {
           <MDBContainer className="two-box">
             <MDBContainer className="Poll_Editor_box box">
               <p className="fontSizeLarge">
-                Poll Details {this.props.pollID}
+                Poll Details
               </p>
 
-              <MDBContainer class="form-group">
+              <MDBContainer className="form-group">
                 <p>Poll Title</p>
                 <input type="GroupName" placeholder="Poll title" className="form-control textBox" id="pollTitle" maxLength="100" value={this.state.pollTitleValue} onChange={this.handlePollTitleChange}/>
                 <button id="groupBtn" className="button" onClick={() => this.savePollTitle()}>Save</button>
               </MDBContainer>
 
-              <MDBContainer class="form-group">
+              <MDBContainer className="form-group">
                 <p>Poll Description</p>
-                <textarea type="pollDescription" placeholder="Poll description" className="form-control textBox" id="pollDescription" maxLength="100" value={this.state.pollDescriptionValue} onChange={this.handlePollDescriptionChange}></textarea>
+                <textarea placeholder="Poll description" className="form-control textBox" id="pollDescription" maxLength="100" value={this.state.pollDescriptionValue} onChange={this.handlePollDescriptionChange}/>
                 <button id="descriptionBtn" className="button" onClick={() => this.savePollDescription()}>Save</button>
               </MDBContainer>
             </MDBContainer>
 
             <MDBContainer className="Poll_Editor_box box">
               <p className="fontSizeLarge">
-                Poll Question Editor {this.props.pollID}
+                Poll Question Editor
               </p>
 
               <div id="poll_questions" className="Poll_Editor_center">
@@ -220,9 +219,9 @@ export default class PollEditor extends Component {
                   </React.Fragment>
                 )}
 
-                <MDBContainer class="form-group">
-                  <input className="display_none form-control textBox" id="question_title_input" placeholder="Title"></input>
-                  <input className="display_none form-control textBox" id="question_input" placeholder="Question"></input>
+                <MDBContainer className="form-group">
+                  <input className="display_none form-control textBox" id="question_title_input" placeholder="Title"/>
+                  <input className="display_none form-control textBox" id="question_input" placeholder="Question"/>
                   <button type="submit" id="newQuestionBtn" className="button" onClick={() => this.createNewQuestion()}>New Question</button>
                   <button type="submit" id="newQuestionCancelButton" className="button display_none Poll_Editor_cancel_button" onClick={() => this.cancelNewQuestion()}>Cancel</button>
                 </MDBContainer>
@@ -235,9 +234,9 @@ export default class PollEditor extends Component {
                 </div>
               }
               {this.state.displayQuestionEditor &&
-                <MDBContainer class="form-group">
-                  <input className="form-control textBox" id="edit_question_title_input" placeholder="Edit Title" value={this.state.pollQuestionTitleValue} onChange={this.handlePollQuestionTitleChange}></input>
-                  <input className="form-control textBox" id="edit_question_input" placeholder="Edit Question" value={this.state.pollQuestionValue} onChange={this.handlePollQuestionChange}></input>
+                <MDBContainer className="form-group">
+                  <input className="form-control textBox" id="edit_question_title_input" placeholder="Edit Title" value={this.state.pollQuestionTitleValue} onChange={this.handlePollQuestionTitleChange}/>
+                  <input className="form-control textBox" id="edit_question_input" placeholder="Edit Question" value={this.state.pollQuestionValue} onChange={this.handlePollQuestionChange}/>
                   <button type="submit" id="editQuestionBtn" className="button" onClick={() => this.submitEditQuestion()}>Save</button>
                 </MDBContainer>
               }
@@ -248,3 +247,5 @@ export default class PollEditor extends Component {
     );
   }
 }
+
+export default withRouter(PollEditor);

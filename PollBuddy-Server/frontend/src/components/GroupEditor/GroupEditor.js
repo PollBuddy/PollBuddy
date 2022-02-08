@@ -2,7 +2,7 @@ import React, { Component } from "react";
 // import './GroupEditor.scss'
 import { MDBContainer } from "mdbreact";
 import LoadingWheel from "../LoadingWheel/LoadingWheel.js";
-import Redirect from "react-router-dom/es/Redirect";
+import { Navigate } from "react-router-dom";
 import ErrorText from "../ErrorText/ErrorText";
 
 //this component has 2 modes, edit and new. The new version allows the user to create a new class while the edit version
@@ -127,7 +127,7 @@ export default class GroupEditor extends Component {
   render() {
     //redirect to the page containing information about a group if one was just created
     if (this.state.redirectToGroup) {
-      return <Redirect to={`/groups/${this.state.id}/polls`} push={true}/>;
+      return <Navigate to={`/groups/${this.state.id}/polls`} push={true}/>;
     }
     if(this.state.loadingon === true){
       return (
