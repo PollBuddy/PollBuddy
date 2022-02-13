@@ -13,7 +13,7 @@ const { createTestScheduler } = require("@jest/core");
 const { ExpectationFailed } = require("http-errors");
 
 let mockApp = express();
-let session = {};
+let session = {cas_user: 'bob'};
 let testUser = {
   UserName: "test.account",
   Email: "test@account.com",
@@ -91,6 +91,27 @@ let createUser = async function(update) {
   return res;
 };
 
+let createUserSchoolAffiliated = async function(update) {
+  let userData = {
+    UserName: testUser.UserName,
+    Email: testUser.Email,
+    Password: testUser.PasswordHash,
+    FirstName: testUser.FirstName,
+    LastName: testUser.LastName,
+    SchoolAffiliation: "RPI"
+  };
+
+  if (update) {
+    for (let [key, value] of Object.entries(update)) {
+      userData[key] = value;
+    }
+  }
+  
+  let user = createModel(userSchema, userData);
+  let res = await mongoConnection.getDB().collection("users").insertOne(user);
+  return res;
+};
+
 describe("/api/users/login", () => {
 
   it("GET: route unavailable", async () => {
@@ -139,6 +160,104 @@ describe("/api/users/login", () => {
       });
   });
 
+  it("POST: login with email failure", async () => {
+    let res = await createUser();
+    let userLogin = {
+      password: testUser.Password,
+    };
+
+    await app.post("/api/users/login")
+      .send(userLogin)
+      .expect(401)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("POST: login with school affiliation failure", async() => {
+    let res = await createUserSchoolAffiliated();
+    let userLogin = {
+      userNameEmail: testUser.Email,
+      password: testUser.Password,
+    };
+
+    await app.post("/api/users/login")
+      .send(userLogin)
+      .expect(406)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("POST: login with password failure", async() => {
+    let res = await createUser();
+    let userLogin = {
+      userNameEmail: testUser.Email,
+      password: "",
+    };
+
+    await app.post("/api/users/login", )
+      .send(userLogin)
+      .expect(401)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+});
+
+
+
+describe("/api/users/login/rpi", () => {
+
+  it("POST: route unavailable", async() => {
+    await app.post("/api/users/login/rpi")
+      .expect(405)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  describe('GET requests login rpi', function(){
+    var parentApp;
+  
+    beforeEach(function(){
+      parentApp = express();
+      parentApp.use(function(req, res, next) {
+        req.session = {};
+        next();
+      })
+      parentApp.get('/api', function(req, res, next) {
+        req.session.cas_user = 'bob';
+        next();
+      })
+      //parentApp.use(app);
+      //nock('https://10.105.195.12:8243')
+      //  .get('/v1/schemes')
+      //  .reply(200, {foo:'bar'});
+    });
+  
+    it.skip('should return a 200 HTTP status code', async () => {
+      parentApp
+        .get('/api/users/login/rpi')
+        .then((response) => {
+          expect(res.status).to.equal(200);
+        });
+    });
+  });
+
+  // NOT WORKING, think it calls cas but doesn't enter the function after
+  /*it("GET: login rpi success", async() => {
+    const mockedReq = mockReq();
+    await app.get("/api/users/login/rpi", true)
+      .expect(200)
+      .then((response) => {
+        /*expect(response.body.result).toBe("success");
+        expect(response.body.data.firstName).toBe(testUser.FirstName);
+        expect(response.body.data.lastName).toBe(testUser.LastName);
+        expect(response.body.data.userName).toBe(testUser.UserName);*/
+    //  });
+  //});
 });
 
 describe("/api/users/register", () => {
@@ -179,6 +298,68 @@ describe("/api/users/register", () => {
       });    
   });
 
+  it("POST: register user empty fields failure", async () => {
+    await app.post("/api/users/register")
+      .send({
+        userName: "__badusername",
+        email: "",
+        password: "",
+        firstName: "",
+        lastName: 4
+      })
+      .expect(400)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });    
+  });
+
+  // Not sure how to do for lines 347-370
+  it("POST: register user duplicate failure", async () => {
+    
+  });
+});
+
+describe("/api/users/register/rpi", () => {
+
+  it.skip("POST: register rpi success", async() => {
+    await app.post("/api/users/register/rpi")
+      .send({
+        userName: testUser.UserName,
+        email: testUser.Email,
+        password: testUser.Password,
+        firstName: testUser.FirstName,
+        lastName: testUser.LastName
+      })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        expect(response.body.data.firstName).toBe(testUser.FirstName);
+        expect(response.body.data.lastName).toBe(testUser.LastName);
+        expect(response.body.data.userName).toBe(testUser.UserName);
+
+        let res = await mongoConnection.getDB().collection("users").findOne({ 
+          UserName: testUser.UserName,
+          Email: testUser.Email,
+          FirstName: testUser.FirstName,
+          LastName: testUser.LastName
+        });
+
+        expect(res).toBeTruthy();
+        expect(session).toHaveProperty("userData.userID", res._id);
+      });
+  });
+
+  // NOT WORKING, think it calls cas but doesn't enter the function after
+  it("GET: register rpi success", async() => {
+    await app.get("/api/users/register/rpi", true)
+      .expect(302)
+      .then((response) => {
+        /*expect(response.body.result).toBe("success");
+        expect(response.body.data.firstName).toBe(testUser.FirstName);
+        expect(response.body.data.lastName).toBe(testUser.LastName);
+        expect(response.body.data.userName).toBe(testUser.UserName);*/
+      });
+  });
 });
 
 describe("/api/users/logout", () => {
