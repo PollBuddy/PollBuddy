@@ -1,6 +1,6 @@
 const bson = require("bson");
 const mongoConnection = require("../modules/mongoConnection.js");
-
+const { httpCodes } = require("../modules/httpCodes.js");
 /**
  * Helper function for creating the specified http response (https://pollbuddy.app/api/users).
  * For sample usage see https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Overview#helper-functions
@@ -44,7 +44,7 @@ async function validateID(collection, id) {
 /**
  * Convenience function to get the currently logged in user
  * Dumps result into passed callback function
- * @returns {void} 
+ * @returns {void}
  * @name getCurrentUser
  * @param {req} req request object
  * @param {callback} callback handler for (err,result) returned by database query
@@ -112,7 +112,7 @@ var isLoggedIn = (req) => {
   if(req.session.userData && req.session.userData.userID){
     return null;
   } else {
-    return "User is not logged in.";
+    return httpCodes.Unauthorized("User is not logged in.");
   }
 };
 
@@ -121,7 +121,7 @@ var isLoggedIn = (req) => {
  * subcondition of isLoggedIn, all siteAdmins are also logged in
  * @see {Predicate}
  */
-var isSiteAdmin = 
+var isSiteAdmin =
   and([
     isLoggedIn,
 
@@ -131,7 +131,7 @@ var isSiteAdmin =
       if(user.SiteAdmin){
         return null;
       } else {
-        return "User is not a site admin.";
+        return httpCodes.Unauthorized("User is not a site admin.");
       }
     }
   ]);
@@ -144,7 +144,7 @@ var isDevelopmentMode = (req) => {
   if(process.env.DEVELOPMENT_MODE === "true"){
     return null;
   } else {
-    return "App is not running in development mode.";
+    return httpCodes.Forbidden("App is not running in development mode.");
   }
 };
 
@@ -152,7 +152,7 @@ var isDevelopmentMode = (req) => {
  * elevates predicate to a middleware that runs it on the request
  * if it returns null : allows execution to go to next middleware
  * if it returns a msg : responds with this message and ends execution
- * @param {Predicate} p - input predicate 
+ * @param {Predicate} p - input predicate
  * @return {Middleware} - Middlewre version of predicate
  */
 function promote(p) {
@@ -161,21 +161,21 @@ function promote(p) {
     if(response === null){
       next();
     } else {
-      res.status(401).send(createResponse(null,response));
+      res.status(response.statusCode).send(response);
     }
   };
 }
 
 /**
  * combines a list of predicates into a single predicate that succeeds on a given request if at least one of the input predicates succeed
- * @param {Array} ps - list of predicates 
+ * @param {Array} ps - list of predicates
  * @return {Predicate} - composite predicate
  */
 function or(ps) {
   return (req) => {
     var response = "empty or()";
     for(var i = 0; i < ps.length ; i++){
-      // the first predicate that succeeds ends the testing 
+      // the first predicate that succeeds ends the testing
       response = ps[i](req);
       if(response === null){
         return null;
@@ -188,20 +188,20 @@ function or(ps) {
 
 /**
  * combines a list of predicates into a single predicate that succeeds on a given request iff all input predicates succeed
- * @param {Array} ps - list of predicates 
+ * @param {Array} ps - list of predicates
  * @return {Predicate} - composite predicate
  */
 function and(ps) {
   return (req) => {
     var response = "empty and()";
     for(var i = 0; i < ps.length ; i++){
-      // the first predicate that fails ends the testing 
+      // the first predicate that fails ends the testing
       response = ps[i](req);
       if(response !== null){
         return response;
       }
     }
-    // if all predicates pass, 
+    // if all predicates pass,
     return null;
   };
 }

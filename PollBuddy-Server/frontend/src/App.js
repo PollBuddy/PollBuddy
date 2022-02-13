@@ -2,13 +2,13 @@ import React from "react";
 import {BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 
-import Group from "./pages/Groups/Groups";
+import Groups from "./pages/Groups/Groups";
 import Homepage from "./pages/Homepage/Homepage";
 import LoginWithPollBuddy from "./pages/LoginWithPollBuddy/LoginWithPollBuddy";
 import GroupCreation from "./pages/GroupCreation/GroupCreation";
 import GroupJoin from "./pages/GroupJoin/GroupJoin";
 import GroupEdit from "./pages/GroupEdit/GroupEdit";
-import GroupPolls from "./pages/GroupPolls/GroupPolls";
+import Group from "./pages/Group/Group";
 import PollEditor from "./pages/PollEditor/PollEditor";
 import Notfound from "./pages/Error404/Error404";
 import Template from "./pages/Template/Template";
@@ -111,7 +111,7 @@ export default class App extends React.Component {
 
             {/* My Groups Page */}
             <Route exact path="/groups">
-              <Group updateTitle={this.updateTitle} />
+              <Groups updateTitle={this.updateTitle} />
             </Route>
 
             {/* Group Creation Page */}
@@ -119,10 +119,15 @@ export default class App extends React.Component {
               <GroupCreation updateTitle={this.updateTitle} />
             </Route>
 
-            {/* Group's Polls Page */}
-            <Route exact path="/groups/:groupID/polls">
-              <GroupPolls updateTitle={this.updateTitle} />
+            {/* Group Join Page */}
+            <Route exact path="/groups/join">
+              <GroupJoin updateTitle={this.updateTitle} />
             </Route>
+
+            {/* Group's Page */}
+            <Route exact path="/groups/:groupID"
+              render={ (props) => (<Group {...props} updateTitle={this.updateTitle} />) }
+            />
 
             {/* Group Edit Page */}
             {/*use the render function so that we can retrieve :groupID from inside the component*/}
@@ -130,10 +135,6 @@ export default class App extends React.Component {
               render={ (props) => (<GroupEdit {...props} updateTitle={this.updateTitle} />) }
             />
 
-            {/* Group Join Page */}
-            <Route exact path="/groups/join">
-              <GroupJoin updateTitle={this.updateTitle} />
-            </Route>
 
 
             {/* --- Poll Pages --- */}

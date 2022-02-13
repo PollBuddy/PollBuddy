@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 // import './GroupEditor.scss'
+import { Redirect } from "react-router-dom";
 import { MDBContainer } from "mdbreact";
 import LoadingWheel from "../LoadingWheel/LoadingWheel.js";
-import Redirect from "react-router-dom/es/Redirect";
 import ErrorText from "../ErrorText/ErrorText";
 
 //this component has 2 modes, edit and new. The new version allows the user to create a new class while the edit version
@@ -40,17 +40,12 @@ export default class GroupEditor extends Component {
   async getInitialData(){
     //once the component is created, fetch the data from the given group from the backend
     //get the info for the specific id in props from the json
-    let response = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.id + "/");
-    let json = await response.json();
-    //this workaround should be refactored later
-    let obj = json[0];
+    let response = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.id);
+    let data = await response.json();
     //call setState so the component updates once the data comes in
     this.setState(
       {
-        name: obj.Name,
-        polls: obj.polls,
-        users: obj.users,
-        instructors: obj.instructors,
+        name: data.data.name,
         loadingon: false,
         redirectToGroup: false,
         showError: false,
@@ -82,7 +77,8 @@ export default class GroupEditor extends Component {
       if(this.props.new){
         //if the component is in new mode, redirect the user to the group's page
         //TODO get id from backend and add it to props
-        this.setState({redirectToGroup: true, id: "temporary"});
+        let data = await response.json();
+        this.setState({redirectToGroup: true, id: data.data.id});
       }
     }else{
       //let user know that something went wrong
@@ -96,18 +92,18 @@ export default class GroupEditor extends Component {
     //api/groups/new allows us to create a new entry
       process.env.REACT_APP_BACKEND_URL + "/groups/new" :
     //api/groups/groupID/edit allows us to edit an entry
-      process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.id + "/edit";
+      process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.id;
   }
 
   //get the correct api json based on whether we're in create mode or not
   getAPIJSON(){
     return this.props.new ?
       {
-        Name: this.state.name,
-        //TODO: add functionality
-        InstructorID: this.state.instructors,
-        PollID: this.state.polls,
-        UserID: this.state.users,
+        name: this.state.name,
+        // //TODO: add functionality
+        // InstructorID: this.state.instructors,
+        // PollID: this.state.polls,
+        // UserID: this.state.users,
       } :
       {
         //edit the data to include the values inputted
@@ -127,7 +123,7 @@ export default class GroupEditor extends Component {
   render() {
     //redirect to the page containing information about a group if one was just created
     if (this.state.redirectToGroup) {
-      return <Redirect to={`/groups/${this.state.id}/polls`} push={true}/>;
+      return <Redirect to={`/groups/${this.state.id}/edit`} push={true}/>;
     }
     if(this.state.loadingon === true){
       return (
@@ -137,20 +133,40 @@ export default class GroupEditor extends Component {
       );
     }else{
       return (
-        <MDBContainer fluid className="box">
-          <MDBContainer className="form-group">
-            <label htmlFor="groupName">Group Name:</label>
-            <input
-              name="name"
-              id="groupName"
-              className="form-control textBox"
-              value={this.props.new ? null: this.state.name}
-              onInput={this.onInput} />
+        <MDBContainer fluid className="two-box page">
+          <MDBContainer className="box">
+            <MDBContainer className="form-group">
+              <label htmlFor="groupName">Group Name:</label>
+              <input
+                name="name"
+                id="groupName"
+                className="form-control textBox"
+                value={this.props.new ? null: this.state.name}
+                onInput={this.onInput} />
+            </MDBContainer>
+            {this.checkError()}
+            <button className="button" onClick={this.onSubmit}>
+              {this.props.new ? "Create Group": "Save Changes"}
+            </button>
           </MDBContainer>
-          {this.checkError()}
-          <button className="button" onClick={this.onSubmit}>
-            {this.props.new ? "Create Group": "Save Changes"}
-          </button>
+          {!this.props.new &&
+            <>
+              <MDBContainer className="box">
+                <p>
+                  <p className="fontSizeLarge">
+                    Admins
+                  </p>
+                </p>
+              </MDBContainer>
+              <MDBContainer className="box">
+                <p>
+                  <p className="fontSizeLarge">
+                    Members
+                  </p>
+                </p>
+              </MDBContainer>
+            </>
+          }
         </MDBContainer>
       );
     }

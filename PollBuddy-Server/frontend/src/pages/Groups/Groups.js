@@ -45,6 +45,7 @@ export default class Groups extends Component {
       console.log(json);
       this.setState({ adminGroups: json["data"]["admin"] });
       this.setState({ memberGroups: json["data"]["member"] });
+      this.stopLoading();
     }).catch(() => {
       console.log("Error, redirecting");
       this.setState({ redirect: true });
@@ -107,7 +108,7 @@ export default class Groups extends Component {
             ) : (
               <React.Fragment>
                 {this.state.adminGroups.map((e) => (
-                  <Link to={"/groups/" + e.id + "/polls"}>
+                  <Link to={"/groups/" + e.id}>
                     <button style={{  width: "20em" }} className="button">{e.name}</button>
                   </Link>
                 ))}
@@ -123,7 +124,7 @@ export default class Groups extends Component {
               <React.Fragment>
                 {this.state.memberGroups.map((e) => (
                   <div>
-                    <Link to={"/groups/" + e.id + "/polls"}>
+                    <Link to={"/groups/" + e.id}>
                       <button style={{  width: "20em" }} className="button">{e.name}</button>
                     </Link>
                     {showXs && <LeaveGroupIcon openDialog={() => this.setState({ isOpen: true })} />}
@@ -139,7 +140,7 @@ export default class Groups extends Component {
               <button className="button">Create New Group</button>
             </Link>
             <Link to={"/groups/join"}>
-              <button className="btn button">Join Group</button>
+              <button className="button">Join Group</button>
             </Link>
             {/* <Popup isOpen={this.state.openJoinGroupPopup} onClose={(e) => this.setState({ openJoinGroupPopup: false })}>
               <form onSubmit={this.handleSubmit}>

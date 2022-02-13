@@ -3,7 +3,11 @@ const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
-const {createResponse, validateID, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
+const {createResponse, validateID, debugRoute, getResultErrors, promote, isLoggedIn} = require("../modules/utils");
+const {userRegisterValidator, getUser} = require("../models/User.js");
+const {createGroupValidator, getGroup, createGroup, getGroupUsers, getGroupAdmins} = require("../models/Group.js"); // object destructuring, only import desired functions
+const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
+const {getGroupPolls, joinGroup, leaveGroup, deleteGroup} = require("../models/Group");
 
 // This file handles /api/groups URLs
 
@@ -16,7 +20,7 @@ const {createResponse, validateID, debugRoute} = require("../modules/utils"); //
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/new", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -34,24 +38,19 @@ router.get("/new", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/new", async (req, res) => {
-  // Validate request body
-  const schema = Joi.object({
-    Name: Joi.string().min(3).max(30).required()
-  });
-  const validResult = schema.validate(req.body);
-  // invalidate handling
-  if (validResult.error) {
-    return res.status(400).send(createResponse(null, validResult.error.details[0].message));
+router.post("/new", promote(isLoggedIn), async (req, res) => {
+  let validResult = createGroupValidator.validate({
+    name: req.body.name,
+  }, { abortEarly: false });
+
+  let errors = getResultErrors(validResult);
+  let errorMsg = {};
+  if (errors["name"]) {
+    errorMsg["name"] = "Invalid group name!";
   }
-  // Add to DB
-  try {
-    const result = await mongoConnection.getDB().collection("groups").insertOne({Name: validResult.value.Name});
-    return res.status(200).send(createResponse({ID: result.insertedId}));   // return group ID
-  } catch (e) {
-    console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while writing to the database."));
-  }
+
+  let response = await createGroup(validResult.value, req.session.userData.userID);
+  return sendResponse(res, response);
 });
 
 /**
@@ -67,7 +66,7 @@ router.get("/:id/edit", function (req, res) {
 });
 
 /**
- * Modify the group information 
+ * Modify the group information
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-idedit
  * @typedef {Object} content
  * @property {String} Action - the action to be performed (should be "add" or "remove")
@@ -197,7 +196,7 @@ router.post("/:id/edit", async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/:id/delete", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -213,17 +212,8 @@ router.get("/:id/delete", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/:id/delete", async (req, res) => {//use router.delete??
-  const id = await validateID("groups", req.params.id);
-  if (!id) {
-    return res.status(400).send(createResponse(null, "Invalid ID."));
-  }
-  try {
-    await mongoConnection.getDB().collection("groups").deleteOne({ "_id": id });
-    return res.status(200).send(createResponse("Success"));
-  } catch(e) {
-    console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
-  }
+  let response = await deleteGroup(req.params.id, req.session.userData.userID);
+  return sendResponse(res, response);
 });
 
 /**
@@ -288,18 +278,9 @@ router.post("/", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id", async (req, res) => {
-  const id = await validateID("groups", req.params.id);
-  if (!id) {
-    return res.status(400).send(createResponse(null, "Invalid ID."));
-  }
-  try {
-    const group = await mongoConnection.getDB().collection("polls").findOne({"_id": id});
-    return res.status(200).send(createResponse(group));
-  } catch(e) {
-    console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
-  }
+router.get("/:id", promote(isLoggedIn), async (req, res) => {
+  let response = await getGroup(req.params.id, req.session.userData.userID);
+  return sendResponse(res, response);
 });
 
 /**
@@ -311,7 +292,7 @@ router.get("/:id", async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/:id", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 /**
@@ -330,17 +311,8 @@ router.post("/:id", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/:id/polls", async (req, res) => {
-  const id = await validateID("groups", req.params.id);
-  if (!id) {
-    return res.status(400).send(createResponse(null, "Invalid ID."));
-  }
-  try {
-    const Polls = await mongoConnection.getDB().collection("groups").findOne({ "_id": id }, { _id: 0, Polls: 1 });
-    return res.status(200).send(createResponse(Polls));
-  } catch(e) {
-    console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
-  }
+  let response = await getGroupPolls(req.params.id);
+  return sendResponse(res, response);
 });
 
 /**
@@ -352,7 +324,7 @@ router.get("/:id/polls", async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/:id/polls", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 /**
@@ -371,17 +343,8 @@ router.post("/:id/polls", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/:id/users", async (req, res) => {
-  const id = await validateID("groups", req.params.id);
-  if (!id) {
-    return res.status(400).send(createResponse(null, "Invalid ID."));
-  }
-  try {
-    const Users = await mongoConnection.getDB().collection("groups").findOne({ "_id": id }, { _id: 0, Users: 1 });
-    return res.status(200).send(createResponse(Users));
-  } catch(e) {
-    console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
-  }
+  let response = await getGroupUsers(req.params.id);
+  return sendResponse(res, response);
 });
 
 /**
@@ -393,7 +356,7 @@ router.get("/:id/users", async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/:id/users", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 /**
@@ -412,17 +375,8 @@ router.post("/:id/users", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/:id/admins", async (req, res) => {
-  const id = await validateID("groups", req.params.id);
-  if (!id) {
-    return res.status(400).send(createResponse(null, "Invalid ID."));
-  }
-  try {
-    const Admins = await mongoConnection.getDB().collection("groups").findOne({ "_id": id }, { _id: 0, Admins: 1 });
-    return res.status(200).send(createResponse(Admins));
-  } catch(e) {
-    console.log(e);
-  }
-  return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
+  let response = await getGroupAdmins(req.params.id);
+  return sendResponse(res, response);
 });
 
 /**
@@ -434,7 +388,7 @@ router.get("/:id/admins", async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/:id/admins", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 /**
@@ -446,7 +400,7 @@ router.post("/:id/admins", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/:id/join", async (req, res) => {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -463,57 +417,18 @@ router.get("/:id/join", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/join", async (res, req) => {
-  const userID = await validateID("groups", req.params.userData.userID);
-  if (!userID) {
-    return res.status(400).send(createResponse(null, "Invalid user ID."));
-  }
-  const groupID = await validateID("groups", req.params.groupID);
-  if (!groupID) {
-    return res.status(400).send(createResponse(null, "Invalid group ID."));
-  }
-  // Add user to group, do nothing if they are already in it
-  try {
-    await mongoConnection.getDB().collection("groups").updateOne({ "_id:": groupID }, { $addToSet: { Users: userID } });
-    return res.status(200).send(createResponse("Success"));
-  } catch(e) {
-    console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
-  }
+router.post("/:id/join", promote(isLoggedIn), async (req, res) => {
+  let response = await joinGroup(req.params.id, req.session.userData.userID);
+  return sendResponse(res, response);
 });
 
-/**
- * Checks to see if the given user has access to the given group
- * @typedef {Object} payload
- * @property {String} userID - id of the user to look for
- * @property {String} groupID - id of the group to check
- * @returns {Boolean} response - True if the user has access, false otherwise
- */
-function checkUserPermission(userID, groupID) { //TODO add checks to make sure IDs are valid
-  var users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Users":1})[0].Users; //get list of users
-  for (var user in users) {
-    if (user === userID) { //check for existence
-      return true; //true if userID is found
-    }
-  }
-  return false; //false if userID is not found
-}
+router.get("/:id/leave", async (req, res) => {
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
+});
 
-/**
- * Checks to see if the given user has admin access to the given group
- * @typedef {Object} payload
- * @property {String} adminID - id of the user to look for
- * @property {String} groupID - id of the group to check
- * @returns {Boolean} response - True if the user has admin access, false otherwise
- */
-function checkAdminPermission(adminID, groupID) { //TODO add checks to make sure IDs are valid
-  var admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Admins":1})[0].Admins; //get list of admins
-  for (var admin in admins) {
-    if (admin === adminID) { //check for existence
-      return true; //true if adminID is found
-    }
-  }
-  return false; //false if adminID is not found
-}
+router.post("/:id/leave", promote(isLoggedIn), async (req, res) => {
+  let response = await leaveGroup(req.params.id, req.session.userData.userID);
+  return sendResponse(res, response);
+});
 
 module.exports = router;

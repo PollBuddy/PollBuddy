@@ -3,7 +3,8 @@ const bson = require("bson");
 const bcrypt = require("bcrypt");
 
 const mongoConnection = require("../modules/mongoConnection.js");
-const { createResponse, getResultErrors, isEmpty } = require("../modules/utils");
+const { getResultErrors, isEmpty } = require("../modules/utils");
+const { httpCodes } = require("../modules/httpCodes.js");
 
 const validators = {
   userName: Joi.string().pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$")),
@@ -41,49 +42,44 @@ const userSchema = {
 };
 
 const getUser = async function(userID) {
-  // Change userID to ObjectID 
   try {
     var idCode = new bson.ObjectID(userID);
-  } catch(err) {
-    return [400, createResponse(null, "Error: Invalid User, ID does not match any user.")];
-  }
-  // Locate user data in database
-  const user = await mongoConnection.getDB().collection("users").findOne({ "_id": idCode });
-  if (user) {
-    // Found user, and return the user data in a JSON Object
-    return [200, createResponse({
+    const user = await mongoConnection.getDB().collection("users").findOne({ "_id": idCode });
+    return httpCodes.Ok({
       firstName: user.FirstName,
       lastName: user.LastName,
       userName: user.UserName,
       email: user.Email,
-    })];
-  } else {
-    // Could not find user associated with this ID, something has gone wrong
-    return [400, createResponse(null, "Error: Invalid User, ID does not match any user.")];
+    });
+  } catch(err) {
+    return httpCodes.BadRequest("Error: Invalid User, ID does not match any user.");
   }
 };
 
 const getUserGroups = async function(userID) {
-  // Change userID to ObjectID 
   try {
     var idCode = new bson.ObjectID(userID);
+    let groups = {
+      admin: [],
+      member: [],
+    };
+    await mongoConnection.getDB().collection("groups")
+      .find({Admins: idCode.toString()}).forEach((group) => {
+        groups.admin.push({
+          id: group._id,
+          name: group.Name,
+        });
+      });
+    await mongoConnection.getDB().collection("groups")
+      .find({Users: idCode.toString()}).forEach((group) => {
+        groups.member.push({
+          id: group._id,
+          name: group.Name,
+        });
+      });
+    return httpCodes.Ok(groups);
   } catch(err) {
-    return [400, createResponse(null, "Error: Invalid User, ID does not match any user.")];
-  }
-  // Locate user data in database
-  const user = await mongoConnection.getDB().collection("users").findOne({ "_id": idCode });
-  if (user) {
-    // Found user, and return the list of groups
-    // TODO: needs to be updated via issue #591
-    return [200, createResponse({ "admin": [
-      { "id": 1, "name": "Example Group 1" },
-      { "id": 2, "name": "Example Group 2" }], "member": [
-      { "id": 3, "name": "Example Group 3" },
-      { "id": 4, "name": "Example Group 4" }] })];
-    //return [200, createResponse(user.Groups)];
-  } else {
-    // Could not find user associated with this ID, something has gone wrong
-    return [400, createResponse(null, "Error: Invalid User, ID does not match any user.")];
+    return httpCodes.BadRequest("Error: Invalid User, ID does not match any user.");
   }
 };
 
@@ -92,14 +88,14 @@ const editUser = async function(userID, jsonContent) {
   try {
     var idCode = new bson.ObjectID(userID);
   } catch(err) {
-    return [400, createResponse(null, "Error: Invalid User, ID does not match any user.")];
+    return httpCodes.BadRequest("Error: Invalid User, ID does not match any user.");
   }
 
   const users = mongoConnection.getDB().collection("users");
   const user = await users.findOne({ "_id": idCode });
 
   if (!user) {
-    return [500, createResponse(null, "Error updating database information")];
+    return httpCodes.InternalServerError("Error updating database information");
   }
 
   const updatedUser = Joi.object({
@@ -141,12 +137,12 @@ const editUser = async function(userID, jsonContent) {
   }
 
   if (!isEmpty(errors)) {
-    return [400, createResponse(errors, "Validation Failed")];
+    return httpCodes.BadRequest("Validation Failed");
   }
 
   users.updateOne({ "_id": idCode }, { "$set": updatedUser.value })
     .catch(() => {
-      return [500, createResponse(null, "Error updating database information")];
+      return httpCodes.InternalServerError("Error updating database information");
     });
 
   return getUser(idCode);
