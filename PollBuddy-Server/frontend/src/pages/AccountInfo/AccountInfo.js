@@ -59,37 +59,37 @@ class AccountInfo extends Component {
       .then(data => {
         // Load states from database values
         data = data.data;
-        if(data.UserName) {
+        if(data.userName) {
           this.setState({
-            userName: data.UserName,
-            userNameLoaded:true,
-            userNameLocked: data.UserNameLocked
+            userName: data.userName,
+            userNameLoaded: true,
+            userNameLocked: data.userNameLocked
           });
         }
-        if(data.FirstName) {
+        if(data.firstName) {
           this.setState({
-            firstName: data.FirstName,
-            firstNameLoaded:true,
-            firstNameLocked: data.FirstNameLocked
+            firstName: data.firstName,
+            firstNameLoaded: true,
+            firstNameLocked: data.firstNameLocked
           });
         }
-        if(data.LastName) {
+        if(data.lastName) {
           this.setState({
-            lastName: data.LastName,
-            lastNameLoaded:true,
-            lastNameLocked: data.LastNameLocked
+            lastName: data.lastName,
+            lastNameLoaded: true,
+            lastNameLocked: data.lastNameLocked
           });
         }
-        if(data.Email) {
+        if(data.email) {
           this.setState({
-            email: data.Email,
-            emailLoaded:true,
-            emailLocked: data.EmailLocked
+            email: data.email,
+            emailLoaded: true,
+            emailLocked: data.emailLocked
           });
         }
-        if(data.SchoolAffiliation) {
+        if(data.schoolAffiliation) {
           this.setState({
-            school: data.SchoolAffiliation,
+            school: data.schoolAffiliation,
             passwordLocked: true
           });
         }
@@ -218,7 +218,9 @@ class AccountInfo extends Component {
         password: undefined,
         logOutEverywhere: this.state.logOutEverywhere
       })
-    }).then(response => {
+    })
+    .then(response => response.json())
+    .then(response => {
       console.log(response);
     });
     this.setState({done: true});

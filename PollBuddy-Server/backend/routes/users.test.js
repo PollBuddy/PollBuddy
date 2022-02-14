@@ -20,7 +20,12 @@ let testUser = {
   Password: "K9g95p$?E@t3A$#4",
   PasswordHash: "$2a$12$8Guj3IMNNVWk/GM4q0xeleExT3QBdPe5dWpSRYvk2elRkkWPMlOPG",
   FirstName: "test",
-  LastName: "account"
+  LastName: "account",
+  FirstNameLocked: false,
+  LastNameLocked: false,
+  EmailLocked: false,
+  UserNameLocked: true,
+  SchoolAffiliation: "",
 };
 
 let testUser2 = {
@@ -213,9 +218,14 @@ describe("/api/users/me", () => {
       .then(async (response) => {
         expect(response.body.result).toBe("success");
         expect(response.body.data.firstName).toBe(testUser.FirstName);
+        expect(response.body.data.firstNameLocked).toBe(testUser.FirstNameLocked);
         expect(response.body.data.lastName).toBe(testUser.LastName);
+        expect(response.body.data.lastNameLocked).toBe(testUser.LastNameLocked);
         expect(response.body.data.userName).toBe(testUser.UserName);
+        expect(response.body.data.userNameLocked).toBe(testUser.UserNameLocked);
         expect(response.body.data.email).toBe(testUser.Email);
+        expect(response.body.data.emailLocked).toBe(testUser.EmailLocked);
+        expect(response.body.data.schoolAffiliation).toBe(testUser.SchoolAffiliation);
       });    
   });
 
