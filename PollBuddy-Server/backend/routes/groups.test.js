@@ -156,11 +156,24 @@ describe("/api/groups/:id/admins", () => {
   it("GET: get group admins", async () => {
     let user = await createUser();
     let group = await createGroup({Admins: [user.insertedId]});
+    session = { userData: { userID: user.insertedId } };
     await app.get("/api/groups/" + group.insertedId + "/admins")
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
-        expect(response.body.data[0].toString()).toEqual(user.insertedId.toString());
+        expect(response.body.data[0].id.toString()).toEqual(user.insertedId.toString());
+        expect(response.body.data[0].userName.toString()).toEqual(testUser.UserName);
+      });
+  });
+
+  it("GET: non-admin get group admins", async () => {
+    let user = await createUser();
+    let group = await createGroup();
+    session = { userData: { userID: user.insertedId } };
+    await app.get("/api/groups/" + group.insertedId + "/admins")
+      .expect(401)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
       });
   });
 
@@ -178,12 +191,25 @@ describe("/api/groups/:id/users", () => {
 
   it("GET: get group users", async () => {
     let user = await createUser();
-    let group = await createGroup({Users: [user.insertedId]});
+    let group = await createGroup({Admins: [user.insertedId], Users: [user.insertedId]});
+    session = { userData: { userID: user.insertedId } };
     await app.get("/api/groups/" + group.insertedId + "/users")
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
-        expect(response.body.data[0].toString()).toEqual(user.insertedId.toString());
+        expect(response.body.data[0].id.toString()).toEqual(user.insertedId.toString());
+        expect(response.body.data[0].userName.toString()).toEqual(testUser.UserName);
+      });
+  });
+
+  it("GET: non-admin get group users", async () => {
+    let user = await createUser();
+    let group = await createGroup();
+    session = { userData: { userID: user.insertedId } };
+    await app.get("/api/groups/" + group.insertedId + "/users")
+      .expect(401)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
       });
   });
 

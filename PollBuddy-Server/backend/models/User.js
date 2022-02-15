@@ -41,10 +41,14 @@ const userSchema = {
   SchoolAffiliation: "",
 };
 
+const getUserInternal = async function(userID) {
+  let idCode = new bson.ObjectID(userID);
+  return await mongoConnection.getDB().collection("users").findOne({ "_id": idCode });
+};
+
 const getUser = async function(userID) {
   try {
-    var idCode = new bson.ObjectID(userID);
-    const user = await mongoConnection.getDB().collection("users").findOne({ "_id": idCode });
+    const user = await getUserInternal(userID);
     return httpCodes.Ok({
       firstName: user.FirstName,
       lastName: user.LastName,
@@ -58,20 +62,20 @@ const getUser = async function(userID) {
 
 const getUserGroups = async function(userID) {
   try {
-    var idCode = new bson.ObjectID(userID);
+    const user = await getUserInternal(userID);
     let groups = {
       admin: [],
       member: [],
     };
     await mongoConnection.getDB().collection("groups")
-      .find({Admins: idCode.toString()}).forEach((group) => {
+      .find({Admins: user._id.toString()}).forEach((group) => {
         groups.admin.push({
           id: group._id,
           name: group.Name,
         });
       });
     await mongoConnection.getDB().collection("groups")
-      .find({Users: idCode.toString()}).forEach((group) => {
+      .find({Users: user._id.toString()}).forEach((group) => {
         groups.member.push({
           id: group._id,
           name: group.Name,
@@ -153,6 +157,7 @@ module.exports = {
   userInformationValidator,
   userRegisterValidator,
   userSchema,
+  getUserInternal,
   getUser,
   getUserGroups,
   editUser

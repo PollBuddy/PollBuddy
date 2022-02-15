@@ -3,6 +3,7 @@ const bson = require("bson");
 const { createResponse, getResultErrors, isEmpty, createModel } = require("../modules/utils");
 const mongoConnection = require("../modules/mongoConnection.js");
 const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
+const {getUserInternal} = require("./User");
 
 const validators = {
   name: Joi.string().min(3).max(30),
@@ -62,7 +63,6 @@ const getGroup = async function(groupID, userID) {
     const group = await getGroupInternal(groupID);
     let isMember = await isGroupMember(groupID, userID);
     let isAdmin = await isGroupAdmin(groupID, userID);
-    console.log(group);
     return httpCodes.Ok({
       name: group.Name,
       description: group.Description,
@@ -90,19 +90,43 @@ const createGroup = async function(groupData, userID) {
   }
 };
 
-const getGroupUsers = async function (groupID) {
+const getGroupUsers = async function (groupID, userID) {
   try {
+    let isUserGroupAdmin = await isGroupAdmin(groupID, userID);
+    if (!isUserGroupAdmin) {
+      return httpCodes.Unauthorized();
+    }
     const group = await getGroupInternal(groupID);
-    return httpCodes.Ok(group.Users);
+    let users = [];
+    for (let groupUserID of group.Users) {
+      let user = await getUserInternal(groupUserID);
+      users.push({
+        id: user._id,
+        userName: user.UserName,
+      });
+    }
+    return httpCodes.Ok(users);
   } catch(err) {
     return httpCodes.BadRequest("Error: Invalid Group, ID does not match any group.");
   }
 };
 
-const getGroupAdmins = async function (groupID) {
+const getGroupAdmins = async function (groupID, userID) {
   try {
+    let isUserGroupAdmin = await isGroupAdmin(groupID, userID);
+    if (!isUserGroupAdmin) {
+      return httpCodes.Unauthorized();
+    }
     const group = await getGroupInternal(groupID);
-    return httpCodes.Ok(group.Admins);
+    let admins = [];
+    for (let groupAdminID of group.Admins) {
+      let admin = await getUserInternal(groupAdminID);
+      admins.push({
+        id: admin._id,
+        userName: admin.UserName,
+      });
+    }
+    return httpCodes.Ok(admins);
   } catch(err) {
     return httpCodes.BadRequest("Error: Invalid Group, ID does not match any group.");
   }
@@ -111,7 +135,6 @@ const getGroupAdmins = async function (groupID) {
 const getGroupPolls = async function (groupID) {
   try {
     const group = await getGroupInternal(groupID);
-
     return httpCodes.Ok(group.Polls);
   } catch(err) {
     return httpCodes.BadRequest("Error: Invalid Group, ID does not match any group.");

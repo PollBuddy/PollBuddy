@@ -342,8 +342,8 @@ router.post("/:id/polls", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/users", async (req, res) => {
-  let response = await getGroupUsers(req.params.id);
+router.get("/:id/users", promote(isLoggedIn), async (req, res) => {
+  let response = await getGroupUsers(req.params.id, req.session.userData.userID);
   return sendResponse(res, response);
 });
 
@@ -374,8 +374,8 @@ router.post("/:id/users", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/admins", async (req, res) => {
-  let response = await getGroupAdmins(req.params.id);
+router.get("/:id/admins", promote(isLoggedIn), async (req, res) => {
+  let response = await getGroupAdmins(req.params.id, req.session.userData.userID);
   return sendResponse(res, response);
 });
 

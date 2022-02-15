@@ -58,7 +58,6 @@ export default class GroupEditor extends Component {
   id;
 
   onInput = e => {
-    //update state to include the data that was changed from the form
     this.setState({
       [e.target.name]: e.target.value
     });
@@ -125,13 +124,13 @@ export default class GroupEditor extends Component {
     if (this.state.redirectToGroup) {
       return <Redirect to={`/groups/${this.state.id}/edit`} push={true}/>;
     }
-    if(this.state.loadingon === true){
+    if (this.state.loadingon === true) {
       return (
         <MDBContainer>
           <LoadingWheel/>
         </MDBContainer>
       );
-    }else{
+    } else {
       return (
         <MDBContainer fluid className="two-box page">
           <MDBContainer className="box">
@@ -152,17 +151,13 @@ export default class GroupEditor extends Component {
           {!this.props.new &&
             <>
               <MDBContainer className="box">
-                <p>
-                  <p className="fontSizeLarge">
-                    Admins
-                  </p>
+                <p className="fontSizeLarge">
+                  Admins
                 </p>
               </MDBContainer>
               <MDBContainer className="box">
-                <p>
-                  <p className="fontSizeLarge">
-                    Members
-                  </p>
+                <p className="fontSizeLarge">
+                  Members
                 </p>
               </MDBContainer>
             </>
