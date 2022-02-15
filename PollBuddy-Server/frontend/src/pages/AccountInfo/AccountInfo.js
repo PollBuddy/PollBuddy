@@ -206,16 +206,16 @@ class AccountInfo extends Component {
       }
       passwordInput = passwordValid.value.password;
     }
-
+    
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
-        firstName: firstNameInput, //TODO: keep track of each of the inital states of these
-        lastName: lastNameInput,  //only want to put in the changed values
-        userName: userInput,
-        email: emailInput,
-        password: undefined,
+        firstName: this.state.firstNameLocked ? undefined : firstNameInput, //TODO: keep track of each of the inital states of these
+        lastName: this.state.lastNameLocked ? undefined : lastNameInput,  //only want to put in the changed values. Update: puts in all non-locked values
+        userName: this.state.userNameLocked ? undefined : userInput,
+        email: this.state.emailLocked ? undefined : emailInput,
+        password: this.state.passwordLocked ? undefined : passwordInput,
         logOutEverywhere: this.state.logOutEverywhere
       })
     })
