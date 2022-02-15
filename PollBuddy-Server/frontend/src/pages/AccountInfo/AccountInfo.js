@@ -219,10 +219,10 @@ class AccountInfo extends Component {
         logOutEverywhere: this.state.logOutEverywhere
       })
     })
-    .then(response => response.json())
-    .then(response => {
-      console.log(response);
-    });
+      .then(response => response.json())
+      .then(response => {
+        console.log(response);
+      });
     this.setState({done: true});
   }
 
