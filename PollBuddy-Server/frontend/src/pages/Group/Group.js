@@ -8,7 +8,6 @@ import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 class Group extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       id: props.router.params.groupID,
       name: "",
