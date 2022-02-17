@@ -10,7 +10,7 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
   constructor(props) {
     super(props);
     this.state = {
-      id: this.props.match.params.groupID,
+      id: props.router.params.groupID,
       name: "",
       inputName: "",
       description: "",

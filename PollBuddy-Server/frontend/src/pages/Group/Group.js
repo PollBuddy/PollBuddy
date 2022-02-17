@@ -3,12 +3,14 @@ import {Link} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 import GroupSettings from "../../components/GroupSettings/GroupSettings";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
-export default class Group extends Component {
+class Group extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
-      id: "",
+      id: props.router.params.groupID,
       name: "",
       description: "",
       isMember: false,
@@ -21,7 +23,7 @@ export default class Group extends Component {
 
   componentDidMount() {
     this.props.updateTitle(this.state.name);
-    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.props.match.params.groupID, {
+    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id, {
       method: "GET"
     })
       .then((response) => response.json())
@@ -30,7 +32,6 @@ export default class Group extends Component {
           this.props.updateTitle(response.data.name);
           if (response.data.isMember || response.data.isAdmin ) {
             this.setState({
-              id: this.props.match.params.groupID,
               name: response.data.name,
               description: response.data.description,
               isMember: response.data.isMember,
@@ -104,3 +105,5 @@ export default class Group extends Component {
     }
   }
 }
+
+export default withRouter(Group);
