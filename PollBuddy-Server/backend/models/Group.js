@@ -7,6 +7,7 @@ const {getUserInternal} = require("./User");
 
 const validators = {
   name: Joi.string().min(3).max(30),
+  description: Joi.string().min(3).max(30),
 };
 
 const groupSchema = {
@@ -28,6 +29,7 @@ const inviteSchema = {
 
 const createGroupValidator = Joi.object({
   name: validators.name.required(),
+  description: validators.description.required(),
 });
 
 const getGroupInternal = async function(groupID) {

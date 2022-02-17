@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
-const {createResponse, validateID, debugRoute, getResultErrors, promote, isLoggedIn} = require("../modules/utils");
+const {createResponse, validateID, debugRoute, getResultErrors, promote, isLoggedIn, isEmpty} = require("../modules/utils");
 const {userRegisterValidator, getUser} = require("../models/User.js");
 const {createGroupValidator, getGroup, createGroup, getGroupUsers, getGroupAdmins} = require("../models/Group.js"); // object destructuring, only import desired functions
 const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
@@ -41,13 +41,14 @@ router.get("/new", function (req, res) {
 router.post("/new", promote(isLoggedIn), async (req, res) => {
   let validResult = createGroupValidator.validate({
     name: req.body.name,
+    description: req.body.description,
   }, { abortEarly: false });
 
   let errors = getResultErrors(validResult);
   let errorMsg = {};
-  if (errors["name"]) {
-    errorMsg["name"] = "Invalid group name!";
-  }
+  if (errors["name"]) { errorMsg["name"] = "Invalid group name!"; }
+  if (errors["description"]) { errorMsg["description"] = "Invalid group description!"; }
+  if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest(errors)); }
 
   let response = await createGroup(validResult.value, req.session.userData.userID);
   return sendResponse(res, response);

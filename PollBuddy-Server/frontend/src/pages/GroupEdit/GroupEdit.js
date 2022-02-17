@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
-import GroupEditor from "../../components/GroupEditor/GroupEditor";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {Link} from "react-router-dom";
+import ErrorText from "../../components/ErrorText/ErrorText";
 
 export default class GroupEdit extends Component {//this class will likely need to call Groups/new and do more with that...
   constructor(props) {
@@ -11,14 +11,15 @@ export default class GroupEdit extends Component {//this class will likely need 
     this.state = {
       id: this.props.match.params.groupID,
       name: "",
+      inputName: "",
+      description: "",
+      inputDescription: "",
       admins: [],
       users: [],
       loadingGroupData: true,
       loadingAdmins: true,
       loadingUsers: true,
-
-      inputName: "",
-      inputDescription: "",
+      showError: false,
     };
   }
 
@@ -33,11 +34,17 @@ export default class GroupEdit extends Component {//this class will likely need 
     fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}`)
       .then((response => response.json()))
       .then((response) => {
-        this.setState({
-          name: response.data.name,
-          des
-          loadingGroupData: false,
-        });
+        if (response.result === "success") {
+          this.setState({
+            name: response.data.name,
+            inputName: response.data.name,
+            description: response.data.description,
+            inputDescription: response.data.description,
+            loadingGroupData: false,
+          });
+        } else {
+          window.location.href = "/groups";
+        }
       });
   };
 
@@ -45,10 +52,14 @@ export default class GroupEdit extends Component {//this class will likely need 
     fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}/admins`)
       .then((response => response.json()))
       .then((response) => {
-        this.setState({
-          admins: response.data,
-          loadingAdmins: false,
-        });
+        if (response.result === "success") {
+          this.setState({
+            admins: response.data,
+            loadingAdmins: false,
+          });
+        } else {
+          window.location.href = "/groups";
+        }
       });
   };
 
@@ -56,17 +67,29 @@ export default class GroupEdit extends Component {//this class will likely need 
     fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}/users`)
       .then((response => response.json()))
       .then((response) => {
-        this.setState({
-          users: response.data,
-          loadingUsers: false,
-        });
+        if (response.result === "success") {
+          this.setState({
+            users: response.data,
+            loadingUsers: false,
+          });
+        } else {
+          window.location.href = "/groups";
+        }
       });
   };
 
-  onInput = e => {
+  onInput = (e) => {
     this.setState({
       [e.target.name]: e.target.value
     });
+  };
+
+  onSubmit = () => {
+    //TODO: Call Edit Group API Endpoint
+  };
+
+  checkError = () => {
+    return this.state.showError ? <ErrorText/> : null;
   };
 
   render() {
@@ -106,6 +129,7 @@ export default class GroupEdit extends Component {//this class will likely need 
                   onInput={this.onInput}
                 />
               </MDBContainer>
+              {this.checkError()}
               <button className="button" onClick={this.onSubmit}>
                 Save Changes
               </button>

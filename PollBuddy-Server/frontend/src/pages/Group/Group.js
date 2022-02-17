@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 import GroupSettings from "../../components/GroupSettings/GroupSettings";
-import GroupEditor from "../../components/GroupEditor/GroupEditor";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 
 export default class Group extends Component {
@@ -79,13 +78,11 @@ export default class Group extends Component {
       return (
         <MDBContainer className="page">
           <MDBContainer className="two-box">
-            {/*TODO: put the GroupEditor component here*/}
             <GroupSettings state={this.state}/>
             <MDBContainer className="box">
               <p className="fontSizeLarge">
                 My Polls
               </p>
-
               {this.state.polls.length === 0 ? (
                 <p>Sorry, you don't have any polls.<br/> <br/></p>
               ) : (
