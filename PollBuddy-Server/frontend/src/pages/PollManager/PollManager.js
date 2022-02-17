@@ -4,8 +4,9 @@ import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import {Link} from "react-router-dom";
 import Countdown, {zeroPad} from "react-countdown";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
-export default class PollManager extends Component {
+class PollManager extends Component {
   componentDidMount(){
     this.props.updateTitle("Poll Data View");
   }
@@ -147,3 +148,5 @@ export default class PollManager extends Component {
     );
   }
 }
+
+export default withRouter(PollManager);

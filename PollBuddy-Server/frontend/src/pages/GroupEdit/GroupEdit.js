@@ -4,8 +4,9 @@ import { MDBContainer } from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {Link} from "react-router-dom";
 import ErrorText from "../../components/ErrorText/ErrorText";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
-export default class GroupEdit extends Component {//this class will likely need to call Groups/new and do more with that...
+class GroupEdit extends Component {//this class will likely need to call Groups/new and do more with that...
   constructor(props) {
     super(props);
     this.state = {
@@ -176,3 +177,5 @@ export default class GroupEdit extends Component {//this class will likely need 
     }
   }
 }
+
+export default withRouter(GroupEdit);

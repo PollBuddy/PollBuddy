@@ -25,11 +25,11 @@ export default class GroupJoin extends Component {//this class will likely need 
 
   handleEnterCode = () => {
     this.setState({showConfirm: true});
-  }
+  };
 
   handleChange = (e) => {
     this.setState({groupCode: e.target.value});
-  }
+  };
 
   async handleConfirmationResponse(join) {
     if (join) {

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
-import {Link, withRouter, Redirect} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import "./AccountInfo.scss";
 const Joi = require("joi");
@@ -45,7 +45,7 @@ class AccountInfo extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     // Bounce back to log in if they are not logged
     if(localStorage.getItem("loggedIn") !== "true"){
-      return <Redirect to="/login" push={true}/>;
+      return <Navigate to="/login" push={true}/>;
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleLogOutEverywhere = this.handleLogOutEverywhere.bind(this);
@@ -327,4 +327,4 @@ class AccountInfo extends Component {
   }
 }
 
-export default withRouter(AccountInfo);
+export default AccountInfo;

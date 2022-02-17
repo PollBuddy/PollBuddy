@@ -304,13 +304,13 @@ label {
 }
 
 a {
-  color: var(--light-purple-logo-text);
+  color: var(--light-purple-logo-text) !important;
   transition: var(--default-transition);
   font-style: italic;
 }
 
 a:hover {
-  color: var(--white-most-text);
+  color: var(--white-most-text) !important;
   text-decoration: underline;
 }
 

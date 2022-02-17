@@ -6,7 +6,7 @@ import {
 } from "mdbreact";
 
 import Countdown, { zeroPad } from "react-countdown";
-import {Redirect} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 
 
 export default class Question extends Component {
@@ -192,7 +192,7 @@ export default class Question extends Component {
 
     if(this.state.successfulSubmission) {
       return (
-        <Redirect to={"/polls/" + this.state.PollID + "/results"} push={true} />
+        <Navigate to={"/polls/" + this.state.PollID + "/results"} push={true} />
       );
     }
 
