@@ -45,7 +45,7 @@ class AccountInfo extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     // Bounce back to log in if they are not logged
     if(localStorage.getItem("loggedIn") !== "true"){
-      return <Navigate to="/login" push={true}/>;
+      window.location.replace("/login");
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleLogOutEverywhere = this.handleLogOutEverywhere.bind(this);
