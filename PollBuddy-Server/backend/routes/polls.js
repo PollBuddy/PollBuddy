@@ -114,7 +114,10 @@ router.post("/:id/edit", async (req, res) => {
         QuestionText: Joi.string().min(1).max(512).required(),  // question text capped at 512 words
         AnswerChoices: Joi.array().items(Joi.string()).unique().allow(null).required(), // null for open-ended
         CorrectAnswers: Joi.array().items(Joi.string()).unique().allow(null).required(),  // null for no-grading
-        Visible: Joi.boolean().required()
+        Visible: Joi.boolean().required(),
+        MaxAllowedChoices: Joi.required(), //TODO more validation
+        TimeLimit: Joi.required(), //TODO more validation
+
       }))
   });
   const validResult = schema.validate(req.body);

@@ -179,14 +179,14 @@ export default class Question extends Component {
 
   render() {
     console.log(this.state.choicesQueue);
-    const clockFormat = ({ minutes, seconds, completed }) => {
+    const clockFormat = ({ days, hours, minutes, seconds, completed }) => {
 
       if (completed) {
         // Render a completed state
         return <span>Question closed!</span>;
       } else {
         // Render a countdown
-        return <span>{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
+        return <span>{zeroPad(days)}:{zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
       }
     };
 
@@ -239,7 +239,7 @@ export default class Question extends Component {
           <MDBIcon far icon="clock" className="time-icon"/>
           <Countdown
             renderer={clockFormat}
-            date={this.questionStartTime + this.state.data.TimeLimit * 1000}
+            date={ this.state.data.TimeLimit }//stored in milliseconds
             onComplete={this.onTimeEnd}
           />
         </MDBContainer>
