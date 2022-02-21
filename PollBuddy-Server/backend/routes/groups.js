@@ -483,6 +483,52 @@ router.post("/:id/join", async (res, req) => {
 });
 
 /**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-idjoin
+ * @throws 405 - Route not used
+ * @name GET api/groups/{id}/join
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/:id/leave", async (req, res) => {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+});
+
+/**
+ * Adds a user to the group
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-idjoin
+ * @typedef {Object} payload
+ * @property {String} userID - id of the user to add
+ * @property {String} groupID - id of the group to add a user to
+ * @postdata {payload} inputs
+ * @throws 500 - An error occurred while accessing the database.
+ * @throws 400 - Invalid user ID.
+ * @throws 400 - Invalid group ID.
+ * @name POST api/groups/{id}/join
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.post("/:id/leave", async (res, req) => {
+  const userID = await validateID("groups", req.params.userData.userID);
+  if (!userID) {
+    return res.status(400).send(createResponse(null, "Invalid user ID."));
+  }
+  const groupID = await validateID("groups", req.params.groupID);
+  if (!groupID) {
+    return res.status(400).send(createResponse(null, "Invalid group ID."));
+  }
+  // Add user to group, do nothing if they are already in it
+  try {
+    await mongoConnection.getDB().collection("groups").updateOne({ "_id:": groupID }, { $addToSet: { Users: userID } });
+    return res.status(200).send(createResponse("Success"));
+  } catch(e) {
+    console.log(e);
+    return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
+  }
+});
+
+
+/**
  * Checks to see if the given user has access to the given group
  * @typedef {Object} payload
  * @property {String} userID - id of the user to look for
@@ -515,5 +561,7 @@ function checkAdminPermission(adminID, groupID) { //TODO add checks to make sure
   }
   return false; //false if adminID is not found
 }
+
+
 
 module.exports = router;
