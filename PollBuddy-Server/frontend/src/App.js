@@ -20,6 +20,7 @@ import RegisterDefault from "./pages/RegisterDefault/RegisterDefault";
 import RegisterWithSchool from "./pages/RegisterWithSchool/RegisterWithSchool";
 import RegisterWithSchoolStep2 from "./pages/RegisterWithSchoolStep2/RegisterWithSchoolStep2";
 import RegisterWithPollBuddy from "./pages/RegisterWithPollBuddy/RegisterWithPollBuddy";
+import PollCreation from "./pages/PollCreation/PollCreation";
 import PollViewer from "./pages/PollViewer/PollViewer";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import PollResults from "./pages/PollResults/PollResults";
@@ -32,12 +33,12 @@ import AnswerRecorded from "./pages/AnswerRecorded/AnswerRecorded";
 import LoginDefault from "./pages/LoginDefault/LoginDefault";
 import LoginWithSchool from "./pages/LoginWithSchool/LoginWithSchool";
 import LoginWithSchoolStep2 from "./pages/LoginWithSchoolStep2/LoginWithSchoolStep2";
-import Code from "./pages/Code/Code";
 
+import Code from "./pages/Code/Code";
 import Header from "./components/Header/Header.js";
 import Footer from "./components/Footer/Footer.js";
-//import Popup2 from "./components/Popup2/Popup2";
 
+//import Popup2 from "./components/Popup2/Popup2";
 import "./styles/main.scss";
 
 export default class App extends React.Component {
@@ -112,7 +113,6 @@ export default class App extends React.Component {
             {/* Group Join Page */}
             <Route exact path="/groups/join" element={<GroupJoin updateTitle={this.updateTitle} />}/>
 
-
             {/* --- Poll Pages --- */}
 
             {/* My Poll Histories Page */}
@@ -121,9 +121,13 @@ export default class App extends React.Component {
                 treated like a :pollID */}
             <Route exact path="/polls/history" element={<PollHistory updateTitle={this.updateTitle} />}/>
 
+            {/* Poll Creation */}
+            <Route exact path="/polls/new" element={<PollCreation updateTitle={this.updateTitle} />}/>
+
             {/* Poll ID Redirect */}
             {/* Redirects from poll ID page (404) to view page */}
             <Route exact path="/polls/:pollID" element={<Navigate to={"view"} push={true}/>}/>
+
 
             {/* Poll Viewer Page */}
             <Route exact path="/polls/:pollID/view" element={<PollViewer updateTitle={this.updateTitle} />}/>

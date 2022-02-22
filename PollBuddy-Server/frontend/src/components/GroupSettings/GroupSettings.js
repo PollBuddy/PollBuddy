@@ -20,19 +20,30 @@ export default class GroupSettings extends Component{
     }
   }
 
+  getPollData = () => {
+    return {
+      title: "Sample",
+      description: "Sample Description",
+    };
+  };
+
+  createNewPoll = async () => {
+    window.location.href = "/polls/new?groupID=" + this.state.id;
+  };
+
   handleLeaveGroup = async () => {
     await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/leave", {
       method: "POST",
     });
     window.location.replace("/groups");
-  }
+  };
 
   handleDeleteGroup = async () => {
     await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/delete", {
       method: "POST",
     });
     window.location.replace("/groups");
-  }
+  };
 
   render(){
     if (this.state.isMember) {
@@ -50,9 +61,7 @@ export default class GroupSettings extends Component{
           <p className="fontSizeLarge">
             Admin Settings
           </p>
-          <Link to={"/polls/123/edit"}>
-            <button className="button">Create New Poll</button>
-          </Link>
+          <button onClick={this.createNewPoll} className="button">Create New Poll</button>
           <Link to={"/groups/"+ this.state.id +"/edit"}>
             <button className="button">Edit Group</button>
           </Link>

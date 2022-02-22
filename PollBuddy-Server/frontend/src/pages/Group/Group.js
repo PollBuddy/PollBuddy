@@ -42,8 +42,28 @@ class Group extends Component {
         }
         window.location.replace("/groups");
       });
+
+    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/polls", {
+      method: "GET"
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        if (response.result === "success") {
+          this.setState({
+            polls: response.data,
+          });
+        }
+      });
   }
 
+  pollButtonClick = (pollID) => {
+    if (this.state.isAdmin) {
+      window.location.href = "/polls/" + pollID + "/edit";
+    } else if(this.state.isMember) {
+      window.location.href = "/polls/" + pollID + "/view";
+    }
+  };
 
   render() {
     if (this.state.error != null) {
@@ -87,16 +107,16 @@ class Group extends Component {
                 <p>Sorry, you don't have any polls.<br/> <br/></p>
               ) : (
                 <React.Fragment>
-                  {this.state.polls.map((e) => (
-                    <Link to={"/polls/" + e.pollId + "/view"}>
-                      <button style={{width: "17em"}}
-                        className="button">{"Poll " + e.pollId + ": " + e.label}
-                      </button>
-                    </Link>
+                  {this.state.polls.map((poll, index) => (
+                    <button style={{width: "17em"}}
+                      className="button"
+                      onClick={() => this.pollButtonClick(poll.id)}
+                    >{"Poll " + (index + 1) + ": " + poll.title}
+
+                    </button>
                   ))}
                 </React.Fragment>
               )}
-
             </MDBContainer>
           </MDBContainer>
         </MDBContainer>

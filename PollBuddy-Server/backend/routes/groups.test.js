@@ -10,8 +10,9 @@ var { userSchema } = require("../models/User.js");
 var { createModel } = require("../modules/utils.js");
 var mongoConnection = require("../modules/mongoConnection.js");
 var groupsRouter = require("./groups");
-
-var { testUser, testUser2, testGroup, createUser, createGroup } = require("../modules/testingUtils.js");
+const {testUser, testUser2, testGroup, createUser, createGroup, createPoll, testPoll, testGroup2} = require("../modules/testingUtils");
+const {create} = require("connect-mongo");
+const bson = require("bson");
 
 let mockApp = express();
 let session = {};
@@ -125,12 +126,14 @@ describe("/api/groups/new", () => {
     await app.post("/api/groups/new")
       .send({
         name: testGroup.Name,
+        description: testGroup.Description,
       })
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
         let res = await mongoConnection.getDB().collection("groups").findOne({
           Name: testGroup.Name,
+          Description: testGroup.Description,
         });
         expect(res).toBeTruthy();
         expect(response.body.data.id.toString()).toEqual(res._id.toString());
@@ -140,9 +143,46 @@ describe("/api/groups/new", () => {
 
   it("POST: create group, user not logged in", async () => {
     await app.post("/api/groups/new")
+      .expect(401)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+});
+
+describe("/api/groups/:id/edit", () => {
+
+  it("GET: route unavailable", async () => {
+    await app.get("/api/groups/0/edit")
+      .expect(405)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("POST: edit group", async () => {
+    let user = await createUser();
+    let group = await createGroup({Admins: [user.insertedId]});
+    session = { userData: { userID: user.insertedId } };
+    await app.post("/api/groups/" + group.insertedId + "/edit")
       .send({
-        name: testGroup.Name,
+        name: testGroup2.Name,
+        description: testGroup2.Description,
       })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        let res = await mongoConnection.getDB().collection("groups").findOne({
+          _id: group.insertedId,
+        });
+        expect(res.Name).toEqual(testGroup2.Name);
+        expect(res.Description).toEqual(testGroup2.Description);
+      });
+  });
+
+  it("POST: edit group, user not logged in", async () => {
+    await app.post("/api/groups/0/edit")
       .expect(401)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
@@ -223,6 +263,31 @@ describe("/api/groups/:id/users", () => {
 
 });
 
+describe("/api/groups/:id/polls", () => {
+
+  it("GET: get group polls", async () => {
+    let user = await createUser();
+    let group = await createGroup();
+    let poll = await createPoll(group.insertedId);
+    session = { userData: { userID: user.insertedId } };
+    await app.get("/api/groups/" + group.insertedId + "/polls")
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        expect(response.body.data[0].id.toString()).toEqual(poll.insertedId.toString());
+        expect(response.body.data[0].title).toEqual(testPoll.Title);
+      });
+  });
+
+  it("POST: route unavailable", async () => {
+    await app.post("/api/groups/0/users")
+      .expect(405)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+});
 
 describe("/api/groups/:id/join", () => {
 

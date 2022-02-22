@@ -12,9 +12,9 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
     this.state = {
       id: props.router.params.groupID,
       name: "",
-      inputName: "",
+      nameInput: "",
       description: "",
-      inputDescription: "",
+      descriptionInput: "",
       admins: [],
       users: [],
       loadingGroupData: true,
@@ -38,9 +38,9 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
         if (response.result === "success") {
           this.setState({
             name: response.data.name,
-            inputName: response.data.name,
+            nameInput: response.data.name,
             description: response.data.description,
-            inputDescription: response.data.description,
+            descriptionInput: response.data.description,
             loadingGroupData: false,
           });
         } else {
@@ -85,8 +85,35 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
     });
   };
 
+  getGroupData = () => {
+    return {
+      name: this.state.nameInput,
+      description: this.state.descriptionInput,
+    };
+  };
+
   onSubmit = () => {
-    //TODO: Call Edit Group API Endpoint
+    this.setState({ loadingGroupData: true });
+    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/edit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+      body: JSON.stringify(this.getGroupData())
+    }).then((response) => response.json())
+      .then((response) => {
+        if (response.result === "success") {
+          this.setState({
+            showError: false,
+            name: this.state.nameInput,
+            description: this.state.descriptionInput,
+            loadingGroupData: false,
+          });
+        } else {
+          this.setState({
+            showError: true,
+            loadingGroupData: false,
+          });
+        }
+      });
   };
 
   checkError = () => {
@@ -113,20 +140,20 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
                   Group Name:
                 </p>
                 <input
-                  name="inputName"
+                  name="nameInput"
                   id="groupName"
                   className="form-control textBox"
-                  value={this.state.inputName}
+                  value={this.state.nameInput}
                   onInput={this.onInput}
                 />
                 <p className="fontSizeMedium">
                   Group Description:
                 </p>
                 <input
-                  name="inputDescription"
+                  name="descriptionInput"
                   id="groupDescription"
                   className="form-control textBox"
-                  value={this.state.inputDescription}
+                  value={this.state.descriptionInput}
                   onInput={this.onInput}
                 />
               </MDBContainer>

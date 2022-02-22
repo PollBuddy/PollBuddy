@@ -11,7 +11,7 @@ class PollViewer extends Component {
     super();
     this.state = {
       error: null,
-      doneLoading: false,
+      doneLoading: true,
       questionData: {}
     };
   }
@@ -21,27 +21,19 @@ class PollViewer extends Component {
 
     let pollID = this.props.router.params.pollID;
 
-    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + pollID + "/view", {
-      method: "GET"
-    })
-      .then(response => {
-        if(response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Something went wrong");
-        }
-
-      })
-      .then(response => {
-        if (response === {}) {
-          console.log("Error fetching data");
-        } else {
-          console.log("Fetching data succeeded");
-          console.log(response);
-          this.setState({"questionData": response.data, "doneLoading": true});
-        }
-      })
-      .catch(error => this.setState({"error": error}));
+    // fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + pollID + "/view", {
+    //   method: "GET"
+    // })
+    //   .then(response => response.json())
+    //   .then(response => {
+    //     console.log(response);
+    //     if (response === {}) {
+    //       console.log("Error fetching data");
+    //     } else {
+    //       console.log("Fetching data succeeded");
+    //       this.setState({"questionData": response.data, "doneLoading": true});
+    //     }
+    //   });
   }
 
   render() {
@@ -66,7 +58,7 @@ class PollViewer extends Component {
         <MDBContainer className="page">
           <Question questionObj={
             //placeholder json, remove when backend functionality is available
-            /*{
+            {
               "questionNumber": "3",
               "question": "Why does the tooth fairy collect teeth?",
               // "img": "https://i.kym-cdn.com/photos/images/newsfeed/001/409/553/5f5.png",
@@ -80,8 +72,8 @@ class PollViewer extends Component {
               "points": 2,
               "maxAllowedChoices": 2,
               "timeLimit": 10
-            }*/
-            this.state.questionData
+            }
+            // this.state.questionData
           }/>
         </MDBContainer>
       );

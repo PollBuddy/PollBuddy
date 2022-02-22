@@ -97,7 +97,7 @@ export default class RegisterWithPollBuddy extends Component {
       })
     }).then(response => {
       if (response.status === 200) {
-        //needs some authentication before and if authentication passes then set local storage and such refer to GroupCreation page to see the way to make POST requests to the backend
+        //needs some authentication before and if authentication passes then set local storage and such refer to PollCreation page to see the way to make POST requests to the backend
         localStorage.setItem("loggedIn", true);
         this.setState({registrationSuccessful: true});
         // TODO: firstName, lastName, and userName are returned. They should probably be stored.
@@ -162,7 +162,7 @@ export default class RegisterWithPollBuddy extends Component {
                 onChange= {(evt) => { this.setState({password: evt.target.value}); }}/>
               <i class="fas fa-eye" onClick={this.showPassword}></i>
             </p>
-            
+
             {this.state.passValid.error &&
               <p style={{color: "red"}}>{ this.state.passValid.error.toString() }</p>
             }

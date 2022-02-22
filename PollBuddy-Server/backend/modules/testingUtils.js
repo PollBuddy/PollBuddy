@@ -2,10 +2,11 @@ const {createModel} = require("../modules/utils.js");
 const {userSchema} = require("../models/User.js");
 const mongoConnection = require("../modules/mongoConnection.js");
 const {groupSchema} = require("../models/Group.js");
+const {pollSchema} = require("../models/Poll");
 
 const testGroup = {
   Name: "test.group",
-  Description: "",
+  Description: "test.group.description",
   Invites: [],
   Admins: [],
   Polls: [],
@@ -14,11 +15,21 @@ const testGroup = {
 
 const testGroup2 = {
   Name: "test.group.2",
-  Description: "",
+  Description: "test.group.description.2",
   Invites: [],
   Admins: [],
   Polls: [],
   Users: [],
+};
+
+const testPoll = {
+  Title: "sample.poll",
+  Description: "sample.poll.description",
+};
+
+const testPoll2 = {
+  Title: "sample.poll.2",
+  Description: "sample.poll.description.2",
 };
 
 let testUser = {
@@ -80,11 +91,30 @@ let createGroup = async function(update) {
   return res;
 };
 
+let createPoll = async function(groupID) {
+  let pollData = {
+    Title: testPoll.Title,
+    Description: testPoll.Description,
+    Group: groupID,
+  };
+  let poll = await mongoConnection.getDB().collection("polls").insertOne(createModel(pollSchema, pollData));
+  await mongoConnection.getDB().collection("groups").updateOne(
+    { _id: groupID, },
+    {"$addToSet": {
+      "Polls": poll.insertedId,
+    }}
+  );
+  return poll;
+};
+
 module.exports = {
   testUser,
   testUser2,
   testGroup,
   testGroup2,
+  testPoll,
+  testPoll2,
   createUser,
-  createGroup
+  createGroup,
+  createPoll
 };

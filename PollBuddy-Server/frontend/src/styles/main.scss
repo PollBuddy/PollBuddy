@@ -121,8 +121,14 @@ button:focus {
   border: 5px solid transparent;
   outline: none;
   text-align: center;
-  margin: 10px 0;
+  margin: 10px 5px;
   box-sizing: border-box;
+}
+
+.checkBox {
+  height: 4em;
+  width: 4em;
+  border-radius: 20px;
 }
 
 input.textBox:focus, textarea.textBox:focus {

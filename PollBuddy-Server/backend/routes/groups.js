@@ -7,7 +7,7 @@ const {createResponse, validateID, debugRoute, getResultErrors, promote, isLogge
 const {userRegisterValidator, getUser} = require("../models/User.js");
 const {createGroupValidator, getGroup, createGroup, getGroupUsers, getGroupAdmins} = require("../models/Group.js"); // object destructuring, only import desired functions
 const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
-const {getGroupPolls, joinGroup, leaveGroup, deleteGroup} = require("../models/Group");
+const {getGroupPolls, joinGroup, leaveGroup, deleteGroup, editGroup, editGroupValidator} = require("../models/Group");
 
 // This file handles /api/groups URLs
 
@@ -45,12 +45,9 @@ router.post("/new", promote(isLoggedIn), async (req, res) => {
   }, { abortEarly: false });
 
   let errors = getResultErrors(validResult);
-  let errorMsg = {};
-  if (errors["name"]) { errorMsg["name"] = "Invalid group name!"; }
-  if (errors["description"]) { errorMsg["description"] = "Invalid group description!"; }
   if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest(errors)); }
 
-  let response = await createGroup(validResult.value, req.session.userData.userID);
+  let response = await createGroup(req.session.userData.userID, validResult.value);
   return sendResponse(res, response);
 });
 
@@ -86,106 +83,17 @@ router.get("/:id/edit", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/edit", async (req, res) => {
-  const id = await validateID("groups", req.params.id);
-  if (!id) {
-    return res.status(400).send(createResponse(null, "Invalid ID."));
-  }
-  const jsonContent = req.body;
-  let success = false;
-  if (jsonContent.Action === "Add") {
-    if (jsonContent.Name !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$set": { Name: jsonContent.Name } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (jsonContent.Instructors !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Instructors: jsonContent.Instructors } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (jsonContent.Polls !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Polls: jsonContent.Polls } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (jsonContent.Users !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Users: jsonContent.Users } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (jsonContent.Admins !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Admins: jsonContent.Admins } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (success === false) {
-      return res.status(400).send(createResponse(null,"Invalid request body or ObjectID"));
-    }
-  } else if (jsonContent.Action === "Remove") {
-    if (jsonContent.Instructors !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Instructors: jsonContent.Instructors } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (jsonContent.Polls !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Polls: jsonContent.Polls } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (jsonContent.Users !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Users: jsonContent.Users } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (jsonContent.Admins !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Admins: jsonContent.Admins } }, function (err, res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (success === false) {
-      return res.status(400).send(createResponse(null,"Invalid request body or ObjectID"));
-    }
-  } else {
-    return res.status(400).send(createResponse(null,"Invalid request body or ObjectID"));
-  }
-  return res.status(200).send(createResponse("Success",));
+router.post("/:id/edit", promote(isLoggedIn), async (req, res) => {
+  let validResult = editGroupValidator.validate({
+    name: req.body.name,
+    description: req.body.description,
+  }, { abortEarly: false });
+
+  let errors = getResultErrors(validResult);
+  if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest(errors)); }
+
+  let response = await editGroup(req.params.id, req.session.userData.userID, validResult.value);
+  return sendResponse(res, response);
 });
 
 /**
@@ -212,7 +120,7 @@ router.get("/:id/delete", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/delete", async (req, res) => {//use router.delete??
+router.post("/:id/delete", promote(isLoggedIn), async (req, res) => {//use router.delete??
   let response = await deleteGroup(req.params.id, req.session.userData.userID);
   return sendResponse(res, response);
 });
@@ -311,7 +219,7 @@ router.post("/:id", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/polls", async (req, res) => {
+router.get("/:id/polls", promote(isLoggedIn), async (req, res) => {
   let response = await getGroupPolls(req.params.id);
   return sendResponse(res, response);
 });

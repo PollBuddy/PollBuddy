@@ -27,9 +27,19 @@
     .randomizeBox, .randomizeLabel {
       display: inline-block;
     }
-  
+
     .randomizeBox {
       height: 25px;
       width: 25px;
     }
   }
+
+.questionAnswer {
+  display: flex;
+  align-items: center;
+}
+
+.correctCheckBox {
+  height: 25px;
+  width: 25px;
+}
