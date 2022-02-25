@@ -23,7 +23,7 @@ export default class Groups extends Component {
       {id:"4", title:"CSCI 2500 - Computer Organization"},
       {id:"5", title:"CSCI 2960 - RCOS"}
     ]
-  }
+  };
 
   render() {
     //These if else statement chooses what to display depending on if you are in groups or not

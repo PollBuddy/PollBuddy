@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import {Redirect, withRouter} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import "./RegisterWithPollBuddy.scss";
 
 const Joi = require('joi');
 
-class RegisterWithPollBuddy extends Component {
+export default class RegisterWithPollBuddy extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -115,7 +115,7 @@ class RegisterWithPollBuddy extends Component {
 
     if(this.state.registrationSuccessful) {
       return (
-        <Redirect to="/groups" />
+        <Navigate to="/groups" />
       );
     }
 
@@ -173,5 +173,3 @@ class RegisterWithPollBuddy extends Component {
     );
   }
 }
-
-export default withRouter(RegisterWithPollBuddy);

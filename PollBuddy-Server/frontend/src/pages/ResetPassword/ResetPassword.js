@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 
-import {Link, withRouter} from "react-router-dom";
+import {Link} from "react-router-dom";
 import "./ResetPassword.scss";
 
 import "mdbreact/dist/css/mdb.css";
 
-class ResetPassword extends Component {
+export default class ResetPassword extends Component {
   constructor(props) {
     super(props);
     this.handleLogOutCheck = this.handleLogOutCheck.bind(this);
@@ -62,5 +62,3 @@ class ResetPassword extends Component {
     );
   }
 }
-
-export default withRouter(ResetPassword);
