@@ -53,9 +53,14 @@ const getUser = async function(userID) {
     // Found user, and return the user data in a JSON Object
     return [200, createResponse({
       firstName: user.FirstName,
+      firstNameLocked: user.FirstNameLocked,
       lastName: user.LastName,
+      lastNameLocked: user.LastNameLocked,
       userName: user.UserName,
+      userNameLocked: user.UserNameLocked,
       email: user.Email,
+      emailLocked: user.EmailLocked,
+      schoolAffiliation: user.SchoolAffiliation,
     })];
   } else {
     // Could not find user associated with this ID, something has gone wrong
