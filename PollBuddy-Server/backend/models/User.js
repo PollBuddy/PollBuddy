@@ -60,7 +60,7 @@ const getUser = async function(userID) {
       userNameLocked: user.UserNameLocked,
       email: user.Email,
       emailLocked: user.EmailLocked,
-      schoolAffiliation: user.SchoolAffiliation,
+      schoolAffiliation: user.SchoolAffiliation
     })];
   } else {
     // Could not find user associated with this ID, something has gone wrong
