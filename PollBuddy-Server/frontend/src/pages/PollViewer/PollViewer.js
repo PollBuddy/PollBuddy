@@ -7,8 +7,8 @@ import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
 class PollViewer extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       error: null,
       doneLoading: false,

@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
-
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
-import {Link, Navigate} from "react-router-dom";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import "./AccountInfo.scss";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 const Joi = require("joi");
 
 
@@ -41,18 +40,23 @@ class AccountInfo extends Component {
       logOutEverywhere: false
     };
     this.changePassword = this.handleToggleClick.bind(this);
-    
     this.handleInputChange = this.handleInputChange.bind(this);
-    // Bounce back to log in if they are not logged
-    if(localStorage.getItem("loggedIn") !== "true"){
-      window.location.replace("/login");
-    }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleLogOutEverywhere = this.handleLogOutEverywhere.bind(this);
   }
 
+
   componentDidMount(){
     this.props.updateTitle("Account Info");
+
+    // Bounce back to log in if they are not logged
+    if(localStorage.getItem("loggedIn") !== "true"){
+      console.log("Not logged in, redirecting");
+      // For some stupid React reason, this needs to be in a timeout to work.
+      // https://github.com/remix-run/react-router/issues/7460#issuecomment-988642684
+      return setTimeout(() => { this.props.router.navigate("/login", { replace: true }); }, 0);
+    }
+
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/me", {
       method: "GET"
     }).then(response => response.json())
@@ -328,4 +332,4 @@ class AccountInfo extends Component {
   }
 }
 
-export default AccountInfo;
+export default withRouter(AccountInfo);
