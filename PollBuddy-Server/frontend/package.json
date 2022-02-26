@@ -42,6 +42,7 @@
     ]
   },
   "devDependencies": {
+    "jest-fetch-mock": "^3.0.3",
     "jquery": "^3.6.0",
     "react-test-renderer": "^17.0.2"
   }
