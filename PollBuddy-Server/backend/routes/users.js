@@ -539,7 +539,7 @@ router.post("/register/rpi", function (req, res) {
 
         // Configure email, username by copying from the result object and saving in the session
         req.session.userData = {};
-        req.session.userData.userID = result.insertedId.str;
+        req.session.userData.userID = result.insertedId;
 
         // Send the response object with some basic info for the frontend to store
         return res.status(200).send(createResponse({
