@@ -14,28 +14,28 @@ class AccountInfo extends Component {
     this.state = {
       changePassword: false,
       doneLoading: false,
-      userName: "mans",
+      userName: "",
       userNameLoaded: false,
       userNameLocked: false, 
       usernameText: null, 
-      firstName: "SIS",
+      firstName: "",
       firstNameLoaded: false,
       firstNameLocked: false,
       firstnameText: null,
-      lastName: "Man",
+      lastName: "",
       lastNameLoaded: false,
       lastNameLocked: false,
       lastnameText: null,
-      email: "sisman@rpi.edu",
+      email: "",
       emailLoaded: false,
       emailLocked: false,
       emailText: null,
-      school: "RPI",
+      school: "None",
       passwordLocked: false,
       newPasswordText: null,
       done: false,
       error: false,
-      errorMessage: "Error: Unkown Error",
+      errorMessage: "Error: Unknown Error",
       showPassword: false,
       logOutEverywhere: false
     };
@@ -215,7 +215,7 @@ class AccountInfo extends Component {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
-        firstName: this.state.firstNameLocked ? undefined : firstNameInput, //TODO: keep track of each of the inital states of these
+        firstName: this.state.firstNameLocked ? undefined : firstNameInput, // TODO: keep track of each of the initial states of these
         lastName: this.state.lastNameLocked ? undefined : lastNameInput,  //only want to put in the changed values. Update: puts in all non-locked values
         userName: this.state.userNameLocked ? undefined : userInput,
         email: this.state.emailLocked ? undefined : emailInput,
@@ -287,8 +287,8 @@ class AccountInfo extends Component {
   
               <MDBRow className="AccountInfo-accountInputs">
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
-                  <label htmlFor="institution">Institution:</label>
-                  <input placeholder="RPI" className="form-control textBox" id="institution" value={this.state.school} readOnly />
+                  <label htmlFor="school">School:</label>
+                  <input placeholder="RPI" className="form-control textBox" id="school" value={this.state.school} readOnly />
                 </MDBCol>
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="passwordChange">Password:</label>
@@ -307,7 +307,7 @@ class AccountInfo extends Component {
 
             <div id="AccountInfo-logOutEverywhere" style={this.state.changePassword ? {display: "flex"} : {display: "none"}}>
               <input type="checkbox" onChange={this.handleLogOutEverywhere} className="logOutBox" id="logOutEverywhere" checked={this.logOutEverywhere}/>
-              <label className="logOutLabel" for="logOutEverywhere">Log out everywhere?</label>
+              <label className="logOutLabel" htmlFor="logOutEverywhere">Log out everywhere?</label>
             </div>
           
             { /* TODO: Update this to have a backend call instead of a "to", plus some result popup */ }
