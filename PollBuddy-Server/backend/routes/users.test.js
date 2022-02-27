@@ -112,6 +112,18 @@ let createUserSchoolAffiliated = async function(update) {
   return res;
 };
 
+describe("/api/users", () => {
+  it("GET: empty url request", async () => {
+    await app.get("/api/users/")
+      .expect(500)
+  });
+
+  it("POST: empty url request", async () => {
+    await app.post("/api/users/")
+      .expect(500)
+  });
+});
+
 describe("/api/users/login", () => {
 
   it("GET: route unavailable", async () => {
@@ -204,6 +216,38 @@ describe("/api/users/login", () => {
       });
   });
 
+  it("POST: login with email failure, no user found", async () => {
+    let res = await createUser();
+    let userLogin = {
+      userNameEmail: "notauser@gmail.com",
+      password: testUser.Password,
+    };
+
+    await app.post("/api/users/login")
+      .send(userLogin)
+      .expect(401)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+        
+      });
+  });
+
+  it("POST: login with email failure, incorrect password", async () => {
+    let res = await createUser();
+    let userLogin = {
+      userNameEmail: testUser.Email,
+      password: "ajd@jdk2DDGK9933lL",
+    };
+
+    await app.post("/api/users/login")
+      .send(userLogin)
+      .expect(401)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+        
+      });
+  });
+
 });
 
 
@@ -218,7 +262,7 @@ describe("/api/users/login/rpi", () => {
       });
   });
 
-  it.skip('GET requests login rpi failure', async () => {
+  it('GET requests login rpi failure', async () => {
     let res = await createUser();
     session = { cas_user: "notregistereduser", userData: { userID: res.insertedId } };
     await app.get("/api/users/login/rpi")
@@ -228,8 +272,6 @@ describe("/api/users/login/rpi", () => {
     });
 
   it('GET requests login rpi success', async () => {
-    
-
     let res = await createUser();
     session = { userDataTemp: { userName: "__rpi_" + testUser.UserName, email: testUser.Email } };
     await app.post("/api/users/register/rpi")
@@ -250,24 +292,10 @@ describe("/api/users/login/rpi", () => {
 
         await app.get("/api/users/login/rpi")
           .expect(302)
-          .then(async (response) => {
-            expect(response.body.result).toBe("success");
-            expect(response.body.data.firstName).toBe(testUser.FirstName);
-            expect(response.body.data.lastName).toBe(testUser.LastName);
-            expect(response.body.data.userName).toBe(testUser.UserName);
-            expect(response.body.data.email).toBe(testUser.Email);
-          }); 
       });
   });
-  
-    it.skip('should return a 200 HTTP status code', async () => {
-      parentApp
-        .get('/api/users/login/rpi')
-        .then((response) => {
-          expect(res.status).to.equal(200);
-        });
-    });
-  });
+
+});
 
 
 describe("/api/users/register", () => {
@@ -323,6 +351,30 @@ describe("/api/users/register", () => {
       });    
   });
 
+  it.skip("POST: register user failure duplicate", async () => {
+    
+    let res = await mongoConnection.getDB().collection("users").findOne({ 
+         UserName: testUser.UserName,
+         Email: testUser.Email,
+         FirstName: testUser.FirstName,
+         LastName: testUser.LastName
+       }).then(
+        await app.post("/api/users/register")
+          .send({
+            userName: testUser.UserName,
+            email: testUser.Email,
+            password: testUser.Password,
+            firstName: testUser.FirstName,
+            lastName: testUser.LastName
+          })
+          .expect(400)
+          .then(async (response) => {
+            expect(response.body.result).toBe("failure");
+
+          })
+        );
+  });
+
   // Not sure how to do for lines 347-370
   it("POST: register user duplicate failure", async () => {
     let user = createUser()
@@ -358,6 +410,20 @@ describe("/api/users/register", () => {
 });
 
 describe("/api/users/register/rpi", () => {
+
+  it("GET: register rpi success", async() => {
+    let res = await createUser();
+    session = { cas_return_to: "", cas_user: "mcdanz", userData: { userID: res.insertedId } };
+    await app.get("/api/users/register/rpi")
+      .send({
+        userName: testUser.UserName,
+        email: testUser.Email,
+        password: testUser.Password,
+        firstName: testUser.FirstName,
+        lastName: testUser.LastName
+      })
+      .expect(302)
+    });
 
   it("POST: register rpi success", async() => {
     let res = await createUser();
@@ -582,6 +648,16 @@ describe("/api/users/me/edit", () => {
 describe("/api/users/me/groups", () => {
 
   //TODO: Successfully gets user groups. Issue#591
+
+  it.skip("GET: user groups success", async () => {
+    let res = await createUser();
+    session = { userData: {userID: "1" } };
+    await app.get("/api/users/me/groups")
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+      });    
+  });
 
   it("GET: user not logged in failed", async () => {
     await app.get("/api/users/me/groups")
