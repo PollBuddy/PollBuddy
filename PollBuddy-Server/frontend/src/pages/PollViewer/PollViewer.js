@@ -6,8 +6,8 @@ import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 
 export default class PollViewer extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       error: null,
       doneLoading: false,
