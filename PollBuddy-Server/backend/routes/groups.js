@@ -495,7 +495,7 @@ router.get("/:id/leave", async (req, res) => {
 });
 
 /**
- * Adds a user to the group
+ * removes user from the group
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-idjoin
  * @typedef {Object} payload
  * @property {String} userID - id of the user to add
@@ -511,19 +511,19 @@ router.get("/:id/leave", async (req, res) => {
 router.post("/:id/leave", async (res, req) => {
   const userID = await validateID("groups", req.params.userData.userID);
   if (!userID) {
-    return res.status(400).send(createResponse(null, "Invalid user ID."));
+    return res.status(400).send(createResponse(null, "User is not a member of this group."));
   }
   const groupID = await validateID("groups", req.params.groupID);
   if (!groupID) {
     return res.status(400).send(createResponse(null, "Invalid group ID."));
   }
-  // Add user to group, do nothing if they are already in it
+  // remove user from the group
   try {
-    await mongoConnection.getDB().collection("groups").updateOne({ "_id:": groupID }, { $addToSet: { Users: userID } });
+    await mongoConnection.getDB().collection("groups").updateOne({ "_id:": groupID }, { $pull: { Users: userID } });
     return res.status(200).send(createResponse("Success"));
   } catch(e) {
     console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
+    return res.status(500).send(createResponse(null, "Database error occurred."));
   }
 });
 
