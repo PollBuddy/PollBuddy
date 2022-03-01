@@ -4,6 +4,21 @@ import "mdbreact/dist/css/mdb.css";
 
 import SchoolPicker, {schoolLinkDict} from "../../components/SchoolPicker/SchoolPicker";
 
+function check(value) {
+  var f = document.getElementById("frm");
+  f.setAttribute('method',"post");
+
+  if(schoolLinkDict.has(value)) {
+       f.setAttribute('action',"/api/users/register/" + schoolLinkDict[this.state.value]);
+  }
+  else {   
+
+       f.setAttribute('action',"");
+  }
+
+  return true;
+}
+
 export default class RegisterWithSchool extends Component {
   componentDidMount() {
     this.props.updateTitle("Register with School");
@@ -36,7 +51,7 @@ export default class RegisterWithSchool extends Component {
           />
 
           <form>
-            <button className="btn button" formAction={ "/api/users/register/" + schoolLinkDict[this.state.value] }>Submit</button>
+            <button className="btn button" onSubmit={check(this.state.value)} formAction={""}>Submit</button>
           </form>
 
         </MDBContainer>
