@@ -107,7 +107,7 @@ module.exports = {
   },
   validateID: function(ID, type){
     //check for valid type
-    if(type == "groups" || type == "polls" || type == "users") {
+    if(type === "groups" || type === "polls" || type === "users") {
       //find ID object, stopping after the first one found to preserve time
       if(db.collection(type).countDocuments({"_id": ID}, {limit: 1}) > 0 ) {
         return true;

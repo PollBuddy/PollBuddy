@@ -14,7 +14,8 @@ const {createResponse, validateID, debugRoute} = require("../modules/utils"); //
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/new", function (_req, res) {
+// eslint-disable-next-line no-unused-vars
+router.get("/new", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
@@ -61,7 +62,8 @@ router.post("/new", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/edit", function (_req, res) {
+// eslint-disable-next-line no-unused-vars
+router.get("/:id/edit", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
@@ -195,7 +197,7 @@ router.post("/:id/edit", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/delete", function (_req, res) {
+router.get("/:id/delete", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
@@ -242,7 +244,7 @@ router.post("/:id/delete", async (req, res) => {//use router.delete??
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/", async (req, res) => {
-  debugRoute(req,res,async (_req,res) => {
+  debugRoute(req,res,async (req,res) => {
     try {
       const groups = await mongoConnection.getDB().collection("groups").find({}).toArray();
       return res.status(200).send(createResponse(groups));
@@ -309,7 +311,7 @@ router.get("/:id", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id", function (_req, res) {
+router.post("/:id", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
@@ -350,7 +352,7 @@ router.get("/:id/polls", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/polls", function (_req, res) {
+router.post("/:id/polls", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
@@ -391,7 +393,7 @@ router.get("/:id/users", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/users", function (_req, res) {
+router.post("/:id/users", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
@@ -432,7 +434,7 @@ router.get("/:id/admins", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/admins", function (_req, res) {
+router.post("/:id/admins", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
@@ -444,7 +446,7 @@ router.post("/:id/admins", function (_req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/join", async (_req, res) => {
+router.get("/:id/join", async (req, res) => {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 

@@ -93,12 +93,13 @@ app.use("/api/groups", groupsRouter);
 app.use("/api/polls", pollsRouter);
 app.use("/api/users", usersRouter);
 
-var schoolsModule = require("./modules/schoolList.js");
+const schoolsModule = require("./modules/schoolList.js");
 
 const {createResponse} = require("./modules/utils");
 
-app.get("/api/schools", (_req, res) => {
-  var schools = schoolsModule.getList();
+// eslint-disable-next-line no-unused-vars
+app.get("/api/schools", (req, res) => {
+  let schools = schoolsModule.getList();
   res.json(schools);
 });
 
@@ -113,7 +114,8 @@ app.get("/api/schools", (_req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-app.get("/", function (_req, res) {
+// eslint-disable-next-line no-unused-vars
+app.get("/", function (req, res) {
   return res.status(200).send(createResponse("Backend is up."));
 });
 
@@ -127,7 +129,8 @@ app.get("/", function (_req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-app.get("/api", function (_req, res) {
+// eslint-disable-next-line no-unused-vars
+app.get("/api", function (req, res) {
   return res.status(200).send(createResponse("Backend is up."));
 });
 
@@ -138,7 +141,8 @@ app.get("/api", function (_req, res) {
  * @throws 404 - Not Found
  * @param {function} callback - Function handler for endpoint.
  */
-app.use(function (_req, _res, next) {
+// eslint-disable-next-line no-unused-vars
+app.use(function (req, _res, next) {
   next(createError(404));
 });
 
@@ -154,7 +158,7 @@ app.use(function (_req, _res, next) {
  * @throws error code of given error, or 500 - server error
  * @param {function} callback - Function handler for endpoint.
  */
-app.use(function (err, req, res, _next) {
+app.use(function (err, req, res) {
 
   console.log(err);
 

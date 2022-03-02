@@ -140,7 +140,7 @@ var isSiteAdmin =
  * predicate to check if the running image is in development mode
  * @see {Predicate}
  */
-var isDevelopmentMode = (req) => {
+var isDevelopmentMode = () => {
   if(process.env.DEVELOPMENT_MODE === "true"){
     return null;
   } else {
