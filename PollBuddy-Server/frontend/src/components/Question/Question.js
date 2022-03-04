@@ -179,14 +179,44 @@ export default class Question extends Component {
 
   render() {
     console.log(this.state.choicesQueue);
-    const clockFormat = ({ days, hours, minutes, seconds, completed }) => {
+    const clockFormatDays = ({ days, completed }) => {
 
       if (completed) {
         // Render a completed state
         return <span>Question closed!</span>;
       } else {
         // Render a countdown
-        return <span>{zeroPad(days)}:{zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
+        return <span>{zeroPad(days)}</span>;
+      }
+    };
+    const clockFormatHours = ({ hours, completed }) => {
+
+      if (completed) {
+        // Render a completed state
+        return <span>Question closed!</span>;
+      } else {
+        // Render a countdown
+        return <span>{zeroPad(hours)}</span>;
+      }
+    };
+    const clockFormatMinutes = ({ minutes, completed }) => {
+
+      if (completed) {
+        // Render a completed state
+        return <span>Question closed!</span>;
+      } else {
+        // Render a countdown
+        return <span>{zeroPad(minutes)}</span>;
+      }
+    };
+    const clockFormatSeconds = ({ seconds, completed }) => {
+
+      if (completed) {
+        // Render a completed state
+        return <span>Question closed!</span>;
+      } else {
+        // Render a countdown
+        return <span>{zeroPad(seconds)}</span>;
       }
     };
 
@@ -199,6 +229,7 @@ export default class Question extends Component {
     return (
       <MDBContainer className="box">
         <p className="question-num">Question {this.state.data.QuestionNumber}</p>
+        <MDBIcon far icon="clock" className="time-icon"/>
         <span className={"question-title"}>{this.state.data.QuestionText}</span>
         { // only display image if there is one
           this.state.data.img &&
@@ -235,14 +266,49 @@ export default class Question extends Component {
             }
           })}
         </MDBContainer>
-        <MDBContainer className="button time-info">
-          <MDBIcon far icon="clock" className="time-icon"/>
-          <Countdown
-            renderer={clockFormat}
-            date={ this.state.data.TimeLimit }//stored in milliseconds
-            onComplete={this.onTimeEnd}
-          />
+        <MDBContainer className="time-grid" title = "Question Countdown">
+          <button className = "button time-info">
+            <Countdown
+                renderer={clockFormatDays}
+                date={ this.state.data.CloseTime }//stored in milliseconds
+                onComplete={this.onTimeEnd}
+            />
+          </button>
+          <button className = "button time-info">
+            <Countdown
+                renderer={clockFormatHours}
+                date={ this.state.data.CloseTime }//stored in milliseconds
+                onComplete={this.onTimeEnd}
+            />
+          </button>
+          <button className = "button time-info">
+            <Countdown
+                renderer={clockFormatMinutes}
+                date={ this.state.data.CloseTime }//stored in milliseconds
+                onComplete={this.onTimeEnd}
+            />
+          </button>
+          <button className = "button time-info">
+            <Countdown
+                renderer={clockFormatSeconds}
+                date={ this.state.data.CloseTime }//stored in milliseconds
+                onComplete={this.onTimeEnd}
+            />
+          </button>
+          <button className={"time-info-text"}>
+            <span>Days</span>
+          </button>
+          <button className={"time-info-text"}>
+            <span>Hrs</span>
+          </button>
+          <button className={"time-info-text"}>
+            <span>Mins</span>
+          </button>
+          <button className={"time-info-text"}>
+            <span>Secs</span>
+          </button>
         </MDBContainer>
+
         <MDBContainer>
           <button className="button" onClick={this.submitAnswers}>Submit</button>
         </MDBContainer>

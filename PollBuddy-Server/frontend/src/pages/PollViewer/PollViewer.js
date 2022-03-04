@@ -12,7 +12,8 @@ class PollViewer extends Component {
     this.state = {
       error: null,
       doneLoading: false,
-      questionData: {}
+      questionData: {},
+      perPoll: false
     };
   }
 
@@ -64,7 +65,7 @@ class PollViewer extends Component {
     } else {
       return (
         <MDBContainer className="page">
-          <Question questionObj={
+          <Question perPoll ={this.state.perPoll} questionObj={
             //placeholder json, remove when backend functionality is available
             /*{
               "questionNumber": "3",

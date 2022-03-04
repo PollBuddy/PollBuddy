@@ -41,8 +41,28 @@
   margin: 8px 0;
 }
 
+.time-grid{
+  display: inline-grid;
+}
+
 .time-info {
+  grid-row: 1;
+  text-align: center;
+  font-size: 10px;
+  width: 33px;
+  padding: 7px 10px;
   color: var(--white-most-text) !important;
+  margin: 2px;
+}
+
+.time-info-text{
+  grid-row: 2;
+  text-align: center;
+  font-size: 10px;
+  margin: 5px 0px;
+  color: var(--white-most-text) !important;
+  background-color: #25162c;
+  border: none;
 }
 
 .time-info:hover {

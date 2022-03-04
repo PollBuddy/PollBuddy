@@ -116,7 +116,7 @@ router.post("/:id/edit", async (req, res) => {
         CorrectAnswers: Joi.array().items(Joi.string()).unique().allow(null).required(),  // null for no-grading
         Visible: Joi.boolean().required(),
         MaxAllowedChoices: Joi.required(), //TODO more validation
-        TimeLimit: Joi.required(), //TODO more validation
+        CloseTime: Joi.required(), //TODO more validation
 
       }))
   });
@@ -407,7 +407,7 @@ router.get("/:id/view", async function (req, res, next) {
         q.QuestionText = result[0].Questions[i].QuestionText;
         q.AnswerChoices = result[0].Questions[i].AnswerChoices;
         q.MaxAllowedChoices = result[0].Questions[i].MaxAllowedChoices;
-        q.TimeLimit = result[0].Questions[i].TimeLimit;
+        q.CloseTime = result[0].Questions[i].CloseTime;
         openQuestions.push(q);
       }
     }
