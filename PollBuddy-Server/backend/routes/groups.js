@@ -463,12 +463,12 @@ router.get("/:id/join", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/join", async (res, req) => {
-  const userID = await validateID("groups", req.session.userData.userID);
+router.post("/:id/join", async (req, res) => {
+  const userID = await validateID("users", req.session.userData.userID);
   if (!userID) {
     return res.status(400).send(createResponse(null, "Invalid user ID."));
   }
-  const groupID = await validateID("groups", req.params.groupID);
+  const groupID = await validateID("groups", req.params.id);
   if (!groupID) {
     return res.status(400).send(createResponse(null, "Invalid group ID."));
   }
@@ -508,12 +508,12 @@ router.get("/:id/leave", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/leave", async (res, req) => {
-  const userID = await validateID("groups", req.session.userData.userID);
+router.post("/:id/leave", async (req, res) => {
+  const userID = await validateID("users", req.session.userData.userID);
   if (!userID) {
     return res.status(400).send(createResponse(null, "User is not a member of this group."));
   }
-  const groupID = await validateID("groups", req.params.groupID);
+  const groupID = await validateID("groups", req.params.id);
   if (!groupID) {
     return res.status(400).send(createResponse(null, "Invalid group ID."));
   }
