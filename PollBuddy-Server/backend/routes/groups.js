@@ -464,7 +464,7 @@ router.get("/:id/join", async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/:id/join", async (res, req) => {
-  const userID = await validateID("groups", req.params.userData.userID);
+  const userID = await validateID("groups", req.session.userData.userID);
   if (!userID) {
     return res.status(400).send(createResponse(null, "Invalid user ID."));
   }
@@ -496,10 +496,10 @@ router.get("/:id/leave", async (req, res) => {
 
 /**
  * removes user from the group
- * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-idjoin
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-idleave
  * @typedef {Object} payload
- * @property {String} userID - id of the user to add
- * @property {String} groupID - id of the group to add a user to
+ * @property {String} userID - id of the user to remove
+ * @property {String} groupID - id of the group to remove a user from
  * @postdata {payload} inputs
  * @throws 500 - An error occurred while accessing the database.
  * @throws 400 - Invalid user ID.
@@ -509,7 +509,7 @@ router.get("/:id/leave", async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/:id/leave", async (res, req) => {
-  const userID = await validateID("groups", req.params.userData.userID);
+  const userID = await validateID("groups", req.session.userData.userID);
   if (!userID) {
     return res.status(400).send(createResponse(null, "User is not a member of this group."));
   }
