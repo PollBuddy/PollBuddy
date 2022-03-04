@@ -17,7 +17,7 @@ export default class LoginWithPollBuddy extends Component {
 
   constructor(){
     super();
-    if(localStorage.getItem("loggedIn")){
+    if(localStorage.getItem("loggedIn") === "true"){
       this.setState({successfulLogin: true}); // Tell it to redirect to the next page if already logged in
     }
     console.log(process.env.REACT_APP_BACKEND_URL);
@@ -100,7 +100,7 @@ export default class LoginWithPollBuddy extends Component {
 
     if(this.state.successfulLogin) { // Basically redirect if the person is logged in or if their login succeeds
       return (
-        <Navigate to="/groups" push={true}/>
+        <Navigate to="/" push={true}/>
       );
     }
     return (

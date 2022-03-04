@@ -54,6 +54,16 @@ export default class App extends React.Component {
     document.title = t + " - Poll Buddy";
   }
 
+  checkLogin(element) {
+    // Bounce back to log in if they are not logged
+    if(localStorage.getItem("loggedIn") !== "true"){
+      return <Navigate to="/login" push={true}/>;
+    }
+    else {
+      return element;
+    }
+  }
+
   render() {
     this.updateTitle = this.updateTitle.bind(this);
     return (
@@ -98,19 +108,19 @@ export default class App extends React.Component {
             {/* --- Group Pages --- */}
 
             {/* My Groups Page */}
-            <Route exact path="/groups" element={<Group updateTitle={this.updateTitle} />}/>
+            <Route exact path="/groups" element={this.checkLogin(<Group updateTitle={this.updateTitle} />)}/>
 
             {/* Group Creation Page */}
-            <Route exact path="/groups/new" element={<GroupCreation updateTitle={this.updateTitle} />}/>
+            <Route exact path="/groups/new" element={this.checkLogin(<GroupCreation updateTitle={this.updateTitle} />)}/>
 
             {/* Group's Polls Page */}
-            <Route exact path="/groups/:groupID/polls" element={<GroupPolls updateTitle={this.updateTitle} />}/>
+            <Route exact path="/groups/:groupID/polls" element={this.checkLogin(<GroupPolls updateTitle={this.updateTitle} />)}/>
 
             {/* Group Edit Page */}
-            <Route exact path="/groups/:groupID/edit" element={<GroupEdit updateTitle={this.updateTitle} />} />
+            <Route exact path="/groups/:groupID/edit" element={this.checkLogin(<GroupEdit updateTitle={this.updateTitle} />)} />
 
             {/* Group Join Page */}
-            <Route exact path="/groups/join" element={<GroupJoin updateTitle={this.updateTitle} />}/>
+            <Route exact path="/groups/join" element={this.checkLogin(<GroupJoin updateTitle={this.updateTitle} />)}/>
 
 
             {/* --- Poll Pages --- */}
@@ -119,34 +129,34 @@ export default class App extends React.Component {
             {/* This route (and any others that route through /polls/that are not polls)
                 need to be listed BEFORE the Poll ID Redirect to ensure they are not
                 treated like a :pollID */}
-            <Route exact path="/polls/history" element={<PollHistory updateTitle={this.updateTitle} />}/>
+            <Route exact path="/polls/history" element={this.checkLogin(<PollHistory updateTitle={this.updateTitle} />)}/>
 
             {/* Poll ID Redirect */}
             {/* Redirects from poll ID page (404) to view page */}
-            <Route exact path="/polls/:pollID" element={<Navigate to={"view"} push={true}/>}/>
+            <Route exact path="/polls/:pollID" element={this.checkLogin(<Navigate to={"view"} push={true}/>)}/>
 
             {/* Poll Viewer Page */}
-            <Route exact path="/polls/:pollID/view" element={<PollViewer updateTitle={this.updateTitle} />}/>
+            <Route exact path="/polls/:pollID/view" element={this.checkLogin(<PollViewer updateTitle={this.updateTitle} />)}/>
 
             {/* Poll Editor Page */}
-            <Route exact path="/polls/:pollID/edit" element={<PollEditor updateTitle={this.updateTitle}/>} />
+            <Route exact path="/polls/:pollID/edit" element={this.checkLogin(<PollEditor updateTitle={this.updateTitle}/>)} />
 
             {/* Poll Manager Page */}
-            <Route exact path="/polls/:pollID/manage" element={<PollManager updateTitle={this.updateTitle} />}/>
+            <Route exact path="/polls/:pollID/manage" element={this.checkLogin(<PollManager updateTitle={this.updateTitle} />)}/>
 
             {/* Poll Results Page */}
             {/*use the render function so that we can retrieve :groupID from inside the component*/}
-            <Route exact path="/polls/:pollID/results" element={<PollResults updateTitle={this.updateTitle} />}/>
+            <Route exact path="/polls/:pollID/results" element={this.checkLogin(<PollResults updateTitle={this.updateTitle} />)}/>
 
             {/* Question Ended Page */}
             {/* A page that shows when a question is closed by an instructor
                 Note: this will be removed soon I believe. */}
-            <Route exact path="/questionEnded" element={<QuestionEnded updateTitle={this.updateTitle} />}/>
+            <Route exact path="/questionEnded" element={this.checkLogin(<QuestionEnded updateTitle={this.updateTitle} />)}/>
 
             {/* Answer Recorded Page */}
             {/* A page that shows after you answered the question, or after time runs out.
              Note: this will be removed soon I believe. */}
-            <Route exact path="/answerRecorded" element={<AnswerRecorded updateTitle={this.updateTitle} />}/>
+            <Route exact path="/answerRecorded" element={this.checkLogin(<AnswerRecorded updateTitle={this.updateTitle} />)}/>
 
 
             {/* --- Login Pages --- */}
@@ -188,7 +198,7 @@ export default class App extends React.Component {
             {/* --- Account and User Settings Pages --- */}
 
             {/* Account Info Page */}
-            <Route exact path="/account" element={<AccountInfo updateTitle={this.updateTitle} />}/>
+            <Route exact path="/account" element={this.checkLogin(<AccountInfo updateTitle={this.updateTitle} />)}/>
 
 
             {/* --- Other Pages --- */}
