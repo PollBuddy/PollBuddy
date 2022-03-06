@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const mongo = require("mongodb");
 const MongoClient = mongo.MongoClient;
 
+
 var { userSchema } = require("../models/User.js");
 var { createModel } = require("../modules/utils.js");
 var mongoConnection = require("../modules/mongoConnection.js");
@@ -22,6 +23,7 @@ let testUser = {
   FirstName: "test",
   LastName: "account"
 };
+
 
 let testUser2 = {
   UserName: "test.account.2",
@@ -351,28 +353,45 @@ describe("/api/users/register", () => {
       });    
   });
 
-  it.skip("POST: register user failure duplicate", async () => {
+  it("POST: register user failure duplicate", async () => {
     
-    let res = await mongoConnection.getDB().collection("users").findOne({ 
+    //mongoConnection.getDB().collection("users").createIndex({"UserName": 1}, {name: "users_UserName_CaseSensitive", unique: true})
+
+    /*let res = await mongoConnection.getDB().collection("users").findOne({ 
          UserName: testUser.UserName,
          Email: testUser.Email,
          FirstName: testUser.FirstName,
          LastName: testUser.LastName
-       }).then(
+       }).then(*/
+        mongoConnection.getDB().collection("users").createIndex({"UserName": 1}, {name: "users_UserName_CaseSensitive", unique: true}).catch(function() {
+          mongoConnection.getDB().collection("users").dropIndex("users_UserName_CaseSensitive").then(function() {
+            mongoConnection.getDB().collection("users").createIndex({"UserName": 1}, {name: "users_UserName_CaseSensitive", unique: true});
+          });
+        });
+        await app.post("/api/users/register")
+        .send({
+          userName: testUser.UserName,
+          email: testUser.Email,
+          password: testUser.Password,
+          firstName: testUser.FirstName,
+          lastName: testUser.LastName
+        })
+        .expect(200)
+        .then(async (response) => {
         await app.post("/api/users/register")
           .send({
             userName: testUser.UserName,
             email: testUser.Email,
             password: testUser.Password,
             firstName: testUser.FirstName,
-            lastName: testUser.LastName
+            lastName: testUser.LastName,
           })
           .expect(400)
           .then(async (response) => {
             expect(response.body.result).toBe("failure");
 
           })
-        );
+        })
   });
 
   // Not sure how to do for lines 347-370

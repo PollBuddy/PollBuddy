@@ -341,9 +341,11 @@ router.post("/register", function (req, res) {
         UserName: req.body.userName.toLowerCase(),
         Email: req.body.email.toLowerCase(),
         Password: hash,
+        _id: req.body._id
       });
 
       mongoConnection.getDB().collection("users").insertOne(user, (err, result) => {
+        console.log(err, result)
         if (err) {
           // Something went wrong
           if (err.code === 11000) {
