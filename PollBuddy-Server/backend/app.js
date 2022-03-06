@@ -139,7 +139,7 @@ app.get("/api", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 app.use(function (req, res, next) {
-  res.status(404).send(createError("Page not found"));
+  res.status(404).send(createResponse(null, "API route not found."));
   next();
 });
 
