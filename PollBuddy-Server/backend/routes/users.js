@@ -9,6 +9,7 @@ const Joi = require("joi");
 var mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
 const {createResponse, validateID, isEmpty} = require("../modules/utils"); // object destructuring, only import desired functions
+const { Console } = require("console");
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/
@@ -816,6 +817,88 @@ router.get("/me/groups", function(req,res) {
  */
 router.post("/me/groups",function (req,res) {
   return res.status(405).send(createResponse(null,"POST is not available for this route. Use GET."));
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/forgotpassword/ when using GET
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405 { "result": "failure", "error": "Route not availible."}
+ * @name backend/users/forgotpassword_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+router.get("/forgotpassword/",function (req,res) {
+  return res.status(405).send(createResponse(null,"Route not availible."));
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/forgotpassword/ when using POST
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405 { "result": "failure", "error": "Route not availible."}
+ * @name backend/users/forgotpassword_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+ router.post("/forgotpassword/",function (req,res) {
+  return res.status(405).send(createResponse(null,"Route not availible."));
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/forgotpassword/submit when using GET
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405 { "result": "failure", "error": "GET not availible.use POST"}
+ * @name backend/users/forgotpassword/submit_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+ router.get("/forgotpassword/submit",function (req,res) {
+  return res.status(405).send(createResponse(null,"GET not availible.use POST"));
+});
+
+/**
+ * TODO:DOCUMENT
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} TODO:DOCUMENT
+ * @name backend/users/forgotpassword/submit_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+ router.post("/forgotpassword/submit/",function (req,res) {
+   var email = req.body.email
+
+   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+
+   mongoConnection.getDB().collection("users").findOne({"Email":email},function (err,res) {
+    if(err)
+    {
+      return res.status(500).send(createResponse("", err));
+    }
+    else
+    {
+      key = ""
+      for(var i = 0; i < 32 ; i++)
+      {
+       key += alphabet[Math.floor(Math.random() * alphabet.length)]
+      }
+
+      expireTime = new Date()
+      expireTime.setHours(expireTime.getHours()+1)
+
+      mongoConnection.getDB().collection("users").updateOne({_id: res.id},{ "$addToSet": { ResetPasswordToken : key, ResetPasswordTokenExpiration : expireTime } },function (err, response) {
+        if (err) {
+          return res.status(500).send(createResponse("", err));
+        } else {
+          return res.status(200).send(createResponse("success", null));
+        }
+      })
+      
+
+    }
+   })
 });
 
 /**
