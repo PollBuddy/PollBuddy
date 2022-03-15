@@ -3,7 +3,7 @@ import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 
-import SchoolPicker, {schoolLinkDict} from "../../components/SchoolPicker/SchoolPicker";
+import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";
 
 export default class RegisterWithSchool extends Component {
   componentDidMount() {
@@ -12,19 +12,35 @@ export default class RegisterWithSchool extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { value: "" };
+    this.state = { value: "", doneLoading : false };
   }
 
   render() {
-    if(!this.state.doneLoading){
+    if(!this.state.doneLoading)
+    {
       console.log("LoadingWheel")
       return(
         <MDBContainer className="page">
+
+            <SchoolPicker
+              value={this.state.value}
+              onChange={e => this.setState({ value: e.target.value })}
+              onSelect={value => this.setState({ value })}
+              onDoneLoading={(schoolLinkDict) => {
+                this.setState({"doneLoading": true, "schoolLinkDict": schoolLinkDict})
+                console.log("BBB");
+                console.log(this.state.schoolLinkDict);
+              }
+              }
+            />
+
           <LoadingWheel/>
         </MDBContainer>
       );
     }
-    else{
+
+    else
+    {
       return (
         <MDBContainer fluid className="page">
           <MDBContainer fluid className="box">
@@ -43,10 +59,16 @@ export default class RegisterWithSchool extends Component {
               value={this.state.value}
               onChange={e => this.setState({ value: e.target.value })}
               onSelect={value => this.setState({ value })}
+              onDoneLoading={(schoolLinkDict) => {
+                this.setState({"doneLoading": true, "schoolLinkDict": schoolLinkDict})
+                console.log("BBB");
+                console.log(this.state.schoolLinkDict);
+              }
+              }
             />
 
             <form>
-              <button className="btn button" formAction={ "/api/users/register/" + schoolLinkDict[this.state.value] }>Submit</button>
+              <button className="btn button" formAction={ "/api/users/register/" + this.state.schoolLinkDict[this.state.value] }>Submit</button>
             </form>
 
           </MDBContainer>

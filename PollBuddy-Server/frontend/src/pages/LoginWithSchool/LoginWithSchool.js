@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 
-import SchoolPicker, {schoolLinkDict} from "../../components/SchoolPicker/SchoolPicker";
+import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";
 
 export default class LoginWithSchool extends Component {
   constructor(props) {
