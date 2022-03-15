@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
-const {createResponse, validateID, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
+const {createResponse, validateID, debugRoute, promote, isLoggedIn} = require("../modules/utils"); // object destructuring, only import desired functions
 
 // This file handles /api/groups URLs
 
@@ -463,7 +463,7 @@ router.get("/:id/join", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/join", async (req, res) => {
+router.post("/:id/join", promote(isLoggedIn), async (req, res) => {
   const userID = await validateID("users", req.session.userData.userID);
   if (!userID) {
     return res.status(400).send(createResponse(null, "Invalid user ID."));
@@ -474,8 +474,8 @@ router.post("/:id/join", async (req, res) => {
   }
   // Add user to group, do nothing if they are already in it
   try {
-    await mongoConnection.getDB().collection("groups").updateOne({ "_id:": groupID }, { $addToSet: { Users: userID } });
-    return res.status(200).send(createResponse("Success"));
+    await mongoConnection.getDB().collection("groups").updateOne({ "_id": groupID }, { $addToSet: { "Users": userID } });
+    return res.status(200).send(createResponse(null));
   } catch(e) {
     console.log(e);
     return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
@@ -508,7 +508,7 @@ router.get("/:id/leave", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/leave", async (req, res) => {
+router.post("/:id/leave", promote(isLoggedIn), async (req, res) => {
   const userID = await validateID("users", req.session.userData.userID);
   if (!userID) {
     return res.status(400).send(createResponse(null, "User is not a member of this group."));
@@ -519,8 +519,8 @@ router.post("/:id/leave", async (req, res) => {
   }
   // remove user from the group
   try {
-    await mongoConnection.getDB().collection("groups").updateOne({ "_id:": groupID }, { $pull: { Users: userID } });
-    return res.status(200).send(createResponse("Success"));
+    await mongoConnection.getDB().collection("groups").updateOne({ "_id": groupID }, { $pull: { Users: userID } });
+    return res.status(200).send(createResponse(null));
   } catch(e) {
     console.log(e);
     return res.status(500).send(createResponse(null, "Database error occurred."));
