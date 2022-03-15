@@ -23,24 +23,16 @@ export default class PollViewer extends Component {
     fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.match.params.pollID + "/view", {
       method: "GET"
     })
+      .then(response => response.json())
       .then(response => {
-        if(response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Something went wrong");
-        }
-
-      })
-      .then(response => {
-        if (response === {}) {
-          console.log("Error fetching data");
-        } else {
-          console.log("Fetching data succeeded");
-          console.log(response);
+        if (response.result === "success") {
           this.setState({"questionData": response.data, "doneLoading": true});
         }
+        else {
+          window.location.href = "/login";
+        }
       })
-      .catch(error => this.setState({"error": error}));
+      // .catch(error => this.setState({"error": error}));
   }
 
   render() {

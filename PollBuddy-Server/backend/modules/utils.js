@@ -76,7 +76,7 @@ async function checkPollPublic(req, res, next) {
     console.log(poll);
     if (!poll.Public) { // poll not public
       // check logged in
-      if (!isLoggedIn(req)) {
+      if (isLoggedIn(req) === "User is not logged in.") {
         return res.status(403).send(createResponse(null, "Sign-In required."));
       }
     }
