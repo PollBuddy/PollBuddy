@@ -341,37 +341,13 @@ router.post("/register", function (req, res) {
         UserName: req.body.userName.toLowerCase(),
         Email: req.body.email.toLowerCase(),
         Password: hash,
-        _id: req.body._id
       });
 
       mongoConnection.getDB().collection("users").insertOne(user, (err, result) => {
-        console.log(err, result)
+        //console.log(err)
         if (err) {
-          // Something went wrong
-          if (err.code === 11000) {
-            // This code means we're trying to insert a duplicate key (aka user already registered somehow)
-            if (err.keyPattern.Email) {
-              // Email in use
-              return res.status(400).send(createResponse(null, "This email is already in use."));
-
-            } else if (err.keyPattern.UserName) {
-              // Username in use
-              return res.status(400).send(createResponse(null, "This username is already in use."));
-
-            } else {
-              // An unknown error occurred
-              console.log("Database Error occurred while creating a new user with Poll Buddy.");
-              console.log(err);
-              return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
-            }
-
-          } else {
-            // An unknown error occurred
-            console.log("Database Error occurred while creating a new user with Poll Buddy.");
-            console.log(err);
-            return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
-          }
-
+          // Something went wrong, likely a duplicate key
+          return res.status(400).send(createResponse(null, "There was a duplicate entry error."));
         } else {
           
           // One result changed, therefore it worked.
@@ -508,29 +484,8 @@ router.post("/register/rpi", function (req, res) {
 
     mongoConnection.getDB().collection("users").insertOne(user, (err, result) => {
       if (err) {
-        // Something went wrong
-        if (err.code === 11000) {
-          // This code means we're trying to insert a duplicate key (aka user already registered somehow)
-          if (err.keyPattern.Email) {
-            // Email in use
-            return res.status(400).send(createResponse(null, "This email is already in use."));
-
-          } else if (err.keyPattern.UserName) {
-            // Username in use
-            return res.status(400).send(createResponse(null, "This username is already in use."));
-
-          } else {
-            // An unknown error occurred
-            console.log("Database Error occurred while creating a new user with RPI.");
-            console.log(err);
-            return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
-          }
-        } else {
-          // An unknown error occurred
-          console.log("Database Error occurred while creating a new with RPI.");
-          console.log(err);
-          return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
-        }
+         // Something went wrong, likely a duplicate key
+         return res.status(400).send(createResponse(null, "There was a duplicate entry error."));
 
       } else {
 

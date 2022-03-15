@@ -353,37 +353,10 @@ describe("/api/users/register", () => {
       });    
   });
 
-  it.skip("POST: register user failure duplicate", async () => {
+  it("POST: register failure duplicate", async () => {
     
-    //mongoConnection.getDB().collection("users").createIndex({"UserName": 1}, {name: "users_UserName_CaseSensitive", unique: true})
-
-    /*let res = await mongoConnection.getDB().collection("users").findOne({ 
-         UserName: testUser.UserName,
-         Email: testUser.Email,
-         FirstName: testUser.FirstName,
-         LastName: testUser.LastName
-       }).then(*/
-          // Create unique indexes
-  mongoConnection.getDB().collection("users").createIndex({"UserName": 1}, {unique: true});//.catch(function() {
-    //mongoConnection.getDB().collection("users").dropIndex("users_UserName_CaseSensitive").then(function() {
-    //  mongoConnection.getDB().collection("users").createIndex({"UserName": 1}, {name: "users_UserName_CaseSensitive", unique: true});
-    //});
-  //});
-  /*mongoConnection.getDB().collection("users").createIndex({"UserName": 1}, {name: "users_UserName_CaseInsensitive", unique: true, collation: { locale: "en_US", strength: 2 }}).catch(function() {
-    mongoConnection.getDB().collection("users").dropIndex("users_UserName_CaseInsensitive").then(function() {
-      mongoConnection.getDB().collection("users").createIndex({"UserName": 1}, {name: "users_UserName_CaseInsensitive", unique: true, collation: { locale: "en_US", strength: 2 }});
-    });
-  });*/
-//  mongoConnection.getDB().collection("users").createIndex({"Email": 1}, {name: "users_Email_CaseSensitive", unique: true});//.catch(function() {
-  //  mongoConnection.getDB().collection("users").dropIndex("users_Email_CaseSensitive").then(function() {
-  //    mongoConnection.getDB().collection("users").createIndex({"Email": 1}, {name: "users_Email_CaseSensitive", unique: true});
-  //  });
-  //});
-  /*mongoConnection.getDB().collection("users").createIndex({"Email": 1}, {name: "users_Email_CaseInsensitive", unique: true, collation: { locale: "en_US", strength: 2 }}).catch(function() {
-    mongoConnection.getDB().collection("users").dropIndex("users_Email_CaseInsensitive").then(function() {
-      mongoConnection.getDB().collection("users").createIndex({"Email": 1}, {name: "users_Email_CaseInsensitive", unique: true, collation: { locale: "en_US", strength: 2 }});
-    });
-  });*/
+    // Create unique indexes
+    mongoConnection.getDB().collection("users").createIndex({"UserName": 1}, {unique: true});
 
         await app.post("/api/users/register")
         .send({
@@ -461,13 +434,13 @@ describe("/api/users/register/rpi", () => {
       .expect(302)
     });
 
-  it.skip("POST: register rpi success", async() => {
+  it("POST: register rpi success", async() => {
     let res = await createUser();
-    session = { userDataTemp: { userName: testUser.UserName, email: testUser.Email } };
+    session = { userDataTemp: { userName: testUser.UserName + "2", email: testUser.Email + "2" } };
     await app.post("/api/users/register/rpi")
       .send({
-        userName: testUser.UserName,
-        email: testUser.Email,
+        userName: testUser.UserName + "2",
+        email: testUser.Email + "2",
         password: testUser.Password,
         firstName: testUser.FirstName,
         lastName: testUser.LastName
@@ -477,11 +450,11 @@ describe("/api/users/register/rpi", () => {
         expect(response.body.result).toBe("success");
         expect(response.body.data.firstName).toBe(testUser.FirstName);
         expect(response.body.data.lastName).toBe(testUser.LastName);
-        expect(response.body.data.userName).toBe(testUser.UserName);
+        expect(response.body.data.userName).toBe(testUser.UserName + "2");
 
         let res = await mongoConnection.getDB().collection("users").findOne({ 
-          UserName: testUser.UserName,
-          Email: testUser.Email,
+          UserName: testUser.UserName + "2",
+          Email: testUser.Email + "2",
           FirstName: testUser.FirstName,
           LastName: testUser.LastName,
           SchoolAffiliation: "RPI"
@@ -508,6 +481,40 @@ describe("/api/users/register/rpi", () => {
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });
+  });
+
+  it("POST: register rpi failure duplicate", async () => {
+    
+    // Create unique indexes
+    mongoConnection.getDB().collection("users").createIndex({"UserName": 1}, {unique: true});
+    session = { userDataTemp: { userName: testUser.UserName + "3", email: testUser.Email + "3" } };
+
+        await app.post("/api/users/register/rpi")
+        .send({
+          userName: testUser.UserName + "3",
+          email: testUser.Email + "3",
+          password: testUser.Password,
+          firstName: testUser.FirstName,
+          lastName: testUser.LastName
+        })
+        .expect(200)
+        .then(async (response) => {
+          session = { userDataTemp: { userName: testUser.UserName + "3", email: testUser.Email + "3" } };
+
+          await app.post("/api/users/register/rpi")
+          .send({
+            userName: testUser.UserName + "3",
+            email: testUser.Email + "3",
+            password: testUser.Password,
+            firstName: testUser.FirstName,
+            lastName: testUser.LastName,
+          })
+          .expect(400)
+          .then(async (response) => {
+            expect(response.body.result).toBe("failure");
+
+          })
+        })
   });
 
   it("POST: register temp data failure", async() => {
