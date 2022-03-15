@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 export default class ended extends Component {
 
   componentDidMount(){
-    this.props.updateTitle("Question Ended!");
+    this.props.updateTitle("QuestionResults Ended!");
   }
 
   render() {

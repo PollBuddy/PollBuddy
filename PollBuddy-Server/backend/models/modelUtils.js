@@ -1,6 +1,10 @@
 const bson = require("bson");
 const mongoConnection = require("../modules/mongoConnection.js");
 
+const getID = function (ID) {
+  return new bson.ObjectID(ID);
+};
+
 const getGroupInternal = async function(groupID) {
   let idCode = new bson.ObjectID(groupID);
   let group = await mongoConnection.getDB().collection("groups").findOne({ "_id": idCode });
@@ -55,5 +59,6 @@ module.exports = {
   isGroupAdmin,
   getPollInternal,
   getUserInternal,
-  getQuestionInternal
+  getQuestionInternal,
+  getID
 };

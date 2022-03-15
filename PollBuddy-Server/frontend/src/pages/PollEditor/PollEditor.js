@@ -38,7 +38,7 @@ class PollEditor extends Component {
       displayNewQuestion: false,
       displayEditQuestion: false,
       questionTextInput: "",
-      maxAllowedChoices: 0,
+      maxAllowedChoices: 1,
 
       loadingPollData: true,
     };
@@ -115,8 +115,11 @@ class PollEditor extends Component {
       });
   };
 
-  deletePoll = () => {
-    window.location.href = "";
+  deletePoll = async () => {
+    await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/delete", {
+      method: "POST",
+    });
+    window.location.href = "/groups";
   };
 
   createQuestion = () => {
@@ -125,15 +128,16 @@ class PollEditor extends Component {
       currentAnswers: [],
       questionTextInput: "",
       displayNewQuestion: true,
+      maxAllowedChoices: 1,
     });
   };
 
   editQuestion = (question) => {
-    console.log(question);
     this.setState({
       currentQuestion: question,
       currentAnswers: JSON.parse(JSON.stringify(question.answers)),
       questionTextInput: question.text,
+      maxAllowedChoices: question.maxAllowedChoices,
       displayEditQuestion: true,
     });
   };
@@ -150,6 +154,7 @@ class PollEditor extends Component {
         body: JSON.stringify({
           text: this.state.questionTextInput,
           answers: this.state.currentAnswers,
+          maxAllowedChoices: this.state.maxAllowedChoices,
         })
       })
         .then(response => response.json())
@@ -159,6 +164,7 @@ class PollEditor extends Component {
               showQuestionError: false,
               currentQuestion: false,
               currentAnswers: [],
+              maxAllowedChoices: 1,
               loadingPollQuestions: false,
               displayNewQuestion: false,
               questions: [...this.state.questions, response.data],
@@ -178,6 +184,7 @@ class PollEditor extends Component {
           id: this.state.currentQuestion.id,
           text: this.state.questionTextInput,
           answers: this.state.currentAnswers,
+          maxAllowedChoices: this.state.maxAllowedChoices,
         })
       })
         .then(response => response.json())
@@ -199,6 +206,7 @@ class PollEditor extends Component {
               showQuestionError: false,
               currentQuestion: false,
               currentAnswers: [],
+              maxAllowedChoices: 1,
               loadingPollQuestions: false,
               displayEditQuestion: false,
             });
@@ -209,23 +217,6 @@ class PollEditor extends Component {
             });
           }
         });
-      // setTimeout(()=> {
-      //   let questions = [...this.state.questions];
-      //   for (let question of questions) {
-      //     if (question.id === this.state.currentQuestion.id) {
-      //       question.text = this.state.questionTextInput;
-      //       question.answers= this.state.currentAnswers;
-      //     }
-      //   }
-      //   this.setState({
-      //     questions: questions,
-      //     showQuestionError: false,
-      //     currentQuestion: false,
-      //     currentAnswers: [],
-      //     displayEditQuestion: false,
-      //     loadingPollQuestions: false,
-      //   });
-      // }, 500);
     }
   };
 
@@ -266,6 +257,16 @@ class PollEditor extends Component {
     currentAnswers[parseInt(e.target.name)].correct = !currentAnswers[parseInt(e.target.name)].correct;
     this.setState({
       currentAnswers: currentAnswers,
+    });
+  };
+
+  incrementMaxAllowedChoices = (increment) => {
+    let maxAllowedChoices = this.state.maxAllowedChoices + increment;
+    if (maxAllowedChoices <= 0) {
+      maxAllowedChoices = 1;
+    }
+    this.setState({
+      maxAllowedChoices: maxAllowedChoices,
     });
   };
 
@@ -343,6 +344,7 @@ class PollEditor extends Component {
                 <p className="fontSizeLarge">
                   Poll Questions
                 </p>
+
                 {this.state.loadingPollQuestions ?
                   <MDBContainer>
                     <LoadingWheel/>
@@ -385,6 +387,26 @@ class PollEditor extends Component {
                             onChange={this.onInput}
                           />
                         </MDBContainer>
+                        <div className="maxAllowedChoices">
+                          <p>
+                            Max Allowed Choices
+                          </p>
+                          <button
+                            type="submit" className="button"
+                            onClick={() => { this.incrementMaxAllowedChoices(1); }}
+                          >
+                            +
+                          </button>
+                          <p className="fontSizeLarge">
+                            {this.state.maxAllowedChoices}
+                          </p>
+                          <button
+                            type="submit" className="button"
+                            onClick={() => { this.incrementMaxAllowedChoices(-1); }}
+                          >
+                            -
+                          </button>
+                        </div>
                         <p className="fontSizeLarge">
                           Answers
                         </p>

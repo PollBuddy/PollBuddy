@@ -394,7 +394,7 @@ router.get("/:id/view", async function (req, res, next) {
     //console.log(result[0]);
     //console.log(result[0].Questions[0]);
 
-    // Loop through the poll's questions and add to openQuestions the Question Number, Text and Answer Choices if
+    // Loop through the poll's questions and add to openQuestions the QuestionResults Number, Text and Answer Choices if
     // the question is set as Visible.
     let openQuestions = [];
     for (let i = 0; i < result[0].Questions.length; i++) {
@@ -452,7 +452,7 @@ router.get("/:id/results", async function (req, res, next) {
         return res.status(500).send(createResponse("", err2)); // TODO: Error message;
       }
 
-      // Loop through the poll's questions and add to openQuestions the Question Number, Text and Answer Choices if
+      // Loop through the poll's questions and add to openQuestions the QuestionResults Number, Text and Answer Choices if
       // the question is set as Visible.
       let results = [];
       for (let i = 0; i < result[0].Questions.length; i++) {

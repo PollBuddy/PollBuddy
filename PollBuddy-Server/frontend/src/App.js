@@ -142,7 +142,7 @@ export default class App extends React.Component {
             {/*use the render function so that we can retrieve :groupID from inside the component*/}
             <Route exact path="/polls/:pollID/results" element={<PollResults updateTitle={this.updateTitle} />}/>
 
-            {/* Question Ended Page */}
+            {/* QuestionResults Ended Page */}
             {/* A page that shows when a question is closed by an instructor
                 Note: this will be removed soon I believe. */}
             <Route exact path="/questionEnded" element={<QuestionEnded updateTitle={this.updateTitle} />}/>
