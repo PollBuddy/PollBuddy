@@ -5,6 +5,7 @@ const bcrypt = require("bcrypt");
 const mongoConnection = require("../modules/mongoConnection.js");
 const { getResultErrors, isEmpty } = require("../modules/utils");
 const { httpCodes } = require("../modules/httpCodes.js");
+const {getUserInternal} = require("./modelUtils");
 
 const validators = {
   userName: Joi.string().pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$")),
@@ -39,11 +40,6 @@ const userSchema = {
   Password: "",
   Groups: [],
   SchoolAffiliation: "",
-};
-
-const getUserInternal = async function(userID) {
-  let idCode = new bson.ObjectID(userID);
-  return await mongoConnection.getDB().collection("users").findOne({ "_id": idCode });
 };
 
 const getUser = async function(userID) {
