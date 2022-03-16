@@ -149,7 +149,7 @@ export default class App extends React.Component {
             {/* Poll ID Redirect */}
             {/* Redirects from poll ID page (404) to view page */}
             <Route exact path="/polls/:pollID"
-              render={ (props) => (<Redirect to={"/polls/"+ props.match.params.pollID + "/view"}/>)}
+              render={ (props) => (<Redirect to={"/polls/"+ props.match.params.pollID + "/view"} push={true}/>)}
             />
 
             {/* Poll Viewer Page */}

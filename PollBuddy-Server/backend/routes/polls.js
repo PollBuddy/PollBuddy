@@ -384,7 +384,7 @@ router.post("/:id", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/view", async function (req, res) {
+router.get("/:id/view", checkPollPublic, async function (req, res) {
   const id = await validateID("polls", req.params.id);
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));

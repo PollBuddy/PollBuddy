@@ -145,11 +145,6 @@ input.textBox::placeholder, textarea.textBox::placeholder {
   transition: var(--default-transition);
 }
 
-input[type=password].textBox {
-  font-family: monospace;
-  line-height: 1.5;
-}
-
 .form-group {
   text-align: center;
 }

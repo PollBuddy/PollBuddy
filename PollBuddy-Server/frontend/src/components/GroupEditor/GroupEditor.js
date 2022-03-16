@@ -127,7 +127,7 @@ export default class GroupEditor extends Component {
   render() {
     //redirect to the page containing information about a group if one was just created
     if (this.state.redirectToGroup) {
-      return <Redirect to={`/groups/${this.state.id}/polls`} />;
+      return <Redirect to={`/groups/${this.state.id}/polls`} push={true}/>;
     }
     if(this.state.loadingon === true){
       return (

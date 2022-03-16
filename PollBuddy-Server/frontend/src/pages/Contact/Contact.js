@@ -20,7 +20,7 @@ export default class Contact extends Component {
     }).then(response => response.json())
       // handle response
       .then(data => {
-        this.setState({fullName: data.data.FirstName+' '+data.data.LastName, value: data.data.SchoolAffiliation, email: data.data.Email});
+        this.setState({fullName: data.data.FirstName+ " " +data.data.LastName, value: data.data.SchoolAffiliation, email: data.data.Email});
       });
     this.state = {
       formUp: false,

@@ -15,7 +15,7 @@ export default class recorded extends Component {
     const clockFormat = ({ minutes, seconds, completed }) => {
       if (completed) {
         // Render a completed state
-        return <Redirect to={"/QuestionEnded"} />;
+        return <Redirect to={"/QuestionEnded"} push={true}/>;
       } else {
         // Render a countdown
         return <p className="fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;

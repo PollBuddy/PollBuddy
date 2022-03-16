@@ -1,7 +1,5 @@
 import React, {Component} from "react";
-import { MDBContainer, MDBDropdownToggle, MDBDropdown, MDBDropdownItem, MDBDropdownMenu } from "mdbreact";
-import Question from "../../components/Question/Question";
-import {Link} from "react-router-dom";
+import { MDBContainer } from "mdbreact";
 import autosize from "autosize";
 import "./PollEditor.scss";
 
@@ -164,14 +162,14 @@ export default class PollEditor extends Component {
     this.setState({questions: reorderedQuestions});
   }
 
-  move(old_index, new_index) {
-    if (old_index > new_index && old_index == 0) {
-      new_index = this.state.questions.length - 1;
+  move(oldIndex, newIndex) {
+    if (oldIndex > newIndex && oldIndex === 0) {
+      newIndex = this.state.questions.length - 1;
     }
-    if (old_index < new_index && old_index == this.state.questions.length - 1) {
-      new_index = 0;
+    if (oldIndex < newIndex && oldIndex === this.state.questions.length - 1) {
+      newIndex = 0;
     }
-    this.state.questions.splice(new_index, 0, this.state.questions.splice(old_index, 1)[0]);
+    this.state.questions.splice(newIndex, 0, this.state.questions.splice(oldIndex, 1)[0]);
     return this.state.questions;
   }
 

@@ -183,22 +183,22 @@ describe("/api/users/register", () => {
 
 describe("/api/users/logout", () => {
 
-  it("GET: logout user success", async () => {
-    session = { userData: {} };
+  it("GET: route unavailable", async () => {
     await app.get("/api/users/logout")
+      .expect(405)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("POST: logout user success", async () => {
+    session = { userData: {} };
+    await app.post("/api/users/logout")
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
         expect(session).not.toHaveProperty("userData");
       });    
-  });
-
-  it("POST: route unavailable", async () => {
-    await app.post("/api/users/logout")
-      .expect(405)
-      .then((response) => {
-        expect(response.body.result).toBe("failure");
-      });
   });
 
 });
@@ -221,7 +221,7 @@ describe("/api/users/me", () => {
 
   it("GET: user not logged in", async () => {
     await app.get("/api/users/me")
-      .expect(400)
+      .expect(401)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });    
@@ -325,7 +325,7 @@ describe("/api/users/me/edit", () => {
 
   it("POST: user not logged in failed", async () => {
     await app.post("/api/users/me/edit")
-      .expect(400)
+      .expect(401)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });    
@@ -335,22 +335,11 @@ describe("/api/users/me/edit", () => {
 
 describe("/api/users/me/groups", () => {
 
-  it("GET: get logged in user groups success", async () => {
-    let res = await createUser({
-      Groups: ["12345"]
-    });
-    session = { userData: { userID: res.insertedId } };
-    await app.get("/api/users/me/groups")
-      .expect(200)
-      .then(async (response) => {
-        expect(response.body.result).toBe("success");
-        expect(response.body.data[0]).toBe("12345");
-      });    
-  });
+  //TODO: Successfully gets user groups. Issue#591
 
   it("GET: user not logged in failed", async () => {
     await app.get("/api/users/me/groups")
-      .expect(400)
+      .expect(401)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });    
@@ -496,18 +485,7 @@ describe("/api/users/:id/edit", () => {
 
 describe("/api/users/:id/groups", () => {
 
-  it("GET: get user groups success", async () => {
-    let res = await createUser({
-      Groups: ["12345"]
-    });
-    session = { userData: { userID: res.insertedId } };
-    await app.get("/api/users/" + res.insertedId + "/groups")
-      .expect(200)
-      .then(async (response) => {
-        expect(response.body.result).toBe("success");
-        expect(response.body.data[0]).toBe("12345");
-      });    
-  });
+  //TODO: Successfully gets user groups Issue#591
 
   it("GET: invalid userID", async () => {
     await app.get("/api/users/0/groups")

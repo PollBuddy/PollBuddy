@@ -8,10 +8,6 @@ export default class GroupEdit extends Component {//this class will likely need 
     this.props.updateTitle("Edit");
   }
 
-  constructor() {
-    super();
-    //TODO check if they're logged in
-  }
 
   render() {
     //TODO check if they're logged in

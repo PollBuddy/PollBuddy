@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
-import {Link, withRouter} from "react-router-dom";
+import {Link, withRouter, Redirect} from "react-router-dom";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import "./AccountInfo.scss";
 const Joi = require("joi");
@@ -37,14 +37,18 @@ class AccountInfo extends Component {
       done: false,
       error: false,
       errorMessage: "Error: Unkown Error",
-      showPassword: false
+      showPassword: false,
+      logOutEverywhere: false
     };
     this.changePassword = this.handleToggleClick.bind(this);
+    
+    this.handleInputChange = this.handleInputChange.bind(this);
     // Bounce back to log in if they are not logged
     if(localStorage.getItem("loggedIn") !== "true"){
-      this.props.history.push("/login");
+      return <Redirect to="/login" push={true}/>;
     }
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleLogOutEverywhere = this.handleLogOutEverywhere.bind(this);
   }
 
   componentDidMount(){
@@ -89,6 +93,11 @@ class AccountInfo extends Component {
             passwordLocked: true
           });
         }
+        if(data.logOutEverywhere) {
+          this.setState({
+            logOutEverywhere: data.logOutEverywhere 
+          });
+        }        
         this.setState({
           doneLoading: true
         });
@@ -114,7 +123,7 @@ class AccountInfo extends Component {
   saveChanges(){
     const schema = Joi.object({
       username: Joi.string()
-        .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9\-._]+$"))
+        .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$"))
         .error(new Error("Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.")),
       email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2})
         .max(320)
@@ -202,12 +211,12 @@ class AccountInfo extends Component {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
-        Action: "Add",
-        FirstName: firstNameInput,
-        LastName: lastNameInput,
-        UserName: userInput,
-        Email: emailInput,
-        Password: passwordInput
+        firstName: firstNameInput, //TODO: keep track of each of the inital states of these
+        lastName: lastNameInput,  //only want to put in the changed values
+        userName: userInput,
+        email: emailInput,
+        password: undefined,
+        logOutEverywhere: this.state.logOutEverywhere
       })
     }).then(response => {
       console.log(response);
@@ -217,6 +226,22 @@ class AccountInfo extends Component {
 
   showPassword() {
     this.setState(state => ({showPassword: !state.showPassword}));
+  }
+
+  handleLogOutEverywhere(){
+    this.setState(state => ({
+      logOutEverywhere: !state.logOutEverywhere
+    }));
+    fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: {
+        password: this.state.password, // TODO: needs to be verified to function
+        logOutEverywhere: this.state.logOutEverywhere
+      }
+    }).then(response => {
+      console.log(response);
+    });
   }
 
   render() {
@@ -273,7 +298,12 @@ class AccountInfo extends Component {
                 </MDBCol>
               </MDBContainer>
             </MDBContainer>
-  
+
+            <div id="AccountInfo-logOutEverywhere" style={this.state.changePassword ? {display: "flex"} : {display: "none"}}>
+              <input type="checkbox" onChange={this.handleLogOutEverywhere} className="logOutBox" id="logOutEverywhere" checked={this.logOutEverywhere}/>
+              <label className="logOutLabel" for="logOutEverywhere">Log out everywhere?</label>
+            </div>
+          
             { /* TODO: Update this to have a backend call instead of a "to", plus some result popup */ }
             <p 
               className="fontSizeLarge"
