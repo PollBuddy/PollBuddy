@@ -105,7 +105,7 @@ router.post("/login", function (req, res) {
 
     } else if (result === null) {
       // No user was found
-      return res.status(401).send(createRvesponse(null, "Invalid credentials."));
+      return res.status(401).send(createResponse(null, "Invalid credentials."));
 
     } else {
       // A user was found!
