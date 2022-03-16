@@ -48,7 +48,7 @@ router.post("/", function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/login", function (_req, res) {
+router.get("/login", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
@@ -105,7 +105,7 @@ router.post("/login", function (req, res) {
 
     } else if (result === null) {
       // No user was found
-      return res.status(401).send(createResponse(null, "Invalid credentials."));
+      return res.status(401).send(createRvesponse(null, "Invalid credentials."));
 
     } else {
       // A user was found!
@@ -562,7 +562,7 @@ router.post("/register/rpi", function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/logout", function (_req, res) {
+router.get("/logout", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
@@ -615,7 +615,7 @@ router.get("/me", async function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/me", function (_req, res) {
+router.post("/me", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
@@ -628,7 +628,8 @@ router.post("/me", function (_req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/me/edit", function (_req, res) {
+// eslint-disable-next-line no-unused-vars
+router.get("/me/edit", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
@@ -676,7 +677,8 @@ router.get("/me/groups", async function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.post("/me/groups", function (_req, res) {
+// eslint-disable-next-line no-unused-vars
+router.post("/me/groups", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
@@ -711,7 +713,7 @@ router.get("/:id", async function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/:id", function (_req, res) {
+router.post("/:id", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
@@ -725,7 +727,7 @@ router.post("/:id", function (_req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/:id/edit", function (_req, res) {
+router.get("/:id/edit", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
 
@@ -772,7 +774,7 @@ router.get("/:id/groups", async function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/:id/groups", function (_req, res) {
+router.post("/:id/groups", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 

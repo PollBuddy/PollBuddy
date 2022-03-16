@@ -96,6 +96,7 @@ router.post("/:id/edit", async (req, res) => {
   let success = false;
   if (jsonContent.Action === "Add") {
     if (jsonContent.Name !== undefined) {
+      // eslint-disable-next-line no-unused-vars
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$set": { Name: jsonContent.Name } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
@@ -105,6 +106,7 @@ router.post("/:id/edit", async (req, res) => {
       });
     }
     if (jsonContent.Instructors !== undefined) {
+      // eslint-disable-next-line no-unused-vars
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Instructors: jsonContent.Instructors } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
@@ -114,6 +116,7 @@ router.post("/:id/edit", async (req, res) => {
       });
     }
     if (jsonContent.Polls !== undefined) {
+      // eslint-disable-next-line no-unused-vars
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Polls: jsonContent.Polls } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
@@ -123,6 +126,7 @@ router.post("/:id/edit", async (req, res) => {
       });
     }
     if (jsonContent.Users !== undefined) {
+      // eslint-disable-next-line no-unused-vars
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Users: jsonContent.Users } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
@@ -132,6 +136,7 @@ router.post("/:id/edit", async (req, res) => {
       });
     }
     if (jsonContent.Admins !== undefined) {
+      // eslint-disable-next-line no-unused-vars
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Admins: jsonContent.Admins } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
@@ -145,6 +150,7 @@ router.post("/:id/edit", async (req, res) => {
     }
   } else if (jsonContent.Action === "Remove") {
     if (jsonContent.Instructors !== undefined) {
+      // eslint-disable-next-line no-unused-vars
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Instructors: jsonContent.Instructors } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
@@ -154,6 +160,7 @@ router.post("/:id/edit", async (req, res) => {
       });
     }
     if (jsonContent.Polls !== undefined) {
+      // eslint-disable-next-line no-unused-vars
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Polls: jsonContent.Polls } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
@@ -163,6 +170,7 @@ router.post("/:id/edit", async (req, res) => {
       });
     }
     if (jsonContent.Users !== undefined) {
+      // eslint-disable-next-line no-unused-vars
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Users: jsonContent.Users } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
@@ -172,6 +180,7 @@ router.post("/:id/edit", async (req, res) => {
       });
     }
     if (jsonContent.Admins !== undefined) {
+      // eslint-disable-next-line no-unused-vars
       await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Admins: jsonContent.Admins } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
