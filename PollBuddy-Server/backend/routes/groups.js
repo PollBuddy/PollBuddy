@@ -484,9 +484,9 @@ router.post("/:id/join", promote(isLoggedIn), async (req, res) => {
 
 /**
  * This route is not used.
- * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-idjoin
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-idleave
  * @throws 405 - Route not used
- * @name GET api/groups/{id}/join
+ * @name GET api/groups/{id}/leave
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
@@ -504,7 +504,7 @@ router.get("/:id/leave", async (req, res) => {
  * @throws 500 - An error occurred while accessing the database.
  * @throws 400 - Invalid user ID.
  * @throws 400 - Invalid group ID.
- * @name POST api/groups/{id}/join
+ * @name POST api/groups/{id}/leave
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
