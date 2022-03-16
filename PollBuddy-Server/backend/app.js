@@ -1,23 +1,23 @@
 // Load values from .env file
 require("dotenv").config();
 
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
 const os = require("os");
 
 // Handles /api/groups routes URLs
-var groupsRouter = require("./routes/groups");
+const groupsRouter = require("./routes/groups");
 // Handles /api/polls routes URLs
-var pollsRouter = require("./routes/polls");
+const pollsRouter = require("./routes/polls");
 // Handles /api/users routes URLs
-var usersRouter = require("./routes/users");
+const usersRouter = require("./routes/users");
 // In case we run into CORS issues
-var cors = require("cors");
+const cors = require("cors");
 
-var app = express();
+const app = express();
 
 // Express Session
 const expressSession = require("express-session");
@@ -41,7 +41,7 @@ app.use(expressSession({
 // Cors: https://daveceddia.com/access-control-allow-origin-cors-errors-in-react-express/
 app.use(cors());
 
-var mongoConnection = require("./modules/mongoConnection.js");
+const mongoConnection = require("./modules/mongoConnection.js");
 mongoConnection.connect(function (res) {
   if (res !== true) {
     console.error(res);
@@ -49,7 +49,7 @@ mongoConnection.connect(function (res) {
 });
 
 // InfluxDB
-var influxConnection = require("./modules/influx.js");
+const influxConnection = require("./modules/influx.js");
 
 // Response Time Logging to InfluxDB
 app.use((req, res, next) => {

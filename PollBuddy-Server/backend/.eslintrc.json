@@ -45,6 +45,7 @@
     "no-unmodified-loop-condition": "warn",
     "no-shadow": "warn",
     "no-duplicate-imports": "error",
-    "camelcase": "warn"
+    "camelcase": "warn",
+    "no-var": "warn"
   }
 }

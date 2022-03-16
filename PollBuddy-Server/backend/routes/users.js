@@ -1,11 +1,11 @@
-var express = require("express");
-var router = express.Router();
-var bcrypt = require("bcrypt");
+const express = require("express");
+const router = express.Router();
+const bcrypt = require("bcrypt");
 
-var mongoConnection = require("../modules/mongoConnection.js");
+const mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
 
-const { createResponse, isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
+const { createResponse, isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute, promote} = require("../modules/utils"); // object destructuring, only import desired functions
 const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups, editUser } = require("../models/User.js");
 
 // This file handles /api/users URLs
