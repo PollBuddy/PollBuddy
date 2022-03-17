@@ -484,8 +484,8 @@ router.post("/register/rpi", function (req, res) {
 
     mongoConnection.getDB().collection("users").insertOne(user, (err, result) => {
       if (err) {
-         // Something went wrong, likely a duplicate key
-         return res.status(400).send(createResponse(null, "There was a duplicate entry error."));
+        // Something went wrong, likely a duplicate key
+        return res.status(400).send(createResponse(null, "There was a duplicate entry error."));
 
       } else {
 
