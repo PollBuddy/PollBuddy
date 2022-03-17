@@ -14,6 +14,7 @@ COPY package*.json ./
 # Files
 # copy both the example file and any existing custom .env 
 COPY .env* ./
+COPY hotreload-fix.js ./
 # attempt to move the example .env to the name ".env"
 # if .env is already there, this fails and the custom instance is used
 # if not, the example instance is used

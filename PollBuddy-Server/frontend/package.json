@@ -22,7 +22,7 @@
     "sass": "^1.49.7"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "node ./hotreload-fix && react-scripts start",
     "docker-start": "CI=true react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
