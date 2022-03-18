@@ -5,10 +5,10 @@ const bcrypt = require("bcrypt");
 const mongo = require("mongodb");
 const MongoClient = mongo.MongoClient;
 
-var { userSchema } = require("../models/User.js");
-var { createModel } = require("../modules/utils.js");
-var mongoConnection = require("../modules/mongoConnection.js");
-var usersRouter = require("./users");
+const { userSchema } = require("../models/User.js");
+const { createModel } = require("../modules/utils.js");
+const mongoConnection = require("../modules/mongoConnection.js");
+const usersRouter = require("./users");
 const { createTestScheduler } = require("@jest/core");
 const { ExpectationFailed } = require("http-errors");
 
@@ -34,6 +34,7 @@ let testUser2 = {
 
 mockApp.use(express.json());
 mockApp.use(express.urlencoded({ extended: false }));
+// eslint-disable-next-line no-unused-vars
 mockApp.use(function (req, res, next) {
   req.session = session;
   next();
