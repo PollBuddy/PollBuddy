@@ -12,9 +12,9 @@ class PrivateComponent extends React.Component {
     if (isLoggedIn === this.props.state) {
       return this.props.element;
     } else if(this.props.state){
-      return <Navigate state={{prevRoute: this.props.router.location.pathname}} to={"/login"}/>
+      return <Navigate state={{prevRoute: this.props.router.location.pathname}} to={"/login"}/>;
     } else {
-      return <Navigate to={"/"}/>
+      return <Navigate to={"/"}/>;
     }
   }
 }
