@@ -957,6 +957,68 @@ router.post("/forgotpassword/validate",function (req,res) {
 });
 
 /**
+ * This route is not used. It is simply there to have some response to /api/users/forgotpassword/chnge when using GET
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405 { "result": "failure", "error": "Route not availible."}
+ * @name backend/users/forgotpassword_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+ router.get("/forgotpassword/change",function (req,res) {
+  return res.status(405).send(createResponse(null,"Route not availible."));
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/forgotpassword/ when using POST
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405 { "result": "failure", "error": "Route not availible."}
+ * @name backend/users/forgotpassword_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+router.post("/forgotpassword/change",function (req,res) {
+  token = req.body.resetPasswordToken;
+  username = req.body.username;
+  newPassword = req.body.password;
+
+  newPasswordValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/)
+  .test(newPassword);
+
+  if(newPasswordValid){
+    mongoConnection.getDB().collection("users").findOne({"UserName":username,"ResetPasswordToken":token},function (searchError,searchResult){
+      if(searchResult){
+        expiration = searchResult.ResetPasswordTokenExpiration;
+        currentDate = new Date();
+        if(currentDate < expiration){
+          bcrypt.hash(newPassword, 10, function (hashError,hash) {
+            if(hashError){
+              return res.status(500).send(createResponse(null,"Could not hash password")); 
+            }else{
+              mongoConnection.getDB().collection("users").updateOne({"_id":searchResult._id},{"$set":{"Password":hash}},function(updateError,updateResult){
+                if(updateError){
+                  return res.status(500).send(createResponse(null,"Could update password")); 
+                }else{
+                  return res.status(200).send(createResponse()); 
+                }
+              });
+            }
+          }); 
+          
+        }else{
+          return res.status(500).send(createResponse(null,"Token expired"));
+        }
+      }else{
+        return res.status(500).send(createResponse(null,"User with token not found"));
+      }
+    });
+  }else{
+    return res.status(500).send(createResponse(null,"Invalid password"));
+  }
+});
+
+/**
  * This route is not used. It is simply there to have some response to /api/users/:id/edit when using GET.
  * @getdata {void} None
  * @postdata {void} None
