@@ -901,19 +901,59 @@ router.post("/forgotpassword/submit/",function (req,res) {
 
           mongoConnection.getDB().collection("users").updateOne({"_id": result._id},{ "$set": { "ResetPasswordToken" : key, "ResetPasswordTokenExpiration" : expireTime } },function (err, response) {
             if (err) {
-              return res.status(500).send(createResponse("could not update user", err));
+              return res.status(500).send(createResponse(err,"could not update user"));
             } else {
-              return res.status(200).send(createResponse("success", null));
+              return res.status(200).send(createResponse());
             }
           })
         }
         else
         {
-          return res.status(500).send(createResponse("could not find user", err));
+          return res.status(500).send(createResponse(null,"could not find user"));
         }
       },
-      err => {return res.status(500).send(createResponse("could not find user", err));}
+      err => {return res.status(500).send(createResponse(err,"could not find user"));}
     );
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/forgotpassword/validate when using GET
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405 { "result": "failure", "error": "Route not availible."}
+ * @name backend/users/forgotpassword_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+ router.get("/forgotpassword/validate",function (req,res) {
+  return res.status(405).send(createResponse(null,"Route not availible."));
+});
+
+/**
+ * TODO DOCUMENT 
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405 { "result": "failure", "error": "Route not availible."}
+ * @name backend/users/forgotpassword_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+router.post("/forgotpassword/validate",function (req,res) {
+  var token = req.body.resetPasswordToken;
+  var username = req.body.username;
+  mongoConnection.getDB().collection("users").findOne({"UserName":username,"ResetPasswordToken":token}, function(error,result) {
+    if(result){
+      currentDate = new Date();
+      if(currentDate < result.ResetPasswordTokenExpiration ){
+        return res.status(200).send(createResponse());
+      }
+      else{
+        return res.status(405).send(createResponse(null,"Token is invalid(token expired)"));
+      }
+    }else{
+      return res.status(405).send(createResponse(null,"Token is invalid(user with token not found)"));
+    }
+  });
 });
 
 /**
