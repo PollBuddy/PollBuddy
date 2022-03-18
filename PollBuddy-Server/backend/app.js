@@ -142,8 +142,9 @@ app.get("/api", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-app.use(function (req, _res, next) {
-  next(createError(404));
+app.use(function (req, res, next) {
+  res.status(404).send(createResponse(null, "API route not found."));
+  next();
 });
 
 
