@@ -77,7 +77,8 @@ export default class Question extends Component {
       studentChoices: tempArray,
       choicesQueue: tempQueue,
       canChoose: true,
-      PollID: id
+      PollID: id,
+      timeLeft: true
     };
   }
 
@@ -176,14 +177,14 @@ export default class Question extends Component {
         this.setState({successfulSubmission: true});
       });
   };
-
+  
   render() {
     console.log(this.state.choicesQueue);
     const clockFormatDays = ({ days, completed }) => {
 
       if (completed) {
         // Render a completed state
-        return <span>Question closed!</span>;
+        return <span>00</span>;
       } else {
         // Render a countdown
         return <span>{zeroPad(days)}</span>;
@@ -193,7 +194,7 @@ export default class Question extends Component {
 
       if (completed) {
         // Render a completed state
-        return <span>Question closed!</span>;
+        return <span>00</span>;
       } else {
         // Render a countdown
         return <span>{zeroPad(hours)}</span>;
@@ -203,7 +204,7 @@ export default class Question extends Component {
 
       if (completed) {
         // Render a completed state
-        return <span>Question closed!</span>;
+        return <span>00</span>;
       } else {
         // Render a countdown
         return <span>{zeroPad(minutes)}</span>;
@@ -213,7 +214,8 @@ export default class Question extends Component {
 
       if (completed) {
         // Render a completed state
-        return <span>Question closed!</span>;
+        this.setState({timeLeft: false});
+        return <span>00</span>;
       } else {
         // Render a countdown
         return <span>{zeroPad(seconds)}</span>;
@@ -266,51 +268,61 @@ export default class Question extends Component {
             }
           })}
         </MDBContainer>
-        <MDBContainer className="time-grid" title = "Question Countdown">
-          <button className = "button time-info">
-            <Countdown
-                renderer={clockFormatDays}
-                date={ this.state.data.CloseTime }//stored in milliseconds
-                onComplete={this.onTimeEnd}
-            />
-          </button>
-          <button className = "button time-info">
-            <Countdown
+        { (this.state.timeLeft) ?(
+            <MDBContainer>
+              <MDBContainer className = "button time-info-label">
+                <span>Question Time Remaining</span>
+              </MDBContainer>
+              <MDBContainer className="time-grid" title = "Question Countdown">
+                <button className = "button time-info">
+                  <Countdown
+                      renderer={clockFormatDays}
+                      date={ this.state.data.CloseTime }//stored in milliseconds
+                      onComplete={this.onTimeEnd}
+                  />
+                </button>
+                <button className = "button time-info">
+                <Countdown
                 renderer={clockFormatHours}
                 date={ this.state.data.CloseTime }//stored in milliseconds
                 onComplete={this.onTimeEnd}
-            />
-          </button>
-          <button className = "button time-info">
-            <Countdown
+                />
+                </button>
+                <button className = "button time-info">
+                <Countdown
                 renderer={clockFormatMinutes}
                 date={ this.state.data.CloseTime }//stored in milliseconds
                 onComplete={this.onTimeEnd}
-            />
-          </button>
-          <button className = "button time-info">
-            <Countdown
+                />
+                </button>
+                <button className = "button time-info">
+                <Countdown
                 renderer={clockFormatSeconds}
                 date={ this.state.data.CloseTime }//stored in milliseconds
                 onComplete={this.onTimeEnd}
-            />
-          </button>
-          <button className={"time-info-text"}>
-            <span>Days</span>
-          </button>
-          <button className={"time-info-text"}>
-            <span>Hrs</span>
-          </button>
-          <button className={"time-info-text"}>
-            <span>Mins</span>
-          </button>
-          <button className={"time-info-text"}>
-            <span>Secs</span>
-          </button>
-        </MDBContainer>
-
+                />
+                </button>
+                <button className={"time-info-text"}>
+                <span>Days</span>
+                </button>
+                <button className={"time-info-text"}>
+                <span>Hrs</span>
+                </button>
+                <button className={"time-info-text"}>
+                <span>Mins</span>
+                </button>
+                <button className={"time-info-text"}>
+                <span>Secs</span>
+                </button>
+              </MDBContainer>
+            </MDBContainer>
+        ) : (
+              <button className="button time-info-closed" title = "Question Countdown">Question Closed!</button>
+          )
+        }
         <MDBContainer>
-          <button className="button" onClick={this.submitAnswers}>Submit</button>
+          {(this.state.timeLeft) &&
+           <button className="button" onClick={this.submitAnswers}>Submit</button>}
         </MDBContainer>
       </MDBContainer>
     );
