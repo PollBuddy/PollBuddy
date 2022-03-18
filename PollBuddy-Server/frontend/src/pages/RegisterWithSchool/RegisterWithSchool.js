@@ -1,20 +1,48 @@
 import React, { Component } from "react";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import SchoolPicker, {schoolLinkDict} from "../../components/SchoolPicker/SchoolPicker";
 
-export default class RegisterWithSchool extends Component {
+
+
+class RegisterWithSchool extends Component {
   componentDidMount() {
     this.props.updateTitle("Register with School");
   }
 
+  check(value) {
+    if(value in schoolLinkDict) {
+      this.setState({
+        errMsg: ""
+      });
+
+      return setTimeout(() => { this.props.router.navigate("/api/users/register/" + schoolLinkDict[value], { replace: true }); }, 100);
+    } else {
+      this.setState({
+        errMsg: value + " is not a valid school"
+      });
+    }
+  }
+
+  changeSchool(school) {
+    this.setState({
+      value: school
+    });
+  }
+
   constructor(props) {
     super(props);
-    this.state = { value: "" };
+    this.state = { 
+      value: "",
+      valid: false,
+      errMsg: ""
+    };
   }
 
   render() {
+    this.check = this.check.bind(this);
+    this.changeSchool = this.changeSchool.bind(this);
     return (
       <MDBContainer fluid className="page">
         <MDBContainer fluid className="box">
@@ -31,16 +59,18 @@ export default class RegisterWithSchool extends Component {
 
           <SchoolPicker
             value={this.state.value}
-            onChange={e => this.setState({ value: e.target.value })}
-            onSelect={value => this.setState({ value })}
+            onSelect={(school) => this.changeSchool(school)}
+            onChange={(event, value) => this.setState({ value }) }
           />
 
-          <form>
-            <button className="btn button" formAction={ "/api/users/register/" + schoolLinkDict[this.state.value] }>Submit</button>
-          </form>
+          <p style={{color: "red", textAlign: "center"}}>{this.state.errMsg}</p>
+
+          <button className="btn button" onClick={() => this.check(this.state.value)}>Submit</button>
 
         </MDBContainer>
       </MDBContainer>
     );
   }
 }
+
+export default withRouter(RegisterWithSchool);
