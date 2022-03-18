@@ -841,7 +841,7 @@ router.get("/forgotpassword/",function (req,res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
- router.post("/forgotpassword/",function (req,res) {
+router.post("/forgotpassword/",function (req,res) {
   return res.status(405).send(createResponse(null,"Route not availible."));
 });
 
@@ -854,7 +854,7 @@ router.get("/forgotpassword/",function (req,res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
- router.get("/forgotpassword/submit",function (req,res) {
+router.get("/forgotpassword/submit",function (req,res) {
   return res.status(405).send(createResponse(null,"GET not availible.use POST"));
 });
 
@@ -867,38 +867,53 @@ router.get("/forgotpassword/",function (req,res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
- router.post("/forgotpassword/submit/",function (req,res) {
-   var email = req.body.email
+router.post("/forgotpassword/submit/",function (req,res) {
+  var email = req.body.email;
+  var username = req.body.username;
 
-   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+  var document;
 
-   mongoConnection.getDB().collection("users").findOne({"Email":email},function (err,res) {
-    if(err)
-    {
-      return res.status(500).send(createResponse("", err));
-    }
-    else
-    {
-      key = ""
-      for(var i = 0; i < 32 ; i++)
-      {
-       key += alphabet[Math.floor(Math.random() * alphabet.length)]
-      }
+  if(email){
+    email = email.toLowerCase();
+    document = mongoConnection.getDB().collection("users").findOne({"Email":email});
+  }
+  else if(username){
+    document = mongoConnection.getDB().collection("users").findOne({"UserName":username});
+  }
+  else{
+    return res.status(500).send(createResponse("neither username nor email provided", null));
+  }
 
-      expireTime = new Date()
-      expireTime.setHours(expireTime.getHours()+1)
+  document
+    .then(
+      result => {
+        if(result)
+        {
+          const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+          key = ""
+          for(var i = 0; i < 32 ; i++)
+          {
+          key += alphabet[Math.floor(Math.random() * alphabet.length)]
+          }
 
-      mongoConnection.getDB().collection("users").updateOne({_id: res.id},{ "$addToSet": { ResetPasswordToken : key, ResetPasswordTokenExpiration : expireTime } },function (err, response) {
-        if (err) {
-          return res.status(500).send(createResponse("", err));
-        } else {
-          return res.status(200).send(createResponse("success", null));
+          expireTime = new Date()
+          expireTime.setHours(expireTime.getHours()+1)
+
+          mongoConnection.getDB().collection("users").updateOne({"_id": result._id},{ "$set": { "ResetPasswordToken" : key, "ResetPasswordTokenExpiration" : expireTime } },function (err, response) {
+            if (err) {
+              return res.status(500).send(createResponse("could not update user", err));
+            } else {
+              return res.status(200).send(createResponse("success", null));
+            }
+          })
         }
-      })
-      
-
-    }
-   })
+        else
+        {
+          return res.status(500).send(createResponse("could not find user", err));
+        }
+      },
+      err => {return res.status(500).send(createResponse("could not find user", err));}
+    );
 });
 
 /**
