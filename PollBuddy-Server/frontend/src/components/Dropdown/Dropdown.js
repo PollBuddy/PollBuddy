@@ -51,7 +51,7 @@ function useOutsideAlerter(ref, menuProps) {
           console.log(response);
           if(response.result === "success") {
             //Logout has succeeded, Clear frontend user data
-            localStorage.setItem("loggedIn", false);
+            localStorage.setItem("loggedIn", "false");
             localStorage.removeItem("lastName");
             localStorage.removeItem("userName");
             localStorage.removeItem("firstName");
