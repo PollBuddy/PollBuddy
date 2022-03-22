@@ -511,7 +511,7 @@ router.get("/:id/leave", async (req, res) => {
 router.post("/:id/leave", promote(isLoggedIn), async (req, res) => {
   const userID = await validateID("users", req.session.userData.userID);
   if (!userID) {
-    return res.status(400).send(createResponse(null, "User is not a member of this group."));
+    return res.status(400).send(createResponse(null, "Invalid user ID."));
   }
   const groupID = await validateID("groups", req.params.id);
   if (!groupID) {
