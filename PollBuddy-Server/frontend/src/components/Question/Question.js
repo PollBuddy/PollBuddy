@@ -7,7 +7,7 @@ import {
 
 import Countdown, { zeroPad } from "react-countdown";
 import {Navigate} from "react-router-dom";
-
+import Timer from "../Timer/Timer.js";
 
 export default class Question extends Component {
   choiceOrder;
@@ -177,50 +177,11 @@ export default class Question extends Component {
         this.setState({successfulSubmission: true});
       });
   };
-  
+  noTimeLeft(){
+    this.setState({timeLeft: false});
+  }
   render() {
     console.log(this.state.choicesQueue);
-    const clockFormatDays = ({ days, completed }) => {
-
-      if (completed) {
-        // Render a completed state
-        return <span>00</span>;
-      } else {
-        // Render a countdown
-        return <span>{zeroPad(days)}</span>;
-      }
-    };
-    const clockFormatHours = ({ hours, completed }) => {
-
-      if (completed) {
-        // Render a completed state
-        return <span>00</span>;
-      } else {
-        // Render a countdown
-        return <span>{zeroPad(hours)}</span>;
-      }
-    };
-    const clockFormatMinutes = ({ minutes, completed }) => {
-
-      if (completed) {
-        // Render a completed state
-        return <span>00</span>;
-      } else {
-        // Render a countdown
-        return <span>{zeroPad(minutes)}</span>;
-      }
-    };
-    const clockFormatSeconds = ({ seconds, completed }) => {
-
-      if (completed) {
-        // Render a completed state
-        this.setState({timeLeft: false});
-        return <span>00</span>;
-      } else {
-        // Render a countdown
-        return <span>{zeroPad(seconds)}</span>;
-      }
-    };
 
     if(this.state.successfulSubmission) {
       return (
@@ -268,58 +229,8 @@ export default class Question extends Component {
             }
           })}
         </MDBContainer>
-        { (this.state.timeLeft) ?(
-            <MDBContainer>
-              <MDBContainer className = "button time-info-label">
-                <span>Question Time Remaining</span>
-              </MDBContainer>
-              <MDBContainer className="time-grid" title = "Question Countdown">
-                <button className = "button time-info">
-                  <Countdown
-                      renderer={clockFormatDays}
-                      date={ this.state.data.CloseTime }//stored in milliseconds
-                      onComplete={this.onTimeEnd}
-                  />
-                </button>
-                <button className = "button time-info">
-                <Countdown
-                renderer={clockFormatHours}
-                date={ this.state.data.CloseTime }//stored in milliseconds
-                onComplete={this.onTimeEnd}
-                />
-                </button>
-                <button className = "button time-info">
-                <Countdown
-                renderer={clockFormatMinutes}
-                date={ this.state.data.CloseTime }//stored in milliseconds
-                onComplete={this.onTimeEnd}
-                />
-                </button>
-                <button className = "button time-info">
-                <Countdown
-                renderer={clockFormatSeconds}
-                date={ this.state.data.CloseTime }//stored in milliseconds
-                onComplete={this.onTimeEnd}
-                />
-                </button>
-                <button className={"time-info-text"}>
-                <span>Days</span>
-                </button>
-                <button className={"time-info-text"}>
-                <span>Hrs</span>
-                </button>
-                <button className={"time-info-text"}>
-                <span>Mins</span>
-                </button>
-                <button className={"time-info-text"}>
-                <span>Secs</span>
-                </button>
-              </MDBContainer>
-            </MDBContainer>
-        ) : (
-              <button className="button time-info-closed" title = "Question Countdown">Question Closed!</button>
-          )
-        }
+          <Timer timeLeft={this.state.timeLeft} noTimeLeft = {() => this.noTimeLeft()}
+                 CloseTime={this.state.data.CloseTime} onTimeEnd={this.onTimeEnd} />
         <MDBContainer>
           {(this.state.timeLeft) &&
            <button className="button" onClick={this.submitAnswers}>Submit</button>}
