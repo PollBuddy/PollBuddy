@@ -27,9 +27,6 @@ mockApp.use("/api/groups", groupsRouter);
 
 let app = supertest(mockApp);
 
-// TODO: Check Responses against Standard Responses.
-// TODO: Make a Backend Testing Wiki
-
 beforeAll(async () => {
   process.env.DB_URL = global.__MONGO_URI__;
   process.env.DB_NAME = global.__MONGO_DB_NAME__;

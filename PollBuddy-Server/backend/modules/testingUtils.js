@@ -30,7 +30,12 @@ let testUser = {
   Password: "K9g95p$?E@t3A$#4",
   PasswordHash: "$2a$12$8Guj3IMNNVWk/GM4q0xeleExT3QBdPe5dWpSRYvk2elRkkWPMlOPG",
   FirstName: "test",
-  LastName: "account"
+  LastName: "account",
+  FirstNameLocked: false,
+  LastNameLocked: false,
+  EmailLocked: false,
+  UserNameLocked: true,
+  SchoolAffiliation: "",
 };
 
 let testUser2 = {
