@@ -5,7 +5,6 @@ import {
   MDBIcon
 } from "mdbreact";
 
-import Countdown, { zeroPad } from "react-countdown";
 import {Navigate} from "react-router-dom";
 import Timer from "../Timer/Timer.js";
 
@@ -229,8 +228,8 @@ export default class Question extends Component {
             }
           })}
         </MDBContainer>
-          <Timer timeLeft={this.state.timeLeft} noTimeLeft = {() => this.noTimeLeft()}
-                 CloseTime={this.state.data.CloseTime} onTimeEnd={this.onTimeEnd} />
+        <Timer timeLeft={this.state.timeLeft} noTimeLeft = {() => this.noTimeLeft()}
+          CloseTime={this.state.data.CloseTime} onTimeEnd={this.onTimeEnd} />
         <MDBContainer>
           {(this.state.timeLeft) &&
            <button className="button" onClick={this.submitAnswers}>Submit</button>}
