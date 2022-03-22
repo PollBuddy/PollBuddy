@@ -5,6 +5,8 @@ import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 
 import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";
 
+//Abby to do Tues 22nd: cleanup: delete console logs, clean in general
+
 export default class RegisterWithSchool extends Component {
   componentDidMount() {
     this.props.updateTitle("Register with School");
@@ -16,30 +18,22 @@ export default class RegisterWithSchool extends Component {
     this.state = {
       value: "",
       doneLoading: false,
-      //initialize schools & schoolLinkDict w/ SchoolPicker return or default?
       "schoolInfo": {}
     };   
   }
 
   render() {
-    console.log("render fnction called")
-
-
     if(!this.state.doneLoading)
     {
-      console.log("LoadingWheel")
       return(
         <MDBContainer className="page">
 
             <SchoolPicker
-            //put this back bc binding this call to SchoolPicker as a variable didn't work
               value={this.state.value}
               onChange={e => this.setState({ value: e.target.value })}
               onSelect={value => this.setState({ value })}
               onDoneLoading={(schoolInfo) => {
                   this.setState({"doneLoading": true, "schoolInfo": schoolInfo})
-                  console.log("BBB");
-                  console.log(this.state.schoolInfo);
                 }
               }
             />
@@ -61,17 +55,14 @@ export default class RegisterWithSchool extends Component {
               To create an account, select your school name.
             </p>
             <p>
-              { /* TODO: Add label here */}
               School Name:
             </p>
 
                 <SchoolPicker
-                //here too
                   value={this.state.value}
                   onChange={e => this.setState({ value: e.target.value })}
                   onSelect={value => this.setState({ value })}
                   schoolInfo = {this.state.schoolInfo}
-                  
                 />
 
             <form>

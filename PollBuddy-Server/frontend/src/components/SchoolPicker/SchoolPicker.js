@@ -20,17 +20,15 @@ export default class SchoolPicker extends Component {
   }
 
   componentDidMount(){
-    console.log("CCC");
-    console.log(this.props);
-    console.log(this.props.schoolInfo);
     if (this.props.schoolInfo == null) {
-      fetch(process.env.REACT_APP_BACKEND_URL + "/schools", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
-      }    ).then(response => response.json())
+      fetch(process.env.REACT_APP_BACKEND_URL + "/schools", 
+              {
+                method: "GET",
+                headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+              }    
+           ).then(response => response.json())
       // handle response
       .then(data => {
-        console.log(data); // for testing, can be deleted later
         let schools = this.state.schoolInfo.schools;
         let schoolLinkDict = this.state.schoolInfo.schoolLinkDict;
         for (var i = 0; i < data.length; i++) {
@@ -38,11 +36,6 @@ export default class SchoolPicker extends Component {
           schoolLinkDict[data[i][0]] = data[i][1];
         }
         this.setState({"schoolInfo": {"schools": schools, "schoolLinkDict": schoolLinkDict}})
-        console.log(schools); // for testing, can be deleted later
-        console.log(schoolLinkDict); // for testing, can be deleted later
-        console.log("AAA");
-        //Abby note to self Fri 18th: return schools & schoolLinkDict in one data structure
-        //so it's easier to pass around
         this.props.onDoneLoading(this.state.schoolInfo);
       });
     } else {

@@ -4,6 +4,8 @@ import "mdbreact/dist/css/mdb.css";
 
 import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";
 
+//Abby to do Tues 22nd: add the whole loading wheel if/else structure to this too!
+
 export default class LoginWithSchool extends Component {
   constructor(props) {
     super(props);
