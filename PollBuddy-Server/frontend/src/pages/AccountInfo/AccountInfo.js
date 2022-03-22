@@ -244,9 +244,6 @@ class AccountInfo extends Component {
   }
 
   render() {
-    if (localStorage.getItem("loggedIn") !== "true") {
-      return(<Navigate to="/login" />);
-    }
     if(!this.state.doneLoading){
       return ( 
         <MDBContainer className="page">

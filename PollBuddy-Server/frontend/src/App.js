@@ -127,7 +127,7 @@ export default class App extends React.Component {
             <Route exact path="/polls/:pollID" element={<PrivateComponent state = {true} element={<Navigate to={"view"} push={true}/>}/>}/>
 
             {/* Poll Viewer Page */}
-            <Route exact path="/polls/:pollID/view" element={<PrivateComponent state = {true} element={<PollViewer updateTitle={this.updateTitle} />}/>}/>
+            <Route exact path="/polls/:pollID/view" element={<PollViewer updateTitle={this.updateTitle} />}/>
 
             {/* Poll Editor Page */}
             <Route exact path="/polls/:pollID/edit" element={<PrivateComponent state = {true} element={<PollEditor updateTitle={this.updateTitle} />}/>}/>
@@ -137,7 +137,7 @@ export default class App extends React.Component {
 
             {/* Poll Results Page */}
             {/*use the render function so that we can retrieve :groupID from inside the component*/}
-            <Route exact path="/polls/:pollID/results" element={<PrivateComponent state = {true} element={<PollResults updateTitle={this.updateTitle} />}/>}/>
+            <Route exact path="/polls/:pollID/results" element={<PollResults updateTitle={this.updateTitle} />}/>
 
             {/* Question Ended Page */}
             {/* A page that shows when a question is closed by an instructor
@@ -153,37 +153,37 @@ export default class App extends React.Component {
             {/* --- Login Pages --- */}
 
             {/* Login Main Page */}
-            <Route exact path="/login" element={<LoginDefault updateTitle={this.updateTitle} />}/>
+            <Route exact path="/login" element={<PrivateComponent state = {false} element={<LoginDefault updateTitle={this.updateTitle} />}/>}/>
 
             {/* Login with Poll Buddy Account Page */}
-            <Route exact path="/login/pollbuddy" element={<LoginWithPollBuddy updateTitle={this.updateTitle} />}/>
+            <Route exact path="/login/pollbuddy" element={<PrivateComponent state = {false} element={<LoginWithPollBuddy updateTitle={this.updateTitle} />}/>}/>
 
             {/* Login with School Account Page */}
-            <Route exact path="/login/school" element={<LoginWithSchool updateTitle={this.updateTitle} />}/>
+            <Route exact path="/login/school" element={<PrivateComponent state = {false} element={<LoginWithSchool updateTitle={this.updateTitle} />}/>}/>
 
             {/* Login with School Account Step 2 Page */}
-            <Route exact path="/login/school/step2" element={<LoginWithSchoolStep2 updateTitle={this.updateTitle} />}/>
+            <Route exact path="/login/school/step2" element={<PrivateComponent state = {false} element={<LoginWithSchoolStep2 updateTitle={this.updateTitle} />}/>}/>
 
             {/* Forgot Password Page */}
-            <Route exact path="/login/forgot" element={<ForgotPassword updateTitle={this.updateTitle} />}/>
+            <Route exact path="/login/forgot" element={<PrivateComponent state = {false} element={<ForgotPassword updateTitle={this.updateTitle} />}/>}/>
 
             {/* Reset Password Page */}
-            <Route exact path="/login/reset" element={<ResetPassword updateTitle={this.updateTitle} />}/>
+            <Route exact path="/login/reset" element={<PrivateComponent state = {false} element={<ResetPassword updateTitle={this.updateTitle} />}/>}/>
 
 
             {/* --- Registration Pages --- */}
 
             {/* Register Main Page */}
-            <Route exact path="/register" element={<RegisterDefault updateTitle={this.updateTitle} />}/>
+            <Route exact path="/register" element={<PrivateComponent state = {false} element={<RegisterDefault updateTitle={this.updateTitle} />}/>}/>
 
             {/* Register with Poll Buddy Account Page */}
-            <Route exact path="/register/pollbuddy" element={<RegisterWithPollBuddy updateTitle={this.updateTitle} />}/>
+            <Route exact path="/register/pollbuddy" element={<PrivateComponent state = {false} element={<RegisterWithPollBuddy updateTitle={this.updateTitle} />}/>}/>
 
             {/* Register with School Account Page */}
-            <Route exact path="/register/school" element={<RegisterWithSchool updateTitle={this.updateTitle} />}/>
+            <Route exact path="/register/school" element={<PrivateComponent state = {false} element={<RegisterWithSchool updateTitle={this.updateTitle} />}/>}/>
 
             {/* Register with School Account Step 2 Page */}
-            <Route exact path="/register/school/step2" element={<RegisterWithSchoolStep2 updateTitle={this.updateTitle} />}/>
+            <Route exact path="/register/school/step2" element={<PrivateComponent state = {false} element={<RegisterWithSchoolStep2 updateTitle={this.updateTitle} />}/>}/>
 
 
             {/* --- Account and User Settings Pages --- */}
