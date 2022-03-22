@@ -94,7 +94,7 @@ const getUserGroups = async function(userID) {
 
 const editUser = async function(userID, jsonContent) {
   try {
-    const user = await getUserInternal(userID);;
+    const user = await getUserInternal(userID);
     if (!user) { return httpCodes.BadRequest(); }
 
     const updatedUser = Joi.object({
