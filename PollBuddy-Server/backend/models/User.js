@@ -52,9 +52,14 @@ const getUser = async function(userID) {
     if (!user) { return httpCodes.BadRequest(); }
     return httpCodes.Ok({
       firstName: user.FirstName,
+      firstNameLocked: user.FirstNameLocked,
       lastName: user.LastName,
+      lastNameLocked: user.LastNameLocked,
       userName: user.UserName,
+      userNameLocked: user.UserNameLocked,
       email: user.Email,
+      emailLocked: user.EmailLocked,
+      schoolAffiliation: user.SchoolAffiliation
     });
   } catch(err) {
     console.error(err);

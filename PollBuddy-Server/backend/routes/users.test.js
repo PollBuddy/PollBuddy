@@ -27,9 +27,6 @@ mockApp.use("/api/users", usersRouter);
 
 let app = supertest(mockApp);
 
-// TODO: Check Responses against Standard Responses.
-// TODO: Make a Backend Testing Wiki
-
 beforeAll(async () => {
   process.env.DB_URL = global.__MONGO_URI__;
   process.env.DB_NAME = global.__MONGO_DB_NAME__;
@@ -178,9 +175,14 @@ describe("/api/users/me", () => {
       .then(async (response) => {
         expect(response.body.result).toBe("success");
         expect(response.body.data.firstName).toBe(testUser.FirstName);
+        expect(response.body.data.firstNameLocked).toBe(testUser.FirstNameLocked);
         expect(response.body.data.lastName).toBe(testUser.LastName);
+        expect(response.body.data.lastNameLocked).toBe(testUser.LastNameLocked);
         expect(response.body.data.userName).toBe(testUser.UserName);
+        expect(response.body.data.userNameLocked).toBe(testUser.UserNameLocked);
         expect(response.body.data.email).toBe(testUser.Email);
+        expect(response.body.data.emailLocked).toBe(testUser.EmailLocked);
+        expect(response.body.data.schoolAffiliation).toBe(testUser.SchoolAffiliation);
       });
   });
 
