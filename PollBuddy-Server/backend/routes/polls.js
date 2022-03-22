@@ -377,7 +377,6 @@ router.post("/:id", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/:id/view", checkPollPublic, async function (req, res, next) {
-  console.log("Hello world! in router get");
   const id = await validateID("polls", req.params.id);
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
