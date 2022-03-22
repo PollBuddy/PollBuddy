@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import Autocomplete from "react-autocomplete";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-//Abby's to do: turn school picker into class
-
 
 export default class SchoolPicker extends Component {
 
@@ -13,14 +11,19 @@ export default class SchoolPicker extends Component {
     this.renderDropdownItem = this.renderDropdownItem.bind(this);
 
     this.state = {
-      "schools": [],
-      "schoolLinkDict": {}
+      "schoolInfo": {
+        "schools": [],
+        "schoolLinkDict": {}
+      }
     };
 
   }
 
   componentDidMount(){
-    if (this.props.inputDict != null) {
+    console.log("CCC");
+    console.log(this.props);
+    console.log(this.props.schoolInfo);
+    if (this.props.schoolInfo == null) {
       fetch(process.env.REACT_APP_BACKEND_URL + "/schools", {
         method: "GET",
         headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
@@ -28,18 +31,23 @@ export default class SchoolPicker extends Component {
       // handle response
       .then(data => {
         console.log(data); // for testing, can be deleted later
-        let schools = this.state.schools;
-        let schoolLinkDict = this.state.schoolLinkDict;
+        let schools = this.state.schoolInfo.schools;
+        let schoolLinkDict = this.state.schoolInfo.schoolLinkDict;
         for (var i = 0; i < data.length; i++) {
           schools.push({ key: i, label: data[i][0] });
           schoolLinkDict[data[i][0]] = data[i][1];
         }
-        this.setState({"schools": schools, "schoolLinkDict": schoolLinkDict})
+        this.setState({"schoolInfo": {"schools": schools, "schoolLinkDict": schoolLinkDict}})
         console.log(schools); // for testing, can be deleted later
         console.log(schoolLinkDict); // for testing, can be deleted later
         console.log("AAA");
-        this.props.onDoneLoading(schoolLinkDict);
+        //Abby note to self Fri 18th: return schools & schoolLinkDict in one data structure
+        //so it's easier to pass around
+        this.props.onDoneLoading(this.state.schoolInfo);
       });
+    } else {
+      // Get info that was passed in
+      this.setState({"schoolInfo": this.props.schoolInfo});
     }
   }
 
@@ -66,7 +74,7 @@ export default class SchoolPicker extends Component {
      return (
       <MDBContainer className="form-group">
         <Autocomplete
-          items={this.state.schools}
+          items={this.state.schoolInfo.schools}
           sortItems={this.sortItems}
           getItemValue={item => item.label}
           shouldItemRender={(item, value2) => item.label.toLowerCase().indexOf(value2.toLowerCase()) >= 0}
