@@ -23,7 +23,7 @@ class PollCreation extends Component {//this class will likely need to call Grou
     return {
       title: this.state.title,
       description: this.state.description,
-      group: this.state.groupID,
+      group: this.state.groupID || undefined,
     };
   };
 
@@ -42,21 +42,9 @@ class PollCreation extends Component {//this class will likely need to call Grou
     })
       .then((response) => response.json())
       .then((response) => {
+        console.log(response);
         if (response.result === "success") {
           window.location.href = "/polls/" + response.data.id + "/edit";
-        } else {
-          this.setState({showError: true});
-        }
-      });
-
-    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/new", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
-      body: JSON.stringify(this.getPollData())
-    }).then((response) => response.json())
-      .then((response) => {
-        if (response.result === "success") {
-          window.location.href = "/groups/" + response.data.id;
         } else {
           this.setState({showError: true});
         }

@@ -3,7 +3,8 @@ const bson = require("bson");
 const { createResponse, getResultErrors, isEmpty, createModel } = require("../modules/utils");
 const mongoConnection = require("../modules/mongoConnection.js");
 const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
-const {getGroupInternal, isGroupMember, isGroupAdmin, getPollInternal, getUserInternal} = require("./modelUtils");
+const {getGroupInternal, isGroupMember, isGroupAdmin, getPollInternal, getUserInternal} = require("../modules/modelUtils");
+const {objectID} = require("../modules/validatorUtils");
 
 const validators = {
   name: Joi.string().min(3).max(30),
@@ -15,8 +16,12 @@ const groupSchema = {
   Description: "",
   Admins: [],
   Polls: [],
-  Users: [],
+  Users: [], //TODO: Change to member
 };
+
+const groupParamsValidator = Joi.object({
+  id: Joi.custom(objectID).required(),
+});
 
 const createGroupValidator = Joi.object({
   name: validators.name.required(),
@@ -31,6 +36,8 @@ const editGroupValidator = Joi.object({
 const getGroup = async function(groupID, userID) {
   try {
     const group = await getGroupInternal(groupID);
+    if (!group) { return httpCodes.BadRequest(); }
+
     let isMember = await isGroupMember(groupID, userID);
     let isAdmin = await isGroupAdmin(groupID, userID);
     return httpCodes.Ok({
@@ -41,7 +48,7 @@ const getGroup = async function(groupID, userID) {
     });
   } catch (err) {
     console.error(err);
-    return httpCodes.BadRequest("Error: Invalid Group, ID does not match any group.");
+    return httpCodes.InternalServerError();
   }
 };
 
@@ -58,17 +65,18 @@ const createGroup = async function(userID, groupData) {
     });
   } catch (err) {
     console.error(err);
-    return httpCodes.InternalServerError("An error occurred while writing to the database.");
+    return httpCodes.InternalServerError();
   }
 };
 
 const editGroup = async function(groupID, userID, groupData) {
   try {
-    let isUserGroupAdmin = await isGroupAdmin(groupID, userID);
-    if (!isUserGroupAdmin) {
-      return httpCodes.Unauthorized();
-    }
     const group = await getGroupInternal(groupID);
+    if (!group) { return httpCodes.BadRequest(); }
+
+    let isUserGroupAdmin = await isGroupAdmin(groupID, userID);
+    if (!isUserGroupAdmin) { return httpCodes.Unauthorized(); }
+
     await mongoConnection.getDB().collection("groups").updateOne(
       { _id: group._id },
       { "$set": {
@@ -79,17 +87,18 @@ const editGroup = async function(groupID, userID, groupData) {
     return httpCodes.Ok();
   } catch (err) {
     console.log(err);
-    return httpCodes.InternalServerError("An error occurred while writing to the database.");
+    return httpCodes.InternalServerError();
   }
 };
 
 const getGroupUsers = async function (groupID, userID) {
   try {
-    let isUserGroupAdmin = await isGroupAdmin(groupID, userID);
-    if (!isUserGroupAdmin) {
-      return httpCodes.Unauthorized();
-    }
     const group = await getGroupInternal(groupID);
+    if (!group) { return httpCodes.BadRequest(); }
+
+    let isUserGroupAdmin = await isGroupAdmin(groupID, userID);
+    if (!isUserGroupAdmin) { return httpCodes.Unauthorized(); }
+
     let users = [];
     for (let groupUserID of group.Users) {
       let user = await getUserInternal(groupUserID);
@@ -100,17 +109,19 @@ const getGroupUsers = async function (groupID, userID) {
     }
     return httpCodes.Ok(users);
   } catch(err) {
-    return httpCodes.BadRequest("Error: Invalid Group, ID does not match any group.");
+    console.log(err);
+    return httpCodes.InternalServerError();
   }
 };
 
 const getGroupAdmins = async function (groupID, userID) {
   try {
-    let isUserGroupAdmin = await isGroupAdmin(groupID, userID);
-    if (!isUserGroupAdmin) {
-      return httpCodes.Unauthorized();
-    }
     const group = await getGroupInternal(groupID);
+    if (!group) { return httpCodes.BadRequest(); }
+
+    let isUserGroupAdmin = await isGroupAdmin(groupID, userID);
+    if (!isUserGroupAdmin) { return httpCodes.Unauthorized(); }
+
     let admins = [];
     for (let groupAdminID of group.Admins) {
       let admin = await getUserInternal(groupAdminID);
@@ -121,13 +132,16 @@ const getGroupAdmins = async function (groupID, userID) {
     }
     return httpCodes.Ok(admins);
   } catch(err) {
-    return httpCodes.BadRequest("Error: Invalid Group, ID does not match any group.");
+    console.log(err);
+    return httpCodes.InternalServerError();
   }
 };
 
 const getGroupPolls = async function (groupID) {
   try {
     const group = await getGroupInternal(groupID);
+    if (!group) { return httpCodes.BadRequest(); }
+
     let polls = [];
     for (let pollID of group.Polls) {
       let poll = await getPollInternal(pollID);
@@ -138,13 +152,16 @@ const getGroupPolls = async function (groupID) {
     }
     return httpCodes.Ok(polls);
   } catch(err) {
-    return httpCodes.BadRequest("Error: Invalid Group, ID does not match any group.");
+    console.log(err);
+    return httpCodes.InternalServerError();
   }
 };
 
 const joinGroup = async function (groupID, userID) {
   try {
     let group = await getGroupInternal(groupID);
+    if (!group) { return httpCodes.BadRequest(); }
+
     await mongoConnection.getDB().collection("groups").updateOne(
       { _id: group._id, },
       {"$addToSet": {
@@ -153,13 +170,16 @@ const joinGroup = async function (groupID, userID) {
     );
     return httpCodes.Ok();
   } catch(err) {
-    return httpCodes.BadRequest("Error: Invalid Group, ID does not match any group.");
+    console.log(err);
+    return httpCodes.InternalServerError();
   }
 };
 
 const leaveGroup = async function (groupID, userID) {
   try {
     let group = await getGroupInternal(groupID);
+    if (!group) { return httpCodes.BadRequest(); }
+
     await mongoConnection.getDB().collection("groups").updateOne(
       { _id: group._id, },
       {"$pull": {
@@ -168,21 +188,23 @@ const leaveGroup = async function (groupID, userID) {
     );
     return httpCodes.Ok();
   } catch(err) {
-    return httpCodes.BadRequest("Error: Invalid Group, ID does not match any group.");
+    console.log(err);
+    return httpCodes.InternalServerError();
   }
 };
 
 const deleteGroup = async function (groupID, userID) {
   try {
-    let isUserGroupAdmin = await isGroupAdmin(groupID, userID);
-    if (!isUserGroupAdmin) {
-      return httpCodes.Unauthorized();
-    }
     let group = await getGroupInternal(groupID);
+    if (!group) { return httpCodes.BadRequest(); }
+
+    let isUserGroupAdmin = await isGroupAdmin(groupID, userID);
+    if (!isUserGroupAdmin) { return httpCodes.Unauthorized(); }
     await mongoConnection.getDB().collection("groups").deleteOne({ _id: group._id });
     return httpCodes.Ok();
   } catch(err) {
-    return httpCodes.BadRequest("Error: Invalid Group, ID does not match any group.");
+    console.log(err);
+    return httpCodes.InternalServerError();
   }
 };
 
@@ -198,5 +220,6 @@ module.exports = {
   leaveGroup,
   deleteGroup,
   editGroup,
-  editGroupValidator
+  editGroupValidator,
+  groupParamsValidator
 };

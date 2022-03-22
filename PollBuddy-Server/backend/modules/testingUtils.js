@@ -7,19 +7,11 @@ const {pollSchema} = require("../models/Poll");
 const testGroup = {
   Name: "test.group",
   Description: "test.group.description",
-  Invites: [],
-  Admins: [],
-  Polls: [],
-  Users: [],
 };
 
 const testGroup2 = {
   Name: "test.group.2",
   Description: "test.group.description.2",
-  Invites: [],
-  Admins: [],
-  Polls: [],
-  Users: [],
 };
 
 const testPoll = {
@@ -50,6 +42,12 @@ let testUser2 = {
   LastName: "account.2"
 };
 
+const sampleQuestion = {
+  Text: "sample.question",
+  Answers: [{ Text: "sample.answer", Correct: true }],
+  MaxAllowedChoices: 1,
+};
+
 let createUser = async function(update) {
   let userData = {
     UserName: testUser.UserName,
@@ -74,10 +72,6 @@ let createGroup = async function(update) {
   let groupData = {
     Name: testGroup.Name,
     Description: testGroup.Description,
-    Invites: testGroup.Invites,
-    Admins: testGroup.Admins,
-    Polls: testGroup.Polls,
-    Users: testGroup.Users,
   };
 
   if (update) {
@@ -91,20 +85,30 @@ let createGroup = async function(update) {
   return res;
 };
 
-let createPoll = async function(groupID) {
+let createPoll = async function(update) {
   let pollData = {
     Title: testPoll.Title,
     Description: testPoll.Description,
-    Group: groupID,
   };
-  let poll = await mongoConnection.getDB().collection("polls").insertOne(createModel(pollSchema, pollData));
-  await mongoConnection.getDB().collection("groups").updateOne(
-    { _id: groupID, },
-    {"$addToSet": {
-      "Polls": poll.insertedId,
-    }}
-  );
-  return poll;
+
+  if (update) {
+    for (let [key, value] of Object.entries(update)) {
+      pollData[key] = value;
+    }
+  }
+
+  let poll = createModel(pollSchema, pollData);
+  let pollInsert = await mongoConnection.getDB().collection("polls").insertOne(poll);
+
+  if (poll.Group) {
+    await mongoConnection.getDB().collection("groups").updateOne(
+      { _id: poll.Group, },
+      {"$addToSet": {
+        "Polls": pollInsert.insertedId,
+      }}
+    );
+  }
+  return pollInsert;
 };
 
 module.exports = {

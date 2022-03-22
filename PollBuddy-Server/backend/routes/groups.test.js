@@ -268,7 +268,7 @@ describe("/api/groups/:id/polls", () => {
   it("GET: get group polls", async () => {
     let user = await createUser();
     let group = await createGroup();
-    let poll = await createPoll(group.insertedId);
+    let poll = await createPoll({ Group: group.insertedId });
     session = { userData: { userID: user.insertedId } };
     await app.get("/api/groups/" + group.insertedId + "/polls")
       .expect(200)

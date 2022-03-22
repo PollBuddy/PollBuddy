@@ -53,43 +53,88 @@ beforeEach(async () => {
 
 describe("/api/groups/:pollID", () => {
 
-  it("GET: get poll as non-member", async () => {
+  it("GET: get group poll as admin", async () => {
     let user = await createUser();
-    let group = await createGroup();
-    let poll = await createPoll(group.insertedId);
+    let group = await createGroup({ Admins: [ user.insertedId ] });
+    let poll = await createPoll({ Group: group.insertedId });
     session = { userData: { userID: user.insertedId } };
     await app.get("/api/polls/" + poll.insertedId)
-      .expect(401)
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        expect(response.body.data.title).toEqual(testPoll.Title);
+        expect(response.body.data.description).toEqual(testPoll.Description);
+      });
+  });
+
+  it("GET: get non-group poll as creator", async () => {
+    let user = await createUser();
+    let poll = await createPoll({ Creator: user.insertedId });
+    session = { userData: { userID: user.insertedId } };
+    await app.get("/api/polls/" + poll.insertedId)
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        expect(response.body.data.title).toEqual(testPoll.Title);
+        expect(response.body.data.description).toEqual(testPoll.Description);
+      });
+  });
+
+  it("GET: get visible group poll as member", async () => {
+    let user = await createUser();
+    let group = await createGroup({ Admins: [ user.insertedId ], Visible: true });
+    let poll = await createPoll({ Group: group.insertedId });
+    session = { userData: { userID: user.insertedId } };
+    await app.get("/api/polls/" + poll.insertedId)
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        expect(response.body.data.title).toEqual(testPoll.Title);
+        expect(response.body.data.description).toEqual(testPoll.Description);
+      });
+  });
+
+  it("GET: get non-visible group poll as member, failure", async () => {
+    let user = await createUser();
+    let group = await createGroup({ Users: [ user.insertedId ] });
+    let poll = await createPoll({ Group: group.insertedId, Visible: false });
+    session = { userData: { userID: user.insertedId } };
+    await app.get("/api/polls/" + poll.insertedId)
+      .expect(403)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });
   });
 
-  it("GET: get poll as member", async () => {
+  it("GET: get visible group poll as non member, failure", async () => {
     let user = await createUser();
-    let group = await createGroup({ Users: [ user.insertedId ] });
-    let poll = await createPoll(group.insertedId);
+    let group = await createGroup({ Visible: true });
+    let poll = await createPoll({ Group: group.insertedId, Visible: true });
     session = { userData: { userID: user.insertedId } };
     await app.get("/api/polls/" + poll.insertedId)
-      .expect(200)
+      .expect(403)
       .then(async (response) => {
-        expect(response.body.result).toBe("success");
-        expect(response.body.data.title).toEqual(testPoll.Title);
-        expect(response.body.data.description).toEqual(testPoll.Description);
+        expect(response.body.result).toBe("failure");
       });
   });
 
-  it("GET: get poll as admin", async () => {
+  it.skip("GET: get visible public poll as not logged in", async () => {
     let user = await createUser();
-    let group = await createGroup({ Admins: [ user.insertedId ] });
-    let poll = await createPoll(group.insertedId);
-    session = { userData: { userID: user.insertedId } };
+    let poll = await createPoll({ Creator: new bson.ObjectID(), Visible: true, Public: true });
     await app.get("/api/polls/" + poll.insertedId)
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
-        expect(response.body.data.title).toEqual(testPoll.Title);
-        expect(response.body.data.description).toEqual(testPoll.Description);
+      });
+  });
+
+  it.skip("GET: get visible non public poll as not logged in", async () => {
+    let user = await createUser();
+    let poll = await createPoll({ Creator: new bson.ObjectID(), Visible: true, Public: false });
+    await app.get("/api/polls/" + poll.insertedId)
+      .expect(401)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
       });
   });
 
@@ -114,7 +159,7 @@ describe("/api/polls/new", () => {
       });
   });
 
-  it("POST: create poll", async () => {
+  it("POST: create group poll", async () => {
     let user = await createUser();
     let group = await createGroup({ Admins: [ user.insertedId ] });
     session = { userData: { userID: user.insertedId } };
@@ -133,10 +178,48 @@ describe("/api/polls/new", () => {
         expect(poll.Title).toEqual(testPoll.Title);
         expect(poll.Description).toEqual(testPoll.Description);
         expect(poll.Group.toString()).toEqual(group.insertedId.toString());
+        expect(poll.Creator).toEqual(false);
         let updatedGroup = await mongoConnection.getDB().collection("groups").findOne({
           _id: group.insertedId,
         });
         expect(updatedGroup.Polls[0].toString()).toEqual(poll._id.toString());
+      });
+  });
+
+  it("POST: create non-group poll", async () => {
+    let user = await createUser();
+    session = { userData: { userID: user.insertedId } };
+    await app.post("/api/polls/new")
+      .send({
+        title: testPoll.Title,
+        description: testPoll.Description,
+      })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        let poll = await mongoConnection.getDB().collection("polls").findOne({
+          _id: new bson.ObjectID(response.body.data.id),
+        });
+        expect(poll.Title).toEqual(testPoll.Title);
+        expect(poll.Description).toEqual(testPoll.Description);
+        expect(poll.Creator.toString()).toEqual(user.insertedId.toString());
+        expect(poll.Group).toEqual(false);
+      });
+  });
+
+  it("POST: create group poll as non-admin, failure", async () => {
+    let user = await createUser();
+    let group = await createGroup();
+    session = { userData: { userID: user.insertedId } };
+    await app.post("/api/polls/new")
+      .send({
+        title: testPoll.Title,
+        description: testPoll.Description,
+        group: group.insertedId,
+      })
+      .expect(401)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
       });
   });
 
@@ -152,10 +235,10 @@ describe("/api/polls/:pollID/edit", () => {
       });
   });
 
-  it("POST: edit poll", async () => {
+  it("POST: edit group poll as admin", async () => {
     let user = await createUser();
     let group = await createGroup({ Admins: [ user.insertedId ] });
-    let poll = await createPoll(group.insertedId);
+    let poll = await createPoll({ Group: group.insertedId });
     session = { userData: { userID: user.insertedId } };
     await app.post("/api/polls/" + poll.insertedId + "/edit")
       .send({
@@ -170,6 +253,157 @@ describe("/api/polls/:pollID/edit", () => {
         });
         expect(res.Title).toEqual(testPoll2.Title);
         expect(res.Description).toEqual(testPoll2.Description);
+      });
+  });
+
+  it("POST: edit non-group poll as creator", async () => {
+    let user = await createUser();
+    let poll = await createPoll({ Creator: user.insertedId });
+    session = { userData: { userID: user.insertedId } };
+    await app.post("/api/polls/" + poll.insertedId + "/edit")
+      .send({
+        title: testPoll2.Title,
+        description: testPoll2.Description,
+      })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        let res = await mongoConnection.getDB().collection("polls").findOne({
+          _id: poll.insertedId,
+        });
+        expect(res.Title).toEqual(testPoll2.Title);
+        expect(res.Description).toEqual(testPoll2.Description);
+      });
+  });
+
+  it("POST: edit poll as non-admin", async () => {
+    let user = await createUser();
+    let poll = await createPoll();
+    session = { userData: { userID: user.insertedId } };
+    await app.post("/api/polls/" + poll.insertedId + "/edit")
+      .send({
+        title: testPoll2.Title,
+        description: testPoll2.Description,
+      })
+      .expect(401)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+});
+
+describe("/api/polls/:pollID/delete", () => {
+
+  it("GET: route unavailable", async () => {
+    await app.get("/api/polls/0/delete")
+      .expect(405)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("POST: delete group poll as admin", async () => {
+    let user = await createUser();
+    let group = await createGroup({ Admins: [ user.insertedId ] });
+    let poll = await createPoll({ Group: group.insertedId });
+    session = { userData: { userID: user.insertedId } };
+    await app.post("/api/polls/" + poll.insertedId + "/delete")
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+
+        let pollRes = await mongoConnection.getDB().collection("polls").findOne({
+          _id: poll.insertedId,
+        });
+        expect(pollRes).toBeNull();
+
+        let groupRes = await mongoConnection.getDB().collection("groups").findOne({
+          _id: group.insertedId
+        });
+        expect(groupRes.Polls).toHaveLength(0);
+      });
+  });
+
+  it("POST: delete non-group poll as admin", async () => {
+    let user = await createUser();
+    let poll = await createPoll({ Creator: user.insertedId });
+    session = { userData: { userID: user.insertedId } };
+    await app.post("/api/polls/" + poll.insertedId + "/delete")
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+
+        let pollRes = await mongoConnection.getDB().collection("polls").findOne({
+          _id: poll.insertedId,
+        });
+        expect(pollRes).toBeNull();
+      });
+  });
+
+  it("POST: delete non-group poll as admin, failure", async () => {
+    let user = await createUser();
+    let poll = await createPoll();
+    session = { userData: { userID: user.insertedId } };
+    await app.post("/api/polls/" + poll.insertedId + "/delete")
+      .expect(401)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+});
+
+describe("/api/polls/:pollID/createQuestion", () => {
+
+  it("GET: route unavailable", async () => {
+    await app.get("/api/polls/0/createQuestion")
+      .expect(405)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("POST: create question as admin", async () => {
+    let user = await createUser();
+    let group = await createGroup({ Admins: [ user.insertedId ] });
+    let poll = await createPoll({ Group: group.insertedId });
+    session = { userData: { userID: user.insertedId } };
+    await app.post("/api/polls/" + poll.insertedId + "/createQuestion")
+      .send({
+        text: "sample.question",
+        answers: [{ text: "sample.answer", correct: true }],
+        maxAllowedChoices: 1,
+      })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        let questionRes = await mongoConnection.getDB().collection("polls").findOne({
+          "_id": poll.insertedId,
+          "Questions._id": new bson.ObjectID(response.body.data.id),
+        });
+        expect(questionRes).not.toBeNull();
+      });
+  });
+
+  it("POST: create question as poll creator", async () => {
+    let user = await createUser();
+    let poll = await createPoll({ Creator: user.insertedId });
+    session = { userData: { userID: user.insertedId } };
+    await app.post("/api/polls/" + poll.insertedId + "/createQuestion")
+      .send({
+        text: "sample.question",
+        answers: [{ text: "sample.answer", correct: true }],
+        maxAllowedChoices: 1,
+      })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        let questionRes = await mongoConnection.getDB().collection("polls").findOne({
+          "_id": poll.insertedId,
+          "Questions._id": new bson.ObjectID(response.body.data.id),
+        });
+        expect(questionRes).not.toBeNull();
       });
   });
 

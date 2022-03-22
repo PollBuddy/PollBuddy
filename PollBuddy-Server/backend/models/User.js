@@ -5,7 +5,8 @@ const bcrypt = require("bcrypt");
 const mongoConnection = require("../modules/mongoConnection.js");
 const { getResultErrors, isEmpty } = require("../modules/utils");
 const { httpCodes } = require("../modules/httpCodes.js");
-const {getUserInternal} = require("./modelUtils");
+const {getUserInternal} = require("../modules/modelUtils");
+const {objectID} = require("../modules/validatorUtils");
 
 const validators = {
   userName: Joi.string().pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$")),
@@ -14,6 +15,10 @@ const validators = {
   firstName: Joi.string().min(1).max(256),
   lastName: Joi.string().allow("").max(256),
 };
+
+const userParamsValidator = Joi.object({
+  id: Joi.custom(objectID).required(),
+});
 
 const userLoginValidator = Joi.object({
   userName: validators.userName.required(),
@@ -38,13 +43,13 @@ const userSchema = {
   UserName: "",
   UserNameLocked: true,
   Password: "",
-  Groups: [],
   SchoolAffiliation: "",
 };
 
 const getUser = async function(userID) {
   try {
     const user = await getUserInternal(userID);
+    if (!user) { return httpCodes.BadRequest(); }
     return httpCodes.Ok({
       firstName: user.FirstName,
       lastName: user.LastName,
@@ -52,13 +57,15 @@ const getUser = async function(userID) {
       email: user.Email,
     });
   } catch(err) {
-    return httpCodes.BadRequest("Error: Invalid User, ID does not match any user.");
+    console.error(err);
+    return httpCodes.InternalServerError();
   }
 };
 
 const getUserGroups = async function(userID) {
   try {
     const user = await getUserInternal(userID);
+    if (!user) { return httpCodes.BadRequest(); }
     let groups = {
       admin: [],
       member: [],
@@ -79,73 +86,64 @@ const getUserGroups = async function(userID) {
       });
     return httpCodes.Ok(groups);
   } catch(err) {
-    return httpCodes.BadRequest("Error: Invalid User, ID does not match any user.");
+    console.error(err);
+    return httpCodes.InternalServerError();
   }
 };
 
 
 const editUser = async function(userID, jsonContent) {
   try {
-    var idCode = new bson.ObjectID(userID);
-  } catch(err) {
-    return httpCodes.BadRequest("Error: Invalid User, ID does not match any user.");
-  }
+    const user = await getUserInternal(userID);;
+    if (!user) { return httpCodes.BadRequest(); }
 
-  const users = mongoConnection.getDB().collection("users");
-  const user = await users.findOne({ "_id": idCode });
-
-  if (!user) {
-    return httpCodes.InternalServerError("Error updating database information");
-  }
-
-  const updatedUser = Joi.object({
-    UserName: validators.userName,
-    FirstName: validators.firstName,
-    LastName: validators.lastName,
-    Email: validators.email,
-    Password: validators.password,
-    LogOutEverywhere: Joi.boolean(),
-  }).validate({
-    UserName: jsonContent.userName,
-    FirstName: jsonContent.firstName,
-    LastName: jsonContent.lastName,
-    Email: jsonContent.email,
-    Password: jsonContent.password,
-    LogOutEverywhere: jsonContent.logOutEverywhere,
-  });
-
-  const errors = getResultErrors(updatedUser);
-  if (updatedUser.value["Password"] && updatedUser.value["LogOutEverywhere"] === undefined) {
-    errors["Password"] = "LogOutEverywhere is required when Password is passed";
-  }
-
-  Object.keys(updatedUser.value).forEach((key) => {
-    if (!Object.prototype.hasOwnProperty.call(userSchema, key) || updatedUser.value[key] === undefined) {
-      delete updatedUser.value[key];
-    } else if(user[key + "Locked"]) {
-      errors[key] = key + " locked.";
-    }
-  });
-
-
-  if (updatedUser.value["Password"]) {
-    if (user.SchoolAffiliation) {
-      errors["Password"] = "Password locked.";
-    } else {
-      updatedUser.value["Password"] = bcrypt.hashSync(updatedUser.value["Password"], 10);
-    }
-  }
-
-  if (!isEmpty(errors)) {
-    return httpCodes.BadRequest("Validation Failed");
-  }
-
-  users.updateOne({ "_id": idCode }, { "$set": updatedUser.value })
-    .catch(() => {
-      return httpCodes.InternalServerError("Error updating database information");
+    const updatedUser = Joi.object({
+      UserName: validators.userName,
+      FirstName: validators.firstName,
+      LastName: validators.lastName,
+      Email: validators.email,
+      Password: validators.password,
+      LogOutEverywhere: Joi.boolean(),
+    }).validate({
+      UserName: jsonContent.userName,
+      FirstName: jsonContent.firstName,
+      LastName: jsonContent.lastName,
+      Email: jsonContent.email,
+      Password: jsonContent.password,
+      LogOutEverywhere: jsonContent.logOutEverywhere,
     });
 
-  return getUser(idCode);
+    const errors = getResultErrors(updatedUser);
+    if (updatedUser.value["Password"] && updatedUser.value["LogOutEverywhere"] === undefined) {
+      errors["Password"] = "LogOutEverywhere is required when Password is passed";
+    }
+
+    Object.keys(updatedUser.value).forEach((key) => {
+      if (!Object.prototype.hasOwnProperty.call(userSchema, key) || updatedUser.value[key] === undefined) {
+        delete updatedUser.value[key];
+      } else if(user[key + "Locked"]) {
+        errors[key] = key + " locked.";
+      }
+    });
+
+
+    if (updatedUser.value["Password"]) {
+      if (user.SchoolAffiliation) {
+        errors["Password"] = "Password locked.";
+      } else {
+        updatedUser.value["Password"] = bcrypt.hashSync(updatedUser.value["Password"], 10);
+      }
+    }
+
+    if (!isEmpty(errors)) { return httpCodes.BadRequest("Validation Failed"); }
+
+    mongoConnection.getDB().collection("users").updateOne({ "_id": user._id }, { "$set": updatedUser.value });
+
+    return getUser(user._id);
+  } catch(err) {
+    console.error(err);
+    return httpCodes.InternalServerError();
+  }
 };
 
 module.exports = {
@@ -153,7 +151,7 @@ module.exports = {
   userInformationValidator,
   userRegisterValidator,
   userSchema,
-  getUserInternal,
+  userParamsValidator,
   getUser,
   getUserGroups,
   editUser

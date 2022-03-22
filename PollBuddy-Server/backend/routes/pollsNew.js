@@ -5,8 +5,9 @@ const Joi = require("joi");
 const {createResponse, validateID, checkPollPublic, isLoggedIn, promote, debugRoute, getResultErrors, isEmpty} = require("../modules/utils");
 const {sendResponse, httpCodes} = require("../modules/httpCodes.js");
 const {createPoll, getPoll, editPoll, createPollValidator, editPollValidator, createQuestionValidator, createQuestion,
-  editQuestionValidator, editQuestion, submitQuestionValidator, submitQuestion, getPollResults, deletePoll
+  editQuestionValidator, editQuestion, submitQuestionValidator, submitQuestion, getPollResults, deletePoll, pollParamsValidator
 } = require("../models/Poll");
+const {paramValidator} = require("../modules/validatorUtils");
 
 router.get("/new", function (req, res) {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
@@ -15,14 +16,18 @@ router.get("/new", function (req, res) {
 router.post("/new", promote(isLoggedIn), async (req, res) => {
   let validResult = createPollValidator.validate(req.body, { abortEarly: false });
   let errors = getResultErrors(validResult);
-  if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest()); }
+  if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest(errors)); }
 
   let result = await createPoll(req.session.userData.userID, validResult.value);
   return sendResponse(res, result);
 });
 
-router.get("/:pollID", promote(isLoggedIn), async (req, res) => {
-  let result = await getPoll(req.session.userData.userID, req.params.pollID);
+router.get("/:pollID", paramValidator(pollParamsValidator), async (req, res) => {
+  let userID = null;
+  if (req.session.userData && req.session.userData.userID) {
+    userID = req.session.userData.userID;
+  }
+  let result = await getPoll(userID, req.params.pollID);
   return sendResponse(res, result);
 });
 
@@ -35,7 +40,7 @@ router.get("/:pollID/edit", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
-router.post("/:pollID/edit", promote(isLoggedIn), async (req, res) => {
+router.post("/:pollID/edit", promote(isLoggedIn), paramValidator(pollParamsValidator), async (req, res) => {
   let validResult = editPollValidator.validate(req.body, { abortEarly: false });
   let errors = getResultErrors(validResult);
   if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest()); }
@@ -48,7 +53,7 @@ router.get("/:pollID/delete", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
-router.post("/:pollID/delete", promote(isLoggedIn), async (req, res) => {
+router.post("/:pollID/delete", promote(isLoggedIn), paramValidator(pollParamsValidator), async (req, res) => {
   let response = await deletePoll(req.session.userData.userID, req.params.pollID);
   return sendResponse(res, response);
 });
@@ -57,7 +62,7 @@ router.get("/:pollID/createQuestion", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
-router.post("/:pollID/createQuestion", promote(isLoggedIn), async (req, res) => {
+router.post("/:pollID/createQuestion", promote(isLoggedIn), paramValidator(pollParamsValidator), async (req, res) => {
   let validResult = createQuestionValidator.validate(req.body, { abortEarly: false });
   let errors = getResultErrors(validResult);
   if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest()); }
@@ -70,8 +75,9 @@ router.get("/:pollID/editQuestion", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
-router.post("/:pollID/editQuestion", promote(isLoggedIn), async (req, res) => {
+router.post("/:pollID/editQuestion", promote(isLoggedIn), paramValidator(pollParamsValidator), async (req, res) => {
   let validResult = editQuestionValidator.validate(req.body, { abortEarly: false });
+  console.log(validResult);
 
   let errors = getResultErrors(validResult);
   if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest(errors)); }
@@ -84,17 +90,22 @@ router.get("/:pollID/submitQuestion", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
-router.post("/:pollID/submitQuestion", promote(isLoggedIn), async (req, res) => {
+router.post("/:pollID/submitQuestion", paramValidator(pollParamsValidator), async (req, res) => {
   let validResult = submitQuestionValidator.validate(req.body, { abortEarly: false });
   let errors = getResultErrors(validResult);
   if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest(errors)); }
 
-  let response = await submitQuestion(req.session.userData.userID, req.params.pollID, validResult.value);
+  let userID = null;
+  if (req.session.userData && req.session.userData.userID) {
+    userID = req.session.userData.userID;
+  }
+
+  let response = await submitQuestion(userID, req.params.pollID, validResult.value);
   return sendResponse(res, response);
 });
 
-router.get("/:pollID/results", promote(isLoggedIn), async (req, res) => {
-  let response = await getPollResults(req.params.pollID, req.session.userData.userID);
+router.get("/:pollID/results", promote(isLoggedIn), paramValidator(pollParamsValidator), async (req, res) => {
+  let response = await getPollResults(req.session.userData.userID, req.params.pollID);
   return sendResponse(res, response);
 });
 

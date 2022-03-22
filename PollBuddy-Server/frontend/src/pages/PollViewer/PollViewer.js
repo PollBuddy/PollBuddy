@@ -12,7 +12,7 @@ class PollViewer extends Component {
     super(props);
     this.state = {
       pollID: props.router.params.pollID,
-      error: null,
+      showError: null,
       doneLoading: false,
       pollTitle: "",
       pollDescription: "",
@@ -32,12 +32,22 @@ class PollViewer extends Component {
         if (response.result === "success") {
           for (let question of response.data.questions) {
             this.shuffleArray(question.answers);
+            let currentAnswers = [...question.selectedAnswers];
+            let savedAnswers = localStorage.getItem(question.id);
+            if (savedAnswers) {
+              currentAnswers = JSON.parse(savedAnswers);
+            }
+            question.currentAnswers = currentAnswers;
           }
           this.setState({
             pollTitle: response.data.description,
             pollDescription: response.data.description,
             questions: response.data.questions,
             doneLoading: true,
+          });
+        } else {
+          this.setState({
+            showError: true,
           });
         }
       });
@@ -58,8 +68,23 @@ class PollViewer extends Component {
     }
   };
 
+  nextQuestion = () => {
+    let newQuestion = this.state.currentQuestion + 1;
+    if (newQuestion >= this.state.questions.length) {
+      newQuestion = 0;
+    }
+    this.setState({
+      currentQuestion: newQuestion,
+    });
+  };
+
+  updateQuestion = (newAnswers) => {
+    this.state.questions[this.state.currentQuestion].currentAnswers = newAnswers;
+    localStorage.setItem(this.state.questions[this.state.currentQuestion].id, JSON.stringify(newAnswers));
+  };
+
   render() {
-    if (this.state.error != null) {
+    if (this.state.showError) {
       return (
         <MDBContainer fluid className="page">
           <MDBContainer fluid className="box">
@@ -94,7 +119,7 @@ class PollViewer extends Component {
           {this.state.questions.map((question, index) => {
             if (this.state.currentQuestion === index) {
               return (
-                <Question data={{
+                <Question nextQuestion={this.nextQuestion} updateQuestion={this.updateQuestion} data={{
                   pollID: this.state.pollID,
                   questionNumber: this.state.currentQuestion + 1,
                   question: this.state.questions[this.state.currentQuestion],

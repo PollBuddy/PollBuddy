@@ -5,9 +5,9 @@ const mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
 const {createResponse, validateID, debugRoute, getResultErrors, promote, isLoggedIn, isEmpty} = require("../modules/utils");
 const {userRegisterValidator, getUser} = require("../models/User.js");
-const {createGroupValidator, getGroup, createGroup, getGroupUsers, getGroupAdmins} = require("../models/Group.js"); // object destructuring, only import desired functions
 const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
-const {getGroupPolls, joinGroup, leaveGroup, deleteGroup, editGroup, editGroupValidator} = require("../models/Group");
+const {getGroupPolls, joinGroup, leaveGroup, deleteGroup, editGroup, editGroupValidator, createGroupValidator, getGroup, createGroup, getGroupUsers, getGroupAdmins, groupParamsValidator} = require("../models/Group");
+const {paramValidator} = require("../modules/validatorUtils");
 
 // This file handles /api/groups URLs
 
@@ -39,13 +39,8 @@ router.get("/new", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/new", promote(isLoggedIn), async (req, res) => {
-  let validResult = createGroupValidator.validate({
-    name: req.body.name,
-    description: req.body.description,
-  }, { abortEarly: false });
-
-  let errors = getResultErrors(validResult);
-  if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest(errors)); }
+  let validResult = createGroupValidator.validate(req.body, { abortEarly: false });
+  if (validResult.error) { return sendResponse(res, httpCodes.BadRequest()); }
 
   let response = await createGroup(req.session.userData.userID, validResult.value);
   return sendResponse(res, response);
@@ -83,14 +78,9 @@ router.get("/:id/edit", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/edit", promote(isLoggedIn), async (req, res) => {
-  let validResult = editGroupValidator.validate({
-    name: req.body.name,
-    description: req.body.description,
-  }, { abortEarly: false });
-
-  let errors = getResultErrors(validResult);
-  if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest(errors)); }
+router.post("/:id/edit", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {
+  let validResult = editGroupValidator.validate(req.body, { abortEarly: false });
+  if (validResult.error) { return sendResponse(res, httpCodes.BadRequest()); }
 
   let response = await editGroup(req.params.id, req.session.userData.userID, validResult.value);
   return sendResponse(res, response);
@@ -120,7 +110,7 @@ router.get("/:id/delete", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/delete", promote(isLoggedIn), async (req, res) => {//use router.delete??
+router.post("/:id/delete", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {//use router.delete??
   let response = await deleteGroup(req.params.id, req.session.userData.userID);
   return sendResponse(res, response);
 });
@@ -187,7 +177,7 @@ router.post("/", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id", promote(isLoggedIn), async (req, res) => {
+router.get("/:id", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {
   let response = await getGroup(req.params.id, req.session.userData.userID);
   return sendResponse(res, response);
 });
@@ -219,7 +209,7 @@ router.post("/:id", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/polls", promote(isLoggedIn), async (req, res) => {
+router.get("/:id/polls", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {
   let response = await getGroupPolls(req.params.id);
   return sendResponse(res, response);
 });
@@ -251,7 +241,7 @@ router.post("/:id/polls", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/users", promote(isLoggedIn), async (req, res) => {
+router.get("/:id/users", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {
   let response = await getGroupUsers(req.params.id, req.session.userData.userID);
   return sendResponse(res, response);
 });
@@ -283,7 +273,7 @@ router.post("/:id/users", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/admins", promote(isLoggedIn), async (req, res) => {
+router.get("/:id/admins", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {
   let response = await getGroupAdmins(req.params.id, req.session.userData.userID);
   return sendResponse(res, response);
 });
@@ -326,7 +316,7 @@ router.get("/:id/join", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/join", promote(isLoggedIn), async (req, res) => {
+router.post("/:id/join", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {
   let response = await joinGroup(req.params.id, req.session.userData.userID);
   return sendResponse(res, response);
 });
@@ -335,7 +325,7 @@ router.get("/:id/leave", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
-router.post("/:id/leave", promote(isLoggedIn), async (req, res) => {
+router.post("/:id/leave", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {
   let response = await leaveGroup(req.params.id, req.session.userData.userID);
   return sendResponse(res, response);
 });

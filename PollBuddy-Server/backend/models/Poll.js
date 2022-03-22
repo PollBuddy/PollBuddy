@@ -3,7 +3,8 @@ const bson = require("bson");
 const { createResponse, getResultErrors, isEmpty, createModel } = require("../modules/utils");
 const mongoConnection = require("../modules/mongoConnection.js");
 const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
-const {getGroupInternal, isGroupMember, isGroupAdmin, getPollInternal, getQuestionInternal} = require("./modelUtils");
+const {getGroupInternal, isGroupMember, isGroupAdmin, getPollInternal, getQuestionInternal, isPollAdmin} = require("../modules/modelUtils");
+const {objectID} = require("../modules/validatorUtils");
 
 const pollValidators = {
   title: Joi.string().min(3).max(30),
@@ -11,11 +12,17 @@ const pollValidators = {
   group: Joi.string(),
 };
 
+const pollParamsValidator = Joi.object({
+  pollID: Joi.custom(objectID).required(),
+});
+
 const pollSchema = {
   Title: "",
   Description: "",
-  Group: "",
-  Public: false,
+  Group: false, //TODO: Change to OwenGroup
+  Creator: false, //TODO: Change to OwnerUser
+  Public: false, //TODO: Change to RequiresLogin
+  Visible: false,
   Questions: [],
 };
 
@@ -34,7 +41,7 @@ const answerSchema = {
 
 const pollAnswerSchema = {
   PollID: "",
-  UserID: "",
+  UserID: false,
   Questions: [],
 };
 
@@ -46,7 +53,7 @@ const PollAnswerQuestionSchema = {
 const createPollValidator = Joi.object({
   title: pollValidators.title.required(),
   description: pollValidators.description.required(),
-  group: pollValidators.group.required(),
+  group: pollValidators.group,
 });
 
 const editPollValidator = Joi.object({
@@ -64,19 +71,19 @@ const createQuestionValidator = Joi.object({
 });
 
 const editQuestionValidator = Joi.object({
-  id: Joi.string().required(),
+  id: Joi.custom(objectID).required(),
   text: Joi.string().required(),
   answers: Joi.array().items(Joi.object({
-    id: Joi.string(),
+    id: Joi.custom(objectID),
     text: Joi.string().required(),
     correct: Joi.boolean().required(),
-  })),
+  })).required(),
   maxAllowedChoices: Joi.number().required(),
 });
 
 const submitQuestionValidator = Joi.object({
-  id: Joi.string(),
-  answers: Joi.array().items(Joi.string()),
+  id: Joi.custom(objectID).required(),
+  answers: Joi.array().items(Joi.custom(objectID)).required(),
 });
 
 const getQuestion = function(question, isAdmin) {
@@ -93,41 +100,59 @@ const getQuestion = function(question, isAdmin) {
     text: question.Text,
     answers: answers,
     maxAllowedChoices: question.MaxAllowedChoices,
+    selectedAnswers: [],
   };
 };
 
 const getPoll = async function(userID, pollID) {
   try {
     let poll = await getPollInternal(pollID);
-    let isAdmin = await isGroupAdmin(poll.Group, userID);
-    let isMember = await isGroupMember(poll.Group, userID);
-    if (isAdmin || isMember) {
-      let questions = [];
-      for (let question of poll.Questions) {
-        questions.push(getQuestion(question, isAdmin));
-      }
-      let pollAnswers = await mongoConnection.getDB().collection("poll_answers")
-        .findOne({ PollID: poll._id, UserID: userID });
-      if (pollAnswers) {
-        for (let question of questions) {
-          let questionAnswers = pollAnswers.Questions.find((e) => {
-            return e.QuestionID.toString() === question.id.toString();
-          });
-          if (questionAnswers) {
-            question.selectedAnswers = questionAnswers.Answers;
+    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+
+    let isUserPollAdmin = false;
+    if (userID) {
+      isUserPollAdmin = await isPollAdmin(userID, pollID);
+    }
+    if (!isUserPollAdmin) {
+      console.log(poll);
+      if(poll.Visible) {
+        if (userID) {
+          if (poll.Group) {
+            let isUserGroupMember = await isGroupMember(poll.Group, userID);
+            if (!isUserGroupMember) { return httpCodes.Forbidden("Not a member of poll group"); }
           }
+        } else {
+          if (!poll.Public) { return httpCodes.Unauthorized("Poll not public"); }
+        }
+      } else {
+        return httpCodes.Forbidden("Poll not visible");
+      }
+    }
+
+    let questions = [];
+    for (let question of poll.Questions) {
+      questions.push(getQuestion(question, isUserPollAdmin));
+    }
+    let pollAnswers = await mongoConnection.getDB().collection("poll_answers")
+      .findOne({ PollID: poll._id, UserID: userID });
+    if (pollAnswers) {
+      for (let question of questions) {
+        let questionAnswers = pollAnswers.Questions.find((e) => {
+          return e.QuestionID.toString() === question.id.toString();
+        });
+        if (questionAnswers) {
+          question.selectedAnswers = questionAnswers.Answers;
         }
       }
-      return httpCodes.Ok({
-        title: poll.Title,
-        description: poll.Description,
-        questions: questions,
-      });
-    } else {
-      return httpCodes.Unauthorized();
     }
+    return httpCodes.Ok({
+      title: poll.Title,
+      description: poll.Description,
+      questions: questions,
+    });
   } catch(err) {
-    return httpCodes.BadRequest();
+    console.error(err);
+    return httpCodes.InternalServerError();
   }
 };
 
@@ -135,8 +160,10 @@ const getPoll = async function(userID, pollID) {
 const getPollResults = async function(userID, pollID) {
   try {
     let poll = await getPollInternal(pollID);
-    let isUserGroupAdmin = await isGroupAdmin(poll.Group, userID);
-    if (!isUserGroupAdmin) { return httpCodes.Unauthorized(); }
+    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+
+    let isUserPollAdmin = await isPollAdmin(userID, pollID);
+    if (!isUserPollAdmin) { return httpCodes.Unauthorized(); }
 
     let questions = [];
     let questionResults = {};
@@ -148,7 +175,7 @@ const getPollResults = async function(userID, pollID) {
           count: 0,
         };
       }
-      let questionData = getQuestion(question, isUserGroupAdmin);
+      let questionData = getQuestion(question, true);
       questions.push(questionData);
     }
 
@@ -167,7 +194,6 @@ const getPollResults = async function(userID, pollID) {
 
     for (let question of questions) {
       for (let answer of question.answers) {
-        console.log(questionResults[question.id][answer.id].count);
         answer.count = questionResults[question.id][answer.id].count;
       }
     }
@@ -178,44 +204,59 @@ const getPollResults = async function(userID, pollID) {
       questions: questions,
     });
   } catch(err) {
-    return httpCodes.BadRequest();
+    console.error(err);
+    return httpCodes.InternalServerError();
   }
 };
 
 const createPoll = async function(userID, pollData) {
   try {
-    let group = await getGroupInternal(pollData.group);
-    let isUserGroupAdmin = await isGroupAdmin(group._id, userID);
-    if (!isUserGroupAdmin) { return httpCodes.Unauthorized(); }
-    let poll = createModel(pollSchema, {
+    let newPoll = {
       Title: pollData.title,
       Description: pollData.description,
-      Group: group._id,
       MaxAllowedChoices: pollData.maxAllowedChoices,
-    });
+    };
+
+    if (pollData.group) {
+      let group = await getGroupInternal(pollData.group);
+      if (!group) { return httpCodes.BadRequest("Invalid Group: Group does not exist."); }
+
+      let isUserGroupAdmin = await isGroupAdmin(group._id, userID);
+      if (!isUserGroupAdmin) { return httpCodes.Unauthorized("Unauthorized: Cannot create poll in this group."); }
+      newPoll.Group = group._id;
+    } else {
+      newPoll.Creator = userID;
+    }
+
+    let poll = createModel(pollSchema, newPoll);
     const result = await mongoConnection.getDB().collection("polls").insertOne(poll);
-    await mongoConnection.getDB().collection("groups").updateOne(
-      { _id: group._id, },
-      {"$addToSet": {
-        "Polls": result.insertedId,
-      }}
-    );
+
+    if (poll.Group) {
+      await mongoConnection.getDB().collection("groups").updateOne(
+        { _id: poll.Group, },
+        {"$addToSet": {
+          "Polls": result.insertedId,
+        }}
+      );
+    }
+
     return httpCodes.Ok({
       id: result.insertedId,
     });
   } catch (err) {
-    return httpCodes.BadRequest();
+    console.error(err);
+    return httpCodes.InternalServerError();
   }
 };
 
 const editPoll = async function(userID, pollID, pollData) {
   try {
     let poll = await getPollInternal(pollID);
-    let group = await getGroupInternal(poll.Group);
-    let isUserGroupAdmin = await isGroupAdmin(group._id, userID);
-    if (!isUserGroupAdmin) {
-      return httpCodes.Unauthorized();
-    }
+    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+
+    let isUserPollAdmin = await isPollAdmin(userID, pollID);
+    if (!isUserPollAdmin) { return httpCodes.Unauthorized("Unauthorized: Cannot Edit Poll"); }
+
     await mongoConnection.getDB().collection("polls").updateOne(
       { _id: poll._id },
       { "$set": {
@@ -225,39 +266,44 @@ const editPoll = async function(userID, pollID, pollData) {
     );
     return httpCodes.Ok();
   } catch (err) {
-    return httpCodes.BadRequest();
+    console.error(err);
+    return httpCodes.InternalServerError();
   }
 };
 
 const deletePoll = async function(userID, pollID) {
   try {
     let poll = await getPollInternal(pollID);
-    let group = await getGroupInternal(poll.Group);
-    let isUserGroupAdmin = await isGroupAdmin(group._id, userID);
-    if (!isUserGroupAdmin) {
-      return httpCodes.Unauthorized();
-    }
+    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+
+    let isUserPollAdmin = await isPollAdmin(userID, pollID);
+    if (!isUserPollAdmin) { return httpCodes.Unauthorized("Unauthorized: Cannot Delete Poll"); }
+
     await mongoConnection.getDB().collection("polls").deleteOne({ _id: poll._id });
-    await mongoConnection.getDB().collection("groups").updateOne(
-      { _id: group._id, },
-      {"pull": {
-        "Polls": poll._id,
-      }}
-    );
+
+    if (poll.Group) {
+      await mongoConnection.getDB().collection("groups").updateOne(
+        { _id: poll.Group, },
+        {"$pull": {
+          "Polls": poll._id,
+        }}
+      );
+    }
     return httpCodes.Ok();
   } catch(err) {
-    return httpCodes.BadRequest();
+    console.error(err);
+    return httpCodes.InternalServerError();
   }
 };
 
 const createQuestion = async function(userID, pollID, questionData) {
   try {
     let poll = await getPollInternal(pollID);
-    let group = await getGroupInternal(poll.Group);
-    let isUserGroupAdmin = await isGroupAdmin(group._id, userID);
-    if (!isUserGroupAdmin) {
-      return httpCodes.Unauthorized();
-    }
+    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+
+    let isUserPollAdmin = await isPollAdmin(userID, pollID);
+    if (!isUserPollAdmin) { return httpCodes.Unauthorized("Unauthorized: Cannot Create Poll"); }
+
     let answers = [];
     for (let answer of questionData.answers) {
       answers.push(createModel(answerSchema, {
@@ -278,45 +324,43 @@ const createQuestion = async function(userID, pollID, questionData) {
         "Questions": question,
       }}
     );
-    return httpCodes.Ok(getQuestion(question, isUserGroupAdmin));
+    return httpCodes.Ok(getQuestion(question, true));
   } catch (err) {
-    return httpCodes.BadRequest();
+    console.error(err);
+    return httpCodes.InternalServerError();
   }
 };
 
 const editQuestion = async function(userID, pollID, questionData) {
   try {
     let poll = await getPollInternal(pollID);
-    let isUserGroupAdmin = await isGroupAdmin(poll.Group, userID);
-    if (!isUserGroupAdmin) {
-      return httpCodes.Unauthorized();
-    }
+    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+
+    let isUserPollAdmin = await isPollAdmin(userID, pollID);
+    if (!isUserPollAdmin) { return httpCodes.Unauthorized("Unauthorized: Cannot Edit Question"); }
+
     let question = await getQuestionInternal(poll._id, questionData.id);
+    if (!question) { return httpCodes.BadRequest("Invalid Question: Question does not exist."); }
+
     let answers = [];
-    for (let answer of question.Answers) {
-      for (let answerData of questionData.answers) {
-        if (answerData.id) {
-          let answerDataID = new bson.ObjectID(answerData.id);
-          if (answerDataID.toString() === answer._id.toString()) {
-            answers.push({
-              _id: answer._id,
-              Text: answerData.text,
-              Correct: answerData.correct,
-            });
-            break;
-          }
-        }
+    for (let newAnswer of questionData.answers) {
+      let oldAnswer = null;
+      if (newAnswer.id) {
+        oldAnswer = question.Answers.find((e) => {
+          return newAnswer.id.toString() === e._id.toString();
+        });
       }
-    }
-    for (let answer of questionData.answers) {
-      if (!answer.id) {
-        answers.push(createModel(answerSchema, {
-          _id: new bson.ObjectID(),
-          Text: answer.text,
-          Correct: answer.correct,
-        }));
+      let id = new bson.ObjectID();
+      if (oldAnswer) {
+        id = oldAnswer._id;
       }
+      answers.push({
+        _id: id,
+        Text: newAnswer.text,
+        Correct: newAnswer.correct,
+      });
     }
+
     await mongoConnection.getDB().collection("polls").updateOne(
       { _id: poll._id, "Questions._id": question._id, },
       { "$set": {
@@ -326,39 +370,66 @@ const editQuestion = async function(userID, pollID, questionData) {
       }}
     );
     let updatedQuestion = await getQuestionInternal(poll._id, questionData.id);
-    return httpCodes.Ok(getQuestion(updatedQuestion, isUserGroupAdmin));
+    return httpCodes.Ok(getQuestion(updatedQuestion, true));
   } catch (err) {
-    return httpCodes.BadRequest();
+    console.error(err);
+    return httpCodes.InternalServerError();
   }
 };
 
 const deleteQuestion = async function(userID, pollID, questionID) {
-  console.log(userID, pollID, questionID);
+  try {
+    let poll = await getPollInternal(pollID);
+    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+
+    let isUserPollAdmin = await isPollAdmin(userID, pollID);
+    if (!isUserPollAdmin) { return httpCodes.Unauthorized("Unauthorized: Cannot Delete Question"); }
+
+    await mongoConnection.getDB().collection("polls").updateOne(
+      { _id: poll._id },
+      { "$pull": {
+        "Questions.$._id": questionID.id,
+      }}
+    );
+
+    return httpCodes.Ok();
+  } catch(err) {
+    console.error(err);
+    return httpCodes.InternalServerError();
+  }
 };
 
 const submitQuestion = async function(userID, pollID, submitData) {
   try {
     let poll = await getPollInternal(pollID);
+    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+
     let question = await getQuestionInternal(poll._id, submitData.id);
-    let pollAnswers = await mongoConnection.getDB().collection("poll_answers")
-      .findOne({ PollID: poll._id, UserID: userID });
+    if (!question) { return httpCodes.BadRequest("Invalid Question: Question does not exist."); }
+
+    let pollAnswers = null;
+    if (userID) {
+      pollAnswers = await mongoConnection.getDB().collection("poll_answers")
+        .findOne({ PollID: poll._id, UserID: userID });
+    }
+
     if (!pollAnswers) {
-      await mongoConnection.getDB().collection("poll_answers").insertOne({
+      let newPollAnswer = {
         PollID: poll._id,
-        UserID: userID,
         Questions: [{
           QuestionID: submitData.id,
           Answers: submitData.answers,
         }]
-      });
-    } else {
-      let found = false;
-      for (let questionAnswer of pollAnswers.Questions) {
-        if (questionAnswer.QuestionID === submitData.id) {
-          found = true;
-        }
+      };
+      if (userID) {
+        newPollAnswer.UserID = userID;
       }
-      if (found) {
+      await mongoConnection.getDB().collection("poll_answers").insertOne(newPollAnswer);
+    } else {
+      let oldAnswers = pollAnswers.Questions.find((q) => {
+        return q.QuestionID.toString() === submitData.id.toString();
+      });
+      if (oldAnswers) {
         await mongoConnection.getDB().collection("poll_answers").updateOne(
           {
             _id: pollAnswers._id,
@@ -388,8 +459,8 @@ const submitQuestion = async function(userID, pollID, submitData) {
     }
     return httpCodes.Ok();
   } catch (err) {
-    console.log(err);
-    return httpCodes.BadRequest();
+    console.error(err);
+    return httpCodes.InternalServerError();
   }
 };
 
@@ -407,5 +478,6 @@ module.exports = {
   editPollValidator,
   createQuestionValidator,
   editQuestionValidator,
-  submitQuestionValidator
+  submitQuestionValidator,
+  pollParamsValidator
 };

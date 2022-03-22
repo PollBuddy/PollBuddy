@@ -1,5 +1,6 @@
 const bson = require("bson");
-const mongoConnection = require("../modules/mongoConnection.js");
+const mongoConnection = require("./mongoConnection.js");
+const {httpCodes} = require("./httpCodes");
 
 const getID = function (ID) {
   return new bson.ObjectID(ID);
@@ -53,6 +54,19 @@ const getQuestionInternal = async function(pollID, questionID) {
   }
 };
 
+const isPollAdmin = async function(userID, pollID) {
+  let poll = await getPollInternal(pollID);
+  if (poll.Group) {
+    let group = await getGroupInternal(poll.Group);
+    let isUserGroupAdmin = await isGroupAdmin(group._id, userID);
+    if (!isUserGroupAdmin) { return false; }
+  } else {
+    let isUserPollCreator = poll.Creator.toString() === userID.toString();
+    if (!isUserPollCreator) { return false; }
+  }
+  return true;
+};
+
 module.exports = {
   getGroupInternal,
   isGroupMember,
@@ -60,5 +74,6 @@ module.exports = {
   getPollInternal,
   getUserInternal,
   getQuestionInternal,
+  isPollAdmin,
   getID
 };

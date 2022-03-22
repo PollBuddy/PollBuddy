@@ -16,7 +16,7 @@ class Group extends Component {
       isAdmin: false,
       polls: [],
       doneLoading: false,
-      error: null
+      showError: null
     };
   }
 
@@ -37,10 +37,16 @@ class Group extends Component {
               isAdmin: response.data.isAdmin,
               doneLoading: true
             });
-            return;
+          } else {
+            this.setState({
+              showError: true,
+            });
           }
+        } else {
+          this.setState({
+            showError: true,
+          });
         }
-        window.location.replace("/groups");
       });
 
     fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/polls", {
@@ -66,7 +72,7 @@ class Group extends Component {
   };
 
   render() {
-    if (this.state.error != null) {
+    if (this.state.showError) {
       return (
         <MDBContainer fluid className="page">
           <MDBContainer fluid className="box">

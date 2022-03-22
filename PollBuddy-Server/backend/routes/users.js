@@ -11,8 +11,8 @@ const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
 const rpi = require("../modules/rpi");
 
 const { createResponse, validateID, isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute, promote } = require("../modules/utils"); // object destructuring, only import desired functions
-const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups, createUser, editUser } = require("../models/User.js");
-const http = require("http");
+const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups, createUser, editUser, userParamsValidator } = require("../models/User.js");
+const {paramValidator} = require("../modules/validatorUtils");
 
 // This file handles /api/users URLs
 
@@ -679,7 +679,7 @@ router.post("/me/groups", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/:id", async function (req, res) {
+router.get("/:id", paramValidator(userParamsValidator), async function (req, res) {
   let response = await getUser(req.params.id);
   return sendResponse(res, response);
 });
@@ -724,7 +724,7 @@ router.get("/:id/edit", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
  */
-router.post("/:id/edit", async function (req, res) {
+router.post("/:id/edit", paramValidator(userParamsValidator), async function (req, res) {
   let response = await editUser(req.params.id, req.body);
   return sendResponse(res, response);
 });
@@ -740,7 +740,7 @@ router.post("/:id/edit", async function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/:id/groups", async function (req, res) {
+router.get("/:id/groups", paramValidator(userParamsValidator), async function (req, res) {
   let response = await getUserGroups(req.params.id);
   return sendResponse(res, response);
 });
