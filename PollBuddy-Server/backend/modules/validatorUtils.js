@@ -6,7 +6,6 @@ function paramValidator(params) {
   return function(req, res, next) {
     let validID = params.validate(req.params);
     if (validID.error) {
-      console.error("Invalid Params", validID);
       return sendResponse(res, httpCodes.BadRequest());
     }
     next();

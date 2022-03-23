@@ -82,8 +82,8 @@ describe("/api/groups/:pollID", () => {
 
   it("GET: get visible group poll as member", async () => {
     let user = await createUser();
-    let group = await createGroup({ Admins: [ user.insertedId ], Visible: true });
-    let poll = await createPoll({ Group: group.insertedId });
+    let group = await createGroup({ Members: [ user.insertedId ] });
+    let poll = await createPoll({ Group: group.insertedId, AllowSubmissions: true });
     session = { userData: { userID: user.insertedId } };
     await app.get("/api/polls/" + poll.insertedId)
       .expect(200)
@@ -96,8 +96,8 @@ describe("/api/groups/:pollID", () => {
 
   it("GET: get non-visible group poll as member, failure", async () => {
     let user = await createUser();
-    let group = await createGroup({ Users: [ user.insertedId ] });
-    let poll = await createPoll({ Group: group.insertedId, Visible: false });
+    let group = await createGroup({ Members: [ user.insertedId ] });
+    let poll = await createPoll({ Group: group.insertedId, AllowSubmissions: false });
     session = { userData: { userID: user.insertedId } };
     await app.get("/api/polls/" + poll.insertedId)
       .expect(403)
@@ -108,8 +108,8 @@ describe("/api/groups/:pollID", () => {
 
   it("GET: get visible group poll as non member, failure", async () => {
     let user = await createUser();
-    let group = await createGroup({ Visible: true });
-    let poll = await createPoll({ Group: group.insertedId, Visible: true });
+    let group = await createGroup();
+    let poll = await createPoll({ Group: group.insertedId, AllowSubmissions: true });
     session = { userData: { userID: user.insertedId } };
     await app.get("/api/polls/" + poll.insertedId)
       .expect(403)
@@ -118,9 +118,8 @@ describe("/api/groups/:pollID", () => {
       });
   });
 
-  it.skip("GET: get visible public poll as not logged in", async () => {
-    let user = await createUser();
-    let poll = await createPoll({ Creator: new bson.ObjectID(), Visible: true, Public: true });
+  it("GET: get visible public poll as not logged in", async () => {
+    let poll = await createPoll({ Creator: new bson.ObjectID(), AllowSubmissions: true, RequiresLogin: false });
     await app.get("/api/polls/" + poll.insertedId)
       .expect(200)
       .then(async (response) => {
@@ -128,9 +127,8 @@ describe("/api/groups/:pollID", () => {
       });
   });
 
-  it.skip("GET: get visible non public poll as not logged in", async () => {
-    let user = await createUser();
-    let poll = await createPoll({ Creator: new bson.ObjectID(), Visible: true, Public: false });
+  it("GET: get visible non public poll as not logged in", async () => {
+    let poll = await createPoll({ Creator: new bson.ObjectID(), AllowSubmissions: true, RequiresLogin: true });
     await app.get("/api/polls/" + poll.insertedId)
       .expect(401)
       .then(async (response) => {

@@ -26,8 +26,8 @@ const isGroupAdmin = async function(groupID, userID) {
 const isGroupMember = async function(groupID, userID) {
   let idCode = new bson.ObjectID(groupID);
   let group = await mongoConnection.getDB().collection("groups").findOne({ "_id": idCode });
-  for (let user of group.Users) {
-    if (user.toString() === userID.toString()) {
+  for (let member of group.Members) {
+    if (member.toString() === userID.toString()) {
       return true;
     }
   }

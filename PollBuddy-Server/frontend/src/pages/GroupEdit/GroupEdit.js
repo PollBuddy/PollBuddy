@@ -58,14 +58,12 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
             admins: response.data,
             loadingAdmins: false,
           });
-        } else {
-          window.location.href = "/groups";
         }
       });
   };
 
   loadUsers = () => {
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}/users`)
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}/members`)
       .then((response => response.json()))
       .then((response) => {
         if (response.result === "success") {
@@ -73,8 +71,6 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
             users: response.data,
             loadingUsers: false,
           });
-        } else {
-          window.location.href = "/groups";
         }
       });
   };

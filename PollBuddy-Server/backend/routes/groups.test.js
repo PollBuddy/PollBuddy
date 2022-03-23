@@ -71,7 +71,7 @@ describe("/api/groups/:id", () => {
 
   it("GET: get group as member", async () => {
     let user = await createUser();
-    let group = await createGroup({ Users: [ user.insertedId ] });
+    let group = await createGroup({ Members: [ user.insertedId ] });
     session = { userData: { userID: user.insertedId } };
     await app.get("/api/groups/" + group.insertedId)
       .expect(200)
@@ -224,13 +224,13 @@ describe("/api/groups/:id/admins", () => {
 
 });
 
-describe("/api/groups/:id/users", () => {
+describe("/api/groups/:id/members", () => {
 
-  it("GET: get group users", async () => {
+  it("GET: get group members", async () => {
     let user = await createUser();
-    let group = await createGroup({Admins: [user.insertedId], Users: [user.insertedId]});
+    let group = await createGroup({Admins: [user.insertedId], Members: [user.insertedId]});
     session = { userData: { userID: user.insertedId } };
-    await app.get("/api/groups/" + group.insertedId + "/users")
+    await app.get("/api/groups/" + group.insertedId + "/members")
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
@@ -239,11 +239,11 @@ describe("/api/groups/:id/users", () => {
       });
   });
 
-  it("GET: non-admin get group users", async () => {
+  it("GET: non-admin get group members", async () => {
     let user = await createUser();
     let group = await createGroup();
     session = { userData: { userID: user.insertedId } };
-    await app.get("/api/groups/" + group.insertedId + "/users")
+    await app.get("/api/groups/" + group.insertedId + "/members")
       .expect(401)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
@@ -251,7 +251,7 @@ describe("/api/groups/:id/users", () => {
   });
 
   it("POST: route unavailable", async () => {
-    await app.post("/api/groups/0/users")
+    await app.post("/api/groups/0/members")
       .expect(405)
       .then((response) => {
         expect(response.body.result).toBe("failure");
@@ -277,7 +277,7 @@ describe("/api/groups/:id/polls", () => {
   });
 
   it("POST: route unavailable", async () => {
-    await app.post("/api/groups/0/users")
+    await app.post("/api/groups/0/members")
       .expect(405)
       .then((response) => {
         expect(response.body.result).toBe("failure");
@@ -307,8 +307,8 @@ describe("/api/groups/:id/join", () => {
         let res = await mongoConnection.getDB().collection("groups").findOne({
           _id: group.insertedId
         });
-        expect(res.Users).toHaveLength(1);
-        expect(res.Users[0].toString()).toEqual(user.insertedId.toString());
+        expect(res.Members).toHaveLength(1);
+        expect(res.Members[0].toString()).toEqual(user.insertedId.toString());
       });
   });
 
@@ -326,7 +326,7 @@ describe("/api/groups/:id/leave", () => {
 
   it("POST: leave group", async () => {
     let user = await createUser();
-    let group = await createGroup({ Users: [user.insertedId] });
+    let group = await createGroup({ Members: [user.insertedId] });
     session = { userData: { userID: user.insertedId } };
     await app.post("/api/groups/" + group.insertedId + "/leave")
       .expect(200)
@@ -335,7 +335,7 @@ describe("/api/groups/:id/leave", () => {
         let res = await mongoConnection.getDB().collection("groups").findOne({
           _id: group.insertedId
         });
-        expect(res.Users).toHaveLength(0);
+        expect(res.Members).toHaveLength(0);
       });
   });
 

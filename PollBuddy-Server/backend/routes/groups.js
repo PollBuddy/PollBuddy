@@ -6,7 +6,7 @@ const Joi = require("joi");
 const {createResponse, validateID, debugRoute, getResultErrors, promote, isLoggedIn, isEmpty} = require("../modules/utils");
 const {userRegisterValidator, getUser} = require("../models/User.js");
 const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
-const {getGroupPolls, joinGroup, leaveGroup, deleteGroup, editGroup, editGroupValidator, createGroupValidator, getGroup, createGroup, getGroupUsers, getGroupAdmins, groupParamsValidator} = require("../models/Group");
+const {getGroupPolls, joinGroup, leaveGroup, deleteGroup, editGroup, editGroupValidator, createGroupValidator, getGroup, createGroup, getGroupMembers, getGroupAdmins, groupParamsValidator} = require("../models/Group");
 const {paramValidator} = require("../modules/validatorUtils");
 
 // This file handles /api/groups URLs
@@ -241,8 +241,8 @@ router.post("/:id/polls", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/users", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {
-  let response = await getGroupUsers(req.params.id, req.session.userData.userID);
+router.get("/:id/members", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {
+  let response = await getGroupMembers(req.params.id, req.session.userData.userID);
   return sendResponse(res, response);
 });
 
@@ -254,7 +254,7 @@ router.get("/:id/users", promote(isLoggedIn), paramValidator(groupParamsValidato
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/users", function (req, res) {
+router.post("/:id/members", function (req, res) {
   return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 

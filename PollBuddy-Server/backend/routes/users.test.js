@@ -302,17 +302,16 @@ describe("/api/users/me/edit", () => {
 
 describe("/api/users/me/groups", () => {
 
-  //TODO: Successfully gets user groups. Issue#591
-
   it("GET: get user groups", async () => {
     let user = await createUser();
     let adminGroup = await createGroup({Admins: [user.insertedId.toString()]});
-    let memberGroup = await createGroup({Name: testGroup2.Name, Users: [user.insertedId.toString()]});
+    let memberGroup = await createGroup({Name: testGroup2.Name, Members: [user.insertedId.toString()]});
     session = { userData: { userID: user.insertedId } };
     await app.get("/api/users/me/groups")
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
+        console.log(response.body);
         expect(response.body.data.admin[0].id.toString()).toEqual(adminGroup.insertedId.toString());
         expect(response.body.data.admin[0].name).toEqual(testGroup.Name);
         expect(response.body.data.member[0].id.toString()).toEqual(memberGroup.insertedId.toString());
@@ -472,7 +471,7 @@ describe("/api/users/:id/groups", () => {
   it("GET: get user groups", async () => {
     let user = await createUser();
     let adminGroup = await createGroup({Admins: [user.insertedId.toString()]});
-    let memberGroup = await createGroup({Name: testGroup2.Name, Users: [user.insertedId.toString()]});
+    let memberGroup = await createGroup({Name: testGroup2.Name, Members: [user.insertedId.toString()]});
     await app.get("/api/users/"+ user.insertedId + "/groups")
       .expect(200)
       .then(async (response) => {

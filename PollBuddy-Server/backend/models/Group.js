@@ -16,7 +16,7 @@ const groupSchema = {
   Description: "",
   Admins: [],
   Polls: [],
-  Users: [], //TODO: Change to member
+  Members: [], //TODO: Change to member
 };
 
 const groupParamsValidator = Joi.object({
@@ -91,7 +91,7 @@ const editGroup = async function(groupID, userID, groupData) {
   }
 };
 
-const getGroupUsers = async function (groupID, userID) {
+const getGroupMembers = async function (groupID, userID) {
   try {
     const group = await getGroupInternal(groupID);
     if (!group) { return httpCodes.BadRequest(); }
@@ -99,15 +99,15 @@ const getGroupUsers = async function (groupID, userID) {
     let isUserGroupAdmin = await isGroupAdmin(groupID, userID);
     if (!isUserGroupAdmin) { return httpCodes.Unauthorized(); }
 
-    let users = [];
-    for (let groupUserID of group.Users) {
+    let members = [];
+    for (let groupUserID of group.Members) {
       let user = await getUserInternal(groupUserID);
-      users.push({
+      members.push({
         id: user._id,
         userName: user.UserName,
       });
     }
-    return httpCodes.Ok(users);
+    return httpCodes.Ok(members);
   } catch(err) {
     console.log(err);
     return httpCodes.InternalServerError();
@@ -165,7 +165,7 @@ const joinGroup = async function (groupID, userID) {
     await mongoConnection.getDB().collection("groups").updateOne(
       { _id: group._id, },
       {"$addToSet": {
-        "Users": userID,
+        "Members": userID,
       }}
     );
     return httpCodes.Ok();
@@ -183,7 +183,7 @@ const leaveGroup = async function (groupID, userID) {
     await mongoConnection.getDB().collection("groups").updateOne(
       { _id: group._id, },
       {"$pull": {
-        "Users": userID,
+        "Members": userID,
       }}
     );
     return httpCodes.Ok();
@@ -213,7 +213,7 @@ module.exports = {
   groupSchema,
   getGroup,
   createGroup,
-  getGroupUsers,
+  getGroupMembers,
   getGroupAdmins,
   getGroupPolls,
   joinGroup,

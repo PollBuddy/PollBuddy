@@ -76,14 +76,14 @@ const getUserGroups = async function(userID) {
       member: [],
     };
     await mongoConnection.getDB().collection("groups")
-      .find({Admins: user._id.toString()}).forEach((group) => {
+      .find({ Admins: user._id.toString() }).forEach((group) => {
         groups.admin.push({
           id: group._id,
           name: group.Name,
         });
       });
     await mongoConnection.getDB().collection("groups")
-      .find({Users: user._id.toString()}).forEach((group) => {
+      .find({ Members: user._id.toString() }).forEach((group) => {
         groups.member.push({
           id: group._id,
           name: group.Name,

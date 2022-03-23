@@ -19,10 +19,10 @@ const pollParamsValidator = Joi.object({
 const pollSchema = {
   Title: "",
   Description: "",
-  Group: false, //TODO: Change to OwenGroup
+  Group: false, //TODO: Change to OwnerGroup
   Creator: false, //TODO: Change to OwnerUser
-  Public: false, //TODO: Change to RequiresLogin
-  Visible: false,
+  RequiresLogin: true,
+  AllowSubmissions: false,
   Questions: [],
 };
 
@@ -115,14 +115,17 @@ const getPoll = async function(userID, pollID) {
     }
     if (!isUserPollAdmin) {
       console.log(poll);
-      if(poll.Visible) {
+      if(poll.AllowSubmissions) {
         if (userID) {
           if (poll.Group) {
             let isUserGroupMember = await isGroupMember(poll.Group, userID);
             if (!isUserGroupMember) { return httpCodes.Forbidden("Not a member of poll group"); }
           }
         } else {
-          if (!poll.Public) { return httpCodes.Unauthorized("Poll not public"); }
+          console.log(poll.RequiresLogin);
+          if (poll.RequiresLogin) {
+            return httpCodes.Unauthorized("Poll requires login");
+          }
         }
       } else {
         return httpCodes.Forbidden("Poll not visible");
