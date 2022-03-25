@@ -21,21 +21,21 @@ export default class GroupSettings extends Component{
   }
 
   createNewPoll = async () => {
-    window.location.href = "/polls/new?groupID=" + this.state.id;
+    this.props.router.navigate("/polls/new?groupID=" + this.state.id);
   };
 
   handleLeaveGroup = async () => {
     await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/leave", {
       method: "POST",
     });
-    window.location.replace("/groups");
+    this.props.router.navigate("/groups");
   };
 
   handleDeleteGroup = async () => {
     await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/delete", {
       method: "POST",
     });
-    window.location.replace("/groups");
+    this.props.router.navigate("/groups");
   };
 
   render(){

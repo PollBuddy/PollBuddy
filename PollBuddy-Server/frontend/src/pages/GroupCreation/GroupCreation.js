@@ -40,7 +40,7 @@ export default class GroupCreation extends Component {//this class will likely n
       .then((response) => {
         console.log(response);
         if (response.result === "success") {
-          window.location.href = "/groups/" + response.data.id; // TODO: This should be a navigate to avoid a full reload
+          this.props.router.navigate("/groups/" + response.data.id);
         } else {
           this.setState({showError: true});
         }

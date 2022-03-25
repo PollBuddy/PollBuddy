@@ -44,7 +44,7 @@ class PollCreation extends Component {//this class will likely need to call Grou
       .then((response) => {
         console.log(response);
         if (response.result === "success") {
-          window.location.href = "/polls/" + response.data.id + "/edit";
+          this.props.router.navigate("/polls/" + response.data.id + "/edit");
         } else {
           this.setState({showError: true});
         }

@@ -44,7 +44,7 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
             loadingGroupData: false,
           });
         } else {
-          window.location.href = "/groups";
+          this.props.router.navigate("/groups");
         }
       });
   };

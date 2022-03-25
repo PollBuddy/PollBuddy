@@ -122,7 +122,7 @@ class PollEditor extends Component {
     await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/delete", {
       method: "POST",
     });
-    window.location.href = "/groups";
+    this.props.router.navigate("/groups");
   };
 
   createQuestion = () => {

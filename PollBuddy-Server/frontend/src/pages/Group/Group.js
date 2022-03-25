@@ -65,9 +65,9 @@ class Group extends Component {
 
   pollButtonClick = (pollID) => {
     if (this.state.isAdmin) {
-      window.location.href = "/polls/" + pollID + "/edit";
+      this.props.router.navigate("/polls/" + pollID + "/edit");
     } else if(this.state.isMember) {
-      window.location.href = "/polls/" + pollID + "/view";
+      this.props.router.navigate("/polls/" + pollID + "/view");
     }
   };
 
