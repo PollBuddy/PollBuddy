@@ -15,6 +15,27 @@
     font-size: 24px;
 }
 
+.pollButtons {
+  display: flex;
+  width: 80%;
+}
+
+.allowSubmissionsBox {
+  display: flex;
+  width: 80%;
+  justify-content: center;
+  align-items: center;
+}
+
+.pollCheckBox {
+  height: 30px;
+  width: 30px;
+}
+
+.pollButton {
+  width: 100%;
+}
+
 .textBox {
     display: block;
 }

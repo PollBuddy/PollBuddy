@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
-export default class GroupJoin extends Component {//this class will likely need to call Groups/new and do more with that...
+class GroupJoin extends Component {//this class will likely need to call Groups/new and do more with that...
   constructor(props) {
     super(props);
+    let groupCode = props.router.searchParams.get("code");
     this.state = {
-      groupCode: "",
+      groupCode: groupCode || "",
       showConfirm: false
     };
   }
@@ -37,7 +39,6 @@ export default class GroupJoin extends Component {//this class will likely need 
   }
 
   render() {
-    //TODO check if they're logged in
     return (
       <MDBContainer className="page">
         <MDBContainer fluid className="box">
@@ -51,7 +52,7 @@ export default class GroupJoin extends Component {//this class will likely need 
             :
             <MDBContainer className="form-group">
               <label>Please enter your group code:</label>
-              <input className="form-control textBox" type="text" name="groupCode" onChange={this.handleChange}/>
+              <input className="form-control textBox" type="text" name="groupCode" value={this.state.groupCode} onChange={this.handleChange}/>
               <input onClick={this.handleEnterCode} className="button float-right" type="submit" value="OK"/>
             </MDBContainer>
           }
@@ -60,3 +61,5 @@ export default class GroupJoin extends Component {//this class will likely need 
     );
   }
 }
+
+export default withRouter(GroupJoin);

@@ -6,7 +6,7 @@ const mongo = require("mongodb");
 const MongoClient = mongo.MongoClient;
 
 var mongoConnection = require("../modules/mongoConnection.js");
-var pollsRouter = require("./pollsNew");
+var pollsRouter = require("./polls");
 
 var { testUser, testUser2, testGroup, createUser, createGroup } = require("../modules/testingUtils.js");
 const {createPoll, testPoll, testPoll2} = require("../modules/testingUtils");
@@ -64,6 +64,7 @@ describe("/api/groups/:pollID", () => {
         expect(response.body.result).toBe("success");
         expect(response.body.data.title).toEqual(testPoll.Title);
         expect(response.body.data.description).toEqual(testPoll.Description);
+        expect(response.body.data.allowSubmissions).toEqual(false);
       });
   });
 
@@ -77,6 +78,7 @@ describe("/api/groups/:pollID", () => {
         expect(response.body.result).toBe("success");
         expect(response.body.data.title).toEqual(testPoll.Title);
         expect(response.body.data.description).toEqual(testPoll.Description);
+        expect(response.body.data.allowSubmissions).toEqual(false);
       });
   });
 
@@ -242,6 +244,7 @@ describe("/api/polls/:pollID/edit", () => {
       .send({
         title: testPoll2.Title,
         description: testPoll2.Description,
+        allowSubmissions: true,
       })
       .expect(200)
       .then(async (response) => {
@@ -251,6 +254,7 @@ describe("/api/polls/:pollID/edit", () => {
         });
         expect(res.Title).toEqual(testPoll2.Title);
         expect(res.Description).toEqual(testPoll2.Description);
+        expect(res.AllowSubmissions).toEqual(true);
       });
   });
 
@@ -262,6 +266,7 @@ describe("/api/polls/:pollID/edit", () => {
       .send({
         title: testPoll2.Title,
         description: testPoll2.Description,
+        allowSubmissions: true,
       })
       .expect(200)
       .then(async (response) => {
@@ -271,6 +276,7 @@ describe("/api/polls/:pollID/edit", () => {
         });
         expect(res.Title).toEqual(testPoll2.Title);
         expect(res.Description).toEqual(testPoll2.Description);
+        expect(res.AllowSubmissions).toEqual(true);
       });
   });
 
@@ -282,6 +288,7 @@ describe("/api/polls/:pollID/edit", () => {
       .send({
         title: testPoll2.Title,
         description: testPoll2.Description,
+        allowSubmissions: true,
       })
       .expect(401)
       .then(async (response) => {

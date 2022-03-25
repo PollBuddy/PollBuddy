@@ -30,6 +30,7 @@ class PollEditor extends Component {
       questions: [],
       pollTitle: "Sample title",
       pollDescription: "This is a sample description",
+      allowSubmissions: false,
       loadingPollQuestions: false,
       showQuestionError: false,
 
@@ -57,6 +58,7 @@ class PollEditor extends Component {
         this.setState({
           pollTitle: response.data.title,
           pollDescription: response.data.description,
+          allowSubmissions: response.data.allowSubmissions,
           questions: response.data.questions,
           loadingPollData: false,
         });
@@ -87,6 +89,7 @@ class PollEditor extends Component {
     return {
       title: this.state.pollTitle,
       description: this.state.pollDescription,
+      allowSubmissions: this.state.allowSubmissions,
     };
   };
 
@@ -295,6 +298,12 @@ class PollEditor extends Component {
     return this.state.questions;
   }
 
+  onAllowSubmissionsClick = () => {
+    this.setState({
+      allowSubmissions: !this.state.allowSubmissions,
+    });
+  };
+
   render() {
     if (this.state.loadingPollData) {
       return (
@@ -311,34 +320,43 @@ class PollEditor extends Component {
                 <p className="fontSizeLarge">
                   Poll Details
                 </p>
-                <MDBContainer className="form-group">
-                  <p>Poll Title</p>
+                <p>Poll Title</p>
+                <input
+                  type="GroupName" placeholder="Poll title" className="form-control textBox" id="pollTitle" maxLength="100"
+                  name="pollTitle"
+                  value={this.state.pollTitle}
+                  onChange={this.onInput}/>
+                <p>Poll Description</p>
+                <textarea
+                  placeholder="Poll description" className="form-control textBox" id="pollDescription" maxLength="100"
+                  name="pollDescription"
+                  value={this.state.pollDescription}
+                  onChange={this.onInput}/>
+                <div class={"allowSubmissionsBox"}>
+                  <p>
+                    Allow Submissions
+                  </p>
                   <input
-                    type="GroupName" placeholder="Poll title" className="form-control textBox" id="pollTitle" maxLength="100"
-                    name="pollTitle"
-                    value={this.state.pollTitle}
-                    onChange={this.onInput}/>
-                </MDBContainer>
-                <MDBContainer className="form-group">
-                  <p>Poll Description</p>
-                  <textarea
-                    placeholder="Poll description" className="form-control textBox" id="pollDescription" maxLength="100"
-                    name="pollDescription"
-                    value={this.state.pollDescription}
-                    onChange={this.onInput}/>
+                    type="checkbox"
+                    className="checkBox pollCheckBox"
+                    checked={this.state.allowSubmissions}
+                    onInput={this.onAllowSubmissionsClick}
+                  />
+                </div>
+                <div class={"pollButtons"}>
                   <button
-                    id="descriptionBtn" className="button"
+                    id="descriptionBtn" className="button pollButton"
                     onClick={this.savePoll}
                   >
                     Save Changes
                   </button>
                   <button
-                    id="descriptionBtn" className="button"
+                    id="descriptionBtn" className="button pollButton"
                     onClick={this.deletePoll}
                   >
                     Delete
                   </button>
-                </MDBContainer>
+                </div>
               </MDBContainer>
               <MDBContainer className="Poll_Editor_box box">
                 <p className="fontSizeLarge">

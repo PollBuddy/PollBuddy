@@ -59,6 +59,7 @@ const createPollValidator = Joi.object({
 const editPollValidator = Joi.object({
   title: pollValidators.title.required(),
   description: pollValidators.description.required(),
+  allowSubmissions: Joi.boolean().required(),
 });
 
 const createQuestionValidator = Joi.object({
@@ -114,7 +115,6 @@ const getPoll = async function(userID, pollID) {
       isUserPollAdmin = await isPollAdmin(userID, pollID);
     }
     if (!isUserPollAdmin) {
-      console.log(poll);
       if(poll.AllowSubmissions) {
         if (userID) {
           if (poll.Group) {
@@ -122,7 +122,6 @@ const getPoll = async function(userID, pollID) {
             if (!isUserGroupMember) { return httpCodes.Forbidden("Not a member of poll group"); }
           }
         } else {
-          console.log(poll.RequiresLogin);
           if (poll.RequiresLogin) {
             return httpCodes.Unauthorized("Poll requires login");
           }
@@ -151,6 +150,7 @@ const getPoll = async function(userID, pollID) {
     return httpCodes.Ok({
       title: poll.Title,
       description: poll.Description,
+      allowSubmissions: poll.AllowSubmissions,
       questions: questions,
     });
   } catch(err) {
@@ -265,6 +265,7 @@ const editPoll = async function(userID, pollID, pollData) {
       { "$set": {
         Title: pollData.title,
         Description: pollData.description,
+        AllowSubmissions: pollData.allowSubmissions,
       }}
     );
     return httpCodes.Ok();

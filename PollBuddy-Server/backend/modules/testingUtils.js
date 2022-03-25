@@ -103,7 +103,6 @@ let createPoll = async function(update) {
   }
 
   let poll = createModel(pollSchema, pollData);
-  console.log(poll);
   let pollInsert = await mongoConnection.getDB().collection("polls").insertOne(poll);
 
   if (poll.Group) {

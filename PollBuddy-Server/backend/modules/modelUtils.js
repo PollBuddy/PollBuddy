@@ -34,6 +34,32 @@ const isGroupMember = async function(groupID, userID) {
   return false;
 };
 
+const isGroupAdminByGroup = function(group, userID) {
+  let isAdmin = group.Admins.find((adminID) => {
+    return adminID.toString() === userID.toString();
+  });
+  if (isAdmin) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const isGroupMemberByGroup = function(group, userID) {
+  let isMember = group.Members.find((memberID) => {
+    return memberID.toString() === userID.toString();
+  });
+  if (isMember) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+const isGroupUserByGroup = function(group, userID) {
+  return isGroupAdminByGroup(group, userID) || isGroupMemberByGroup(group, userID);
+};
+
 const getPollInternal = async function(pollID) {
   let idCode = new bson.ObjectID(pollID);
   let poll = await mongoConnection.getDB().collection("polls").findOne({ "_id": idCode });
@@ -75,5 +101,8 @@ module.exports = {
   getUserInternal,
   getQuestionInternal,
   isPollAdmin,
-  getID
+  getID,
+  isGroupAdminByGroup,
+  isGroupMemberByGroup,
+  isGroupUserByGroup,
 };
