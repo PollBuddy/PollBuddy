@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
 export default class GroupJoin extends Component {//this class will likely need to call Groups/new and do more with that...
   componentDidMount(){
     this.props.updateTitle("Join Group");
   }
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     //TODO check if they're logged in
     console.log(localStorage.getItem("loggedIn"));
     if (localStorage.getItem("loggedIn") === "true") {
@@ -33,9 +34,9 @@ export default class GroupJoin extends Component {//this class will likely need 
 
   handleConfirmationResponse(response) {
     if (response === true) {
-      window.location.replace("/groups/" + this.state.groupCode + "/polls");
+      this.props.router.navigate("/groups/" + this.state.groupCode + "/polls");
     } else {
-      window.location.replace("/groups");
+      this.props.router.navigate("/groups");
     }
   }
 
@@ -63,3 +64,4 @@ export default class GroupJoin extends Component {//this class will likely need 
     );
   }
 }
+export default withRouter(GroupJoin);

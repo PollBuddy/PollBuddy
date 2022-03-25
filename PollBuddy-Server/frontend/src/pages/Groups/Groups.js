@@ -1,14 +1,15 @@
 import React, {Component} from "react";
 import {Link, Navigate} from "react-router-dom";
 import { MDBContainer } from "mdbreact";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import "../../styles/main.scss";
 import "./Groups.scss";
 
-export default class Groups extends Component {
+class Groups extends Component {
 
-  constructor(){
-    super();
+  constructor(props){
+    super(props);
     this.state = {
       //TODO: fetch this data from api/users/:id/groups when that functionality works
       error: null,
@@ -63,11 +64,11 @@ export default class Groups extends Component {
     // call prompt() with custom message to get user input from alert-like dialog
     const groupCode = prompt("Please enter your group code");
     // combine the group code into URL and redirect to the next page
-    window.location.replace("/groups/" + groupCode + "/polls");
+    this.props.router.navigate("/groups/" + groupCode + "/polls");
   };
   handleSubmit = (e) => {
     e.preventDefault();
-    window.location.href = "/groups/" + this.state.groupCode + "/polls";
+    this.props.router.navigate("/groups/" + this.state.groupCode + "/polls");
   };
   handleChange = (e) => {
     this.setState({groupCode: e.target.value});
@@ -173,3 +174,4 @@ function Dialog(props) {
     </div>
   );
 }
+export default withRouter(Groups);
