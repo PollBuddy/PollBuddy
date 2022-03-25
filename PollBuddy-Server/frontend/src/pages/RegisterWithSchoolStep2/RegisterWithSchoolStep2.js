@@ -113,12 +113,13 @@ class RegisterWithSchoolStep2 extends Component {
         if (response != null) {
           if (response.result === "success") {
             // Save data about the user
-            localStorage.setItem("loggedIn", true);
+            localStorage.setItem("loggedIn", "true");
             localStorage.setItem("firstName", response.data.firstName);
             localStorage.setItem("lastName", response.data.lastName);
             localStorage.setItem("userName", response.data.userName);
-            // Redirect to groups page
-            return <Navigate to="/groups" push={true}/>;
+
+            // Redirect to the groups page
+            return this.props.router.navigate("/groups", { replace: true });
           } else {
             // Something went wrong, handle it
 

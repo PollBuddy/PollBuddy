@@ -15,6 +15,27 @@
     font-size: 24px;
 }
 
+.pollButtons {
+  display: flex;
+  width: 80%;
+}
+
+.allowSubmissionsBox {
+  display: flex;
+  width: 80%;
+  justify-content: center;
+  align-items: center;
+}
+
+.pollCheckBox {
+  height: 30px;
+  width: 30px;
+}
+
+.pollButton {
+  width: 100%;
+}
+
 .textBox {
     display: block;
 }
@@ -27,9 +48,24 @@
     .randomizeBox, .randomizeLabel {
       display: inline-block;
     }
-  
+
     .randomizeBox {
       height: 25px;
       width: 25px;
     }
   }
+
+.questionAnswer {
+  display: flex;
+  align-items: center;
+}
+
+.correctCheckBox {
+  height: 25px;
+  width: 25px;
+}
+
+.maxAllowedChoices {
+  display: flex;
+  align-items: center;
+}

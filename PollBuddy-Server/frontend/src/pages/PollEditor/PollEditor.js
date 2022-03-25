@@ -3,39 +3,10 @@ import { MDBContainer } from "mdbreact";
 import autosize from "autosize";
 import "./PollEditor.scss";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
+import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import QuestionEditor from "../../components/QuestionEditor/QuestionEditor";
 
 class PollEditor extends Component {
-  componentDidMount() {
-    autosize(document.querySelector("textarea"));
-    this.props.updateTitle("Poll Editor");
-
-    // Test pollID: 6089fb33145365b82e93717a
-
-    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.router.params.pollID, {
-      method: "GET"
-    })
-      .then(response => {
-        if(response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Something went wrong");
-        }
-
-      })
-      .then(response => {
-        if (response === {}) {
-          console.log("Error fetching data");
-        } else {
-          console.log("Fetching data succeeded");
-          console.log(response);
-          this.setState({pollTitle: response[0].Name});
-          this.setState({pollTitleValue: response[0].Name});
-          this.setState({questions: response[0].Questions});
-        }
-      })
-      .catch(error => this.setState({"error": error}));
-  }
-
   constructor(props) {
     super(props);
     this.askQuestion = this.askQuestion.bind(this);
@@ -44,28 +15,54 @@ class PollEditor extends Component {
     // let questions = require("./placeholder");//./placeholder will need to be changed into the json file in the get call or something
 
     this.state = {
-      questions: [],
       askedQuestions: [],
       questionDispatcherIndex: 0,
-      pollTitle: "Sample title",
-      pollDescription: "This is a sample description",
       pollTitleValue: "",
       pollDescriptionValue: "",
       displayQuestionEditor: false,
-      currentQuestion: "",
       pollQuestionTitleValue: "",
       pollQuestionValue: "",
       reorderQuestions: false,
-      randomQuestions: false
+      randomQuestions: false,
+
+      pollID: props.router.params.pollID,
+      doneLoading: false,
+      questions: [],
+      pollTitle: "Sample title",
+      pollDescription: "This is a sample description",
+      allowSubmissions: false,
+      loadingPollQuestions: false,
+      showQuestionError: false,
+
+      currentQuestion: false,
+      currentAnswers: [],
+      displayNewQuestion: false,
+      displayEditQuestion: false,
+      questionTextInput: "",
+      maxAllowedChoices: 1,
+
+      loadingPollData: true,
     };
+  }
 
-    // this.state.pollTitleValue = this.state.pollTitle;
-    this.state.pollDescriptionValue = this.state.pollDescription;
-
-    this.handlePollTitleChange = this.handlePollTitleChange.bind(this);
-    this.handlePollDescriptionChange = this.handlePollDescriptionChange.bind(this);
-    this.handlePollQuestionTitleChange = this.handlePollQuestionTitleChange.bind(this);
-    this.handlePollQuestionChange = this.handlePollQuestionChange.bind(this);
+  componentDidMount() {
+    autosize(document.querySelector("textarea"));
+    this.props.updateTitle("Poll Editor");
+    // Test pollID: 6089fb33145365b82e93717a
+    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID, {
+      method: "GET"
+    })
+      .then(response => response.json())
+      .then((response) => {
+        console.log(response);
+        this.setState({
+          pollTitle: response.data.title,
+          pollDescription: response.data.description,
+          allowSubmissions: response.data.allowSubmissions,
+          questions: response.data.questions,
+          loadingPollData: false,
+        });
+      });
   }
 
   handleRandomize() {
@@ -82,70 +79,199 @@ class PollEditor extends Component {
     }));
   }
 
-  savePollTitle() {
-    this.setState({pollTitle: document.getElementById("pollTitle").value});
-  }
+  onInput = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
 
-  savePollDescription() {
-    this.setState({pollDescription: document.getElementById("pollDescription").value});
-  }
+  getPollData = () => {
+    return {
+      title: this.state.pollTitle,
+      description: this.state.pollDescription,
+      allowSubmissions: this.state.allowSubmissions,
+    };
+  };
 
-  handlePollTitleChange(event) {
-    this.setState({pollTitleValue: event.target.value});
-  }
+  savePoll = () => {
+    this.setState({
+      loadingPollData: true,
+    });
+    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/edit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(this.getPollData())
+    })
+      .then(response => response.json())
+      .then((response) => {
+        if (response.result === "success") {
+          this.setState({
+            showError: false,
+            loadingPollData: false,
+          });
+        } else {
+          this.setState({
+            showError: true,
+            loadingPollData: false,
+          });
+        }
+      });
+  };
 
-  handlePollDescriptionChange(event) {
-    this.setState({pollDescriptionValue: event.target.value});
-  }
+  deletePoll = async () => {
+    await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/delete", {
+      method: "POST",
+    });
+    window.location.href = "/groups";
+  };
 
-  handlePollQuestionTitleChange(event) {
-    this.setState({pollQuestionTitleValue: event.target.value});
-  }
+  createQuestion = () => {
+    this.setState({
+      currentQuestion: false,
+      currentAnswers: [],
+      questionTextInput: "",
+      displayNewQuestion: true,
+      maxAllowedChoices: 1,
+    });
+  };
 
-  handlePollQuestionChange(event) {
-    this.setState({pollQuestionValue: event.target.value});
-  }
+  editQuestion = (question) => {
+    this.setState({
+      currentQuestion: question,
+      currentAnswers: JSON.parse(JSON.stringify(question.answers)),
+      questionTextInput: question.text,
+      maxAllowedChoices: question.maxAllowedChoices,
+      displayEditQuestion: true,
+    });
+  };
 
-  createNewQuestion() {
-    if (document.getElementById("newQuestionBtn").textContent === "Submit") {
-      let newQuestion = [{
-        QuestionText: document.getElementById("question_input").value
-      }];
-      this.setState({questions: [...this.state.questions, newQuestion]});
-      document.getElementById("question_title_input").style.display = "none";
-      document.getElementById("question_input").style.display = "none";
-      document.getElementById("newQuestionBtn").textContent = "New Question";
-      document.getElementById("newQuestionCancelButton").style.display = "none";
-    } else {
-      document.getElementById("question_title_input").style.display = "block";
-      document.getElementById("question_input").style.display = "block";
-      document.getElementById("newQuestionBtn").textContent = "Submit";
-      document.getElementById("newQuestionCancelButton").style.display = "inline";
+  submitQuestion = () => {
+    this.setState({
+      showQuestionError: false,
+      loadingPollQuestions: true,
+    });
+    if (this.state.displayNewQuestion) {
+      fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/createQuestion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: this.state.questionTextInput,
+          answers: this.state.currentAnswers,
+          maxAllowedChoices: this.state.maxAllowedChoices,
+        })
+      })
+        .then(response => response.json())
+        .then((response) => {
+          if (response.result === "success") {
+            this.setState({
+              showQuestionError: false,
+              currentQuestion: false,
+              currentAnswers: [],
+              maxAllowedChoices: 1,
+              loadingPollQuestions: false,
+              displayNewQuestion: false,
+              questions: [...this.state.questions, response.data],
+            });
+          } else {
+            this.setState({
+              showQuestionError: true,
+              loadingPollQuestions: false,
+            });
+          }
+        });
+    } else if (this.state.displayEditQuestion) {
+      fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/editQuestion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: this.state.currentQuestion.id,
+          text: this.state.questionTextInput,
+          answers: this.state.currentAnswers,
+          maxAllowedChoices: this.state.maxAllowedChoices,
+        })
+      })
+        .then(response => response.json())
+        .then((response) => {
+          if (response.result === "success") {
+            let questions = [...this.state.questions];
+            let currentQuestionIndex = -1;
+            for (let questionIndex in questions) {
+              if (questions[questionIndex].id === this.state.currentQuestion.id) {
+                currentQuestionIndex = questionIndex;
+                break;
+              }
+            }
+            if (currentQuestionIndex !== -1) {
+              questions[currentQuestionIndex] = response.data;
+            }
+            this.setState({
+              questions: questions,
+              showQuestionError: false,
+              currentQuestion: false,
+              currentAnswers: [],
+              maxAllowedChoices: 1,
+              loadingPollQuestions: false,
+              displayEditQuestion: false,
+            });
+          } else {
+            this.setState({
+              showQuestionError: true,
+              loadingPollQuestions: false,
+            });
+          }
+        });
     }
-  }
+  };
 
-  cancelNewQuestion() {
-    document.getElementById("question_title_input").style.display = "none";
-    document.getElementById("question_input").style.display = "none";
-    document.getElementById("newQuestionBtn").textContent = "New Question";
-    document.getElementById("newQuestionCancelButton").style.display = "none";
-  }
+  cancelQuestion = () => {
+    this.setState({
+      displayNewQuestion: false,
+      displayEditQuestion: false,
+    });
+  };
 
-  editQuestion(question) {
-    document.getElementById("poll_questions").style.display = "none";
-    this.setState({displayQuestionEditor: true});
-    this.setState({currentQuestion: question});
-    this.setState({pollQuestionTitleValue: question.QuestionText});
-    this.setState({pollQuestionValue: question.QuestionText});
-  }
+  addAnswer = () => {
+    this.setState({
+      currentAnswers: [...this.state.currentAnswers, {
+        text: "",
+        correct: false,
+      }]
+    });
+  };
 
-  submitEditQuestion() {
-    this.setState({displayQuestionEditor: false});
-    document.getElementById("poll_questions").style.display = "flex";
-    var found = this.state.questions.find(element => element[0].QuestionText === this.state.currentQuestion.QuestionText);
-    found[0].QuestionText = document.getElementById("edit_question_title_input").value;
-    found[0].QuestionText = document.getElementById("edit_question_input").value;
-  }
+  deleteAnswer = (answerIndex) => {
+    let currentAnswers = [...this.state.currentAnswers];
+    currentAnswers.splice(answerIndex, 1);
+    this.setState({
+      currentAnswers: currentAnswers,
+    });
+  };
+
+  onAnswerInput = (e) => {
+    let currentAnswers = [...this.state.currentAnswers];
+    currentAnswers[parseInt(e.target.name)].text = e.target.value;
+    this.setState({
+      currentAnswers: currentAnswers,
+    });
+  };
+
+  onAnswerCheck = (e) => {
+    let currentAnswers = [...this.state.currentAnswers];
+    currentAnswers[parseInt(e.target.name)].correct = !currentAnswers[parseInt(e.target.name)].correct;
+    this.setState({
+      currentAnswers: currentAnswers,
+    });
+  };
+
+  incrementMaxAllowedChoices = (increment) => {
+    let maxAllowedChoices = this.state.maxAllowedChoices + increment;
+    if (maxAllowedChoices <= 0) {
+      maxAllowedChoices = 1;
+    }
+    this.setState({
+      maxAllowedChoices: maxAllowedChoices,
+    });
+  };
 
   reorderQuestions() {
     this.setState({reorderQuestions: !this.state.reorderQuestions});
@@ -172,79 +298,198 @@ class PollEditor extends Component {
     return this.state.questions;
   }
 
+  onAllowSubmissionsClick = () => {
+    this.setState({
+      allowSubmissions: !this.state.allowSubmissions,
+    });
+  };
+
   render() {
-
-    return (
-      <MDBContainer>
-        <MDBContainer className="page">
-          <MDBContainer className="two-box">
-            <MDBContainer className="Poll_Editor_box box">
-              <p className="fontSizeLarge">
-                Poll Details
-              </p>
-
-              <MDBContainer className="form-group">
+    if (this.state.loadingPollData) {
+      return (
+        <MDBContainer fluid className="page">
+          <LoadingWheel/>
+        </MDBContainer>
+      );
+    } else {
+      return (
+        <MDBContainer>
+          <MDBContainer className="page">
+            <MDBContainer className="two-box">
+              <MDBContainer className="Poll_Editor_box box">
+                <p className="fontSizeLarge">
+                  Poll Details
+                </p>
                 <p>Poll Title</p>
-                <input type="GroupName" placeholder="Poll title" className="form-control textBox" id="pollTitle" maxLength="100" value={this.state.pollTitleValue} onChange={this.handlePollTitleChange}/>
-                <button id="groupBtn" className="button" onClick={() => this.savePollTitle()}>Save</button>
-              </MDBContainer>
-
-              <MDBContainer className="form-group">
+                <input
+                  type="GroupName" placeholder="Poll title" className="form-control textBox" id="pollTitle" maxLength="100"
+                  name="pollTitle"
+                  value={this.state.pollTitle}
+                  onChange={this.onInput}/>
                 <p>Poll Description</p>
-                <textarea placeholder="Poll description" className="form-control textBox" id="pollDescription" maxLength="100" value={this.state.pollDescriptionValue} onChange={this.handlePollDescriptionChange}/>
-                <button id="descriptionBtn" className="button" onClick={() => this.savePollDescription()}>Save</button>
-              </MDBContainer>
-            </MDBContainer>
-
-            <MDBContainer className="Poll_Editor_box box">
-              <p className="fontSizeLarge">
-                Poll Question Editor
-              </p>
-
-              <div id="poll_questions" className="Poll_Editor_center">
-                {this.state.questions.length === 0 ? (
-                  <p>Sorry, you don't have any polls.<br/> <br/></p>
-                ) : (
-                  <React.Fragment>
-                    {console.log(this.state.questions)}
-                    {this.state.questions.map((value, index) => (
-                      <div id={"question-" + (index+1)}>
-                        {console.log(value)}
-                        {this.state.reorderQuestions && <span className="Poll_Editor_reorder" onClick={() => this.moveQuestionUp(index)}>↑</span>}
-                        <button style={{  width: "17em" }} className="button" onClick={() => this.editQuestion(value[0])}>{"Question " + (index+1) + ": " + value[0].QuestionText}</button>
-                        {this.state.reorderQuestions && <span className="Poll_Editor_reorder" onClick={() => this.moveQuestionDown(index)}>↓</span>}
-                      </div>
-                    ))}
-                    <button type="submit" id="reorderQuestionsBtn" className="button" onClick={() => this.reorderQuestions()}>Reorder Questions</button>
-                  </React.Fragment>
-                )}
-
-                <MDBContainer className="form-group">
-                  <input className="display_none form-control textBox" id="question_title_input" placeholder="Title"/>
-                  <input className="display_none form-control textBox" id="question_input" placeholder="Question"/>
-                  <button type="submit" id="newQuestionBtn" className="button" onClick={() => this.createNewQuestion()}>New Question</button>
-                  <button type="submit" id="newQuestionCancelButton" className="button display_none Poll_Editor_cancel_button" onClick={() => this.cancelNewQuestion()}>Cancel</button>
-                </MDBContainer>
-              </div>
-                
-              {this.state.questions.length > 1 && !this.displayQuestionEditor &&
-                <div id="randomizeContainer">
-                  <input type="checkbox" onChange={this.handleRandomize} className="randomizeBox" id="randomizeQuestions" checked={this.randomQuestions}/>
-                  <label className="randomizeLabel" for="randomizeQuestions">Randomize Questions</label>
+                <textarea
+                  placeholder="Poll description" className="form-control textBox" id="pollDescription" maxLength="100"
+                  name="pollDescription"
+                  value={this.state.pollDescription}
+                  onChange={this.onInput}/>
+                <div class={"allowSubmissionsBox"}>
+                  <p>
+                    Allow Submissions
+                  </p>
+                  <input
+                    type="checkbox"
+                    className="checkBox pollCheckBox"
+                    checked={this.state.allowSubmissions}
+                    onInput={this.onAllowSubmissionsClick}
+                  />
                 </div>
-              }
-              {this.state.displayQuestionEditor &&
-                <MDBContainer className="form-group">
-                  <input className="form-control textBox" id="edit_question_title_input" placeholder="Edit Title" value={this.state.pollQuestionTitleValue} onChange={this.handlePollQuestionTitleChange}/>
-                  <input className="form-control textBox" id="edit_question_input" placeholder="Edit Question" value={this.state.pollQuestionValue} onChange={this.handlePollQuestionChange}/>
-                  <button type="submit" id="editQuestionBtn" className="button" onClick={() => this.submitEditQuestion()}>Save</button>
-                </MDBContainer>
-              }
+                <div class={"pollButtons"}>
+                  <button
+                    id="descriptionBtn" className="button pollButton"
+                    onClick={this.savePoll}
+                  >
+                    Save Changes
+                  </button>
+                  <button
+                    id="descriptionBtn" className="button pollButton"
+                    onClick={this.deletePoll}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </MDBContainer>
+              <MDBContainer className="Poll_Editor_box box">
+                <p className="fontSizeLarge">
+                  Poll Questions
+                </p>
+
+                {this.state.loadingPollQuestions ?
+                  <MDBContainer>
+                    <LoadingWheel/>
+                  </MDBContainer> :
+                  <>
+                    { !(this.state.displayEditQuestion || this.state.displayNewQuestion) &&
+                      <div id="poll_questions" className="Poll_Editor_center">
+                        {this.state.questions.length === 0 && !this.state.displayNewQuestion ? (
+                          <p>Sorry, you don't have any questions.</p>
+                        ) : (
+                          <React.Fragment>
+                            {this.state.questions.map((question, index) => (
+                              <div id={"question-" + (index+1)}>
+                                <button
+                                  style={{  width: "17em" }} className="button"
+                                  onClick={() => this.editQuestion(question)}
+                                >
+                                  {"Question " + (index+1) + ": " + question.text}
+                                </button>
+                              </div>
+                            ))}
+                          </React.Fragment>
+                        )}
+                        <button
+                          type="submit" id="newQuestionBtn" className="button"
+                          onClick={this.createQuestion}
+                        >
+                          New Question
+                        </button>
+                      </div>
+                    }
+                    { (this.state.displayEditQuestion || this.state.displayNewQuestion) &&
+                      <>
+                        <MDBContainer className="form-group">
+                          <input
+                            className="form-control textBox"
+                            placeholder="Question"
+                            name="questionTextInput"
+                            value={this.state.questionTextInput}
+                            onChange={this.onInput}
+                          />
+                        </MDBContainer>
+                        <div className="maxAllowedChoices">
+                          <p>
+                            Max Allowed Choices
+                          </p>
+                          <button
+                            type="submit" className="button"
+                            onClick={() => { this.incrementMaxAllowedChoices(1); }}
+                          >
+                            +
+                          </button>
+                          <p className="fontSizeLarge">
+                            {this.state.maxAllowedChoices}
+                          </p>
+                          <button
+                            type="submit" className="button"
+                            onClick={() => { this.incrementMaxAllowedChoices(-1); }}
+                          >
+                            -
+                          </button>
+                        </div>
+                        <p className="fontSizeLarge">
+                          Answers
+                        </p>
+                        {this.state.currentAnswers.length === 0 ? (
+                          <p>Sorry, this question has no answers.</p>
+                        ) : (
+                          <React.Fragment>
+                            {this.state.currentAnswers.map((value, index) => (
+                              <div class="questionAnswer">
+                                <input
+                                  id={"questionAnswer-" + (index)}
+                                  className="form-control textBox"
+                                  placeholder={"Answer " + (index+1)}
+                                  name={index}
+                                  value={value.text}
+                                  onInput={this.onAnswerInput}
+                                />
+                                <input
+                                  type="checkbox"
+                                  className="checkBox"
+                                  name={index}
+                                  checked={value.correct}
+                                  onInput={this.onAnswerCheck}
+                                />
+                                <button
+                                  type="submit" className="button"
+                                  onClick={() => { this.deleteAnswer(index); }}
+                                >
+                                  Delete
+                                </button>
+                              </div>
+                            ))}
+                          </React.Fragment>
+                        )}
+                        <button
+                          type="submit" className="button"
+                          onClick={this.addAnswer}
+                        >
+                          Add Answer
+                        </button>
+
+                        <MDBContainer className="form-group">
+                          <button
+                            type="submit" className="button"
+                            onClick={this.submitQuestion}
+                          >
+                            {this.state.displayNewQuestion ? "Create" : "Save"}
+                          </button>
+                          <button
+                            type="submit" className="button"
+                            onClick={this.cancelQuestion}
+                          >
+                            Cancel
+                          </button>
+                        </MDBContainer>
+                      </>
+                    }
+                  </>
+                }
+              </MDBContainer>
             </MDBContainer>
           </MDBContainer>
         </MDBContainer>
-      </MDBContainer>
-    );
+      );
+    }
   }
 }
 

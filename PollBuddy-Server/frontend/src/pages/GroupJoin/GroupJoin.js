@@ -3,25 +3,19 @@ import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
-export default class GroupJoin extends Component {//this class will likely need to call Groups/new and do more with that...
-  componentDidMount(){
-    this.props.updateTitle("Join Group");
-  }
 
+class GroupJoin extends Component {//this class will likely need to call Groups/new and do more with that...
   constructor(props) {
     super(props);
-    //TODO check if they're logged in
-    console.log(localStorage.getItem("loggedIn"));
-    if (localStorage.getItem("loggedIn") === "true") {
-      console.log("Logged in");
-    } else {
-      console.log("Not logged in");
-      // window.location.replace("/login");
-    }
+    let groupCode = props.router.searchParams.get("code");
     this.state = {
-      groupCode: "",
+      groupCode: groupCode || "",
       showConfirm: false
     };
+  }
+  
+  componentDidMount(){
+    this.props.updateTitle("Join Group");
   }
 
   handleEnterCode = () => {
@@ -31,17 +25,20 @@ export default class GroupJoin extends Component {//this class will likely need 
   handleChange = (e) => {
     this.setState({groupCode: e.target.value});
   };
-
-  handleConfirmationResponse(response) {
-    if (response === true) {
-      this.props.router.navigate("/groups/" + this.state.groupCode + "/polls");
-    } else {
-      this.props.router.navigate("/groups");
+  async handleConfirmationResponse(join) {
+    if (join) {
+      let response = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.groupCode + "/join", {
+        method: "POST",
+      });
+      if(response.status === 200) {
+          this.props.router.navigate("/groups/" + this.state.groupCode);
+        return;
+      }
     }
+      this.props.router.navigate("/groups");
   }
 
   render() {
-    //TODO check if they're logged in
     return (
       <MDBContainer className="page">
         <MDBContainer fluid className="box">
@@ -49,14 +46,14 @@ export default class GroupJoin extends Component {//this class will likely need 
             ?
             <MDBContainer className="form-group">
               <p>Are you sure you want to join this group?</p>
-              <input onClick={this.handleConfirmationResponse.bind(this, false)} className="btn button float-left" type="submit" value="No"/>
-              <input onClick={this.handleConfirmationResponse.bind(this, true)} className="btn button float-right" type="submit" value="Yes"/>
+              <input onClick={this.handleConfirmationResponse.bind(this, false)} className="button float-left" type="submit" value="No"/>
+              <input onClick={this.handleConfirmationResponse.bind(this, true)} className="button float-right" type="submit" value="Yes"/>
             </MDBContainer>
             :
             <MDBContainer className="form-group">
               <label>Please enter your group code:</label>
-              <input className="form-control textBox" type="text" name="groupCode" onChange={this.handleChange}/>
-              <input onClick={this.handleEnterCode} className="btn button float-right" type="submit" value="OK"/>
+              <input className="form-control textBox" type="text" name="groupCode" value={this.state.groupCode} onChange={this.handleChange}/>
+              <input onClick={this.handleEnterCode} className="button float-right" type="submit" value="OK"/>
             </MDBContainer>
           }
         </MDBContainer>
@@ -64,4 +61,5 @@ export default class GroupJoin extends Component {//this class will likely need 
     );
   }
 }
+
 export default withRouter(GroupJoin);
