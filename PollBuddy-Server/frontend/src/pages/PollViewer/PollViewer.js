@@ -71,7 +71,7 @@ class PollViewer extends Component {
   nextQuestion = () => {
     let newQuestion = this.state.currentQuestion + 1;
     if (newQuestion >= this.state.questions.length) {
-      newQuestion = 0;
+      newQuestion = -1;
     }
     this.setState({
       currentQuestion: newQuestion,
@@ -98,6 +98,16 @@ class PollViewer extends Component {
       return (
         <MDBContainer className="page">
           <LoadingWheel/>
+        </MDBContainer>
+      );
+    } else if (this.state.currentQuestion === -1) {
+      return (
+        <MDBContainer fluid className="page">
+          <MDBContainer fluid className="box">
+            <p className="fontSizeLarge">
+              Thanks for submitting! That was the last question.
+            </p>
+          </MDBContainer>
         </MDBContainer>
       );
     } else {

@@ -88,7 +88,7 @@ router.get("/:id/edit", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-rrouter.post("/:id/edit", promote(isLoggedIn), paramValidator(pollParamsValidator), async (req, res) => {
+router.post("/:id/edit", promote(isLoggedIn), paramValidator(pollParamsValidator), async (req, res) => {
   let validResult = editPollValidator.validate(req.body, { abortEarly: false });
   let errors = getResultErrors(validResult);
   if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest()); }
