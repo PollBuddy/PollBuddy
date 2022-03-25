@@ -45,7 +45,7 @@ export default class Question extends Component {
     ];
     this.questionStartTime = Date.now();
     let closeTime = new Date();
-    closeTime.setHours(closeTime.getHours() + 2)
+    closeTime.setHours(closeTime.getHours() + 2);
     let question = props.data.question;
     this.state = {
       pollID: props.data.pollID,
@@ -107,17 +107,6 @@ export default class Question extends Component {
     this.setState({timeLeft: false});
   }
   render() {
-    const clockFormat = ({ minutes, seconds, completed }) => {
-
-      if (completed) {
-        // Render a completed state
-        return <span>Question closed!</span>;
-      } else {
-        // Render a countdown
-        return <span>{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
-      }
-    };
-
     // if(this.state.successfulSubmission) {
     //   return (
     //     <Navigate to={"/polls/" + this.state.PollID + "/results"} push={true} />

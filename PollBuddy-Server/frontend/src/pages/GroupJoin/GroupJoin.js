@@ -31,11 +31,11 @@ class GroupJoin extends Component {//this class will likely need to call Groups/
         method: "POST",
       });
       if(response.status === 200) {
-          this.props.router.navigate("/groups/" + this.state.groupCode);
+        this.props.router.navigate("/groups/" + this.state.groupCode);
         return;
       }
     }
-      this.props.router.navigate("/groups");
+    this.props.router.navigate("/groups");
   }
 
   render() {
