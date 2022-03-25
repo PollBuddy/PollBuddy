@@ -477,24 +477,70 @@ router.get("/:id/join", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/join", async (res, req) => {
-  const userID = await validateID("groups", req.params.userData.userID);
+router.post("/:id/join", promote(isLoggedIn), async (req, res) => {
+  const userID = await validateID("users", req.session.userData.userID);
   if (!userID) {
     return res.status(400).send(createResponse(null, "Invalid user ID."));
   }
-  const groupID = await validateID("groups", req.params.groupID);
+  const groupID = await validateID("groups", req.params.id);
   if (!groupID) {
     return res.status(400).send(createResponse(null, "Invalid group ID."));
   }
   // Add user to group, do nothing if they are already in it
   try {
-    await mongoConnection.getDB().collection("groups").updateOne({ "_id:": groupID }, { $addToSet: { Users: userID } });
-    return res.status(200).send(createResponse("Success"));
+    await mongoConnection.getDB().collection("groups").updateOne({ "_id": groupID }, { $addToSet: { "Users": userID } });
+    return res.status(200).send(createResponse(null));
   } catch(e) {
     console.log(e);
     return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
   }
 });
+
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-idleave
+ * @throws 405 - Route not used
+ * @name GET api/groups/{id}/leave
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/:id/leave", async (req, res) => {
+  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+});
+
+/**
+ * removes user from the group
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-idleave
+ * @typedef {Object} payload
+ * @property {String} userID - id of the user to remove
+ * @property {String} groupID - id of the group to remove a user from
+ * @postdata {payload} inputs
+ * @throws 500 - An error occurred while accessing the database.
+ * @throws 400 - Invalid user ID.
+ * @throws 400 - Invalid group ID.
+ * @name POST api/groups/{id}/leave
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.post("/:id/leave", promote(isLoggedIn), async (req, res) => {
+  const userID = await validateID("users", req.session.userData.userID);
+  if (!userID) {
+    return res.status(400).send(createResponse(null, "Invalid user ID."));
+  }
+  const groupID = await validateID("groups", req.params.id);
+  if (!groupID) {
+    return res.status(400).send(createResponse(null, "Invalid group ID."));
+  }
+  // remove user from the group
+  try {
+    await mongoConnection.getDB().collection("groups").updateOne({ "_id": groupID }, { $pull: { Users: userID } });
+    return res.status(200).send(createResponse(null));
+  } catch(e) {
+    console.log(e);
+    return res.status(500).send(createResponse(null, "Database error occurred."));
+  }
+});
+
 
 /**
  * Checks to see if the given user has access to the given group
@@ -530,5 +576,7 @@ function checkAdminPermission(adminID, groupID) { // TODO: add checks to make su
   }
   return false; //false if adminID is not found
 }
+
+
 
 module.exports = router;
