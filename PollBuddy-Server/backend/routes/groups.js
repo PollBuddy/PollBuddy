@@ -1,9 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
-const Joi = require("joi");
-const {createResponse, validateID, isDevelopmentMode, getResultErrors, promote, isLoggedIn, isEmpty} = require("../modules/utils");
-const {userRegisterValidator, getUser} = require("../models/User.js");
+const {createResponse, isDevelopmentMode, promote, isLoggedIn} = require("../modules/utils");
 const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
 const {getGroupPolls, joinGroup, leaveGroup, deleteGroup, editGroup, editGroupValidator, createGroupValidator, getGroup, createGroup, getGroupMembers, getGroupAdmins, groupParamsValidator} = require("../models/Group");
 const {paramValidator} = require("../modules/validatorUtils");
