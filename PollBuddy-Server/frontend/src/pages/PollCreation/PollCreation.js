@@ -2,25 +2,28 @@ import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 import ErrorText from "../../components/ErrorText/ErrorText";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
-export default class GroupCreation extends Component {//this class will likely need to call Groups/new and do more with that...
+class PollCreation extends Component {//this class will likely need to call Groups/new and do more with that...
   constructor(props) {
     super(props);
     this.state = {
-      name: "",
+      groupID: props.router.searchParams.get("groupID"),
+      title: "",
       description: "",
       showError: false,
     };
   }
 
   componentDidMount(){
-    this.props.updateTitle("Group Creation");
+    this.props.updateTitle("Poll Creation");
   }
 
-  getGroupData = () => {
+  getPollData = () => {
     return {
-      name: this.state.name,
+      title: this.state.title,
       description: this.state.description,
+      group: this.state.groupID || undefined,
     };
   };
 
@@ -32,15 +35,16 @@ export default class GroupCreation extends Component {//this class will likely n
 
   onSubmit = async () => {
     this.setState({showError: false});
-    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/new", {
+    await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/new", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
-      body: JSON.stringify(this.getGroupData())
-    }).then((response) => response.json())
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(this.getPollData())
+    })
+      .then((response) => response.json())
       .then((response) => {
         console.log(response);
         if (response.result === "success") {
-          window.location.href = "/groups/" + response.data.id; // TODO: This should be a navigate to avoid a full reload
+          window.location.href = "/polls/" + response.data.id + "/edit";
         } else {
           this.setState({showError: true});
         }
@@ -56,27 +60,31 @@ export default class GroupCreation extends Component {//this class will likely n
       <MDBContainer className="page">
         <MDBContainer className="box">
           <MDBContainer className="form-group">
-            <label htmlFor="groupName">Group Name:</label>
+            <label htmlFor="pollTitle">Poll Title:</label>
             <input
-              name="name"
-              id="groupName"
+              name="title"
+              id="pollTitle"
+              placeholder="Title"
               className="form-control textBox"
               onInput={this.onInput}
             />
-            <label htmlFor="groupName">Group Description:</label>
+            <label htmlFor="pollDescription">Poll Description:</label>
             <input
               name="description"
-              id="groupDescription"
+              id="pollDescription"
+              placeholder="Description"
               className="form-control textBox"
               onInput={this.onInput}
             />
           </MDBContainer>
           {this.checkError()}
           <button className="button" onClick={this.onSubmit}>
-            Create Group
+            Create Poll
           </button>
         </MDBContainer>
       </MDBContainer>
     );
   }
 }
+
+export default withRouter(PollCreation);

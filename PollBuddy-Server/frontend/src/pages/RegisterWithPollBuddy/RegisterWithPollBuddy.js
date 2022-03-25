@@ -162,7 +162,7 @@ export default class RegisterWithPollBuddy extends Component {
                 onChange= {(evt) => { this.setState({password: evt.target.value}); }}/>
               <i class="fas fa-eye" onClick={this.showPassword}></i>
             </p>
-            
+
             {this.state.passValid.error &&
               <p style={{color: "red"}}>{ this.state.passValid.error.toString() }</p>
             }

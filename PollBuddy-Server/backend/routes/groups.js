@@ -2,7 +2,11 @@ const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
-const {createResponse, validateID, promote, isDevelopmentMode, isLoggedIn} = require("../modules/utils"); // object destructuring, only import desired functions
+const {createResponse, validateID, isDevelopmentMode, getResultErrors, promote, isLoggedIn, isEmpty} = require("../modules/utils");
+const {userRegisterValidator, getUser} = require("../models/User.js");
+const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
+const {getGroupPolls, joinGroup, leaveGroup, deleteGroup, editGroup, editGroupValidator, createGroupValidator, getGroup, createGroup, getGroupMembers, getGroupAdmins, groupParamsValidator} = require("../models/Group");
+const {paramValidator} = require("../modules/validatorUtils");
 
 // This file handles /api/groups URLs
 
@@ -16,7 +20,7 @@ const {createResponse, validateID, promote, isDevelopmentMode, isLoggedIn} = req
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/new", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -34,24 +38,12 @@ router.get("/new", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/new", async (req, res) => {
-  // Validate request body
-  const schema = Joi.object({
-    Name: Joi.string().min(3).max(30).required()
-  });
-  const validResult = schema.validate(req.body);
-  // invalidate handling
-  if (validResult.error) {
-    return res.status(400).send(createResponse(null, validResult.error.details[0].message));
-  }
-  // Add to DB
-  try {
-    const result = await mongoConnection.getDB().collection("groups").insertOne({Name: validResult.value.Name});
-    return res.status(200).send(createResponse({ID: result.insertedId}));   // return group ID
-  } catch (e) {
-    console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while writing to the database."));
-  }
+router.post("/new", promote(isLoggedIn), async (req, res) => {
+  let validResult = createGroupValidator.validate(req.body, { abortEarly: false });
+  if (validResult.error) { return sendResponse(res, httpCodes.BadRequest()); }
+
+  let response = await createGroup(req.session.userData.userID, validResult.value);
+  return sendResponse(res, response);
 });
 
 /**
@@ -68,7 +60,7 @@ router.get("/:id/edit", function (req, res) {
 });
 
 /**
- * Modify the group information 
+ * Modify the group information
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-idedit
  * @typedef {Object} content
  * @property {String} Action - the action to be performed (should be "add" or "remove")
@@ -87,115 +79,12 @@ router.get("/:id/edit", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/edit", async (req, res) => {
-  const id = await validateID("groups", req.params.id);
-  if (!id) {
-    return res.status(400).send(createResponse(null, "Invalid ID."));
-  }
-  const jsonContent = req.body;
-  let success = false;
-  if (jsonContent.Action === "Add") {
-    if (jsonContent.Name !== undefined) {
-      // eslint-disable-next-line no-unused-vars
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$set": { Name: jsonContent.Name } }, function (err, _res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (jsonContent.Instructors !== undefined) {
-      // eslint-disable-next-line no-unused-vars
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Instructors: jsonContent.Instructors } }, function (err, _res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (jsonContent.Polls !== undefined) {
-      // eslint-disable-next-line no-unused-vars
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Polls: jsonContent.Polls } }, function (err, _res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (jsonContent.Users !== undefined) {
-      // eslint-disable-next-line no-unused-vars
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Users: jsonContent.Users } }, function (err, _res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (jsonContent.Admins !== undefined) {
-      // eslint-disable-next-line no-unused-vars
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Admins: jsonContent.Admins } }, function (err, _res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (success === false) {
-      return res.status(400).send(createResponse(null,"Invalid request body or ObjectID"));
-    }
-  } else if (jsonContent.Action === "Remove") {
-    if (jsonContent.Instructors !== undefined) {
-      // eslint-disable-next-line no-unused-vars
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Instructors: jsonContent.Instructors } }, function (err, _res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (jsonContent.Polls !== undefined) {
-      // eslint-disable-next-line no-unused-vars
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Polls: jsonContent.Polls } }, function (err, _res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (jsonContent.Users !== undefined) {
-      // eslint-disable-next-line no-unused-vars
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Users: jsonContent.Users } }, function (err, _res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (jsonContent.Admins !== undefined) {
-      // eslint-disable-next-line no-unused-vars
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Admins: jsonContent.Admins } }, function (err, _res) {
-        if (err) {
-          return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
-        } else {
-          success = true;
-        }
-      });
-    }
-    if (success === false) {
-      return res.status(400).send(createResponse(null,"Invalid request body or ObjectID"));
-    }
-  } else {
-    return res.status(400).send(createResponse(null,"Invalid request body or ObjectID"));
-  }
-  return res.status(200).send(createResponse("Success",));
+router.post("/:id/edit", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {
+  let validResult = editGroupValidator.validate(req.body, { abortEarly: false });
+  if (validResult.error) { return sendResponse(res, httpCodes.BadRequest()); }
+
+  let response = await editGroup(req.params.id, req.session.userData.userID, validResult.value);
+  return sendResponse(res, response);
 });
 
 /**
@@ -208,7 +97,7 @@ router.post("/:id/edit", async (req, res) => {
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/:id/delete", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -223,18 +112,9 @@ router.get("/:id/delete", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/delete", async (req, res) => {//use router.delete??
-  const id = await validateID("groups", req.params.id);
-  if (!id) {
-    return res.status(400).send(createResponse(null, "Invalid ID."));
-  }
-  try {
-    await mongoConnection.getDB().collection("groups").deleteOne({ "_id": id });
-    return res.status(200).send(createResponse("Success"));
-  } catch(e) {
-    console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
-  }
+router.post("/:id/delete", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {//use router.delete??
+  let response = await deleteGroup(req.params.id, req.session.userData.userID);
+  return sendResponse(res, response);
 });
 
 /**
@@ -297,18 +177,9 @@ router.post("/", promote(isDevelopmentMode), function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id", async (req, res) => {
-  const id = await validateID("groups", req.params.id);
-  if (!id) {
-    return res.status(400).send(createResponse(null, "Invalid ID."));
-  }
-  try {
-    const group = await mongoConnection.getDB().collection("polls").findOne({"_id": id});
-    return res.status(200).send(createResponse(group));
-  } catch(e) {
-    console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
-  }
+router.get("/:id", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {
+  let response = await getGroup(req.params.id, req.session.userData.userID);
+  return sendResponse(res, response);
 });
 
 /**
@@ -321,7 +192,7 @@ router.get("/:id", async (req, res) => {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/:id", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 /**
@@ -339,18 +210,9 @@ router.post("/:id", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/polls", async (req, res) => {
-  const id = await validateID("groups", req.params.id);
-  if (!id) {
-    return res.status(400).send(createResponse(null, "Invalid ID."));
-  }
-  try {
-    const Polls = await mongoConnection.getDB().collection("groups").findOne({ "_id": id }, { _id: 0, Polls: 1 });
-    return res.status(200).send(createResponse(Polls));
-  } catch(e) {
-    console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
-  }
+router.get("/:id/polls", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {
+  let response = await getGroupPolls(req.params.id);
+  return sendResponse(res, response);
 });
 
 /**
@@ -363,7 +225,7 @@ router.get("/:id/polls", async (req, res) => {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/:id/polls", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 /**
@@ -381,18 +243,9 @@ router.post("/:id/polls", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/users", async (req, res) => {
-  const id = await validateID("groups", req.params.id);
-  if (!id) {
-    return res.status(400).send(createResponse(null, "Invalid ID."));
-  }
-  try {
-    const Users = await mongoConnection.getDB().collection("groups").findOne({ "_id": id }, { _id: 0, Users: 1 });
-    return res.status(200).send(createResponse(Users));
-  } catch(e) {
-    console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
-  }
+router.get("/:id/members", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {
+  let response = await getGroupMembers(req.params.id, req.session.userData.userID);
+  return sendResponse(res, response);
 });
 
 /**
@@ -403,9 +256,8 @@ router.get("/:id/users", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-// eslint-disable-next-line no-unused-vars
-router.post("/:id/users", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+router.post("/:id/members", function (req, res) {
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 /**
@@ -423,18 +275,9 @@ router.post("/:id/users", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/admins", async (req, res) => {
-  const id = await validateID("groups", req.params.id);
-  if (!id) {
-    return res.status(400).send(createResponse(null, "Invalid ID."));
-  }
-  try {
-    const Admins = await mongoConnection.getDB().collection("groups").findOne({ "_id": id }, { _id: 0, Admins: 1 });
-    return res.status(200).send(createResponse(Admins));
-  } catch(e) {
-    console.log(e);
-  }
-  return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
+router.get("/:id/admins", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {
+  let response = await getGroupAdmins(req.params.id, req.session.userData.userID);
+  return sendResponse(res, response);
 });
 
 /**
@@ -447,7 +290,7 @@ router.get("/:id/admins", async (req, res) => {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/:id/admins", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 /**
@@ -460,7 +303,7 @@ router.post("/:id/admins", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/:id/join", async (req, res) => {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -477,23 +320,9 @@ router.get("/:id/join", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/join", promote(isLoggedIn), async (req, res) => {
-  const userID = await validateID("users", req.session.userData.userID);
-  if (!userID) {
-    return res.status(400).send(createResponse(null, "Invalid user ID."));
-  }
-  const groupID = await validateID("groups", req.params.id);
-  if (!groupID) {
-    return res.status(400).send(createResponse(null, "Invalid group ID."));
-  }
-  // Add user to group, do nothing if they are already in it
-  try {
-    await mongoConnection.getDB().collection("groups").updateOne({ "_id": groupID }, { $addToSet: { "Users": userID } });
-    return res.status(200).send(createResponse(null));
-  } catch(e) {
-    console.log(e);
-    return res.status(500).send(createResponse(null, "An error occurred while accessing the database."));
-  }
+router.post("/:id/join", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {
+  let response = await joinGroup(req.params.id, req.session.userData.userID);
+  return sendResponse(res, response);
 });
 
 /**
@@ -505,7 +334,7 @@ router.post("/:id/join", promote(isLoggedIn), async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/:id/leave", async (req, res) => {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -522,23 +351,9 @@ router.get("/:id/leave", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/leave", promote(isLoggedIn), async (req, res) => {
-  const userID = await validateID("users", req.session.userData.userID);
-  if (!userID) {
-    return res.status(400).send(createResponse(null, "Invalid user ID."));
-  }
-  const groupID = await validateID("groups", req.params.id);
-  if (!groupID) {
-    return res.status(400).send(createResponse(null, "Invalid group ID."));
-  }
-  // remove user from the group
-  try {
-    await mongoConnection.getDB().collection("groups").updateOne({ "_id": groupID }, { $pull: { Users: userID } });
-    return res.status(200).send(createResponse(null));
-  } catch(e) {
-    console.log(e);
-    return res.status(500).send(createResponse(null, "Database error occurred."));
-  }
+router.post("/:id/leave", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {
+  let response = await leaveGroup(req.params.id, req.session.userData.userID);
+  return sendResponse(res, response);
 });
 
 
@@ -560,22 +375,6 @@ function checkUserPermission(userID, groupID) { // TODO: add checks to make sure
   return false; //false if userID is not found
 }
 
-/**
- * Checks to see if the given user has admin access to the given group
- * @typedef {Object} payload
- * @property {String} adminID - id of the user to look for
- * @property {String} groupID - id of the group to check
- * @returns {Boolean} response - True if the user has admin access, false otherwise
- */
-function checkAdminPermission(adminID, groupID) { // TODO: add checks to make sure IDs are valid
-  let admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Admins":1})[0].Admins; //get list of admins
-  for (let admin in admins) {
-    if (admin === adminID) { //check for existence
-      return true; //true if adminID is found
-    }
-  }
-  return false; //false if adminID is not found
-}
 
 
 

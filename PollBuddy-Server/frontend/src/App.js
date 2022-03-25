@@ -2,13 +2,13 @@ import React from "react";
 import {BrowserRouter, Route, Routes, Navigate} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 
-import Group from "./pages/Groups/Groups";
+import Groups from "./pages/Groups/Groups";
 import Homepage from "./pages/Homepage/Homepage";
 import LoginWithPollBuddy from "./pages/LoginWithPollBuddy/LoginWithPollBuddy";
 import GroupCreation from "./pages/GroupCreation/GroupCreation";
 import GroupJoin from "./pages/GroupJoin/GroupJoin";
 import GroupEdit from "./pages/GroupEdit/GroupEdit";
-import GroupPolls from "./pages/GroupPolls/GroupPolls";
+import Group from "./pages/Group/Group";
 import PollEditor from "./pages/PollEditor/PollEditor";
 import Notfound from "./pages/Error404/Error404";
 import Template from "./pages/Template/Template";
@@ -20,6 +20,7 @@ import RegisterDefault from "./pages/RegisterDefault/RegisterDefault";
 import RegisterWithSchool from "./pages/RegisterWithSchool/RegisterWithSchool";
 import RegisterWithSchoolStep2 from "./pages/RegisterWithSchoolStep2/RegisterWithSchoolStep2";
 import RegisterWithPollBuddy from "./pages/RegisterWithPollBuddy/RegisterWithPollBuddy";
+import PollCreation from "./pages/PollCreation/PollCreation";
 import PollViewer from "./pages/PollViewer/PollViewer";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import PollResults from "./pages/PollResults/PollResults";
@@ -32,13 +33,14 @@ import AnswerRecorded from "./pages/AnswerRecorded/AnswerRecorded";
 import LoginDefault from "./pages/LoginDefault/LoginDefault";
 import LoginWithSchool from "./pages/LoginWithSchool/LoginWithSchool";
 import LoginWithSchoolStep2 from "./pages/LoginWithSchoolStep2/LoginWithSchoolStep2";
+
 import Code from "./pages/Code/Code";
 import PrivateComponent from "./components/PrivateComponent/PrivateComponent";
 
 import Header from "./components/Header/Header.js";
 import Footer from "./components/Footer/Footer.js";
-//import Popup2 from "./components/Popup2/Popup2";
 
+//import Popup2 from "./components/Popup2/Popup2";
 import "./styles/main.scss";
 
 export default class App extends React.Component {
@@ -99,20 +101,19 @@ export default class App extends React.Component {
             {/* --- Group Pages --- */}
 
             {/* My Groups Page */}
-            <Route exact path="/groups" element={<PrivateComponent state = {true} element={<Group updateTitle={this.updateTitle} />}/>}/>
+            <Route exact path="/groups" element={<PrivateComponent state = {true} element={<Groups updateTitle={this.updateTitle} />}/>}/>
 
             {/* Group Creation Page */}
             <Route exact path="/groups/new" element={<PrivateComponent state = {true} element={<GroupCreation updateTitle={this.updateTitle} />}/>}/>
 
-            {/* Group's Polls Page */}
-            <Route exact path="/groups/:groupID/polls" element={<PrivateComponent state = {true} element={<GroupPolls updateTitle={this.updateTitle} />}/>}/>
+            {/* Group's Page */}
+            <Route exact path="/groups/:groupID" element={<PrivateComponent state = {true} element={<Group updateTitle={this.updateTitle} />}/>}/>
 
             {/* Group Edit Page */}
             <Route exact path="/groups/:groupID/edit" element={<PrivateComponent state = {true} element={<GroupEdit updateTitle={this.updateTitle} />}/>} />
 
             {/* Group Join Page */}
             <Route exact path="/groups/join" element={<PrivateComponent state = {true} element={<GroupJoin updateTitle={this.updateTitle} />}/>}/>
-
 
             {/* --- Poll Pages --- */}
 
@@ -122,9 +123,13 @@ export default class App extends React.Component {
                 treated like a :pollID */}
             <Route exact path="/polls/history" element={<PrivateComponent state = {true} element={<PollHistory updateTitle={this.updateTitle} />}/>}/>
 
+            {/* Poll Creation */}
+            <Route exact path="/polls/new" element={<PollCreation updateTitle={this.updateTitle} />}/>
+
             {/* Poll ID Redirect */}
             {/* Redirects from poll ID page (404) to view page */}
             <Route exact path="/polls/:pollID" element={<PrivateComponent state = {true} element={<Navigate to={"view"} push={true}/>}/>}/>
+
 
             {/* Poll Viewer Page */}
             <Route exact path="/polls/:pollID/view" element={<PollViewer updateTitle={this.updateTitle} />}/>
@@ -139,7 +144,7 @@ export default class App extends React.Component {
             {/*use the render function so that we can retrieve :groupID from inside the component*/}
             <Route exact path="/polls/:pollID/results" element={<PollResults updateTitle={this.updateTitle} />}/>
 
-            {/* Question Ended Page */}
+            {/* QuestionResults Ended Page */}
             {/* A page that shows when a question is closed by an instructor
                 Note: this will be removed soon I believe. */}
             <Route exact path="/questionEnded" element={<PrivateComponent state = {true} element={<QuestionEnded updateTitle={this.updateTitle} />}/>}/>

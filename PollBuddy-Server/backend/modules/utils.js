@@ -1,6 +1,6 @@
 const bson = require("bson");
 const mongoConnection = require("../modules/mongoConnection.js");
-
+const { httpCodes } = require("../modules/httpCodes.js");
 /**
  * Helper function for creating the specified http response (https://pollbuddy.app/api/users).
  * For sample usage see https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Overview#helper-functions
@@ -44,7 +44,7 @@ async function validateID(collection, id) {
 /**
  * Convenience function to get the currently logged in user
  * Dumps result into passed callback function
- * @returns {void} 
+ * @returns {void}
  * @name getCurrentUser
  * @param {req} req request object
  * @param {callback} callback handler for (err,result) returned by database query
@@ -107,7 +107,7 @@ function isLoggedIn(req) {
   if(req.session.userData && req.session.userData.userID){
     return null;
   } else {
-    return "User is not logged in.";
+    return httpCodes.Unauthorized("User is not logged in.");
   }
 }
 
@@ -125,7 +125,7 @@ function isSiteAdmin() {
       if (user.SiteAdmin) {
         return null;
       } else {
-        return "User is not a site admin.";
+        return httpCodes.Unauthorized("User is not a site admin.");
       }
     }
   ]);
@@ -139,7 +139,7 @@ function isDevelopmentMode() {
   if(process.env.DEVELOPMENT_MODE === "true"){
     return null;
   } else {
-    return "Route is not available when app is not running in development mode.";
+    return httpCodes.Forbidden("App is not running in development mode.");
   }
 }
 
@@ -156,14 +156,14 @@ function promote(p) {
     if(response === null){
       next();
     } else {
-      res.status(401).send(createResponse(null,response));
+      res.status(response.statusCode).send(response);
     }
   };
 }
 
 /**
  * combines a list of predicates into a single predicate that succeeds on a given request if at least one of the input predicates succeed
- * @param {Array} ps - list of predicates 
+ * @param {Array} ps - list of predicates
  * @return {Predicate} - composite predicate
  */
 function or(ps) {
@@ -183,7 +183,7 @@ function or(ps) {
 
 /**
  * combines a list of predicates into a single predicate that succeeds on a given request iff all input predicates succeed
- * @param {Array} ps - list of predicates 
+ * @param {Array} ps - list of predicates
  * @return {Predicate} - composite predicate
  */
 function and(ps) {
@@ -196,7 +196,7 @@ function and(ps) {
         return response;
       }
     }
-    // if all predicates pass, 
+    // if all predicates pass,
     return null;
   };
 }
