@@ -1,9 +1,8 @@
-const createError = require("http-errors");
 const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
-const {createResponse, validateID, debugRoute, promote, isLoggedIn} = require("../modules/utils"); // object destructuring, only import desired functions
+const {createResponse, validateID, promote, isDevelopmentMode} = require("../modules/utils"); // object destructuring, only import desired functions
 
 // This file handles /api/groups URLs
 
@@ -15,6 +14,7 @@ const {createResponse, validateID, debugRoute, promote, isLoggedIn} = require(".
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.get("/new", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
@@ -62,6 +62,7 @@ router.post("/new", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.get("/:id/edit", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
@@ -95,7 +96,8 @@ router.post("/:id/edit", async (req, res) => {
   let success = false;
   if (jsonContent.Action === "Add") {
     if (jsonContent.Name !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$set": { Name: jsonContent.Name } }, function (err, res) {
+      // eslint-disable-next-line no-unused-vars
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$set": { Name: jsonContent.Name } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
@@ -104,7 +106,8 @@ router.post("/:id/edit", async (req, res) => {
       });
     }
     if (jsonContent.Instructors !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Instructors: jsonContent.Instructors } }, function (err, res) {
+      // eslint-disable-next-line no-unused-vars
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Instructors: jsonContent.Instructors } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
@@ -113,7 +116,8 @@ router.post("/:id/edit", async (req, res) => {
       });
     }
     if (jsonContent.Polls !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Polls: jsonContent.Polls } }, function (err, res) {
+      // eslint-disable-next-line no-unused-vars
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Polls: jsonContent.Polls } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
@@ -122,7 +126,8 @@ router.post("/:id/edit", async (req, res) => {
       });
     }
     if (jsonContent.Users !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Users: jsonContent.Users } }, function (err, res) {
+      // eslint-disable-next-line no-unused-vars
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Users: jsonContent.Users } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
@@ -131,7 +136,8 @@ router.post("/:id/edit", async (req, res) => {
       });
     }
     if (jsonContent.Admins !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Admins: jsonContent.Admins } }, function (err, res) {
+      // eslint-disable-next-line no-unused-vars
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$addToSet": { Admins: jsonContent.Admins } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
@@ -144,7 +150,8 @@ router.post("/:id/edit", async (req, res) => {
     }
   } else if (jsonContent.Action === "Remove") {
     if (jsonContent.Instructors !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Instructors: jsonContent.Instructors } }, function (err, res) {
+      // eslint-disable-next-line no-unused-vars
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Instructors: jsonContent.Instructors } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
@@ -153,7 +160,8 @@ router.post("/:id/edit", async (req, res) => {
       });
     }
     if (jsonContent.Polls !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Polls: jsonContent.Polls } }, function (err, res) {
+      // eslint-disable-next-line no-unused-vars
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Polls: jsonContent.Polls } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
@@ -162,7 +170,8 @@ router.post("/:id/edit", async (req, res) => {
       });
     }
     if (jsonContent.Users !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Users: jsonContent.Users } }, function (err, res) {
+      // eslint-disable-next-line no-unused-vars
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Users: jsonContent.Users } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
@@ -171,7 +180,8 @@ router.post("/:id/edit", async (req, res) => {
       });
     }
     if (jsonContent.Admins !== undefined) {
-      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Admins: jsonContent.Admins } }, function (err, res) {
+      // eslint-disable-next-line no-unused-vars
+      await mongoConnection.getDB().collection("groups").updateOne({ "_id": id }, { "$pull": { Admins: jsonContent.Admins } }, function (err, _res) {
         if (err) {
           return res.status(500).send(createResponse(null, "An error occurred while writing to the database"));
         } else {
@@ -196,6 +206,7 @@ router.post("/:id/edit", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.get("/:id/delete", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
@@ -242,16 +253,15 @@ router.post("/:id/delete", async (req, res) => {//use router.delete??
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/", async (req, res) => {
-  debugRoute(req,res,async (req,res) => {
-    try {
-      const groups = await mongoConnection.getDB().collection("groups").find({}).toArray();
-      return res.status(200).send(createResponse(groups));
-    } catch (e) {
-      console.log(e);
-      return res.status(500).send(createResponse(null, "An error occurred while reading the database."));
-    }
-  });
+// eslint-disable-next-line no-unused-vars
+router.get("/", promote(isDevelopmentMode), async (req, res) => {
+  try {
+    const groups = await mongoConnection.getDB().collection("groups").find({}).toArray();
+    return res.status(200).send(createResponse(groups));
+  } catch (e) {
+    console.log(e);
+    return res.status(500).send(createResponse(null, "An error occurred while reading the database."));
+  }
 });
 
 /**
@@ -262,10 +272,9 @@ router.get("/", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/", function (req, res) {
-  debugRoute(req,res,(req,res) => {
-    res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
-  });
+// eslint-disable-next-line no-unused-vars
+router.post("/", promote(isDevelopmentMode), function (req, res) {
+  res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 /**
@@ -310,6 +319,7 @@ router.get("/:id", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/:id", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
@@ -351,6 +361,7 @@ router.get("/:id/polls", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/:id/polls", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
@@ -392,6 +403,7 @@ router.get("/:id/users", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/:id/users", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
@@ -433,6 +445,7 @@ router.get("/:id/admins", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/:id/admins", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
@@ -445,6 +458,7 @@ router.post("/:id/admins", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.get("/:id/join", async (req, res) => {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
@@ -535,9 +549,10 @@ router.post("/:id/leave", promote(isLoggedIn), async (req, res) => {
  * @property {String} groupID - id of the group to check
  * @returns {Boolean} response - True if the user has access, false otherwise
  */
-function checkUserPermission(userID, groupID) { //TODO add checks to make sure IDs are valid
-  var users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Users":1})[0].Users; //get list of users
-  for (var user in users) {
+
+function checkUserPermission(userID, groupID) { // TODO: add checks to make sure IDs are valid
+  let users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Users":1})[0].Users; //get list of users
+  for (let user in users) {
     if (user === userID) { //check for existence
       return true; //true if userID is found
     }
@@ -552,9 +567,9 @@ function checkUserPermission(userID, groupID) { //TODO add checks to make sure I
  * @property {String} groupID - id of the group to check
  * @returns {Boolean} response - True if the user has admin access, false otherwise
  */
-function checkAdminPermission(adminID, groupID) { //TODO add checks to make sure IDs are valid
-  var admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Admins":1})[0].Admins; //get list of admins
-  for (var admin in admins) {
+function checkAdminPermission(adminID, groupID) { // TODO: add checks to make sure IDs are valid
+  let admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Admins":1})[0].Admins; //get list of admins
+  for (let admin in admins) {
     if (admin === adminID) { //check for existence
       return true; //true if adminID is found
     }

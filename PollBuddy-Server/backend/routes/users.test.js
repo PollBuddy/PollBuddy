@@ -5,10 +5,10 @@ const bcrypt = require("bcrypt");
 const mongo = require("mongodb");
 const MongoClient = mongo.MongoClient;
 
-var { userSchema } = require("../models/User.js");
-var { createModel } = require("../modules/utils.js");
-var mongoConnection = require("../modules/mongoConnection.js");
-var usersRouter = require("./users");
+const { userSchema } = require("../models/User.js");
+const { createModel } = require("../modules/utils.js");
+const mongoConnection = require("../modules/mongoConnection.js");
+const usersRouter = require("./users");
 const { createTestScheduler } = require("@jest/core");
 const { ExpectationFailed } = require("http-errors");
 
@@ -20,7 +20,12 @@ let testUser = {
   Password: "K9g95p$?E@t3A$#4",
   PasswordHash: "$2a$12$8Guj3IMNNVWk/GM4q0xeleExT3QBdPe5dWpSRYvk2elRkkWPMlOPG",
   FirstName: "test",
-  LastName: "account"
+  LastName: "account",
+  FirstNameLocked: false,
+  LastNameLocked: false,
+  EmailLocked: false,
+  UserNameLocked: true,
+  SchoolAffiliation: "",
 };
 
 let testUser2 = {
@@ -34,6 +39,7 @@ let testUser2 = {
 
 mockApp.use(express.json());
 mockApp.use(express.urlencoded({ extended: false }));
+// eslint-disable-next-line no-unused-vars
 mockApp.use(function (req, res, next) {
   req.session = session;
   next();
@@ -213,9 +219,14 @@ describe("/api/users/me", () => {
       .then(async (response) => {
         expect(response.body.result).toBe("success");
         expect(response.body.data.firstName).toBe(testUser.FirstName);
+        expect(response.body.data.firstNameLocked).toBe(testUser.FirstNameLocked);
         expect(response.body.data.lastName).toBe(testUser.LastName);
+        expect(response.body.data.lastNameLocked).toBe(testUser.LastNameLocked);
         expect(response.body.data.userName).toBe(testUser.UserName);
+        expect(response.body.data.userNameLocked).toBe(testUser.UserNameLocked);
         expect(response.body.data.email).toBe(testUser.Email);
+        expect(response.body.data.emailLocked).toBe(testUser.EmailLocked);
+        expect(response.body.data.schoolAffiliation).toBe(testUser.SchoolAffiliation);
       });    
   });
 

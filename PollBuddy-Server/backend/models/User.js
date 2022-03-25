@@ -41,9 +41,10 @@ const userSchema = {
 };
 
 const getUser = async function(userID) {
-  // Change userID to ObjectID 
+  // Change userID to ObjectID
+  let idCode;
   try {
-    var idCode = new bson.ObjectID(userID);
+    idCode = new bson.ObjectID(userID);
   } catch(err) {
     return [400, createResponse(null, "Error: Invalid User, ID does not match any user.")];
   }
@@ -53,9 +54,14 @@ const getUser = async function(userID) {
     // Found user, and return the user data in a JSON Object
     return [200, createResponse({
       firstName: user.FirstName,
+      firstNameLocked: user.FirstNameLocked,
       lastName: user.LastName,
+      lastNameLocked: user.LastNameLocked,
       userName: user.UserName,
+      userNameLocked: user.UserNameLocked,
       email: user.Email,
+      emailLocked: user.EmailLocked,
+      schoolAffiliation: user.SchoolAffiliation
     })];
   } else {
     // Could not find user associated with this ID, something has gone wrong
@@ -65,8 +71,9 @@ const getUser = async function(userID) {
 
 const getUserGroups = async function(userID) {
   // Change userID to ObjectID 
+  let idCode;
   try {
-    var idCode = new bson.ObjectID(userID);
+    idCode = new bson.ObjectID(userID);
   } catch(err) {
     return [400, createResponse(null, "Error: Invalid User, ID does not match any user.")];
   }
@@ -89,8 +96,9 @@ const getUserGroups = async function(userID) {
 
 
 const editUser = async function(userID, jsonContent) {
+  let idCode;
   try {
-    var idCode = new bson.ObjectID(userID);
+    idCode = new bson.ObjectID(userID);
   } catch(err) {
     return [400, createResponse(null, "Error: Invalid User, ID does not match any user.")];
   }

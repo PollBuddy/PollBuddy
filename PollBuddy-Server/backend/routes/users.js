@@ -1,16 +1,12 @@
-var createError = require("http-errors");
-var express = require("express");
-var router = express.Router();
-const bson = require("bson");
-var bcrypt = require("bcrypt");
-var path = require("path");
-const Joi = require("joi");
+const express = require("express");
+const router = express.Router();
+const bcrypt = require("bcrypt");
 
-var mongoConnection = require("../modules/mongoConnection.js");
+const mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
 
-const { createResponse, validateID, isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute, promote } = require("../modules/utils"); // object destructuring, only import desired functions
-const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups, createUser, editUser } = require("../models/User.js");
+const { createResponse, isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute, promote} = require("../modules/utils"); // object destructuring, only import desired functions
+const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups, editUser } = require("../models/User.js");
 
 // This file handles /api/users URLs
 
@@ -432,8 +428,8 @@ router.get("/register/rpi", rpi.bounce, function (req, res) {
     delete req.session.cas_user;
 
     // Send the user to the registration step 2 page with relevant info to prefill
-    return res.redirect("/register/school/step2?result=success&userName=" + req.session.userDataTemp.userName +
-      "&email=" + req.session.userDataTemp.email + "&school=rpi");
+    return res.redirect("/register/school/step2?result=success&data=" + JSON.stringify({ "userName":
+      req.session.userDataTemp.userName, "email": req.session.userDataTemp.email, "school": "rpi"}));
 
   } else {
     // Something went wrong
@@ -539,7 +535,7 @@ router.post("/register/rpi", function (req, res) {
 
         // Configure email, username by copying from the result object and saving in the session
         req.session.userData = {};
-        req.session.userData.userID = result.insertedId.str;
+        req.session.userData.userID = result.insertedId;
 
         // Send the response object with some basic info for the frontend to store
         return res.status(200).send(createResponse({
@@ -629,6 +625,7 @@ router.post("/me", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
+// eslint-disable-next-line no-unused-vars
 router.get("/me/edit", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
@@ -673,6 +670,7 @@ router.get("/me/groups", promote(isLoggedIn), async function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/me/groups", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
