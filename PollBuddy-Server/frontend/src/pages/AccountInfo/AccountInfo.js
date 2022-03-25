@@ -4,6 +4,7 @@ import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import "./AccountInfo.scss";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
+import {Navigate} from "react-router-dom";
 const Joi = require("joi");
 
 
@@ -48,14 +49,6 @@ class AccountInfo extends Component {
 
   componentDidMount(){
     this.props.updateTitle("Account Info");
-
-    // Bounce back to log in if they are not logged
-    if(localStorage.getItem("loggedIn") !== "true"){
-      console.log("Not logged in, redirecting");
-      // For some stupid React reason, this needs to be in a timeout to work.
-      // https://github.com/remix-run/react-router/issues/7460#issuecomment-988642684
-      return setTimeout(() => { this.props.router.navigate("/login", { replace: true }); }, 0);
-    }
 
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/me", {
       method: "GET"

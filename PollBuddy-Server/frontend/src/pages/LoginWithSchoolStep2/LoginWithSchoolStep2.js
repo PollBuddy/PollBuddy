@@ -75,7 +75,7 @@ class LoginWithSchoolStep2 extends Component {
       );
     } else {
       // Save data about the user
-      localStorage.setItem("loggedIn", true);
+      localStorage.setItem("loggedIn", "true");
       localStorage.setItem("firstName", this.state.firstName);
       localStorage.setItem("lastName", this.state.lastName);
       localStorage.setItem("userName", this.state.userName);

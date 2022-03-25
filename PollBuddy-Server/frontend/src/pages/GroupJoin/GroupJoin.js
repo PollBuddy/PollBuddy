@@ -3,24 +3,16 @@ import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 
 export default class GroupJoin extends Component {//this class will likely need to call Groups/new and do more with that...
-  componentDidMount(){
-    this.props.updateTitle("Join Group");
-  }
-
-  constructor() {
-    super();
-    //TODO check if they're logged in
-    console.log(localStorage.getItem("loggedIn"));
-    if (localStorage.getItem("loggedIn") === "true") {
-      console.log("Logged in");
-    } else {
-      console.log("Not logged in");
-      // window.location.replace("/login");
-    }
+  constructor(props) {
+    super(props);
     this.state = {
       groupCode: "",
       showConfirm: false
     };
+  }
+  
+  componentDidMount(){
+    this.props.updateTitle("Join Group");
   }
 
   handleEnterCode = () => {
