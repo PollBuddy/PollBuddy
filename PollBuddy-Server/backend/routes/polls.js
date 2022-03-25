@@ -92,8 +92,7 @@ router.get("/:id/edit", function (req, res) {
  */
 router.post("/:id/edit", promote(isLoggedIn), paramValidator(pollParamsValidator), async (req, res) => {
   let validResult = editPollValidator.validate(req.body, { abortEarly: false });
-  let errors = getResultErrors(validResult);
-  if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest()); }
+  if (validResult.error) { return sendResponse(res, httpCodes.BadRequest()); }
 
   let response = await editPoll(req.session.userData.userID, req.params.id, validResult.value);
   return sendResponse(res, response);

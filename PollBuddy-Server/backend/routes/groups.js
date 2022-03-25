@@ -209,7 +209,7 @@ router.post("/:id", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 router.get("/:id/polls", promote(isLoggedIn), paramValidator(groupParamsValidator), async (req, res) => {
-  let response = await getGroupPolls(req.params.id);
+  let response = await getGroupPolls(req.session.userData.userID, req.params.id);
   return sendResponse(res, response);
 });
 

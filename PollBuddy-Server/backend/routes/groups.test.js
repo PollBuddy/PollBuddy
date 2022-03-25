@@ -178,6 +178,17 @@ describe("/api/groups/:id/edit", () => {
       });
   });
 
+  it("POST: non-admin edit group", async () => {
+    let user = await createUser();
+    let group = await createGroup();
+    session = { userData: { userID: user.insertedId } };
+    await app.post("/api/groups/" + group.insertedId + "/edit")
+      .expect(403)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
   it("POST: edit group, user not logged in", async () => {
     await app.post("/api/groups/0/edit")
       .expect(401)
@@ -208,7 +219,7 @@ describe("/api/groups/:id/admins", () => {
     let group = await createGroup();
     session = { userData: { userID: user.insertedId } };
     await app.get("/api/groups/" + group.insertedId + "/admins")
-      .expect(401)
+      .expect(403)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });
@@ -244,7 +255,7 @@ describe("/api/groups/:id/members", () => {
     let group = await createGroup();
     session = { userData: { userID: user.insertedId } };
     await app.get("/api/groups/" + group.insertedId + "/members")
-      .expect(401)
+      .expect(403)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });
@@ -262,10 +273,10 @@ describe("/api/groups/:id/members", () => {
 
 describe("/api/groups/:id/polls", () => {
 
-  it("GET: get group polls", async () => {
+  it("GET: get group polls as admin", async () => {
     let user = await createUser();
-    let group = await createGroup();
-    let poll = await createPoll({ Group: group.insertedId });
+    let group = await createGroup({ Admins: [user.insertedId]});
+    let poll = await createPoll({ Group: group.insertedId, AllowSubmissions: false });
     session = { userData: { userID: user.insertedId } };
     await app.get("/api/groups/" + group.insertedId + "/polls")
       .expect(200)
@@ -273,6 +284,44 @@ describe("/api/groups/:id/polls", () => {
         expect(response.body.result).toBe("success");
         expect(response.body.data[0].id.toString()).toEqual(poll.insertedId.toString());
         expect(response.body.data[0].title).toEqual(testPoll.Title);
+      });
+  });
+
+  it("GET: get visible group polls as member", async () => {
+    let user = await createUser();
+    let group = await createGroup({ Members: [user.insertedId]});
+    let poll = await createPoll({ Group: group.insertedId, AllowSubmissions: true });
+    session = { userData: { userID: user.insertedId } };
+    await app.get("/api/groups/" + group.insertedId + "/polls")
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        expect(response.body.data[0].id.toString()).toEqual(poll.insertedId.toString());
+        expect(response.body.data[0].title).toEqual(testPoll.Title);
+      });
+  });
+
+  it("GET: get non-visible group polls as member", async () => {
+    let user = await createUser();
+    let group = await createGroup({ Members: [user.insertedId]});
+    let poll = await createPoll({ Group: group.insertedId, AllowSubmissions: false });
+    session = { userData: { userID: user.insertedId } };
+    await app.get("/api/groups/" + group.insertedId + "/polls")
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        expect(response.body.data).toHaveLength(0);
+      });
+  });
+
+  it("GET: get polls as non-member", async () => {
+    let user = await createUser();
+    let group = await createGroup();
+    session = { userData: { userID: user.insertedId } };
+    await app.get("/api/groups/" + group.insertedId + "/polls")
+      .expect(403)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
       });
   });
 
@@ -312,6 +361,17 @@ describe("/api/groups/:id/join", () => {
       });
   });
 
+  it("POST: join group as user", async () => {
+    let user = await createUser();
+    let group = await createGroup({ Admins: [user.insertedId]});
+    session = { userData: { userID: user.insertedId } };
+    await app.post("/api/groups/" + group.insertedId + "/join")
+      .expect(403)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
 });
 
 describe("/api/groups/:id/leave", () => {
@@ -336,6 +396,17 @@ describe("/api/groups/:id/leave", () => {
           _id: group.insertedId
         });
         expect(res.Members).toHaveLength(0);
+      });
+  });
+
+  it("POST: leave group as non member", async () => {
+    let user = await createUser();
+    let group = await createGroup({ Admins: [user.insertedId]});
+    session = { userData: { userID: user.insertedId } };
+    await app.post("/api/groups/" + group.insertedId + "/join")
+      .expect(403)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
       });
   });
 
@@ -371,7 +442,7 @@ describe("/api/groups/:id/delete", () => {
     let group = await createGroup();
     session = { userData: { userID: user.insertedId } };
     await app.post("/api/groups/" + group.insertedId + "/delete")
-      .expect(401)
+      .expect(403)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });
