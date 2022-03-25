@@ -20,13 +20,6 @@ export default class GroupSettings extends Component{
     }
   }
 
-  getPollData = () => {
-    return {
-      title: "Sample",
-      description: "Sample Description",
-    };
-  };
-
   createNewPoll = async () => {
     window.location.href = "/polls/new?groupID=" + this.state.id;
   };

@@ -11,7 +11,7 @@ const os = require("os");
 // Handles /api/groups routes URLs
 var groupsRouter = require("./routes/groups");
 // Handles /api/polls routes URLs
-var pollsRouter = require("./routes/pollsNew");
+var pollsRouter = require("./routes/polls");
 // Handles /api/users routes URLs
 var usersRouter = require("./routes/users");
 // In case we run into CORS issues

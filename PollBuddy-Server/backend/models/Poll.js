@@ -13,7 +13,7 @@ const pollValidators = {
 };
 
 const pollParamsValidator = Joi.object({
-  pollID: Joi.custom(objectID).required(),
+  id: Joi.custom(objectID).required(),
 });
 
 const pollSchema = {

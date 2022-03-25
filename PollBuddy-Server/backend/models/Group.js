@@ -16,7 +16,7 @@ const groupSchema = {
   Description: "",
   Admins: [],
   Polls: [],
-  Members: [], //TODO: Change to member
+  Members: [],
 };
 
 const groupParamsValidator = Joi.object({

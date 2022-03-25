@@ -9,9 +9,3 @@ services:
     build:
       context: PollBuddy-Server/backend
       dockerfile: "Dockerfile.test"
-    restart: unless-stopped
-    volumes:
-      - "./PollBuddy-Server/backend/models:/usr/src/app/models"
-      - "./PollBuddy-Server/backend/modules:/usr/src/app/modules"
-      - "./PollBuddy-Server/backend/routes:/usr/src/app/routes"
-      - "./PollBuddy-Server/backend/app.js:/usr/src/app/app.js"
