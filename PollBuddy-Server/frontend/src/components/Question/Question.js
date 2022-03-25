@@ -44,6 +44,8 @@ export default class Question extends Component {
       "Z",
     ];
     this.questionStartTime = Date.now();
+    let closeTime = new Date();
+    closeTime.setHours(closeTime.getHours() + 2)
     let question = props.data.question;
     this.state = {
       pollID: props.data.pollID,
@@ -51,15 +53,14 @@ export default class Question extends Component {
       question: question,
       currentAnswers: question.currentAnswers || [],
       perPoll: this.props.perPoll,
-      timeLeft: true
+      timeLeft: true,
+      closeTime: closeTime,
     };
   }
 
-  // onTimeEnd(){
-  //   this.state.canChoose = false;
-  //   //TODO send answers to backend
-  //   //TODO move on to next question (probably should be handled in a callback prop)
-  // }
+  onTimeEnd(){
+    console.log("Poll Ended");
+  }
 
   isAnswerSelected = (answerID) => {
     let i = this.state.currentAnswers.indexOf(answerID);
@@ -155,7 +156,7 @@ export default class Question extends Component {
           })}
         </MDBContainer>
         <Timer timeLeft={this.state.timeLeft} noTimeLeft = {() => this.noTimeLeft()}
-          CloseTime={this.state.data.CloseTime} onTimeEnd={this.onTimeEnd} />
+          CloseTime={this.state.closeTime} onTimeEnd={this.onTimeEnd} />
         <MDBContainer>
           {(this.state.timeLeft) &&
            <button className="button" onClick={this.submitQuestion}>Save</button>}
