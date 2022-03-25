@@ -197,7 +197,7 @@ export default class App extends React.Component {
             <Route exact path="/template" element={<Template updateTitle={this.updateTitle} />}/>
 
             {/* Default Route/Error 404 Page */}
-            <Route element={<Notfound updateTitle={this.updateTitle} />}/>
+            <Route path="*" element={<Notfound updateTitle={this.updateTitle} />}/>
           </Routes>
 
           <Footer/>
