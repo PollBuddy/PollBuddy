@@ -1,23 +1,23 @@
 // Load values from .env file
 require("dotenv").config();
 
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+const createError = require("http-errors");
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
 const os = require("os");
 
 // Handles /api/groups routes URLs
-var groupsRouter = require("./routes/groups");
+const groupsRouter = require("./routes/groups");
 // Handles /api/polls routes URLs
-var pollsRouter = require("./routes/polls");
+const pollsRouter = require("./routes/polls");
 // Handles /api/users routes URLs
-var usersRouter = require("./routes/users");
+const usersRouter = require("./routes/users");
 // In case we run into CORS issues
-var cors = require("cors");
+const cors = require("cors");
 
-var app = express();
+const app = express();
 
 // Express Session
 const expressSession = require("express-session");
@@ -41,7 +41,7 @@ app.use(expressSession({
 // Cors: https://daveceddia.com/access-control-allow-origin-cors-errors-in-react-express/
 app.use(cors());
 
-var mongoConnection = require("./modules/mongoConnection.js");
+const mongoConnection = require("./modules/mongoConnection.js");
 mongoConnection.connect(function (res) {
   if (res !== true) {
     console.error(res);
@@ -49,7 +49,7 @@ mongoConnection.connect(function (res) {
 });
 
 // InfluxDB
-var influxConnection = require("./modules/influx.js");
+const influxConnection = require("./modules/influx.js");
 
 // Response Time Logging to InfluxDB
 app.use((req, res, next) => {
@@ -93,12 +93,13 @@ app.use("/api/groups", groupsRouter);
 app.use("/api/polls", pollsRouter);
 app.use("/api/users", usersRouter);
 
-var schoolsModule = require("./modules/schoolList.js");
+const schoolsModule = require("./modules/schoolList.js");
 
 const {createResponse} = require("./modules/utils");
 
+// eslint-disable-next-line no-unused-vars
 app.get("/api/schools", (req, res) => {
-  var schools = schoolsModule.getList();
+  let schools = schoolsModule.getList();
   res.json(schools);
 });
 
@@ -113,6 +114,7 @@ app.get("/api/schools", (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 app.get("/", function (req, res) {
   return res.status(200).send(createResponse("Backend is up."));
 });
@@ -127,6 +129,7 @@ app.get("/", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 app.get("/api", function (req, res) {
   return res.status(200).send(createResponse("Backend is up."));
 });
@@ -138,8 +141,9 @@ app.get("/api", function (req, res) {
  * @throws 404 - Not Found
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 app.use(function (req, res, next) {
-  next(createError(404));
+  res.status(404).send(createResponse(null, "API route not found."));
 });
 
 
@@ -154,7 +158,7 @@ app.use(function (req, res, next) {
  * @throws error code of given error, or 500 - server error
  * @param {function} callback - Function handler for endpoint.
  */
-app.use(function (err, req, res, next) {
+app.use(function (err, req, res) {
 
   console.log(err);
 

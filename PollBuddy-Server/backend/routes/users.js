@@ -1,16 +1,12 @@
-var createError = require("http-errors");
-var express = require("express");
-var router = express.Router();
-const bson = require("bson");
-var bcrypt = require("bcrypt");
-var path = require("path");
-const Joi = require("joi");
+const express = require("express");
+const router = express.Router();
+const bcrypt = require("bcrypt");
 
-var mongoConnection = require("../modules/mongoConnection.js");
+const mongoConnection = require("../modules/mongoConnection.js");
 const rpi = require("../modules/rpi");
 
-const { createResponse, validateID, isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute, promote } = require("../modules/utils"); // object destructuring, only import desired functions
-const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups, createUser, editUser } = require("../models/User.js");
+const { createResponse, isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute, promote} = require("../modules/utils"); // object destructuring, only import desired functions
+const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups, editUser } = require("../models/User.js");
 
 // This file handles /api/users URLs
 
@@ -629,6 +625,7 @@ router.post("/me", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
+// eslint-disable-next-line no-unused-vars
 router.get("/me/edit", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
@@ -673,6 +670,7 @@ router.get("/me/groups", promote(isLoggedIn), async function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/me/groups", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });

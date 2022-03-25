@@ -41,9 +41,10 @@ const userSchema = {
 };
 
 const getUser = async function(userID) {
-  // Change userID to ObjectID 
+  // Change userID to ObjectID
+  let idCode;
   try {
-    var idCode = new bson.ObjectID(userID);
+    idCode = new bson.ObjectID(userID);
   } catch(err) {
     return [400, createResponse(null, "Error: Invalid User, ID does not match any user.")];
   }
@@ -70,8 +71,9 @@ const getUser = async function(userID) {
 
 const getUserGroups = async function(userID) {
   // Change userID to ObjectID 
+  let idCode;
   try {
-    var idCode = new bson.ObjectID(userID);
+    idCode = new bson.ObjectID(userID);
   } catch(err) {
     return [400, createResponse(null, "Error: Invalid User, ID does not match any user.")];
   }
@@ -94,8 +96,9 @@ const getUserGroups = async function(userID) {
 
 
 const editUser = async function(userID, jsonContent) {
+  let idCode;
   try {
-    var idCode = new bson.ObjectID(userID);
+    idCode = new bson.ObjectID(userID);
   } catch(err) {
     return [400, createResponse(null, "Error: Invalid User, ID does not match any user.")];
   }

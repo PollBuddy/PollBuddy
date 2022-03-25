@@ -1,8 +1,8 @@
-var express = require("express");
-var router = express.Router();
-var mongoConnection = require("../modules/mongoConnection.js");
+const express = require("express");
+const router = express.Router();
+const mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
-const {createResponse, validateID, checkPollPublic, isLoggedIn, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
+const {createResponse, validateID, checkPollPublic, isLoggedIn, promote, isDevelopmentMode} = require("../modules/utils"); // object destructuring, only import desired functions
 
 // This file handles /api/polls URLs
 
@@ -14,6 +14,7 @@ const {createResponse, validateID, checkPollPublic, isLoggedIn, debugRoute} = re
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.get("/new", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
@@ -61,6 +62,7 @@ router.post("/new", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.get("/:id/edit", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
@@ -129,6 +131,7 @@ router.post("/:id/edit", async (req, res) => {
   }
   // generate ObjectID for embedded Questions
   if (validResult.value.Questions) {  // check if Questions exists
+    // eslint-disable-next-line no-unused-vars
     validResult.value.Questions.forEach((o, i, a) => {
       a[i]["_id"] = new mongoConnection.getMongo().ObjectID();
     });
@@ -151,6 +154,7 @@ router.post("/:id/edit", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.get("/:id/submit", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
@@ -235,9 +239,10 @@ router.post("/:id/submit", checkPollPublic, async (req, res) => {
 * @name GET api/polls/pollAnswers
 * @param {function} callback - Function handler for endpoint.
 */
-router.get("/pollAnswers", function (req, res, next) {
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  mongoConnection.getDB().collection("poll_answers").deleteOne({"_id": id}, function (err, res) {
+router.get("/pollAnswers", function (req, res) {
+  let id = new mongoConnection.getMongo().ObjectID(req.params.id);
+  // eslint-disable-next-line no-unused-vars
+  mongoConnection.getDB().collection("poll_answers").deleteOne({"_id": id}, function (err, _res) {
     if (err) {
       return res.status(500).send(createResponse("", err)); // TODO: Error message
     }
@@ -253,6 +258,7 @@ router.get("/pollAnswers", function (req, res, next) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/pollAnswers", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
@@ -265,6 +271,7 @@ router.post("/pollAnswers", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.get("/:id/delete", function (req, res) {
   return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
 });
@@ -280,8 +287,9 @@ router.get("/:id/delete", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/:id/delete", function (req, res) {//use router.delete??
-  var id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  mongoConnection.getDB().collection("polls").deleteOne({"_id": id}, function (err, res) {
+  let id = new mongoConnection.getMongo().ObjectID(req.params.id);
+  // eslint-disable-next-line no-unused-vars
+  mongoConnection.getDB().collection("polls").deleteOne({"_id": id}, function (err, _res) {
     if (err) {
       return res.status(500).send(createResponse("", err)); // TODO: Error message;
     }
@@ -302,16 +310,15 @@ router.post("/:id/delete", function (req, res) {//use router.delete??
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/", async (req, res) => {
-  debugRoute(req,res,async (req,res) =>{
-    try {
-      const polls = await mongoConnection.getDB().collection("polls").find({}).toArray();
-      return res.status(200).send(createResponse(polls));
-    } catch (e) {
-      console.log(e);
-    }
-    return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
-  });
+// eslint-disable-next-line no-unused-vars
+router.get("/", promote(isDevelopmentMode), async (req, res) => {
+  try {
+    const polls = await mongoConnection.getDB().collection("polls").find({}).toArray();
+    return res.status(200).send(createResponse(polls));
+  } catch (e) {
+    console.log(e);
+  }
+  return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
 });
 
 /**
@@ -322,10 +329,9 @@ router.get("/", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/", function (req, res) {
-  debugRoute(req,res,(req,res) => {
-    res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
-  });
+// eslint-disable-next-line no-unused-vars
+router.post("/", promote(isDevelopmentMode), function (req, res) {
+  res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 /**
@@ -362,6 +368,7 @@ router.get("/:id", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/:id", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
@@ -376,7 +383,7 @@ router.post("/:id", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/view", async function (req, res, next) {
+router.get("/:id/view", checkPollPublic, async function (req, res) {
   const id = await validateID("polls", req.params.id);
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
@@ -421,6 +428,7 @@ router.get("/:id/view", async function (req, res, next) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/:id/view", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
@@ -436,7 +444,7 @@ router.post("/:id/view", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/results", async function (req, res, next) {
+router.get("/:id/results", async function (req, res) {
   const id = await validateID("polls", req.params.id);
   if (!id) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
@@ -504,42 +512,45 @@ router.get("/:id/results", async function (req, res, next) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/:id/results", function (req, res) {
   return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
-//Given a userID and a pollID, this function returns true if the user has permission to access the poll, and false otherwise
-//if the poll is linked to a group (there is information in the .Group data), the group is checked for user access permissions
-//if the poll is not linked, it returns true by default
+// Given a userID and a pollID, this function returns true if the user has permission to access the poll, and false otherwise.
+// If the poll is linked to a group (there is information in the .Group data), the group is checked for user access permissions.
+// If the poll is not linked, it returns true by default.
 function checkUserPermission(userID, pollID) { //TODO add checks to make sure IDs are valid
-  var groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id": 0, "Groups": 1})[0].Group; //get groupID attached to poll
-  if (groupID.length !== 0 && groupID !== undefined) { //groupID returned something
-    var users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id": 0, "Users": 1})[0].Users; //get list of users in group
-    for (var user in users) {
+  const groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id": 0, "Groups": 1})[0].Group; //get groupID attached to poll
+  if (groupID !== undefined && groupID.length !== 0) {
+    // groupID returned something
+    const users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id": 0, "Users": 1})[0].Users; //get list of users in group
+    for (let user in users) {
       if (user === userID) {
         return true;
       }
     }
     return false;
   }
-  return true; //returns true if the poll isn't linked to a group
+  // Return true if the poll isn't linked to a group
+  return true;
 }
 
-//Given an adminID (really just a userID) and a pollID, this function returns true if the user has admin permissions for the poll, and false otherwise
-//if the poll is linked to a group (there is information in the .Group data), the group is checked for admin access
-//if the poll is not linked, it checks the internal .Admin data and returns true see if it finds the adminID, and false otherwise
+// Given an adminID (really just a userID) and a pollID, this function returns true if the user has admin permissions for the poll, and false otherwise.
+// If the poll is linked to a group (there is information in the ".Group" data), the group is checked for admin access.
+// If the poll is not linked, it checks the internal .Admin data and returns true see if it finds the adminID, and false otherwise.
 function checkAdminPermission(adminID, pollID) { //TODO add checks to make sure IDs are valid
-  var groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id": 0, "Groups": 1})[0].Group; //get groupID attached to the poll
+  let groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id": 0, "Groups": 1})[0].Group; //get groupID attached to the poll
   if (groupID.length === 0 || groupID.length === undefined) { //groupID returned something
-    var admins = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id": 0, "Admins": 1})[0].Admins; //get list of admins in attached group
-    for (var admin in admins) {
+    let admins = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id": 0, "Admins": 1})[0].Admins; //get list of admins in attached group
+    for (let admin in admins) {
       if (admin === adminID) { //check for adminID in list
         return true;
       }
     }
   } else { //groupID didn't return something
-    admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id": 0, "Admins": 1})[0].Admins; //get internal list of Admins
-    for (admin in admins) {
+    let admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id": 0, "Admins": 1})[0].Admins; //get internal list of Admins
+    for (let admin in admins) {
       if (admin === adminID) { //check for adminID in list
         return true;
       }
