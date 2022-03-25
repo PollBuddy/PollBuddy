@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
-const {createResponse, validateID, promote, isDevelopmentMode} = require("../modules/utils"); // object destructuring, only import desired functions
+const {createResponse, validateID, promote, isDevelopmentMode, isLoggedIn} = require("../modules/utils"); // object destructuring, only import desired functions
 
 // This file handles /api/groups URLs
 
