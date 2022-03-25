@@ -8,22 +8,34 @@
                 "hide": true,
                 "iconColor": "rgba(0, 211, 255, 1)",
                 "name": "Annotations & Alerts",
+                "target": {
+                    "limit": 100,
+                    "matchAny": false,
+                    "tags": [],
+                    "type": "dashboard"
+                },
                 "type": "dashboard"
             }
         ]
     },
     "editable": true,
-    "gnetId": null,
+    "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
-    "id": 2,
+    "id": 1,
     "links": [],
+    "liveNow": false,
     "panels": [
         {
             "aliasColors": {},
             "bars": false,
             "dashLength": 10,
             "dashes": false,
-            "datasource": null,
+            "fieldConfig": {
+                "defaults": {
+                    "links": []
+                },
+                "overrides": []
+            },
             "fill": 1,
             "fillGradient": 0,
             "gridPos": {
@@ -47,9 +59,10 @@
             "linewidth": 1,
             "nullPointMode": "null",
             "options": {
-                "dataLinks": []
+                "alertThreshold": true
             },
             "percentage": false,
+            "pluginVersion": "8.4.4",
             "pointradius": 2,
             "points": false,
             "renderer": "flot",
@@ -59,6 +72,10 @@
             "steppedLine": false,
             "targets": [
                 {
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "P951FEA4DE68E13C5"
+                    },
                     "groupBy": [
                         {
                             "params": [
@@ -92,14 +109,18 @@
                             }
                         ]
                     ],
-                    "tags": []
+                    "tags": [
+                        {
+                            "key": "path",
+                            "operator": "!=",
+                            "value": "/api/healthcheck"
+                        }
+                    ]
                 }
             ],
             "thresholds": [],
-            "timeFrom": null,
             "timeRegions": [],
-            "timeShift": null,
-            "title": "Response Times",
+            "title": "Response Times (Non Health Check)",
             "tooltip": {
                 "shared": true,
                 "sort": 0,
@@ -107,47 +128,36 @@
             },
             "type": "graph",
             "xaxis": {
-                "buckets": null,
                 "mode": "time",
-                "name": null,
                 "show": true,
                 "values": []
             },
             "yaxes": [
                 {
                     "format": "short",
-                    "label": null,
                     "logBase": 1,
-                    "max": null,
-                    "min": null,
                     "show": true
                 },
                 {
                     "format": "short",
-                    "label": null,
                     "logBase": 1,
-                    "max": null,
-                    "min": null,
                     "show": true
                 }
             ],
             "yaxis": {
-                "align": false,
-                "alignLevel": null
+                "align": false
             }
         },
         {
             "columns": [],
-            "datasource": null,
             "fontSize": "100%",
             "gridPos": {
-                "h": 8,
+                "h": 25,
                 "w": 12,
                 "x": 12,
                 "y": 0
             },
-            "id": 4,
-            "pageSize": null,
+            "id": 5,
             "showHeader": true,
             "sort": {
                 "col": 0,
@@ -164,7 +174,6 @@
                 {
                     "alias": "Request Time",
                     "align": "auto",
-                    "colorMode": null,
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
                         "rgba(237, 129, 40, 0.89)",
@@ -181,7 +190,237 @@
                 {
                     "alias": "",
                     "align": "right",
-                    "colorMode": null,
+                    "colors": [
+                        "rgba(245, 54, 54, 0.9)",
+                        "rgba(237, 129, 40, 0.89)",
+                        "rgba(50, 172, 45, 0.97)"
+                    ],
+                    "decimals": 2,
+                    "pattern": "/.*/",
+                    "thresholds": [],
+                    "type": "number",
+                    "unit": "short"
+                }
+            ],
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "P951FEA4DE68E13C5"
+                    },
+                    "groupBy": [
+                        {
+                            "params": [
+                                "host"
+                            ],
+                            "type": "tag"
+                        },
+                        {
+                            "params": [
+                                "path"
+                            ],
+                            "type": "tag"
+                        },
+                        {
+                            "params": [
+                                "platform"
+                            ],
+                            "type": "tag"
+                        }
+                    ],
+                    "measurement": "response_times",
+                    "orderByTime": "ASC",
+                    "policy": "one_year",
+                    "refId": "A",
+                    "resultFormat": "table",
+                    "select": [
+                        [
+                            {
+                                "params": [
+                                    "duration"
+                                ],
+                                "type": "field"
+                            }
+                        ]
+                    ],
+                    "tags": [
+                        {
+                            "key": "path",
+                            "operator": "!=",
+                            "value": "/api/healthcheck"
+                        }
+                    ]
+                }
+            ],
+            "title": "Request Log (Non Health Check)",
+            "transform": "table",
+            "type": "table-old"
+        },
+        {
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 10,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "linear",
+                        "lineWidth": 1,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "never",
+                        "spanNulls": true,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "links": [],
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 9
+            },
+            "id": 6,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom"
+                },
+                "tooltip": {
+                    "mode": "multi",
+                    "sort": "none"
+                }
+            },
+            "pluginVersion": "8.4.4",
+            "targets": [
+                {
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "P951FEA4DE68E13C5"
+                    },
+                    "groupBy": [
+                        {
+                            "params": [
+                                "$__interval"
+                            ],
+                            "type": "time"
+                        },
+                        {
+                            "params": [
+                                "null"
+                            ],
+                            "type": "fill"
+                        }
+                    ],
+                    "measurement": "response_times",
+                    "orderByTime": "ASC",
+                    "policy": "one_year",
+                    "refId": "A",
+                    "resultFormat": "time_series",
+                    "select": [
+                        [
+                            {
+                                "params": [
+                                    "duration"
+                                ],
+                                "type": "field"
+                            },
+                            {
+                                "params": [],
+                                "type": "mean"
+                            }
+                        ]
+                    ],
+                    "tags": [
+                        {
+                            "key": "path",
+                            "operator": "=",
+                            "value": "/api/healthcheck"
+                        }
+                    ]
+                }
+            ],
+            "title": "Response Times (Only Health Check)",
+            "type": "timeseries"
+        },
+        {
+            "columns": [],
+            "fontSize": "100%",
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 17
+            },
+            "id": 4,
+            "showHeader": true,
+            "sort": {
+                "col": 0,
+                "desc": true
+            },
+            "styles": [
+                {
+                    "alias": "Time",
+                    "align": "auto",
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "pattern": "Time",
+                    "type": "date"
+                },
+                {
+                    "alias": "Request Time",
+                    "align": "auto",
+                    "colors": [
+                        "rgba(245, 54, 54, 0.9)",
+                        "rgba(237, 129, 40, 0.89)",
+                        "rgba(50, 172, 45, 0.97)"
+                    ],
+                    "dateFormat": "YYYY-MM-DD HH:mm:ss",
+                    "decimals": 2,
+                    "mappingType": 1,
+                    "pattern": "duration",
+                    "thresholds": [],
+                    "type": "number",
+                    "unit": "short"
+                },
+                {
+                    "alias": "",
+                    "align": "right",
                     "colors": [
                         "rgba(245, 54, 54, 0.9)",
                         "rgba(237, 129, 40, 0.89)",
@@ -234,15 +473,13 @@
                     "tags": []
                 }
             ],
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "Request Log",
+            "title": "Request Log (Only Health Check)",
             "transform": "table",
-            "type": "table"
+            "type": "table-old"
         }
     ],
-    "refresh": false,
-    "schemaVersion": 22,
+    "refresh": "",
+    "schemaVersion": 35,
     "style": "dark",
     "tags": [],
     "templating": {
@@ -256,8 +493,6 @@
     "timezone": "",
     "title": "PollBuddy",
     "uid": "5a7riE3Wk",
-    "variables": {
-        "list": []
-    },
-    "version": 2
+    "version": 5,
+    "weekStart": ""
 }
