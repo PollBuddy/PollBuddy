@@ -435,6 +435,10 @@
             ],
             "targets": [
                 {
+                    "datasource": {
+                        "type": "influxdb",
+                        "uid": "P951FEA4DE68E13C5"
+                    },
                     "groupBy": [
                         {
                             "params": [
@@ -470,7 +474,13 @@
                             }
                         ]
                     ],
-                    "tags": []
+                    "tags": [
+                        {
+                            "key": "path",
+                            "operator": "=",
+                            "value": "/api/healthcheck"
+                        }
+                    ]
                 }
             ],
             "title": "Request Log (Only Health Check)",
@@ -493,6 +503,6 @@
     "timezone": "",
     "title": "Home",
     "uid": "5a7riE3Wk",
-    "version": 5,
+    "version": 1,
     "weekStart": ""
 }
