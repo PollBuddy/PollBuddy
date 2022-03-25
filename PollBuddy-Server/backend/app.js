@@ -135,6 +135,21 @@ app.get("/api", function (req, res) {
 });
 
 /**
+ * API health check page
+ * Does not do anything by itself, defined as a graceful response to the Docker health check
+ * Returns a status 200 OK message to indicate the backend handled the request and is working.
+ * For full documentation, see the wiki: https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Overview)
+ * @throws 200 - OK
+ * @name GET /api/healthcheck
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+// eslint-disable-next-line no-unused-vars
+app.get("/api/healthcheck", function (req, res) {
+  return res.status(200).send(createResponse("Backend is working."));
+});
+
+/**
  * Fall-through response for undefined routes
  * Sends a 404 error down to the next middleware (the error handler)
  * For full documentation, see the wiki: https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Overview)
