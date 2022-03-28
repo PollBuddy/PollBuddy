@@ -38,22 +38,14 @@ const isGroupAdminByGroup = function(group, userID) {
   let isAdmin = group.Admins.find((adminID) => {
     return adminID.toString() === userID.toString();
   });
-  if (isAdmin) {
-    return true;
-  } else {
-    return false;
-  }
+  return !!isAdmin;
 };
 
 const isGroupMemberByGroup = function(group, userID) {
   let isMember = group.Members.find((memberID) => {
     return memberID.toString() === userID.toString();
   });
-  if (isMember) {
-    return true;
-  } else {
-    return false;
-  }
+  return !!isMember;
 };
 
 const isGroupUserByGroup = function(group, userID) {
