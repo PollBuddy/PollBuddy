@@ -4,7 +4,7 @@ import "mdbreact/dist/css/mdb.css";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";
 
-//Abby to do Tues 22 & 29th: add the whole loading wheel if/else structure to this too!
+//Abby to do 29th: fix linting errors
 
 export default class LoginWithSchool extends Component {
   constructor(props) {
