@@ -46,7 +46,7 @@ class PollViewer extends Component {
             doneLoading: true,
           });
         } else {
-          this.props.router.navigate("/login")
+          this.props.router.navigate("/login");
         }
       });
   }
