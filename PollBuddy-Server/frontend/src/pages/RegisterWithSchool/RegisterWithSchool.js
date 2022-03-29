@@ -2,10 +2,7 @@ import React, { Component } from "react";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-
 import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";
-
-//Abby to do Tues 22nd: cleanup: delete console logs, clean in general
 
 export default class RegisterWithSchool extends Component {
   componentDidMount() {
@@ -18,8 +15,20 @@ export default class RegisterWithSchool extends Component {
     this.state = {
       value: "",
       doneLoading: false,
-      "schoolInfo": {}
+      "schoolInfo": {},
+      errorText: ""
     };   
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(){
+    if(!(this.state.value in this.state.schoolInfo.schoolLinkDict)) {
+      this.setState({errorText: "Invalid school"})
+    }
+    else {
+      window.location.replace("/api/users/register/" + this.state.schoolInfo.schoolLinkDict[this.state.value]);
+    }
   }
 
   render() {
@@ -65,9 +74,9 @@ export default class RegisterWithSchool extends Component {
                   schoolInfo = {this.state.schoolInfo}
                 />
 
-            <form>
-              <button className="btn button" formAction={ "/api/users/register/" + this.state.schoolInfo.schoolLinkDict[this.state.value] }>Submit</button>
-            </form>
+            <p> {this.state.errorText} </p>
+
+            <button className="btn button" onClick={this.handleSubmit}>Submit</button>
 
           </MDBContainer>
         </MDBContainer>
