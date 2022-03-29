@@ -859,10 +859,15 @@ router.get("/forgotpassword/submit",function (req,res) {
 });
 
 /**
- * TODO:DOCUMENT
+ * The route primes a given user's data so their password may be reset
+ * accepts either the users username or email
+ * sets in the user's data a random 32char code and an expiration date 1 hour from the requests handling
  * @getdata {void} None
- * @postdata {void} None
- * @returns {void} TODO:DOCUMENT
+ * @postdata {void} email : String , username : String
+ * @returns {void} on success : Status 200
+ * On failure : Status 500 { "result": "failure", "error": "neither username nor email provided"}
+ *              Status 500 { "result": "failure", "error": "could not update user"}
+ *              Status 500 { "result": "failure", "error": "could not find user"}
  * @name backend/users/forgotpassword/submit_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -930,10 +935,13 @@ router.post("/forgotpassword/submit/",function (req,res) {
 });
 
 /**
- * TODO DOCUMENT 
+ * Checks if the user specified by username has a resetPasswordToken matching that given, and it has not yet expired
+ * This is the predicate determining if a user can reset their password at the given moment
  * @getdata {void} None
- * @postdata {void} None
- * @returns {void} Status 405 { "result": "failure", "error": "Route not availible."}
+ * @postdata {void} resetPasswordToken : String , username : String
+ * @returns {void} on success : Status 200 
+ * On failure : Status 500 { "result": "failure", "error": "Token is invalid(token expired)"}
+ *              Status 500 { "result": "failure", "error": "Token is invalid(user with token not found)"}
  * @name backend/users/forgotpassword_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -957,7 +965,7 @@ router.post("/forgotpassword/validate",function (req,res) {
 });
 
 /**
- * This route is not used. It is simply there to have some response to /api/users/forgotpassword/chnge when using GET
+ * This route is not used. It is simply there to have some response to /api/users/forgotpassword/change when using GET
  * @getdata {void} None
  * @postdata {void} None
  * @returns {void} Status 405 { "result": "failure", "error": "Route not availible."}
@@ -970,10 +978,16 @@ router.post("/forgotpassword/validate",function (req,res) {
 });
 
 /**
- * This route is not used. It is simply there to have some response to /api/users/forgotpassword/ when using POST
+ * This route resets the password of the user with the given username to the given password
+ * This is only done if the user has a valid token as per the validate route and if the password satifies the strength requirements
  * @getdata {void} None
- * @postdata {void} None
- * @returns {void} Status 405 { "result": "failure", "error": "Route not availible."}
+ * @postdata {void} resetPasswordToken : String , username : String , password : String
+ * @returns {void} On success : Status 200
+ * On failure : Status 500 { "result": "failure", "error": "could not hash password"}
+ *              Status 500 { "result": "failure", "error": "could not update password"}
+ *              Status 500 { "result": "failure", "error": "token expired"}
+ *              Status 500 { "result": "failure", "error": "user with token not found"}
+ *              Status 500 { "result": "failure", "error": "invalid password"}
  * @name backend/users/forgotpassword_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -996,9 +1010,9 @@ router.post("/forgotpassword/change",function (req,res) {
             if(hashError){
               return res.status(500).send(createResponse(null,"Could not hash password")); 
             }else{
-              mongoConnection.getDB().collection("users").updateOne({"_id":searchResult._id},{"$set":{"Password":hash}},function(updateError,updateResult){
+              mongoConnection.getDB().collection("users").updateOne({"_id":searchResult._id},{"$set":{"Password":hash},"$unset":{"ResetPasswordTokenExpiration":"","ResetPasswordToken":""}},function(updateError,updateResult){
                 if(updateError){
-                  return res.status(500).send(createResponse(null,"Could update password")); 
+                  return res.status(500).send(createResponse(null,"Could not update password")); 
                 }else{
                   return res.status(200).send(createResponse()); 
                 }
