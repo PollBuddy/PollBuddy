@@ -3,7 +3,7 @@ const bson = require("bson");
 const { createResponse, getResultErrors, isEmpty, createModel } = require("../modules/utils");
 const mongoConnection = require("../modules/mongoConnection.js");
 const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
-const {getGroupInternal, isGroupMember, isGroupAdmin, getPollInternal, getQuestionInternal, isPollAdmin} = require("../modules/modelUtils");
+const {getGroupInternal, isGroupMember, isGroupAdmin, getPollInternal, getQuestionInternal, isPollAdmin, getUserInternal} = require("../modules/modelUtils");
 const {objectID} = require("../modules/validatorUtils");
 
 const pollValidators = {
@@ -168,13 +168,17 @@ const getPollResults = async function(userID, pollID) {
     let isUserPollAdmin = await isPollAdmin(userID, pollID);
     if (!isUserPollAdmin) { return httpCodes.Unauthorized(); }
 
+    let users = [];
     let questions = [];
     let questionResults = {};
 
     for (let question of poll.Questions) {
-      questionResults[question._id] = {};
+      questionResults[question._id] = {
+        totalResponses: 0,
+      };
       for (let answer of question.Answers) {
         questionResults[question._id][answer._id] =  {
+          answer: answer,
           count: 0,
         };
       }
@@ -182,18 +186,34 @@ const getPollResults = async function(userID, pollID) {
       questions.push(questionData);
     }
 
-    await mongoConnection.getDB().collection("poll_answers")
-      .find({ PollID: poll._id }).forEach((pollAnswers) => {
-        for (let question of pollAnswers.Questions) {
-          if (questionResults[question.QuestionID]) {
-            for (let answerID of question.Answers) {
-              if (questionResults[question.QuestionID][answerID]) {
-                questionResults[question.QuestionID][answerID].count++;
-              }
+    let pollAnswers = await mongoConnection.getDB().collection("poll_answers")
+      .find({ PollID: poll._id }).toArray();
+
+    for (let pollAnswer of pollAnswers) {
+      let user = await getUserInternal(pollAnswer.UserID);
+      let userResults = {
+        id: user._id,
+        userName: user.UserName,
+        questions: [],
+      };
+
+      for (let question of pollAnswer.Questions) {
+        if (questionResults[question.QuestionID]) {
+          let questionAnswers = {
+            id: question.QuestionID,
+            answers: [],
+          };
+          for (let answerID of question.Answers) {
+            if (questionResults[question.QuestionID][answerID]) {
+              questionAnswers.answers.push(answerID);
+              questionResults[question.QuestionID][answerID].count++;
             }
           }
+          userResults.questions.push(questionAnswers);
         }
-      });
+      }
+      users.push(userResults);
+    }
 
     for (let question of questions) {
       for (let answer of question.answers) {
@@ -205,6 +225,7 @@ const getPollResults = async function(userID, pollID) {
       title: poll.Title,
       description: poll.Description,
       questions: questions,
+      users: users,
     });
   } catch(err) {
     console.error(err);

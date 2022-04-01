@@ -7,6 +7,7 @@ import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import QuestionResults from "../../components/QuestionResults/QuestionResults";
 import "./PollResults.scss";
+import csv from "fast-csv";
 
 class PollResults extends Component {
   constructor() {
@@ -15,6 +16,7 @@ class PollResults extends Component {
       error: null,
       doneLoading: false,
       questions: {},
+      users: [],
       currentQuestion: 0,
       dataBar: {
         labels: [],
@@ -99,23 +101,10 @@ class PollResults extends Component {
       .then(response => response.json())
       .then(response => {
         if (response.result === "success") {
-          // response = response.data[0]; // TODO: This needs to be fixed for the general case and not just the demo
-          console.log(response);
-
-          // eslint-disable-next-line no-sequences
-          // this.setState(state => {
-          //   state.questionData = response;
-          //   state.dataBar.labels = response.AnswerChoices;
-          //   state.dataBar.datasets[0].data = response.Tallies;
-          //   return state;
-          // });
-          // for(let i = 0; i < this.state.questionData.CorrectAnswers.length-1; i++){
-          //   this.state.correctAnswers = this.state.correctAnswers + this.state.questionData.CorrectAnswers[i] + ", ";
-          // }
-          // this.state.correctAnswers+= this.state.questionData.CorrectAnswers[this.state.questionData.CorrectAnswers.length-1];
           this.setState({
             doneLoading: true,
             questions: response.data.questions,
+            users: response.data.users,
           });
         } else {
           this.setState({
@@ -129,6 +118,35 @@ class PollResults extends Component {
     this.setState({
       currentQuestion: index,
     });
+  };
+
+  downloadCSV = (e) => {
+    let data = [];
+    let headerRow = "username";
+    for (let questionData of this.state.questions) {
+      headerRow += `,${questionData.id}`;
+    }
+    for (let user of this.state.users) {
+      let userRow = `${user.userName}`;
+      for (let questionData of this.state.questions) {
+        let questionResult = user.questions.find((e) => {
+          return e.id.toString() === questionData.id.toString();
+        });
+        let isCorrect = false;
+        if (questionResult) {
+          for (let answerID of questionResult.answers) {
+            let answerData = questionData.answers.find((e) => {
+              return e.id.toString() === answerID.toString();
+            });
+            if (answerData.correct) {
+              isCorrect = true;
+            }
+          }
+        }
+        userRow += `,${isCorrect ? "true" : "false"}`;
+      }
+      console.log(userRow);
+    }
   };
 
   render() {
@@ -176,18 +194,9 @@ class PollResults extends Component {
               );
             }
           })}
-          {/*<p className="fontSizeLarge">*/}
-          {/*  {"QuestionResults " + this.state.questionData.QuestionNumber + ": " + this.state.questionData.QuestionText}*/}
-          {/*</p>*/}
-          {/*<p>*/}
-          {/*  {"Correct Answers: " + this.state.correctAnswers}*/}
-          {/*</p>*/}
-          {/*<p>*/}
-          {/*  {"Total Number of Answers: " + this.state.dataBar.datasets[0].data.reduce((a, b) => a + b, 0)}*/}
-          {/*</p>*/}
-          {/*The MDBReact Bar component was built on top of chart.js.
-                  Look at https://www.chartjs.org/docs/latest/ for more info*/}
-          {/*<Bar data={this.state.dataBar} options={this.state.barChartOptions}/>*/}
+          <div onClick={this.downloadCSV}>
+            Download CSV
+          </div>
         </MDBContainer>
       );
     }
