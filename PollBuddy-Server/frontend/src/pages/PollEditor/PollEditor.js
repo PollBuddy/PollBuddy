@@ -4,14 +4,18 @@ import autosize from "autosize";
 import "./PollEditor.scss";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import QuestionEditor from "../../components/QuestionEditor/QuestionEditor";
+import TextField from '@mui/material/TextField';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DateTimePicker from '@mui/lab/DateTimePicker';
+import { purple } from '@mui/material/colors';
+import {createMuiTheme, ThemeProvider} from "@mui/material";
 
 class PollEditor extends Component {
   constructor(props) {
     super(props);
     this.askQuestion = this.askQuestion.bind(this);
     this.handleRandomize = this.handleRandomize.bind(this);
-
     // let questions = require("./placeholder");//./placeholder will need to be changed into the json file in the get call or something
 
     this.state = {
@@ -31,6 +35,8 @@ class PollEditor extends Component {
       pollTitle: "Sample title",
       pollDescription: "This is a sample description",
       allowSubmissions: false,
+      openTime: Date.now(),
+      closeTime: Date.now(),
       loadingPollQuestions: false,
       showQuestionError: false,
 
@@ -278,12 +284,12 @@ class PollEditor extends Component {
   }
 
   moveQuestionUp(index) {
-    var reorderedQuestions = this.move(index, index-1);
+    let reorderedQuestions = this.move(index, index-1);
     this.setState({questions: reorderedQuestions});
   }
 
   moveQuestionDown(index) {
-    var reorderedQuestions = this.move(index, index+1);
+    let reorderedQuestions = this.move(index, index+1);
     this.setState({questions: reorderedQuestions});
   }
 
@@ -303,8 +309,17 @@ class PollEditor extends Component {
       allowSubmissions: !this.state.allowSubmissions,
     });
   };
+  onOpenTimeChange = (e) =>{
+    this.setState({openTime: e});
+  };
 
   render() {
+    const defaultMaterialTheme = createMuiTheme({
+      palette: {
+        primary: purple,
+      },
+    });
+    const color = "#ffffff";
     if (this.state.loadingPollData) {
       return (
         <MDBContainer fluid className="page">
@@ -332,17 +347,36 @@ class PollEditor extends Component {
                   name="pollDescription"
                   value={this.state.pollDescription}
                   onChange={this.onInput}/>
-                <div class={"allowSubmissionsBox"}>
-                  <p>
-                    Allow Submissions
-                  </p>
-                  <input
-                    type="checkbox"
-                    className="checkBox pollCheckBox"
-                    checked={this.state.allowSubmissions}
-                    onInput={this.onAllowSubmissionsClick}
-                  />
-                </div>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <ThemeProvider theme={defaultMaterialTheme}>
+                    <DateTimePicker
+                      renderInput={(props) => <TextField {...props} sx={{
+                        svg: { color },
+                        input: { color },
+                        label: { color }
+                      }}
+                      />}
+                      label="PollOpenTime"
+                      value={this.state.openTime}
+                      onChange={this.onOpenTimeChange}
+                    />
+                  </ThemeProvider>
+                </LocalizationProvider>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <ThemeProvider theme={defaultMaterialTheme}>
+                    <DateTimePicker
+                      renderInput={(props) => <TextField {...props} sx={{
+                        svg: { color },
+                        input: { color },
+                        label: { color }
+                      }}
+                      />}
+                      label="PollCloseTime"
+                      value={this.state.closeTime}
+                      onChange={this.onOpenTimeChange}
+                    />
+                  </ThemeProvider>
+                </LocalizationProvider>
                 <div class={"pollButtons"}>
                   <button
                     id="descriptionBtn" className="button pollButton"
