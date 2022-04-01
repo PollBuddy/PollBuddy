@@ -149,6 +149,64 @@ describe("/api/groups/:pollID", () => {
 });
 
 
+describe("/api/polls/:id/results", () => {
+  
+  it("POST: route unavailable", async () => {
+    await app.post("/api/polls/0/results")
+      .expect(405)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      })
+  });
+
+  it("GET: results success", async () => {
+    //let user = await createUser();
+    //let group = await createGroup({ Admins: [ user.insertedId ] });
+    //let poll = await createPoll({ Group: group.insertedId });
+    //session = { userData: { userID: user.insertedId } };
+
+    let user = await createUser();
+    session = { userData: { userID: user.insertedId } };
+    await app.post("/api/polls/new")
+      .send({
+        title: testPoll.Title,
+        description: testPoll.Description,
+      })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        poll_id = response.body.data.id;
+        console.log(response.body.data)
+
+    await app.post("/api/polls/" + poll_id + "/createQuestion")
+      .send({
+        text: "sample.question",
+        answers: [{ text: "sample.answer", correct: true }],
+        maxAllowedChoices: 1,
+      })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        let questionRes = await mongoConnection.getDB().collection("polls").findOne({
+          "_id": poll_id,
+          "Questions._id": new bson.ObjectID(response.body.data.id),
+        });
+        console.log(questionRes)
+        //expect(questionRes).not.toBeNull();
+
+        await app.get("/api/polls/" + poll_id + "/results")
+          .expect(200)
+          .then(async (response) => {
+            expect(response.body.result).toBe("success");
+            expect(response.body.data.title).toBe(testPoll.Title);
+            expect(response.body.data.description).toBe(testPoll.Description);
+          });
+      });
+    });
+  });
+});
+
+
 describe("/api/polls/new", () => {
 
   it("GET: route unavailable", async () => {
