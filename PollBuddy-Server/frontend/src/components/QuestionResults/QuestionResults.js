@@ -11,16 +11,17 @@ export default class QuestionResults extends Component {
     super(props);
     let labels = [];
     let data = [];
-
+    let totalResponses = 0;
     for (let answer of props.data.question.answers) {
       labels.push(answer.text);
       data.push(answer.count);
+      totalResponses += answer.count;
     }
-    console.log(labels, data);
 
     this.state = {
       questionNumber: props.data.questionNumber,
       question: props.data.question,
+      totalResponses: totalResponses,
       dataBar: {
         labels: labels,
         datasets: [
@@ -107,6 +108,9 @@ export default class QuestionResults extends Component {
           {"Question " + (this.state.questionNumber) + ": " + this.state.question.text}
         </p>
         <Bar data={this.state.dataBar} options={this.state.barChartOptions}/>
+        <p className="fontSizeSmall questionText">
+          {this.state.totalResponses + " Total Responses"}
+        </p>
       </MDBContainer>
     );
   }
