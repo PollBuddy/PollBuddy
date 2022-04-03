@@ -1,22 +1,13 @@
 version: '3'
 services:
-  webproxy:
-    image: "nginx:latest"
-    restart: unless-stopped
-    volumes:
-      - ./PollBuddy-Server/webproxy/conf.d:/etc/nginx/conf.d
-    ports:
-      - "7655:80"
-    networks:
-      - frontend
-      - backend
-      - logging
-
   frontend:
     build: PollBuddy-Server/frontend
     restart: unless-stopped
+    ports:
+      - "7655:80"
     networks:
-      - frontend
+      - backend
+      - logging
 
   backend:
     build: PollBuddy-Server/backend
@@ -60,7 +51,6 @@ volumes:
 
 networks:
   backend:
-  frontend:
   logging:
 
 

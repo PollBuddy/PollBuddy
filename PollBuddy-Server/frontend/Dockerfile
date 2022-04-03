@@ -35,26 +35,25 @@ RUN npm run build
 
 
 # Build Stage 2 - Run previously built files
-FROM node:16-alpine
+FROM nginx:stable-alpine
 
 # Install curl
 RUN apk --no-cache add curl
 
-# Create app directory
-WORKDIR /usr/src/app/
+# Bundle the NGINX config files
+COPY webproxy/conf.d /etc/nginx/conf.d
 
-# Install serve to serve the files
-RUN npm install -g serve
+# Create app directory
+WORKDIR /usr/src/app
 
 # Bundle app source from builder
 COPY --from=builder /usr/src/app/build ./build
 
 # Port
-EXPOSE 3000
+EXPOSE 80
 
 # Start command
-CMD ["serve", "-s", "build", "-l", "3000"]
+#CMD ["serve", "-s", "build", "-l", "3000"]
 
 # Health Check
-HEALTHCHECK --interval=15s --timeout=3s \
-  CMD curl -f http://localhost:3000 || exit 1
+HEALTHCHECK --interval=15s --timeout=3s CMD curl -f http://localhost || exit 1
