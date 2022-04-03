@@ -37,12 +37,13 @@ jobs:
         with:
           context: "{{defaultContext}}:PollBuddy-Server/backend"
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
 
       - name: Build and push frontend
         uses: docker/build-push-action@v2
         with:
           context: "{{defaultContext}}:PollBuddy-Server/frontend"
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
