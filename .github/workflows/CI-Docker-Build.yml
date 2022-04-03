@@ -37,7 +37,9 @@ jobs:
         with:
           context: "{{defaultContext}}:PollBuddy-Server/backend"
           push: true
-          tags: ${{ steps.metadata.outputs.tags }}
+          tags: |
+            pollbuddy/backend 
+            ${{ steps.metadata.outputs.tags }}
           labels: ${{ steps.metadata.outputs.labels }}
 
       - name: Build and push frontend
