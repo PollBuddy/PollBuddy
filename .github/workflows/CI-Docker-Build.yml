@@ -23,7 +23,7 @@ jobs:
         id: metadata
         uses: docker/metadata-action@v3
         with:
-          images: pollbuddy/pollbuddy
+          images: pollbuddy/frontend
           tags: |
             type=ref,event=branch
             type=sha
