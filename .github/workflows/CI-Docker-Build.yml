@@ -20,12 +20,12 @@ jobs:
       - name: Build and push backend
         uses: docker/build-push-action@v2
         with:
-          context: "{{defaultContext}}:PollBuddy-Server/backend"
+          context: "${{defaultContext}}:PollBuddy-Server/backend"
           push: true
           tags: "pollbuddy/backend:{{GITHUB_SHA}}"
       - name: Build and push frontend
         uses: docker/build-push-action@v2
         with:
-          context: "{{defaultContext}}:PollBuddy-Server/frontend"
+          context: "${{defaultContext}}:PollBuddy-Server/frontend"
           push: true
           tags: "pollbuddy/frontend:{{GITHUB_SHA}}"
