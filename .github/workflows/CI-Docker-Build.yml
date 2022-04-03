@@ -32,15 +32,15 @@ jobs:
             type=sha,format=long,prefix={{branch}}-
           # type=raw,value=latest
 
-        - name: Extract metadata (tags, labels) for Docker (frontend)
-          id: metadata-frontend
-          uses: docker/metadata-action@v3
-          with:
-            images: pollbuddy/frontend
-            tags: |
-              type=ref,event=branch
-              type=sha,format=long,suffix=-{{branch}}
-            # type=raw,value=latest
+      - name: Extract metadata (tags, labels) for Docker (frontend)
+        id: metadata-frontend
+        uses: docker/metadata-action@v3
+        with:
+          images: pollbuddy/frontend
+          tags: |
+            type=ref,event=branch
+            type=sha,format=long,suffix=-{{branch}}
+          # type=raw,value=latest
 
       - name: Build and push backend
         uses: docker/build-push-action@v2
