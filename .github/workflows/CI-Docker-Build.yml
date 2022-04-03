@@ -19,8 +19,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: metadata
+      - name: Extract metadata (tags, labels) for Docker (backend)
+        id: metadata-backend
         uses: docker/metadata-action@v3
         with:
           images: pollbuddy/frontend
@@ -32,20 +32,28 @@ jobs:
             type=sha,format=long,prefix={{branch}}-
           # type=raw,value=latest
 
+        - name: Extract metadata (tags, labels) for Docker (frontend)
+          id: metadata-frontend
+          uses: docker/metadata-action@v3
+          with:
+            images: pollbuddy/frontend
+            tags: |
+              type=ref,event=branch
+              type=sha,format=long,suffix=-{{branch}}
+            # type=raw,value=latest
+
       - name: Build and push backend
         uses: docker/build-push-action@v2
         with:
           context: "{{defaultContext}}:PollBuddy-Server/backend"
           push: true
-          tags: |
-            pollbuddy/backend 
-            ${{ steps.metadata.outputs.tags }}
-          labels: ${{ steps.metadata.outputs.labels }}
+          tags: ${{ steps.metadata-backend.outputs.tags }}
+          labels: ${{ steps.metadata-backend.outputs.labels }}
 
       - name: Build and push frontend
         uses: docker/build-push-action@v2
         with:
           context: "{{defaultContext}}:PollBuddy-Server/frontend"
           push: true
-          tags: ${{ steps.metadata.outputs.tags }}
-          labels: ${{ steps.metadata.outputs.labels }}
+          tags: ${{ steps.metadata-frontend.outputs.tags }}
+          labels: ${{ steps.metadata-frontend.outputs.labels }}
