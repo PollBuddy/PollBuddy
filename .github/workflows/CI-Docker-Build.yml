@@ -37,9 +37,7 @@ jobs:
         with:
           context: "{{defaultContext}}:PollBuddy-Server/backend"
           push: true
-          tags: |
-            pollbuddy/backend
-            ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Build and push frontend
@@ -47,6 +45,4 @@ jobs:
         with:
           context: "{{defaultContext}}:PollBuddy-Server/frontend"
           push: true
-          ttags: |
-            pollbuddy/frontend
-            ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}
