@@ -456,23 +456,23 @@ describe("/api/polls/:pollID/editQuestion", () => {
     session = { userData: { userID: user.insertedId } };
 
     await app.post("/api/polls/" + poll.insertedId + "/editQuestion")
-        .send({
-          id: poll.insertedId.Questions[0]._id,
-          text: "sample.question2",
-          answers: [{ text: "sample.answer", correct: true }, { text: "sample.answer2", correct: false }],
-          maxAllowedChoices: 1,
-        })
-        .expect(200)
-        .then(async (response) => {
-          expect(response.body.result).toBe("success");
-          let questionRes = await mongoConnection.getDB().collection("polls").findOne({
-            "_id": poll.insertedId,
-            "Questions._id": poll.insertedId.Questions[0]._id,
-          });
-          expect(questionRes.text).toEqual(samplequestion2.text);
-          expect(questionRes.answers).toEqual(samplequestion2.answers);
-          expect(questionRes.maxAllowedChoices).toEqual(samplequestion2.maxAllowedChoices);
+      .send({
+        id: poll.insertedId.Questions[0]._id,
+        text: "sample.question2",
+        answers: [{ text: "sample.answer", correct: true }, { text: "sample.answer2", correct: false }],
+        maxAllowedChoices: 1,
+      })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        let questionRes = await mongoConnection.getDB().collection("polls").findOne({
+          "_id": poll.insertedId,
+          "Questions._id": poll.insertedId.Questions[0]._id,
         });
+        expect(questionRes.text).toEqual(samplequestion2.text);
+        expect(questionRes.answers).toEqual(samplequestion2.answers);
+        expect(questionRes.maxAllowedChoices).toEqual(samplequestion2.maxAllowedChoices);
+      });
   });
 
   it("POST: edit question as non-admin/pollcreator, failure", async () => {
