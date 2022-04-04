@@ -2,7 +2,7 @@ const {createModel} = require("../modules/utils.js");
 const {userSchema} = require("../models/User.js");
 const mongoConnection = require("../modules/mongoConnection.js");
 const {groupSchema} = require("../models/Group.js");
-const {pollSchema} = require("../models/Poll");
+const {pollSchema, questionSchema} = require("../models/Poll");
 
 const testGroup = {
   Name: "test.group",
@@ -48,7 +48,6 @@ let testUser2 = {
 };
 
 const sampleQuestion = {
-  _id: new bson.ObjectID(),
   Text: "sample.question",
   Answers: [{ Text: "sample.answer", Correct: true }],
   MaxAllowedChoices: 1,
@@ -123,7 +122,7 @@ let createPoll = async function(update) {
   return pollInsert;
 };
 
-let createPollWithQuestion = async function(update) {
+let createPollWithQuestion = async function(update, questionid) {
   let pollData = {
     Title: testPoll.Title,
     Description: testPoll.Description,
@@ -135,6 +134,8 @@ let createPollWithQuestion = async function(update) {
       pollData[key] = value;
     }
   }
+
+  pollData[Questions]._id = questionid;
 
   let poll = createModel(pollSchema, pollData);
   let pollInsert = await mongoConnection.getDB().collection("polls").insertOne(poll);

@@ -8,7 +8,7 @@ const MongoClient = mongo.MongoClient;
 var mongoConnection = require("../modules/mongoConnection.js");
 var pollsRouter = require("./polls");
 
-var { testUser, testUser2, testGroup, createUser, createGroup } = require("../modules/testingUtils.js");
+var { testUser, testUser2, testGroup, createUser, createGroup, createPollWithQuestion } = require("../modules/testingUtils.js");
 const {createPoll, testPoll, testPoll2} = require("../modules/testingUtils");
 const bson = require("bson");
 
@@ -430,29 +430,29 @@ describe("/api/polls/:pollID/editQuestion", () => {
     session = { userData: { userID: user.insertedId } };
 
     await app.post("/api/polls/" + poll.insertedId + "/editQuestion")
-    .send({
-      id: poll.insertedId.Questions[0]._id,
-      text: "sample.question2",
-      answers: [{ text: "sample.answer", correct: true }, { text: "sample.answer2", correct: false }],
-      maxAllowedChoices: 1,
-    })
-    .expect(200)
-    .then(async (response) => {
-      expect(response.body.result).toBe("success");
-      let questionRes = await mongoConnection.getDB().collection("polls").findOne({
-        "_id": poll.insertedId,
-        "Questions._id": poll.insertedId.Questions[0]._id,
+      .send({
+        id: poll.insertedId.Questions[0]._id,
+        text: "sample.question2",
+        answers: [{ text: "sample.answer", correct: true }, { text: "sample.answer2", correct: false }],
+        maxAllowedChoices: 1,
+      })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        let questionRes = await mongoConnection.getDB().collection("polls").findOne({
+          "_id": poll.insertedId,
+          "Questions._id": poll.insertedId.Questions[0]._id,
+        });
+        expect(questionRes.text).toEqual(samplequestion2.text);
+        expect(questionRes.answers).toEqual(samplequestion2.answers);
+        expect(questionRes.maxAllowedChoices).toEqual(samplequestion2.maxAllowedChoices);
       });
-      expect(questionRes.text).toEqual(samplequestion2.text);
-      expect(questionRes.answers).toEqual(samplequestion2.answers);
-      expect(questionRes.maxAllowedChoices).toEqual(samplequestion2.maxAllowedChoices);
-    });
   });
 
   
   it("POST: edit question as poll creator", async () => {
     let user = await createUser();
-    let poll = await createPollWithQuestion({ Creator: user.insertedId });
+    let poll = await createPollWithQuestion({ Creator: user.insertedId }, new bson.ObjectID());
     session = { userData: { userID: user.insertedId } };
 
     await app.post("/api/polls/" + poll.insertedId + "/editQuestion")
