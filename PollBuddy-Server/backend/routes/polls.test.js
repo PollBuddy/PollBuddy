@@ -413,3 +413,77 @@ describe("/api/polls/:pollID/createQuestion", () => {
   });
 
 });
+
+describe("/api/polls/:pollID/editQuestion", () => {
+  it("GET: route unavailable", async () => {
+    await app.get("/api/polls/0/editQuestion")
+      .expect(405)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("POST: edit question as admin", async () => {
+    let user = await createUser();
+    let group = await createGroup({ Admins: [ user.insertedId ] });
+    let poll = await createPollWithQuestion({ Group: group.insertedId});
+    session = { userData: { userID: user.insertedId } };
+
+    await app.post("/api/polls/" + poll.insertedId + "/editQuestion")
+    .send({
+      id: poll.insertedId.Questions[0]._id,
+      text: "sample.question2",
+      answers: [{ text: "sample.answer", correct: true }, { text: "sample.answer2", correct: false }],
+      maxAllowedChoices: 1,
+    })
+    .expect(200)
+    .then(async (response) => {
+      expect(response.body.result).toBe("success");
+      let questionRes = await mongoConnection.getDB().collection("polls").findOne({
+        "_id": poll.insertedId,
+        "Questions._id": poll.insertedId.Questions[0]._id,
+      });
+      expect(questionRes.text).toEqual(samplequestion2.text);
+      expect(questionRes.answers).toEqual(samplequestion2.answers);
+      expect(questionRes.maxAllowedChoices).toEqual(samplequestion2.maxAllowedChoices);
+    });
+  });
+
+  
+  it("POST: edit question as poll creator", async () => {
+    let user = await createUser();
+    let poll = await createPollWithQuestion({ Creator: user.insertedId });
+    session = { userData: { userID: user.insertedId } };
+
+    await app.post("/api/polls/" + poll.insertedId + "/editQuestion")
+    .send({
+      id: poll.insertedId.Questions[0]._id,
+      text: "sample.question2",
+      answers: [{ text: "sample.answer", correct: true }, { text: "sample.answer2", correct: false }],
+      maxAllowedChoices: 1,
+    })
+    .expect(200)
+    .then(async (response) => {
+      expect(response.body.result).toBe("success");
+      let questionRes = await mongoConnection.getDB().collection("polls").findOne({
+        "_id": poll.insertedId,
+        "Questions._id": poll.insertedId.Questions[0]._id,
+      });
+      expect(questionRes.text).toEqual(samplequestion2.text);
+      expect(questionRes.answers).toEqual(samplequestion2.answers);
+      expect(questionRes.maxAllowedChoices).toEqual(samplequestion2.maxAllowedChoices);
+    });
+  });
+
+  it("POST: edit question as non-admin/pollcreator, failure", async () => {
+    let user = await createUser();
+    let group = await createGroup({ Members: [ user.insertedId ] });
+    let poll = await createPoll({ Group: group.insertedId});
+    session = { userData: { userID: user.insertedId } };
+    await app.post("/api/polls/" + poll.insertedId + "/editQuestion")
+      .expect(403)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });  
+});

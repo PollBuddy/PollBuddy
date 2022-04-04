@@ -48,8 +48,15 @@ let testUser2 = {
 };
 
 const sampleQuestion = {
+  _id: new bson.ObjectID(),
   Text: "sample.question",
   Answers: [{ Text: "sample.answer", Correct: true }],
+  MaxAllowedChoices: 1,
+};
+
+const sampleQuestion2 = {
+  Text: "sample.question2",
+  Answers: [{ Text: "sample.answer", Correct: true }, { Text: "sample.answer2", Correct: false }],
   MaxAllowedChoices: 1,
 };
 
@@ -116,6 +123,41 @@ let createPoll = async function(update) {
   return pollInsert;
 };
 
+let createPollWithQuestion = async function(update) {
+  let pollData = {
+    Title: testPoll.Title,
+    Description: testPoll.Description,
+    Questions: [sampleQuestion],
+  };
+
+  if (update) {
+    for (let [key, value] of Object.entries(update)) {
+      pollData[key] = value;
+    }
+  }
+
+  let poll = createModel(pollSchema, pollData);
+  let pollInsert = await mongoConnection.getDB().collection("polls").insertOne(poll);
+
+  let question = createModel(questionSchema, sampleQuestion);
+  await mongoConnection.getDB().collection("polls").updateOne(
+    { _id: poll._id },
+    { "$addToSet": {
+      "Questions": question,
+    }}
+  );
+
+  if (poll.Group) {
+    await mongoConnection.getDB().collection("groups").updateOne(
+      { _id: poll.Group, },
+      {"$addToSet": {
+        "Polls": pollInsert.insertedId,
+      }}
+    );
+  }
+  return pollInsert;
+};
+
 module.exports = {
   testUser,
   testUser2,
@@ -123,7 +165,10 @@ module.exports = {
   testGroup2,
   testPoll,
   testPoll2,
+  sampleQuestion,
+  sampleQuestion2,
   createUser,
   createGroup,
-  createPoll
+  createPoll,
+  createPollWithQuestion,
 };
