@@ -135,7 +135,7 @@ let createPollWithQuestion = async function(update, questionid) {
     }
   }
 
-  pollData[Questions]._id = questionid;
+  pollData.Questions[0]._id = questionid;
 
   let poll = createModel(pollSchema, pollData);
   let pollInsert = await mongoConnection.getDB().collection("polls").insertOne(poll);
