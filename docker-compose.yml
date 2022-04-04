@@ -24,13 +24,13 @@ services:
     networks:
       - backend
 
-  grafana:
+  reporting:
     build: PollBuddy-Server/reporting/grafana
     restart: unless-stopped
     networks:
       - logging
 
-  influxdb:
+  reporting-db:
     build: PollBuddy-Server/reporting/influxdb
     restart: unless-stopped
     volumes:
