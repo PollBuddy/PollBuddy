@@ -156,29 +156,14 @@ describe("/api/polls/:id/results", () => {
       .expect(405)
       .then((response) => {
         expect(response.body.result).toBe("failure");
-      })
+      });
   });
 
   it("GET: results success", async () => {
-    //let user = await createUser();
-    //let group = await createGroup({ Admins: [ user.insertedId ] });
-    //let poll = await createPoll({ Group: group.insertedId });
-    //session = { userData: { userID: user.insertedId } };
-
     let user = await createUser();
+    let poll = await createPoll({ Creator: user.insertedId });
     session = { userData: { userID: user.insertedId } };
-    await app.post("/api/polls/new")
-      .send({
-        title: testPoll.Title,
-        description: testPoll.Description,
-      })
-      .expect(200)
-      .then(async (response) => {
-        expect(response.body.result).toBe("success");
-        poll_id = response.body.data.id;
-        console.log(response.body.data)
-
-    await app.post("/api/polls/" + poll_id + "/createQuestion")
+    await app.post("/api/polls/" + poll.insertedId + "/createQuestion")
       .send({
         text: "sample.question",
         answers: [{ text: "sample.answer", correct: true }],
@@ -188,21 +173,27 @@ describe("/api/polls/:id/results", () => {
       .then(async (response) => {
         expect(response.body.result).toBe("success");
         let questionRes = await mongoConnection.getDB().collection("polls").findOne({
-          "_id": poll_id,
+          "_id": poll.insertedId,
           "Questions._id": new bson.ObjectID(response.body.data.id),
         });
-        console.log(questionRes)
-        //expect(questionRes).not.toBeNull();
+        expect(questionRes).not.toBeNull();
 
-        await app.get("/api/polls/" + poll_id + "/results")
+        await app.post("/api/polls/" + poll.insertedId + "/submitQuestion")
+          .send({
+            id: questionRes.Questions[0]._id,
+            answers: [{answer: true}]
+          })
           .expect(200)
           .then(async (response) => {
-            expect(response.body.result).toBe("success");
-            expect(response.body.data.title).toBe(testPoll.Title);
-            expect(response.body.data.description).toBe(testPoll.Description);
+            await app.get("/api/polls/" + poll.insertedId + "/results")
+              .expect(200)
+              .then(async (response) => {
+                expect(response.body.result).toBe("success");
+                expect(response.body.data.title).toBe(testPoll.Title);
+                expect(response.body.data.description).toBe(testPoll.Description);
+              });
           });
       });
-    });
   });
 });
 
