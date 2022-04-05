@@ -24,16 +24,14 @@ export default class RegisterWithSchool extends Component {
 
   handleSubmit(){
     if(!(this.state.value in this.state.schoolInfo.schoolLinkDict)) {
-      this.setState({errorText: "Invalid school"})
-    }
-    else {
+      this.setState({errorText: "Invalid school"});
+    } else {
       window.location.replace("/api/users/register/" + this.state.schoolInfo.schoolLinkDict[this.state.value]);
     }
   }
 
   render() {
-    if(!this.state.doneLoading)
-    {
+    if(!this.state.doneLoading) {
       return(
         <MDBContainer className="page">
 
@@ -42,18 +40,15 @@ export default class RegisterWithSchool extends Component {
             onChange={e => this.setState({ value: e.target.value })}
             onSelect={value => this.setState({ value })}
             onDoneLoading={(schoolInfo) => {
-                this.setState({"doneLoading": true, "schoolInfo": schoolInfo})
-              }
+              this.setState({"doneLoading": true, "schoolInfo": schoolInfo});
+            }
             }
           />
 
           <LoadingWheel/>
         </MDBContainer>
       );
-    }
-
-    else
-    {
+    } else {
       return (
         <MDBContainer fluid className="page">
           <MDBContainer fluid className="box">

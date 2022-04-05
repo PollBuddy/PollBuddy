@@ -35,8 +35,8 @@ export default class SchoolPicker extends Component {
             schools.push({ key: i, label: data[i][0] });
             schoolLinkDict[data[i][0]] = data[i][1];
           }
-        this.setState({"schoolInfo": {"schools": schools, "schoolLinkDict": schoolLinkDict}})
-        this.props.onDoneLoading(this.state.schoolInfo);
+          this.setState({"schoolInfo": {"schools": schools, "schoolLinkDict": schoolLinkDict}}); //missing semicolon
+          this.props.onDoneLoading(this.state.schoolInfo);
       });
     } else {
       // Get info that was passed in
@@ -64,7 +64,7 @@ export default class SchoolPicker extends Component {
   }
 
   render() {
-     return (
+    return (
       <MDBContainer className="form-group">
         <Autocomplete
           items={this.state.schoolInfo.schools}

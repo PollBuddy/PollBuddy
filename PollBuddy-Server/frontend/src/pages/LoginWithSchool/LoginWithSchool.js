@@ -36,16 +36,16 @@ export default class LoginWithSchool extends Component {
       return (
         <MDBContainer fluid className="page">
 
-        <SchoolPicker
-          value={this.state.value}
-          onChange={e => this.setState({ value: e.target.value })}
-          onSelect={value => this.setState({ value })}
-          onDoneLoading={(schoolInfo) => {
-                this.setState({"doneLoading": true, "schoolInfo": schoolInfo})
-              }
+          <SchoolPicker
+            value={this.state.value}
+            onChange={e => this.setState({ value: e.target.value })}
+            onSelect={value => this.setState({ value })}
+            onDoneLoading={(schoolInfo) => {
+              this.setState({"doneLoading": true, "schoolInfo": schoolInfo});
             }
-        />
-        <LoadingWheel/>
+           }
+          />
+          <LoadingWheel/>
 
         </MDBContainer>
       );
@@ -68,9 +68,9 @@ export default class LoginWithSchool extends Component {
               onChange={e => this.setState({ value: e.target.value })}
               onSelect={value => this.setState({ value })}
               onDoneLoading={(schoolInfo) => {
-                    this.setState({"doneLoading": true, "schoolInfo": schoolInfo})
-                  }
-                }
+                this.setState({"doneLoading": true, "schoolInfo": schoolInfo});
+              }
+              }
             />
             
             <p> {this.state.errorText} </p>
