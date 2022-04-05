@@ -25,16 +25,14 @@ export default class LoginWithSchool extends Component {
   handleSubmit() {
     if(!(this.state.value in this.state.schoolInfo.schoolLinkDict)) {
       this.setState({errorText: "Invalid school"});
-    }
-    else {
+    } else {
       window.location.replace("/api/users/login/" + this.state.schoolInfo.schoolLinkDict[this.state.value]);
     }
   }
 
   render() {
 
-    if(!this.state.doneLoading)
-    {
+    if(!this.state.doneLoading) {
       return (
         <MDBContainer fluid className="page">
 
@@ -51,10 +49,7 @@ export default class LoginWithSchool extends Component {
 
         </MDBContainer>
       );
-    }
-
-    else
-    {
+    } else {
       return (
         <MDBContainer fluid className="page">
           <MDBContainer fluid className="box">
