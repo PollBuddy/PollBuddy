@@ -10,6 +10,8 @@ const { createResponse, validateID, isEmpty, getResultErrors, createModel, isLog
 const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups, createUser, editUser, userParamsValidator } = require("../models/User.js");
 const {paramValidator} = require("../modules/validatorUtils");
 
+const {send} = require("../modules/email.js")
+
 // This file handles /api/users URLs
 
 /**
@@ -750,7 +752,21 @@ router.post("/forgotpassword/submit/",function (req,res) {
             if (err) {
               return res.status(500).send(createResponse(err,"could not update user"));
             } else {
-              return res.status(200).send(createResponse());
+              var emailBody = 
+              "Hello, " + result.UserName + "\n"
+              +"\n You are recieving this email because a password reset request was sent to this account"
+              +"\n\n if you requested a password reset follow the link below:"
+              +"\n  " + process.env.FRONTEND_URL + "/login/reset"
+              +"\n your password reset token is: " + key
+              +"\n\n if you did not make a password reset request, you can safely ignore this message\n\n"
+              
+              send(result.Email,"PollBuddy Password Reset",emailBody,function (success,messages) {
+                if (success){
+                  return res.status(200).send(createResponse());
+                }else{
+                  return res.status(500).send(createResponse(messages,"could not send email"));
+                }
+              })
             }
           })
         }
