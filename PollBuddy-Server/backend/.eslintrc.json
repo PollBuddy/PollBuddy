@@ -1,9 +1,10 @@
 {
-  "extends": ["eslint:recommended"],
+  "extends": ["eslint:recommended", "plugin:jest/recommended"],
   "parserOptions": { "ecmaVersion": 2019 },
   "env": {
     "es6": true,
-    "node": true
+    "node": true,
+    "jest/globals": true
   },
   "rules": {
     "no-unused-vars": [
@@ -14,7 +15,8 @@
       }],
     "indent": [
       "error",
-      2
+      2,
+      { "SwitchCase": 1 }
     ],
     "quotes": [
       "warn",
@@ -44,6 +46,7 @@
     "no-unmodified-loop-condition": "warn",
     "no-shadow": "warn",
     "no-duplicate-imports": "error",
-    "camelcase": "warn"
+    "camelcase": "warn",
+    "no-var": "warn"
   }
 }

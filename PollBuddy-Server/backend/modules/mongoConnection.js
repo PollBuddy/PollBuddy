@@ -1,8 +1,8 @@
 const mongo = require("mongodb");
 const MongoClient = mongo.MongoClient;
 
-var client;
-var db;
+let client;
+let db;
 
 // This function is used to create the indexes in the database. These help increase performance and ensure certain
 // attributes are unique. This will run on every DB connect, but it should silently do nothing if the indexes
@@ -61,6 +61,7 @@ async function createIndexes() {
 }
 
 module.exports = {
+  //Todo: Use Async/Await
   connect: function(callback) {
 
     con();
@@ -77,17 +78,26 @@ module.exports = {
           db = client.db(process.env.DB_NAME);
           console.log("Database connected");
 
-          createIndexes();
-          callback(true);
+          createIndexes().then(function() {
+            callback(true);
+          });
         }
       });
-
     }
   },
   disconnect: function(callback) {
     client.close(function() {
       callback(true);
     });
+  },
+  setClient: function(_client) {
+    client = _client;
+  },
+  getClient: function() {
+    return client;
+  },
+  setDB: function(_db){
+    db = _db;
   },
   getDB: function(){
     return db;
@@ -97,7 +107,7 @@ module.exports = {
   },
   validateID: function(ID, type){
     //check for valid type
-    if(type == "groups" || type == "polls" || type == "users") {
+    if(type === "groups" || type === "polls" || type === "users") {
       //find ID object, stopping after the first one found to preserve time
       if(db.collection(type).countDocuments({"_id": ID}, {limit: 1}) > 0 ) {
         return true;

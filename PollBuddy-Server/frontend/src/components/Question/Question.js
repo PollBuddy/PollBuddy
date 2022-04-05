@@ -6,20 +6,13 @@ import {
 } from "mdbreact";
 
 import Countdown, { zeroPad } from "react-countdown";
-import {Redirect} from "react-router-dom";
-
+import {Navigate} from "react-router-dom";
 
 export default class Question extends Component {
   choiceOrder;
   questionStartTime;
   constructor(props) {
     super(props);
-    //binding helper functions
-    this.deselectChoice = this.deselectChoice.bind(this);
-    this.selectChoice = this.selectChoice.bind(this);
-    this.getChoiceLabel = this.getChoiceLabel.bind(this);
-    this.onTimeEnd = this.onTimeEnd.bind(this);
-    this.submitAnswers = this.submitAnswers.bind(this);
 
     this.choiceOrder = [
       "A",
@@ -49,136 +42,65 @@ export default class Question extends Component {
       "Y",
       "Z",
     ];
-
     this.questionStartTime = Date.now();
-
-    //get props
-    let data = props.questionObj;
-
-    // Store ID for answer submission
-    let id = data.PollID;
-
-    // TODO: Update so that this can handle multiple questions, or do it in PollViewer.js
-    // Manual override is below
-    console.log("data");
-    console.log(data);
-    data = data.Questions[0];
-
-    //set up an array of booleans (representing the student's answer choices)
-    //and initialize it to all false
-    let tempArray = [];
-    for (let i = 0; i < data.AnswerChoices.length; i++) {
-      tempArray.push(false);
-    }
-    let tempQueue = [];
-    //add the data and the array to state
+    let question = props.data.question;
     this.state = {
-      data: data,
-      studentChoices: tempArray,
-      choicesQueue: tempQueue,
-      canChoose: true,
-      PollID: id
+      pollID: props.data.pollID,
+      questionNumber: props.data.questionNumber,
+      question: question,
+      currentAnswers: question.currentAnswers || [],
     };
   }
 
-  deselectChoice(index) {
-    if(!this.state.canChoose){
-      return;
-    }
-    //set the boolean in the array at the selected index to false
-    //remove it from the queue and update state
-    let tempChoices = this.state.studentChoices;
-    tempChoices[index] = false;
-    //remove the index from teh queue
-    for(let i = 0; i < this.state.choicesQueue.length; i++){
-      if(this.state.choicesQueue[i] === index){
-        this.state.choicesQueue.splice(i, 1);
-        break;
+  // onTimeEnd(){
+  //   this.state.canChoose = false;
+  //   //TODO send answers to backend
+  //   //TODO move on to next question (probably should be handled in a callback prop)
+  // }
+
+  isAnswerSelected = (answerID) => {
+    let i = this.state.currentAnswers.indexOf(answerID);
+    return i >= 0;
+  };
+
+  selectAnswer = (answerID) => {
+    let currentAnswers = [...this.state.currentAnswers];
+    let i = currentAnswers.indexOf(answerID);
+    if (i >= 0) {
+      currentAnswers.splice(i, 1);
+    } else {
+      currentAnswers.push(answerID);
+      if (currentAnswers.length > this.state.question.maxAllowedChoices) {
+        currentAnswers.shift();
       }
     }
-    this.setState(prevState => ({
-      ...prevState,
-      studentChoices: tempChoices,
-      // choicesQueue: tempQueue,
-    }
-    )
-    );
-  }
+    this.props.updateQuestion(currentAnswers);
+    this.setState({
+      currentAnswers: currentAnswers,
+    });
+  };
 
-  selectChoice(index) {
-    if(!this.state.canChoose){
-      return;
-    }
-    let tempChoices = this.state.studentChoices;
-    let count = 0;
-    //push the index to the queue
-    this.state.choicesQueue.push(index);
-    //count the number of booleans that are true in the array
-    for (let i = 0; i < this.state.studentChoices.length; i++) {
-      if (this.state.studentChoices[i]) {
-        count++;
-      }
-    }
-    //if the number of true booleans is greater than the maximum number of
-    //allowed choices (specified by the json) then pop from the queue to set the first
-    //choice chosen back to false
-    if (count >= this.state.data.MaxAllowedChoices) {
-      this.state.studentChoices[this.state.choicesQueue.shift()] = false;
-    }
-    //make the boolean at the selected index true and update state
-    tempChoices[index] = true;
-    this.setState(prevState => ({
-      ...prevState,
-      studentChoices: tempChoices,
-    }));
-  }
+  getSubmitData = () => {
+    return {
+      id: this.state.question.id,
+      answers: this.state.currentAnswers,
+    };
+  };
 
-  //return the correct label to go in the choice bubble based on the index of the choice
-  getChoiceLabel(index){
-    //if the index is between 0 and 25, simply return the proper letter
-    if(index < this.choiceOrder.length){
-      return this.choiceOrder[index];
-    }
-    //if the index is greater than 25, return a combination of letters (ex. AA, BB, etc)
-    let repititions = Math.floor(index / 26) + 1;
-    let charIndex = index % 26;
-    let str = "";
-    for(let i = 0; i < repititions; i++){
-      str += this.choiceOrder[charIndex];
-    }
-    return str;
-  }
-
-  onTimeEnd(){
-    this.state.canChoose = false;
-    //TODO send answers to backend
-    //TODO move on to next question (probably should be handled in a callback prop)
-  }
-
-  submitAnswers = () => {
-    // Build submission
-    // TODO: This will need to be formatted better in the future but it's fine for the demo
-    let submission = { "Answers": [ { "QuestionNumber": 1} ]};
-    console.log(this.state.studentChoices);
-    console.log(this.state.choicesQueue);
-    submission.Answers[0].Answer = this.state.data.AnswerChoices[this.state.choicesQueue[0]];
-    console.log(submission);
-
-    // Submit
-    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.PollID + "/submit", {
+  submitQuestion = async () => {
+    await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/submitQuestion/", {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(submission)
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(this.getSubmitData())
     })
-      .then(response => response.text())
+      .then(response => response.json())
       .then(response => {
-        console.log("Server response to submission: " + response);
-        this.setState({successfulSubmission: true});
+        console.log(response);
       });
+    this.props.nextQuestion();
   };
 
   render() {
-    console.log(this.state.choicesQueue);
     const clockFormat = ({ minutes, seconds, completed }) => {
 
       if (completed) {
@@ -190,61 +112,81 @@ export default class Question extends Component {
       }
     };
 
-    if(this.state.successfulSubmission) {
-      return (
-        <Redirect to={"/polls/" + this.state.PollID + "/results"} push={true} />
-      );
-    }
-
+    // if(this.state.successfulSubmission) {
+    //   return (
+    //     <Navigate to={"/polls/" + this.state.PollID + "/results"} push={true} />
+    //   );
+    // }
+    console.log("Heu");
     return (
       <MDBContainer className="box">
-        <p className="question-num">Question {this.state.data.QuestionNumber}</p>
-        <span className={"question-title"}>{this.state.data.QuestionText}</span>
+        <p className="fontSizeLarge">Question {this.state.questionNumber}: {this.state.question.text}</p>
         { // only display image if there is one
-          this.state.data.img &&
+          this.state.question.img &&
           <img
             className="question-img-fluid"
             src={this.state.data.img}
             alt={""}/>
         }
-        <MDBContainer style={{ width: '100%' }}>
-          {this.state.data.AnswerChoices.map((choice, index) => {
-
-            if (this.state.studentChoices[index]) {
-              return (
-                <btn className={"question-btn-and-text"} onClick={() => {
-                  return this.deselectChoice(index);
-                }}>
-                  <MDBContainer className="question-label-bubble question-label-bubble-active">
-                    {this.getChoiceLabel(index)}
-                  </MDBContainer>
-                  {choice}
-                </btn>
-              );
-            } else {
-              return (
-                <btn className={"question-btn-and-text"} onClick={() => {
-                  return this.selectChoice(index);
-                }}>
-                  <MDBContainer className="question-label-bubble question-label-bubble-inactive">
-                    {this.getChoiceLabel(index)}
-                  </MDBContainer>
-                  {choice}
-                </btn>
-              );
-            }
+        <MDBContainer>
+          {this.state.question.answers.map((answer, index) => {
+            return (
+              <btn className={"question-btn-and-text"} onClick={() => {
+                this.selectAnswer(answer.id);
+              }}>
+                <MDBContainer
+                  // className="question-label-bubble"
+                  className={
+                    this.isAnswerSelected(answer.id) ?
+                      "question-label-bubble question-label-bubble-active" :
+                      "question-label-bubble question-label-bubble-inactive"
+                  }
+                >
+                  {this.choiceOrder[index]}
+                </MDBContainer>
+                {answer.text}
+              </btn>
+            );
+            // if (this.state.studentChoices[index]) {
+            //   return (
+            //     <btn className={"question-btn-and-text"} onClick={() => {
+            //       return this.deselectChoice(index);
+            //     }}>
+            //       <MDBContainer className="question-label-bubble question-label-bubble-active">
+            //         {this.getChoiceLabel(index)}
+            //       </MDBContainer>
+            //       {choice}
+            //     </btn>
+            //   );
+            // } else {
+            //   return (
+            //     <btn className={"question-btn-and-text"} onClick={() => {
+            //       return this.selectChoice(index);
+            //     }}>
+            //       <MDBContainer className="question-label-bubble question-label-bubble-inactive">
+            //         {this.getChoiceLabel(index)}
+            //       </MDBContainer>
+            //       {choice}
+            //     </btn>
+            //   );
+            // }
           })}
         </MDBContainer>
-        <MDBContainer className="button time-info">
-          <MDBIcon far icon="clock" className="time-icon"/>
-          <Countdown
-            renderer={clockFormat}
-            date={this.questionStartTime + this.state.data.TimeLimit * 1000}
-            onComplete={this.onTimeEnd}
-          />
-        </MDBContainer>
+        {/*<MDBContainer className="button time-info">*/}
+        {/*  <MDBIcon far icon="clock" className="time-icon"/>*/}
+        {/*  <Countdown*/}
+        {/*    renderer={clockFormat}*/}
+        {/*    date={this.questionStartTime + this.state.data.TimeLimit * 1000}*/}
+        {/*    onComplete={this.onTimeEnd}*/}
+        {/*  />*/}
+        {/*</MDBContainer>*/}
         <MDBContainer>
-          <button className="button" onClick={this.submitAnswers}>Submit</button>
+          <button
+            className="button"
+            onClick={this.submitQuestion}
+          >
+            Save
+          </button>
         </MDBContainer>
       </MDBContainer>
     );

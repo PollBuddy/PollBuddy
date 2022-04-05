@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import { Link } from "react-router-dom";
 
 import SchoolPicker, {schoolLinkDict} from "../../components/SchoolPicker/SchoolPicker";
 
@@ -23,7 +22,7 @@ export default class RegisterWithSchool extends Component {
             Register with School
           </p>
           <p>
-            To create an account, enter your school name or login using RPI's CAS.
+            To create an account, select your school name.
           </p>
           <p>
             { /* TODO: Add label here */}

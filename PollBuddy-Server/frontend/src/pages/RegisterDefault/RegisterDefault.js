@@ -22,7 +22,7 @@ export default class RegisterDefault extends Component {
             <button className="button">Register with Poll Buddy</button>
           </Link>
           <Link to={"/register/school"}>
-            <button className="btn button">Register with School</button>
+            <button className="button">Register with School</button>
           </Link>
         </MDBContainer>
       </MDBContainer>

@@ -1,10 +1,12 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import {withRouter} from "react-router-dom";
+import {Navigate} from "react-router-dom";
+import "./RegisterWithPollBuddy.scss";
+
 const Joi = require('joi');
 
-class RegisterWithPollBuddy extends Component {
+export default class RegisterWithPollBuddy extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -19,7 +21,17 @@ class RegisterWithPollBuddy extends Component {
       passValid: true,
       firstnameValid: true,
       lastnameValid: true,
+      registrationSuccessful: false,
+      showPassword: false
     };
+
+    this.showPassword = this.showPassword.bind(this);
+  }
+
+  showPassword() {
+    this.setState({
+      showPassword: !this.state.showPassword
+    });
   }
 
   componentDidMount() {
@@ -30,26 +42,26 @@ class RegisterWithPollBuddy extends Component {
     // do input validation
     const schema = Joi.object({
       username: Joi.string()
-        .pattern(new RegExp('^(?=.{3,32}$)[a-zA-Z0-9\-._]+$'))
-        .error(new Error('Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.')),
+        .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$"))
+        .error(new Error("Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.")),
       email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2})
         .max(320)
-        .error(new Error('Invalid email format.')),
+        .error(new Error("Invalid email format.")),
       password: Joi.string()
-        .pattern(new RegExp('^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$'))
-        .pattern(new RegExp('^.*[0-9].*$'))
-        .pattern(new RegExp('^.*[A-Z].*$'))
-        .error(new Error('Invalid password. Must contain 10 or more characters, ' +
-          'at least 1 uppercase letter, and at least 1 number. ' +
-          'Cannot have 4 of the same characters in a row.')),
+        .pattern(new RegExp("^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$"))
+        .pattern(new RegExp("^.*[0-9].*$"))
+        .pattern(new RegExp("^.*[A-Z].*$"))
+        .error(new Error("Invalid password. Must contain 10 or more characters, " +
+          "at least 1 uppercase letter, and at least 1 number. " +
+          "Cannot have 4 of the same characters in a row.")),
       firstname: Joi.string()
         .min(1)
         .max(256)
-        .error(new Error('First name must be between 1 and 256 characters.')),
+        .error(new Error("First name must be between 1 and 256 characters.")),
       lastname: Joi.string()
-        .allow('')
+        .allow("")
         .max(256)
-        .error(new Error('Last name must be less than 256 characters.')),
+        .error(new Error("Last name must be less than 256 characters.")),
     });
 
     var userValid = schema.validate({ username: this.state.username });
@@ -83,33 +95,29 @@ class RegisterWithPollBuddy extends Component {
         email: this.state.email.toLowerCase(),
         password: this.state.password
       })
-    }).then(response => response.text())
-      .then(response => {
-        // the backend api (user/register) has three return values:
-        // 1. an error array: {firstname: "Invalid firstname format!", lastname: "Invalid lastname format!"}
-        // 2. a string: Exists, which means the email address has already been registered
-        // 3. status 203: everything is ok
-
-        // print and check the response for debugging (can be deleted later)
-        console.log(response);
-        if (response === "Exists") {
-          this.setState({emailExists: true});
-        } else {
-          try {
-            let result2 = JSON.parse(response);
-            console.log("You have following errors:");
-            console.log(result2);
-          } catch(e) {
-            localStorage.setItem("loggedIn", true);
-            // redirect to groups page
-            this.props.history.push("/groups");
-          } 
-        }
-      });
+    }).then(response => {
+      if (response.status === 200) {
+        //needs some authentication before and if authentication passes then set local storage and such refer to GroupCreation page to see the way to make POST requests to the backend
+        localStorage.setItem("loggedIn", "true");
+        this.setState({registrationSuccessful: true});
+        // TODO: firstName, lastName, and userName are returned. They should probably be stored.
+      } else {
+        // TODO: This needs to be handled
+      }
+    }).catch(err => {
+      console.log(err);
+      this.setState({error: "An error occurred during login. Please try again"});
+    });
   }
 
   render() {
     this.handleRegister = this.handleRegister.bind(this);
+
+    if(this.state.registrationSuccessful) {
+      return (
+        <Navigate to="/groups" />
+      );
+    }
 
     return (
       <MDBContainer fluid className="page">
@@ -149,8 +157,12 @@ class RegisterWithPollBuddy extends Component {
               <p style={{color: "red"}}> A user with this email already exists. </p>
             }
             <label htmlFor="passwordText">Password:</label>
-            <input type="password" placeholder="••••••••••••" className="form-control textBox" id="passwordText"
-              onChange= {(evt) => { this.setState({password: evt.target.value}); }}/>
+            <p class="password_container">
+              <input type={this.state.showPassword ? "text" : "password"} placeholder="••••••••••••" className="form-control textBox" id="passwordText"
+                onChange= {(evt) => { this.setState({password: evt.target.value}); }}/>
+              <i class="fas fa-eye" onClick={this.showPassword}></i>
+            </p>
+
             {this.state.passValid.error &&
               <p style={{color: "red"}}>{ this.state.passValid.error.toString() }</p>
             }
@@ -161,5 +173,3 @@ class RegisterWithPollBuddy extends Component {
     );
   }
 }
-
-export default withRouter(RegisterWithPollBuddy);

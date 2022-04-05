@@ -1,5 +1,6 @@
+const bson = require("bson");
 const mongoConnection = require("../modules/mongoConnection.js");
-
+const { httpCodes } = require("../modules/httpCodes.js");
 /**
  * Helper function for creating the specified http response (https://pollbuddy.app/api/users).
  * For sample usage see https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Overview#helper-functions
@@ -40,9 +41,18 @@ async function validateID(collection, id) {
   return null;
 }
 
-// check if user is logged in. returns true or false.
-function isLoggedIn(req) {
-  return req.session.userData && req.session.userData.userID;
+/**
+ * Convenience function to get the currently logged in user
+ * Dumps result into passed callback function
+ * @returns {void}
+ * @name getCurrentUser
+ * @param {req} req request object
+ * @param {callback} callback handler for (err,result) returned by database query
+ */
+function getCurrentUser(req,callback) {
+  mongoConnection.getDB().collection("users").findOne({ _id: bson.ObjectId(req.session.userData.userID) }, { projection: { Password: false } }, (err, result) => {
+    callback(err,result);
+  });
 }
 
 // Middleware to check if login is required for the poll.
@@ -72,10 +82,9 @@ async function checkPollPublic(req, res, next) {
   next();
 }
 
-
 // Checks if a JS object is empty or not. Returns true if so, false otherwise.
 function isEmpty(obj) {
-  for(var prop in obj) {
+  for(let prop in obj) {
     if(Object.prototype.hasOwnProperty.call(obj,prop)) {
       return false;
     }
@@ -83,10 +92,151 @@ function isEmpty(obj) {
   return JSON.stringify(obj) === JSON.stringify({});
 }
 
+/**
+ * @typedef {Predicate} - function from request object to either null or an error string
+ * returns null on success
+ * returns string containing error on failure
+ */
+
+
+/**
+ * predicate to check If user is logged in in the request
+ * @see {Predicate}
+ */
+function isLoggedIn(req) {
+  if(req.session.userData && req.session.userData.userID){
+    return null;
+  } else {
+    return httpCodes.Unauthorized("User is not logged in.");
+  }
+}
+
+/**
+ * Predicate to check if user is siteAdmin
+ * Also checks to make sure that the user is logged in
+ * @see {Predicate}
+ */
+function isSiteAdmin() {
+  return and([
+    isLoggedIn,
+    (req) => {
+      let userID = req.session.userData.userID;
+      let user = mongoConnection.getDB().collection("users").findOne({_id: userID});
+      if (user.SiteAdmin) {
+        return null;
+      } else {
+        return httpCodes.Unauthorized("User is not a site admin.");
+      }
+    }
+  ]);
+}
+
+/**
+ * predicate to check if the running image is in development mode
+ * @see {Predicate}
+ */
+function isDevelopmentMode() {
+  if(process.env.DEVELOPMENT_MODE === "true"){
+    return null;
+  } else {
+    return httpCodes.Forbidden("App is not running in development mode.");
+  }
+}
+
+/**
+ * elevates predicate to a middleware that runs it on the request
+ * if it returns null: allows execution to go to next middleware
+ * if it returns a msg: responds with this message and ends execution
+ * @param {Predicate} p - input predicate 
+ * @return {Middleware} - Middleware version of predicate
+ */
+function promote(p) {
+  return (req,res,next) => {
+    let response = p(req);
+    if(response === null){
+      next();
+    } else {
+      res.status(response.statusCode).send(response);
+    }
+  };
+}
+
+/**
+ * combines a list of predicates into a single predicate that succeeds on a given request if at least one of the input predicates succeed
+ * @param {Array} ps - list of predicates
+ * @return {Predicate} - composite predicate
+ */
+function or(ps) {
+  return (req) => {
+    let response = "empty or()";
+    for(let i = 0; i < ps.length ; i++){
+      // the first predicate that succeeds ends the testing 
+      response = ps[i](req);
+      if(response === null){
+        return null;
+      }
+    }
+    // if all predicates fail, return the last error
+    return response;
+  };
+}
+
+/**
+ * combines a list of predicates into a single predicate that succeeds on a given request iff all input predicates succeed
+ * @param {Array} ps - list of predicates
+ * @return {Predicate} - composite predicate
+ */
+function and(ps) {
+  return (req) => {
+    let response = "empty and()";
+    for(let i = 0; i < ps.length ; i++){
+      // the first predicate that fails ends the testing 
+      response = ps[i](req);
+      if(response !== null){
+        return response;
+      }
+    }
+    // if all predicates pass,
+    return null;
+  };
+}
+
+// TODO: Documentation
+function getResultErrors(result) {
+  let errors = {};
+  if (result.error) {
+    for (let i = 0; i < result.error.details.length; i++) {
+      if (result.error.details[i].context.key in result.value) {
+        errors[result.error.details[i].context.key] = true;
+      }
+    }
+  }
+  return errors;
+
+}
+
+function createModel(schema, data){
+  let model = Object.assign({}, schema);
+  for (let key of Object.keys(model)) {
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
+      model[key] = data[key];
+    }
+  }
+  return model;
+}
+
 module.exports = {
   createResponse,
   validateID,
-  isLoggedIn,
+  getCurrentUser,
   checkPollPublic,
-  isEmpty
+  isEmpty,
+  isLoggedIn,
+  isSiteAdmin,
+  isDevelopmentMode,
+  promote,
+  or,
+  and,
+  getResultErrors,
+  createModel
 };

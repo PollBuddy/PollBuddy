@@ -1,25 +1,29 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import {withRouter} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-const Joi = require('joi');
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
+const Joi = require("joi");
+
 
 class RegisterWithSchoolStep2 extends Component {
   constructor(props) {
     super(props);
 
     // Process args
-    if(this.props.location.search) {
+    // TODO: Some of this should probably be in a try/catch or something for robustness
+    if(this.props.router.location.search) {
       console.log("Getting things");
-      var firstName = new URLSearchParams(this.props.location.search).get("firstName");
+      var data = JSON.parse(new URLSearchParams(this.props.router.location.search).get("data"));
+      var firstName = data["firstName"];
       var firstNamePrefilled = true;
-      var lastName = new URLSearchParams(this.props.location.search).get("lastName");
+      var lastName = data["lastName"];
       var lastNamePrefilled = true;
-      var userName = new URLSearchParams(this.props.location.search).get("userName");
+      var userName = data["userName"];
       var userNamePrefilled = true;
-      var email = new URLSearchParams(this.props.location.search).get("email");
+      var email = data["email"];
       var emailPrefilled = true;
 
       if(firstName == null) { firstName = ""; firstNamePrefilled = false; }
@@ -58,18 +62,18 @@ class RegisterWithSchoolStep2 extends Component {
     // do input validation
     const schema = Joi.object({
       username: Joi.string()
-        .pattern(new RegExp('^(?=.{3,32}$)[a-zA-Z0-9\-._]+$'))
-        .error(new Error('Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.')),
+        .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$"))
+        .error(new Error("Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.")),
       email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2}).max(320)
-        .error(new Error('Invalid email format.')),
+        .error(new Error("Invalid email format.")),
       firstname: Joi.string()
         .min(1)
         .max(256)
-        .error(new Error('First name must be between 1 and 256 characters.')),
+        .error(new Error("First name must be between 1 and 256 characters.")),
       lastname: Joi.string()
-        .allow('')
+        .allow("")
         .max(256)
-        .error(new Error('Last name must be less than 256 characters.')),
+        .error(new Error("Last name must be less than 256 characters.")),
     });
     var userNameValid = schema.validate({ username: this.state.username });
     var emailValid = schema.validate({ email: this.state.email });
@@ -109,12 +113,13 @@ class RegisterWithSchoolStep2 extends Component {
         if (response != null) {
           if (response.result === "success") {
             // Save data about the user
-            localStorage.setItem("loggedIn", true);
+            localStorage.setItem("loggedIn", "true");
             localStorage.setItem("firstName", response.data.firstName);
             localStorage.setItem("lastName", response.data.lastName);
             localStorage.setItem("userName", response.data.userName);
-            // Redirect to groups page
-            this.props.history.push("/groups");
+
+            // Redirect to the groups page
+            return this.props.router.navigate("/groups", { replace: true });
           } else {
             // Something went wrong, handle it
 

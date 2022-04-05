@@ -7,6 +7,7 @@ node_modules
 
 # testing
 /coverage
+PollBuddy-Server/backend/coverage
 
 # production
 /build
@@ -27,3 +28,6 @@ yarn-error.log*
 .vs
 
 *~
+
+# Testing-related things
+PollBuddy-Server/backend/globalConfig.json

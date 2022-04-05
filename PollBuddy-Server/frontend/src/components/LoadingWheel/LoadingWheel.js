@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import "./LoadingWheel.scss";
-import { MDBContainer } from "mdbreact";
 
-export default class LoadingWheel extends Component{
-  render(){
+export default class LoadingWheel extends Component {
+  render() {
     return (
-      <MDBContainer className="LoadingWheel-loader"></MDBContainer>
+      <div className="Loading-Wheel">
+        <div/><div/><div/><div/>
+      </div>
     );
   }
 }

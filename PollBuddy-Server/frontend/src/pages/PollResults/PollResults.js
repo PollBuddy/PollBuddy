@@ -1,21 +1,26 @@
 import React, { Component } from "react";
 import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS } from 'chart.js/auto';
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
+import QuestionResults from "../../components/QuestionResults/QuestionResults";
+import "./PollResults.scss";
 
-export default class PollResults extends Component {
+class PollResults extends Component {
   constructor() {
     super();
     this.state = {
       error: null,
       doneLoading: false,
-      questionData: {},
-      correctAnswers: "",
+      questions: {},
+      currentQuestion: 0,
       dataBar: {
         labels: [],
         datasets: [
           {
+            label: "Number of Votes",
             data: [],
             backgroundColor: [
               "rgba(255, 134, 159, 0.5)", // TODO: These need to be generated in some way
@@ -54,12 +59,15 @@ export default class PollResults extends Component {
             {
               barPercentage: 1,
               gridLines: {
-                display: false,
+                gridLines: {
+                  display: true,
+                  color: "rgba(255, 255, 255, 0.9)"
+                }
               },
               ticks: {
                 fontColor: "white",
                 fontSize: 20,
-                fontFamily: 'Baloo 2',
+                fontFamily: "Baloo 2",
               }
             }
           ],
@@ -67,13 +75,13 @@ export default class PollResults extends Component {
             {
               gridLines: {
                 display: true,
-                color: "rgba(255, 255, 255, 0.5)"
+                color: "rgba(255, 255, 255, 0.9)"
               },
               ticks: {
                 beginAtZero: true,
                 fontColor: "white",
                 fontSize: 20,
-                fontFamily: 'Baloo 2',
+                fontFamily: "Baloo 2",
                 precision: 0
               }
             }
@@ -85,46 +93,46 @@ export default class PollResults extends Component {
 
   componentDidMount() {
     this.props.updateTitle("Poll Results");
-
-    console.log(this.props.match.params.pollID);
-
-    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.match.params.pollID + "/results", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.router.params.pollID + "/results", {
       method: "GET"
     })
+      .then(response => response.json())
       .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("Something went wrong");
-        }
-
-      })
-      .then(response => {
-        if (response === {}) {
-          console.log("Error fetching data");
-        } else {
-          console.log("Fetching data succeeded");
-          response = response.data[0]; // TODO: This needs to be fixed for the general case and not just the demo
+        if (response.result === "success") {
+          // response = response.data[0]; // TODO: This needs to be fixed for the general case and not just the demo
           console.log(response);
 
           // eslint-disable-next-line no-sequences
-          this.setState(state => {
-            state.questionData = response;
-            state.dataBar.labels = response.AnswerChoices;
-            state.dataBar.datasets[0].data = response.Tallies;
-            return state;
+          // this.setState(state => {
+          //   state.questionData = response;
+          //   state.dataBar.labels = response.AnswerChoices;
+          //   state.dataBar.datasets[0].data = response.Tallies;
+          //   return state;
+          // });
+          // for(let i = 0; i < this.state.questionData.CorrectAnswers.length-1; i++){
+          //   this.state.correctAnswers = this.state.correctAnswers + this.state.questionData.CorrectAnswers[i] + ", ";
+          // }
+          // this.state.correctAnswers+= this.state.questionData.CorrectAnswers[this.state.questionData.CorrectAnswers.length-1];
+          this.setState({
+            doneLoading: true,
+            questions: response.data.questions,
           });
-          for(let i = 0; i < this.state.questionData.CorrectAnswers.length-1; i++){
-            this.state.correctAnswers = this.state.correctAnswers + this.state.questionData.CorrectAnswers[i] + ", ";
-          }
-          this.state.correctAnswers+= this.state.questionData.CorrectAnswers[this.state.questionData.CorrectAnswers.length-1];
-          this.setState({"doneLoading": true});
+        } else {
+          this.setState({
+            showError: true,
+          });
         }
-      })
-      .catch(error => this.setState({"error": error}));
+      });
   }
+
+  displayQuestion = (index) => {
+    this.setState({
+      currentQuestion: index,
+    });
+  };
+
   render() {
-    if (this.state.error != null) {
+    if (this.state.showError) {
       return (
         <MDBContainer fluid className="page">
           <MDBContainer fluid className="box">
@@ -143,22 +151,47 @@ export default class PollResults extends Component {
     } else {
       return (
         <MDBContainer fluid className="page">
-          <MDBContainer fluid className="box">
-            <p className="fontSizeLarge">
-              {"Question " + this.state.questionData.QuestionNumber + ": " + this.state.questionData.QuestionText}
-            </p>
-            <p>
-              {"Correct Answers: " + this.state.correctAnswers}
-            </p>
-            <p>
-              {"Total Number of Answers: " + this.state.dataBar.datasets[0].data.reduce((a, b) => a + b, 0)}
-            </p>
-            {/*The MDBReact Bar component was built on top of chart.js.
-                    Look at https://www.chartjs.org/docs/latest/ for more info*/}
-            <Bar data={this.state.dataBar} options={this.state.barChartOptions}/>
-          </MDBContainer>
+          <div className="questions-bar">
+            {this.state.questions.map((question, index) => {
+              return (
+                <div>
+                  <div className={
+                    this.state.currentQuestion === index ?
+                      "question-label question-label-active" :
+                      "question-label question-label-inactive"
+                  } onClick={() => this.displayQuestion(index)}>
+                    {index + 1}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {this.state.questions.map((question, index) => {
+            if (this.state.currentQuestion === index) {
+              return (
+                <QuestionResults data={{
+                  questionNumber: this.state.currentQuestion + 1,
+                  question: this.state.questions[this.state.currentQuestion],
+                }}/>
+              );
+            }
+          })}
+          {/*<p className="fontSizeLarge">*/}
+          {/*  {"QuestionResults " + this.state.questionData.QuestionNumber + ": " + this.state.questionData.QuestionText}*/}
+          {/*</p>*/}
+          {/*<p>*/}
+          {/*  {"Correct Answers: " + this.state.correctAnswers}*/}
+          {/*</p>*/}
+          {/*<p>*/}
+          {/*  {"Total Number of Answers: " + this.state.dataBar.datasets[0].data.reduce((a, b) => a + b, 0)}*/}
+          {/*</p>*/}
+          {/*The MDBReact Bar component was built on top of chart.js.
+                  Look at https://www.chartjs.org/docs/latest/ for more info*/}
+          {/*<Bar data={this.state.dataBar} options={this.state.barChartOptions}/>*/}
         </MDBContainer>
       );
     }
   }
 }
+
+export default withRouter(PollResults);

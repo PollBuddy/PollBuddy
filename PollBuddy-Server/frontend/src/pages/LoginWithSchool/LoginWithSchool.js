@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import { Link } from "react-router-dom";
 
 import SchoolPicker, {schoolLinkDict} from "../../components/SchoolPicker/SchoolPicker";
 
@@ -24,7 +23,7 @@ export default class LoginWithSchool extends Component {
             Login with School
           </p>
           <p className="fontSizeSmall">
-            To login, enter your school name or login using RPI's CAS.
+            To login, select your school name.
           </p>
           <p className="fontSizeSmall" id="schoolNameText">
             School Name:

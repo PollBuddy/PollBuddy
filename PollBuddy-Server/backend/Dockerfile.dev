@@ -1,6 +1,6 @@
 # Development Dockerfile
 
-FROM node:current
+FROM node:16
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -11,10 +11,20 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 
+# Files
+# copy both the example file and any existing custom .env 
+COPY .env* ./
+# attempt to move the example .env to the name ".env"
+# if .env is already there, this fails and the custom instance is used
+# if not, the example instance is used
+RUN ["mv","-n", ".env.example", ".env"]
+
 EXPOSE 3000
 
 # Install nodemon
 RUN npm install -g nodemon
+
+ENV DEVELOPMENT_MODE="true"
 
 # Start command
 CMD ["nodemon", "--legacy-watch", "bin/www"]

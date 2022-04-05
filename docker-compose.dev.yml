@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   webproxy:
     image: "nginx:latest"
@@ -19,11 +19,11 @@ services:
     stdin_open: true
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - WDS_SOCKET_PORT=7655
     restart: unless-stopped
     volumes:
       - "./PollBuddy-Server/frontend/src:/usr/src/app/src"
       - "./PollBuddy-Server/frontend/public:/usr/src/app/public"
-      - "./PollBuddy-Server/frontend/.env:/usr/src/app/.env"
     networks:
       - frontend
 
@@ -34,16 +34,16 @@ services:
     restart: unless-stopped
     volumes:
       - "./PollBuddy-Server/backend/bin:/usr/src/app/bin"
+      - "./PollBuddy-Server/backend/models:/usr/src/app/models"
       - "./PollBuddy-Server/backend/modules:/usr/src/app/modules"
       - "./PollBuddy-Server/backend/public:/usr/src/app/public"
       - "./PollBuddy-Server/backend/routes:/usr/src/app/routes"
       - "./PollBuddy-Server/backend/app.js:/usr/src/app/app.js"
-      - "./PollBuddy-Server/backend/.env:/usr/src/app/.env"
     networks:
       - backend
-  
+
   db:
-    image: "mongo:latest"
+    image: "mongo:4"
     restart: unless-stopped
     volumes:
       - mongodata:/data/db
@@ -82,5 +82,3 @@ networks:
   backend:
   frontend:
   logging:
-
-

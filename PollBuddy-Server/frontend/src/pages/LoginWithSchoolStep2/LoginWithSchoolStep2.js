@@ -3,30 +3,46 @@ import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import {Navigate} from "react-router-dom";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
-export default class LoginWithSchoolStep2 extends Component {
+class LoginWithSchoolStep2 extends Component {
   constructor(props) {
     super(props);
 
     // Process args
-    if(this.props.location.search) {
+    // TODO: Some of this should probably be in a try/catch or something for robustness
+    if(this.props.router.location.search) {
       console.log("Getting things");
+      let result = new URLSearchParams(this.props.router.location.search).get("result");
+      let data = JSON.parse(new URLSearchParams(this.props.router.location.search).get("data"));
+      let error = new URLSearchParams(this.props.router.location.search).get("error");
 
-      var result = new URLSearchParams(this.props.location.search).get("result");
-      var data = JSON.parse(new URLSearchParams(this.props.location.search).get("data"));
-      var error = JSON.parse(new URLSearchParams(this.props.location.search).get("error"));
-
+      // Set up the state
+      if(error) {
+        this.state = {
+          result: result,
+          error: error,
+          doneLoading: true,
+        };
+      } else {
+        this.state = {
+          result: result,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          userName: data.userName,
+          doneLoading: true,
+        };
+      }
+    } else {
+      console.log("Failed to locate search parameters");
+      this.state = {
+        result: "failure",
+        error: "Failed to load data from the URL.",
+        doneLoading: true,
+      };
     }
 
-    // Set up the state
-    this.state = {
-      result: result,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      userName: data.userName,
-      error: error,
-      doneLoading: true,
-    };
   }
 
   componentDidMount() {
@@ -35,16 +51,18 @@ export default class LoginWithSchoolStep2 extends Component {
 
   render() {
     if (this.state.result === "failure") {
-      alert("Error: " + this.state.error + " Please try again.");
-      if(this.state.error === "User is not registered"){
+      if(this.state.error === "User is not registered."){
         console.log("Error: " + this.state.error);
+        alert("Error: You are not registered! Redirecting to registration page...");
         // Redirect to register page
-        this.props.history.push("/register/school");
+        return (<Navigate to="/register/school" push={true}/>);
       } else if(this.state.error === "User has not logged in with RPI."){
         console.log("Error: " + this.state.error);
+        alert("Error: Something went wrong with the school login process. Please try again, redirecting to login page...");
         // Redirect to login page
-        this.props.history.push("/login/school");
+        return (<Navigate to="/login/school" push={true}/>);
       } else { //database error - show the ErrorText component
+        alert("Error: Something went wrong. Details: " + this.state.error);
         return ( //for some reason, this only shows up after clicking submit twice
           <ErrorText text={this.state.error}> </ErrorText>
         );
@@ -57,18 +75,15 @@ export default class LoginWithSchoolStep2 extends Component {
       );
     } else {
       // Save data about the user
-      localStorage.setItem("loggedIn", true);
+      localStorage.setItem("loggedIn", "true");
       localStorage.setItem("firstName", this.state.firstName);
       localStorage.setItem("lastName", this.state.lastName);
       localStorage.setItem("userName", this.state.userName);
 
       console.log("everything worked; redirecting to /groups");
-      this.props.history.push("/groups");
-
-      //technically we'll never get here, but this makes react happy
-      return (
-        <p>Logging in...</p>
-      );
+      return (<Navigate to="/groups" push={true}/>);
     }
   }
 }
+
+export default withRouter(LoginWithSchoolStep2);
