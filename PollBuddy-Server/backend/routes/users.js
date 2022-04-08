@@ -346,6 +346,10 @@ router.post("/register", function (req, res) {
       mongoConnection.getDB().collection("users").insertOne(user, (err, result) => {
         //console.log(err)
         if (err) {
+
+          console.log(err.code);
+          console.log(err.keyPattern);
+
           // Something went wrong, likely a duplicate key
           return res.status(400).send(createResponse(null, "There was a duplicate entry error."));
         } else {
