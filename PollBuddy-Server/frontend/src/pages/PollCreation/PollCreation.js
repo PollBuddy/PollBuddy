@@ -54,20 +54,13 @@ class PollCreation extends Component {//this class will likely need to call Grou
   };
 
   checkError() {
-    if(this.state.errors.title == true && this.state.errors.description == true)
-    {
+    if(this.state.errors.title === true && this.state.errors.description === true) {
       return this.state.showError ? <ErrorText text={"Must enter a title and description!"}/> : null;
-    }
-    else if(this.state.errors.title == true)
-    {
+    } else if(this.state.errors.title === true) {
       return this.state.showError ? <ErrorText text={"Must enter a title!"}/> : null;
-    }
-    else if(this.state.errors.description == true)
-    {
+    } else if(this.state.errors.description === true) {
       return this.state.showError ? <ErrorText text={"Must enter a description!"}/> : null;
-    }
-    else
-    {
+    } else {
       return this.state.showError ? <ErrorText text={"An unknown error has occurred."}/> : null;
     }
   }
