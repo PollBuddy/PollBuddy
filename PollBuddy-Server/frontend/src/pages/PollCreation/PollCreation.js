@@ -12,6 +12,7 @@ class PollCreation extends Component {//this class will likely need to call Grou
       title: "",
       description: "",
       showError: false,
+      errors: [],
     };
   }
 
@@ -46,13 +47,29 @@ class PollCreation extends Component {//this class will likely need to call Grou
         if (response.result === "success") {
           window.location.href = "/polls/" + response.data.id + "/edit";
         } else {
+          this.setState({errors: response.error});
           this.setState({showError: true});
         }
       });
   };
 
   checkError() {
-    return this.state.showError ? <ErrorText/> : null;
+    if(this.state.errors.title == true && this.state.errors.description == true)
+    {
+      return this.state.showError ? <ErrorText text={"Must enter a title and description!"}/> : null;
+    }
+    else if(this.state.errors.title == true)
+    {
+      return this.state.showError ? <ErrorText text={"Must enter a title!"}/> : null;
+    }
+    else if(this.state.errors.description == true)
+    {
+      return this.state.showError ? <ErrorText text={"Must enter a description!"}/> : null;
+    }
+    else
+    {
+      return this.state.showError ? <ErrorText text={"An unknown error has occurred."}/> : null;
+    }
   }
 
   render() {
