@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 
-import {Link} from "react-router-dom";
 import "./ResetPassword.scss";
 
 import "mdbreact/dist/css/mdb.css";
@@ -16,6 +15,7 @@ class ResetPassword extends Component {
 
     this.state = {
       logOutCheck: true,
+      errorText: "",
       resetCode: "",
       userName: "",
       newPassword: "",
@@ -31,35 +31,44 @@ class ResetPassword extends Component {
     this.props.updateTitle("Reset Password");
   }
 
+  raiseError(text){
+    this.setState({errorText:text});
+  }
+
   attemptPasswordReset(){
-    console.log("pass :" + this.state.newPassword);
-    console.log("code :" + this.state.resetCode);
-    console.log("name :" + this.state.userName);
-    if(this.newPassword === this.confirmedPassword){
+    this.setState({errorText:""});
+
+    if(this.state.newPassword === this.state.confirmedPassword){
       fetch(process.env.REACT_APP_BACKEND_URL + "/users/forgotpassword/change", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+        //HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           "resetPasswordToken" : this.state.resetCode,
           "username" : this.state.userName,
           "password" : this.state.newPassword,
           })
-        }).then(
-          value => {
-            if(!(value.result === "success")){
-              console.log(value.result);
-            }
-          },
-          err => {console.log(err)}
+        }).then(response => response.json())
+          .then(
+            value => {
+              if(value.result === "success"){
+                const {router} = this.props
+                router.navigate("/");
+              }else{
+                this.setState({errorText:value.error});
+              }
+            },
+            err => {this.setState({errorText:err});}
         )
     }else {
-      console.log("new and confirmed passwords do not match");
+      this.setState({errorText:"New and confirmed passwords do not match."});
     }
   }
 
   render() {
     return (
       <MDBContainer fluid className="page">
+        
         <MDBContainer fluid className="box">
           <p>
             Enter the security code from your inbox and your new password.
@@ -83,13 +92,14 @@ class ResetPassword extends Component {
             
             <div id="logOutEverywhereContainer">
               <input type="checkbox" onChange={this.handleLogOutCheck} className="logOutBox" id="logOutEverywhere" checked={this.logOutCheck}/>
-              <label className="logOutLabel" for="logOutEverywhere">Log out everywhere</label>
+              <label className="logOutLabel" htmlFor="logOutEverywhere">Log out everywhere</label>
             </div>
+
+            <p style={{color: "red"}}>{ this.state.errorText }</p>
           </MDBContainer>
 
           <button className="button" onClick={this.attemptPasswordReset}>Submit</button>
-          <Link to={"/Groups"}>
-          </Link>
+
         </MDBContainer>
       </MDBContainer>
     );

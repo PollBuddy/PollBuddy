@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import { withRouter } from "../../components/PropsWrapper/PropsWrapper";
 
 class ForgotPassword extends Component {
@@ -23,13 +23,17 @@ class ForgotPassword extends Component {
       method: "POST",
       headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
       body: JSON.stringify({"email" : this.state.emailInput})
-    }).then(
-      val => {
-        if(!(val.result === "success")){
-          console.log("failed to update data")
-        }
-      },
-      err => {console.log(err);}
+    }).then(response => response.json())
+      .then(
+        val => {
+          if(!(val.result === "success")){
+            console.log("failed to update data")
+          }else{
+            const { router } = this.props;
+            router.navigate("/login/reset")
+          }
+        },
+        err => {console.log(err);}
     )
   }
 
@@ -46,9 +50,7 @@ class ForgotPassword extends Component {
             <label htmlFor="emailText">Email:</label>
             <input placeholder="Enter email" className="form-control textBox" id="emailText" onChange={(e)=> this.setState({emailInput:e.target.value})}/>
           </MDBContainer>
-          <Link to={"/login/reset"}>
-            <button className="button" onClick={this.requestReset}>Reset Password</button>
-          </Link>
+          <button className="button" onClick={this.requestReset}>Reset Password</button>
 
         </MDBContainer>
       </MDBContainer>

@@ -730,7 +730,7 @@ router.post("/forgotpassword/submit/",function (req,res) {
     document = mongoConnection.getDB().collection("users").findOne({"UserName":username});
   }
   else{
-    return res.status(500).send(createResponse("neither username nor email provided", null));
+    return res.status(500).send(createResponse("Neither username nor email provided.", null));
   }
 
   document
@@ -750,7 +750,7 @@ router.post("/forgotpassword/submit/",function (req,res) {
 
           mongoConnection.getDB().collection("users").updateOne({"_id": result._id},{ "$set": { "ResetPasswordToken" : key, "ResetPasswordTokenExpiration" : expireTime } },function (err, response) {
             if (err) {
-              return res.status(500).send(createResponse(err,"could not update user"));
+              return res.status(500).send(createResponse(err,"Could not update user data."));
             } else {
               var emailBody = 
               "Hello, " + result.UserName + "\n"
@@ -764,7 +764,7 @@ router.post("/forgotpassword/submit/",function (req,res) {
                 if (success){
                   return res.status(200).send(createResponse());
                 }else{
-                  return res.status(500).send(createResponse(messages,"could not send email"));
+                  return res.status(500).send(createResponse(messages,"Could not send email."));
                 }
               })
             }
@@ -772,10 +772,10 @@ router.post("/forgotpassword/submit/",function (req,res) {
         }
         else
         {
-          return res.status(500).send(createResponse(null,"could not find user"));
+          return res.status(500).send(createResponse(null,"Could not find user."));
         }
       },
-      err => {return res.status(500).send(createResponse(err,"could not find user"));}
+      err => {return res.status(500).send(createResponse(err,"Could not find user."));}
     );
 });
 
@@ -814,10 +814,10 @@ router.post("/forgotpassword/validate",function (req,res) {
         return res.status(200).send(createResponse());
       }
       else{
-        return res.status(405).send(createResponse(null,"Token is invalid(token expired)"));
+        return res.status(405).send(createResponse(null,"Token is invalid(token expired)."));
       }
     }else{
-      return res.status(405).send(createResponse(null,"Token is invalid(user with token not found)"));
+      return res.status(405).send(createResponse(null,"Token is invalid(user with token not found)."));
     }
   });
 });
@@ -866,11 +866,11 @@ router.post("/forgotpassword/change",function (req,res) {
         if(currentDate < expiration){
           bcrypt.hash(newPassword, 10, function (hashError,hash) {
             if(hashError){
-              return res.status(500).send(createResponse(null,"Could not hash password")); 
+              return res.status(500).send(createResponse(null,"Could not hash password.")); 
             }else{
               mongoConnection.getDB().collection("users").updateOne({"_id":searchResult._id},{"$set":{"Password":hash},"$unset":{"ResetPasswordTokenExpiration":"","ResetPasswordToken":""}},function(updateError,updateResult){
                 if(updateError){
-                  return res.status(500).send(createResponse(null,"Could not update password")); 
+                  return res.status(500).send(createResponse(null,"Could not update password.")); 
                 }else{
                   return res.status(200).send(createResponse()); 
                 }
@@ -879,14 +879,14 @@ router.post("/forgotpassword/change",function (req,res) {
           }); 
           
         }else{
-          return res.status(500).send(createResponse(null,"Token expired"));
+          return res.status(500).send(createResponse(null,"Token expired."));
         }
       }else{
-        return res.status(500).send(createResponse(null,"User with token not found"));
+        return res.status(500).send(createResponse(null,"User with token not found."));
       }
     });
   }else{
-    return res.status(500).send(createResponse(null,"Invalid password"));
+    return res.status(500).send(createResponse(null,"Invalid password."));
   }
 });
 
