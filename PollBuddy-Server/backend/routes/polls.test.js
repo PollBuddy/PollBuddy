@@ -8,8 +8,8 @@ const MongoClient = mongo.MongoClient;
 var mongoConnection = require("../modules/mongoConnection.js");
 var pollsRouter = require("./polls");
 
-var { testUser, testUser2, testGroup, createUser, createGroup, createPollWithQuestion } = require("../modules/testingUtils.js");
-const {createPoll, testPoll, testPoll2, samplequestion2} = require("../modules/testingUtils");
+var { testUser, testUser2, testGroup, createUser, createGroup } = require("../modules/testingUtils.js");
+const {createPoll, testPoll, testPoll2, sampleQuestion, sampleQuestion2} = require("../modules/testingUtils");
 const bson = require("bson");
 
 let mockApp = express();
@@ -426,14 +426,13 @@ describe("/api/polls/:pollID/editQuestion", () => {
   it("POST: edit question as admin", async () => {
     let user = await createUser();
     let group = await createGroup({ Admins: [ user.insertedId ] });
-    let poll = await createPollWithQuestion({ Group: group.insertedId});
+    let poll = await createPoll({ Group: group.insertedId} );
     session = { userData: { userID: user.insertedId } };
 
-    await app.post("/api/polls/" + poll.insertedId + "/editQuestion")
+    await app.post("/api/polls/" + poll.insertedId + "/createQuestion")
       .send({
-        id: poll.insertedId.Questions[0]._id,
-        text: "sample.question2",
-        answers: [{ text: "sample.answer", correct: true }, { text: "sample.answer2", correct: false }],
+        text: "sample.question",
+        answers: [{ text: "sample.answer", correct: true }],
         maxAllowedChoices: 1,
       })
       .expect(200)
@@ -441,25 +440,48 @@ describe("/api/polls/:pollID/editQuestion", () => {
         expect(response.body.result).toBe("success");
         let questionRes = await mongoConnection.getDB().collection("polls").findOne({
           "_id": poll.insertedId,
-          "Questions._id": poll.insertedId.Questions[0]._id,
+          "Questions._id": new bson.ObjectID(response.body.data.id),
         });
-        expect(questionRes.text).toEqual(samplequestion2.text);
-        expect(questionRes.answers).toEqual(samplequestion2.answers);
-        expect(questionRes.maxAllowedChoices).toEqual(samplequestion2.maxAllowedChoices);
+        expect(questionRes).not.toBeNull();
+        expect(questionRes.Questions[0].Text).toEqual(sampleQuestion.Text);
+        expect(questionRes.Questions[0].Answers[0].Text).toEqual(sampleQuestion.Answers[0].Text);
+        expect(questionRes.Questions[0].Answers[0].Correct).toEqual(sampleQuestion.Answers[0].Correct);
+        expect(questionRes.Questions[0].MaxAllowedChoices).toEqual(sampleQuestion.MaxAllowedChoices);
+
+        await app.post("/api/polls/" + poll.insertedId + "/editQuestion")
+        .send({
+          id: questionRes.Questions[0]._id,
+          text: "sample.question2",
+          answers: [{ text: "sample.answer", correct: true }, { text: "sample.answer2", correct: false }],
+          maxAllowedChoices: 1,
+        })
+        .expect(200)
+        .then(async (response2) => {
+          expect(response2.body.result).toBe("success");
+          let resPoll = await mongoConnection.getDB().collection("polls").findOne({
+            _id: poll.insertedId,
+            "Questions._id": questionRes.Questions[0]._id,
+          });
+          expect(resPoll).not.toBeNull();
+          expect(resPoll.Questions[0].Text).toEqual(sampleQuestion2.Text);
+          expect(resPoll.Questions[0].Answers[0].Text).toEqual(sampleQuestion2.Answers[0].Text);
+          expect(resPoll.Questions[0].Answers[0].Correct).toEqual(sampleQuestion2.Answers[0].Correct);
+          expect(resPoll.Questions[0].Answers[1].Text).toEqual(sampleQuestion2.Answers[1].Text);
+          expect(resPoll.Questions[0].Answers[1].Correct).toEqual(sampleQuestion2.Answers[1].Correct);
+          expect(resPoll.Questions[0].MaxAllowedChoices).toEqual(sampleQuestion2.MaxAllowedChoices);
+        });
       });
   });
 
-  
   it("POST: edit question as poll creator", async () => {
     let user = await createUser();
-    let poll = await createPollWithQuestion({ Creator: user.insertedId }, new bson.ObjectID());
+    let poll = await createPoll({ Creator: user.insertedId }, new bson.ObjectID());
     session = { userData: { userID: user.insertedId } };
 
-    await app.post("/api/polls/" + poll.insertedId + "/editQuestion")
+    await app.post("/api/polls/" + poll.insertedId + "/createQuestion")
       .send({
-        id: poll.insertedId.Questions[0]._id,
-        text: "sample.question2",
-        answers: [{ text: "sample.answer", correct: true }, { text: "sample.answer2", correct: false }],
+        text: "sample.question",
+        answers: [{ text: "sample.answer", correct: true }],
         maxAllowedChoices: 1,
       })
       .expect(200)
@@ -467,11 +489,36 @@ describe("/api/polls/:pollID/editQuestion", () => {
         expect(response.body.result).toBe("success");
         let questionRes = await mongoConnection.getDB().collection("polls").findOne({
           "_id": poll.insertedId,
-          "Questions._id": poll.insertedId.Questions[0]._id,
+          "Questions._id": new bson.ObjectID(response.body.data.id),
         });
-        expect(questionRes.text).toEqual(samplequestion2.text);
-        expect(questionRes.answers).toEqual(samplequestion2.answers);
-        expect(questionRes.maxAllowedChoices).toEqual(samplequestion2.maxAllowedChoices);
+        expect(questionRes).not.toBeNull();
+        expect(questionRes.Questions[0].Text).toEqual(sampleQuestion.Text);
+        expect(questionRes.Questions[0].Answers[0].Text).toEqual(sampleQuestion.Answers[0].Text);
+        expect(questionRes.Questions[0].Answers[0].Correct).toEqual(sampleQuestion.Answers[0].Correct);
+        expect(questionRes.Questions[0].MaxAllowedChoices).toEqual(sampleQuestion.MaxAllowedChoices);
+
+        await app.post("/api/polls/" + poll.insertedId + "/editQuestion")
+        .send({
+          id: questionRes.Questions[0]._id,
+          text: "sample.question2",
+          answers: [{ text: "sample.answer", correct: true }, { text: "sample.answer2", correct: false }],
+          maxAllowedChoices: 1,
+        })
+        .expect(200)
+        .then(async (response2) => {
+          expect(response2.body.result).toBe("success");
+          let resPoll = await mongoConnection.getDB().collection("polls").findOne({
+            _id: poll.insertedId,
+            "Questions._id": questionRes.Questions[0]._id,
+          });
+          expect(resPoll).not.toBeNull();
+          expect(resPoll.Questions[0].Text).toEqual(sampleQuestion2.Text);
+          expect(resPoll.Questions[0].Answers[0].Text).toEqual(sampleQuestion2.Answers[0].Text);
+          expect(resPoll.Questions[0].Answers[0].Correct).toEqual(sampleQuestion2.Answers[0].Correct);
+          expect(resPoll.Questions[0].Answers[1].Text).toEqual(sampleQuestion2.Answers[1].Text);
+          expect(resPoll.Questions[0].Answers[1].Correct).toEqual(sampleQuestion2.Answers[1].Correct);
+          expect(resPoll.Questions[0].MaxAllowedChoices).toEqual(sampleQuestion2.MaxAllowedChoices);
+        });
       });
   });
 
@@ -481,7 +528,7 @@ describe("/api/polls/:pollID/editQuestion", () => {
     let poll = await createPoll({ Group: group.insertedId});
     session = { userData: { userID: user.insertedId } };
     await app.post("/api/polls/" + poll.insertedId + "/editQuestion")
-      .expect(403)
+      .expect(401)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });

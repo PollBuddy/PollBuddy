@@ -122,43 +122,6 @@ let createPoll = async function(update) {
   return pollInsert;
 };
 
-let createPollWithQuestion = async function(update, questionid) {
-  let pollData = {
-    Title: testPoll.Title,
-    Description: testPoll.Description,
-    Questions: [sampleQuestion],
-  };
-
-  if (update) {
-    for (let [key, value] of Object.entries(update)) {
-      pollData[key] = value;
-    }
-  }
-
-  pollData.Questions[0]._id = questionid;
-
-  let poll = createModel(pollSchema, pollData);
-  let pollInsert = await mongoConnection.getDB().collection("polls").insertOne(poll);
-
-  let question = createModel(questionSchema, sampleQuestion);
-  await mongoConnection.getDB().collection("polls").updateOne(
-    { _id: poll._id },
-    { "$addToSet": {
-      "Questions": question,
-    }}
-  );
-
-  if (poll.Group) {
-    await mongoConnection.getDB().collection("groups").updateOne(
-      { _id: poll.Group, },
-      {"$addToSet": {
-        "Polls": pollInsert.insertedId,
-      }}
-    );
-  }
-  return pollInsert;
-};
-
 module.exports = {
   testUser,
   testUser2,
@@ -171,5 +134,4 @@ module.exports = {
   createUser,
   createGroup,
   createPoll,
-  createPollWithQuestion,
 };
