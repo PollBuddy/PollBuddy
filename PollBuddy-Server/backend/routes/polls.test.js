@@ -149,6 +149,55 @@ describe("/api/groups/:pollID", () => {
 });
 
 
+describe("/api/polls/:id/results", () => {
+  
+  it("POST: route unavailable", async () => {
+    await app.post("/api/polls/0/results")
+      .expect(405)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("GET: results success", async () => {
+    let user = await createUser();
+    let poll = await createPoll({ Creator: user.insertedId });
+    session = { userData: { userID: user.insertedId } };
+    await app.post("/api/polls/" + poll.insertedId + "/createQuestion")
+      .send({
+        text: "sample.question",
+        answers: [{ text: "sample.answer", correct: true }],
+        maxAllowedChoices: 1,
+      })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        let questionRes = await mongoConnection.getDB().collection("polls").findOne({
+          "_id": poll.insertedId,
+          "Questions._id": new bson.ObjectID(response.body.data.id),
+        });
+        expect(questionRes).not.toBeNull();
+
+        await app.post("/api/polls/" + poll.insertedId + "/submitQuestion")
+          .send({
+            id: questionRes.Questions[0]._id,
+            answers: [{answer: true}]
+          })
+          .expect(200)
+          .then(async (response) => {
+            await app.get("/api/polls/" + poll.insertedId + "/results")
+              .expect(200)
+              .then(async (response) => {
+                expect(response.body.result).toBe("success");
+                expect(response.body.data.title).toBe(testPoll.Title);
+                expect(response.body.data.description).toBe(testPoll.Description);
+              });
+          });
+      });
+  });
+});
+
+
 describe("/api/polls/new", () => {
 
   it("GET: route unavailable", async () => {

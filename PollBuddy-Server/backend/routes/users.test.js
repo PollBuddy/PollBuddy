@@ -312,7 +312,6 @@ describe("/api/users/me/groups", () => {
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
-        console.log(response.body);
         expect(response.body.data.admin[0].id.toString()).toEqual(adminGroup.insertedId.toString());
         expect(response.body.data.admin[0].name).toEqual(testGroup.Name);
         expect(response.body.data.member[0].id.toString()).toEqual(memberGroup.insertedId.toString());
