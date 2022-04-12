@@ -17,7 +17,11 @@ const usersRouter = require("./routes/users");
 // In case we run into CORS issues
 const cors = require("cors");
 
+const {isLoggedIn, isDevelopmentMode, and, or} = require("./modules/utils");
+
 const app = express();
+
+
 
 // Express Session
 const expressSession = require("express-session");
@@ -98,7 +102,7 @@ const schoolsModule = require("./modules/schoolList.js");
 const {createResponse} = require("./modules/utils");
 
 // eslint-disable-next-line no-unused-vars
-app.get("/api/schools", (req, res) => {
+app.get("/api/schools", or(isDevelopmentMode,isLoggedIn), (req, res) => {
   let schools = schoolsModule.getList();
   res.json(schools);
 });

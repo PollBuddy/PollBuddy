@@ -103,11 +103,11 @@ function isEmpty(obj) {
  * predicate to check If user is logged in in the request
  * @see {Predicate}
  */
-function isLoggedIn(req) {
+function isLoggedIn(req,res,next) {
   if(req.session.userData && req.session.userData.userID){
-    return null;
+    next();
   } else {
-    return httpCodes.Unauthorized("User is not logged in.");
+    return res.status(500).send(createResponse(null, "User is not logged in"));
   }
 }
 
@@ -116,68 +116,48 @@ function isLoggedIn(req) {
  * Also checks to make sure that the user is logged in
  * @see {Predicate}
  */
-function isSiteAdmin() {
-  return and([
+let isSiteAdmin = 
+  and([
     isLoggedIn,
-    (req) => {
+    (req,res,next) => {
       let userID = req.session.userData.userID;
       let user = mongoConnection.getDB().collection("users").findOne({_id: userID});
       if (user.SiteAdmin) {
-        return null;
+        next()
       } else {
-        return httpCodes.Unauthorized("User is not a site admin.");
+        return res.status(500).send(createResponse(null, "User is not a site admin."));
       }
     }
   ]);
-}
 
 /**
  * predicate to check if the running image is in development mode
  * @see {Predicate}
  */
-function isDevelopmentMode() {
+function isDevelopmentMode(req,res,next) {
   if(process.env.DEVELOPMENT_MODE === "true"){
-    return null;
+    next()
   } else {
-    return httpCodes.Forbidden("App is not running in development mode.");
+    return res.status(500).send(createResponse(null, "App is not running in development mode."));
   }
 }
 
-/**
- * elevates predicate to a middleware that runs it on the request
- * if it returns null: allows execution to go to next middleware
- * if it returns a msg: responds with this message and ends execution
- * @param {Predicate} p - input predicate 
- * @return {Middleware} - Middleware version of predicate
- */
-function promote(p) {
-  return (req,res,next) => {
-    let response = p(req);
-    if(response === null){
-      next();
-    } else {
-      res.status(response.statusCode).send(response);
-    }
-  };
-}
 
 /**
  * combines a list of predicates into a single predicate that succeeds on a given request if at least one of the input predicates succeed
  * @param {Array} ps - list of predicates
  * @return {Predicate} - composite predicate
  */
-function or(ps) {
-  return (req) => {
-    let response = "empty or()";
-    for(let i = 0; i < ps.length ; i++){
-      // the first predicate that succeeds ends the testing 
-      response = ps[i](req);
-      if(response === null){
-        return null;
+function or() {
+  // passing middleware will call this, alerting us of their result
+  let succeed = () => true;
+  return (req,res,next) => {
+    for(let i = 0; i < arguments.length ; i ++){
+      if(arguments[i](req,res,succeed) === true){
+        return next();
       }
     }
-    // if all predicates fail, return the last error
-    return response;
+    return res.status(500).send(createResponse(null, "No conditions passed"));  
   };
 }
 
@@ -186,18 +166,17 @@ function or(ps) {
  * @param {Array} ps - list of predicates
  * @return {Predicate} - composite predicate
  */
-function and(ps) {
-  return (req) => {
-    let response = "empty and()";
-    for(let i = 0; i < ps.length ; i++){
-      // the first predicate that fails ends the testing 
-      response = ps[i](req);
-      if(response !== null){
-        return response;
+function and() {
+  // passing middleware will call this, alerting us of their result
+  let succeed = () => true;
+  return (req,res,next) => {
+    for(let i = 0; i < arguments.length ; i ++){
+      let result = arguments[i](req,res,succeed);
+      if(!( result === true)){
+        return result;
       }
     }
-    // if all predicates pass,
-    return null;
+    next();
   };
 }
 
@@ -234,7 +213,6 @@ module.exports = {
   isLoggedIn,
   isSiteAdmin,
   isDevelopmentMode,
-  promote,
   or,
   and,
   getResultErrors,
