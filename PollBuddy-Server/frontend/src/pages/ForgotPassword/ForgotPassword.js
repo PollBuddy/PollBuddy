@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import {useNavigate} from "react-router-dom";
 import { withRouter } from "../../components/PropsWrapper/PropsWrapper";
 
 class ForgotPassword extends Component {
@@ -27,14 +26,14 @@ class ForgotPassword extends Component {
       .then(
         val => {
           if(!(val.result === "success")){
-            console.log("failed to update data")
+            console.log("failed to update data");
           }else{
             const { router } = this.props;
-            router.navigate("/login/reset")
+            router.navigate("/login/reset");
           }
         },
         err => {console.log(err);}
-    )
+      );
   }
 
 

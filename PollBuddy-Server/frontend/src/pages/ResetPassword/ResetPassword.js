@@ -47,19 +47,19 @@ class ResetPassword extends Component {
           "resetPasswordToken" : this.state.resetCode,
           "username" : this.state.userName,
           "password" : this.state.newPassword,
-          })
-        }).then(response => response.json())
-          .then(
-            value => {
-              if(value.result === "success"){
-                const {router} = this.props
-                router.navigate("/");
-              }else{
-                this.setState({errorText:value.error});
-              }
-            },
-            err => {this.setState({errorText:err});}
-        )
+        })
+      }).then(response => response.json())
+        .then(
+          value => {
+            if(value.result === "success"){
+              const {router} = this.props;
+              router.navigate("/");
+            }else{
+              this.setState({errorText:value.error});
+            }
+          },
+          err => {this.setState({errorText:err});}
+        );
     }else {
       this.setState({errorText:"New and confirmed passwords do not match."});
     }

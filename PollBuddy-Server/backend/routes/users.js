@@ -10,7 +10,7 @@ const { createResponse, validateID, isEmpty, getResultErrors, createModel, isLog
 const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups, createUser, editUser, userParamsValidator } = require("../models/User.js");
 const {paramValidator} = require("../modules/validatorUtils");
 
-const {send} = require("../modules/email.js")
+const {send} = require("../modules/email.js");
 
 // This file handles /api/users URLs
 
@@ -717,48 +717,44 @@ router.get("/forgotpassword/submit",function (req,res) {
  * @param {callback} callback - function handler for route
  */
 router.post("/forgotpassword/submit/",function (req,res) {
-  var email = req.body.email;
-  var username = req.body.username;
+  let email = req.body.email;
+  const username = req.body.username;
 
-  var document;
+  let document;
 
   if(email){
     email = email.toLowerCase();
     document = mongoConnection.getDB().collection("users").findOne({"Email":email});
-  }
-  else if(username){
+  }else if(username){
     document = mongoConnection.getDB().collection("users").findOne({"UserName":username});
-  }
-  else{
+  }else{
     return res.status(500).send(createResponse("Neither username nor email provided.", null));
   }
 
   document
     .then(
       result => {
-        if(result)
-        {
-          const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-          key = ""
-          for(var i = 0; i < 32 ; i++)
-          {
-          key += alphabet[Math.floor(Math.random() * alphabet.length)]
+        if(result) {
+          const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+          let key = "";
+          for(let i = 0; i < 32 ; i++) {
+            key += alphabet[Math.floor(Math.random() * alphabet.length)];
           }
 
-          expireTime = new Date()
-          expireTime.setHours(expireTime.getHours()+1)
+          let expireTime = new Date();
+          expireTime.setHours(expireTime.getHours()+1);
 
           mongoConnection.getDB().collection("users").updateOne({"_id": result._id},{ "$set": { "ResetPasswordToken" : key, "ResetPasswordTokenExpiration" : expireTime } },function (err, response) {
             if (err) {
               return res.status(500).send(createResponse(err,"Could not update user data."));
-            } else {
-              var emailBody = 
+            } else{
+              let emailBody = 
               "Hello, " + result.UserName + "\n"
               +"\n You are recieving this email because a password reset request was sent to this account"
               +"\n\n if you requested a password reset follow the link below:"
               +"\n  " + process.env.FRONTEND_URL + "/login/reset"
               +"\n your password reset token is: " + key
-              +"\n\n if you did not make a password reset request, you can safely ignore this message\n\n"
+              +"\n\n if you did not make a password reset request, you can safely ignore this message\n\n";
               
               send(result.Email,"PollBuddy Password Reset",emailBody,function (success,messages) {
                 if (success){
@@ -766,12 +762,10 @@ router.post("/forgotpassword/submit/",function (req,res) {
                 }else{
                   return res.status(500).send(createResponse(messages,"Could not send email."));
                 }
-              })
+              });
             }
-          })
-        }
-        else
-        {
+          });
+        }else{
           return res.status(500).send(createResponse(null,"Could not find user."));
         }
       },
@@ -788,7 +782,7 @@ router.post("/forgotpassword/submit/",function (req,res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
- router.get("/forgotpassword/validate",function (req,res) {
+router.get("/forgotpassword/validate",function (req,res) {
   return res.status(405).send(createResponse(null,"Route not availible."));
 });
 
@@ -805,18 +799,17 @@ router.post("/forgotpassword/submit/",function (req,res) {
  * @param {callback} callback - function handler for route
  */
 router.post("/forgotpassword/validate",function (req,res) {
-  var token = req.body.resetPasswordToken;
-  var username = req.body.username;
+  const token = req.body.resetPasswordToken;
+  const username = req.body.username;
   mongoConnection.getDB().collection("users").findOne({"UserName":username,"ResetPasswordToken":token}, function(error,result) {
     if(result){
-      currentDate = new Date();
+      let currentDate = new Date();
       if(currentDate < result.ResetPasswordTokenExpiration ){
         return res.status(200).send(createResponse());
-      }
-      else{
+      } else {
         return res.status(405).send(createResponse(null,"Token is invalid(token expired)."));
       }
-    }else{
+    } else {
       return res.status(405).send(createResponse(null,"Token is invalid(user with token not found)."));
     }
   });
@@ -831,7 +824,7 @@ router.post("/forgotpassword/validate",function (req,res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
- router.get("/forgotpassword/change",function (req,res) {
+router.get("/forgotpassword/change",function (req,res) {
   return res.status(405).send(createResponse(null,"Route not availible."));
 });
 
@@ -851,18 +844,18 @@ router.post("/forgotpassword/validate",function (req,res) {
  * @param {callback} callback - function handler for route
  */
 router.post("/forgotpassword/change",function (req,res) {
-  token = req.body.resetPasswordToken;
-  username = req.body.username;
-  newPassword = req.body.password;
+  let token = req.body.resetPasswordToken;
+  let username = req.body.username;
+  let newPassword = req.body.password;
 
-  newPasswordValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/)
-  .test(newPassword);
+  let newPasswordValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/)
+    .test(newPassword);
 
   if(newPasswordValid){
     mongoConnection.getDB().collection("users").findOne({"UserName":username,"ResetPasswordToken":token},function (searchError,searchResult){
       if(searchResult){
-        expiration = searchResult.ResetPasswordTokenExpiration;
-        currentDate = new Date();
+        let expiration = searchResult.ResetPasswordTokenExpiration;
+        let currentDate = new Date();
         if(currentDate < expiration){
           bcrypt.hash(newPassword, 10, function (hashError,hash) {
             if(hashError){
