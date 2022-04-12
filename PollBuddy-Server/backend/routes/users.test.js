@@ -383,7 +383,7 @@ describe("/api/users/register", () => {
           });
       });
 
-      mongoConnection.getDB().collection("users").dropIndex("email")
+    mongoConnection.getDB().collection("users").dropIndex("email");
   });
 
   it("POST: register failure duplicate username", async () => {
@@ -416,7 +416,7 @@ describe("/api/users/register", () => {
           });
       });
 
-      mongoConnection.getDB().collection("users").dropIndex("username")
+    mongoConnection.getDB().collection("users").dropIndex("username");
   });
 
   it("POST: register failure duplicate other error", async () => {
@@ -449,7 +449,7 @@ describe("/api/users/register", () => {
           });
       });
 
-      mongoConnection.getDB().collection("users").dropIndex("firstname")
+    mongoConnection.getDB().collection("users").dropIndex("firstname");
   });
 });
 

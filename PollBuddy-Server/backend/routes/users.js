@@ -366,7 +366,7 @@ router.post("/register", function (req, res) {
             // An unknown error occurred
             console.log("Database Error occurred while creating a new user with Poll Buddy.");
             console.log(err);
-            return sendResponse(res, httpCodes.InternalServerError("An error occurred while communicating with the database."));
+            return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
           }
         } else {
           
