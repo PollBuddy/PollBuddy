@@ -346,12 +346,28 @@ router.post("/register", function (req, res) {
       mongoConnection.getDB().collection("users").insertOne(user, (err, result) => {
         //console.log(err)
         if (err) {
+          // Something went wrong
+          if (err.code === 11000) {
+            // This code means we're trying to insert a duplicate key (aka user already registered somehow)
+            if (err.keyPattern.Email) {
+              // Email in use
+              return res.status(400).send(createResponse(errorMsg, "This email is already in use."));
+            } else if (err.keyPattern.UserName) {
+              // Username in use
+              return res.status(400).send(createResponse(errorMsg, "This username is already in use."));
+            } else {
+              // An unknown error occurred
+              console.log("Database Error occurred while creating a new user with Poll Buddy.");
+              console.log(err);
+              return res.status(400).send(createResponse(errorMsg, "An error occurred while communicating with the database."));
+            }
 
-          console.log(err.code);
-          console.log(err.keyPattern);
-
-          // Something went wrong, likely a duplicate key
-          return res.status(400).send(createResponse(null, "There was a duplicate entry error."));
+          } else {
+            // An unknown error occurred
+            console.log("Database Error occurred while creating a new user with Poll Buddy.");
+            console.log(err);
+            return sendResponse(res, httpCodes.InternalServerError("An error occurred while communicating with the database."));
+          }
         } else {
           
           // One result changed, therefore it worked.

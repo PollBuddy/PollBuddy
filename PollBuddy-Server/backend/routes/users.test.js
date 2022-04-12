@@ -353,10 +353,10 @@ describe("/api/users/register", () => {
       });    
   });
 
-  it("POST: register failure duplicate", async () => {
+  it("POST: register failure duplicate email", async () => {
     
     // Create unique indexes
-    mongoConnection.getDB().collection("users").createIndex({"UserName": 1}, {unique: true});
+    mongoConnection.getDB().collection("users").createIndex({"Email": 1}, {name: "email", unique: true});
 
     await app.post("/api/users/register")
       .send({
@@ -382,6 +382,74 @@ describe("/api/users/register", () => {
 
           });
       });
+
+      mongoConnection.getDB().collection("users").dropIndex("email")
+  });
+
+  it("POST: register failure duplicate username", async () => {
+    
+    // Create unique indexes
+    mongoConnection.getDB().collection("users").createIndex({"UserName": 1}, {name: "username", unique: true});
+
+    await app.post("/api/users/register")
+      .send({
+        userName: testUser.UserName,
+        email: testUser.Email,
+        password: testUser.Password,
+        firstName: testUser.FirstName,
+        lastName: testUser.LastName
+      })
+      .expect(200)
+      .then(async (response) => {
+        await app.post("/api/users/register")
+          .send({
+            userName: testUser.UserName,
+            email: testUser.Email,
+            password: testUser.Password,
+            firstName: testUser.FirstName,
+            lastName: testUser.LastName,
+          })
+          .expect(400)
+          .then(async (response) => {
+            expect(response.body.result).toBe("failure");
+
+          });
+      });
+
+      mongoConnection.getDB().collection("users").dropIndex("username")
+  });
+
+  it("POST: register failure duplicate other error", async () => {
+    
+    // Create unique indexes
+    mongoConnection.getDB().collection("users").createIndex({"FirstName": 1}, {name: "firstname", unique: true});
+
+    await app.post("/api/users/register")
+      .send({
+        userName: testUser.UserName,
+        email: testUser.Email,
+        password: testUser.Password,
+        firstName: testUser.FirstName,
+        lastName: testUser.LastName
+      })
+      .expect(200)
+      .then(async (response) => {
+        await app.post("/api/users/register")
+          .send({
+            userName: testUser.UserName,
+            email: testUser.Email,
+            password: testUser.Password,
+            firstName: testUser.FirstName,
+            lastName: testUser.LastName,
+          })
+          .expect(400)
+          .then(async (response) => {
+            expect(response.body.result).toBe("failure");
+
+          });
+      });
+
+      mongoConnection.getDB().collection("users").dropIndex("firstname")
   });
 });
 
