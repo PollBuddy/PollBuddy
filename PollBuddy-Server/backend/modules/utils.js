@@ -93,9 +93,10 @@ function isEmpty(obj) {
 }
 
 /**
- * @typedef {Predicate} - function from request object to either null or an error string
- * returns null on success
- * returns string containing error on failure
+ * @typedef {Predicate} - middleware that checks some condition
+ * on success, calls next
+ * on failure, sends error response
+ * note : any return value from a predicate is assumed to be failure data
  */
 
 
@@ -145,15 +146,27 @@ function isDevelopmentMode(req,res,next) {
 
 /**
  * combines a list of predicates into a single predicate that succeeds on a given request if at least one of the input predicates succeed
- * @param {Array} ps - list of predicates
+ * @param {...} ps - any number of predicates
  * @return {Predicate} - composite predicate
  */
 function or() {
   // passing middleware will call this, alerting us of their result
-  let succeed = () => true;
+  let passed = false
+  let succeed = () => {passed = true};
+
+  //dummy response object
+  //only one response can be sent per request
+  //failure is typically done by sending a failure response
+  //or() needs to allow multiple middleware to fail
+  //this object absorbs a middleware's attempts to send an error on its own
+  let mockRes = {
+    status : (x) => mockRes,
+    send : (x) => mockRes,
+  }
   return (req,res,next) => {
     for(let i = 0; i < arguments.length ; i ++){
-      if(arguments[i](req,res,succeed) === true){
+      arguments[i](req,mockRes,succeed);
+      if( passed === true){
         return next();
       }
     }
@@ -163,17 +176,18 @@ function or() {
 
 /**
  * combines a list of predicates into a single predicate that succeeds on a given request iff all input predicates succeed
- * @param {Array} ps - list of predicates
+ * @param {...} ps - any number of predicates
  * @return {Predicate} - composite predicate
  */
 function and() {
-  // passing middleware will call this, alerting us of their result
-  let succeed = () => true;
+  // given so that passing middleware simply return to this context after finishing
+  let doNothing = () => {};
   return (req,res,next) => {
     for(let i = 0; i < arguments.length ; i ++){
-      let result = arguments[i](req,res,succeed);
-      if(!( result === true)){
-        return result;
+      // if the middleware returns anything
+      // it is assumed that it failed and fired off a response
+      if(arguments[i](req,res,doNothing)){
+        return;
       }
     }
     next();
