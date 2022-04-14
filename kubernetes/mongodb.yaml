@@ -1,0 +1,64 @@
+# Service
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pollbuddy-mongodb-service
+  labels:
+    name: pollbuddy-mongodb-service
+spec:
+  ports:
+    - name: mongodb
+      port: 27017
+      targetPort: 27017
+  clusterIP: None
+  publishNotReadyAddresses: true
+  selector:
+    name: pollbuddy-mongo-statefulset
+
+# StatefulSet
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    name: pollbuddy-mongo-statefulset
+  name: pollbuddy-mongod-statefulset
+spec:
+  serviceName: pollbuddy-mongodb-service
+  replicas: 3
+  selector:
+    matchLabels:
+      role: mongo
+  template:
+    metadata:
+      labels:
+        role: mongo
+        environment: test
+        replicaset: MainRepSet
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+        - name: pollbuddy-mongodb-pod
+          image: mongo:4
+          command:
+            - "mongod"
+            - "--bind_ip"
+            - "0.0.0.0"
+            - "--replSet"
+            - "MainRepSet"
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: pollbuddy-mongodb-volume-claim
+              mountPath: /data
+  volumeClaimTemplates:
+    - metadata:
+        name: pollbuddy-mongodb-volume-claim
+      spec:
+        storageClassName: openebs-jiva-default
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
