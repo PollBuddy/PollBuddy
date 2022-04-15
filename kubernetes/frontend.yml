@@ -74,6 +74,6 @@ spec:
             timeoutSeconds: 1
           env:
             - name: BACKEND
-              value: poll-buddy-backend-service-master
+              value: poll-buddy-backend-service-master.default.svc.cluster.local
             - name: REPORTING
-              value: poll-buddy-reporting-service-master
+              value: poll-buddy-reporting-service-master.default.svc.cluster.local
