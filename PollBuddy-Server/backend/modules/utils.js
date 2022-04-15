@@ -1,5 +1,6 @@
 const bson = require("bson");
 const mongoConnection = require("../modules/mongoConnection.js");
+const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
 /**
  * Helper function for creating the specified http response (https://pollbuddy.app/api/users).
  * For sample usage see https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Overview#helper-functions
@@ -93,9 +94,8 @@ function isEmpty(obj) {
 
 /**
  * @typedef {Predicate} - middleware that checks some condition
- * on success, calls next
- * on failure, sends error response
- * note : any return value from a predicate is assumed to be failure data
+ * on success : calls next()
+ * on failure : send a message on the response object
  */
 
 
@@ -106,8 +106,8 @@ function isEmpty(obj) {
 function isLoggedIn(req,res,next) {
   if(req.session.userData && req.session.userData.userID){
     next();
-  } else {
-    return res.status(500).send(createResponse(null, "User is not logged in"));
+  }else{
+    return sendResponse(res,httpCodes.InternalServerError("User is not logged in"));
   }
 }
 
@@ -124,8 +124,8 @@ let isSiteAdmin =
       let user = mongoConnection.getDB().collection("users").findOne({_id: userID});
       if (user.SiteAdmin) {
         next();
-      } else {
-        return res.status(500).send(createResponse(null, "User is not a site admin."));
+      } else {  
+        return sendResponse(res,httpCodes.InternalServerError("User is not a site admin."));
       }
     }
   ]);
@@ -136,57 +136,73 @@ let isSiteAdmin =
  */
 function isDevelopmentMode(req,res,next) {
   if(process.env.DEVELOPMENT_MODE === "true"){
-    next();
+    next(); 
   } else {
-    return res.status(500).send(createResponse(null, "App is not running in development mode."));
+    return sendResponse(res,httpCodes.InternalServerError("App is not running in development mode."));
   }
 }
 
 
 /**
- * combines a list of predicates into a single predicate that succeeds on a given request if at least one of the input predicates succeed
+ * combines a list of predicates into a single predicate
+ * succeeds on a given request if and only if at least one of the input predicates succeed
+ * ignores and changes a predicate may make to the response object
  * @param {...} ps - any number of predicates
  * @return {Predicate} - composite predicate
  */
 function or() {
-  // passing middleware will call this, alerting us of their result
-  let passed = false;
-  let succeed = () => {passed = true;};
+  let succeeded = false;
 
   //dummy response object
   //only one response can be sent per request
-  //failure is typically done by sending a failure response
-  //or() needs to allow multiple middleware to fail
-  //this object absorbs a middleware's attempts to send an error on its own
+  //or() needs to allow multiple middleware to run without terminating the response
+  //this object absorbs a middleware's attempts to send a response on its own
   let mockRes = {
-    status : (x) => mockRes,
-    send : (x) => mockRes,
+    status : (x) => {return mockRes;},
+    send : (x) => {return mockRes;},
   };
   return (req,res,next) => {
     for(let i = 0; i < arguments.length ; i ++){
-      arguments[i](req,mockRes,succeed);
-      if(passed === true){
+      statusCode = false;
+      arguments[i](req,mockRes,() => {succeeded = true});
+      if(succeeded){
         return next();
       }
     }
-    return res.status(500).send(createResponse(null, "No conditions passed"));  
+    return sendResponse(res,httpCodes.InternalServerError("No conditions passed"));  
   };
 }
 
 /**
- * combines a list of predicates into a single predicate that succeeds on a given request iff all input predicates succeed
+ * combines a list of predicates into a single predicate
+ * succeeds on a given request if and only if all input predicates succeed
+ * ignores and changes a predicate may make to the response object
  * @param {...} ps - any number of predicates
  * @return {Predicate} - composite predicate
  */
 function and() {
-  // given so that passing middleware simply return to this context after finishing
-  let doNothing = () => {};
+  let statusCode = null;
+  let responseData = null;
+
+  //dummy response object
+  //and() needs to check if a middleware has failed or not
+  //this object absorbs a middleware's attempts to send a response on its own
+  //the first failed middleware's response is echoed here instead
+  let mockRes = {
+    status : (x) => {statusCode = x; return mockRes;},
+    send : (x) => {responseData = x; return mockRes;},
+  };
+
   return (req,res,next) => {
     for(let i = 0; i < arguments.length ; i ++){
-      // if the middleware returns anything
-      // it is assumed that it failed and fired off a response
-      if(arguments[i](req,res,doNothing)){
-        return;
+      statusCode = null;
+      responseData = null;
+      arguments[i](req,mockRes,() => {});
+
+      // the middleware attempted to send a response
+      // echo it then short-ciruit
+      if(statusCode){
+        return sendResponse(res,responseData);
       }
     }
     next();
