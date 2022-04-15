@@ -18,6 +18,7 @@ spec:
       app.kubernetes.io/component: reporting
       app.kubernetes.io/part-of: poll-buddy
       app.kubernetes.io/instance: master
+      app: poll-buddy-reporting
   strategy:
     type: RollingUpdate
   template:
@@ -27,14 +28,16 @@ spec:
         app.kubernetes.io/component: reporting
         app.kubernetes.io/part-of: poll-buddy
         app.kubernetes.io/instance: master
+        app: poll-buddy-reporting
     spec:
       restartPolicy: Always
       containers:
         - image: pollbuddy/reporting:kubernetes-setup
+          imagePullPolicy: Always
           name: reporting
           ports:
-            - containerPort: 300
-              name: reporting-port
+            - containerPort: 3000
+              name: reporting
 
 # Create a service to access the app from outside the cluster
 ---
@@ -52,7 +55,11 @@ spec:
   ports:
     - port: 3000
       protocol: TCP
-      targetPort: reporting-port
+      targetPort: reporting
   selector:
-    app.kubernetes.io/name: poll-buddy-reporting-deployment-master
+    app.kubernetes.io/name: poll-buddy-reporting
+    app.kubernetes.io/component: reporting
+    app.kubernetes.io/part-of: poll-buddy
+    app.kubernetes.io/instance: master
+    app: poll-buddy-reporting
   type: NodePort

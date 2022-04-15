@@ -18,6 +18,7 @@ spec:
       app.kubernetes.io/component: backend
       app.kubernetes.io/part-of: poll-buddy
       app.kubernetes.io/instance: master
+      app: poll-buddy-backend
   strategy:
     type: RollingUpdate
   template:
@@ -27,14 +28,16 @@ spec:
         app.kubernetes.io/component: backend
         app.kubernetes.io/part-of: poll-buddy
         app.kubernetes.io/instance: master
+        app: poll-buddy-backend
     spec:
       restartPolicy: Always
       containers:
         - image: pollbuddy/backend:kubernetes-setup
+          imagePullPolicy: Always
           name: backend
           ports:
             - containerPort: 3001
-              name: backend-port
+              name: backend
           readinessProbe:
             failureThreshold: 3
             httpGet:
@@ -62,7 +65,11 @@ spec:
   ports:
     - port: 3001
       protocol: TCP
-      targetPort: backend-port
+      targetPort: backend
   selector:
-    app.kubernetes.io/name: poll-buddy-backend-deployment-master
+    app.kubernetes.io/name: poll-buddy-backend
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: poll-buddy
+    app.kubernetes.io/instance: master
+    app: poll-buddy-backend
   type: NodePort

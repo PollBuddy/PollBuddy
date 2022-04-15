@@ -53,6 +53,7 @@ spec:
       restartPolicy: Always
       containers:
         - image: pollbuddy/reporting-db:kubernetes-setup
+          imagePullPolicy: Always
           name: reporting-db
           ports:
             - containerPort: 8086
@@ -83,5 +84,9 @@ spec:
       protocol: TCP
       targetPort: reporting-db
   selector:
-    app.kubernetes.io/name: poll-buddy-reporting-db-deployment-master
+    app.kubernetes.io/name: poll-buddy-reporting-db
+    app.kubernetes.io/component: reporting-db
+    app.kubernetes.io/part-of: poll-buddy
+    app.kubernetes.io/instance: master
+    app: poll-buddy-reporting-db
   type: NodePort

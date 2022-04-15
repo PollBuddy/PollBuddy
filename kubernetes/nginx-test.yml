@@ -1,30 +1,34 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-nginx
+  labels:
+    run: my-nginx
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+  selector:
+    run: my-nginx
+  type: NodePort
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
-  labels:
-    app: poll-buddy
-    app.kubernetes.io/name: poll-buddy
-    dev-instance-type: "pull-request"
-    dev-instance-id: "650"
+  name: my-nginx
 spec:
   selector:
     matchLabels:
-      app: poll-buddy
-      app.kubernetes.io/name: poll-buddy
-      dev-instance-type: "pull-request"
-      dev-instance-id: "650"
-  replicas: 2 # tells deployment to run 2 pods matching the template
+      run: my-nginx
+  replicas: 2
   template:
     metadata:
       labels:
-        app: poll-buddy
-        app.kubernetes.io/name: poll-buddy
-        dev-instance-type: "pull-request"
-        dev-instance-id: "650"
+        run: my-nginx
     spec:
       containers:
-        - name: nginx
-          image: nginx:1.14.2
+        - name: my-nginx
+          image: nginx
           ports:
             - containerPort: 80
