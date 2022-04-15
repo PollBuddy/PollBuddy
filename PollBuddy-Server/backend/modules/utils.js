@@ -1,6 +1,5 @@
 const bson = require("bson");
 const mongoConnection = require("../modules/mongoConnection.js");
-const { httpCodes } = require("../modules/httpCodes.js");
 /**
  * Helper function for creating the specified http response (https://pollbuddy.app/api/users).
  * For sample usage see https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Overview#helper-functions
@@ -124,7 +123,7 @@ let isSiteAdmin =
       let userID = req.session.userData.userID;
       let user = mongoConnection.getDB().collection("users").findOne({_id: userID});
       if (user.SiteAdmin) {
-        next()
+        next();
       } else {
         return res.status(500).send(createResponse(null, "User is not a site admin."));
       }
@@ -137,7 +136,7 @@ let isSiteAdmin =
  */
 function isDevelopmentMode(req,res,next) {
   if(process.env.DEVELOPMENT_MODE === "true"){
-    next()
+    next();
   } else {
     return res.status(500).send(createResponse(null, "App is not running in development mode."));
   }
@@ -151,8 +150,8 @@ function isDevelopmentMode(req,res,next) {
  */
 function or() {
   // passing middleware will call this, alerting us of their result
-  let passed = false
-  let succeed = () => {passed = true};
+  let passed = false;
+  let succeed = () => {passed = true;};
 
   //dummy response object
   //only one response can be sent per request
@@ -162,11 +161,11 @@ function or() {
   let mockRes = {
     status : (x) => mockRes,
     send : (x) => mockRes,
-  }
+  };
   return (req,res,next) => {
     for(let i = 0; i < arguments.length ; i ++){
       arguments[i](req,mockRes,succeed);
-      if( passed === true){
+      if(passed === true){
         return next();
       }
     }
