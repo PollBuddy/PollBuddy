@@ -1,3 +1,28 @@
+# Create a service to access the deployment pods
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: poll-buddy-reporting-service-master
+  labels:
+    app.kubernetes.io/name: poll-buddy-reporting-service-master
+    app.kubernetes.io/component: reporting
+    app.kubernetes.io/part-of: poll-buddy
+    app.kubernetes.io/instance: master
+    app: poll-buddy-reporting
+spec:
+  ports:
+    - port: 3000
+      protocol: TCP
+      targetPort: reporting
+  selector:
+    app.kubernetes.io/name: poll-buddy-reporting
+    app.kubernetes.io/component: reporting
+    app.kubernetes.io/part-of: poll-buddy
+    app.kubernetes.io/instance: master
+    app: poll-buddy-reporting
+  type: NodePort
+
 # Create a deployment to run in
 ---
 apiVersion: apps/v1
@@ -38,28 +63,3 @@ spec:
           ports:
             - containerPort: 3000
               name: reporting
-
-# Create a service to access the app from outside the cluster
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: poll-buddy-reporting-service-master
-  labels:
-    app.kubernetes.io/name: poll-buddy-reporting-service-master
-    app.kubernetes.io/component: reporting
-    app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
-    app: poll-buddy-reporting
-spec:
-  ports:
-    - port: 3000
-      protocol: TCP
-      targetPort: reporting
-  selector:
-    app.kubernetes.io/name: poll-buddy-reporting
-    app.kubernetes.io/component: reporting
-    app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
-    app: poll-buddy-reporting
-  type: NodePort

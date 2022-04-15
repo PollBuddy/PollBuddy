@@ -1,4 +1,4 @@
-# Allocate a volume for InfluxDB
+# Allocate a volume for data storage
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -18,7 +18,32 @@ spec:
     requests:
       storage: 1G
 
-# Create a deployment to run the app in
+# Create a service to access the deployment pods
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: poll-buddy-reporting-db-service-master
+  labels:
+    app.kubernetes.io/name: poll-buddy-reporting-db-service-master
+    app.kubernetes.io/component: reporting-db
+    app.kubernetes.io/part-of: poll-buddy
+    app.kubernetes.io/instance: master
+    app: poll-buddy-reporting-db
+spec:
+  ports:
+    - port: 8086
+      protocol: TCP
+      targetPort: reporting-db
+  selector:
+    app.kubernetes.io/name: poll-buddy-reporting-db
+    app.kubernetes.io/component: reporting-db
+    app.kubernetes.io/part-of: poll-buddy
+    app.kubernetes.io/instance: master
+    app: poll-buddy-reporting-db
+  type: NodePort
+
+# Create a deployment to run in
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -65,28 +90,3 @@ spec:
         - name: db-influx
           persistentVolumeClaim:
             claimName: pollbuddy-volume-claim-influx-master
-
-# Create a service to access the app from outside the cluster
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: poll-buddy-reporting-db-service-master
-  labels:
-    app.kubernetes.io/name: poll-buddy-reporting-db-service-master
-    app.kubernetes.io/component: reporting-db
-    app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
-    app: poll-buddy-reporting-db
-spec:
-  ports:
-    - port: 8086
-      protocol: TCP
-      targetPort: reporting-db
-  selector:
-    app.kubernetes.io/name: poll-buddy-reporting-db
-    app.kubernetes.io/component: reporting-db
-    app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
-    app: poll-buddy-reporting-db
-  type: NodePort

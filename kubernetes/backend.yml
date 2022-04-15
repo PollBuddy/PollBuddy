@@ -1,3 +1,28 @@
+# Create a service to access the deployment pods
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: poll-buddy-backend-service-master
+  labels:
+    app.kubernetes.io/name: poll-buddy-backend-service-master
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: poll-buddy
+    app.kubernetes.io/instance: master
+    app: poll-buddy-backend
+spec:
+  ports:
+    - port: 3001
+      protocol: TCP
+      targetPort: backend
+  selector:
+    app.kubernetes.io/name: poll-buddy-backend
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: poll-buddy
+    app.kubernetes.io/instance: master
+    app: poll-buddy-backend
+  type: NodePort
+
 # Create a deployment to run in
 ---
 apiVersion: apps/v1
@@ -48,28 +73,3 @@ spec:
             successThreshold: 1
             timeoutSeconds: 1
             # TODO: Health check probe
-
-# Create a service to access the app from within the cluster
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: poll-buddy-backend-service-master
-  labels:
-    app.kubernetes.io/name: poll-buddy-backend-service-master
-    app.kubernetes.io/component: backend
-    app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
-    app: poll-buddy-backend
-spec:
-  ports:
-    - port: 3001
-      protocol: TCP
-      targetPort: backend
-  selector:
-    app.kubernetes.io/name: poll-buddy-backend
-    app.kubernetes.io/component: backend
-    app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
-    app: poll-buddy-backend
-  type: NodePort
