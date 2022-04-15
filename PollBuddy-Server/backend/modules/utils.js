@@ -163,8 +163,7 @@ function or() {
   };
   return (req,res,next) => {
     for(let i = 0; i < arguments.length ; i ++){
-      statusCode = false;
-      arguments[i](req,mockRes,() => {succeeded = true});
+      arguments[i](req,mockRes,() => {succeeded = true;});
       if(succeeded){
         return next();
       }
