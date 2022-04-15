@@ -35,12 +35,16 @@ RUN npm run build
 
 
 # Build Stage 2 - Run previously built files
-FROM nginx:stable-alpine
+FROM nginx:stable-alpine-perl
 
 # Install curl
-RUN apk --no-cache add curl
+RUN apk add --no-cache curl
+
+# Install module for using environment variables
+#RUN apk add --no-cache nginx-mod-http-perl
 
 # Bundle the NGINX config files
+COPY webproxy/nginx.conf /etc/nginx/
 COPY webproxy/conf.d /etc/nginx/conf.d
 
 # Create app directory
