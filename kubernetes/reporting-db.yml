@@ -41,7 +41,7 @@ spec:
     app.kubernetes.io/part-of: poll-buddy
     app.kubernetes.io/instance: master
     app: poll-buddy-reporting-db
-  type: NodePort
+  type: ClusterIP
 
 # Create a deployment to run in
 ---
