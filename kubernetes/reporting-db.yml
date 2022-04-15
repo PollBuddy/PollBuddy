@@ -1,17 +1,22 @@
-
 # Allocate a volume for InfluxDB
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: pollbuddy-volume-claim-influx
+  labels:
+    app.kubernetes.io/name: poll-buddy-reporting-db
+    app.kubernetes.io/component: reporting-db
+    app.kubernetes.io/part-of: poll-buddy
+    app.kubernetes.io/instance: master
+    app: poll-buddy-reporting-db
+  name: pollbuddy-volume-claim-influx-master
 spec:
-  storageClassName: openebs-jiva-default
+  #storageClassName: openebs-jiva-default # I think I can just let this default and be good
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5G
+      storage: 1G
 
 # Create a deployment to run the app in
 ---
@@ -19,73 +24,64 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: poll-buddy-deployment
-    app: poll-buddy
-  name: poll-buddy-deployment
+    app.kubernetes.io/name: poll-buddy-reporting-db
+    app.kubernetes.io/component: reporting-db
+    app.kubernetes.io/part-of: poll-buddy
+    app.kubernetes.io/instance: master
+    app: poll-buddy-reporting-db
+  name: poll-buddy-reporting-db-deployment-master
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: poll-buddy
+      app.kubernetes.io/name: poll-buddy-reporting-db
+      app.kubernetes.io/component: reporting-db
+      app.kubernetes.io/part-of: poll-buddy
+      app.kubernetes.io/instance: master
+      app: poll-buddy-reporting-db
   strategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: poll-buddy
+        app.kubernetes.io/name: poll-buddy-reporting-db
+        app.kubernetes.io/component: reporting-db
+        app.kubernetes.io/part-of: poll-buddy
+        app.kubernetes.io/instance: master
+        app: poll-buddy-reporting-db
     spec:
+      restartPolicy: Always
       containers:
-        - image: pollbuddy/frontend:kubernetes-setup
-          name: frontend
-          ports:
-            - containerPort: 80
-              name: pollbuddy-frontend-port
-          readinessProbe:
-            failureThreshold: 3
-            httpGet:
-              path: /
-              port: 80
-              scheme: HTTP
-            periodSeconds: 10
-            successThreshold: 1
-            timeoutSeconds: 1
-
-        - image: pollbuddy/backend:kubernetes-setup
-          name: backend
-
-        - image: pollbuddy/reporting:kubernetes-setup
-          name: reporting
-
         - image: pollbuddy/reporting-db:kubernetes-setup
           name: reporting-db
+          ports:
+            - containerPort: 8086
+              name: reporting-db
           volumeMounts:
             - mountPath: /var/lib/influxdb
               name: db-influx
-
-      restartPolicy: Always
-
       volumes:
-        - name: db-mongo
-          persistentVolumeClaim:
-            claimName: pollbuddy-volume-claim-mongo
         - name: db-influx
           persistentVolumeClaim:
-            claimName: pollbuddy-volume-claim-influx
+            claimName: pollbuddy-volume-claim-influx-master
 
 # Create a service to access the app from outside the cluster
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: poll-buddy-service
+  name: poll-buddy-reporting-db-service-master
   labels:
-    app.kubernetes.io/name: poll-buddy-service
-    app: poll-buddy
+    app.kubernetes.io/name: poll-buddy-reporting-db-service-master
+    app.kubernetes.io/component: reporting-db
+    app.kubernetes.io/part-of: poll-buddy
+    app.kubernetes.io/instance: master
+    app: poll-buddy-reporting-db
 spec:
   ports:
-    - port: 80
+    - port: 8086
       protocol: TCP
-      targetPort: pollbuddy-frontend-port
+      targetPort: reporting-db
   selector:
-    app.kubernetes.io/name: poll-buddy-deployment
+    app.kubernetes.io/name: poll-buddy-reporting-db-deployment-master
   type: NodePort

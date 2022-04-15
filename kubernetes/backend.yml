@@ -1,91 +1,68 @@
-
-# Allocate a volume for InfluxDB
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: pollbuddy-volume-claim-influx
-spec:
-  storageClassName: openebs-jiva-default
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 5G
-
-# Create a deployment to run the app in
+# Create a deployment to run in
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: poll-buddy-deployment
-    app: poll-buddy
-  name: poll-buddy-deployment
+    app.kubernetes.io/name: poll-buddy-backend
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: poll-buddy
+    app.kubernetes.io/instance: master
+    app: poll-buddy-backend
+  name: poll-buddy-backend-deployment-master
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: poll-buddy
+      app.kubernetes.io/name: poll-buddy-backend
+      app.kubernetes.io/component: backend
+      app.kubernetes.io/part-of: poll-buddy
+      app.kubernetes.io/instance: master
   strategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: poll-buddy
+        app.kubernetes.io/name: poll-buddy-backend
+        app.kubernetes.io/component: backend
+        app.kubernetes.io/part-of: poll-buddy
+        app.kubernetes.io/instance: master
     spec:
+      restartPolicy: Always
       containers:
-        - image: pollbuddy/frontend:kubernetes-setup
-          name: frontend
+        - image: pollbuddy/backend:kubernetes-setup
+          name: backend
           ports:
-            - containerPort: 80
-              name: pollbuddy-frontend-port
+            - containerPort: 3001
+              name: backend-port
           readinessProbe:
             failureThreshold: 3
             httpGet:
-              path: /
-              port: 80
+              path: /api/healthcheck
+              port: 3001
               scheme: HTTP
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 1
+            # TODO: Health check probe
 
-        - image: pollbuddy/backend:kubernetes-setup
-          name: backend
-
-        - image: pollbuddy/reporting:kubernetes-setup
-          name: reporting
-
-        - image: pollbuddy/reporting-db:kubernetes-setup
-          name: reporting-db
-          volumeMounts:
-            - mountPath: /var/lib/influxdb
-              name: db-influx
-
-      restartPolicy: Always
-
-      volumes:
-        - name: db-mongo
-          persistentVolumeClaim:
-            claimName: pollbuddy-volume-claim-mongo
-        - name: db-influx
-          persistentVolumeClaim:
-            claimName: pollbuddy-volume-claim-influx
-
-# Create a service to access the app from outside the cluster
+# Create a service to access the app from within the cluster
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: poll-buddy-service
+  name: poll-buddy-backend-service-master
   labels:
-    app.kubernetes.io/name: poll-buddy-service
-    app: poll-buddy
+    app.kubernetes.io/name: poll-buddy-backend-service-master
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: poll-buddy
+    app.kubernetes.io/instance: master
+    app: poll-buddy-backend
 spec:
   ports:
-    - port: 80
+    - port: 3001
       protocol: TCP
-      targetPort: pollbuddy-frontend-port
+      targetPort: backend-port
   selector:
-    app.kubernetes.io/name: poll-buddy-deployment
+    app.kubernetes.io/name: poll-buddy-backend-deployment-master
   type: NodePort

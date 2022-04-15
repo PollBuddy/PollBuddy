@@ -1,3 +1,17 @@
+# Allocate a volume for InfluxDB
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: pollbuddy-volume-claim-mongo-master
+spec:
+  # storageClassName: openebs-jiva-default
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1G
+
 # Service
 ---
 apiVersion: v1
@@ -52,6 +66,7 @@ spec:
           volumeMounts:
             - name: pollbuddy-mongodb-volume-claim
               mountPath: /data
+        # TODO: Env things
   volumeClaimTemplates:
     - metadata:
         name: pollbuddy-mongodb-volume-claim

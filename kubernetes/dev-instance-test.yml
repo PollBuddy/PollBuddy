@@ -1,0 +1,86 @@
+# Create a deployment to run in
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: poll-buddy-deployment
+    app: poll-buddy
+    dev-instance-type: pull-request
+    dev-instance-id: "650"
+  name: poll-buddy-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: poll-buddy
+      app: poll-buddy
+      dev-instance-type: pull-request
+      dev-instance-id: "650"
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: poll-buddy
+        app: poll-buddy
+        dev-instance-type: pull-request
+        dev-instance-id: "650"
+    spec:
+      containers:
+        - image: pollbuddy/frontend:kubernetes-setup
+          name: frontend
+          ports:
+            - containerPort: 80
+              name: frontend
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+
+        - image: pollbuddy/backend:kubernetes-setup
+          name: backend
+
+        - image: pollbuddy/reporting:kubernetes-setup
+          name: reporting
+
+        - image: pollbuddy/reporting-db:kubernetes-setup
+          name: reporting-db
+          volumeMounts:
+            - mountPath: /var/lib/influxdb
+              name: db-influx
+
+      restartPolicy: Always
+
+      volumes:
+        - name: db-mongo
+          persistentVolumeClaim:
+            claimName: pollbuddy-volume-claim-mongo
+        - name: db-influx
+          persistentVolumeClaim:
+            claimName: pollbuddy-volume-claim-influx
+
+# Create a service to access the app from outside the cluster
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: poll-buddy-service
+  labels:
+    app.kubernetes.io/name: poll-buddy-service
+    app: poll-buddy
+    dev-instance-type: pull-request
+    dev-instance-id: "650"
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: frontend
+  selector:
+    app.kubernetes.io/name: poll-buddy-deployment
+  type: NodePort
