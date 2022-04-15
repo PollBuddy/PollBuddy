@@ -73,6 +73,8 @@ spec:
             successThreshold: 1
             timeoutSeconds: 1
           env:
+            - name: DNS
+              value: kube-dns.kube-system.svc.cluster.local
             - name: BACKEND
               value: poll-buddy-backend-service-master
             - name: REPORTING
