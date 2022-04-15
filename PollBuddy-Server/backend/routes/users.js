@@ -650,7 +650,7 @@ router.get("/me/groups", promote(isLoggedIn), async function (req, res) {
 });
 
 /**
- * This route is not used. It is simply there to have some response to /api/users/:id/edit when using GET.
+ * This route is not used. It is simply there to have some response to /api/users/me/groups when using POST.
  * @getdata {void} None
  * @postdata {void} None
  * @returns {void} Status 405: { "result": "failure", "error": "GET is not available for this route. Use POST." }
@@ -673,7 +673,7 @@ router.post("/me/groups", function (req, res) {
  * @param {callback} callback - function handler for route
  */
 router.get("/forgotpassword/",function (req,res) {
-  return res.status(405).send(createResponse(null,"Route not availible."));
+  return sendResponse(res,httpCodes.MethodNotAllowed("Route not availible"));
 });
 
 /**
@@ -686,7 +686,7 @@ router.get("/forgotpassword/",function (req,res) {
  * @param {callback} callback - function handler for route
  */
 router.post("/forgotpassword/",function (req,res) {
-  return res.status(405).send(createResponse(null,"Route not availible."));
+  return sendResponse(res,httpCodes.MethodNotAllowed("Route not availible"));
 });
 
 /**
@@ -699,7 +699,7 @@ router.post("/forgotpassword/",function (req,res) {
  * @param {callback} callback - function handler for route
  */
 router.get("/forgotpassword/submit",function (req,res) {
-  return res.status(405).send(createResponse(null,"GET not availible.use POST"));
+  return sendResponse(res,httpCodes.MethodNotAllowed("GET not availible.use POST"));
 });
 
 /**
@@ -728,14 +728,14 @@ router.post("/forgotpassword/submit/",function (req,res) {
   }else if(username){
     document = mongoConnection.getDB().collection("users").findOne({"UserName":username});
   }else{
-    return res.status(500).send(createResponse("Neither username nor email provided.", null));
+    return sendResponse(res,httpCodes.InternalServerError("Neither username nor email provided."));
   }
 
   document
     .then(
       result => {
         if(result) {
-          const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+          const alphabet = "ABCDEFGHKLMNPQRSTUVWXYZabcdefghkmnpqrstuvwxyz23456789";
           let key = "";
           for(let i = 0; i < 32 ; i++) {
             key += alphabet[Math.floor(Math.random() * alphabet.length)];
@@ -746,30 +746,30 @@ router.post("/forgotpassword/submit/",function (req,res) {
 
           mongoConnection.getDB().collection("users").updateOne({"_id": result._id},{ "$set": { "ResetPasswordToken" : key, "ResetPasswordTokenExpiration" : expireTime } },function (err, response) {
             if (err) {
-              return res.status(500).send(createResponse(err,"Could not update user data."));
+              return sendResponse(res,httpCodes.InternalServerError("Could not update user data."));
             } else{
               let emailBody = 
               "Hello, " + result.UserName + "\n"
-              +"\n You are recieving this email because a password reset request was sent to this account"
-              +"\n\n if you requested a password reset follow the link below:"
+              +"\n You are recieving this email because a password reset request was sent to this account."
+              +"\n\n If you requested a password reset follow the link below:"
               +"\n  " + process.env.FRONTEND_URL + "/login/reset"
-              +"\n your password reset token is: " + key
-              +"\n\n if you did not make a password reset request, you can safely ignore this message\n\n";
+              +"\n Your password reset token is: " + key
+              +"\n\n If you did not make a password reset request, you can safely ignore this message.\n\n";
               
-              send(result.Email,"PollBuddy Password Reset",emailBody,function (success,messages) {
+              send(result.Email,"Poll Buddy Password Reset",emailBody,function (success,messages) {
                 if (success){
-                  return res.status(200).send(createResponse());
+                  return sendResponse(res,httpCodes.Ok());
                 }else{
-                  return res.status(500).send(createResponse(messages,"Could not send email."));
+                  return sendResponse(res,httpCodes.InternalServerError("Could not send email."));
                 }
               });
             }
           });
         }else{
-          return res.status(500).send(createResponse(null,"Could not find user."));
+          return sendResponse(res,httpCodes.InternalServerError("Could not find user."));
         }
       },
-      err => {return res.status(500).send(createResponse(err,"Could not find user."));}
+      err => {return sendResponse(res,httpCodes.InternalServerError("Could not find user."));}
     );
 });
 
@@ -783,7 +783,7 @@ router.post("/forgotpassword/submit/",function (req,res) {
  * @param {callback} callback - function handler for route
  */
 router.get("/forgotpassword/validate",function (req,res) {
-  return res.status(405).send(createResponse(null,"Route not availible."));
+  return sendResponse(res,httpCodes.MethodNotAllowed("GET not availible.use POST"));
 });
 
 /**
@@ -804,13 +804,13 @@ router.post("/forgotpassword/validate",function (req,res) {
   mongoConnection.getDB().collection("users").findOne({"UserName":username,"ResetPasswordToken":token}, function(error,result) {
     if(result){
       let currentDate = new Date();
-      if(currentDate < result.ResetPasswordTokenExpiration ){
-        return res.status(200).send(createResponse());
+      if( currentDate < result.ResetPasswordTokenExpiration ){
+        return sendResponse(res,httpCodes.Ok());
       } else {
-        return res.status(405).send(createResponse(null,"Token is invalid(token expired)."));
+        return sendResponse(res,httpCodes.InternalServerError("Token is invalid(token expired)."));
       }
     } else {
-      return res.status(405).send(createResponse(null,"Token is invalid(user with token not found)."));
+      return sendResponse(res,httpCodes.InternalServerError("Token is invalid(user with token not found)."));
     }
   });
 });
@@ -825,7 +825,7 @@ router.post("/forgotpassword/validate",function (req,res) {
  * @param {callback} callback - function handler for route
  */
 router.get("/forgotpassword/change",function (req,res) {
-  return res.status(405).send(createResponse(null,"Route not availible."));
+  return sendResponse(res.httpCodes.MethodNotAllowed("GET not availible.use POST"));
 });
 
 /**
@@ -859,27 +859,27 @@ router.post("/forgotpassword/change",function (req,res) {
         if(currentDate < expiration){
           bcrypt.hash(newPassword, 10, function (hashError,hash) {
             if(hashError){
-              return res.status(500).send(createResponse(null,"Could not hash password.")); 
+              return sendResponse(res,httpCodes.InternalServerError("Could not hash password."));
             }else{
               mongoConnection.getDB().collection("users").updateOne({"_id":searchResult._id},{"$set":{"Password":hash},"$unset":{"ResetPasswordTokenExpiration":"","ResetPasswordToken":""}},function(updateError,updateResult){
                 if(updateError){
-                  return res.status(500).send(createResponse(null,"Could not update password.")); 
+                  return sendResponse(res,httpCodes.InternalServerError("Could not update password."));
                 }else{
-                  return res.status(200).send(createResponse()); 
+                  return sendResponse(res,httpCodes.Ok());
                 }
               });
             }
           }); 
           
         }else{
-          return res.status(500).send(createResponse(null,"Token expired."));
+          return sendResponse(res,httpCodes.InternalServerError("Token expired."));
         }
       }else{
-        return res.status(500).send(createResponse(null,"User with token not found."));
+        return sendResponse(res,httpCodes.InternalServerError("User with token not found."));
       }
     });
   }else{
-    return res.status(500).send(createResponse(null,"Invalid password."));
+    return sendResponse(res,httpCodes.InternalServerError("Invalid password."));
   }
 });
 
