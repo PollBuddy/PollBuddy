@@ -7,10 +7,9 @@ let db;
 const username = encodeURIComponent(process.env.DB_USERNAME);
 const password = encodeURIComponent(process.env.DB_PASSWORD);
 const clusterUrl = process.env.DB_URL;
-const authMechanism = "DEFAULT";
 
 const uri = process.env.DB_USERNAME ?
-  `mongodb://${username}:${password}@${clusterUrl}/`
+  `mongodb://${username}:${password}@${clusterUrl}/?authSource=${process.env.DB_NAME}`
   : `mongodb://${clusterUrl}/`;
 
 
