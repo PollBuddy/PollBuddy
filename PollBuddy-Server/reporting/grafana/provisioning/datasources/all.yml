@@ -12,7 +12,7 @@ datasources:
     # <int> org id. will default to orgId 1 if not specified
     orgId: 1
     # <string> url
-    url: http://influxdb:8086
+    url: http://$REPORTING_DB_URL:8086
     # <string> database user, if used
     user: pollbuddy
     # <string> database name, if used
