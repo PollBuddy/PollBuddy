@@ -10,8 +10,8 @@ const clusterUrl = process.env.DB_URL;
 const authMechanism = "DEFAULT";
 
 const uri = process.env.DB_USERNAME ?
-  `mongodb://${username}:${password}@${clusterUrl}/?authMechanism=${authMechanism}`
-  : `mongodb+srv://${clusterUrl}/`;
+  `mongodb://${username}:${password}@${clusterUrl}/`
+  : `mongodb://${clusterUrl}/`;
 
 
 // This function is used to create the indexes in the database. These help increase performance and ensure certain
