@@ -4,6 +4,16 @@ const MongoClient = mongo.MongoClient;
 let client;
 let db;
 
+const username = encodeURIComponent(process.env.DB_USERNAME);
+const password = encodeURIComponent(process.env.DB_PASSWORD);
+const clusterUrl = process.env.DB_URL;
+const authMechanism = "DEFAULT";
+
+const uri = process.env.DB_USERNAME ?
+  `mongodb+srv://${username}:${password}@${clusterUrl}/?authMechanism=${authMechanism}`
+  : `mongodb+srv://${clusterUrl}/`;
+
+
 // This function is used to create the indexes in the database. These help increase performance and ensure certain
 // attributes are unique. This will run on every DB connect, but it should silently do nothing if the indexes
 // already exist in the database.
@@ -67,14 +77,7 @@ module.exports = {
     con();
 
     function con() {
-      const username = encodeURIComponent(process.env.DB_USERNAME);
-      const password = encodeURIComponent(process.env.DB_PASSWORD);
-      const clusterUrl = process.env.DB_URL;
-      const authMechanism = "DEFAULT";
-
-      const uri = process.env.DB_USERNAME ?
-        `mongodb+srv://${username}:${password}@${clusterUrl}/?authMechanism=${authMechanism}`
-        : `mongodb+srv://${clusterUrl}/`;
+      console.log(uri);
 
       client = new MongoClient(uri);
       client.connect((err) => {
@@ -123,5 +126,8 @@ module.exports = {
       }
     }
     return false;
+  },
+  getURI: function() {
+    return uri;
   }
 };
