@@ -9,8 +9,8 @@ const password = encodeURIComponent(process.env.DB_PASSWORD);
 const clusterUrl = process.env.DB_URL;
 
 const uri = process.env.DB_USERNAME ?
-  `mongodb://${username}:${password}@${clusterUrl}/?authSource=${process.env.DB_NAME}`
-  : `mongodb://${clusterUrl}/`;
+  `mongodb://${username}:${password}@${clusterUrl}/pollbuddy?authSource=${process.env.DB_NAME}`
+  : `mongodb://${clusterUrl}/pollbuddy`;
 
 
 // This function is used to create the indexes in the database. These help increase performance and ensure certain
