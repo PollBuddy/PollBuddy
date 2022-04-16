@@ -70,33 +70,23 @@ async function createIndexes() {
 }
 
 module.exports = {
-  //Todo: Use Async/Await
   connect: function(callback) {
+    console.log("Connecting to database...");
+    client = new MongoClient(uri);
+    client.connect((err) => {
+      if (err) {
+        console.error("Seems the database isn't up yet, retrying...");
+        console.log(err);
+        process.exit(1);
+      } else {
+        db = client.db(process.env.DB_NAME);
+        console.log("Database connected");
 
-    con();
-
-    function con() {
-      console.log(uri);
-
-      client = new MongoClient(uri);
-      client.connect((err) => {
-        if (err) {
-          console.error("Seems the database isn't up yet, retrying in 1 second");
-          console.log(err);
-          process.exit(1);
-          setTimeout(function () {
-            con();
-          }, 3000);
-        } else {
-          db = client.db(process.env.DB_NAME);
-          console.log("Database connected");
-
-          createIndexes().then(function() {
-            callback(true);
-          });
-        }
-      });
-    }
+        createIndexes().then(function() {
+          callback(true);
+        });
+      }
+    });
   },
   disconnect: function(callback) {
     client.close(function() {

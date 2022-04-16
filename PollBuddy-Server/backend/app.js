@@ -19,29 +19,33 @@ const cors = require("cors");
 
 const app = express();
 
+// Express Session
+const expressSession = require("express-session");
+const MongoStore = require("connect-mongo");
+
 // Database
 const mongoConnection = require("./modules/mongoConnection.js");
 mongoConnection.connect(function (res) {
   if (res !== true) {
     console.error(res);
   }
+  let clientPromise = mongoConnection.getClient();
+  console.log("Connecting express-session");
+  app.use(expressSession({
+    cookie: {
+      maxAge: 2629800000
+    },
+    name: "pollbuddy_session",
+    secret: process.env["SESSION_SECRET"],
+    secure: true,
+    rolling: true,
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({ clientPromise })
+  }));
 });
 
-// Express Session
-const expressSession = require("express-session");
-const MongoStore = require("connect-mongo");
-app.use(expressSession({
-  cookie: {
-    maxAge: 2629800000
-  },
-  name: "pollbuddy_session",
-  secret: process.env["SESSION_SECRET"],
-  secure: true,
-  rolling: true,
-  resave: false,
-  saveUninitialized: true,
-  store: MongoStore.create(mongoConnection.getClient())
-}));
+
 
 // Cors: https://daveceddia.com/access-control-allow-origin-cors-errors-in-react-express/
 app.use(cors());
