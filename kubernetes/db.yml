@@ -14,7 +14,7 @@ data:
   mongo-user.sh: |
     mongo admin -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} <<EOF
         use ${DB_NAME}
-        db.createUser({user: "${DB_USERNAME}", pwd: "${DB_USERPASSWORD}", roles: [
+        db.createUser({user: "${DB_USERNAME}", pwd: "${DB_PASSWORD}", roles: [
             { role: "readWrite", db: "${DB_NAME}" }
         ]});
     EOF

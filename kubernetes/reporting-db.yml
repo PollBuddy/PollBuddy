@@ -151,7 +151,7 @@ spec:
       volumes:
         - name: poll-buddy-reporting-db-volume-init-script-master
           configMap:
-            name: poll-buddy-reporting-db-configmap-master
+            name: poll-buddy-reporting-db-configmap-init-script-master
             defaultMode: 0755
         - name: influx-data
           persistentVolumeClaim:

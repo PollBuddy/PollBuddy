@@ -40,10 +40,7 @@ app.use(expressSession({
   rolling: true,
   resave: false,
   saveUninitialized: true,
-  store: MongoStore.create({
-    mongoUrl: mongoConnection.getURI(),
-    dbName: process.env["DB_NAME"]
-  })
+  store: MongoStore.create(mongoConnection.getClient())
 }));
 
 // Cors: https://daveceddia.com/access-control-allow-origin-cors-errors-in-react-express/
