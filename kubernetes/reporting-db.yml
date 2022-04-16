@@ -1,3 +1,25 @@
+# ConfigMap to store the startup script
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: poll-buddy-reporting-db-configmap-init-script-master
+  labels:
+    app.kubernetes.io/name: influxdb
+    app.kubernetes.io/component: reporting-db
+    app.kubernetes.io/part-of: poll-buddy
+    environment: production
+    app: poll-buddy-reporting-db
+data:
+  influxdb-init.sh: |
+    influx -host 127.0.0.1 -port $INFLUXDB_INIT_PORT \
+    -username ${DOCKER_INFLUXDB_INIT_USERNAME} \
+    -password ${DOCKER_INFLUXDB_INIT_PASSWORD} \
+    -execute "CREATE DATABASE ${REPORTING_DB_NAME}; \
+    CREATE RETENTION POLICY one_year ON ${REPORTING_DB_NAME} DURATION 365d REPLICATION 1 DEFAULT; \
+    CREATE USER ${REPORTING_DB_USERNAME} WITH PASSWORD '${REPORTING_DB_PASSWORD}'; \
+    GRANT ALL ON ${REPORTING_DB_NAME} TO ${REPORTING_DB_USERNAME}"
+
 # Allocate a volume for data storage
 ---
 kind: PersistentVolumeClaim
@@ -77,15 +99,38 @@ spec:
       restartPolicy: Always
       containers:
         - name: reporting-db
-          image: pollbuddy/reporting-db:kubernetes-setup
+          image: influxdb:1.8
           imagePullPolicy: Always
           ports:
             - containerPort: 8086
               name: reporting-db
+          env:
+            - name: DOCKER_INFLUXDB_INIT_USERNAME
+              value: admin
+            - name: DOCKER_INFLUXDB_INIT_PASSWORD
+              value: pollbuddy
+            - name: REPORTING_DB_NAME
+              value: pollbuddy
+            - name: REPORTING_DB_USERNAME
+              value: pollbuddy
+            - name: REPORTING_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: poll-buddy-reporting-db-secrets-master
+                  key: user-password
+            - name: INFLUXDB_HTTP_AUTH_ENABLED
+              value: "true"
           volumeMounts:
-            - mountPath: /var/lib/influxdb
-              name: db-influx
+            - name: poll-buddy-reporting-db-volume-init-script-master
+              mountPath: /docker-entrypoint-initdb.d
+            - name: influx-data
+              mountPath: /var/lib/influxdb
+
       volumes:
-        - name: db-influx
+        - name: poll-buddy-reporting-db-volume-init-script-master
+          configMap:
+            name: poll-buddy-reporting-db-configmap-init-script-master
+            defaultMode: 0755
+        - name: influx-data
           persistentVolumeClaim:
             claimName: poll-buddy-volume-claim-influx-master

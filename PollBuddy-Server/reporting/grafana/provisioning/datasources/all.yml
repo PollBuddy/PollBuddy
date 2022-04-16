@@ -14,9 +14,9 @@ datasources:
     # <string> url
     url: http://$REPORTING_DB_URL:8086
     # <string> database user, if used
-    user: pollbuddy
+    user: $REPORTING_DB_USERNAME
     # <string> database name, if used
-    database: pollbuddy
+    database: $REPORTING_DB_NAME
     # <bool> mark as default datasource. Max one per org
     isDefault: true
     # <map> fields that will be converted to json and stored in jsonData
@@ -24,7 +24,7 @@ datasources:
       httpMode: GET
     secureJsonData:
       # <string> database password, if used
-      password: pollbuddy
+      password: $REPORTING_DB_PASSWORD
     version: 1
     # <bool> allow users to edit data sources from the UI.
     editable: false

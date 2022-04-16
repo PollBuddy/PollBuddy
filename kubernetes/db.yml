@@ -185,7 +185,7 @@ spec:
                   name: poll-buddy-db-secrets-master
                   key: user-password
           volumeMounts:
-            - name: mongodata
+            - name: mongo-data
               mountPath: /var/lib/mongodb
             - name: poll-buddy-db-volume-init-script-master
               mountPath: /docker-entrypoint-initdb.d
@@ -231,7 +231,7 @@ spec:
 
   volumeClaimTemplates:
     - metadata:
-        name: mongodata
+        name: mongo-data
       spec:
         accessModes:
           - ReadWriteOnce

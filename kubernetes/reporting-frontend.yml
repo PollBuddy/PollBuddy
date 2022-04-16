@@ -66,3 +66,14 @@ spec:
           env:
             - name: REPORTING_DB_URL
               value: poll-buddy-reporting-db-service-master.default.svc.cluster.local
+            - name: REPORTING_DB_NAME
+              value: pollbuddy
+            - name: REPORTING_DB_USERNAME
+              value: pollbuddy
+            - name: REPORTING_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: poll-buddy-reporting-db-secrets-master
+                  key: user-password
+            - name: SESSION_SECRET
+              value: NTpUkD6xyALq4LMB2FDHf2iKdYcSznns
