@@ -67,7 +67,16 @@ module.exports = {
     con();
 
     function con() {
-      client = new MongoClient(process.env.DB_URL);
+      const username = encodeURIComponent(process.env.DB_USERNAME);
+      const password = encodeURIComponent(process.env.DB_PASSWORD);
+      const clusterUrl = process.env.DB_URL;
+      const authMechanism = "DEFAULT";
+
+      const uri = process.env.DB_USERNAME ?
+        `mongodb+srv://${username}:${password}@${clusterUrl}/?authMechanism=${authMechanism}`
+        : `mongodb+srv://${clusterUrl}/`;
+
+      client = new MongoClient(uri);
       client.connect((err) => {
         if (err) {
           console.error("Seems the database isn't up yet, retrying in 1 second");

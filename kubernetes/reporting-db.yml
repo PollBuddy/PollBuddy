@@ -3,20 +3,19 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
+  name: poll-buddy-volume-claim-influx-master
   labels:
-    app.kubernetes.io/name: poll-buddy-reporting-db
+    app.kubernetes.io/name: influxdb
     app.kubernetes.io/component: reporting-db
     app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
+    environment: production
     app: poll-buddy-reporting-db
-  name: pollbuddy-volume-claim-influx-master
 spec:
-  #storageClassName: openebs-jiva-default # I think I can just let this default and be good
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1G
+      storage: 1Gi
 
 # Create a service to access the deployment pods
 ---
@@ -25,10 +24,10 @@ kind: Service
 metadata:
   name: poll-buddy-reporting-db-service-master
   labels:
-    app.kubernetes.io/name: poll-buddy-reporting-db-service-master
+    app.kubernetes.io/name: influxdb
     app.kubernetes.io/component: reporting-db
     app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
+    environment: production
     app: poll-buddy-reporting-db
 spec:
   ports:
@@ -36,10 +35,10 @@ spec:
       protocol: TCP
       targetPort: reporting-db
   selector:
-    app.kubernetes.io/name: poll-buddy-reporting-db
+    app.kubernetes.io/name: influxdb
     app.kubernetes.io/component: reporting-db
     app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
+    environment: production
     app: poll-buddy-reporting-db
   type: ClusterIP
 
@@ -49,37 +48,34 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: poll-buddy-reporting-db
+    app.kubernetes.io/name: influxdb
     app.kubernetes.io/component: reporting-db
     app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
-    app: poll-buddy-reporting-db
+    environment: production
   name: poll-buddy-reporting-db-deployment-master
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: poll-buddy-reporting-db
+      app.kubernetes.io/name: influxdb
       app.kubernetes.io/component: reporting-db
       app.kubernetes.io/part-of: poll-buddy
-      app.kubernetes.io/instance: master
-      app: poll-buddy-reporting-db
+      environment: production
   strategy:
     type: RollingUpdate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: poll-buddy-reporting-db
+        app.kubernetes.io/name: influxdb
         app.kubernetes.io/component: reporting-db
         app.kubernetes.io/part-of: poll-buddy
-        app.kubernetes.io/instance: master
-        app: poll-buddy-reporting-db
+        environment: production
     spec:
       restartPolicy: Always
       containers:
-        - image: pollbuddy/reporting-db:kubernetes-setup
+        - name: reporting-db
+          image: pollbuddy/reporting-db:kubernetes-setup
           imagePullPolicy: Always
-          name: reporting-db
           ports:
             - containerPort: 8086
               name: reporting-db

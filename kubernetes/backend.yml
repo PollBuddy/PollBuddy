@@ -63,6 +63,15 @@ spec:
           ports:
             - containerPort: 3001
               name: backend
+          env:
+            - name: FRONTEND_URL
+              value: http://localhost:7655
+            - name: DB_URL
+              value: mongodb://poll-buddy-db-service-master:27017
+            - name: DB_NAME
+              value: pollbuddy
+            - name: SESSION_SECRET
+              value: NTpUkD6xyALq4LMB2FDHf2iKdYcSznns
           readinessProbe:
             failureThreshold: 3
             httpGet:
