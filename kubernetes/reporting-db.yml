@@ -47,12 +47,13 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: poll-buddy-reporting-db-deployment-master
   labels:
     app.kubernetes.io/name: influxdb
     app.kubernetes.io/component: reporting-db
     app.kubernetes.io/part-of: poll-buddy
     environment: production
-  name: poll-buddy-reporting-db-deployment-master
+    app: poll-buddy-reporting-db
 spec:
   replicas: 1
   selector:
@@ -61,6 +62,7 @@ spec:
       app.kubernetes.io/component: reporting-db
       app.kubernetes.io/part-of: poll-buddy
       environment: production
+      app: poll-buddy-reporting-db
   strategy:
     type: RollingUpdate
   template:
@@ -70,6 +72,7 @@ spec:
         app.kubernetes.io/component: reporting-db
         app.kubernetes.io/part-of: poll-buddy
         environment: production
+        app: poll-buddy-reporting-db
     spec:
       restartPolicy: Always
       containers:
@@ -85,4 +88,4 @@ spec:
       volumes:
         - name: db-influx
           persistentVolumeClaim:
-            claimName: pollbuddy-volume-claim-influx-master
+            claimName: poll-buddy-volume-claim-influx-master

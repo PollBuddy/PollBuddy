@@ -86,7 +86,7 @@ spec:
             - name: REPORTING_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: poll-buddy-db-secrets-master
+                  name: poll-buddy-reporting-db-secrets-master
                   key: user-password
             - name: SESSION_SECRET
               value: NTpUkD6xyALq4LMB2FDHf2iKdYcSznns
