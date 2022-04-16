@@ -83,6 +83,7 @@ module.exports = {
         if (err) {
           console.error("Seems the database isn't up yet, retrying in 1 second");
           console.log(err);
+          process.exit(1);
           setTimeout(function () {
             con();
           }, 3000);

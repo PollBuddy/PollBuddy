@@ -13,8 +13,8 @@ metadata:
 data:
   mongo-user.sh: |
     mongo admin -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} <<EOF
-        use pollbuddy
-        db.createUser({user: "${DB_USER_NAME}", pwd: "${DB_USER_PASSWORD}", roles: [
+        use ${DB_NAME}
+        db.createUser({user: "${DB_USERNAME}", pwd: "${DB_USERPASSWORD}", roles: [
             { role: "readWrite", db: "${DB_NAME}" }
         ]});
     EOF
@@ -75,7 +75,6 @@ spec:
     - name: mongo
       port: 27017
       targetPort: 27017
-  #clusterIP: None # ???
   selector:
     app.kubernetes.io/name: mongodb
     app.kubernetes.io/component: db
@@ -169,17 +168,26 @@ spec:
             - name: MONGO_DATA_DIR
               value: /var/lib/mongodb
             - name: DB_NAME
-              value: pollbuddy
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-db-configmap-master
+                  key: db_name
             - name: MONGO_INITDB_ROOT_USERNAME
-              value: root
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-db-configmap-master
+                  key: db_admin_username
             - name: MONGO_INITDB_ROOT_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: poll-buddy-db-secrets-master
                   key: admin-password
-            - name: DB_USER_NAME
-              value: pollbuddy
-            - name: DB_USER_PASSWORD
+            - name: DB_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-db-configmap-master
+                  key: db_username
+            - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: poll-buddy-db-secrets-master
@@ -206,7 +214,10 @@ spec:
             - name: KUBERNETES_MONGO_SERVICE_NAME
               value: poll-buddy-db-service-master
             - name: MONGODB_USERNAME
-              value: root
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-db-configmap-master
+                  key: db_admin_username
             - name: MONGODB_DATABASE
               value: admin
             - name: MONGODB_PASSWORD

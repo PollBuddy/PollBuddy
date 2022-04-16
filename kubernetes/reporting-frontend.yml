@@ -67,13 +67,17 @@ spec:
             - name: REPORTING_DB_URL
               value: poll-buddy-reporting-db-service-master.default.svc.cluster.local
             - name: REPORTING_DB_NAME
-              value: pollbuddy
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-reporting-db-configmap-master
+                  key: reporting_db_name
             - name: REPORTING_DB_USERNAME
-              value: pollbuddy
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-reporting-db-configmap-master
+                  key: reporting_db_username
             - name: REPORTING_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: poll-buddy-reporting-db-secrets-master
                   key: user-password
-            - name: SESSION_SECRET
-              value: NTpUkD6xyALq4LMB2FDHf2iKdYcSznns

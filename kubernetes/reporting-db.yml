@@ -106,17 +106,35 @@ spec:
               name: reporting-db
           env:
             - name: DOCKER_INFLUXDB_INIT_USERNAME
-              value: admin
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-reporting-db-configmap-master
+                  key: reporting_db_admin_username
             - name: INFLUXDB_ADMIN_USER
-              value: admin
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-reporting-db-configmap-master
+                  key: reporting_db_admin_username
             - name: DOCKER_INFLUXDB_INIT_PASSWORD
-              value: pollbuddy
+              valueFrom:
+                secretKeyRef:
+                  name: poll-buddy-reporting-db-secrets-master
+                  key: admin-password
             - name: INFLUXDB_ADMIN_PASSWORD
-              value: pollbuddy
+              valueFrom:
+                secretKeyRef:
+                  name: poll-buddy-reporting-db-secrets-master
+                  key: admin-password
             - name: REPORTING_DB_NAME
-              value: pollbuddy
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-reporting-db-configmap-master
+                  key: reporting_db_name
             - name: REPORTING_DB_USERNAME
-              value: pollbuddy
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-reporting-db-configmap-master
+                  key: reporting_db_username
             - name: REPORTING_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -133,7 +151,7 @@ spec:
       volumes:
         - name: poll-buddy-reporting-db-volume-init-script-master
           configMap:
-            name: poll-buddy-reporting-db-configmap-init-script-master
+            name: poll-buddy-reporting-db-configmap-master
             defaultMode: 0755
         - name: influx-data
           persistentVolumeClaim:

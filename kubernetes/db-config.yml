@@ -1,0 +1,16 @@
+# ConfigMap to store the non-secret database details
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: poll-buddy-db-configmap-master
+  labels:
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/component: db
+    app.kubernetes.io/part-of: poll-buddy
+    environment: production
+    app: poll-buddy-db
+data:
+  db_name: pollbuddy
+  db_admin_username: root
+  db_username: pollbuddy

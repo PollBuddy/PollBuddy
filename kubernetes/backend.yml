@@ -65,13 +65,22 @@ spec:
               name: backend
           env:
             - name: FRONTEND_URL
-              value: http://localhost:7655
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-backend-configmap-master
+                  key: frontend_url
             - name: DB_URL
               value: poll-buddy-db-service-master.default.svc.cluster.local
             - name: DB_NAME
-              value: pollbuddy
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-db-configmap-master
+                  key: db_name
             - name: DB_USERNAME
-              value: pollbuddy
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-db-configmap-master
+                  key: db_username
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -80,16 +89,25 @@ spec:
             - name: REPORTING_DB_URL
               value: poll-buddy-reporting-db-service-master.default.svc.cluster.local
             - name: REPORTING_DB_NAME
-              value: pollbuddy
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-reporting-db-configmap-master
+                  key: reporting_db_name
             - name: REPORTING_DB_USERNAME
-              value: pollbuddy
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-reporting-db-configmap-master
+                  key: reporting_db_username
             - name: REPORTING_DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: poll-buddy-reporting-db-secrets-master
                   key: user-password
             - name: SESSION_SECRET
-              value: NTpUkD6xyALq4LMB2FDHf2iKdYcSznns
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-backend-configmap-master
+                  key: session_secret
           readinessProbe:
             failureThreshold: 3
             httpGet:
