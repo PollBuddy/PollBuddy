@@ -10,7 +10,7 @@ const clusterUrl = process.env.DB_URL;
 const authMechanism = "DEFAULT";
 
 const uri = process.env.DB_USERNAME ?
-  `mongodb+srv://${username}:${password}@${clusterUrl}/?authMechanism=${authMechanism}`
+  `mongodb://${username}:${password}@${clusterUrl}/?authMechanism=${authMechanism}`
   : `mongodb+srv://${clusterUrl}/`;
 
 
