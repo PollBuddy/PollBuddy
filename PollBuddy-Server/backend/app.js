@@ -29,7 +29,7 @@ mongoConnection.connect(function (res) {
   if (res !== true) {
     console.error(res);
   }
-  let clientPromise = mongoConnection.getClient();
+  let client = mongoConnection.getClient();
   console.log("Connecting express-session");
   app.use(expressSession({
     cookie: {
@@ -41,7 +41,7 @@ mongoConnection.connect(function (res) {
     rolling: true,
     resave: false,
     saveUninitialized: true,
-    store: MongoStore.create({ clientPromise })
+    store: MongoStore.create({ client: client })
   }));
 });
 
