@@ -83,6 +83,7 @@ module.exports = {
       client.connect((err) => {
         if (err) {
           console.error("Seems the database isn't up yet, retrying in 1 second");
+          console.log(err);
           setTimeout(function () {
             con();
           }, 3000);

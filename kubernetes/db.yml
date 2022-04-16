@@ -75,7 +75,7 @@ spec:
     - name: mongo
       port: 27017
       targetPort: 27017
-  clusterIP: None # ???
+  #clusterIP: None # ???
   selector:
     app.kubernetes.io/name: mongodb
     app.kubernetes.io/component: db

@@ -67,9 +67,16 @@ spec:
             - name: FRONTEND_URL
               value: http://localhost:7655
             - name: DB_URL
-              value: mongodb://poll-buddy-db-service-master:27017
+              value: poll-buddy-db-service-master.default.svc.cluster.local
             - name: DB_NAME
               value: pollbuddy
+            - name: DB_USERNAME
+              value: pollbuddy
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: poll-buddy-db-secrets-master
+                  key: user-password
             - name: SESSION_SECRET
               value: NTpUkD6xyALq4LMB2FDHf2iKdYcSznns
           readinessProbe:
