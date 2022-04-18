@@ -25,7 +25,7 @@ data:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: poll-buddy-volume-claim-influx-master
+  name: poll-buddy-reporting-db-volume-claim-influxdata-master
   labels:
     app.kubernetes.io/name: influxdb
     app.kubernetes.io/component: reporting-db
@@ -145,7 +145,7 @@ spec:
           volumeMounts:
             - name: poll-buddy-reporting-db-volume-init-script-master
               mountPath: /docker-entrypoint-initdb.d
-            - name: influx-data
+            - name: poll-buddy-reporting-db-volume-influxdata-master
               mountPath: /var/lib/influxdb
           # Probes to report the status of the application
           startupProbe: # Runs to know when the app started up
@@ -184,6 +184,6 @@ spec:
           configMap:
             name: poll-buddy-reporting-db-configmap-init-script-master
             defaultMode: 0755
-        - name: influx-data
+        - name: poll-buddy-reporting-db-volume-influxdata-master
           persistentVolumeClaim:
-            claimName: poll-buddy-volume-claim-influx-master
+            claimName: poll-buddy-reporting-db-volume-claim-influxdata-master

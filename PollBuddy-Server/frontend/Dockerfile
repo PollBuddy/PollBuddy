@@ -40,9 +40,6 @@ FROM nginx:stable-alpine-perl
 # Install curl
 RUN apk add --no-cache curl
 
-# Install module for using environment variables
-#RUN apk add --no-cache nginx-mod-http-perl
-
 # Bundle the NGINX config files
 COPY webproxy/nginx.conf /etc/nginx/
 COPY webproxy/conf.d /etc/nginx/conf.d
@@ -55,9 +52,6 @@ COPY --from=builder /usr/src/app/build ./build
 
 # Port
 EXPOSE 80
-
-# Start command
-#CMD ["serve", "-s", "build", "-l", "3000"]
 
 # Health Check
 HEALTHCHECK --interval=15s --timeout=3s CMD curl -f http://localhost || exit 1

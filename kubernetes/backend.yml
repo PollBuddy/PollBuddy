@@ -105,8 +105,8 @@ spec:
                   key: user-password
             - name: SESSION_SECRET
               valueFrom:
-                configMapKeyRef:
-                  name: poll-buddy-backend-configmap-master
+                secretKeyRef:
+                  name: poll-buddy-backend-secrets-master
                   key: session_secret
           # Probes to report the status of the application
           startupProbe: # Runs to know when the app started up
