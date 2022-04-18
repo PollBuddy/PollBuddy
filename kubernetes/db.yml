@@ -8,8 +8,10 @@ metadata:
     app.kubernetes.io/name: mongodb
     app.kubernetes.io/component: db
     app.kubernetes.io/part-of: poll-buddy
-    environment: production
     app: poll-buddy-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
 data:
   mongo-user.sh: |
     mongo admin -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} <<EOF
@@ -29,8 +31,10 @@ metadata:
     app.kubernetes.io/name: mongodb
     app.kubernetes.io/component: db
     app.kubernetes.io/part-of: poll-buddy
-    environment: production
     app: poll-buddy-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
 data:
   mongo-data-dir-permission.sh: |
     chown -R mongodb:mongodb ${MONGO_DATA_DIR}
@@ -50,8 +54,10 @@ metadata:
     app.kubernetes.io/name: mongodb
     app.kubernetes.io/component: db
     app.kubernetes.io/part-of: poll-buddy
-    environment: production
     app: poll-buddy-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
 data:
   mongo.key: |
     ahaksdnqsakdqnajhvckqaafnxasxaxaxmaskdadadsasfsdsdfsf
@@ -68,8 +74,10 @@ metadata:
     app.kubernetes.io/name: mongodb
     app.kubernetes.io/component: db
     app.kubernetes.io/part-of: poll-buddy
-    environment: production
     app: poll-buddy-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
 spec:
   ports:
     - name: mongo
@@ -79,8 +87,10 @@ spec:
     app.kubernetes.io/name: mongodb
     app.kubernetes.io/component: db
     app.kubernetes.io/part-of: poll-buddy
-    environment: production
     app: poll-buddy-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
 
 # Service Accounts and Authorizations
 ---
@@ -89,11 +99,27 @@ kind: ServiceAccount
 metadata:
   name: poll-buddy-db-service-account-master
   namespace: default
+  labels:
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/component: db
+    app.kubernetes.io/part-of: poll-buddy
+    app: poll-buddy-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: poll-buddy-db-service-role-master
+  labels:
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/component: db
+    app.kubernetes.io/part-of: poll-buddy
+    app: poll-buddy-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
 rules:
   - apiGroups: ["*"]
     resources: ["configmaps"]
@@ -112,6 +138,14 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: poll-buddy-db-service-role-binding-master
+  labels:
+    app.kubernetes.io/name: mongodb
+    app.kubernetes.io/component: db
+    app.kubernetes.io/part-of: poll-buddy
+    app: poll-buddy-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
 subjects:
   - kind: ServiceAccount
     name: poll-buddy-db-service-account-master
@@ -131,8 +165,10 @@ metadata:
     app.kubernetes.io/name: mongodb
     app.kubernetes.io/component: db
     app.kubernetes.io/part-of: poll-buddy
-    environment: production
     app: poll-buddy-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
 spec:
   serviceName: poll-buddy-db-service-master
   podManagementPolicy: Parallel
@@ -142,16 +178,20 @@ spec:
       app.kubernetes.io/name: mongodb
       app.kubernetes.io/component: db
       app.kubernetes.io/part-of: poll-buddy
-      environment: production
       app: poll-buddy-db
+      environment: production
+      dev_instance_type: no-type
+      dev_instance_id: no-id
   template:
     metadata:
       labels:
         app.kubernetes.io/name: mongodb
         app.kubernetes.io/component: db
         app.kubernetes.io/part-of: poll-buddy
-        environment: production
         app: poll-buddy-db
+        environment: production
+        dev_instance_type: no-type
+        dev_instance_id: no-id
     spec:
       serviceAccountName: poll-buddy-db-service-account-master
       terminationGracePeriodSeconds: 10
@@ -280,6 +320,14 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: mongodata # Claim name is mongodata-<statefulsetname>
+        labels:
+          app.kubernetes.io/name: mongodb
+          app.kubernetes.io/component: db
+          app.kubernetes.io/part-of: poll-buddy
+          app: poll-buddy-db
+          environment: production
+          dev_instance_type: no-type
+          dev_instance_id: no-id
       spec:
         accessModes:
           - ReadWriteOnce

@@ -8,8 +8,10 @@ metadata:
     app.kubernetes.io/name: influxdb
     app.kubernetes.io/component: reporting-db
     app.kubernetes.io/part-of: poll-buddy
-    environment: production
     app: poll-buddy-reporting-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
 data:
   influxdb-init.sh: |
     influx -host 127.0.0.1 -port $INFLUXDB_INIT_PORT \
@@ -30,8 +32,10 @@ metadata:
     app.kubernetes.io/name: influxdb
     app.kubernetes.io/component: reporting-db
     app.kubernetes.io/part-of: poll-buddy
-    environment: production
     app: poll-buddy-reporting-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
 spec:
   accessModes:
     - ReadWriteOnce
@@ -49,8 +53,10 @@ metadata:
     app.kubernetes.io/name: influxdb
     app.kubernetes.io/component: reporting-db
     app.kubernetes.io/part-of: poll-buddy
-    environment: production
     app: poll-buddy-reporting-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
 spec:
   ports:
     - port: 8086
@@ -60,8 +66,10 @@ spec:
     app.kubernetes.io/name: influxdb
     app.kubernetes.io/component: reporting-db
     app.kubernetes.io/part-of: poll-buddy
-    environment: production
     app: poll-buddy-reporting-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
   type: ClusterIP
 
 # Create a deployment to run in
@@ -74,8 +82,10 @@ metadata:
     app.kubernetes.io/name: influxdb
     app.kubernetes.io/component: reporting-db
     app.kubernetes.io/part-of: poll-buddy
-    environment: production
     app: poll-buddy-reporting-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
 spec:
   replicas: 1
   selector:
@@ -83,8 +93,10 @@ spec:
       app.kubernetes.io/name: influxdb
       app.kubernetes.io/component: reporting-db
       app.kubernetes.io/part-of: poll-buddy
-      environment: production
       app: poll-buddy-reporting-db
+      environment: production
+      dev_instance_type: no-type
+      dev_instance_id: no-id
   strategy:
     type: RollingUpdate
   template:
@@ -93,8 +105,10 @@ spec:
         app.kubernetes.io/name: influxdb
         app.kubernetes.io/component: reporting-db
         app.kubernetes.io/part-of: poll-buddy
-        environment: production
         app: poll-buddy-reporting-db
+        environment: production
+        dev_instance_type: no-type
+        dev_instance_id: no-id
     spec:
       restartPolicy: Always
       containers:
