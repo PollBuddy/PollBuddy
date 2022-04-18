@@ -147,6 +147,37 @@ spec:
               mountPath: /docker-entrypoint-initdb.d
             - name: influx-data
               mountPath: /var/lib/influxdb
+          # Probes to report the status of the application
+          startupProbe: # Runs to know when the app started up
+            httpGet:
+              path: /health
+              port: reporting-db
+              scheme: HTTP
+            failureThreshold: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+            initialDelaySeconds: 5
+          readinessProbe: # Runs to make sure the app is ready to receive requests
+            httpGet:
+              path: /health
+              port: reporting-db
+              scheme: HTTP
+            failureThreshold: 2
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+            initialDelaySeconds: 5
+          livenessProbe: # Runs to make sure the app is alive
+            httpGet:
+              path: /health
+              port: reporting-db
+              scheme: HTTP
+            failureThreshold: 2
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            initialDelaySeconds: 5
 
       volumes:
         - name: poll-buddy-reporting-db-volume-init-script-master

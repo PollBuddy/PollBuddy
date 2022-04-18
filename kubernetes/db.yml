@@ -201,6 +201,43 @@ spec:
               mountPath: /home/mongodb
             - name: poll-buddy-db-volume-internode-key-master
               mountPath: /var/lib/mongoKeyTemp
+          # Probes to report the status of the application
+          startupProbe: # Runs to know when the app started up
+            exec:
+              command:
+                - bash
+                - -c
+                - |
+                  mongo --username="$MONGO_INITDB_ROOT_USERNAME" --password="$MONGO_INITDB_ROOT_PASSWORD" --eval "db.adminCommand('ping')"
+            failureThreshold: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+            initialDelaySeconds: 30
+          readinessProbe: # Runs to make sure the app is ready to receive requests
+            exec:
+              command:
+                - bash
+                - -c
+                - |
+                  mongo --username="$MONGO_INITDB_ROOT_USERNAME" --password="$MONGO_INITDB_ROOT_PASSWORD" --eval "db.adminCommand('ping')"
+            failureThreshold: 2
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+            initialDelaySeconds: 5
+          livenessProbe: # Runs to make sure the app is alive
+            exec:
+              command:
+                - bash
+                - -c
+                - |
+                  mongo --username="$MONGO_INITDB_ROOT_USERNAME" --password="$MONGO_INITDB_ROOT_PASSWORD" --eval "db.adminCommand('ping')"
+            failureThreshold: 2
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            initialDelaySeconds: 5
 
         - name: mongo-sidecar
           image: cvallance/mongo-k8s-sidecar:latest

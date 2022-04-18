@@ -10,7 +10,7 @@ const clusterUrl = process.env.DB_URL;
 
 const uri = process.env.DB_USERNAME ?
   `mongodb://${username}:${password}@${clusterUrl}/pollbuddy?authSource=${process.env.DB_NAME}`
-  : `mongodb://${clusterUrl}/pollbuddy`;
+  : `mongodb://${clusterUrl}/pollbuddy`; // TODO: DB to env
 
 
 // This function is used to create the indexes in the database. These help increase performance and ensure certain

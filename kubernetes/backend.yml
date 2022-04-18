@@ -108,13 +108,34 @@ spec:
                 configMapKeyRef:
                   name: poll-buddy-backend-configmap-master
                   key: session_secret
-          readinessProbe:
-            failureThreshold: 3
+          # Probes to report the status of the application
+          startupProbe: # Runs to know when the app started up
             httpGet:
               path: /api/healthcheck
-              port: 3001
+              port: backend
               scheme: HTTP
-            periodSeconds: 10
+            failureThreshold: 10
+            periodSeconds: 5
             successThreshold: 1
             timeoutSeconds: 1
-            # TODO: Health check probe
+            initialDelaySeconds: 5
+          readinessProbe: # Runs to make sure the app is ready to receive requests
+            httpGet:
+              path: /api/healthcheck
+              port: backend
+              scheme: HTTP
+            failureThreshold: 2
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+            initialDelaySeconds: 5
+          livenessProbe: # Runs to make sure the app is alive
+            httpGet:
+              path: /api/healthcheck
+              port: backend
+              scheme: HTTP
+            failureThreshold: 2
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            initialDelaySeconds: 5

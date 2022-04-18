@@ -81,3 +81,34 @@ spec:
                 secretKeyRef:
                   name: poll-buddy-reporting-db-secrets-master
                   key: user-password
+          # Probes to report the status of the application
+          startupProbe: # Runs to know when the app started up
+            httpGet:
+              path: /
+              port: reporting
+              scheme: HTTP
+            failureThreshold: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+            initialDelaySeconds: 5
+          readinessProbe: # Runs to make sure the app is ready to receive requests
+            httpGet:
+              path: /
+              port: reporting
+              scheme: HTTP
+            failureThreshold: 2
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+            initialDelaySeconds: 5
+          livenessProbe: # Runs to make sure the app is alive
+            httpGet:
+              path: /
+              port: reporting
+              scheme: HTTP
+            failureThreshold: 2
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            initialDelaySeconds: 5
