@@ -653,8 +653,8 @@ router.get("/me/groups", promote(isLoggedIn), async function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/me/groups when using POST.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 405: { "result": "failure", "error": "GET is not available for this route. Use POST." }
- * @name backend/users/:id/edit_GET
+ * @returns {void} Status 405: { "result": "failure", "error": "POST is not available for this route. Use GET." }
+ * @name backend/users/me/groups_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
@@ -667,39 +667,39 @@ router.post("/me/groups", function (req, res) {
  * This route is not used. It is simply there to have some response to /api/users/forgotpassword/ when using GET
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 405 { "result": "failure", "error": "Route not availible."}
+ * @returns {void} Status 405 { "result": "failure", "error": "GET is not available for this routee."}
  * @name backend/users/forgotpassword_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
 router.get("/forgotpassword/",function (req,res) {
-  return sendResponse(res,httpCodes.MethodNotAllowed("Route not availible"));
+  return sendResponse(res,httpCodes.MethodNotAllowed("GET is not available for this route."));
 });
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/forgotpassword/ when using POST
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 405 { "result": "failure", "error": "Route not availible."}
+ * @returns {void} Status 405 { "result": "failure", "error": "POST is not available for this route."}
  * @name backend/users/forgotpassword_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
 router.post("/forgotpassword/",function (req,res) {
-  return sendResponse(res,httpCodes.MethodNotAllowed("Route not availible"));
+  return sendResponse(res,httpCodes.MethodNotAllowed("POST is not available for this route."));
 });
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/forgotpassword/submit when using GET
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 405 { "result": "failure", "error": "GET not availible.use POST"}
+ * @returns {void} Status 405 { "result": "failure", "error": "GET is not available for this route. Use POST."}
  * @name backend/users/forgotpassword/submit_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
 router.get("/forgotpassword/submit",function (req,res) {
-  return sendResponse(res,httpCodes.MethodNotAllowed("GET not availible.use POST"));
+  return sendResponse(res,httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -750,8 +750,8 @@ router.post("/forgotpassword/submit/",function (req,res) {
             } else{
               let emailBody = 
               "Hello, " + result.UserName + "\n"
-              +"\n You are recieving this email because a password reset request was sent to this account."
-              +"\n\n If you requested a password reset follow the link below:"
+              +"\n You are receiving this email because a password reset request was sent to this account."
+              +"\n\n If you requested a password reset, follow the link below:"
               +"\n  " + process.env.FRONTEND_URL + "/login/reset"
               +"\n Your password reset token is: " + key
               +"\n\n If you did not make a password reset request, you can safely ignore this message.\n\n";
@@ -777,13 +777,13 @@ router.post("/forgotpassword/submit/",function (req,res) {
  * This route is not used. It is simply there to have some response to /api/users/forgotpassword/validate when using GET
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 405 { "result": "failure", "error": "Route not availible."}
+ * @returns {void} Status 405 { "result": "failure", "error": "GET is not available for this route. Use POST."}
  * @name backend/users/forgotpassword_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
 router.get("/forgotpassword/validate",function (req,res) {
-  return sendResponse(res,httpCodes.MethodNotAllowed("GET not availible.use POST"));
+  return sendResponse(res,httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -792,8 +792,8 @@ router.get("/forgotpassword/validate",function (req,res) {
  * @getdata {void} None
  * @postdata {void} resetPasswordToken : String , username : String
  * @returns {void} on success : Status 200 
- * On failure : Status 500 { "result": "failure", "error": "Token is invalid(token expired)"}
- *              Status 500 { "result": "failure", "error": "Token is invalid(user with token not found)"}
+ * On failure : Status 500 { "result": "failure", "error": "Token is invalid (token expired)"}
+ *              Status 500 { "result": "failure", "error": "Token is invalid (user with token not found)"}
  * @name backend/users/forgotpassword_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
@@ -807,10 +807,10 @@ router.post("/forgotpassword/validate",function (req,res) {
       if( currentDate < result.ResetPasswordTokenExpiration ){
         return sendResponse(res,httpCodes.Ok());
       } else {
-        return sendResponse(res,httpCodes.InternalServerError("Token is invalid(token expired)."));
+        return sendResponse(res,httpCodes.InternalServerError("Token is invalid (token expired)."));
       }
     } else {
-      return sendResponse(res,httpCodes.InternalServerError("Token is invalid(user with token not found)."));
+      return sendResponse(res,httpCodes.InternalServerError("Token is invalid (user with token not found)."));
     }
   });
 });
@@ -819,18 +819,18 @@ router.post("/forgotpassword/validate",function (req,res) {
  * This route is not used. It is simply there to have some response to /api/users/forgotpassword/change when using GET
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 405 { "result": "failure", "error": "Route not availible."}
+ * @returns {void} Status 405 { "result": "failure", "error": "GET is not available for this route. Use POST."}
  * @name backend/users/forgotpassword_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
 router.get("/forgotpassword/change",function (req,res) {
-  return sendResponse(res.httpCodes.MethodNotAllowed("GET not availible.use POST"));
+  return sendResponse(res.httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
  * This route resets the password of the user with the given username to the given password
- * This is only done if the user has a valid token as per the validate route and if the password satifies the strength requirements
+ * This is only done if the user has a valid token as per the validation route and if the password satisfies the strength requirements
  * @getdata {void} None
  * @postdata {void} resetPasswordToken : String , username : String , password : String
  * @returns {void} On success : Status 200
