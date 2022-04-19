@@ -65,11 +65,11 @@ class Group extends Component {
 
   pollButtonClick = (pollID) => {
     if (this.state.isAdmin) {
-      window.location.href = "/polls/" + pollID + "/edit";
-      /*window.open(
+      // window.location.href = "/polls/" + pollID + "/edit";
+      window.open(
         "/polls/" + pollID + "/edit",
         '_blank' // <- This is what makes it open in a new window.
-      );*/
+      );
     } else if(this.state.isMember) {
       window.location.href = "/polls/" + pollID + "/view";
     }
