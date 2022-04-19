@@ -54,11 +54,22 @@ export default class GroupSettings extends Component{
           <p className="fontSizeLarge">
             Admin Settings
           </p>
-          <button onClick={this.createNewPoll} className="button">Create New Poll</button>
+          <button style={{width: "17em"}}
+            className="button"
+            onClick={this.createNewPoll}
+          >Create New Poll
+          </button>
           <Link to={"/groups/"+ this.state.id +"/edit"}>
-            <button className="button">Edit Group</button>
+            <button style={{width: "17em"}}
+              className="button"
+            >Edit Group
+            </button>
           </Link>
-          <button onClick={this.handleDeleteGroup} className="button">Delete this Group</button>
+          <button style={{width: "17em"}}
+            className="button"
+            onClick={this.handleDeleteGroup}
+          >Delete this Group
+          </button>
         </MDBContainer>
       );
     }
