@@ -99,20 +99,6 @@ class PollResults extends Component {
       .then(response => response.json())
       .then(response => {
         if (response.result === "success") {
-          // response = response.data[0]; // TODO: This needs to be fixed for the general case and not just the demo
-          console.log(response);
-
-          // eslint-disable-next-line no-sequences
-          // this.setState(state => {
-          //   state.questionData = response;
-          //   state.dataBar.labels = response.AnswerChoices;
-          //   state.dataBar.datasets[0].data = response.Tallies;
-          //   return state;
-          // });
-          // for(let i = 0; i < this.state.questionData.CorrectAnswers.length-1; i++){
-          //   this.state.correctAnswers = this.state.correctAnswers + this.state.questionData.CorrectAnswers[i] + ", ";
-          // }
-          // this.state.correctAnswers+= this.state.questionData.CorrectAnswers[this.state.questionData.CorrectAnswers.length-1];
           this.setState({
             doneLoading: true,
             questions: response.data.questions,
@@ -176,18 +162,6 @@ class PollResults extends Component {
               );
             }
           })}
-          {/*<p className="fontSizeLarge">*/}
-          {/*  {"QuestionResults " + this.state.questionData.QuestionNumber + ": " + this.state.questionData.QuestionText}*/}
-          {/*</p>*/}
-          {/*<p>*/}
-          {/*  {"Correct Answers: " + this.state.correctAnswers}*/}
-          {/*</p>*/}
-          {/*<p>*/}
-          {/*  {"Total Number of Answers: " + this.state.dataBar.datasets[0].data.reduce((a, b) => a + b, 0)}*/}
-          {/*</p>*/}
-          {/*The MDBReact Bar component was built on top of chart.js.
-                  Look at https://www.chartjs.org/docs/latest/ for more info*/}
-          {/*<Bar data={this.state.dataBar} options={this.state.barChartOptions}/>*/}
         </MDBContainer>
       );
     }
