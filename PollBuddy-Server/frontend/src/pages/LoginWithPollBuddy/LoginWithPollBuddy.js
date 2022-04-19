@@ -32,6 +32,7 @@ export default class LoginWithPollBuddy extends Component {
       })
       .catch(err => {
         this.setState({error: "An error occurred during login. Please try again"});
+        console.log(err);
       });
   }
   handleLogin() {

@@ -37,7 +37,7 @@ export default class SchoolPicker extends Component {
           }
           this.setState({"schoolInfo": {"schools": schools, "schoolLinkDict": schoolLinkDict}}); //missing semicolon
           this.props.onDoneLoading(this.state.schoolInfo);
-      });
+        });
     } else {
       // Get info that was passed in
       this.setState({"schoolInfo": this.props.schoolInfo});

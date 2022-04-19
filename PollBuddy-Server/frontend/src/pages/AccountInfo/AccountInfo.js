@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
-import {Link, withRouter, Redirect} from "react-router-dom";
+import {withRouter, Redirect} from "react-router-dom";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import "./AccountInfo.scss";
 const Joi = require("joi");
@@ -152,7 +152,6 @@ class AccountInfo extends Component {
     var lastNameValid = undefined;
     var lastNameInput = "";
     var passwordValid = undefined;
-    var passwordInput = undefined;
 
     this.setState({done: false, error: false});
 
@@ -204,7 +203,7 @@ class AccountInfo extends Component {
         this.setState({error: true, errorMessage: passwordValid.error.toString()});
         return;
       }
-      passwordInput = passwordValid.value.password;
+      //passwordInput = passwordValid.value.password; //might need this later, passwordInput not used for now
     }
 
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {

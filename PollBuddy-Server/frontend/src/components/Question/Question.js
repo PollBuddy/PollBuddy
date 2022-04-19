@@ -123,7 +123,7 @@ export default class Question extends Component {
     //allowed choices (specified by the json) then pop from the queue to set the first
     //choice chosen back to false
     if (count >= this.state.data.MaxAllowedChoices) {
-      this.state.studentChoices[this.state.choicesQueue.shift()] = false;
+      tempChoices[this.state.choicesQueue.shift()] = false;
     }
     //make the boolean at the selected index true and update state
     tempChoices[index] = true;
@@ -150,7 +150,7 @@ export default class Question extends Component {
   }
 
   onTimeEnd(){
-    this.state.canChoose = false;
+    this.setState({canChoose : false});
     //TODO send answers to backend
     //TODO move on to next question (probably should be handled in a callback prop)
   }

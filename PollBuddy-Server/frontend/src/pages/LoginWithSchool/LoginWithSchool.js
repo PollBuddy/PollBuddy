@@ -43,7 +43,7 @@ export default class LoginWithSchool extends Component {
             onDoneLoading={(schoolInfo) => {
               this.setState({"doneLoading": true, "schoolInfo": schoolInfo});
             }
-           }
+            }
           />
           <LoadingWheel/>
 

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS } from 'chart.js/auto';
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
@@ -120,9 +119,9 @@ export default class PollResults extends Component {
             return state;
           });
           for(let i = 0; i < this.state.questionData.CorrectAnswers.length-1; i++){
-            this.state.correctAnswers = this.state.correctAnswers + this.state.questionData.CorrectAnswers[i] + ", ";
+            this.setState({correctAnswers : this.state.correctAnswers + this.state.questionData.CorrectAnswers[i] + ", "});
           }
-          this.state.correctAnswers+= this.state.questionData.CorrectAnswers[this.state.questionData.CorrectAnswers.length-1];
+          this.setState({correctAnswers: this.state.correctAnswers + this.state.questionData.CorrectAnswers[this.state.questionData.CorrectAnswers.length-1]});
           this.setState({"doneLoading": true});
         }
       })
