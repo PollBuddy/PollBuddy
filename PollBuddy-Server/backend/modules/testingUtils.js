@@ -2,7 +2,7 @@ const {createModel} = require("../modules/utils.js");
 const {userSchema} = require("../models/User.js");
 const mongoConnection = require("../modules/mongoConnection.js");
 const {groupSchema} = require("../models/Group.js");
-const {pollSchema} = require("../models/Poll");
+const {pollSchema, questionSchema} = require("../models/Poll");
 
 const testGroup = {
   Name: "test.group",
@@ -50,6 +50,12 @@ let testUser2 = {
 const sampleQuestion = {
   Text: "sample.question",
   Answers: [{ Text: "sample.answer", Correct: true }],
+  MaxAllowedChoices: 1,
+};
+
+const sampleQuestion2 = {
+  Text: "sample.question2",
+  Answers: [{ Text: "sample.answer", Correct: true }, { Text: "sample.answer2", Correct: false }],
   MaxAllowedChoices: 1,
 };
 
@@ -123,7 +129,9 @@ module.exports = {
   testGroup2,
   testPoll,
   testPoll2,
+  sampleQuestion,
+  sampleQuestion2,
   createUser,
   createGroup,
-  createPoll
+  createPoll,
 };
