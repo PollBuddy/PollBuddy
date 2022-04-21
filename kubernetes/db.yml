@@ -280,7 +280,7 @@ spec:
             initialDelaySeconds: 5
 
         - name: mongo-sidecar
-          image: cvallance/mongo-k8s-sidecar:latest
+          image: cvallance/mongo-k8s-sidecar
           env:
             - name: MONGO_SIDECAR_POD_LABELS
               value: "app.kubernetes.io/name=mongodb,app.kubernetes.io/component=db,app.kubernetes.io/part-of=poll-buddy,environment=production,app=poll-buddy-db"

@@ -72,7 +72,7 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-        - image: pollbuddy/frontend:kubernetes-setup
+        - image: pollbuddy/frontend:latest
           imagePullPolicy: Always
           name: frontend
           ports:

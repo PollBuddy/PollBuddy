@@ -72,7 +72,7 @@ spec:
     spec:
       restartPolicy: Always
       containers:
-        - image: pollbuddy/backend:kubernetes-setup
+        - image: pollbuddy/backend:latest
           imagePullPolicy: Always
           name: backend
           ports:
