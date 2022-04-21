@@ -26,7 +26,7 @@ jobs:
           images: pollbuddy/frontend
           tags: |
             type=ref,event=branch
-            type=sha,format=short,prefix=,suffix=
+            type=sha,format=long,prefix=,suffix=
             type=sha,format=long,suffix=-{{branch}}
 
       - name: Build and push
@@ -60,7 +60,7 @@ jobs:
           images: pollbuddy/backend
           tags: |
             type=ref,event=branch
-            type=sha,format=short,prefix=,suffix=
+            type=sha,format=long,prefix=,suffix=
             type=sha,format=long,suffix=-{{branch}}
 
       - name: Build and push
@@ -94,7 +94,7 @@ jobs:
           images: pollbuddy/reporting
           tags: |
             type=ref,event=branch
-            type=sha,format=short,prefix=,suffix=
+            type=sha,format=long,prefix=,suffix=
             type=sha,format=long,suffix=-{{branch}}
 
       - name: Build and push
