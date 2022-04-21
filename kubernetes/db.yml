@@ -283,7 +283,7 @@ spec:
           image: cvallance/mongo-k8s-sidecar
           env:
             - name: MONGO_SIDECAR_POD_LABELS
-              value: "app.kubernetes.io/name=mongodb,app.kubernetes.io/component=db,app.kubernetes.io/part-of=poll-buddy,environment=production,app=poll-buddy-db"
+              value: "app.kubernetes.io/name=mongodb,app.kubernetes.io/component=db,app.kubernetes.io/part-of=poll-buddy,app=poll-buddy-db,environment=production,dev_instance_type=no-type,dev_instance_id=no-id"
             - name: KUBE_NAMESPACE
               valueFrom:
                 fieldRef:
