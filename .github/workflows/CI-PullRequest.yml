@@ -4,8 +4,119 @@ on:
   pull_request:
 
 jobs:
+  Docker-Build-Frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: metadata
+        uses: docker/metadata-action@v3
+        with:
+          images: pollbuddy/frontend
+          tags: |
+            type=ref,event=pr,prefix=,suffix=
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: "{{defaultContext}}:PollBuddy-Server/frontend"
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
+
+  Docker-Build-Backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: metadata
+        uses: docker/metadata-action@v3
+        with:
+          images: pollbuddy/backend
+          tags: |
+            type=ref,event=pr,prefix=,suffix=
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: "{{defaultContext}}:PollBuddy-Server/backend"
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
+
+  Docker-Build-Reporting:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: metadata
+        uses: docker/metadata-action@v3
+        with:
+          images: pollbuddy/reporting
+          tags: |
+            type=ref,event=pr,prefix=,suffix=
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: "{{defaultContext}}:PollBuddy-Server/reporting/grafana"
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
+
+  Kubernetes-Deploy:
+    runs-on: ubuntu-latest
+    needs: [Docker-Build-Frontend, Docker-Build-Backend, Docker-Build-Reporting]
+    timeout-minutes: 5
+    steps:
+      - name: Deploy
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: 'https://dev.pollbuddy.app/api/deployment/new'
+          method: 'POST'
+          timeout: 60000 # 60 second timeout, should only need about 10s
+          contentType: application/x-www-form-urlencoded
+          data: dev_instance_type=pr&dev_instance_id=${{ github.ref }}&key=${{ secrets.CICD_KEY }}
+
   PullRequest-Comment:
     runs-on: ubuntu-latest
+    needs: [Docker-Build-Frontend, Docker-Build-Backend, Docker-Build-Reporting, Kubernetes-Deploy]
     timeout-minutes: 5
     steps:
       - name: Share Link on PR
