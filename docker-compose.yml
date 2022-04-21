@@ -1,7 +1,9 @@
 version: '3'
 services:
   frontend:
-    build: PollBuddy-Server/frontend
+    build:
+      context: PollBuddy-Server/frontend
+      dockerfile: "Dockerfile.d"
     restart: unless-stopped
     ports:
       - "7655:80"
