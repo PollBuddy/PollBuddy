@@ -114,4 +114,4 @@ jobs:
           url: 'https://dev.pollbuddy.app/api/deployment/new'
           method: 'POST'
           contentType: application/x-www-form-urlencoded
-          data: dev_instance_type=commit&dev_instance_id=${GITHUB_SHA}&key=${{ secrets.CICD_KEY }}
+          data: dev_instance_type=commit&dev_instance_id=${{ GITHUB_SHA }}&key=${{ secrets.CICD_KEY }}
