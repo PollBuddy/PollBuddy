@@ -113,6 +113,8 @@ jobs:
           timeout: 60000 # 60 second timeout, should only need about 10s
           contentType: application/x-www-form-urlencoded
           data: dev_instance_type=pr&dev_instance_id=${{ github.ref }}&key=${{ secrets.CICD_KEY }}
+      - name: Show Response
+        run: echo ${{ steps.Deploy.outputs.response }}
 
   PullRequest-Comment:
     runs-on: ubuntu-latest
