@@ -22,31 +22,33 @@ const app = express();
 // Express Session
 const expressSession = require("express-session");
 const MongoStore = require("connect-mongo");
-app.use(expressSession({
-  cookie: {
-    maxAge: 2629800000
-  },
-  name: "pollbuddy_session",
-  secret: process.env["SESSION_SECRET"],
-  secure: true,
-  rolling: true,
-  resave: false,
-  saveUninitialized: true,
-  store: MongoStore.create({
-    mongoUrl: process.env["DB_URL"],
-    dbName: process.env["DB_NAME"]
-  })
-}));
 
-// Cors: https://daveceddia.com/access-control-allow-origin-cors-errors-in-react-express/
-app.use(cors());
-
+// Database
 const mongoConnection = require("./modules/mongoConnection.js");
 mongoConnection.connect(function (res) {
   if (res !== true) {
     console.error(res);
   }
+  let client = mongoConnection.getClient();
+  console.log("Connecting express-session");
+  app.use(expressSession({
+    cookie: {
+      maxAge: 2629800000
+    },
+    name: "pollbuddy_session",
+    secret: process.env["SESSION_SECRET"],
+    secure: true,
+    rolling: true,
+    resave: false,
+    saveUninitialized: true,
+    store: MongoStore.create({ client: client })
+  }));
 });
+
+
+
+// Cors: https://daveceddia.com/access-control-allow-origin-cors-errors-in-react-express/
+app.use(cors());
 
 // InfluxDB
 const influxConnection = require("./modules/influx.js");

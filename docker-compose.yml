@@ -1,22 +1,15 @@
 version: '3'
 services:
-  webproxy:
-    image: "nginx:latest"
+  frontend:
+    build:
+      context: PollBuddy-Server/frontend
+      dockerfile: "Dockerfile.d"
     restart: unless-stopped
-    volumes:
-      - ./PollBuddy-Server/webproxy/conf.d:/etc/nginx/conf.d
     ports:
       - "7655:80"
     networks:
-      - frontend
       - backend
       - logging
-
-  frontend:
-    build: PollBuddy-Server/frontend
-    restart: unless-stopped
-    networks:
-      - frontend
 
   backend:
     build: PollBuddy-Server/backend
@@ -33,13 +26,13 @@ services:
     networks:
       - backend
 
-  grafana:
+  reporting:
     build: PollBuddy-Server/reporting/grafana
     restart: unless-stopped
     networks:
       - logging
 
-  influxdb:
+  reporting-db:
     build: PollBuddy-Server/reporting/influxdb
     restart: unless-stopped
     volumes:
@@ -60,7 +53,6 @@ volumes:
 
 networks:
   backend:
-  frontend:
   logging:
 
 

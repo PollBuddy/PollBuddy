@@ -1,0 +1,203 @@
+# ConfigMap to store the startup script
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: poll-buddy-reporting-db-configmap-init-script-master
+  labels:
+    app.kubernetes.io/name: influxdb
+    app.kubernetes.io/component: reporting-db
+    app.kubernetes.io/part-of: poll-buddy
+    app: poll-buddy-reporting-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
+data:
+  influxdb-init.sh: |
+    influx -host 127.0.0.1 -port $INFLUXDB_INIT_PORT \
+    -username ${DOCKER_INFLUXDB_INIT_USERNAME} \
+    -password ${DOCKER_INFLUXDB_INIT_PASSWORD} \
+    -execute "CREATE DATABASE ${REPORTING_DB_NAME}; \
+    CREATE RETENTION POLICY one_year ON ${REPORTING_DB_NAME} DURATION 365d REPLICATION 1 DEFAULT; \
+    CREATE USER ${REPORTING_DB_USERNAME} WITH PASSWORD '${REPORTING_DB_PASSWORD}'; \
+    GRANT ALL ON ${REPORTING_DB_NAME} TO ${REPORTING_DB_USERNAME}"
+
+# Allocate a volume for data storage
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: poll-buddy-reporting-db-volume-claim-influxdata-master
+  labels:
+    app.kubernetes.io/name: influxdb
+    app.kubernetes.io/component: reporting-db
+    app.kubernetes.io/part-of: poll-buddy
+    app: poll-buddy-reporting-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+# Create a service to access the deployment pods
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: poll-buddy-reporting-db-service-master
+  labels:
+    app.kubernetes.io/name: influxdb
+    app.kubernetes.io/component: reporting-db
+    app.kubernetes.io/part-of: poll-buddy
+    app: poll-buddy-reporting-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
+spec:
+  ports:
+    - port: 8086
+      protocol: TCP
+      targetPort: reporting-db
+  selector:
+    app.kubernetes.io/name: influxdb
+    app.kubernetes.io/component: reporting-db
+    app.kubernetes.io/part-of: poll-buddy
+    app: poll-buddy-reporting-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
+  type: ClusterIP
+
+# Create a deployment to run in
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poll-buddy-reporting-db-deployment-master
+  labels:
+    app.kubernetes.io/name: influxdb
+    app.kubernetes.io/component: reporting-db
+    app.kubernetes.io/part-of: poll-buddy
+    app: poll-buddy-reporting-db
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: influxdb
+      app.kubernetes.io/component: reporting-db
+      app.kubernetes.io/part-of: poll-buddy
+      app: poll-buddy-reporting-db
+      environment: production
+      dev_instance_type: no-type
+      dev_instance_id: no-id
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: influxdb
+        app.kubernetes.io/component: reporting-db
+        app.kubernetes.io/part-of: poll-buddy
+        app: poll-buddy-reporting-db
+        environment: production
+        dev_instance_type: no-type
+        dev_instance_id: no-id
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: reporting-db
+          image: influxdb:1.8
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8086
+              name: reporting-db
+          env:
+            - name: DOCKER_INFLUXDB_INIT_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-reporting-db-configmap-master
+                  key: reporting_db_admin_username
+            - name: INFLUXDB_ADMIN_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-reporting-db-configmap-master
+                  key: reporting_db_admin_username
+            - name: DOCKER_INFLUXDB_INIT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: poll-buddy-reporting-db-secrets-master
+                  key: admin-password
+            - name: INFLUXDB_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: poll-buddy-reporting-db-secrets-master
+                  key: admin-password
+            - name: REPORTING_DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-reporting-db-configmap-master
+                  key: reporting_db_name
+            - name: REPORTING_DB_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: poll-buddy-reporting-db-configmap-master
+                  key: reporting_db_username
+            - name: REPORTING_DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: poll-buddy-reporting-db-secrets-master
+                  key: user-password
+            - name: INFLUXDB_HTTP_AUTH_ENABLED
+              value: "true"
+          volumeMounts:
+            - name: poll-buddy-reporting-db-volume-init-script-master
+              mountPath: /docker-entrypoint-initdb.d
+            - name: poll-buddy-reporting-db-volume-influxdata-master
+              mountPath: /var/lib/influxdb
+          # Probes to report the status of the application
+          startupProbe: # Runs to know when the app started up
+            httpGet:
+              path: /health
+              port: reporting-db
+              scheme: HTTP
+            failureThreshold: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+            initialDelaySeconds: 5
+          readinessProbe: # Runs to make sure the app is ready to receive requests
+            httpGet:
+              path: /health
+              port: reporting-db
+              scheme: HTTP
+            failureThreshold: 2
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+            initialDelaySeconds: 5
+          livenessProbe: # Runs to make sure the app is alive
+            httpGet:
+              path: /health
+              port: reporting-db
+              scheme: HTTP
+            failureThreshold: 2
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            initialDelaySeconds: 5
+
+      volumes:
+        - name: poll-buddy-reporting-db-volume-init-script-master
+          configMap:
+            name: poll-buddy-reporting-db-configmap-init-script-master
+            defaultMode: 0755
+        - name: poll-buddy-reporting-db-volume-influxdata-master
+          persistentVolumeClaim:
+            claimName: poll-buddy-reporting-db-volume-claim-influxdata-master

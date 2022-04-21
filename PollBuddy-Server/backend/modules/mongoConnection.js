@@ -4,6 +4,15 @@ const MongoClient = mongo.MongoClient;
 let client;
 let db;
 
+const username = encodeURIComponent(process.env.DB_USERNAME);
+const password = encodeURIComponent(process.env.DB_PASSWORD);
+const clusterUrl = process.env.DB_URL;
+
+const uri = process.env.DB_USERNAME ?
+  `mongodb://${username}:${password}@${clusterUrl}/pollbuddy?authSource=${process.env.DB_NAME}`
+  : `mongodb://${clusterUrl}/pollbuddy`; // TODO: DB to env
+
+
 // This function is used to create the indexes in the database. These help increase performance and ensure certain
 // attributes are unique. This will run on every DB connect, but it should silently do nothing if the indexes
 // already exist in the database.
@@ -61,29 +70,23 @@ async function createIndexes() {
 }
 
 module.exports = {
-  //Todo: Use Async/Await
   connect: function(callback) {
+    console.log("Connecting to database...");
+    client = new MongoClient(uri);
+    client.connect((err) => {
+      if (err) {
+        console.error("Seems the database isn't up yet, retrying...");
+        console.log(err);
+        process.exit(1);
+      } else {
+        db = client.db(process.env.DB_NAME);
+        console.log("Database connected");
 
-    con();
-
-    function con() {
-      client = new MongoClient(process.env.DB_URL);
-      client.connect((err) => {
-        if (err) {
-          console.error("Seems the database isn't up yet, retrying in 1 second");
-          setTimeout(function () {
-            con();
-          }, 3000);
-        } else {
-          db = client.db(process.env.DB_NAME);
-          console.log("Database connected");
-
-          createIndexes().then(function() {
-            callback(true);
-          });
-        }
-      });
-    }
+        createIndexes().then(function() {
+          callback(true);
+        });
+      }
+    });
   },
   disconnect: function(callback) {
     client.close(function() {
@@ -114,5 +117,8 @@ module.exports = {
       }
     }
     return false;
+  },
+  getURI: function() {
+    return uri;
   }
 };

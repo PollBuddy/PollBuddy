@@ -1,0 +1,116 @@
+# Create a service to access the deployment pods
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: poll-buddy-frontend-service-master
+  labels:
+    app.kubernetes.io/name: poll-buddy-frontend-service-master
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: poll-buddy
+    app.kubernetes.io/instance: master
+    app: poll-buddy-frontend
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: frontend
+  selector:
+    app.kubernetes.io/name: poll-buddy-frontend
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: poll-buddy
+    app.kubernetes.io/instance: master
+    app: poll-buddy-frontend
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
+  type: NodePort
+
+# Create a deployment to run in
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: poll-buddy-frontend
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: poll-buddy
+    app.kubernetes.io/instance: master
+    app: poll-buddy-frontend
+    environment: production
+    dev_instance_type: no-type
+    dev_instance_id: no-id
+  name: poll-buddy-frontend-deployment-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: poll-buddy-frontend
+      app.kubernetes.io/component: frontend
+      app.kubernetes.io/part-of: poll-buddy
+      app.kubernetes.io/instance: master
+      app: poll-buddy-frontend
+      environment: production
+      dev_instance_type: no-type
+      dev_instance_id: no-id
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: poll-buddy-frontend
+        app.kubernetes.io/component: frontend
+        app.kubernetes.io/part-of: poll-buddy
+        app.kubernetes.io/instance: master
+        app: poll-buddy-frontend
+        environment: production
+        dev_instance_type: no-type
+        dev_instance_id: no-id
+    spec:
+      restartPolicy: Always
+      containers:
+        - image: pollbuddy/frontend:latest
+          imagePullPolicy: Always
+          name: frontend
+          ports:
+            - containerPort: 80
+              name: frontend
+          env:
+            - name: BACKEND
+              value: poll-buddy-backend-service-master.default.svc.cluster.local
+            - name: REPORTING
+              value: poll-buddy-reporting-service-master.default.svc.cluster.local
+          # Probes to report the status of the application
+          startupProbe: # Runs to know when the app started up
+            httpGet:
+              path: /
+              port: frontend
+              scheme: HTTP
+            failureThreshold: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+            initialDelaySeconds: 5
+          readinessProbe: # Runs to make sure the app is ready to receive requests
+            httpGet:
+              path: /
+              port: frontend
+              scheme: HTTP
+            failureThreshold: 2
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 3
+            initialDelaySeconds: 5
+          livenessProbe: # Runs to make sure the app is alive
+            httpGet:
+              path: /
+              port: frontend
+              scheme: HTTP
+            failureThreshold: 2
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+            initialDelaySeconds: 5
