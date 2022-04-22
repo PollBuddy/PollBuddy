@@ -11,11 +11,10 @@ export default class QuestionResults extends Component {
     super(props);
     let labels = [];
     let data = [];
-    let totalResponses = 0;
+    let totalResponses = props.data.question.responses;
     for (let answer of props.data.question.answers) {
       labels.push(answer.text);
       data.push(answer.count);
-      totalResponses += answer.count;
     }
 
     this.state = {
