@@ -1,4 +1,4 @@
-# ConfigMap to store the non-secret database details
+# ConfigMap to store the non-secret reporting database details
 ---
 apiVersion: v1
 kind: ConfigMap
