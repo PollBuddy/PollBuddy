@@ -1,10 +1,12 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import {withRouter, Redirect} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 const Joi = require("joi");
+
 
 class RegisterWithSchoolStep2 extends Component {
   constructor(props) {
@@ -12,9 +14,9 @@ class RegisterWithSchoolStep2 extends Component {
 
     // Process args
     // TODO: Some of this should probably be in a try/catch or something for robustness
-    if(this.props.location.search) {
+    if(this.props.router.location.search) {
       console.log("Getting things");
-      var data = JSON.parse(new URLSearchParams(this.props.location.search).get("data"));
+      var data = JSON.parse(new URLSearchParams(this.props.router.location.search).get("data"));
       var firstName = data["firstName"];
       var firstNamePrefilled = true;
       var lastName = data["lastName"];
@@ -111,12 +113,13 @@ class RegisterWithSchoolStep2 extends Component {
         if (response != null) {
           if (response.result === "success") {
             // Save data about the user
-            localStorage.setItem("loggedIn", true);
+            localStorage.setItem("loggedIn", "true");
             localStorage.setItem("firstName", response.data.firstName);
             localStorage.setItem("lastName", response.data.lastName);
             localStorage.setItem("userName", response.data.userName);
-            // Redirect to groups page
-            return <Redirect to="/groups" push={true}/>;
+
+            // Redirect to the groups page
+            return this.props.router.navigate("/groups", { replace: true });
           } else {
             // Something went wrong, handle it
 

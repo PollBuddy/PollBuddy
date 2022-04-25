@@ -1,5 +1,5 @@
 {
-  "extends": ["eslint:recommended", "react-app"],
+  "extends": ["eslint:recommended", "react-app", "react-app/jest"],
   "rules": {
     "no-unused-vars": [
       "warn",
@@ -39,6 +39,7 @@
     "no-unmodified-loop-condition": "warn",
     "no-shadow": "warn",
     "no-duplicate-imports": "error",
-    "camelcase": "warn"
+    "camelcase": "warn",
+    "no-var": "warn"
   }
 }

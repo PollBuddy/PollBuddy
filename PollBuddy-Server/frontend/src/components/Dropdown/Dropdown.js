@@ -1,7 +1,7 @@
 import React, { Component, useState, useRef, useEffect } from "react";
 import "mdbreact/dist/css/mdb.css";
 import "./Dropdown.scss";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default class Dropdown extends Component {
   render() {
@@ -25,7 +25,7 @@ function DropdownButton() {
 }
 
 function useOutsideAlerter(ref, menuProps) {
-  let history = useHistory();
+  const navigate = useNavigate();
   useEffect(() => {
     // Close menu if click outside
     function handleClickOutside(event) {
@@ -51,7 +51,7 @@ function useOutsideAlerter(ref, menuProps) {
           console.log(response);
           if(response.result === "success") {
             //Logout has succeeded, Clear frontend user data
-            localStorage.setItem("loggedIn", false);
+            localStorage.setItem("loggedIn", "false");
             localStorage.removeItem("lastName");
             localStorage.removeItem("userName");
             localStorage.removeItem("firstName");
@@ -59,9 +59,9 @@ function useOutsideAlerter(ref, menuProps) {
             console.log("Error Logging Out");
           }
           //Navigates after response so that the redirect does not interrupt response
-          history.push("/");
+          navigate("/");
           //Reloads the page so that the logged-in menu closes
-          history.go(0);
+          //history.go(0);
         });
       });
     }

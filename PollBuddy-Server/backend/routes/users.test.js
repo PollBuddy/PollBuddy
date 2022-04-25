@@ -5,16 +5,18 @@ const bcrypt = require("bcrypt");
 const mongo = require("mongodb");
 const MongoClient = mongo.MongoClient;
 
-
-var { userSchema } = require("../models/User.js");
-var { createModel } = require("../modules/utils.js");
-var mongoConnection = require("../modules/mongoConnection.js");
-var usersRouter = require("./users");
+const { userSchema } = require("../models/User.js");
+const { createModel } = require("../modules/utils.js");
+const mongoConnection = require("../modules/mongoConnection.js");
+const usersRouter = require("./users");
 const { createTestScheduler } = require("@jest/core");
 const { ExpectationFailed } = require("http-errors");
+var { testUser, testUser2, testGroup, createUser, createGroup } = require("../modules/testingUtils.js");
+const {testGroup2} = require("../modules/testingUtils");
 
 let mockApp = express();
 let session = {};
+
 let testUser = {
   UserName: "test.account",
   Email: "test@account.com",
@@ -23,7 +25,6 @@ let testUser = {
   FirstName: "test",
   LastName: "account"
 };
-
 
 let testUser2 = {
   UserName: "test.account.2",
@@ -36,16 +37,14 @@ let testUser2 = {
 
 mockApp.use(express.json());
 mockApp.use(express.urlencoded({ extended: false }));
+// eslint-disable-next-line no-unused-vars
 mockApp.use(function (req, res, next) {
   req.session = session;
   next();
 });
-mockApp.use("/api/users", usersRouter); 
+mockApp.use("/api/users", usersRouter);
 
 let app = supertest(mockApp);
-
-// TODO: Check Responses against Standard Responses.
-// TODO: Make a Backend Testing Wiki 
 
 beforeAll(async () => {
   process.env.DB_URL = global.__MONGO_URI__;
@@ -151,7 +150,7 @@ describe("/api/users/login", () => {
         expect(response.body.data.firstName).toBe(testUser.FirstName);
         expect(response.body.data.lastName).toBe(testUser.LastName);
         expect(response.body.data.userName).toBe(testUser.UserName);
-        expect(session).toHaveProperty("userData.userID", res.insertedId);  
+        expect(session).toHaveProperty("userData.userID", res.insertedId);
       });
   });
 
@@ -170,7 +169,7 @@ describe("/api/users/login", () => {
         expect(response.body.data.firstName).toBe(testUser.FirstName);
         expect(response.body.data.lastName).toBe(testUser.LastName);
         expect(response.body.data.userName).toBe(testUser.UserName);
-        expect(session).toHaveProperty("userData.userID", res.insertedId);  
+        expect(session).toHaveProperty("userData.userID", res.insertedId);
       });
   });
 
@@ -301,7 +300,7 @@ describe("/api/users/login/rpi", () => {
 
 
 describe("/api/users/register", () => {
-  
+
   it("GET: route unavailable", async () => {
     await app.get("/api/users/register")
       .expect(405)
@@ -326,7 +325,7 @@ describe("/api/users/register", () => {
         expect(response.body.data.lastName).toBe(testUser.LastName);
         expect(response.body.data.userName).toBe(testUser.UserName);
 
-        let res = await mongoConnection.getDB().collection("users").findOne({ 
+        let res = await mongoConnection.getDB().collection("users").findOne({
           UserName: testUser.UserName,
           Email: testUser.Email,
           FirstName: testUser.FirstName,
@@ -335,7 +334,7 @@ describe("/api/users/register", () => {
 
         expect(res).toBeTruthy();
         expect(session).toHaveProperty("userData.userID", res._id);
-      });    
+      });
   });
 
   it("POST: register user empty fields failure", async () => {
@@ -588,7 +587,7 @@ describe("/api/users/logout", () => {
       .then(async (response) => {
         expect(response.body.result).toBe("success");
         expect(session).not.toHaveProperty("userData");
-      });    
+      });
   });
 
 });
@@ -603,10 +602,15 @@ describe("/api/users/me", () => {
       .then(async (response) => {
         expect(response.body.result).toBe("success");
         expect(response.body.data.firstName).toBe(testUser.FirstName);
+        expect(response.body.data.firstNameLocked).toBe(testUser.FirstNameLocked);
         expect(response.body.data.lastName).toBe(testUser.LastName);
+        expect(response.body.data.lastNameLocked).toBe(testUser.LastNameLocked);
         expect(response.body.data.userName).toBe(testUser.UserName);
+        expect(response.body.data.userNameLocked).toBe(testUser.UserNameLocked);
         expect(response.body.data.email).toBe(testUser.Email);
-      });    
+        expect(response.body.data.emailLocked).toBe(testUser.EmailLocked);
+        expect(response.body.data.schoolAffiliation).toBe(testUser.SchoolAffiliation);
+      });
   });
 
   it("GET: user not logged in", async () => {
@@ -614,7 +618,7 @@ describe("/api/users/me", () => {
       .expect(401)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
-      });    
+      });
   });
 
   it("POST: route unavailable", async () => {
@@ -662,16 +666,16 @@ describe("/api/users/me/edit", () => {
         expect(response.body.data.userName).toBe(testUser2.UserName);
         expect(response.body.data.email).toBe(testUser2.Email);
 
-        let updatedUser = await mongoConnection.getDB().collection("users").findOne({ 
+        let updatedUser = await mongoConnection.getDB().collection("users").findOne({
           _id: res.insertedId,
         });
-        
+
         expect(updatedUser.FirstName).toBe(testUser2.FirstName);
         expect(updatedUser.LastName).toBe(testUser2.LastName);
         expect(updatedUser.UserName).toBe(testUser2.UserName);
         expect(updatedUser.Email).toBe(testUser2.Email);
         expect(bcrypt.compareSync(testUser2.Password, updatedUser.Password)).toBe(true);
-      });    
+      });
   });
 
   it("POST: update user data all locked", async () => {
@@ -695,7 +699,7 @@ describe("/api/users/me/edit", () => {
       .expect(400)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
-      });    
+      });
   });
 
   it("POST: logOutEverywhere not included with password", async () => {
@@ -710,7 +714,7 @@ describe("/api/users/me/edit", () => {
       .expect(400)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
-      });    
+      });
   });
 
   it("POST: user not logged in failed", async () => {
@@ -718,14 +722,28 @@ describe("/api/users/me/edit", () => {
       .expect(401)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
-      });    
+      });
   });
 
 });
 
 describe("/api/users/me/groups", () => {
 
-  //TODO: Successfully gets user groups. Issue#591
+  it("GET: get user groups", async () => {
+    let user = await createUser();
+    let adminGroup = await createGroup({Admins: [user.insertedId.toString()]});
+    let memberGroup = await createGroup({Name: testGroup2.Name, Members: [user.insertedId.toString()]});
+    session = { userData: { userID: user.insertedId } };
+    await app.get("/api/users/me/groups")
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        expect(response.body.data.admin[0].id.toString()).toEqual(adminGroup.insertedId.toString());
+        expect(response.body.data.admin[0].name).toEqual(testGroup.Name);
+        expect(response.body.data.member[0].id.toString()).toEqual(memberGroup.insertedId.toString());
+        expect(response.body.data.member[0].name).toEqual(testGroup2.Name);
+      });
+  });
 
   it.skip("GET: user groups success", async () => {
     let res = await createUser();
@@ -742,7 +760,7 @@ describe("/api/users/me/groups", () => {
       .expect(401)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
-      });    
+      });
   });
 
   it("POST: route unavailable", async () => {
@@ -752,7 +770,7 @@ describe("/api/users/me/groups", () => {
         expect(response.body.result).toBe("failure");
       });
   });
-  
+
 });
 
 describe("/api/users/:id", () => {
@@ -767,7 +785,7 @@ describe("/api/users/:id", () => {
         expect(response.body.data.lastName).toBe(testUser.LastName);
         expect(response.body.data.userName).toBe(testUser.UserName);
         expect(response.body.data.email).toBe(testUser.Email);
-      });    
+      });
   });
 
   it("GET: invalid userID", async () => {
@@ -823,16 +841,16 @@ describe("/api/users/:id/edit", () => {
         expect(response.body.data.userName).toBe(testUser2.UserName);
         expect(response.body.data.email).toBe(testUser2.Email);
 
-        let updatedUser = await mongoConnection.getDB().collection("users").findOne({ 
+        let updatedUser = await mongoConnection.getDB().collection("users").findOne({
           _id: res.insertedId,
         });
-        
+
         expect(updatedUser.FirstName).toBe(testUser2.FirstName);
         expect(updatedUser.LastName).toBe(testUser2.LastName);
         expect(updatedUser.UserName).toBe(testUser2.UserName);
         expect(updatedUser.Email).toBe(testUser2.Email);
         expect(bcrypt.compareSync(testUser2.Password, updatedUser.Password)).toBe(true);
-      });    
+      });
   });
 
   it("POST: update user data all locked", async () => {
@@ -855,7 +873,7 @@ describe("/api/users/:id/edit", () => {
       .expect(400)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
-      });    
+      });
   });
 
   it("POST: logOutEverywhere not included with password", async () => {
@@ -870,7 +888,7 @@ describe("/api/users/:id/edit", () => {
       .expect(400)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
-      });    
+      });
   });
 
   it("POST: invalid userID", async () => {
@@ -886,6 +904,20 @@ describe("/api/users/:id/edit", () => {
 describe("/api/users/:id/groups", () => {
 
   //TODO: Successfully gets user groups Issue#591
+  it("GET: get user groups", async () => {
+    let user = await createUser();
+    let adminGroup = await createGroup({Admins: [user.insertedId.toString()]});
+    let memberGroup = await createGroup({Name: testGroup2.Name, Members: [user.insertedId.toString()]});
+    await app.get("/api/users/"+ user.insertedId + "/groups")
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        expect(response.body.data.admin[0].id.toString()).toEqual(adminGroup.insertedId.toString());
+        expect(response.body.data.admin[0].name).toEqual(testGroup.Name);
+        expect(response.body.data.member[0].id.toString()).toEqual(memberGroup.insertedId.toString());
+        expect(response.body.data.member[0].name).toEqual(testGroup2.Name);
+      });
+  });
 
   it("GET: invalid userID", async () => {
     await app.get("/api/users/0/groups")

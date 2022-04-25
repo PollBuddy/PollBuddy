@@ -33,12 +33,8 @@ COPY .env* ./
 # if not, the example instance is used
 RUN ["mv","-n", ".env.example", ".env"]
 
-# Port
-EXPOSE 3000
-
 # Start command
 CMD ["node", "bin/www"]
 
 # Health Check
-HEALTHCHECK --interval=15s --timeout=3s \
-  CMD curl -f http://localhost:3001/api || exit 1
+HEALTHCHECK --interval=15s --timeout=3s CMD curl -f http://localhost:3001/api/healthcheck || exit 1

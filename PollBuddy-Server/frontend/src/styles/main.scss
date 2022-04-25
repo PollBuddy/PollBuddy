@@ -90,6 +90,7 @@ li:not(:last-child) {
   text-transform: uppercase;
   margin: 10px 5px;
   border: none;
+  size: 20em;
 }
 
 .button, .textBox {
@@ -120,8 +121,14 @@ button:focus {
   border: 5px solid transparent;
   outline: none;
   text-align: center;
-  margin: 10px 0;
+  margin: 10px 5px;
   box-sizing: border-box;
+}
+
+.checkBox {
+  height: 4em;
+  width: 4em;
+  border-radius: 20px;
 }
 
 input.textBox:focus, textarea.textBox:focus {
@@ -303,13 +310,13 @@ label {
 }
 
 a {
-  color: var(--light-purple-logo-text);
+  color: var(--light-purple-logo-text) !important;
   transition: var(--default-transition);
   font-style: italic;
 }
 
 a:hover {
-  color: var(--white-most-text);
+  color: var(--white-most-text) !important;
   text-decoration: underline;
 }
 

@@ -1,8 +1,7 @@
 # config file version
 apiVersion: 1
 
-# list of datasources to insert/update depending
-# what's available in the database
+# list of data sources to insert/update depending on what's available in the database
 datasources:
   # <string, required> name of the datasource. Required
   - name: InfluxDB
@@ -27,5 +26,5 @@ datasources:
       # <string> database password, if used
       password: pollbuddy
     version: 1
-    # <bool> allow users to edit datasources from the UI.
+    # <bool> allow users to edit data sources from the UI.
     editable: false

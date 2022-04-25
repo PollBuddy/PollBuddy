@@ -1,16 +1,16 @@
-var createError = require("http-errors");
-var express = require("express");
-var router = express.Router();
-const bson = require("bson");
-var bcrypt = require("bcrypt");
-var path = require("path");
-const Joi = require("joi");
+const express = require("express");
+const router = express.Router();
+const bcrypt = require("bcrypt");
 
-var mongoConnection = require("../modules/mongoConnection.js");
+const mongoConnection = require("../modules/mongoConnection.js");
+const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
 const rpi = require("../modules/rpi");
 
 const { createResponse, validateID, isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute, promote } = require("../modules/utils"); // object destructuring, only import desired functions
-const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups, createUser, editUser } = require("../models/User.js");
+const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups, createUser, editUser, userParamsValidator } = require("../models/User.js");
+const {paramValidator} = require("../modules/validatorUtils");
+
+const {send} = require("../modules/email.js");
 
 // This file handles /api/users URLs
 
@@ -53,7 +53,7 @@ router.post("/", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/login", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -87,7 +87,7 @@ router.post("/login", function (req, res) {
   let errors = getResultErrors(validResult);
   if (isEmpty(errors)) {
     console.log("Error: No validation errors when checking details in /login. This should not happen.");
-    return res.status(500).send(createResponse(null, "An error occurred while validating login details."));
+    return sendResponse(res, httpCodes.InternalServerError("An error occurred while validating login details."));
   }
   // Check whether to validate email or username
   let mode = "";
@@ -96,7 +96,7 @@ router.post("/login", function (req, res) {
   } else if (errors["userName"] && !errors["email"]) {
     mode = "email";
   } else {
-    return res.status(401).send(createResponse(null, "Invalid credentials."));
+    return sendResponse(res, httpCodes.Unauthorized("Invalid credentials."));
   }
 
   // Define an internal function to use for validating the data returned from the DB query
@@ -105,50 +105,44 @@ router.post("/login", function (req, res) {
       // Something went wrong
       console.log("Database Error occurred while locating a user to log in with Poll Buddy");
       console.error(err);
-      return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
-
+      return sendResponse(res, httpCodes.InternalServerError("An error occurred while communicating with the database."));
     } else if (result === null) {
       // No user was found
-      return res.status(401).send(createResponse(null, "Invalid credentials."));
-
+      return sendResponse(res, httpCodes.Unauthorized("Invalid credentials."));
     } else {
       // A user was found!
 
       // Make sure this isn't a school account as they can't log in here
       if (result.SchoolAffiliation) {
         // This is a school account, don't bother trying to log in anymore.
-        return res.status(406).send(createResponse(null, "This account is associated with a school."));
-
+        return sendResponse(res, httpCodes.NotAcceptable("This account is associated with a school."));
       } else {
         // Not a school account
 
         // Make sure the password is worth checking (performance optimization as hashing is slow)
         if (errors["password"]) {
-          return res.status(401).send(createResponse(null, "Invalid credentials."));
-
+          return sendResponse(res, httpCodes.Unauthorized("Invalid credentials."));
         } else {
           // Check the password
           bcrypt.compare(req.body.password, result.Password, function (bcryptErr, bcryptResult) {
             if (bcryptErr) {
               // Something went wrong with bcrypt
               console.error(bcryptErr);
-              return res.status(500).send(createResponse(null, "An error occurred while validating credentials."));
-
+              return sendResponse(res, httpCodes.InternalServerError("An error occurred while validating credentials."));
             } else if (bcryptResult) {
 
               req.session.userData = {};
               req.session.userData.userID = result._id;
 
               // Send the user the necessary data to complete the login process
-              return res.status(200).send(createResponse({
+              return sendResponse(res, httpCodes.Ok({
                 "firstName": result.FirstName,
                 "lastName": result.LastName,
                 "userName": result.UserName
               }));
-
             } else {
               // Password validated and does not match
-              return res.status(401).send(createResponse(null, "Invalid credentials."));
+              return sendResponse(res, httpCodes.Unauthorized("Invalid credentials."));
             }
           });
         }
@@ -169,7 +163,7 @@ router.post("/login", function (req, res) {
 
   } else {
     // Didn't pass validation for username or email. This shouldn't ever run anyways though.
-    return res.status(401).send(createResponse(null, "Invalid credentials."));
+    return sendResponse(res, httpCodes.Unauthorized("Invalid credentials."));
   }
 
 });
@@ -258,7 +252,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/login/rpi", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 /**
@@ -272,7 +266,7 @@ router.post("/login/rpi", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/register", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -332,7 +326,7 @@ router.post("/register", function (req, res) {
       if (error) {
         console.log("Error occurred while hashing a password with bcrypt.");
         console.log(error);
-        return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
+        return sendResponse(res, httpCodes.InternalServerError("An error occurred while communicating with the database."));
       }
 
       let user = createModel(userSchema, {
@@ -351,32 +345,32 @@ router.post("/register", function (req, res) {
             // This code means we're trying to insert a duplicate key (aka user already registered somehow)
             if (err.keyPattern.Email) {
               // Email in use
-              return res.status(400).send(createResponse(errorMsg, "This email is already in use."));
+              return sendResponse(res, httpCodes.BadRequest("This email is already in use."));
             } else if (err.keyPattern.UserName) {
               // Username in use
-              return res.status(400).send(createResponse(errorMsg, "This username is already in use."));
+              return sendResponse(res, httpCodes.BadRequest("This username is already in use."));
             } else {
               // An unknown error occurred
               console.log("Database Error occurred while creating a new user with Poll Buddy.");
               console.log(err);
-              return res.status(400).send(createResponse(errorMsg, "An error occurred while communicating with the database."));
+              return sendResponse(res, httpCodes.InternalServerError("An error occurred while communicating with the database."));
             }
 
           } else {
             // An unknown error occurred
             console.log("Database Error occurred while creating a new user with Poll Buddy.");
             console.log(err);
-            return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
+            return sendResponse(res, httpCodes.InternalServerError("An error occurred while communicating with the database."));
           }
         } else {
-          
+
           // One result changed, therefore it worked.
           // Configure user data and save in session
           req.session.userData = {};
           req.session.userData.userID = result.insertedId;
 
           // Send the response object with some basic info for the frontend to store
-          return res.status(200).send(createResponse({
+          return sendResponse(res, httpCodes.Ok({
             "firstName": user.FirstName,
             "lastName": user.LastName,
             "userName": user.UserName
@@ -386,7 +380,7 @@ router.post("/register", function (req, res) {
     });
 
   } else {
-    return res.status(400).send(createResponse(errorMsg, "Validation failed."));
+    return sendResponse(res, httpCodes.BadRequest("Validation failed."));
   }
 
 });
@@ -430,8 +424,8 @@ router.get("/register/rpi", rpi.bounce, function (req, res) {
     delete req.session.cas_user;
 
     // Send the user to the registration step 2 page with relevant info to prefill
-    return res.redirect("/register/school/step2?result=success&userName=" + req.session.userDataTemp.userName +
-      "&email=" + req.session.userDataTemp.email + "&school=rpi");
+    return res.redirect("/register/school/step2?result=success&data=" + JSON.stringify({ "userName":
+      req.session.userDataTemp.userName, "email": req.session.userDataTemp.email, "school": "rpi"}));
 
   } else {
     // Something went wrong
@@ -485,7 +479,7 @@ router.post("/register/rpi", function (req, res) {
 
   // Make sure we've got data from step 1
   if (!req.session.userDataTemp) {
-    return res.status(500).send(createResponse(null, "Prerequisite data is not available."));
+    return sendResponse(res, httpCodes.InternalServerError("Prerequisite data is not available."));
   }
   // Configure email, username, overwriting whatever the user may have sent as we don't want it anyways.
   req.body.userName = req.session.userDataTemp.userName;
@@ -504,8 +498,27 @@ router.post("/register/rpi", function (req, res) {
 
     mongoConnection.getDB().collection("users").insertOne(user, (err, result) => {
       if (err) {
-        // Something went wrong, likely a duplicate key
-        return res.status(400).send(createResponse(null, "There was a duplicate entry error."));
+        // Something went wrong
+        if (err.code === 11000) {
+          // This code means we're trying to insert a duplicate key (aka user already registered somehow)
+          if (err.keyPattern.Email) {
+            // Email in use
+            return sendResponse(res, httpCodes.BadRequest("This email is already in use."));
+          } else if (err.keyPattern.UserName) {
+            // Username in use
+            return sendResponse(res, httpCodes.BadRequest("This username is already in use."));
+          } else {
+            // An unknown error occurred
+            console.log("Database Error occurred while creating a new user with RPI.");
+            console.log(err);
+            return sendResponse(res, httpCodes.InternalServerError("An error occurred while communicating with the database."));
+          }
+        } else {
+          // An unknown error occurred
+          console.log("Database Error occurred while creating a new with RPI.");
+          console.log(err);
+          return sendResponse(res, httpCodes.InternalServerError("An error occurred while communicating with the database."));
+        }
 
       } else {
 
@@ -516,21 +529,19 @@ router.post("/register/rpi", function (req, res) {
 
         // Configure email, username by copying from the result object and saving in the session
         req.session.userData = {};
-        req.session.userData.userID = result.insertedId.toString();
+        req.session.userData.userID = result.insertedId;
 
         // Send the response object with some basic info for the frontend to store
-        return res.status(200).send(createResponse({
+        return sendResponse(res, httpCodes.Ok({
           "firstName": user.FirstName,
           "lastName": user.LastName,
           "userName": user.UserName
         }));
-
       }
     });
   } else {
-    return res.status(400).send(createResponse(errorMsg, "Validation failed."));
+    return sendResponse(res, httpCodes.BadRequest("Validation failed."));
   }
-
 });
 
 /**
@@ -544,7 +555,7 @@ router.post("/register/rpi", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/logout", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -560,12 +571,9 @@ router.get("/logout", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/logout", function (req, res) {
-
   // Delete the userData in the session
   delete req.session.userData;
-
-  return res.status(200).send(createResponse("User was logged out successfully."));
-
+  return sendResponse(res, httpCodes.Ok("User was logged out successfully."));
 });
 
 /**
@@ -580,7 +588,7 @@ router.post("/logout", function (req, res) {
  */
 router.get("/me", promote(isLoggedIn), async function (req, res) {
   let response = await getUser(req.session.userData.userID);
-  return res.status(response[0]).send(response[1]);
+  return sendResponse(res, response);
 });
 
 /**
@@ -594,7 +602,7 @@ router.get("/me", promote(isLoggedIn), async function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/me", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 /**
@@ -606,8 +614,9 @@ router.post("/me", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
+// eslint-disable-next-line no-unused-vars
 router.get("/me/edit", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -619,11 +628,11 @@ router.get("/me/edit", function (req, res) {
  *             Status 500: { "result": "failure", "error": "Error updating database information"}
  * @name backend/users/me/edit_POST
  * @param {string} path - Express path
- * @param {callback} callback - function handler for route 
+ * @param {callback} callback - function handler for route
  */
 router.post("/me/edit", promote(isLoggedIn), async function (req, res) {
   let response = await editUser(req.session.userData.userID, req.body);
-  return res.status(response[0]).send(response[1]);
+  return sendResponse(res, response);
 });
 
 /**
@@ -638,20 +647,241 @@ router.post("/me/edit", promote(isLoggedIn), async function (req, res) {
  */
 router.get("/me/groups", promote(isLoggedIn), async function (req, res) {
   let response = await getUserGroups(req.session.userData.userID);
-  return res.status(response[0]).send(response[1]);
+  return sendResponse(res, response);
 });
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/me/groups when using POST.
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 405: { "result": "failure", "error": "POST is not available for this route. Use GET."}
+ * @returns {void} Status 405: { "result": "failure", "error": "POST is not available for this route. Use GET." }
  * @name backend/users/me/groups_POST
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/me/groups", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/forgotpassword/ when using GET
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405 { "result": "failure", "error": "GET is not available for this routee."}
+ * @name backend/users/forgotpassword_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+router.get("/forgotpassword/",function (req,res) {
+  return sendResponse(res,httpCodes.MethodNotAllowed("GET is not available for this route."));
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/forgotpassword/ when using POST
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405 { "result": "failure", "error": "POST is not available for this route."}
+ * @name backend/users/forgotpassword_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+router.post("/forgotpassword/",function (req,res) {
+  return sendResponse(res,httpCodes.MethodNotAllowed("POST is not available for this route."));
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/forgotpassword/submit when using GET
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405 { "result": "failure", "error": "GET is not available for this route. Use POST."}
+ * @name backend/users/forgotpassword/submit_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+router.get("/forgotpassword/submit",function (req,res) {
+  return sendResponse(res,httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
+});
+
+/**
+ * The route primes a given user's data so their password may be reset
+ * accepts either the users username or email
+ * sets in the user's data a random 32char code and an expiration date 1 hour from the requests handling
+ * @getdata {void} None
+ * @postdata {void} email : String , username : String
+ * @returns {void} on success : Status 200
+ * On failure : Status 500 { "result": "failure", "error": "neither username nor email provided"}
+ *              Status 500 { "result": "failure", "error": "could not update user"}
+ *              Status 500 { "result": "failure", "error": "could not find user"}
+ * @name backend/users/forgotpassword/submit_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+router.post("/forgotpassword/submit/",function (req,res) {
+  let email = req.body.email;
+  const username = req.body.username;
+
+  let document;
+
+  if(email){
+    email = email.toLowerCase();
+    document = mongoConnection.getDB().collection("users").findOne({"Email":email});
+  }else if(username){
+    document = mongoConnection.getDB().collection("users").findOne({"UserName":username});
+  }else{
+    return sendResponse(res,httpCodes.InternalServerError("Neither username nor email provided."));
+  }
+
+  document
+    .then(
+      result => {
+        if(result) {
+          const alphabet = "ABCDEFGHKLMNPQRSTUVWXYZabcdefghkmnpqrstuvwxyz23456789";
+          let key = "";
+          for(let i = 0; i < 32 ; i++) {
+            key += alphabet[Math.floor(Math.random() * alphabet.length)];
+          }
+
+          let expireTime = new Date();
+          expireTime.setHours(expireTime.getHours()+1);
+
+          mongoConnection.getDB().collection("users").updateOne({"_id": result._id},{ "$set": { "ResetPasswordToken" : key, "ResetPasswordTokenExpiration" : expireTime } },function (err, response) {
+            if (err) {
+              return sendResponse(res,httpCodes.InternalServerError("Could not update user data."));
+            } else{
+              let emailBody = 
+              "Hello, " + result.UserName + "\n"
+              +"\n You are receiving this email because a password reset request was sent to this account."
+              +"\n\n If you requested a password reset, follow the link below:"
+              +"\n  " + process.env.FRONTEND_URL + "/login/reset"
+              +"\n Your password reset token is: " + key
+              +"\n\n If you did not make a password reset request, you can safely ignore this message.\n\n";
+              
+              send(result.Email,"Poll Buddy Password Reset",emailBody,function (success,messages) {
+                if (success){
+                  return sendResponse(res,httpCodes.Ok());
+                }else{
+                  return sendResponse(res,httpCodes.InternalServerError("Could not send email."));
+                }
+              });
+            }
+          });
+        }else{
+          return sendResponse(res,httpCodes.InternalServerError("Could not find user."));
+        }
+      },
+      err => {return sendResponse(res,httpCodes.InternalServerError("Could not find user."));}
+    );
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/forgotpassword/validate when using GET
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405 { "result": "failure", "error": "GET is not available for this route. Use POST."}
+ * @name backend/users/forgotpassword_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+router.get("/forgotpassword/validate",function (req,res) {
+  return sendResponse(res,httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
+});
+
+/**
+ * Checks if the user specified by username has a resetPasswordToken matching that given, and it has not yet expired
+ * This is the predicate determining if a user can reset their password at the given moment
+ * @getdata {void} None
+ * @postdata {void} resetPasswordToken : String , username : String
+ * @returns {void} on success : Status 200 
+ * On failure : Status 500 { "result": "failure", "error": "Token is invalid (token expired)"}
+ *              Status 500 { "result": "failure", "error": "Token is invalid (user with token not found)"}
+ * @name backend/users/forgotpassword_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+router.post("/forgotpassword/validate",function (req,res) {
+  const token = req.body.resetPasswordToken;
+  const username = req.body.username;
+  mongoConnection.getDB().collection("users").findOne({"UserName":username,"ResetPasswordToken":token}, function(error,result) {
+    if(result){
+      let currentDate = new Date();
+      if( currentDate < result.ResetPasswordTokenExpiration ){
+        return sendResponse(res,httpCodes.Ok());
+      } else {
+        return sendResponse(res,httpCodes.InternalServerError("Token is invalid (token expired)."));
+      }
+    } else {
+      return sendResponse(res,httpCodes.InternalServerError("Token is invalid (user with token not found)."));
+    }
+  });
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/forgotpassword/change when using GET
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405 { "result": "failure", "error": "GET is not available for this route. Use POST."}
+ * @name backend/users/forgotpassword_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+router.get("/forgotpassword/change",function (req,res) {
+  return sendResponse(res.httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
+});
+
+/**
+ * This route resets the password of the user with the given username to the given password
+ * This is only done if the user has a valid token as per the validation route and if the password satisfies the strength requirements
+ * @getdata {void} None
+ * @postdata {void} resetPasswordToken : String , username : String , password : String
+ * @returns {void} On success : Status 200
+ * On failure : Status 500 { "result": "failure", "error": "could not hash password"}
+ *              Status 500 { "result": "failure", "error": "could not update password"}
+ *              Status 500 { "result": "failure", "error": "token expired"}
+ *              Status 500 { "result": "failure", "error": "user with token not found"}
+ *              Status 500 { "result": "failure", "error": "invalid password"}
+ * @name backend/users/forgotpassword_POST
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+router.post("/forgotpassword/change",function (req,res) {
+  let token = req.body.resetPasswordToken;
+  let username = req.body.username;
+  let newPassword = req.body.password;
+
+  let newPasswordValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/)
+    .test(newPassword);
+
+  if(newPasswordValid){
+    mongoConnection.getDB().collection("users").findOne({"UserName":username,"ResetPasswordToken":token},function (searchError,searchResult){
+      if(searchResult){
+        let expiration = searchResult.ResetPasswordTokenExpiration;
+        let currentDate = new Date();
+        if(currentDate < expiration){
+          bcrypt.hash(newPassword, 10, function (hashError,hash) {
+            if(hashError){
+              return sendResponse(res,httpCodes.InternalServerError("Could not hash password."));
+            }else{
+              mongoConnection.getDB().collection("users").updateOne({"_id":searchResult._id},{"$set":{"Password":hash},"$unset":{"ResetPasswordTokenExpiration":"","ResetPasswordToken":""}},function(updateError,updateResult){
+                if(updateError){
+                  return sendResponse(res,httpCodes.InternalServerError("Could not update password."));
+                }else{
+                  return sendResponse(res,httpCodes.Ok());
+                }
+              });
+            }
+          }); 
+          
+        }else{
+          return sendResponse(res,httpCodes.InternalServerError("Token expired."));
+        }
+      }else{
+        return sendResponse(res,httpCodes.InternalServerError("User with token not found."));
+      }
+    });
+  }else{
+    return sendResponse(res,httpCodes.InternalServerError("Invalid password."));
+  }
 });
 
 /**
@@ -670,9 +900,9 @@ router.post("/me/groups", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/:id", async function (req, res) {
+router.get("/:id", paramValidator(userParamsValidator), async function (req, res) {
   let response = await getUser(req.params.id);
-  return res.status(response[0]).send(response[1]);
+  return sendResponse(res, response);
 });
 
 /**
@@ -686,7 +916,7 @@ router.get("/:id", async function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/:id", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 /**
@@ -700,7 +930,7 @@ router.post("/:id", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/:id/edit", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -715,25 +945,25 @@ router.get("/:id/edit", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
  */
-router.post("/:id/edit", async function (req, res) {
+router.post("/:id/edit", paramValidator(userParamsValidator), async function (req, res) {
   let response = await editUser(req.params.id, req.body);
-  return res.status(response[0]).send(response[1]);
+  return sendResponse(res, response);
 });
 
 /**
- * This route obtains the group of users by id, and returns a network response depending on whether 
+ * This route obtains the group of users by id, and returns a network response depending on whether
  * the network communication was successful or not
  * @getdata {void} None
  * @postdata {void} None
  * @returns {void} On success: Status 200
- * On failure: Status 500 // TODO: Endpoint requires error message 
+ * On failure: Status 500 // TODO: Endpoint requires error message
  * @name backend/users/:id/GROUPS
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/:id/groups", async function (req, res) {
+router.get("/:id/groups", paramValidator(userParamsValidator), async function (req, res) {
   let response = await getUserGroups(req.params.id);
-  return res.status(response[0]).send(response[1]);
+  return sendResponse(res, response);
 });
 
 /**
@@ -747,7 +977,7 @@ router.get("/:id/groups", async function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/:id/groups", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 module.exports = router;
