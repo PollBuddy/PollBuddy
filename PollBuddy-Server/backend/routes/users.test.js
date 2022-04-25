@@ -17,24 +17,6 @@ const {testGroup2} = require("../modules/testingUtils");
 let mockApp = express();
 let session = {};
 
-let testUser = {
-  UserName: "test.account",
-  Email: "test@account.com",
-  Password: "K9g95p$?E@t3A$#4",
-  PasswordHash: "$2a$12$8Guj3IMNNVWk/GM4q0xeleExT3QBdPe5dWpSRYvk2elRkkWPMlOPG",
-  FirstName: "test",
-  LastName: "account"
-};
-
-let testUser2 = {
-  UserName: "test.account.2",
-  Email: "test@account2.com",
-  Password: "fbdbxsDzPBo6m68$",
-  PasswordHash: "$2a$12$BQKM4Ml3ag38KacRJRrZhO9FRt5yg4hbp3pg3zF.2ZZPQkn5QIAV2",
-  FirstName: "test.2",
-  LastName: "account.2"
-};
-
 mockApp.use(express.json());
 mockApp.use(express.urlencoded({ extended: false }));
 // eslint-disable-next-line no-unused-vars
@@ -71,26 +53,6 @@ beforeEach(async () => {
     await mongoConnection.getDB().collection(collection.name).deleteMany({});
   });
 });
-
-let createUser = async function(update) {
-  let userData = {
-    UserName: testUser.UserName,
-    Email: testUser.Email,
-    Password: testUser.PasswordHash,
-    FirstName: testUser.FirstName,
-    LastName: testUser.LastName
-  };
-
-  if (update) {
-    for (let [key, value] of Object.entries(update)) {
-      userData[key] = value;
-    }
-  }
-  
-  let user = createModel(userSchema, userData);
-  let res = await mongoConnection.getDB().collection("users").insertOne(user);
-  return res;
-};
 
 let createUserSchoolAffiliated = async function(update) {
   let userData = {

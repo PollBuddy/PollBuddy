@@ -69,8 +69,7 @@ let createUser = async function(update) {
   }
 
   let user = createModel(userSchema, userData);
-  let res = await mongoConnection.getDB().collection("users").insertOne(user);
-  return res;
+  return await mongoConnection.getDB().collection("users").insertOne(user);
 };
 
 let createGroup = async function(update) {
