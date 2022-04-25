@@ -1,0 +1,113 @@
+import React, { Component } from "react";
+import "./QuestionResults.scss";
+import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS } from 'chart.js/auto';
+import { MDBContainer, MDBIcon } from "mdbreact";
+
+import Countdown, { zeroPad } from "react-countdown";
+
+export default class QuestionResults extends Component {
+  constructor(props) {
+    super(props);
+    let labels = [];
+    let data = [];
+
+    for (let answer of props.data.question.answers) {
+      labels.push(answer.text);
+      data.push(answer.count);
+    }
+    console.log(labels, data);
+
+    this.state = {
+      questionNumber: props.data.questionNumber,
+      question: props.data.question,
+      dataBar: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Number of Votes",
+            data: data,
+            backgroundColor: [
+              "rgba(255, 134, 159, 0.5)",
+              "rgba(98,  182, 239, 0.5)",
+              "rgba(255, 218, 128, 0.5)",
+              "rgba(113, 205, 205, 0.5)",
+              "rgba(170, 128, 252, 0.5)",
+              "rgba(255, 134, 159, 0.5)",
+              "rgba(98,  182, 239, 0.5)",
+              "rgba(255, 218, 128, 0.5)",
+              "rgba(113, 205, 205, 0.5)",
+              "rgba(170, 128, 252, 0.5)",
+            ],
+            borderWidth: 5,
+            borderColor: [
+              "rgba(255, 134, 159, 1)",
+              "rgba(98,  182, 239, 1)",
+              "rgba(255, 218, 128, 1)",
+              "rgba(113, 205, 205, 1)",
+              "rgba(170, 128, 252, 1)",
+              "rgba(255, 134, 159, 1)",
+              "rgba(98,  182, 239, 1)",
+              "rgba(255, 218, 128, 1)",
+              "rgba(113, 205, 205, 1)",
+              "rgba(170, 128, 252, 1)",
+            ]
+          }
+        ]
+      },
+      barChartOptions: {
+        plugins: {
+          legend: {
+            display: false
+          },
+        },
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+          xAxes: [
+            {
+              barPercentage: 1,
+              gridLines: {
+                gridLines: {
+                  display: true,
+                  color: "rgba(255, 255, 255, 0.9)"
+                }
+              },
+              ticks: {
+                fontColor: "white",
+                fontSize: 20,
+                fontFamily: "Baloo 2",
+              }
+            }
+          ],
+          yAxes: [
+            {
+              gridLines: {
+                display: true,
+                color: "rgba(255, 255, 255, 0.9)"
+              },
+              ticks: {
+                beginAtZero: true,
+                fontColor: "white",
+                fontSize: 20,
+                fontFamily: "Baloo 2",
+                precision: 0
+              }
+            }
+          ]
+        }
+      }
+    };
+  }
+
+  render() {
+    return (
+      <MDBContainer className="box">
+        <p className="fontSizeLarge questionText">
+          {"Question " + (this.state.questionNumber) + ": " + this.state.question.text}
+        </p>
+        <Bar data={this.state.dataBar} options={this.state.barChartOptions}/>
+      </MDBContainer>
+    );
+  }
+}

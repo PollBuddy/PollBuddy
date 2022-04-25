@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import "mdbreact/dist/css/mdb.css";
 import Countdown, {zeroPad} from "react-countdown";
 import { MDBContainer } from "mdbreact";
-import { Link, Redirect } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 
 export default class recorded extends Component {
@@ -15,7 +15,7 @@ export default class recorded extends Component {
     const clockFormat = ({ minutes, seconds, completed }) => {
       if (completed) {
         // Render a completed state
-        return <Redirect to={"/QuestionEnded"} push={true}/>;
+        return <Navigate to={"/QuestionEnded"} push={true}/>;
       } else {
         // Render a countdown
         return <p className="fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;

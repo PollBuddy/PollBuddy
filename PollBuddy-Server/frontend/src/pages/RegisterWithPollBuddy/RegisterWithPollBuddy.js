@@ -1,12 +1,12 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import {Redirect, withRouter} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import "./RegisterWithPollBuddy.scss";
 
 const Joi = require("joi");
 
-class RegisterWithPollBuddy extends Component {
+export default class RegisterWithPollBuddy extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -98,7 +98,7 @@ class RegisterWithPollBuddy extends Component {
     }).then(response => {
       if (response.status === 200) {
         //needs some authentication before and if authentication passes then set local storage and such refer to GroupCreation page to see the way to make POST requests to the backend
-        localStorage.setItem("loggedIn", true);
+        localStorage.setItem("loggedIn", "true");
         this.setState({registrationSuccessful: true});
         // TODO: firstName, lastName, and userName are returned. They should probably be stored.
       } else {
@@ -115,7 +115,7 @@ class RegisterWithPollBuddy extends Component {
 
     if(this.state.registrationSuccessful) {
       return (
-        <Redirect to="/groups" />
+        <Navigate to="/groups" />
       );
     }
 
@@ -162,7 +162,7 @@ class RegisterWithPollBuddy extends Component {
                 onChange= {(evt) => { this.setState({password: evt.target.value}); }}/>
               <i class="fas fa-eye" onClick={this.showPassword}></i>
             </p>
-            
+
             {this.state.passValid.error &&
               <p style={{color: "red"}}>{ this.state.passValid.error.toString() }</p>
             }
@@ -173,5 +173,3 @@ class RegisterWithPollBuddy extends Component {
     );
   }
 }
-
-export default withRouter(RegisterWithPollBuddy);

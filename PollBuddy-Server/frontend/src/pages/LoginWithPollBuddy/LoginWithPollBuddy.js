@@ -1,23 +1,29 @@
 import React, { Component } from "react";
-import {Redirect} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 import "mdbreact/dist/css/mdb.css";
 import "./LoginWithPollBuddy.scss";
 import { MDBContainer } from "mdbreact";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 const Joi = require("joi");
 
-export default class LoginWithPollBuddy extends Component {
+class LoginWithPollBuddy extends Component {
 
-  state = {
-    successfulLogin: false,
-    error: "",
-    numLoginAttempts: 0,
-    userNameEmail: "",
-    password: ""
-  };
-
-  constructor(){
-    super();
-    if(localStorage.getItem("loggedIn")){
+  
+  constructor(props){
+    super(props);
+    let prevRoute = "/";
+    if (props.router.location.state && props.router.location.state.prevRoute) {
+      prevRoute = props.router.location.state.prevRoute;
+    }
+    this.state = {
+      successfulLogin: false,
+      prevRoute,
+      error: "",
+      numLoginAttempts: 0,
+      userNameEmail: "",
+      password: ""
+    };
+    if(localStorage.getItem("loggedIn") === "true"){
       this.setState({successfulLogin: true}); // Tell it to redirect to the next page if already logged in
     }
     console.log(process.env.REACT_APP_BACKEND_URL);
@@ -77,7 +83,7 @@ export default class LoginWithPollBuddy extends Component {
     }).then(response => {
       if (response.status === 200) {
         //needs some authentication before and if authentication passes then set local storage and such refer to GroupCreation page to see the way to make POST requests to the backend
-        localStorage.setItem("loggedIn", true);//maybe have an admin/teacher var instead of just true
+        localStorage.setItem("loggedIn", "true");//maybe have an admin/teacher var instead of just true
         this.setState({successfulLogin: true}); // Tell it to redirect to the next page if successful
       } else {
         this.setState({error: "Invalid username/email and password combination"});
@@ -98,10 +104,13 @@ export default class LoginWithPollBuddy extends Component {
 
   render() {
     this.handleLogin = this.handleLogin.bind(this); // This is needed so stuff like this.setState works
-
     if(this.state.successfulLogin) { // Basically redirect if the person is logged in or if their login succeeds
+      let route = "";
+      if (this.state.prevRoute) {
+        route += this.state.prevRoute;
+      }
       return (
-        <Redirect to="/groups" push={true}/>
+        <Navigate to={route} push={true}/>
       );
     }
     return (
@@ -130,3 +139,5 @@ export default class LoginWithPollBuddy extends Component {
     );
   }
 }
+
+export default withRouter(LoginWithPollBuddy);

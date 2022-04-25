@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
-
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
 import {withRouter, Redirect} from "react-router-dom";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import "./AccountInfo.scss";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
+import {Navigate} from "react-router-dom";
 const Joi = require("joi");
 
 
@@ -15,95 +16,94 @@ class AccountInfo extends Component {
     this.state = {
       changePassword: false,
       doneLoading: false,
-      userName: "mans",
+      userName: "",
       userNameLoaded: false,
       userNameLocked: false, 
       usernameText: null, 
-      firstName: "SIS",
+      firstName: "",
       firstNameLoaded: false,
       firstNameLocked: false,
       firstnameText: null,
-      lastName: "Man",
+      lastName: "",
       lastNameLoaded: false,
       lastNameLocked: false,
       lastnameText: null,
-      email: "sisman@rpi.edu",
+      email: "",
       emailLoaded: false,
       emailLocked: false,
       emailText: null,
-      school: "RPI",
+      school: "None",
       passwordLocked: false,
       newPasswordText: null,
       done: false,
       error: false,
-      errorMessage: "Error: Unkown Error",
+      errorMessage: "Error: Unknown Error",
       showPassword: false,
       logOutEverywhere: false
     };
     this.changePassword = this.handleToggleClick.bind(this);
-    
+
     this.handleInputChange = this.handleInputChange.bind(this);
-    // Bounce back to log in if they are not logged
-    if(localStorage.getItem("loggedIn") !== "true"){
-      return <Redirect to="/login" push={true}/>;
-    }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleLogOutEverywhere = this.handleLogOutEverywhere.bind(this);
   }
 
+
   componentDidMount(){
     this.props.updateTitle("Account Info");
+
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/me", {
       method: "GET"
     }).then(response => response.json())
       .then(data => {
+        console.log(data);
         // Load states from database values
         data = data.data;
-        if(data.UserName) {
+        if(data.userName) {
           this.setState({
-            userName: data.UserName,
-            userNameLoaded:true,
-            userNameLocked: data.UserNameLocked
+            userName: data.userName,
+            userNameLoaded: true,
+            userNameLocked: data.userNameLocked
           });
         }
-        if(data.FirstName) {
+        if(data.firstName) {
           this.setState({
-            firstName: data.FirstName,
-            firstNameLoaded:true,
-            firstNameLocked: data.FirstNameLocked
+            firstName: data.firstName,
+            firstNameLoaded: true,
+            firstNameLocked: data.firstNameLocked
           });
         }
-        if(data.LastName) {
+        if(data.lastName) {
           this.setState({
-            lastName: data.LastName,
-            lastNameLoaded:true,
-            lastNameLocked: data.LastNameLocked
+            lastName: data.lastName,
+            lastNameLoaded: true,
+            lastNameLocked: data.lastNameLocked
           });
         }
-        if(data.Email) {
+        if(data.email) {
           this.setState({
-            email: data.Email,
-            emailLoaded:true,
-            emailLocked: data.EmailLocked
+            email: data.email,
+            emailLoaded: true,
+            emailLocked: data.emailLocked
           });
         }
-        if(data.SchoolAffiliation) {
+        if(data.schoolAffiliation) {
           this.setState({
-            school: data.SchoolAffiliation,
+            school: data.schoolAffiliation,
             passwordLocked: true
           });
         }
         if(data.logOutEverywhere) {
           this.setState({
-            logOutEverywhere: data.logOutEverywhere 
+            logOutEverywhere: data.logOutEverywhere
           });
-        }        
+        }
         this.setState({
           doneLoading: true
         });
       });
   }
-  
+
   handleToggleClick() {
     this.setState(state => ({
       changePassword: !state.changePassword
@@ -205,21 +205,23 @@ class AccountInfo extends Component {
       }
       //passwordInput = passwordValid.value.password; //might need this later, passwordInput not used for now
     }
-
+    
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
-        firstName: firstNameInput, //TODO: keep track of each of the inital states of these
-        lastName: lastNameInput,  //only want to put in the changed values
-        userName: userInput,
-        email: emailInput,
-        password: undefined,
+        firstName: this.state.firstNameLocked ? undefined : firstNameInput, // TODO: keep track of each of the initial states of these
+        lastName: this.state.lastNameLocked ? undefined : lastNameInput,  //only want to put in the changed values. Update: puts in all non-locked values
+        userName: this.state.userNameLocked ? undefined : userInput,
+        email: this.state.emailLocked ? undefined : emailInput,
+        password: this.state.passwordLocked ? undefined : passwordInput,
         logOutEverywhere: this.state.logOutEverywhere
       })
-    }).then(response => {
-      console.log(response);
-    });
+    })
+      .then(response => response.json())
+      .then(response => {
+        console.log(response);
+      });
     this.setState({done: true});
   }
 
@@ -245,7 +247,7 @@ class AccountInfo extends Component {
 
   render() {
     if(!this.state.doneLoading){
-      return ( 
+      return (
         <MDBContainer className="page">
           <LoadingWheel/>
         </MDBContainer>
@@ -266,7 +268,7 @@ class AccountInfo extends Component {
                   <input defaultValue={this.state.lastNameLoaded ? this.state.lastName : undefined } className="form-control textBox" id="lastnameText" readOnly={this.state.lastNameLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
               </MDBRow>
-  
+
               <MDBRow className="AccountInfo-accountInputs">
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="usernameText">Username:</label>
@@ -277,18 +279,18 @@ class AccountInfo extends Component {
                   <input defaultValue={this.state.emailLoaded ? this.state.email : undefined } className="form-control textBox" id="emailText" readOnly={this.state.emailLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
               </MDBRow>
-  
+
               <MDBRow className="AccountInfo-accountInputs">
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
-                  <label htmlFor="institution">Institution:</label>
-                  <input placeholder="RPI" className="form-control textBox" id="institution" value={this.state.school} readOnly />
+                  <label htmlFor="school">School:</label>
+                  <input placeholder="RPI" className="form-control textBox" id="school" value={this.state.school} readOnly />
                 </MDBCol>
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="passwordChange">Password:</label>
                   <p id="AccountInfo-passwordChange" onClick={this.changePassword}>{this.state.changePassword ? "Cancel password change" : "Click to change password"}</p>
-                </MDBCol>              
+                </MDBCol>
               </MDBRow>
-  
+
               <MDBContainer id="AccountInfo-changePasswordInputs" style={this.state.changePassword ? {display: "flex"} : {display: "none"}}>
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="newPasswordText">New password:</label>
@@ -300,14 +302,14 @@ class AccountInfo extends Component {
 
             <div id="AccountInfo-logOutEverywhere" style={this.state.changePassword ? {display: "flex"} : {display: "none"}}>
               <input type="checkbox" onChange={this.handleLogOutEverywhere} className="logOutBox" id="logOutEverywhere" checked={this.logOutEverywhere}/>
-              <label className="logOutLabel" for="logOutEverywhere">Log out everywhere?</label>
+              <label className="logOutLabel" htmlFor="logOutEverywhere">Log out everywhere?</label>
             </div>
-          
+
             { /* TODO: Update this to have a backend call instead of a "to", plus some result popup */ }
-            <p 
+            <p
               className="fontSizeLarge"
               style={{ display: this.state.done ? "" : "none"}}
-            > 
+            >
               Your changes have been submitted. Thank you.
             </p>
             <p className="fontSizeLarge" style={{display: this.state.error ? "": "none"}}>{this.state.errorMessage}</p>

@@ -3,15 +3,18 @@ import { Bar } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
+import QuestionResults from "../../components/QuestionResults/QuestionResults";
+import "./PollResults.scss";
 
-export default class PollResults extends Component {
+class PollResults extends Component {
   constructor() {
     super();
     this.state = {
       error: null,
       doneLoading: false,
-      questionData: {},
-      correctAnswers: "",
+      questions: {},
+      currentQuestion: 0,
       dataBar: {
         labels: [],
         datasets: [
@@ -89,34 +92,19 @@ export default class PollResults extends Component {
 
   componentDidMount() {
     this.props.updateTitle("Poll Results");
-
-    console.log(this.props.match.params.pollID);
-
-    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.match.params.pollID + "/results", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.router.params.pollID + "/results", {
       method: "GET"
     })
+      .then(response => response.json())
       .then(response => {
-        if (response.ok) {
-          return response.json();
+        if (response.result === "success") {
+          this.setState({
+            doneLoading: true,
+            questions: response.data.questions,
+          });
         } else {
-          throw new Error("Something went wrong");
-        }
-
-      })
-      .then(response => {
-        if (response === {}) {
-          console.log("Error fetching data");
-        } else {
-          console.log("Fetching data succeeded");
-          response = response.data[0]; // TODO: This needs to be fixed for the general case and not just the demo
-          console.log(response);
-
-          // eslint-disable-next-line no-sequences
-          this.setState(state => {
-            state.questionData = response;
-            state.dataBar.labels = response.AnswerChoices;
-            state.dataBar.datasets[0].data = response.Tallies;
-            return state;
+          this.setState({
+            showError: true,
           });
           for(let i = 0; i < this.state.questionData.CorrectAnswers.length-1; i++){
             this.setState({correctAnswers : this.state.correctAnswers + this.state.questionData.CorrectAnswers[i] + ", "});
@@ -124,11 +112,17 @@ export default class PollResults extends Component {
           this.setState({correctAnswers: this.state.correctAnswers + this.state.questionData.CorrectAnswers[this.state.questionData.CorrectAnswers.length-1]});
           this.setState({"doneLoading": true});
         }
-      })
-      .catch(error => this.setState({"error": error}));
+      });
   }
+
+  displayQuestion = (index) => {
+    this.setState({
+      currentQuestion: index,
+    });
+  };
+
   render() {
-    if (this.state.error != null) {
+    if (this.state.showError) {
       return (
         <MDBContainer fluid className="page">
           <MDBContainer fluid className="box">
@@ -147,22 +141,35 @@ export default class PollResults extends Component {
     } else {
       return (
         <MDBContainer fluid className="page">
-          <MDBContainer fluid className="box">
-            <p className="fontSizeLarge">
-              {"Question " + this.state.questionData.QuestionNumber + ": " + this.state.questionData.QuestionText}
-            </p>
-            <p>
-              {"Correct Answers: " + this.state.correctAnswers}
-            </p>
-            <p>
-              {"Total Number of Answers: " + this.state.dataBar.datasets[0].data.reduce((a, b) => a + b, 0)}
-            </p>
-            {/*The MDBReact Bar component was built on top of chart.js.
-                    Look at https://www.chartjs.org/docs/latest/ for more info*/}
-            <Bar data={this.state.dataBar} options={this.state.barChartOptions}/>
-          </MDBContainer>
+          <div className="questions-bar">
+            {this.state.questions.map((question, index) => {
+              return (
+                <div>
+                  <div className={
+                    this.state.currentQuestion === index ?
+                      "question-label question-label-active" :
+                      "question-label question-label-inactive"
+                  } onClick={() => this.displayQuestion(index)}>
+                    {index + 1}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          {this.state.questions.map((question, index) => {
+            if (this.state.currentQuestion === index) {
+              return (
+                <QuestionResults data={{
+                  questionNumber: this.state.currentQuestion + 1,
+                  question: this.state.questions[this.state.currentQuestion],
+                }}/>
+              );
+            }
+          })}
         </MDBContainer>
       );
     }
   }
 }
+
+export default withRouter(PollResults);

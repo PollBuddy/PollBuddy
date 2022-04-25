@@ -1,14 +1,14 @@
 import React from "react";
-import {BrowserRouter, Route, Switch, Redirect} from "react-router-dom";
+import {BrowserRouter, Route, Routes, Navigate} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 
-import Group from "./pages/Groups/Groups";
+import Groups from "./pages/Groups/Groups";
 import Homepage from "./pages/Homepage/Homepage";
 import LoginWithPollBuddy from "./pages/LoginWithPollBuddy/LoginWithPollBuddy";
 import GroupCreation from "./pages/GroupCreation/GroupCreation";
 import GroupJoin from "./pages/GroupJoin/GroupJoin";
 import GroupEdit from "./pages/GroupEdit/GroupEdit";
-import GroupPolls from "./pages/GroupPolls/GroupPolls";
+import Group from "./pages/Group/Group";
 import PollEditor from "./pages/PollEditor/PollEditor";
 import Notfound from "./pages/Error404/Error404";
 import Template from "./pages/Template/Template";
@@ -20,6 +20,7 @@ import RegisterDefault from "./pages/RegisterDefault/RegisterDefault";
 import RegisterWithSchool from "./pages/RegisterWithSchool/RegisterWithSchool";
 import RegisterWithSchoolStep2 from "./pages/RegisterWithSchoolStep2/RegisterWithSchoolStep2";
 import RegisterWithPollBuddy from "./pages/RegisterWithPollBuddy/RegisterWithPollBuddy";
+import PollCreation from "./pages/PollCreation/PollCreation";
 import PollViewer from "./pages/PollViewer/PollViewer";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import PollResults from "./pages/PollResults/PollResults";
@@ -32,12 +33,14 @@ import AnswerRecorded from "./pages/AnswerRecorded/AnswerRecorded";
 import LoginDefault from "./pages/LoginDefault/LoginDefault";
 import LoginWithSchool from "./pages/LoginWithSchool/LoginWithSchool";
 import LoginWithSchoolStep2 from "./pages/LoginWithSchoolStep2/LoginWithSchoolStep2";
+
 import Code from "./pages/Code/Code";
+import PrivateComponent from "./components/PrivateComponent/PrivateComponent";
 
 import Header from "./components/Header/Header.js";
 import Footer from "./components/Footer/Footer.js";
-//import Popup2 from "./components/Popup2/Popup2";
 
+//import Popup2 from "./components/Popup2/Popup2";
 import "./styles/main.scss";
 
 export default class App extends React.Component {
@@ -72,201 +75,135 @@ export default class App extends React.Component {
             We will likely want to nest a lot of these later, this link has some details how
           */}
 
-          <Switch>
+          <Routes>
 
             {/* --- Main Site Pages --- */}
 
             {/* Home Page */}
-            <Route exact path="/">
-              <Homepage updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/" element={<Homepage updateTitle={this.updateTitle} />} />
 
             {/* About Poll Buddy Page */}
-            <Route exact path="/about">
-              <About updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/about" element={<About updateTitle={this.updateTitle} />} />
 
             {/* Contact Us Page */}
-            <Route exact path="/contact">
-              <Contact updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/contact" element={<Contact updateTitle={this.updateTitle} />} />
 
             {/* Frequently Asked Questions (FAQ) Page */}
-            <Route exact path="/faq">
-              <FAQ updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/faq" element={<FAQ updateTitle={this.updateTitle} />}/>
 
             {/* Data Privacy Page */}
-            <Route exact path="/privacy">
-              <Privacy updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/privacy" element={<Privacy updateTitle={this.updateTitle} />} />
 
             {/* Enter Poll Code Page */}
-            <Route exact path="/code">
-              <Code updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/code" element={<Code updateTitle={this.updateTitle} />} />
 
 
             {/* --- Group Pages --- */}
 
             {/* My Groups Page */}
-            <Route exact path="/groups">
-              <Group updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/groups" element={<PrivateComponent state = {true} element={<Groups updateTitle={this.updateTitle} />}/>}/>
 
             {/* Group Creation Page */}
-            <Route exact path="/groups/new">
-              <GroupCreation updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/groups/new" element={<PrivateComponent state = {true} element={<GroupCreation updateTitle={this.updateTitle} />}/>}/>
 
-            {/* Group's Polls Page */}
-            <Route exact path="/groups/:groupID/polls">
-              <GroupPolls updateTitle={this.updateTitle} />
-            </Route>
+            {/* Group's Page */}
+            <Route exact path="/groups/:groupID" element={<PrivateComponent state = {true} element={<Group updateTitle={this.updateTitle} />}/>}/>
 
             {/* Group Edit Page */}
-            {/*use the render function so that we can retrieve :groupID from inside the component*/}
-            <Route exact path="/groups/:groupID/edit"
-              render={ (props) => (<GroupEdit {...props} updateTitle={this.updateTitle} />) }
-            />
+            <Route exact path="/groups/:groupID/edit" element={<PrivateComponent state = {true} element={<GroupEdit updateTitle={this.updateTitle} />}/>} />
 
             {/* Group Join Page */}
-            <Route exact path="/groups/join">
-              <GroupJoin updateTitle={this.updateTitle} />
-            </Route>
-
+            <Route exact path="/groups/join" element={<PrivateComponent state = {true} element={<GroupJoin updateTitle={this.updateTitle} />}/>}/>
 
             {/* --- Poll Pages --- */}
 
             {/* My Poll Histories Page */}
             {/* This route (and any others that route through /polls/that are not polls)
-                need to be lsited BEFORE the Poll ID Redirect to ensure they are not
+                need to be listed BEFORE the Poll ID Redirect to ensure they are not
                 treated like a :pollID */}
-            <Route exact path="/polls/history">
-              <PollHistory updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/polls/history" element={<PrivateComponent state = {true} element={<PollHistory updateTitle={this.updateTitle} />}/>}/>
+
+            {/* Poll Creation */}
+            <Route exact path="/polls/new" element={<PollCreation updateTitle={this.updateTitle} />}/>
 
             {/* Poll ID Redirect */}
             {/* Redirects from poll ID page (404) to view page */}
-            <Route exact path="/polls/:pollID"
-              render={ (props) => (<Redirect to={"/polls/"+ props.match.params.pollID + "/view"} push={true}/>)}
-            />
+            <Route exact path="/polls/:pollID" element={<PrivateComponent state = {true} element={<Navigate to={"view"} push={true}/>}/>}/>
+
 
             {/* Poll Viewer Page */}
-            <Route exact path="/polls/:pollID/view"
-              render={ (props) => (<PollViewer {...props} updateTitle={this.updateTitle} />) }
-            />
+            <Route exact path="/polls/:pollID/view" element={<PollViewer updateTitle={this.updateTitle} />}/>
 
             {/* Poll Editor Page */}
-            <Route exact path="/polls/:pollID/edit"
-              render={ (props) => (<PollEditor {...props} updateTitle={this.updateTitle}/>) }
-            />
+            <Route exact path="/polls/:pollID/edit" element={<PrivateComponent state = {true} element={<PollEditor updateTitle={this.updateTitle} />}/>}/>
 
             {/* Poll Manager Page */}
-            <Route exact path="/polls/:pollID/manage">
-              <PollManager updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/polls/:pollID/manage" element={<PrivateComponent state = {true} element={<PollManager updateTitle={this.updateTitle} />}/>}/>
 
             {/* Poll Results Page */}
             {/*use the render function so that we can retrieve :groupID from inside the component*/}
-            <Route exact path="/polls/:pollID/results"
-              render={ (props) => (<PollResults {...props} updateTitle={this.updateTitle} />) }
-            />
+            <Route exact path="/polls/:pollID/results" element={<PollResults updateTitle={this.updateTitle} />}/>
 
-            {/* Question Ended Page */}
+            {/* QuestionResults Ended Page */}
             {/* A page that shows when a question is closed by an instructor
                 Note: this will be removed soon I believe. */}
-            <Route exact path="/questionEnded">
-              <QuestionEnded updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/questionEnded" element={<PrivateComponent state = {true} element={<QuestionEnded updateTitle={this.updateTitle} />}/>}/>
 
             {/* Answer Recorded Page */}
             {/* A page that shows after you answered the question, or after time runs out.
              Note: this will be removed soon I believe. */}
-            <Route exact path="/answerRecorded">
-              <AnswerRecorded updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/answerRecorded" element={<PrivateComponent state = {true} element={<AnswerRecorded updateTitle={this.updateTitle} />}/>}/>
 
 
             {/* --- Login Pages --- */}
 
             {/* Login Main Page */}
-            <Route exact path="/login">
-              <LoginDefault updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/login" element={<PrivateComponent state = {false} element={<LoginDefault updateTitle={this.updateTitle} />}/>}/>
 
             {/* Login with Poll Buddy Account Page */}
-            <Route exact path="/login/pollbuddy">
-              <LoginWithPollBuddy updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/login/pollbuddy" element={<PrivateComponent state = {false} element={<LoginWithPollBuddy updateTitle={this.updateTitle} />}/>}/>
 
             {/* Login with School Account Page */}
-            <Route exact path="/login/school">
-              <LoginWithSchool updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/login/school" element={<PrivateComponent state = {false} element={<LoginWithSchool updateTitle={this.updateTitle} />}/>}/>
 
             {/* Login with School Account Step 2 Page */}
-            <Route exact path="/login/school/step2"
-              render={ (props) => (<LoginWithSchoolStep2 {...props} updateTitle={this.updateTitle}
-                userInfo={this.state.userInfo} />) }
-            />
+            <Route exact path="/login/school/step2" element={<PrivateComponent state = {false} element={<LoginWithSchoolStep2 updateTitle={this.updateTitle} />}/>}/>
 
             {/* Forgot Password Page */}
-            <Route exact path="/login/forgot">
-              <ForgotPassword updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/login/forgot" element={<PrivateComponent state = {false} element={<ForgotPassword updateTitle={this.updateTitle} />}/>}/>
 
             {/* Reset Password Page */}
-            <Route exact path="/login/reset">
-              <ResetPassword updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/login/reset" element={<PrivateComponent state = {false} element={<ResetPassword updateTitle={this.updateTitle} />}/>}/>
 
 
             {/* --- Registration Pages --- */}
 
             {/* Register Main Page */}
-            <Route exact path="/register">
-              <RegisterDefault updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/register" element={<PrivateComponent state = {false} element={<RegisterDefault updateTitle={this.updateTitle} />}/>}/>
 
             {/* Register with Poll Buddy Account Page */}
-            <Route exact path="/register/pollbuddy">
-              <RegisterWithPollBuddy updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/register/pollbuddy" element={<PrivateComponent state = {false} element={<RegisterWithPollBuddy updateTitle={this.updateTitle} />}/>}/>
 
             {/* Register with School Account Page */}
-            <Route exact path="/register/school">
-              <RegisterWithSchool updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/register/school" element={<PrivateComponent state = {false} element={<RegisterWithSchool updateTitle={this.updateTitle} />}/>}/>
 
             {/* Register with School Account Step 2 Page */}
-            {/*use the render function so that we can retrieve :groupID from inside the component*/}
-            <Route exact path="/register/school/step2"
-              render={ (props) => (<RegisterWithSchoolStep2 {...props} updateTitle={this.updateTitle}
-                userInfo={this.state.userInfo} />) }
-            />
+            <Route exact path="/register/school/step2" element={<PrivateComponent state = {false} element={<RegisterWithSchoolStep2 updateTitle={this.updateTitle} />}/>}/>
 
 
             {/* --- Account and User Settings Pages --- */}
 
             {/* Account Info Page */}
-            <Route exact path="/account">
-              <AccountInfo updateTitle={this.updateTitle} />
-            </Route>
-
+            <Route exact path="/account" element={<PrivateComponent state = {true} element={<AccountInfo updateTitle={this.updateTitle} />}/>}/>
 
             {/* --- Other Pages --- */}
 
             {/* Template Page */}
-            <Route exact path="/template">
-              <Template updateTitle={this.updateTitle} />
-            </Route>
+            <Route exact path="/template" element={<Template updateTitle={this.updateTitle} />}/>
 
             {/* Default Route/Error 404 Page */}
-            <Route>
-              <Notfound updateTitle={this.updateTitle} />
-            </Route>
-          </Switch>
+            <Route path="*" element={<Notfound updateTitle={this.updateTitle} />}/>
+          </Routes>
 
           <Footer/>
 
