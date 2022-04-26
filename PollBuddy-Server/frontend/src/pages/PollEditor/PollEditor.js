@@ -5,6 +5,7 @@ import "./PollEditor.scss";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import QuestionEditor from "../../components/QuestionEditor/QuestionEditor";
+import PopupStatic from "../../components/PopupStatic/PopupStatic";
 
 class PollEditor extends Component {
   constructor(props) {
@@ -352,7 +353,8 @@ class PollEditor extends Component {
                   </button>
                   <button
                     id="descriptionBtn" className="button pollButton"
-                    onClick={this.deletePoll}
+                    onClick={() => this.setState({showStaticModal: true})}
+                    //onClick={this.deletePoll}
                   >
                     Delete
                   </button>
