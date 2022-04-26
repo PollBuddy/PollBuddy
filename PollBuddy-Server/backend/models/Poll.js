@@ -478,10 +478,12 @@ module.exports = {
   submitQuestion,
   deletePoll,
   pollSchema,
+  questionSchema,
   createPollValidator,
   editPollValidator,
   createQuestionValidator,
   editQuestionValidator,
   submitQuestionValidator,
   pollParamsValidator
+  
 };

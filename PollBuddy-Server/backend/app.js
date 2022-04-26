@@ -8,20 +8,27 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const os = require("os");
 
-// Handles /api/groups routes URLs
-const groupsRouter = require("./routes/groups");
-// Handles /api/polls routes URLs
-const pollsRouter = require("./routes/polls");
-// Handles /api/users routes URLs
-const usersRouter = require("./routes/users");
-// In case we run into CORS issues
-const cors = require("cors");
-
 const app = express();
+
+// In case we run into CORS issues
+// Cors: https://daveceddia.com/access-control-allow-origin-cors-errors-in-react-express/
+const cors = require("cors");
+app.use(cors());
 
 // Express Session
 const expressSession = require("express-session");
 const MongoStore = require("connect-mongo");
+
+// Database
+const mongoConnection = require("./modules/mongoConnection.js");
+mongoConnection.connect(function (res) {
+  if (res !== true) {
+    console.error(res);
+  }
+});
+
+// Sessions
+console.log("Connecting express-session");
 app.use(expressSession({
   cookie: {
     maxAge: 2629800000
@@ -33,23 +40,20 @@ app.use(expressSession({
   resave: false,
   saveUninitialized: true,
   store: MongoStore.create({
-    mongoUrl: process.env["DB_URL"],
+    mongoUrl: mongoConnection.getURI(),
     dbName: process.env["DB_NAME"]
   })
 }));
 
-// Cors: https://daveceddia.com/access-control-allow-origin-cors-errors-in-react-express/
-app.use(cors());
-
-const mongoConnection = require("./modules/mongoConnection.js");
-mongoConnection.connect(function (res) {
-  if (res !== true) {
-    console.error(res);
-  }
-});
-
 // InfluxDB
 const influxConnection = require("./modules/influx.js");
+
+// Handles /api/groups routes URLs
+const groupsRouter = require("./routes/groups");
+// Handles /api/polls routes URLs
+const pollsRouter = require("./routes/polls");
+// Handles /api/users routes URLs
+const usersRouter = require("./routes/users");
 
 // Response Time Logging to InfluxDB
 app.use((req, res, next) => {

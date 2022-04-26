@@ -42,7 +42,7 @@ RUN apk add --no-cache curl
 
 # Bundle the NGINX config files
 COPY webproxy/nginx.conf /etc/nginx/
-COPY webproxy/conf.d /etc/nginx/conf.d
+COPY webproxy/conf.d.docker /etc/nginx/conf.d
 
 # Create app directory
 WORKDIR /usr/src/app

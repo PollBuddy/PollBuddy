@@ -4,57 +4,131 @@ on:
   pull_request:
 
 jobs:
-  PullRequest-Temp-Deploy:
+  Docker-Build-Frontend:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 10
     steps:
-      - name: Save start time
-        run: |
-          echo "START_TIME=$(TZ='America/New_York' date +"%Y/%m/%d %r")" >> $GITHUB_ENV
-      - name: Initialize SSH
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.POLLBUDDY_CICD_SERVER_KNOWNHOST }}" >> ~/.ssh/known_hosts
-          ssh-agent -a $SSH_AUTH_SOCK > /dev/null
-          ssh-add - <<< "${{ secrets.POLLBUDDY_CICD_SERVER_USER_KEY }}"
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
 
-      - name: Remote Test
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: |
-          ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} cat test
-        id: remote_test
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
-      - name: Remote Update
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: |
-          ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} "cd ./CI-CD && git pull"
-        id: remote_update
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Remote Deploy
-        env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-        run: |
-          ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} "cd ./CI-CD && bash ./deployTestInstance.sh \"${{ github.event.number }}\" PR"
-        id: remote_deploy
+      - name: Extract metadata (tags, labels) for Docker
+        id: metadata
+        uses: docker/metadata-action@v3
+        with:
+          images: pollbuddy/frontend
+          tags: |
+            type=ref,event=pr,prefix=,suffix=
 
-      - name: Save end time
-        run: |
-          echo "END_TIME=$(TZ='America/New_York' date +"%Y/%m/%d %r")" >> $GITHUB_ENV
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: "{{defaultContext}}:PollBuddy-Server/frontend"
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
 
+  Docker-Build-Backend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: metadata
+        uses: docker/metadata-action@v3
+        with:
+          images: pollbuddy/backend
+          tags: |
+            type=ref,event=pr,prefix=,suffix=
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: "{{defaultContext}}:PollBuddy-Server/backend"
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
+
+  Docker-Build-Reporting:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: metadata
+        uses: docker/metadata-action@v3
+        with:
+          images: pollbuddy/reporting
+          tags: |
+            type=ref,event=pr,prefix=,suffix=
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: "{{defaultContext}}:PollBuddy-Server/reporting/grafana"
+          push: true
+          tags: ${{ steps.metadata.outputs.tags }}
+          labels: ${{ steps.metadata.outputs.labels }}
+
+  Kubernetes-Deploy:
+    runs-on: ubuntu-latest
+    needs: [Docker-Build-Frontend, Docker-Build-Backend, Docker-Build-Reporting]
+    timeout-minutes: 5
+    steps:
+      - name: Deploy
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: 'https://dev.pollbuddy.app/api/deployment/new'
+          method: 'POST'
+          timeout: 60000 # 60 second timeout, should only need about 10s
+          contentType: application/x-www-form-urlencoded
+          data: dev_instance_type=pr&dev_instance_id=${{ github.ref }}&key=${{ secrets.CICD_KEY }}
+      - name: Show Response
+        run: echo ${{ steps.Deploy.outputs.response }}
+
+  PullRequest-Comment:
+    runs-on: ubuntu-latest
+    needs: [Docker-Build-Frontend, Docker-Build-Backend, Docker-Build-Reporting, Kubernetes-Deploy]
+    timeout-minutes: 5
+    steps:
       - name: Share Link on PR
         continue-on-error: true
         uses: thollander/actions-comment-pull-request@v1.0.4
         with:
           message: |
-            Live version has been created!
+            Live version is available!
             Always-Updated URL: https://dev-${{ github.event.number }}.pollbuddy.app/
-
-            Start Time: ${{ env.START_TIME }} ET
-            End Time: ${{ env.END_TIME }} ET
+            
             Last commit: ${{ github.event.pull_request.head.sha }}
             Up-To-Commit URL: https://dev-${{ github.event.pull_request.head.sha }}.pollbuddy.app/
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
