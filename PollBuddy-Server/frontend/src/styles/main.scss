@@ -311,8 +311,8 @@ label {
 
 a {
   color: var(--light-purple-logo-text) !important;
-  transition: var(--default-transition);
-  font-style: italic;
+  transition: var(--default-transition) !important;
+  font-style: italic !important;
 }
 
 a:hover {
