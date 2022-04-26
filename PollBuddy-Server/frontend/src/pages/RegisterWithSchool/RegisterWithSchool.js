@@ -18,8 +18,7 @@ class RegisterWithSchool extends Component {
       });
 
       return setTimeout(() => { 
-        this.props.router.navigate("/api/users/register/" + schoolLinkDict[value], { replace: true });
-        window.location.reload() }, 100);
+        this.props.router.navigate("/api/users/register/" + schoolLinkDict[value], { replace: true }); window.location.reload(); }, 100);
     } else {
       this.setState({
         errMsg: value + " is not a valid school"
