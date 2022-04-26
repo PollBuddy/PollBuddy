@@ -1,16 +1,14 @@
-var createError = require("http-errors");
-var express = require("express");
-var router = express.Router();
-const bson = require("bson");
-var bcrypt = require("bcrypt");
-var path = require("path");
-const Joi = require("joi");
+const express = require("express");
+const router = express.Router();
+const bcrypt = require("bcrypt");
 
-var mongoConnection = require("../modules/mongoConnection.js");
+const mongoConnection = require("../modules/mongoConnection.js");
+const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
 const rpi = require("../modules/rpi");
 
 const { createResponse, validateID, isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute, promote } = require("../modules/utils"); // object destructuring, only import desired functions
-const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups, createUser, editUser } = require("../models/User.js");
+const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups, createUser, editUser, userParamsValidator } = require("../models/User.js");
+const {paramValidator} = require("../modules/validatorUtils");
 
 // This file handles /api/users URLs
 
@@ -53,7 +51,7 @@ router.post("/", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/login", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -87,7 +85,7 @@ router.post("/login", function (req, res) {
   let errors = getResultErrors(validResult);
   if (isEmpty(errors)) {
     console.log("Error: No validation errors when checking details in /login. This should not happen.");
-    return res.status(500).send(createResponse(null, "An error occurred while validating login details."));
+    return sendResponse(res, httpCodes.InternalServerError("An error occurred while validating login details."));
   }
   // Check whether to validate email or username
   let mode = "";
@@ -96,7 +94,7 @@ router.post("/login", function (req, res) {
   } else if (errors["userName"] && !errors["email"]) {
     mode = "email";
   } else {
-    return res.status(401).send(createResponse(null, "Invalid credentials."));
+    return sendResponse(res, httpCodes.Unauthorized("Invalid credentials."));
   }
 
   // Define an internal function to use for validating the data returned from the DB query
@@ -105,50 +103,44 @@ router.post("/login", function (req, res) {
       // Something went wrong
       console.log("Database Error occurred while locating a user to log in with Poll Buddy");
       console.error(err);
-      return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
-
+      return sendResponse(res, httpCodes.InternalServerError("An error occurred while communicating with the database."));
     } else if (result === null) {
       // No user was found
-      return res.status(401).send(createResponse(null, "Invalid credentials."));
-
+      return sendResponse(res, httpCodes.Unauthorized("Invalid credentials."));
     } else {
       // A user was found!
 
       // Make sure this isn't a school account as they can't log in here
       if (result.SchoolAffiliation) {
         // This is a school account, don't bother trying to log in anymore.
-        return res.status(406).send(createResponse(null, "This account is associated with a school."));
-
+        return sendResponse(res, httpCodes.NotAcceptable("This account is associated with a school."));
       } else {
         // Not a school account
 
         // Make sure the password is worth checking (performance optimization as hashing is slow)
         if (errors["password"]) {
-          return res.status(401).send(createResponse(null, "Invalid credentials."));
-
+          return sendResponse(res, httpCodes.Unauthorized("Invalid credentials."));
         } else {
           // Check the password
           bcrypt.compare(req.body.password, result.Password, function (bcryptErr, bcryptResult) {
             if (bcryptErr) {
               // Something went wrong with bcrypt
               console.error(bcryptErr);
-              return res.status(500).send(createResponse(null, "An error occurred while validating credentials."));
-
+              return sendResponse(res, httpCodes.InternalServerError("An error occurred while validating credentials."));
             } else if (bcryptResult) {
 
               req.session.userData = {};
               req.session.userData.userID = result._id;
 
               // Send the user the necessary data to complete the login process
-              return res.status(200).send(createResponse({
+              return sendResponse(res, httpCodes.Ok({
                 "firstName": result.FirstName,
                 "lastName": result.LastName,
                 "userName": result.UserName
               }));
-
             } else {
               // Password validated and does not match
-              return res.status(401).send(createResponse(null, "Invalid credentials."));
+              return sendResponse(res, httpCodes.Unauthorized("Invalid credentials."));
             }
           });
         }
@@ -169,7 +161,7 @@ router.post("/login", function (req, res) {
 
   } else {
     // Didn't pass validation for username or email. This shouldn't ever run anyways though.
-    return res.status(401).send(createResponse(null, "Invalid credentials."));
+    return sendResponse(res, httpCodes.Unauthorized("Invalid credentials."));
   }
 
 });
@@ -258,7 +250,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/login/rpi", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 /**
@@ -272,7 +264,7 @@ router.post("/login/rpi", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/register", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -332,7 +324,7 @@ router.post("/register", function (req, res) {
       if (error) {
         console.log("Error occurred while hashing a password with bcrypt.");
         console.log(error);
-        return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
+        return sendResponse(res, httpCodes.InternalServerError("An error occurred while communicating with the database."));
       }
 
       let user = createModel(userSchema, {
@@ -350,35 +342,32 @@ router.post("/register", function (req, res) {
             // This code means we're trying to insert a duplicate key (aka user already registered somehow)
             if (err.keyPattern.Email) {
               // Email in use
-              return res.status(400).send(createResponse(null, "This email is already in use."));
-
+              return sendResponse(res, httpCodes.BadRequest("This email is already in use."));
             } else if (err.keyPattern.UserName) {
               // Username in use
-              return res.status(400).send(createResponse(null, "This username is already in use."));
-
+              return sendResponse(res, httpCodes.BadRequest("This username is already in use."));
             } else {
               // An unknown error occurred
               console.log("Database Error occurred while creating a new user with Poll Buddy.");
               console.log(err);
-              return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
+              return sendResponse(res, httpCodes.InternalServerError("An error occurred while communicating with the database."));
             }
 
           } else {
             // An unknown error occurred
             console.log("Database Error occurred while creating a new user with Poll Buddy.");
             console.log(err);
-            return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
+            return sendResponse(res, httpCodes.InternalServerError("An error occurred while communicating with the database."));
           }
-
         } else {
-          
+
           // One result changed, therefore it worked.
           // Configure user data and save in session
           req.session.userData = {};
           req.session.userData.userID = result.insertedId;
 
           // Send the response object with some basic info for the frontend to store
-          return res.status(200).send(createResponse({
+          return sendResponse(res, httpCodes.Ok({
             "firstName": user.FirstName,
             "lastName": user.LastName,
             "userName": user.UserName
@@ -388,7 +377,7 @@ router.post("/register", function (req, res) {
     });
 
   } else {
-    return res.status(400).send(createResponse(errorMsg, "Validation failed."));
+    return sendResponse(res, httpCodes.BadRequest("Validation failed."));
   }
 
 });
@@ -487,7 +476,7 @@ router.post("/register/rpi", function (req, res) {
 
   // Make sure we've got data from step 1
   if (!req.session.userDataTemp) {
-    return res.status(500).send(createResponse(null, "Prerequisite data is not available."));
+    return sendResponse(res, httpCodes.InternalServerError("Prerequisite data is not available."));
   }
   // Configure email, username, overwriting whatever the user may have sent as we don't want it anyways.
   req.body.userName = req.session.userDataTemp.userName;
@@ -511,23 +500,21 @@ router.post("/register/rpi", function (req, res) {
           // This code means we're trying to insert a duplicate key (aka user already registered somehow)
           if (err.keyPattern.Email) {
             // Email in use
-            return res.status(400).send(createResponse(null, "This email is already in use."));
-
+            return sendResponse(res, httpCodes.BadRequest("This email is already in use."));
           } else if (err.keyPattern.UserName) {
             // Username in use
-            return res.status(400).send(createResponse(null, "This username is already in use."));
-
+            return sendResponse(res, httpCodes.BadRequest("This username is already in use."));
           } else {
             // An unknown error occurred
             console.log("Database Error occurred while creating a new user with RPI.");
             console.log(err);
-            return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
+            return sendResponse(res, httpCodes.InternalServerError("An error occurred while communicating with the database."));
           }
         } else {
           // An unknown error occurred
           console.log("Database Error occurred while creating a new with RPI.");
           console.log(err);
-          return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
+          return sendResponse(res, httpCodes.InternalServerError("An error occurred while communicating with the database."));
         }
 
       } else {
@@ -542,18 +529,16 @@ router.post("/register/rpi", function (req, res) {
         req.session.userData.userID = result.insertedId;
 
         // Send the response object with some basic info for the frontend to store
-        return res.status(200).send(createResponse({
+        return sendResponse(res, httpCodes.Ok({
           "firstName": user.FirstName,
           "lastName": user.LastName,
           "userName": user.UserName
         }));
-
       }
     });
   } else {
-    return res.status(400).send(createResponse(errorMsg, "Validation failed."));
+    return sendResponse(res, httpCodes.BadRequest("Validation failed."));
   }
-
 });
 
 /**
@@ -567,7 +552,7 @@ router.post("/register/rpi", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/logout", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -583,12 +568,9 @@ router.get("/logout", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/logout", function (req, res) {
-
   // Delete the userData in the session
   delete req.session.userData;
-
-  return res.status(200).send(createResponse("User was logged out successfully."));
-
+  return sendResponse(res, httpCodes.Ok("User was logged out successfully."));
 });
 
 /**
@@ -603,7 +585,7 @@ router.post("/logout", function (req, res) {
  */
 router.get("/me", promote(isLoggedIn), async function (req, res) {
   let response = await getUser(req.session.userData.userID);
-  return res.status(response[0]).send(response[1]);
+  return sendResponse(res, response);
 });
 
 /**
@@ -617,7 +599,7 @@ router.get("/me", promote(isLoggedIn), async function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/me", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 /**
@@ -629,8 +611,9 @@ router.post("/me", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
+// eslint-disable-next-line no-unused-vars
 router.get("/me/edit", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -642,11 +625,11 @@ router.get("/me/edit", function (req, res) {
  *             Status 500: { "result": "failure", "error": "Error updating database information"}
  * @name backend/users/me/edit_POST
  * @param {string} path - Express path
- * @param {callback} callback - function handler for route 
+ * @param {callback} callback - function handler for route
  */
 router.post("/me/edit", promote(isLoggedIn), async function (req, res) {
   let response = await editUser(req.session.userData.userID, req.body);
-  return res.status(response[0]).send(response[1]);
+  return sendResponse(res, response);
 });
 
 /**
@@ -661,7 +644,7 @@ router.post("/me/edit", promote(isLoggedIn), async function (req, res) {
  */
 router.get("/me/groups", promote(isLoggedIn), async function (req, res) {
   let response = await getUserGroups(req.session.userData.userID);
-  return res.status(response[0]).send(response[1]);
+  return sendResponse(res, response);
 });
 
 /**
@@ -673,8 +656,9 @@ router.get("/me/groups", promote(isLoggedIn), async function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/me/groups", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 /**
@@ -693,9 +677,9 @@ router.post("/me/groups", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/:id", async function (req, res) {
+router.get("/:id", paramValidator(userParamsValidator), async function (req, res) {
   let response = await getUser(req.params.id);
-  return res.status(response[0]).send(response[1]);
+  return sendResponse(res, response);
 });
 
 /**
@@ -709,7 +693,7 @@ router.get("/:id", async function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/:id", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 /**
@@ -723,7 +707,7 @@ router.post("/:id", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.get("/:id/edit", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -738,25 +722,25 @@ router.get("/:id/edit", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
  */
-router.post("/:id/edit", async function (req, res) {
+router.post("/:id/edit", paramValidator(userParamsValidator), async function (req, res) {
   let response = await editUser(req.params.id, req.body);
-  return res.status(response[0]).send(response[1]);
+  return sendResponse(res, response);
 });
 
 /**
- * This route obtains the group of users by id, and returns a network response depending on whether 
+ * This route obtains the group of users by id, and returns a network response depending on whether
  * the network communication was successful or not
  * @getdata {void} None
  * @postdata {void} None
  * @returns {void} On success: Status 200
- * On failure: Status 500 // TODO: Endpoint requires error message 
+ * On failure: Status 500 // TODO: Endpoint requires error message
  * @name backend/users/:id/GROUPS
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/:id/groups", async function (req, res) {
+router.get("/:id/groups", paramValidator(userParamsValidator), async function (req, res) {
   let response = await getUserGroups(req.params.id);
-  return res.status(response[0]).send(response[1]);
+  return sendResponse(res, response);
 });
 
 /**
@@ -770,7 +754,7 @@ router.get("/:id/groups", async function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 router.post("/:id/groups", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 module.exports = router;

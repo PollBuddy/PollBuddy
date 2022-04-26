@@ -4,6 +4,7 @@ import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import "./AccountInfo.scss";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
+import {Navigate} from "react-router-dom";
 const Joi = require("joi");
 
 
@@ -40,6 +41,7 @@ class AccountInfo extends Component {
       logOutEverywhere: false
     };
     this.changePassword = this.handleToggleClick.bind(this);
+
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleLogOutEverywhere = this.handleLogOutEverywhere.bind(this);
@@ -49,18 +51,11 @@ class AccountInfo extends Component {
   componentDidMount(){
     this.props.updateTitle("Account Info");
 
-    // Bounce back to log in if they are not logged
-    if(localStorage.getItem("loggedIn") !== "true"){
-      console.log("Not logged in, redirecting");
-      // For some stupid React reason, this needs to be in a timeout to work.
-      // https://github.com/remix-run/react-router/issues/7460#issuecomment-988642684
-      return setTimeout(() => { this.props.router.navigate("/login", { replace: true }); }, 0);
-    }
-
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/me", {
       method: "GET"
     }).then(response => response.json())
       .then(data => {
+        console.log(data);
         // Load states from database values
         data = data.data;
         if(data.userName) {
@@ -99,15 +94,15 @@ class AccountInfo extends Component {
         }
         if(data.logOutEverywhere) {
           this.setState({
-            logOutEverywhere: data.logOutEverywhere 
+            logOutEverywhere: data.logOutEverywhere
           });
-        }        
+        }
         this.setState({
           doneLoading: true
         });
       });
   }
-  
+
   handleToggleClick() {
     this.setState(state => ({
       changePassword: !state.changePassword
@@ -252,7 +247,7 @@ class AccountInfo extends Component {
 
   render() {
     if(!this.state.doneLoading){
-      return ( 
+      return (
         <MDBContainer className="page">
           <LoadingWheel/>
         </MDBContainer>
@@ -273,7 +268,7 @@ class AccountInfo extends Component {
                   <input defaultValue={this.state.lastNameLoaded ? this.state.lastName : undefined } className="form-control textBox" id="lastnameText" readOnly={this.state.lastNameLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
               </MDBRow>
-  
+
               <MDBRow className="AccountInfo-accountInputs">
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="usernameText">Username:</label>
@@ -284,7 +279,7 @@ class AccountInfo extends Component {
                   <input defaultValue={this.state.emailLoaded ? this.state.email : undefined } className="form-control textBox" id="emailText" readOnly={this.state.emailLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
               </MDBRow>
-  
+
               <MDBRow className="AccountInfo-accountInputs">
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="school">School:</label>
@@ -293,9 +288,9 @@ class AccountInfo extends Component {
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="passwordChange">Password:</label>
                   <p id="AccountInfo-passwordChange" onClick={this.changePassword}>{this.state.changePassword ? "Cancel password change" : "Click to change password"}</p>
-                </MDBCol>              
+                </MDBCol>
               </MDBRow>
-  
+
               <MDBContainer id="AccountInfo-changePasswordInputs" style={this.state.changePassword ? {display: "flex"} : {display: "none"}}>
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="newPasswordText">New password:</label>
@@ -309,12 +304,12 @@ class AccountInfo extends Component {
               <input type="checkbox" onChange={this.handleLogOutEverywhere} className="logOutBox" id="logOutEverywhere" checked={this.logOutEverywhere}/>
               <label className="logOutLabel" htmlFor="logOutEverywhere">Log out everywhere?</label>
             </div>
-          
+
             { /* TODO: Update this to have a backend call instead of a "to", plus some result popup */ }
-            <p 
+            <p
               className="fontSizeLarge"
               style={{ display: this.state.done ? "" : "none"}}
-            > 
+            >
               Your changes have been submitted. Thank you.
             </p>
             <p className="fontSizeLarge" style={{display: this.state.error ? "": "none"}}>{this.state.errorMessage}</p>

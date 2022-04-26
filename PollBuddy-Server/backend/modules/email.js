@@ -13,10 +13,10 @@ const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
 
-var oauth2Client;
-var accessToken;
-var smtpTransport;
-var enabled;
+let oauth2Client;
+let accessToken;
+let smtpTransport;
+let enabled;
 
 module.exports = {
 

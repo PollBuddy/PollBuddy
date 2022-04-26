@@ -1,12 +1,12 @@
 .errorContainer{
-  padding: calc(var(--box-padding) * 3 / 5) var(--box-padding);
-  border-radius: calc(var(--box-padding) * 4 / 5);
+  margin: 5px;
+  border-radius: 20px;
   border: 2px solid #e84e43;
   background: #e83225;
   display: flex;
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-  width: calc(100% - 2 * var(--box-margin));
+  width: 100%;
 }
 
