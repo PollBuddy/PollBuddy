@@ -51,9 +51,6 @@ export default class Timer extends Component {
     };
     let countdown = ( (this.props.timeLeft) ?(
       <MDBContainer>
-        <MDBContainer className = "button time-info-label">
-          <span>Question Time Remaining</span>
-        </MDBContainer>
         <MDBContainer className="time-grid" title = "Question Countdown">
           <button className = "button time-info">
             <Countdown
