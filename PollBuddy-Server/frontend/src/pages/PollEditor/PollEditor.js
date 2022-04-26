@@ -9,7 +9,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import { purple } from '@mui/material/colors';
-import {createMuiTheme, ThemeProvider} from "@mui/material";
+import {createTheme, ThemeProvider} from "@mui/material";
 
 class PollEditor extends Component {
   constructor(props) {
@@ -312,11 +312,15 @@ class PollEditor extends Component {
   onOpenTimeChange = (e) =>{
     this.setState({openTime: e});
   };
+  onCloseTimeChange = (e) =>{
+    this.setState({closeTime: e});
+  };
 
   render() {
-    const defaultMaterialTheme = createMuiTheme({
+    const defaultMaterialTheme = createTheme({
       palette: {
         primary: purple,
+        secondary: purple,
       },
     });
     const color = "#ffffff";
@@ -350,15 +354,15 @@ class PollEditor extends Component {
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <ThemeProvider theme={defaultMaterialTheme}>
                     <DateTimePicker
+                      label="PollOpenTime"
+                      value={Date.now() + (60*60*1000)}
+                      onChange={this.onOpenTimeChange}
                       renderInput={(props) => <TextField {...props} sx={{
                         svg: { color },
                         input: { color },
                         label: { color }
                       }}
                       />}
-                      label="PollOpenTime"
-                      value={this.state.openTime}
-                      onChange={this.onOpenTimeChange}
                     />
                   </ThemeProvider>
                 </LocalizationProvider>
@@ -372,8 +376,8 @@ class PollEditor extends Component {
                       }}
                       />}
                       label="PollCloseTime"
-                      value={this.state.closeTime}
-                      onChange={this.onOpenTimeChange}
+                      value={Date.now() + (2*60*60*1000)}
+                      onChange={this.onCloseTimeChange}
                     />
                   </ThemeProvider>
                 </LocalizationProvider>

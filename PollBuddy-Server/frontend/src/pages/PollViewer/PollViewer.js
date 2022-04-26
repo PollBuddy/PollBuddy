@@ -14,7 +14,8 @@ class PollViewer extends Component {
       pollID: props.router.params.pollID,
       showError: null,
       doneLoading: false,
-      perPoll: false,
+      perPoll: true,
+      pollCloseTime: "",
       pollTitle: "",
       pollDescription: "",
       questions: "",
@@ -44,6 +45,8 @@ class PollViewer extends Component {
             pollTitle: response.data.description,
             pollDescription: response.data.description,
             questions: response.data.questions,
+            perPoll: response.data.perPoll,
+            pollCloseTime: response.data.pollCloseTime,
             doneLoading: true,
           });
         } else {
@@ -134,7 +137,8 @@ class PollViewer extends Component {
                   pollID: this.state.pollID,
                   questionNumber: this.state.currentQuestion + 1,
                   question: this.state.questions[this.state.currentQuestion],
-                  perPoll: this.state.perPoll
+                  perPoll: this.state.perPoll,
+                  pollCloseTime: this.state.pollCloseTime
                 }}/>
               );
             }
