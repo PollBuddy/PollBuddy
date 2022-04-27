@@ -4,8 +4,6 @@ import "mdbreact/dist/css/mdb.css";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";
 
-//Abby to do 29th: fix linting errors
-
 export default class LoginWithSchool extends Component {
   constructor(props) {
     super(props);

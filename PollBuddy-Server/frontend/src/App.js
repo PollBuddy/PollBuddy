@@ -11,7 +11,6 @@ import GroupEdit from "./pages/GroupEdit/GroupEdit";
 import Group from "./pages/Group/Group";
 import PollEditor from "./pages/PollEditor/PollEditor";
 import Notfound from "./pages/Error404/Error404";
-import Template from "./pages/Template/Template";
 import FAQ from "./pages/FAQ/FAQ";
 import AccountInfo from "./pages/AccountInfo/AccountInfo";
 import Privacy from "./pages/Privacy/Privacy";
@@ -197,9 +196,6 @@ export default class App extends React.Component {
             <Route exact path="/account" element={<PrivateComponent state = {true} element={<AccountInfo updateTitle={this.updateTitle} />}/>}/>
 
             {/* --- Other Pages --- */}
-
-            {/* Template Page */}
-            <Route exact path="/template" element={<Template updateTitle={this.updateTitle} />}/>
 
             {/* Default Route/Error 404 Page */}
             <Route path="*" element={<Notfound updateTitle={this.updateTitle} />}/>

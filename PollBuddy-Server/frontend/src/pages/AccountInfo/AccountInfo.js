@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
-import {withRouter, Redirect} from "react-router-dom";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import "./AccountInfo.scss";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
-import {Navigate} from "react-router-dom";
 const Joi = require("joi");
 
 
@@ -143,15 +141,16 @@ class AccountInfo extends Component {
           "Cannot have 4 of the same characters in a row."))
     });
 
-    var userValid = undefined;
-    var userInput = "";
-    var emailValid = undefined;
-    var emailInput = "";
-    var firstNameValid = undefined;
-    var firstNameInput = "";
-    var lastNameValid = undefined;
-    var lastNameInput = "";
-    var passwordValid = undefined;
+    let userValid = undefined;
+    let userInput = "";
+    let emailValid = undefined;
+    let emailInput = "";
+    let firstNameValid = undefined;
+    let firstNameInput = "";
+    let lastNameValid = undefined;
+    let lastNameInput = "";
+    let passwordValid = undefined;
+    let passwordInput = "";
 
     this.setState({done: false, error: false});
 
@@ -203,7 +202,7 @@ class AccountInfo extends Component {
         this.setState({error: true, errorMessage: passwordValid.error.toString()});
         return;
       }
-      //passwordInput = passwordValid.value.password; //might need this later, passwordInput not used for now
+      passwordInput = passwordValid.value.password;
     }
     
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
