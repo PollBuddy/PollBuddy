@@ -354,7 +354,7 @@ class PollEditor extends Component {
                     id="descriptionBtn" className="button pollButton"
                     onClick={this.deletePoll}
                   >
-                    Delete
+                    Delete Poll
                   </button>
                 </div>
               </MDBContainer>

@@ -138,3 +138,14 @@ jobs:
         run: |
           ssh -p ${{ secrets.POLLBUDDY_CICD_SERVER_PORT }} ${{ secrets.POLLBUDDY_CICD_SERVER_USER_NAME }}@${{ secrets.POLLBUDDY_CICD_SERVER_URL }} "cd ./CI-CD && bash ./deployMaster.sh"
         id: remote_deploy
+
+      - name: Kubernetes Deploy
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: 'https://dev.pollbuddy.app/api/deployment/new'
+          method: 'POST'
+          timeout: 60000 # 60 second timeout, should only need about 10s
+          contentType: application/x-www-form-urlencoded
+          data: key=${{ secrets.CICD_KEY }}
+      - name: Show Response
+        run: echo ${{ steps.Deploy.outputs.response }}

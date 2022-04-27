@@ -29,6 +29,8 @@ services:
   reporting:
     build: PollBuddy-Server/reporting/grafana
     restart: unless-stopped
+    environment:
+      - REPORTING_DB_URL=reporting-db
     networks:
       - logging
 
