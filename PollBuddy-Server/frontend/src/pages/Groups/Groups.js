@@ -96,10 +96,10 @@ export default class Groups extends Component {
               Group Management:
             </p>
             <Link to={"/groups/new"}>
-              <button className="button">Create New Group</button>
+              <button style={{width: "20em"}} className="button">Create New Group</button>
             </Link>
             <Link to={"/groups/join"}>
-              <button className="button">Join Group</button>
+              <button style={{width: "20em"}} className="button">Join Group</button>
             </Link>
           </MDBContainer>
         </MDBContainer>
