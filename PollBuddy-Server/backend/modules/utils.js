@@ -1,6 +1,6 @@
 const bson = require("bson");
 const mongoConnection = require("../modules/mongoConnection.js");
-const { httpCodes } = require("../modules/httpCodes.js");
+const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
 /**
  * Helper function for creating the specified http response (https://pollbuddy.app/api/users).
  * For sample usage see https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Overview#helper-functions
@@ -93,9 +93,9 @@ function isEmpty(obj) {
 }
 
 /**
- * @typedef {Predicate} - function from request object to either null or an error string
- * returns null on success
- * returns string containing error on failure
+ * @typedef {Predicate} - middleware that checks some condition
+ * on success : calls next()
+ * on failure : send a message on the response object
  */
 
 
@@ -103,11 +103,11 @@ function isEmpty(obj) {
  * predicate to check If user is logged in in the request
  * @see {Predicate}
  */
-function isLoggedIn(req) {
+function isLoggedIn(req,res,next) {
   if(req.session.userData && req.session.userData.userID){
-    return null;
-  } else {
-    return httpCodes.Unauthorized("User is not logged in.");
+    next();
+  }else{
+    return sendResponse(res,httpCodes.InternalServerError("User is not logged in"));
   }
 }
 
@@ -116,88 +116,95 @@ function isLoggedIn(req) {
  * Also checks to make sure that the user is logged in
  * @see {Predicate}
  */
-function isSiteAdmin() {
-  return and([
+let isSiteAdmin = 
+  and([
     isLoggedIn,
-    (req) => {
+    (req,res,next) => {
       let userID = req.session.userData.userID;
       let user = mongoConnection.getDB().collection("users").findOne({_id: userID});
       if (user.SiteAdmin) {
-        return null;
-      } else {
-        return httpCodes.Unauthorized("User is not a site admin.");
+        next();
+      } else {  
+        return sendResponse(res,httpCodes.InternalServerError("User is not a site admin."));
       }
     }
   ]);
-}
 
 /**
  * predicate to check if the running image is in development mode
  * @see {Predicate}
  */
-function isDevelopmentMode() {
+function isDevelopmentMode(req,res,next) {
   if(process.env.DEVELOPMENT_MODE === "true"){
-    return null;
+    next(); 
   } else {
-    return httpCodes.Forbidden("App is not running in development mode.");
+    return sendResponse(res,httpCodes.InternalServerError("App is not running in development mode."));
   }
 }
 
+
 /**
- * elevates predicate to a middleware that runs it on the request
- * if it returns null: allows execution to go to next middleware
- * if it returns a msg: responds with this message and ends execution
- * @param {Predicate} p - input predicate 
- * @return {Middleware} - Middleware version of predicate
+ * combines a list of predicates into a single predicate
+ * succeeds on a given request if and only if at least one of the input predicates succeed
+ * ignores and changes a predicate may make to the response object
+ * @param {...} ps - any number of predicates
+ * @return {Predicate} - composite predicate
  */
-function promote(p) {
+function or() {
+  let succeeded = false;
+
+  //dummy response object
+  //only one response can be sent per request
+  //or() needs to allow multiple middleware to run without terminating the response
+  //this object absorbs a middleware's attempts to send a response on its own
+  let mockRes = {
+    status : (x) => {return mockRes;},
+    send : (x) => {return mockRes;},
+  };
   return (req,res,next) => {
-    let response = p(req);
-    if(response === null){
-      next();
-    } else {
-      res.status(response.statusCode).send(response);
+    for(let i = 0; i < arguments.length ; i ++){
+      arguments[i](req,mockRes,() => {succeeded = true;});
+      if(succeeded){
+        return next();
+      }
     }
+    return sendResponse(res,httpCodes.InternalServerError("No conditions passed"));  
   };
 }
 
 /**
- * combines a list of predicates into a single predicate that succeeds on a given request if at least one of the input predicates succeed
- * @param {Array} ps - list of predicates
+ * combines a list of predicates into a single predicate
+ * succeeds on a given request if and only if all input predicates succeed
+ * ignores and changes a predicate may make to the response object
+ * @param {...} ps - any number of predicates
  * @return {Predicate} - composite predicate
  */
-function or(ps) {
-  return (req) => {
-    let response = "empty or()";
-    for(let i = 0; i < ps.length ; i++){
-      // the first predicate that succeeds ends the testing 
-      response = ps[i](req);
-      if(response === null){
-        return null;
-      }
-    }
-    // if all predicates fail, return the last error
-    return response;
-  };
-}
+function and() {
+  let statusCode = null;
+  let responseData = null;
 
-/**
- * combines a list of predicates into a single predicate that succeeds on a given request iff all input predicates succeed
- * @param {Array} ps - list of predicates
- * @return {Predicate} - composite predicate
- */
-function and(ps) {
-  return (req) => {
-    let response = "empty and()";
-    for(let i = 0; i < ps.length ; i++){
-      // the first predicate that fails ends the testing 
-      response = ps[i](req);
-      if(response !== null){
-        return response;
+  //dummy response object
+  //and() needs to check if a middleware has failed or not
+  //this object absorbs a middleware's attempts to send a response on its own
+  //the first failed middleware's response is echoed here instead
+  let mockRes = {
+    status : (x) => {statusCode = x; return mockRes;},
+    send : (x) => {responseData = x; return mockRes;},
+  };
+
+  return (req,res,next) => {
+    for(let i = 0; i < arguments.length ; i ++){
+      statusCode = null;
+      responseData = null;
+      arguments[i](req,mockRes,() => {});
+
+      // the middleware attempted to send a response
+      // echo it then short-ciruit
+      if(statusCode){
+        return sendResponse(res,responseData);
       }
     }
-    // if all predicates pass,
-    return null;
+    next();
   };
 }
 
@@ -234,7 +241,6 @@ module.exports = {
   isLoggedIn,
   isSiteAdmin,
   isDevelopmentMode,
-  promote,
   or,
   and,
   getResultErrors,

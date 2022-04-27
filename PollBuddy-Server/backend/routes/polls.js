@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
 const Joi = require("joi");
-const {createResponse, validateID, checkPollPublic, isLoggedIn, promote, isDevelopmentMode, getResultErrors, isEmpty} = require("../modules/utils");
+const {createResponse, validateID, checkPollPublic, isLoggedIn, isDevelopmentMode, getResultErrors, isEmpty} = require("../modules/utils");
 const {sendResponse, httpCodes} = require("../modules/httpCodes.js");
 const {createPoll, getPoll, editPoll, createPollValidator, editPollValidator, createQuestionValidator, createQuestion,
   editQuestionValidator, editQuestion, submitQuestionValidator, submitQuestion, getPollResults, deletePoll, pollParamsValidator
@@ -39,7 +39,7 @@ router.get("/new", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/new", promote(isLoggedIn), async (req, res) => {
+router.post("/new", isLoggedIn, async (req, res) => {
   let validResult = createPollValidator.validate(req.body, { abortEarly: false });
   let errors = getResultErrors(validResult);
   if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest(errors)); }
@@ -90,7 +90,7 @@ router.get("/:id/edit", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/edit", promote(isLoggedIn), paramValidator(pollParamsValidator), async (req, res) => {
+router.post("/:id/edit", isLoggedIn, paramValidator(pollParamsValidator), async (req, res) => {
   let validResult = editPollValidator.validate(req.body, { abortEarly: false });
   if (validResult.error) { return sendResponse(res, httpCodes.BadRequest()); }
 
@@ -116,7 +116,7 @@ router.get("/:id/createQuestion", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
-router.post("/:id/createQuestion", promote(isLoggedIn), paramValidator(pollParamsValidator), async (req, res) => {
+router.post("/:id/createQuestion", isLoggedIn, paramValidator(pollParamsValidator), async (req, res) => {
   let validResult = createQuestionValidator.validate(req.body, { abortEarly: false });
   let errors = getResultErrors(validResult);
   if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest()); }
@@ -129,7 +129,7 @@ router.get("/:id/editQuestion", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
-router.post("/:id/editQuestion", promote(isLoggedIn), paramValidator(pollParamsValidator), async (req, res) => {
+router.post("/:id/editQuestion", isLoggedIn, paramValidator(pollParamsValidator), async (req, res) => {
   let validResult = editQuestionValidator.validate(req.body, { abortEarly: false });
   console.log(validResult);
 
@@ -214,7 +214,7 @@ router.get("/:id/delete", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/delete", promote(isLoggedIn), paramValidator(pollParamsValidator), async (req, res) => {
+router.post("/:id/delete", isLoggedIn, paramValidator(pollParamsValidator), async (req, res) => {
   let response = await deletePoll(req.session.userData.userID, req.params.id);
   return sendResponse(res, response);
 });
@@ -233,7 +233,7 @@ router.post("/:id/delete", promote(isLoggedIn), paramValidator(pollParamsValidat
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/", promote(isDevelopmentMode), async (req, res) => {
+router.get("/", isDevelopmentMode, async (req, res) => {
   try {
     const polls = await mongoConnection.getDB().collection("polls").find({}).toArray();
     return res.status(200).send(createResponse(polls));
@@ -252,7 +252,7 @@ router.get("/", promote(isDevelopmentMode), async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/", promote(isDevelopmentMode), function (req, res) {
+router.post("/", isDevelopmentMode, function (req, res) {
   res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
@@ -358,7 +358,7 @@ router.post("/:id/view", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.get("/:id/results", promote(isLoggedIn), paramValidator(pollParamsValidator), async (req, res) => {
+router.get("/:id/results", isLoggedIn, paramValidator(pollParamsValidator), async (req, res) => {
   let response = await getPollResults(req.session.userData.userID, req.params.id);
   return sendResponse(res, response);
 });
