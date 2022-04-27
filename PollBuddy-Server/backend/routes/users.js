@@ -338,6 +338,7 @@ router.post("/register", function (req, res) {
       });
 
       mongoConnection.getDB().collection("users").insertOne(user, (err, result) => {
+        //console.log(err)
         if (err) {
           // Something went wrong
           if (err.code === 11000) {
