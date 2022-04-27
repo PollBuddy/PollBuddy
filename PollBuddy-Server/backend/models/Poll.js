@@ -170,9 +170,13 @@ const getPollResults = async function(userID, pollID) {
 
     let questions = [];
     let questionResults = {};
+    let questionResponses = {};
 
     for (let question of poll.Questions) {
       questionResults[question._id] = {};
+      questionResponses[question._id] = {
+        count: 0,
+      };
       for (let answer of question.Answers) {
         questionResults[question._id][answer._id] =  {
           count: 0,
@@ -186,6 +190,7 @@ const getPollResults = async function(userID, pollID) {
       .find({ PollID: poll._id }).forEach((pollAnswers) => {
         for (let question of pollAnswers.Questions) {
           if (questionResults[question.QuestionID]) {
+            questionResponses[question.QuestionID].count++;
             for (let answerID of question.Answers) {
               if (questionResults[question.QuestionID][answerID]) {
                 questionResults[question.QuestionID][answerID].count++;
@@ -194,8 +199,9 @@ const getPollResults = async function(userID, pollID) {
           }
         }
       });
-
+      
     for (let question of questions) {
+      question.responses = questionResponses[question.id].count;
       for (let answer of question.answers) {
         answer.count = questionResults[question.id][answer.id].count;
       }
