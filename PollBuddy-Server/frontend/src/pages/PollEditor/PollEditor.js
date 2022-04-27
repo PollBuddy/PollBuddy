@@ -360,8 +360,12 @@ class PollEditor extends Component {
                   >
                     Delete
                   </button>
-
-                  <button className="button pollButton"> Return to group</button>
+                  <button
+                      id="descriptionBtn" className="button pollButton"
+                      onClick={this.deletePoll}
+                  >
+                    Return to group
+                  </button>
 
 
                   {/*{this.state.adminGroups.map((e) => (*/}
