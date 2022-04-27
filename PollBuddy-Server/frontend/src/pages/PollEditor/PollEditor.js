@@ -5,6 +5,7 @@ import "./PollEditor.scss";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import QuestionEditor from "../../components/QuestionEditor/QuestionEditor";
+import {Link} from "react-router-dom";
 
 class PollEditor extends Component {
   constructor(props) {
@@ -41,6 +42,8 @@ class PollEditor extends Component {
       questionTextInput: "",
       maxAllowedChoices: 1,
 
+      adminGroups: [],
+
       loadingPollData: true,
     };
   }
@@ -61,6 +64,7 @@ class PollEditor extends Component {
           allowSubmissions: response.data.allowSubmissions,
           questions: response.data.questions,
           loadingPollData: false,
+          adminGroups: response.data.admin,
         });
       });
   }
@@ -356,7 +360,18 @@ class PollEditor extends Component {
                   >
                     Delete
                   </button>
+
+                  <button className="button pollButton"> Return to group</button>
+
+
+                  {/*{this.state.adminGroups.map((e) => (*/}
+                  {/*    <Link to={"/groups/" + e.id}>*/}
+                  {/*      <button className="button pollButton"> Return to group</button>*/}
+                  {/*    </Link>,*/}
+                  {/*}*/}
+
                 </div>
+
               </MDBContainer>
               <MDBContainer className="Poll_Editor_box box">
                 <p className="fontSizeLarge">
