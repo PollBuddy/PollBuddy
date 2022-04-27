@@ -105,10 +105,20 @@ const getQuestion = function(question, isAdmin) {
   };
 };
 
+/**
+ * errorCode === 100 means that the poll does not exist
+
+*/
+
 const getPoll = async function(userID, pollID) {
   try {
     let poll = await getPollInternal(pollID);
-    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+    if (!poll) {
+      return httpCodes.NotFound({
+        errorCode: 100,
+        errorMessage: "Invalid Poll: Poll does not exist."
+      });
+    }
 
     let isUserPollAdmin = false;
     if (userID) {
@@ -119,15 +129,31 @@ const getPoll = async function(userID, pollID) {
         if (userID) {
           if (poll.Group) {
             let isUserGroupMember = await isGroupMember(poll.Group, userID);
-            if (!isUserGroupMember) { return httpCodes.Forbidden("Not a member of poll group"); }
+            if (!isUserGroupMember) {
+              return httpCodes.Forbidden({
+                errorCode: 101,
+                errorMessage: "User is not part of Group"
+              });
+            }
           }
-        } else {
+        } else {    //user is not logged in, but if poll is part of a group they shouldnt access it
           if (poll.RequiresLogin) {
-            return httpCodes.Unauthorized("Poll requires login");
+            return httpCodes.Unauthorized({
+              errorCode: 102,
+              errorMessage: "Poll requires a log-in"
+            });
+          } else if (poll.Group) { //user not logged in and poll is part of a group
+            return httpCodes.Forbidden({
+              errorCode: 101,
+              errorMessage: "User is not part of Group"
+            });
           }
         }
       } else {
-        return httpCodes.Forbidden("Poll not visible");
+        return httpCodes.Forbidden({
+          errorCode: 103,
+          errorMessage: "Poll not Visible"
+        });
       }
     }
 
