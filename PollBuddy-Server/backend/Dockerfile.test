@@ -22,6 +22,7 @@ COPY app.js ./
 COPY .env ./
 COPY .eslint* ./
 COPY jest.config.js ./
+COPY jest-mongodb-config.js ./
 
 # Start command
 CMD ["sh", "-c", "echo 'Running backend tests:'; npm run test"]
