@@ -6,7 +6,7 @@ const mongoConnection = require("../modules/mongoConnection.js");
 const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
 const rpi = require("../modules/rpi");
 
-const { createResponse, validateID, isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute, promote } = require("../modules/utils"); // object destructuring, only import desired functions
+const { createResponse, validateID, isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
 const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups, createUser, editUser, userParamsValidator } = require("../models/User.js");
 const {paramValidator} = require("../modules/validatorUtils");
 
@@ -586,7 +586,7 @@ router.post("/logout", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/me", promote(isLoggedIn), async function (req, res) {
+router.get("/me", isLoggedIn, async function (req, res) {
   let response = await getUser(req.session.userData.userID);
   return sendResponse(res, response);
 });
@@ -630,7 +630,7 @@ router.get("/me/edit", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.post("/me/edit", promote(isLoggedIn), async function (req, res) {
+router.post("/me/edit", isLoggedIn, async function (req, res) {
   let response = await editUser(req.session.userData.userID, req.body);
   return sendResponse(res, response);
 });
@@ -645,7 +645,7 @@ router.post("/me/edit", promote(isLoggedIn), async function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/me/groups", promote(isLoggedIn), async function (req, res) {
+router.get("/me/groups", isLoggedIn, async function (req, res) {
   let response = await getUserGroups(req.session.userData.userID);
   return sendResponse(res, response);
 });

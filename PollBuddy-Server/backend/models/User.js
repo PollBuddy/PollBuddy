@@ -42,7 +42,7 @@ const userSchema = {
   EmailLocked: false,
   UserName: "",
   UserNameLocked: true,
-  Password: "",
+  Password: null,
   SchoolAffiliation: "",
 };
 
