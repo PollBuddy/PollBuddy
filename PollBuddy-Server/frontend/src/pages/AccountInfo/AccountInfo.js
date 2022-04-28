@@ -4,7 +4,6 @@ import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import "./AccountInfo.scss";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
-import {Navigate} from "react-router-dom";
 const Joi = require("joi");
 
 
@@ -142,16 +141,16 @@ class AccountInfo extends Component {
           "Cannot have 4 of the same characters in a row."))
     });
 
-    var userValid = undefined;
-    var userInput = "";
-    var emailValid = undefined;
-    var emailInput = "";
-    var firstNameValid = undefined;
-    var firstNameInput = "";
-    var lastNameValid = undefined;
-    var lastNameInput = "";
-    var passwordValid = undefined;
-    var passwordInput = undefined;
+    let userValid = undefined;
+    let userInput = "";
+    let emailValid = undefined;
+    let emailInput = "";
+    let firstNameValid = undefined;
+    let firstNameInput = "";
+    let lastNameValid = undefined;
+    let lastNameInput = "";
+    let passwordValid = undefined;
+    let passwordInput = "";
 
     this.setState({done: false, error: false});
 

@@ -52,11 +52,40 @@ export default class Question extends Component {
     };
   }
 
-  // onTimeEnd(){
-  //   this.state.canChoose = false;
+  onTimeEnd(){
+    this.state.canChoose = false;
   //   //TODO send answers to backend
   //   //TODO move on to next question (probably should be handled in a callback prop)
-  // }
+  }
+
+
+  selectChoice(index) {
+    if(!this.state.canChoose){
+      return;
+    }
+    let tempChoices = this.state.studentChoices;
+    let count = 0;
+    //push the index to the queue
+    this.state.choicesQueue.push(index);
+    //count the number of booleans that are true in the array
+    for (let i = 0; i < this.state.studentChoices.length; i++) {
+      if (this.state.studentChoices[i]) {
+        count++;
+      }
+    }
+    //if the number of true booleans is greater than the maximum number of
+    //allowed choices (specified by the json) then pop from the queue to set the first
+    //choice chosen back to false
+    if (count >= this.state.data.MaxAllowedChoices) {
+      tempChoices[this.state.choicesQueue.shift()] = false;
+    }
+    //make the boolean at the selected index true and update state
+    tempChoices[index] = true;
+    this.setState(prevState => ({
+      ...prevState,
+      studentChoices: tempChoices,
+    }));
+  }
 
   isAnswerSelected = (answerID) => {
     let i = this.state.currentAnswers.indexOf(answerID);
@@ -74,6 +103,7 @@ export default class Question extends Component {
         currentAnswers.shift();
       }
     }
+
     this.props.updateQuestion(currentAnswers);
     this.setState({
       currentAnswers: currentAnswers,

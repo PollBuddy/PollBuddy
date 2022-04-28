@@ -9,13 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Deploy
+      - name: Un-Deploy
         uses: fjogeleit/http-request-action@v1
         with:
           url: 'https://dev.pollbuddy.app/api/deployment/delete'
           method: 'POST'
           timeout: 60000 # 60 second timeout, should only need about 10s
           contentType: application/x-www-form-urlencoded
-          data: dev_instance_type=pr&dev_instance_id=${{ github.ref }}&key=${{ secrets.CICD_KEY }}
+          data: dev_instance_type=pr&dev_instance_id=${{ github.event.number }}&key=${{ secrets.CICD_KEY }}
       - name: Show Response
         run: echo ${{ steps.Deploy.outputs.response }}

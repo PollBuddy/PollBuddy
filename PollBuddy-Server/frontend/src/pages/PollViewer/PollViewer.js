@@ -5,6 +5,7 @@ import Question from "../../components/Question/Question";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import "./PollViewer.scss";
+import Popup from "../../components/Popup/Popup";
 
 class PollViewer extends Component {
 
@@ -18,8 +19,13 @@ class PollViewer extends Component {
       pollDescription: "",
       questions: "",
       currentQuestion: 0,
+      errorMessage: "uhhh plz work",
     };
   }
+
+  /**
+   * if response.error fails, redirect to the homepage
+   */
 
   componentDidMount(){
     this.props.updateTitle("Poll Viewer");
@@ -45,10 +51,29 @@ class PollViewer extends Component {
             questions: response.data.questions,
             doneLoading: true,
           });
-        } else {
+        } else if (response.error) {
           this.setState({
             showError: true,
           });
+          if (response.error.errorCode === 100) {
+            this.setState({
+              errorMessage: "Invalid Poll: Poll does not exist",
+            });
+          } else if (response.error.errorCode === 101) {
+            this.setState({
+              errorMessage: "You are not a part of the group associated with this poll",
+            });
+          } else if (response.error.errorCode === 102) {
+            this.setState({
+              errorMessage: "You must login in order to access this Poll",
+            });
+          } else if (response.error.errorCode === 103) {
+            this.setState({
+              errorMessage: "The Poll you are trying to access is not currently allowing submissions",
+            });
+          }
+        } else { // invalid poll ID given
+          this.props.router.navigate("/");
         }
       });
   }
@@ -89,7 +114,7 @@ class PollViewer extends Component {
         <MDBContainer fluid className="page">
           <MDBContainer fluid className="box">
             <p className="fontSizeLarge">
-              Error loading data! Please try again.
+              {this.state.errorMessage}
             </p>
           </MDBContainer>
         </MDBContainer>

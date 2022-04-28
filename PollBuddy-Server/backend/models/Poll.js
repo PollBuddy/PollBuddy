@@ -105,10 +105,20 @@ const getQuestion = function(question, isAdmin) {
   };
 };
 
+/**
+ * errorCode === 100 means that the poll does not exist
+
+*/
+
 const getPoll = async function(userID, pollID) {
   try {
     let poll = await getPollInternal(pollID);
-    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+    if (!poll) {
+      return httpCodes.NotFound({
+        errorCode: 100,
+        errorMessage: "Invalid Poll: Poll does not exist."
+      });
+    }
 
     let isUserPollAdmin = false;
     if (userID) {
@@ -119,15 +129,31 @@ const getPoll = async function(userID, pollID) {
         if (userID) {
           if (poll.Group) {
             let isUserGroupMember = await isGroupMember(poll.Group, userID);
-            if (!isUserGroupMember) { return httpCodes.Forbidden("Not a member of poll group"); }
+            if (!isUserGroupMember) {
+              return httpCodes.Forbidden({
+                errorCode: 101,
+                errorMessage: "User is not part of Group"
+              });
+            }
           }
-        } else {
+        } else {    //user is not logged in, but if poll is part of a group they shouldnt access it
           if (poll.RequiresLogin) {
-            return httpCodes.Unauthorized("Poll requires login");
+            return httpCodes.Unauthorized({
+              errorCode: 102,
+              errorMessage: "Poll requires a log-in"
+            });
+          } else if (poll.Group) { //user not logged in and poll is part of a group
+            return httpCodes.Forbidden({
+              errorCode: 101,
+              errorMessage: "User is not part of Group"
+            });
           }
         }
       } else {
-        return httpCodes.Forbidden("Poll not visible");
+        return httpCodes.Forbidden({
+          errorCode: 103,
+          errorMessage: "Poll not Visible"
+        });
       }
     }
 
@@ -170,9 +196,13 @@ const getPollResults = async function(userID, pollID) {
 
     let questions = [];
     let questionResults = {};
+    let questionResponses = {};
 
     for (let question of poll.Questions) {
       questionResults[question._id] = {};
+      questionResponses[question._id] = {
+        count: 0,
+      };
       for (let answer of question.Answers) {
         questionResults[question._id][answer._id] =  {
           count: 0,
@@ -186,6 +216,7 @@ const getPollResults = async function(userID, pollID) {
       .find({ PollID: poll._id }).forEach((pollAnswers) => {
         for (let question of pollAnswers.Questions) {
           if (questionResults[question.QuestionID]) {
+            questionResponses[question.QuestionID].count++;
             for (let answerID of question.Answers) {
               if (questionResults[question.QuestionID][answerID]) {
                 questionResults[question.QuestionID][answerID].count++;
@@ -194,8 +225,9 @@ const getPollResults = async function(userID, pollID) {
           }
         }
       });
-
+      
     for (let question of questions) {
+      question.responses = questionResponses[question.id].count;
       for (let answer of question.answers) {
         answer.count = questionResults[question.id][answer.id].count;
       }

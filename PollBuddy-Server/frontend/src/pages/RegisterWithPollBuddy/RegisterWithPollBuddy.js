@@ -4,7 +4,7 @@ import "mdbreact/dist/css/mdb.css";
 import {Navigate} from "react-router-dom";
 import "./RegisterWithPollBuddy.scss";
 
-const Joi = require('joi');
+const Joi = require("joi");
 
 export default class RegisterWithPollBuddy extends Component {
   constructor(props) {
