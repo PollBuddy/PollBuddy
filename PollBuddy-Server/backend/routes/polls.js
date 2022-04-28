@@ -5,7 +5,7 @@ const Joi = require("joi");
 const {createResponse, validateID, checkPollPublic, isLoggedIn, isDevelopmentMode, getResultErrors, isEmpty} = require("../modules/utils");
 const {sendResponse, httpCodes} = require("../modules/httpCodes.js");
 const {createPoll, getPoll, editPoll, createPollValidator, editPollValidator, createQuestionValidator, createQuestion,
-  editQuestionValidator, editQuestion, submitQuestionValidator, submitQuestion, getPollResults, deletePoll, pollParamsValidator
+  editQuestionValidator, editQuestion, deleteQuestion, submitQuestionValidator, submitQuestion, getPollResults, deletePoll, pollParamsValidator
 } = require("../models/Poll");
 const {paramValidator} = require("../modules/validatorUtils");
 
@@ -137,6 +137,21 @@ router.post("/:id/editQuestion", isLoggedIn, paramValidator(pollParamsValidator)
   if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest(errors)); }
 
   let response = await editQuestion(req.session.userData.userID, req.params.id, validResult.value);
+  return sendResponse(res, response);
+});
+
+router.get("/:id/deleteQuestion", async (req, res) => {
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
+});
+
+router.post("/:id/deleteQuestion", isLoggedIn, paramValidator(pollParamsValidator), async (req, res) => {
+  let validResult = editQuestionValidator.validate(req.body, { abortEarly: false });
+  console.log(validResult);
+
+  let errors = getResultErrors(validResult);
+  if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest(errors)); }
+
+  let response = await deleteQuestion(req.session.userData.userID, req.params.id, validResult.value);
   return sendResponse(res, response);
 });
 

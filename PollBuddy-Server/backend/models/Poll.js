@@ -509,6 +509,7 @@ module.exports = {
   editQuestion,
   submitQuestion,
   deletePoll,
+  deleteQuestion,
   pollSchema,
   questionSchema,
   createPollValidator,

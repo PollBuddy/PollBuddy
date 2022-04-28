@@ -104,7 +104,7 @@ class Group extends Component {
       return (
         <MDBContainer className="page">
           <Link to={"/groups"}>
-            <button className="backButton">Back</button>
+            <button className="backButton">Return to groups</button>
           </Link>
           <MDBContainer className="two-box">
             <GroupSettings state={this.state}/>
