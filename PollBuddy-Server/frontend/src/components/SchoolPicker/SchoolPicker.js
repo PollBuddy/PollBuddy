@@ -12,13 +12,10 @@ fetch(process.env.REACT_APP_BACKEND_URL + "/schools", {
 }).then(response => response.json())
   // handle response
   .then(data => {
-    console.log(data); // for testing, can be deleted later
     for (var i = 0; i < data.length; i++) {
       schools.push({ key: i, label: data[i][0] });
       schoolLinkDict[data[i][0]] = data[i][1];
     }
-    console.log(schools); // for testing, can be deleted later
-    console.log(schoolLinkDict); // for testing, can be deleted later
   });
 
 const sortItems = (itemA, itemB, value) => {

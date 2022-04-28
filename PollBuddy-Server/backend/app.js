@@ -7,6 +7,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const os = require("os");
+const {createResponse} = require("../modules/utils");
 
 const app = express();
 
@@ -104,7 +105,8 @@ const {createResponse} = require("./modules/utils");
 // eslint-disable-next-line no-unused-vars
 app.get("/api/schools", (req, res) => {
   let schools = schoolsModule.getList();
-  res.json(schools);
+
+  return res.status(200).send(createResponse(res.json(schools)));
 });
 
 /**
