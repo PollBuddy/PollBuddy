@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { MDBContainer } from "mdbreact";
 import {Link} from "react-router-dom";
 import "./GroupSettings.scss";
-import LoadingWheel from "../LoadingWheel/LoadingWheel";
+import {withRouter} from "../PropsWrapper/PropsWrapper";
 
-export default class GroupSettings extends Component{
+class GroupSettings extends Component{
   constructor(props) {
     super(props);
     this.state = this.props.state;
@@ -21,21 +21,21 @@ export default class GroupSettings extends Component{
   }
 
   createNewPoll = async () => {
-    window.location.href = "/polls/new?groupID=" + this.state.id;
+    this.props.router.navigate("/polls/new?groupID=" + this.state.id);
   };
 
   handleLeaveGroup = async () => {
     await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/leave", {
       method: "POST",
     });
-    window.location.replace("/groups");
+    this.props.router.navigate("/groups");
   };
 
   handleDeleteGroup = async () => {
     await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/delete", {
       method: "POST",
     });
-    window.location.replace("/groups");
+    this.props.router.navigate("/groups");
   };
 
   render(){
@@ -43,7 +43,7 @@ export default class GroupSettings extends Component{
       return (
         <MDBContainer className="box">
           <p className="fontSizeLarge">
-            Member Settings:
+            Member Settings
           </p>
           <button onClick={this.handleLeaveGroup} className="button">Leave Group</button>
         </MDBContainer>
@@ -75,3 +75,4 @@ export default class GroupSettings extends Component{
     }
   }
 }
+export default withRouter(GroupSettings);

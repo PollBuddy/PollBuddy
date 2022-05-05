@@ -5,8 +5,9 @@ import {
   MDBIcon
 } from "mdbreact";
 
-import Countdown, { zeroPad } from "react-countdown";
 import {Navigate} from "react-router-dom";
+import Timer from "../Timer/Timer.js";
+
 
 export default class Question extends Component {
   choiceOrder;
@@ -43,19 +44,23 @@ export default class Question extends Component {
       "Z",
     ];
     this.questionStartTime = Date.now();
+    let closeTime = new Date();
+    closeTime.setHours(closeTime.getHours() + 2);
     let question = props.data.question;
     this.state = {
       pollID: props.data.pollID,
       questionNumber: props.data.questionNumber,
       question: question,
       currentAnswers: question.currentAnswers || [],
+      perPoll: true,
+      timeLeft: true,
+      closeTime: closeTime,
+      pollCloseTime: props.data.pollCloseTime,
     };
   }
 
   onTimeEnd(){
     this.state.canChoose = false;
-  //   //TODO send answers to backend
-  //   //TODO move on to next question (probably should be handled in a callback prop)
   }
 
 
@@ -130,24 +135,11 @@ export default class Question extends Component {
     this.props.nextQuestion();
   };
 
+  noTimeLeft = () => {
+    this.setState({timeLeft: false});
+  };
+
   render() {
-    const clockFormat = ({ minutes, seconds, completed }) => {
-
-      if (completed) {
-        // Render a completed state
-        return <span>Question closed!</span>;
-      } else {
-        // Render a countdown
-        return <span>{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
-      }
-    };
-
-    // if(this.state.successfulSubmission) {
-    //   return (
-    //     <Navigate to={"/polls/" + this.state.PollID + "/results"} push={true} />
-    //   );
-    // }
-    console.log("Heu");
     return (
       <MDBContainer className="box">
         <p className="fontSizeLarge">Question {this.state.questionNumber}: {this.state.question.text}</p>
@@ -177,46 +169,18 @@ export default class Question extends Component {
                 {answer.text}
               </btn>
             );
-            // if (this.state.studentChoices[index]) {
-            //   return (
-            //     <btn className={"question-btn-and-text"} onClick={() => {
-            //       return this.deselectChoice(index);
-            //     }}>
-            //       <MDBContainer className="question-label-bubble question-label-bubble-active">
-            //         {this.getChoiceLabel(index)}
-            //       </MDBContainer>
-            //       {choice}
-            //     </btn>
-            //   );
-            // } else {
-            //   return (
-            //     <btn className={"question-btn-and-text"} onClick={() => {
-            //       return this.selectChoice(index);
-            //     }}>
-            //       <MDBContainer className="question-label-bubble question-label-bubble-inactive">
-            //         {this.getChoiceLabel(index)}
-            //       </MDBContainer>
-            //       {choice}
-            //     </btn>
-            //   );
-            // }
           })}
         </MDBContainer>
-        {/*<MDBContainer className="button time-info">*/}
-        {/*  <MDBIcon far icon="clock" className="time-icon"/>*/}
-        {/*  <Countdown*/}
-        {/*    renderer={clockFormat}*/}
-        {/*    date={this.questionStartTime + this.state.data.TimeLimit * 1000}*/}
-        {/*    onComplete={this.onTimeEnd}*/}
-        {/*  />*/}
-        {/*</MDBContainer>*/}
+        { /* This should work, but is being commented out for now since per-question times are not implemented fully yet
+        <MDBContainer className = "button time-info-label">
+          <span>Question Time Remaining</span>
+        </MDBContainer>
+        <Timer timeLeft={this.state.timeLeft} noTimeLeft = {() => this.noTimeLeft()}
+          CloseTime={this.state.closeTime} onTimeEnd={this.onTimeEnd} />
+          */ }
         <MDBContainer>
-          <button
-            className="button"
-            onClick={this.submitQuestion}
-          >
-            Save
-          </button>
+          {(this.state.timeLeft) &&
+           <button className="button" onClick={this.submitQuestion}>Save</button>}
         </MDBContainer>
       </MDBContainer>
     );

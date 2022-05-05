@@ -1,13 +1,15 @@
 import React, {Component} from "react";
 import {Link, Navigate} from "react-router-dom";
 import { MDBContainer } from "mdbreact";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import "../../styles/main.scss";
 import "./Groups.scss";
 
-export default class Groups extends Component {
-  constructor(){
-    super();
+class Groups extends Component {
+
+  constructor(props){
+    super(props);
     this.state = {
       error: null,
       redirect: false,
@@ -61,10 +63,13 @@ export default class Groups extends Component {
         <MDBContainer className="page">
           <MDBContainer className="box">
             <p className="fontSizeLarge">
+              Groups
+            </p>
+            <p className="fontSizeLarge">
               As a Group Admin:
             </p>
             {this.state.adminGroups.length === 0 ? (
-              <p>Sorry, you are not the admin of any groups.<br/> <br/></p>
+              <p>You are not the admin of any groups.<br/> <br/></p>
             ) : (
               <React.Fragment>
                 {this.state.adminGroups.map((e) => (
@@ -79,7 +84,7 @@ export default class Groups extends Component {
               As a Group Member:
             </p>
             {this.state.memberGroups.length === 0 ? (
-              <p>Sorry, you are not the member of any groups.<br/> <br/></p>
+              <p>You are not a member of any groups.<br/> <br/></p>
             ) : (
               <React.Fragment>
                 {this.state.memberGroups.map((e) => (
@@ -107,3 +112,5 @@ export default class Groups extends Component {
     }
   }
 }
+export default withRouter(Groups);
+

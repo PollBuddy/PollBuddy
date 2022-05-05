@@ -75,14 +75,14 @@ class PollManager extends Component {
   timeLimit = 5;
 
   render() {
-    const clockFormat = ({ minutes, seconds, completed }) => {
+    const clockFormat = ({ days, hours, minutes, seconds, completed }) => {
 
       if (completed) {
         // Render a completed state
         return <p className="fontSizeLarge"> Question closed! </p>;
       } else {
         // Render a countdown
-        return <p className="fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
+        return <p className="fontSizeLarge">{zeroPad(days)}:{zeroPad(hours)}:zeroPad(minutes)}:{zeroPad(seconds)}</p>;
       }
     };
     return (
@@ -100,7 +100,7 @@ class PollManager extends Component {
             <p className="fontSizeLarge">
               Time remaining:
             </p>
-            <Countdown renderer={clockFormat} date={Date.now() + this.timeLimit*1000} />
+            <Countdown renderer={clockFormat} date={ this.state.data.TimeLimit } />
 
             <Link to={"/polls/:pollID/manage"}>
               <button className="button">Next Question</button>

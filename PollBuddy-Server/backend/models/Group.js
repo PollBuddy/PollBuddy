@@ -153,7 +153,7 @@ const getGroupPolls = async function (userID, groupID) {
     let polls = [];
     for (let pollID of group.Polls) {
       let poll = await getPollInternal(pollID);
-      if (isAdmin || poll.AllowSubmissions) {
+      if (isAdmin || Date.now() > poll.OpenTime && Date.now() < poll.CloseTime) {
         polls.push({
           id: poll._id,
           title: poll.Title,

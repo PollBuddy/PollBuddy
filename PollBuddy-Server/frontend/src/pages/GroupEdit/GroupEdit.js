@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import {Link} from "react-router-dom";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
@@ -44,7 +43,7 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
             loadingGroupData: false,
           });
         } else {
-          window.location.href = "/groups";
+          this.props.router.navigate("/groups");
         }
       });
   };

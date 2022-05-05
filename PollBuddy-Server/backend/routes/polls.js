@@ -159,15 +159,15 @@ router.post("/:id/submitQuestion", paramValidator(pollParamsValidator), async (r
 });
 
 /**
-* Get the answers of a poll, using its specified id
-* For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-pollAnswers
-* @property {string} id - ID of the poll.
-* @throws 500 - An error occurred while communicating with the database.
-* @returns {Poll} response
-* @param {string} path - Express path.
-* @name GET api/polls/pollAnswers
-* @param {function} callback - Function handler for endpoint.
-*/
+ * Get the answers of a poll, using its specified id
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-pollAnswers
+ * @property {string} id - ID of the poll.
+ * @throws 500 - An error occurred while communicating with the database.
+ * @returns {Poll} response
+ * @param {string} path - Express path.
+ * @name GET api/polls/pollAnswers
+ * @param {function} callback - Function handler for endpoint.
+ */
 router.get("/pollAnswers", function (req, res) {
   let id = new mongoConnection.getMongo().ObjectID(req.params.id);
   // eslint-disable-next-line no-unused-vars
@@ -303,17 +303,10 @@ router.get("/:id/view", checkPollPublic, async function (req, res) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
   }
 
-  //console.log(id);
-  //console.log(req.params.id);
-
   mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
     if (err) {
       return res.status(500).send(createResponse("", err)); // TODO: Error message;
     }
-
-    //console.log(result);
-    //console.log(result[0]);
-    //console.log(result[0].Questions[0]);
 
     // Loop through the poll's questions and add to openQuestions the QuestionResults Number, Text and Answer Choices if
     // the question is set as Visible.

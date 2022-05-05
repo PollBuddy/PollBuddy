@@ -3,7 +3,7 @@ import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
-class GroupJoin extends Component {//this class will likely need to call Groups/new and do more with that...
+class GroupJoin extends Component {
   constructor(props) {
     super(props);
     let groupCode = props.router.searchParams.get("code");
@@ -24,18 +24,17 @@ class GroupJoin extends Component {//this class will likely need to call Groups/
   handleChange = (e) => {
     this.setState({groupCode: e.target.value});
   };
-
   async handleConfirmationResponse(join) {
     if (join) {
       let response = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.groupCode + "/join", {
         method: "POST",
       });
       if(response.status === 200) {
-        window.location.replace("/groups/" + this.state.groupCode);
+        this.props.router.navigate("/groups/" + this.state.groupCode);
         return;
       }
     }
-    window.location.replace("/groups");
+    this.props.router.navigate("/groups");
   }
 
   render() {

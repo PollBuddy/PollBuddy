@@ -4,15 +4,18 @@ import autosize from "autosize";
 import "./PollEditor.scss";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import QuestionEditor from "../../components/QuestionEditor/QuestionEditor";
+import TextField from '@mui/material/TextField';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DateTimePicker from '@mui/lab/DateTimePicker';
+import { purple } from '@mui/material/colors';
+import {createTheme, ThemeProvider} from "@mui/material";
 
 class PollEditor extends Component {
   constructor(props) {
     super(props);
     this.askQuestion = this.askQuestion.bind(this);
     this.handleRandomize = this.handleRandomize.bind(this);
-
-    // let questions = require("./placeholder");//./placeholder will need to be changed into the json file in the get call or something
 
     this.state = {
       askedQuestions: [],
@@ -28,9 +31,10 @@ class PollEditor extends Component {
       pollID: props.router.params.pollID,
       doneLoading: false,
       questions: [],
-      pollTitle: "Sample title",
-      pollDescription: "This is a sample description",
-      allowSubmissions: false,
+      pollTitle: "",
+      pollDescription: "",
+      openTime: Date.now(),
+      closeTime: Date.now(),
       loadingPollQuestions: false,
       showQuestionError: false,
 
@@ -48,7 +52,6 @@ class PollEditor extends Component {
   componentDidMount() {
     autosize(document.querySelector("textarea"));
     this.props.updateTitle("Poll Editor");
-    // Test pollID: 6089fb33145365b82e93717a
     fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID, {
       method: "GET"
     })
@@ -58,8 +61,9 @@ class PollEditor extends Component {
         this.setState({
           pollTitle: response.data.title,
           pollDescription: response.data.description,
-          allowSubmissions: response.data.allowSubmissions,
           questions: response.data.questions,
+          openTime: response.data.openTime,
+          closeTime: response.data.closeTime,
           loadingPollData: false,
         });
       });
@@ -89,7 +93,8 @@ class PollEditor extends Component {
     return {
       title: this.state.pollTitle,
       description: this.state.pollDescription,
-      allowSubmissions: this.state.allowSubmissions,
+      openTime: this.state.openTime,
+      closeTime: this.state.closeTime,
     };
   };
 
@@ -122,7 +127,7 @@ class PollEditor extends Component {
     await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/delete", {
       method: "POST",
     });
-    window.location.href = "/groups";
+    this.props.router.navigate("/groups");
   };
 
   createQuestion = () => {
@@ -278,12 +283,12 @@ class PollEditor extends Component {
   }
 
   moveQuestionUp(index) {
-    var reorderedQuestions = this.move(index, index-1);
+    let reorderedQuestions = this.move(index, index-1);
     this.setState({questions: reorderedQuestions});
   }
 
   moveQuestionDown(index) {
-    var reorderedQuestions = this.move(index, index+1);
+    let reorderedQuestions = this.move(index, index+1);
     this.setState({questions: reorderedQuestions});
   }
 
@@ -298,13 +303,21 @@ class PollEditor extends Component {
     return this.state.questions;
   }
 
-  onAllowSubmissionsClick = () => {
-    this.setState({
-      allowSubmissions: !this.state.allowSubmissions,
-    });
+  onOpenTimeChange = (e) =>{
+    this.setState({openTime: Date.parse(e)});
+  };
+  onCloseTimeChange = (e) =>{
+    this.setState({closeTime: Date.parse(e)});
   };
 
   render() {
+    const defaultMaterialTheme = createTheme({
+      palette: {
+        primary: purple,
+        secondary: purple,
+      },
+    });
+    const color = "#ffffff";
     if (this.state.loadingPollData) {
       return (
         <MDBContainer fluid className="page">
@@ -332,18 +345,37 @@ class PollEditor extends Component {
                   name="pollDescription"
                   value={this.state.pollDescription}
                   onChange={this.onInput}/>
-                <div class={"allowSubmissionsBox"}>
-                  <p>
-                    Allow Submissions
-                  </p>
-                  <input
-                    type="checkbox"
-                    className="checkBox pollCheckBox"
-                    checked={this.state.allowSubmissions}
-                    onInput={this.onAllowSubmissionsClick}
-                  />
-                </div>
-                <div class={"pollButtons"}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <ThemeProvider theme={defaultMaterialTheme}>
+                    <DateTimePicker
+                      label="Poll Open Time"
+                      value={this.state.openTime}
+                      onChange={this.onOpenTimeChange}
+                      renderInput={(props) => <TextField {...props} sx={{
+                        svg: { color },
+                        input: { color },
+                        label: { color }
+                      }}
+                      />}
+                    />
+                  </ThemeProvider>
+                </LocalizationProvider>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <ThemeProvider theme={defaultMaterialTheme}>
+                    <DateTimePicker
+                      renderInput={(props) => <TextField {...props} sx={{
+                        svg: { color },
+                        input: { color },
+                        label: { color }
+                      }}
+                      />}
+                      label="Poll Close Time"
+                      value={this.state.closeTime}
+                      onChange={this.onCloseTimeChange}
+                    />
+                  </ThemeProvider>
+                </LocalizationProvider>
+                <div className={"pollButtons"}>
                   <button
                     id="descriptionBtn" className="button pollButton"
                     onClick={this.savePoll}
@@ -433,7 +465,7 @@ class PollEditor extends Component {
                         ) : (
                           <React.Fragment>
                             {this.state.currentAnswers.map((value, index) => (
-                              <div class="questionAnswer">
+                              <div className="questionAnswer">
                                 <input
                                   id={"questionAnswer-" + (index)}
                                   className="form-control textBox"
