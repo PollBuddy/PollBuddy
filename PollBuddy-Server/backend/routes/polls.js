@@ -303,17 +303,10 @@ router.get("/:id/view", checkPollPublic, async function (req, res) {
     return res.status(400).send(createResponse(null, "Invalid ID."));
   }
 
-  //console.log(id);
-  //console.log(req.params.id);
-
   mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
     if (err) {
       return res.status(500).send(createResponse("", err)); // TODO: Error message;
     }
-
-    //console.log(result);
-    //console.log(result[0]);
-    //console.log(result[0].Questions[0]);
 
     // Loop through the poll's questions and add to openQuestions the QuestionResults Number, Text and Answer Choices if
     // the question is set as Visible.

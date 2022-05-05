@@ -16,7 +16,6 @@ class PollEditor extends Component {
     super(props);
     this.askQuestion = this.askQuestion.bind(this);
     this.handleRandomize = this.handleRandomize.bind(this);
-    // let questions = require("./placeholder");//./placeholder will need to be changed into the json file in the get call or something
 
     this.state = {
       askedQuestions: [],
@@ -32,9 +31,8 @@ class PollEditor extends Component {
       pollID: props.router.params.pollID,
       doneLoading: false,
       questions: [],
-      pollTitle: "Sample title",
-      pollDescription: "This is a sample description",
-      allowSubmissions: false,
+      pollTitle: "",
+      pollDescription: "",
       openTime: Date.now(),
       closeTime: Date.now(),
       loadingPollQuestions: false,
@@ -54,7 +52,6 @@ class PollEditor extends Component {
   componentDidMount() {
     autosize(document.querySelector("textarea"));
     this.props.updateTitle("Poll Editor");
-    // Test pollID: 6089fb33145365b82e93717a
     fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID, {
       method: "GET"
     })
@@ -64,8 +61,9 @@ class PollEditor extends Component {
         this.setState({
           pollTitle: response.data.title,
           pollDescription: response.data.description,
-          allowSubmissions: response.data.allowSubmissions,
           questions: response.data.questions,
+          openTime: response.data.openTime,
+          closeTime: response.data.closeTime,
           loadingPollData: false,
         });
       });
@@ -95,7 +93,8 @@ class PollEditor extends Component {
     return {
       title: this.state.pollTitle,
       description: this.state.pollDescription,
-      allowSubmissions: this.state.allowSubmissions,
+      openTime: this.state.openTime,
+      closeTime: this.state.closeTime,
     };
   };
 
@@ -304,16 +303,11 @@ class PollEditor extends Component {
     return this.state.questions;
   }
 
-  onAllowSubmissionsClick = () => {
-    this.setState({
-      allowSubmissions: !this.state.allowSubmissions,
-    });
-  };
   onOpenTimeChange = (e) =>{
-    this.setState({openTime: e});
+    this.setState({openTime: Date.parse(e)});
   };
   onCloseTimeChange = (e) =>{
-    this.setState({closeTime: e});
+    this.setState({closeTime: Date.parse(e)});
   };
 
   render() {
@@ -354,8 +348,8 @@ class PollEditor extends Component {
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <ThemeProvider theme={defaultMaterialTheme}>
                     <DateTimePicker
-                      label="PollOpenTime"
-                      value={Date.now() + (60*60*1000)}
+                      label="Poll Open Time"
+                      value={this.state.openTime}
                       onChange={this.onOpenTimeChange}
                       renderInput={(props) => <TextField {...props} sx={{
                         svg: { color },
@@ -375,13 +369,13 @@ class PollEditor extends Component {
                         label: { color }
                       }}
                       />}
-                      label="PollCloseTime"
-                      value={Date.now() + (2*60*60*1000)}
+                      label="Poll Close Time"
+                      value={this.state.closeTime}
                       onChange={this.onCloseTimeChange}
                     />
                   </ThemeProvider>
                 </LocalizationProvider>
-                <div class={"pollButtons"}>
+                <div className={"pollButtons"}>
                   <button
                     id="descriptionBtn" className="button pollButton"
                     onClick={this.savePoll}
@@ -471,7 +465,7 @@ class PollEditor extends Component {
                         ) : (
                           <React.Fragment>
                             {this.state.currentAnswers.map((value, index) => (
-                              <div class="questionAnswer">
+                              <div className="questionAnswer">
                                 <input
                                   id={"questionAnswer-" + (index)}
                                   className="form-control textBox"

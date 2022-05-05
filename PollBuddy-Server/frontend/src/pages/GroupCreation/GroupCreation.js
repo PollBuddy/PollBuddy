@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import { MDBContainer } from "mdbreact";
 import ErrorText from "../../components/ErrorText/ErrorText";
 
-export default class GroupCreation extends Component {//this class will likely need to call Groups/new and do more with that...
+class GroupCreation extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -80,3 +81,4 @@ export default class GroupCreation extends Component {//this class will likely n
     );
   }
 }
+export default withRouter(GroupCreation);

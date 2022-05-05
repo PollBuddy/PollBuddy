@@ -41,56 +41,6 @@
   margin: 8px 0;
 }
 
-.time-info-label {
-  text-align: center;
-  font-size: 10px;
-  color: var(--white-most-text) !important;
-  background-color: #25162c;
-  border: none;
-  margin-bottom: 0px;
-  padding-bottom: 5px;
-}
-
-.time-grid{
-  display: inline-grid;
-  align-items: center;
-  padding-left: 10.94px;
-  padding-right: 10.94px;
-}
-
-.time-info {
-  grid-row: 1;
-  text-align: center;
-  font-size: 10px;
-  width: 33px;
-  padding: 7px 10px;
-  color: var(--white-most-text) !important;
-  margin: 2px;
-}
-
-.time-info-text{
-  grid-row: 2;
-  text-align: center;
-  font-size: 10px;
-  margin: 5px 0px;
-  color: var(--white-most-text) !important;
-  background-color: #25162c;
-  border: none;
-}
-
-.time-info-closed {
-  text-align: center;
-  color: var(--white-most-text) !important;
-}
-
-.time-info:hover {
-  cursor: default !important;
-}
-
-.time-icon {
-  margin-right: 5px;
-}
-
 .question-num {
   font-size: var(--font-size-small);
 }

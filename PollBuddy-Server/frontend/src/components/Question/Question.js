@@ -46,20 +46,16 @@ export default class Question extends Component {
     this.questionStartTime = Date.now();
     let closeTime = new Date();
     closeTime.setHours(closeTime.getHours() + 2);
-    let pollCloseTime = new Date();
-    pollCloseTime.setHours(pollCloseTime.getHours() + 2);
     let question = props.data.question;
     this.state = {
       pollID: props.data.pollID,
       questionNumber: props.data.questionNumber,
       question: question,
       currentAnswers: question.currentAnswers || [],
-      perPoll: true,//this.props.perPoll,
-      //pollCloseTime: this.props.pollCloseTime,
-      pollTimeLeft: true,
+      perPoll: true,
       timeLeft: true,
       closeTime: closeTime,
-      pollCloseTime: pollCloseTime,
+      pollCloseTime: props.data.pollCloseTime,
     };
   }
 
@@ -108,30 +104,14 @@ export default class Question extends Component {
       });
     this.props.nextQuestion();
   };
-  noTimeLeft(){
+
+  noTimeLeft = () => {
     this.setState({timeLeft: false});
-  }
-  noPollTimeLeft(){
-    this.setState({pollTimeLeft: false});
   }
 
   render() {
-    // if(this.state.successfulSubmission) {
-    //   return (
-    //     <Navigate to={"/polls/" + this.state.PollID + "/results"} push={true} />
-    //   );
-    // }
-    console.log("Heu");
     return (
       <MDBContainer className="box">
-        {(this.state.perPoll) && (
-          <MDBContainer className = "button time-info-label">
-            <span>Poll Time Remaining</span>
-          </MDBContainer>)}
-        {(this.state.perPoll) && (
-          <Timer timeLeft={this.state.pollTimeLeft} noTimeLeft = {() => this.noPollTimeLeft()}
-            CloseTime={this.state.pollCloseTime} onTimeEnd={this.onTimeEnd} />
-        ) }
         <p className="fontSizeLarge">Question {this.state.questionNumber}: {this.state.question.text}</p>
         { // only display image if there is one
           this.state.question.img &&
@@ -161,11 +141,13 @@ export default class Question extends Component {
             );
           })}
         </MDBContainer>
+        { /* This should work, but is being commented out for now since per-question times are not implemented fully yet
         <MDBContainer className = "button time-info-label">
           <span>Question Time Remaining</span>
         </MDBContainer>
         <Timer timeLeft={this.state.timeLeft} noTimeLeft = {() => this.noTimeLeft()}
           CloseTime={this.state.closeTime} onTimeEnd={this.onTimeEnd} />
+          */ }
         <MDBContainer>
           {(this.state.timeLeft) &&
            <button className="button" onClick={this.submitQuestion}>Save</button>}

@@ -63,10 +63,13 @@ class Groups extends Component {
         <MDBContainer className="page">
           <MDBContainer className="box">
             <p className="fontSizeLarge">
+              Groups
+            </p>
+            <p className="fontSizeLarge">
               As a Group Admin:
             </p>
             {this.state.adminGroups.length === 0 ? (
-              <p>Sorry, you are not the admin of any groups.<br/> <br/></p>
+              <p>You are not the admin of any groups.<br/> <br/></p>
             ) : (
               <React.Fragment>
                 {this.state.adminGroups.map((e) => (
@@ -81,7 +84,7 @@ class Groups extends Component {
               As a Group Member:
             </p>
             {this.state.memberGroups.length === 0 ? (
-              <p>Sorry, you are not the member of any groups.<br/> <br/></p>
+              <p>You are not a member of any groups.<br/> <br/></p>
             ) : (
               <React.Fragment>
                 {this.state.memberGroups.map((e) => (

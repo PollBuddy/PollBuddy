@@ -7,8 +7,8 @@ const {getGroupInternal, isGroupMember, isGroupAdmin, getPollInternal, getQuesti
 const {objectID} = require("../modules/validatorUtils");
 
 const pollValidators = {
-  title: Joi.string().min(3).max(30),
-  description: Joi.string().min(3).max(30),
+  title: Joi.string().min(1).max(32),
+  description: Joi.string().min(0).max(128),
   group: Joi.string(),
 };
 
@@ -22,7 +22,8 @@ const pollSchema = {
   Group: false, //TODO: Change to OwnerGroup
   Creator: false, //TODO: Change to OwnerUser
   RequiresLogin: true,
-  AllowSubmissions: false,
+  OpenTime: Date.now(),
+  CloseTime: Date.now() + (10 * 365.25 * 24 * 60 * 60 * 1000), // Now + 10 years
   Questions: [],
 };
 
@@ -59,7 +60,8 @@ const createPollValidator = Joi.object({
 const editPollValidator = Joi.object({
   title: pollValidators.title.required(),
   description: pollValidators.description.required(),
-  allowSubmissions: Joi.boolean().required(),
+  openTime: Joi.date().required(),
+  closeTime: Joi.date().required(),
 });
 
 const createQuestionValidator = Joi.object({
@@ -115,7 +117,7 @@ const getPoll = async function(userID, pollID) {
       isUserPollAdmin = await isPollAdmin(userID, pollID);
     }
     if (!isUserPollAdmin) {
-      if(poll.AllowSubmissions) {
+      if(Date.now() > Date.parse(poll.OpenTime) && Date.now() < Date.parse(poll.CloseTime)) {
         if (userID) {
           if (poll.Group) {
             let isUserGroupMember = await isGroupMember(poll.Group, userID);
@@ -150,7 +152,8 @@ const getPoll = async function(userID, pollID) {
     return httpCodes.Ok({
       title: poll.Title,
       description: poll.Description,
-      allowSubmissions: poll.AllowSubmissions,
+      openTime: poll.OpenTime,
+      closeTime: poll.CloseTime,
       questions: questions,
     });
   } catch(err) {
@@ -265,7 +268,8 @@ const editPoll = async function(userID, pollID, pollData) {
       { "$set": {
         Title: pollData.title,
         Description: pollData.description,
-        AllowSubmissions: pollData.allowSubmissions,
+        OpenTime: pollData.openTime,
+        CloseTime: pollData.closeTime,
       }}
     );
     return httpCodes.Ok();
@@ -407,6 +411,10 @@ const submitQuestion = async function(userID, pollID, submitData) {
   try {
     let poll = await getPollInternal(pollID);
     if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+
+    if(Date.now() < Date.parse(poll.OpenTime) || Date.now() > Date.parse(poll.CloseTime)) {
+      return httpCodes.BadRequest("Poll is not open for submissions.");
+    }
 
     let question = await getQuestionInternal(poll._id, submitData.id);
     if (!question) { return httpCodes.BadRequest("Invalid Question: Question does not exist."); }

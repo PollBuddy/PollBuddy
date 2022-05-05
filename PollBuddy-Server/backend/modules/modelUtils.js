@@ -8,8 +8,7 @@ const getID = function (ID) {
 
 const getGroupInternal = async function(groupID) {
   let idCode = new bson.ObjectID(groupID);
-  let group = await mongoConnection.getDB().collection("groups").findOne({ "_id": idCode });
-  return group;
+  return await mongoConnection.getDB().collection("groups").findOne({"_id": idCode});
 };
 
 const isGroupAdmin = async function(groupID, userID) {
@@ -62,8 +61,7 @@ const isGroupUserByGroup = function(group, userID) {
 
 const getPollInternal = async function(pollID) {
   let idCode = new bson.ObjectID(pollID);
-  let poll = await mongoConnection.getDB().collection("polls").findOne({ "_id": idCode });
-  return poll;
+  return await mongoConnection.getDB().collection("polls").findOne({"_id": idCode});
 };
 
 const getUserInternal = async function(userID) {

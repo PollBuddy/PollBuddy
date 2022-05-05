@@ -5,6 +5,7 @@ import Question from "../../components/Question/Question";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import "./PollViewer.scss";
+import Timer from "../../components/Timer/Timer";
 
 class PollViewer extends Component {
 
@@ -16,6 +17,7 @@ class PollViewer extends Component {
       doneLoading: false,
       perPoll: true,
       pollCloseTime: "",
+      pollTimeLeft: true,
       pollTitle: "",
       pollDescription: "",
       questions: "",
@@ -42,11 +44,11 @@ class PollViewer extends Component {
             question.currentAnswers = currentAnswers;
           }
           this.setState({
-            pollTitle: response.data.description,
+            pollTitle: response.data.title,
             pollDescription: response.data.description,
             questions: response.data.questions,
-            perPoll: response.data.perPoll,
-            pollCloseTime: response.data.pollCloseTime,
+            //perPoll: response.data.perPoll,
+            pollCloseTime: response.data.closeTime,
             doneLoading: true,
           });
         } else {
@@ -87,7 +89,38 @@ class PollViewer extends Component {
     localStorage.setItem(this.state.questions[this.state.currentQuestion].id, JSON.stringify(newAnswers));
   };
 
+  noPollTimeLeft = () => {
+    this.setState({pollTimeLeft: false});
+  }
+
   render() {
+
+    let pollTimer = () => {
+      /* Check to see if there's < 100 days left and only show if there is. This is maybe to hide a visual bug lol,
+             but also because we really probably don't need to show a remaining time if it's that far away */
+      if((this.state.perPoll) && ((Date.parse(this.state.pollCloseTime) - Date.now()) < (100 * 24 * 60 * 60 * 1000))) {
+        const boxStyleOverrides = {
+
+        }
+        return (
+          <div>
+            <MDBContainer className="box" style={ { width: "275px", maxWidth: "275px" } }>
+              <MDBContainer>
+                <span>Poll Time Remaining</span>
+              </MDBContainer>
+              <Timer timeLeft={this.state.pollTimeLeft}
+                     noTimeLeft = {() => this.noPollTimeLeft()}
+                     CloseTime={this.state.pollCloseTime}
+                     onTimeEnd={this.onTimeEnd}
+              />
+            </MDBContainer>
+            <br />
+            <br />
+          </div>
+        );
+      }
+    }
+
     if (this.state.showError) {
       return (
         <MDBContainer fluid className="page">
@@ -109,14 +142,15 @@ class PollViewer extends Component {
         <MDBContainer fluid className="page">
           <MDBContainer fluid className="box">
             <p className="fontSizeLarge">
-              Thanks for submitting! That was the last question.
+              You've reached the end of the poll. Thanks for submitting!
             </p>
           </MDBContainer>
         </MDBContainer>
       );
     } else {
       return (
-        <MDBContainer className="page">
+        <MDBContainer className="page" style={ { justifyContent: "start" } }>
+          {pollTimer()}
           <div className="questions-bar">
             {this.state.questions.map((question, index) => {
               return (
@@ -138,7 +172,6 @@ class PollViewer extends Component {
                   questionNumber: this.state.currentQuestion + 1,
                   question: this.state.questions[this.state.currentQuestion],
                   perPoll: this.state.perPoll,
-                  pollCloseTime: this.state.pollCloseTime
                 }}/>
               );
             }

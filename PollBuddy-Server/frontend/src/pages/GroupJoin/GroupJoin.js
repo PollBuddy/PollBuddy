@@ -3,8 +3,7 @@ import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
-
-class GroupJoin extends Component {//this class will likely need to call Groups/new and do more with that...
+class GroupJoin extends Component {
   constructor(props) {
     super(props);
     let groupCode = props.router.searchParams.get("code");
