@@ -107,7 +107,7 @@ export default class Question extends Component {
 
   noTimeLeft = () => {
     this.setState({timeLeft: false});
-  }
+  };
 
   render() {
     return (

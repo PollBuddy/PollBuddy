@@ -91,7 +91,7 @@ class PollViewer extends Component {
 
   noPollTimeLeft = () => {
     this.setState({pollTimeLeft: false});
-  }
+  };
 
   render() {
 
@@ -99,9 +99,6 @@ class PollViewer extends Component {
       /* Check to see if there's < 100 days left and only show if there is. This is maybe to hide a visual bug lol,
              but also because we really probably don't need to show a remaining time if it's that far away */
       if((this.state.perPoll) && ((Date.parse(this.state.pollCloseTime) - Date.now()) < (100 * 24 * 60 * 60 * 1000))) {
-        const boxStyleOverrides = {
-
-        }
         return (
           <div>
             <MDBContainer className="box" style={ { width: "275px", maxWidth: "275px" } }>
@@ -109,9 +106,9 @@ class PollViewer extends Component {
                 <span>Poll Time Remaining</span>
               </MDBContainer>
               <Timer timeLeft={this.state.pollTimeLeft}
-                     noTimeLeft = {() => this.noPollTimeLeft()}
-                     CloseTime={this.state.pollCloseTime}
-                     onTimeEnd={this.onTimeEnd}
+                noTimeLeft = {() => this.noPollTimeLeft()}
+                CloseTime={this.state.pollCloseTime}
+                onTimeEnd={this.onTimeEnd}
               />
             </MDBContainer>
             <br />
@@ -119,7 +116,7 @@ class PollViewer extends Component {
           </div>
         );
       }
-    }
+    };
 
     if (this.state.showError) {
       return (
