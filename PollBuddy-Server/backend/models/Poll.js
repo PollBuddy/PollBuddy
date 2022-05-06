@@ -138,23 +138,23 @@ const getPoll = async function(userID, pollID) {
               });
             }
           }
-        } else {    //user is not logged in, but if poll is part of a group they shouldnt access it
+        } else {    //user is not logged in, but if poll is part of a group they shouldn't access it
           if (poll.RequiresLogin) {
             return httpCodes.Unauthorized({
               errorCode: 102,
-              errorMessage: "Poll requires a log-in"
+              errorMessage: "Poll requires logging in"
             });
           } else if (poll.Group) { //user not logged in and poll is part of a group
             return httpCodes.Forbidden({
               errorCode: 101,
-              errorMessage: "User is not part of Group"
+              errorMessage: "User is not part of group"
             });
           }
         }
       } else {
         return httpCodes.Forbidden({
           errorCode: 103,
-          errorMessage: "Poll not Visible"
+          errorMessage: "Poll is not open"
         });
       }
     }

@@ -64,11 +64,11 @@ export default class RegisterWithPollBuddy extends Component {
         .error(new Error("Last name must be less than 256 characters.")),
     });
 
-    var userValid = schema.validate({ username: this.state.username });
-    var emailValid = schema.validate({ email: this.state.email });
-    var passValid = schema.validate({ password: this.state.password });
-    var firstnameValid = schema.validate({ firstname: this.state.firstname});
-    var lastnameValid = schema.validate({ lastname: this.state.lastname});
+    const userValid = schema.validate({username: this.state.username});
+    const emailValid = schema.validate({ email: this.state.email });
+    const passValid = schema.validate({ password: this.state.password });
+    const firstnameValid = schema.validate({ firstname: this.state.firstname});
+    const lastnameValid = schema.validate({ lastname: this.state.lastname});
 
     // update component's state
     this.setState({
@@ -130,25 +130,25 @@ export default class RegisterWithPollBuddy extends Component {
           </p>
           <MDBContainer className="form-group">
             <label htmlFor="firstnameText">First Name:</label>
-            <input placeholder="SIS" className="form-control textBox" id="firstnameText"
+            <input placeholder="Your first name" className="form-control textBox" id="firstnameText"
               onChange={(evt) => { this.setState({firstname: evt.target.value}); }}/>
             {this.state.firstnameValid.error &&
               <p style={{color: "red"}}>{ this.state.firstnameValid.error.toString() }</p>
             }
             <label htmlFor="lastnameText">Last Name:</label>
-            <input placeholder="Man" className="form-control textBox" id="lastnameText"
+            <input placeholder="Your last name" className="form-control textBox" id="lastnameText"
               onChange={(evt) => { this.setState({lastname: evt.target.value}); }}/>
             {this.state.lastnameValid.error &&
               <p style={{color: "red"}}>{ this.state.lastnameValid.error.toString() }</p>
             }
             <label htmlFor="usernameText">Username:</label>
-            <input placeholder="mans" className="form-control textBox" id="usernameText"
+            <input placeholder="Your username" className="form-control textBox" id="usernameText"
               onChange={(evt) => { this.setState({username: evt.target.value}); }}/>
             {this.state.userValid.error &&
               <p style={{color: "red"}}>{ this.state.userValid.error.toString() }</p>
             }
             <label htmlFor="emailText">Email:</label>
-            <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText"
+            <input placeholder="Your email address" className="form-control textBox" id="emailText"
               onChange={(evt) => { this.setState({email: evt.target.value}); }}/>
             {this.state.emailValid.error &&
               <p style={{color: "red"}}>{ this.state.emailValid.error.toString() }</p>

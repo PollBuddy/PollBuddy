@@ -104,7 +104,7 @@ class LoginWithPollBuddy extends Component {
         <MDBContainer className="box">
           <MDBContainer className="form-group">
             <label htmlFor="userNameEmail">Username or Email:</label>
-            <input type="userNameEmail" placeholder="sisman@rpi.edu" className="form-control textBox" id="userNameEmail"
+            <input type="userNameEmail" placeholder="Your username or email" className="form-control textBox" id="userNameEmail"
               onChange={(evt) => { this.setState({userNameEmail: evt.target.value}); }}/>
             <label htmlFor="password">Password:</label>
             <input type="password" placeholder="••••••••••••" className="form-control textBox" id="password"

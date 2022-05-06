@@ -5,7 +5,6 @@ import Question from "../../components/Question/Question";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import "./PollViewer.scss";
-import Popup from "../../components/Popup/Popup";
 import Timer from "../../components/Timer/Timer";
 
 class PollViewer extends Component {
@@ -23,7 +22,7 @@ class PollViewer extends Component {
       pollDescription: "",
       questions: "",
       currentQuestion: 0,
-      errorMessage: "uhhh plz work",
+      errorMessage: "",
     };
   }
 
@@ -67,15 +66,15 @@ class PollViewer extends Component {
             });
           } else if (response.error.errorCode === 101) {
             this.setState({
-              errorMessage: "You are not a part of the group associated with this poll",
+              errorMessage: "You are not a member of the group associated with this poll",
             });
           } else if (response.error.errorCode === 102) {
             this.setState({
-              errorMessage: "You must login in order to access this Poll",
+              errorMessage: "You must login in order to access this poll",
             });
           } else if (response.error.errorCode === 103) {
             this.setState({
-              errorMessage: "The Poll you are trying to access is not currently allowing submissions",
+              errorMessage: "The poll you are trying to access is currently not allowing submissions",
             });
           }
         } else { // invalid poll ID given

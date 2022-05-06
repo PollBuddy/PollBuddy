@@ -282,7 +282,7 @@ class AccountInfo extends Component {
               <MDBRow className="AccountInfo-accountInputs">
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="school">School:</label>
-                  <input placeholder="RPI" className="form-control textBox" id="school" value={this.state.school} readOnly />
+                  <input className="form-control textBox" id="school" value={this.state.school} readOnly />
                 </MDBCol>
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="passwordChange">Password:</label>
