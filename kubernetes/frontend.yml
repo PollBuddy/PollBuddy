@@ -80,9 +80,9 @@ spec:
               name: frontend
           env:
             - name: BACKEND
-              value: poll-buddy-backend-service-master.default.svc.cluster.local
+              value: poll-buddy-backend-service-master
             - name: REPORTING
-              value: poll-buddy-reporting-service-master.default.svc.cluster.local
+              value: poll-buddy-reporting-service-master
           # Probes to report the status of the application
           startupProbe: # Runs to know when the app started up
             httpGet:
