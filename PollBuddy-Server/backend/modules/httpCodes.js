@@ -189,7 +189,7 @@ for (let httpCode of HTTP_CODES) {
 }
 
 function sendResponse(res, response) {
-  return res.status(response.statusCode).send(response);
+  return res.status(response.statusCode).json(response);
 }
 
 module.exports = {
