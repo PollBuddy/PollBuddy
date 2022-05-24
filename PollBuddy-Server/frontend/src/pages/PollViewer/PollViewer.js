@@ -3,12 +3,11 @@ import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 import Question from "../../components/Question/Question";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
+import { withRouter } from "../../components/PropsWrapper/PropsWrapper";
 import "./PollViewer.scss";
 import Timer from "../../components/Timer/Timer";
 
 class PollViewer extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -30,15 +29,22 @@ class PollViewer extends Component {
    * if response.error fails, redirect to the homepage
    */
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.updateTitle("Poll Viewer");
     fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID, {
-      method: "GET"
+      method: "GET",
     })
-      .then(response => response.json())
-      .then(response => {
+      .then((response) => response.json())
+      .then((response) => {
         console.log(response);
         if (response.result === "success") {
+          if (response.data.questions.length === 0) {
+            this.setState({
+              errorMessage:
+                "This poll has no questions for you to answer at this time.",
+              showError: true,
+            });
+          }
           for (let question of response.data.questions) {
             this.shuffleArray(question.answers);
             let currentAnswers = [...question.selectedAnswers];
@@ -66,7 +72,8 @@ class PollViewer extends Component {
             });
           } else if (response.error.errorCode === 101) {
             this.setState({
-              errorMessage: "You are not a member of the group associated with this poll",
+              errorMessage:
+                "You are not a member of the group associated with this poll",
             });
           } else if (response.error.errorCode === 102) {
             this.setState({
@@ -74,10 +81,12 @@ class PollViewer extends Component {
             });
           } else if (response.error.errorCode === 103) {
             this.setState({
-              errorMessage: "The poll you are trying to access is currently not allowing submissions",
+              errorMessage:
+                "The poll you are trying to access is currently not allowing submissions",
             });
           }
-        } else { // invalid poll ID given
+        } else {
+          // invalid poll ID given
           this.props.router.navigate("/");
         }
       });
@@ -109,28 +118,39 @@ class PollViewer extends Component {
   };
 
   updateQuestion = (newAnswers) => {
-    this.state.questions[this.state.currentQuestion].currentAnswers = newAnswers;
-    localStorage.setItem(this.state.questions[this.state.currentQuestion].id, JSON.stringify(newAnswers));
+    this.state.questions[this.state.currentQuestion].currentAnswers =
+      newAnswers;
+    localStorage.setItem(
+      this.state.questions[this.state.currentQuestion].id,
+      JSON.stringify(newAnswers)
+    );
   };
 
   noPollTimeLeft = () => {
-    this.setState({pollTimeLeft: false});
+    this.setState({ pollTimeLeft: false });
   };
 
   render() {
-
     let pollTimer = () => {
       /* Check to see if there's < 100 days left and only show if there is. This is maybe to hide a visual bug lol,
              but also because we really probably don't need to show a remaining time if it's that far away */
-      if((this.state.perPoll) && ((Date.parse(this.state.pollCloseTime) - Date.now()) < (100 * 24 * 60 * 60 * 1000))) {
+      if (
+        this.state.perPoll &&
+        Date.parse(this.state.pollCloseTime) - Date.now() <
+          100 * 24 * 60 * 60 * 1000
+      ) {
         return (
           <div>
-            <MDBContainer className="box" style={ { width: "275px", maxWidth: "275px" } }>
+            <MDBContainer
+              className="box"
+              style={{ width: "275px", maxWidth: "275px" }}
+            >
               <MDBContainer>
                 <span>Poll Time Remaining</span>
               </MDBContainer>
-              <Timer timeLeft={this.state.pollTimeLeft}
-                noTimeLeft = {() => this.noPollTimeLeft()}
+              <Timer
+                timeLeft={this.state.pollTimeLeft}
+                noTimeLeft={() => this.noPollTimeLeft()}
                 CloseTime={this.state.pollCloseTime}
                 onTimeEnd={this.onTimeEnd}
               />
@@ -146,16 +166,14 @@ class PollViewer extends Component {
       return (
         <MDBContainer fluid className="page">
           <MDBContainer fluid className="box">
-            <p className="fontSizeLarge">
-              {this.state.errorMessage}
-            </p>
+            <p className="fontSizeLarge">{this.state.errorMessage}</p>
           </MDBContainer>
         </MDBContainer>
       );
     } else if (!this.state.doneLoading) {
       return (
         <MDBContainer className="page">
-          <LoadingWheel/>
+          <LoadingWheel />
         </MDBContainer>
       );
     } else if (this.state.currentQuestion === -1) {
@@ -170,16 +188,19 @@ class PollViewer extends Component {
       );
     } else {
       return (
-        <MDBContainer className="page" style={ { justifyContent: "start" } }>
+        <MDBContainer className="page" style={{ justifyContent: "start" }}>
           {pollTimer()}
           <div className="questions-bar">
             {this.state.questions.map((question, index) => {
               return (
-                <div className={
-                  this.state.currentQuestion === index ?
-                    "question-label question-label-active" :
-                    "question-label question-label-inactive"
-                } onClick={() => this.displayQuestion(index)}>
+                <div
+                  className={
+                    this.state.currentQuestion === index
+                      ? "question-label question-label-active"
+                      : "question-label question-label-inactive"
+                  }
+                  onClick={() => this.displayQuestion(index)}
+                >
                   {index + 1}
                 </div>
               );
@@ -188,12 +209,16 @@ class PollViewer extends Component {
           {this.state.questions.map((question, index) => {
             if (this.state.currentQuestion === index) {
               return (
-                <Question nextQuestion={this.nextQuestion} updateQuestion={this.updateQuestion} data={{
-                  pollID: this.state.pollID,
-                  questionNumber: this.state.currentQuestion + 1,
-                  question: this.state.questions[this.state.currentQuestion],
-                  perPoll: this.state.perPoll,
-                }}/>
+                <Question
+                  nextQuestion={this.nextQuestion}
+                  updateQuestion={this.updateQuestion}
+                  data={{
+                    pollID: this.state.pollID,
+                    questionNumber: this.state.currentQuestion + 1,
+                    question: this.state.questions[this.state.currentQuestion],
+                    perPoll: this.state.perPoll,
+                  }}
+                />
               );
             }
           })}
