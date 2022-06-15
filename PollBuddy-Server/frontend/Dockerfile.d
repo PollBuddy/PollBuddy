@@ -15,7 +15,8 @@ COPY package*.json ./
 
 # Instead of npm install, we're using npm ci which uses package-lock.json instead of package.json for more reproducible
 # builds and for performance. We also won't be needing dev dependencies here so those are omitted.
-RUN npm ci --only=production
+# Note: --legacy-peer-deps has been added due to a conflict with React versions
+RUN npm ci --only=production --legacy-peer-deps
 
 # Bundle app source
 # Folders
