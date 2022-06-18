@@ -9,32 +9,32 @@
   },
   "dependencies": {
     "@sideway/formula": "^3.0.0",
+    "@sinonjs/commons": "^1.8.3",
     "bcrypt": "^5.0.1",
-    "bson": "^4.6.2",
+    "bson": "^4.6.4",
     "connect-mongo": "^4.6.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "debug": "^4.3.4",
-    "dotenv": "^16.0.0",
-    "eslint": "^8.11.0",
-    "express": "^4.17.3",
+    "dotenv": "^16.0.1",
+    "eslint": "^8.18.0",
+    "express": "^4.18.1",
     "express-cas-authentication": "^0.1.0",
-    "express-session": "^1.17.2",
-    "googleapis": "^98.0.0",
+    "express-session": "^1.17.3",
+    "googleapis": "^103.0.0",
     "http-errors": "^2.0.0",
     "influx": "^5.9.3",
     "joi": "^17.6.0",
     "joi-objectid": "^4.0.2",
-    "mongodb": "^4.4.1",
+    "mongodb": "^4.7.0",
     "morgan": "^1.10.0",
-    "nodemailer": "^6.7.3",
-    "promise-retry": "^2.0.1",
-    "@sinonjs/commons": "^1.8.3"
+    "nodemailer": "^6.7.5",
+    "promise-retry": "^2.0.1"
   },
   "devDependencies": {
-    "@shelf/jest-mongodb": "^2.2.1",
-    "eslint-plugin-jest": "^26.1.3",
-    "jest": "^27.5.1",
-    "supertest": "^6.1.6"
+    "@shelf/jest-mongodb": "^3.0.1",
+    "eslint-plugin-jest": "^26.5.3",
+    "jest": "^28.1.1",
+    "supertest": "^6.2.3"
   }
 }
