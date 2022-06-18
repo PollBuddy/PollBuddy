@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Autocomplete from "react-autocomplete";
+import Autocomplete from "react-autocomplete-pollbuddy";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 
