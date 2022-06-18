@@ -21,7 +21,8 @@ COPY hotreload-fix.js ./
 RUN ["mv","-n", ".env.example", ".env"]
 
 # Install all dependencies
-RUN npm install
+# Note: --legacy-peer-deps has been added due to a conflict with React versions
+RUN npm ci --legacy-peer-deps
 
 # Start command
 CMD ["npm", "start"]

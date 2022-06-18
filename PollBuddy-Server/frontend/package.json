@@ -3,28 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@emotion/react": "^11.8.2",
-    "@emotion/styled": "^11.8.1",
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.18",
-    "@mui/lab": "^5.0.0-alpha.75",
-    "@mui/material": "^5.5.3",
+    "@mui/lab": "^5.0.0-alpha.86",
+    "@mui/material": "^5.8.4",
     "autosize": "^5.0.1",
-    "chart.js": "^3.7.1",
+    "chart.js": "^3.8.0",
     "date-fns": "^2.28.0",
     "joi": "^17.6.0",
     "mdbreact": "^5.2.0",
-    "react": "^18.1.0",
+    "react": "^18.2.0",
     "react-autocomplete": "^1.8.1",
-    "react-chartjs-2": "^4.1.0",
+    "react-chartjs-2": "^4.2.0",
     "react-countdown": "^2.3.2",
-    "react-dom": "^18.1.0",
+    "react-dom": "^18.2.0",
     "react-markdown": "^8.0.3",
     "react-phone-input-2": "^2.15.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
-    "sass": "^1.51.0"
+    "sass": "^1.52.3"
   },
   "scripts": {
     "start": "node ./hotreload-fix && react-scripts start",
@@ -49,6 +49,6 @@
   "devDependencies": {
     "jest-fetch-mock": "^3.0.3",
     "jquery": "^3.6.0",
-    "react-test-renderer": "^18.1.0"
+    "react-test-renderer": "^18.2.0"
   }
 }
