@@ -10,6 +10,8 @@ const {createPoll, getPoll, editPoll, createPollValidator, editPollValidator, cr
 const {paramValidator} = require("../modules/validatorUtils");
 const {Parser} = require("json2csv");
 const {getPollInternal} = require("../modules/modelUtils");
+const sanitize = require("sanitize-filename");
+
 
 // This file handles /api/polls URLs
 
@@ -359,7 +361,7 @@ router.get("/:id/csv", isLoggedIn, paramValidator(pollParamsValidator), async (r
   const json2csv = new Parser(opts);
   const csv = json2csv.parse(data);
   res.header('Content-Type', 'text/csv');
-  res.attachment("Poll Results for " + poll.Title +  " - Poll Buddy.csv");
+  res.attachment(sanitize("Poll Results for " + poll.Title +  " - Poll Buddy.csv"));
   return res.send(csv);
 
 
