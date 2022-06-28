@@ -1,10 +1,14 @@
 const Joi = require("joi");
 const bson = require("bson");
+const { Parser } = require('json2csv');
 const { createResponse, getResultErrors, isEmpty, createModel } = require("../modules/utils");
 const mongoConnection = require("../modules/mongoConnection.js");
 const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
-const {getGroupInternal, isGroupMember, isGroupAdmin, getPollInternal, getQuestionInternal, isPollAdmin} = require("../modules/modelUtils");
+const {getGroupInternal, isGroupMember, isGroupAdmin, getPollInternal, getQuestionInternal, isPollAdmin,
+  getUserInternal
+} = require("../modules/modelUtils");
 const {objectID} = require("../modules/validatorUtils");
+const {getUser} = require("./User");
 
 const pollValidators = {
   title: Joi.string().min(1).max(32),
@@ -228,7 +232,7 @@ const getPollResults = async function(userID, pollID) {
           }
         }
       });
-      
+
     for (let question of questions) {
       question.responses = questionResponses[question.id].count;
       for (let answer of question.answers) {
@@ -246,6 +250,97 @@ const getPollResults = async function(userID, pollID) {
     return httpCodes.InternalServerError();
   }
 };
+
+const getPollResultsCSV = async function(userID, pollID) {
+  try {
+    let poll = await getPollInternal(pollID);
+    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+
+    let isUserPollAdmin = await isPollAdmin(userID, pollID);
+    if (!isUserPollAdmin) { return httpCodes.Unauthorized(); }
+
+    let pollAnswers = await mongoConnection.getDB().collection("poll_answers").find({ PollID: poll._id }).toArray();
+    let output = [];
+
+    // Index the questions
+    let questionIndexes = {};
+    let questionNumber = 1;
+    for(let question of poll.Questions) {
+      questionIndexes[question._id.toString()] = questionNumber;
+      questionNumber++;
+    }
+
+    // Go over every submitted raw database answer
+    for(let rawAnswer of pollAnswers) {
+
+      // Get the user data
+      let user;
+      if(rawAnswer.userID === null) {
+        // No User ID was found, so the user must be anonymous
+        user = { UserName: "Anonymous", Email: "Anonymous", FirstName: "Anonymous", LastName: "Anonymous", SchoolAffiliation: ""};
+      } else {
+        user = await getUserInternal(rawAnswer.UserID);
+        if (user === null) {
+          user = { UserName: "Deleted User", Email: "Deleted User", FirstName: "Deleted User", LastName: "Deleted User", SchoolAffiliation: ""};
+        }
+      }
+
+      // Go over the answers to each of the questions
+      for (let fullAnswer of rawAnswer.Questions) {
+        // TODO: rawAnswers.Questions is supposed to be rawAnswers.Answers as per the DB schema, but migrations are required for this to work
+
+        // Find the question for this answer
+        let question = poll.Questions.filter(question => {
+          return question._id.toString() === fullAnswer.QuestionID.toString();
+        })[0];
+
+        // Go over every answer option within the entire answer
+        for (let individualAnswer of fullAnswer.Answers) {
+
+          // Make a new row to store this answer
+          let row = {};
+
+          // Set up question data
+          row.QuestionNumber = questionIndexes[question._id];
+          row.QuestionText = question.Text;
+
+          // Set up user data
+          row.UserName = user.UserName;
+          row.Email = user.Email;
+          row.FirstName = user.FirstName;
+          row.LastName = user.LastName;
+          row.SchoolAffiliation = user.SchoolAffiliation;
+
+          // Find the answer that's stored in the question
+          let questionAnswer = question.Answers.filter(ans => {
+            return ans._id.toString() === individualAnswer.toString();
+          })[0];
+
+          // Set up answer data
+          //row.AnswerText = questionAnswer.Content; // TODO: Same issue as before, DB inconsistency that needs migrations
+          row.AnswerText = questionAnswer.Text;
+
+          // Figure out if the answer is correct
+          row.Correct = questionAnswer.Correct ? "Yes" : "No";
+
+          output.push(row);
+        }
+
+      }
+
+    }
+
+
+    return output;
+
+
+
+  } catch(err) {
+    console.error(err);
+    return httpCodes.InternalServerError();
+  }
+};
+
 
 const createPoll = async function(userID, pollData) {
   try {
@@ -511,6 +606,7 @@ const submitQuestion = async function(userID, pollID, submitData) {
 module.exports = {
   getPoll,
   getPollResults,
+  getPollResultsCSV,
   createPoll,
   editPoll,
   createQuestion,
@@ -525,5 +621,5 @@ module.exports = {
   editQuestionValidator,
   submitQuestionValidator,
   pollParamsValidator
-  
+
 };
