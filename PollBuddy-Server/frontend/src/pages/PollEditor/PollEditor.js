@@ -130,6 +130,13 @@ class PollEditor extends Component {
     this.props.router.navigate("/groups");
   };
 
+  viewResults = async () => {
+    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/results", {
+      method: "POST",
+    });
+    this.props.router.navigate("/polls/" + this.state.pollID + "/results");
+  };
+
   createQuestion = () => {
     this.setState({
       currentQuestion: false,
@@ -387,6 +394,12 @@ class PollEditor extends Component {
                     onClick={this.deletePoll}
                   >
                     Delete Poll
+                  </button>
+                  <button
+                    id="descriptionBtn" className="button pollButton"
+                    onClick={this.viewResults}
+                  >
+                    View Results
                   </button>
                 </div>
               </MDBContainer>
