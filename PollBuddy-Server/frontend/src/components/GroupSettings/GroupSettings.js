@@ -24,18 +24,36 @@ class GroupSettings extends Component{
     this.props.router.navigate("/polls/new?groupID=" + this.state.id);
   };
 
-  handleLeaveGroup = async () => {
-    await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/leave", {
-      method: "POST",
-    });
-    this.props.router.navigate("/groups");
+  handleLeaveConfirm = () => {
+    this.setState({showConfirm: true});
   };
 
-  handleDeleteGroup = async () => {
-    await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/delete", {
-      method: "POST",
-    });
-    this.props.router.navigate("/groups");
+  async handleLeaveGroup(leaveGroup) {
+    if (leaveGroup) {
+      let response = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/leave", {
+        method: "POST",
+      });
+
+      if (response.status == 200) {
+        this.props.router.navigate("/groups");
+        return
+      }
+    }
+    this.setState({showConfirm: false});
+  };
+
+  async handleDeleteGroup(deleteGroup) {
+    if (deleteGroup) {
+      let response = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/delete", {
+        method: "POST",
+      });
+
+      if (response.status == 200) {
+        this.props.router.navigate("/groups");
+        return
+      }
+    }
+    this.setState({showConfirm: false});
   };
 
   render(){
@@ -46,6 +64,22 @@ class GroupSettings extends Component{
             Member Settings
           </p>
           <button onClick={this.handleLeaveGroup} className="button">Leave Group</button>
+          <MDBContainer fluid>
+            { this.state.showConfirm
+              ?
+              <MDBContainer className="form-group">
+                <p>Are you sure you want to leave this group?</p>
+                <input onClick={this.handleLeaveGroup.bind(this, false)} className="button float-left" type="submit" value="No"/>
+                <input onClick={this.handleLeaveGroup.bind(this, true)} className="button float-right" type="submit" value="Yes"/>
+              </MDBContainer>
+              :
+              <button style={{width:"17em"}}
+                className="button"
+                onClick={this.handleLeaveConfirm}
+                >Leave Group
+                </button>
+            }
+          </MDBContainer>
         </MDBContainer>
       );
     } else if (this.state.isAdmin) {
@@ -65,11 +99,23 @@ class GroupSettings extends Component{
             >Edit Group
             </button>
           </Link>
-          <button style={{width: "17em"}}
-            className="button"
-            onClick={this.handleDeleteGroup}
-          >Delete this Group
-          </button>
+          
+          <MDBContainer fluid>
+            { this.state.showConfirm
+              ?
+              <MDBContainer className="form-group">
+                <p>Are you sure you want to delete this group?</p>
+                <input onClick={this.handleDeleteGroup.bind(this, false)} className="button float-left" type="submit" value="No"/>
+                <input onClick={this.handleDeleteGroup.bind(this, true)} className="button float-right" type="submit" value="Yes"/>
+              </MDBContainer>
+              :
+              <button style={{width:"17em"}}
+                className="button"
+                onClick={this.handleLeaveConfirm}
+                >Delete this Group
+                </button>
+            }
+          </MDBContainer>
         </MDBContainer>
       );
     }
