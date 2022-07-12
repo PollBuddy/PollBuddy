@@ -91,7 +91,8 @@ export default class QuestionResults extends Component {
                 fontColor: "white",
                 fontSize: 20,
                 fontFamily: "Baloo 2",
-                precision: 0
+                precision: 0,
+                stepSize: 1
               }
             }
           ]
