@@ -1,14 +1,12 @@
 const Joi = require("joi");
 const bson = require("bson");
-const { Parser } = require('json2csv');
-const { createResponse, getResultErrors, isEmpty, createModel } = require("../modules/utils");
+const { createModel } = require("../modules/utils");
 const mongoConnection = require("../modules/mongoConnection.js");
-const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
+const { httpCodes } = require("../modules/httpCodes.js");
 const {getGroupInternal, isGroupMember, isGroupAdmin, getPollInternal, getQuestionInternal, isPollAdmin,
   getUserInternal
 } = require("../modules/modelUtils");
 const {objectID} = require("../modules/validatorUtils");
-const {getUser} = require("./User");
 
 const pollValidators = {
   title: Joi.string().min(1).max(32),
@@ -290,8 +288,8 @@ const getPollResultsCSV = async function(userID, pollID) {
         // TODO: rawAnswers.Questions is supposed to be rawAnswers.Answers as per the DB schema, but migrations are required for this to work
 
         // Find the question for this answer
-        let question = poll.Questions.filter(question => {
-          return question._id.toString() === fullAnswer.QuestionID.toString();
+        let question = poll.Questions.filter(q => {
+          return q._id.toString() === fullAnswer.QuestionID.toString();
         })[0];
 
         // Go over every answer option within the entire answer
@@ -317,7 +315,8 @@ const getPollResultsCSV = async function(userID, pollID) {
           })[0];
 
           // Set up answer data
-          //row.AnswerText = questionAnswer.Content; // TODO: Same issue as before, DB inconsistency that needs migrations
+          // TODO: Same issue as before, DB inconsistency that needs migrations
+          //row.AnswerText = questionAnswer.Content;
           row.AnswerText = questionAnswer.Text;
 
           // Figure out if the answer is correct
@@ -325,15 +324,10 @@ const getPollResultsCSV = async function(userID, pollID) {
 
           output.push(row);
         }
-
       }
-
     }
 
-
     return output;
-
-
 
   } catch(err) {
     console.error(err);

@@ -254,6 +254,7 @@ router.get("/:id/members", isLoggedIn, paramValidator(groupParamsValidator), asy
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/:id/members", function (req, res) {
   return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
@@ -331,6 +332,7 @@ router.post("/:id/join", isLoggedIn, paramValidator(groupParamsValidator), async
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.get("/:id/leave", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });

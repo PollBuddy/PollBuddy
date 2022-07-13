@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
-const Joi = require("joi");
 const {createResponse, validateID, checkPollPublic, isLoggedIn, isDevelopmentMode, getResultErrors, isEmpty} = require("../modules/utils");
 const {sendResponse, httpCodes} = require("../modules/httpCodes.js");
 const {createPoll, getPoll, editPoll, createPollValidator, editPollValidator, createQuestionValidator, createQuestion,
@@ -116,6 +115,7 @@ router.get("/:id/submit", function (req, res) {
 });
 
 
+// eslint-disable-next-line no-unused-vars
 router.get("/:id/createQuestion", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
@@ -129,6 +129,7 @@ router.post("/:id/createQuestion", isLoggedIn, paramValidator(pollParamsValidato
   return sendResponse(res, response);
 });
 
+// eslint-disable-next-line no-unused-vars
 router.get("/:id/editQuestion", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
@@ -144,6 +145,7 @@ router.post("/:id/editQuestion", isLoggedIn, paramValidator(pollParamsValidator)
   return sendResponse(res, response);
 });
 
+// eslint-disable-next-line no-unused-vars
 router.get("/:id/submitQuestion", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
@@ -170,6 +172,7 @@ router.post("/:id/submitQuestion", paramValidator(pollParamsValidator), async (r
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.get("/:id/delete", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
@@ -253,6 +256,7 @@ router.get("/:id", paramValidator(pollParamsValidator), async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/:id", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
@@ -333,6 +337,7 @@ router.get("/:id/results", isLoggedIn, paramValidator(pollParamsValidator), asyn
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/:id/results", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
@@ -353,19 +358,15 @@ router.get("/:id/csv", isLoggedIn, paramValidator(pollParamsValidator), async (r
   let poll = await getPollInternal(req.params.id);
 
   // Set up the static fields
-  const fields = ['QuestionNumber', 'QuestionText', 'UserName', 'Email', 'FirstName', 'LastName', 'SchoolAffiliation', "AnswerText", "Correct"];
-
+  const fields = ["QuestionNumber", "QuestionText", "UserName", "Email", "FirstName", "LastName", "SchoolAffiliation", "AnswerText", "Correct"];
 
   const opts = { fields };
 
   const json2csv = new Parser(opts);
   const csv = json2csv.parse(data);
-  res.header('Content-Type', 'text/csv');
+  res.header("Content-Type", "text/csv");
   res.attachment(sanitize("Poll Results for " + poll.Title +  " - Poll Buddy.csv"));
   return res.send(csv);
-
-
-  //return sendResponse(res, response);
 });
 
 /**
@@ -376,6 +377,7 @@ router.get("/:id/csv", isLoggedIn, paramValidator(pollParamsValidator), async (r
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/:id/csv", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
