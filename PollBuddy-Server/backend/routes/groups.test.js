@@ -1,24 +1,19 @@
 require("dotenv").config();
 const express = require("express");
 const supertest = require("supertest");
-const bcrypt = require("bcrypt");
 const mongo = require("mongodb");
 const MongoClient = mongo.MongoClient;
 
-var { groupSchema } = require("../models/Group.js");
-var { userSchema } = require("../models/User.js");
-var { createModel } = require("../modules/utils.js");
-var mongoConnection = require("../modules/mongoConnection.js");
-var groupsRouter = require("./groups");
-const {testUser, testUser2, testGroup, createUser, createGroup, createPoll, testPoll, testGroup2} = require("../modules/testingUtils");
-const {create} = require("connect-mongo");
-const bson = require("bson");
+const mongoConnection = require("../modules/mongoConnection.js");
+const groupsRouter = require("./groups");
+const {testUser, testGroup, createUser, createGroup, createPoll, testPoll, testGroup2} = require("../modules/testingUtils");
 
 let mockApp = express();
 let session = {};
 
 mockApp.use(express.json());
 mockApp.use(express.urlencoded({ extended: false }));
+// eslint-disable-next-line no-unused-vars
 mockApp.use(function (req, res, next) {
   req.session = session;
   next();
@@ -304,7 +299,7 @@ describe("/api/groups/:id/polls", () => {
   it("GET: get non-visible group polls as member", async () => {
     let user = await createUser();
     let group = await createGroup({ Members: [user.insertedId]});
-    let poll = await createPoll({ Group: group.insertedId, AllowSubmissions: false });
+    await createPoll({ Group: group.insertedId, AllowSubmissions: false });
     session = { userData: { userID: user.insertedId } };
     await app.get("/api/groups/" + group.insertedId + "/polls")
       .expect(200)

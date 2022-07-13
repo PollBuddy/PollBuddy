@@ -2,7 +2,7 @@ const {createModel} = require("../modules/utils.js");
 const {userSchema} = require("../models/User.js");
 const mongoConnection = require("../modules/mongoConnection.js");
 const {groupSchema} = require("../models/Group.js");
-const {pollSchema, questionSchema} = require("../models/Poll");
+const {pollSchema} = require("../models/Poll");
 
 const testGroup = {
   Name: "test.group",

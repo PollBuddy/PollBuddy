@@ -116,29 +116,26 @@ function isLoggedIn(req,res,next) {
  * Also checks to make sure that the user is logged in
  * @see {Predicate}
  */
-let isSiteAdmin = 
-  and([
-    isLoggedIn,
-    (req,res,next) => {
-      let userID = req.session.userData.userID;
-      let user = mongoConnection.getDB().collection("users").findOne({_id: userID});
-      if (user.SiteAdmin) {
-        next();
-      } else {  
-        return sendResponse(res,httpCodes.InternalServerError("User is not a site admin."));
-      }
-    }
-  ]);
+let isSiteAdmin = and([isLoggedIn, (req,res,next) => {
+  let userID = req.session.userData.userID;
+  let user = mongoConnection.getDB().collection("users").findOne({_id: userID});
+  if (user.SiteAdmin) {
+    next();
+  } else {
+    return sendResponse(res, httpCodes.InternalServerError("User is not a site admin."));
+  }
+}]);
 
 /**
  * predicate to check if the running image is in development mode
  * @see {Predicate}
  */
-function isDevelopmentMode(req,res,next) {
+// eslint-disable-next-line no-unused-vars
+function isDevelopmentMode(req, res, next) {
   if(process.env.DEVELOPMENT_MODE === "true"){
-    next(); 
+    next();
   } else {
-    return sendResponse(res,httpCodes.InternalServerError("App is not running in development mode."));
+    return sendResponse(res, httpCodes.InternalServerError("App is not running in development mode."));
   }
 }
 
@@ -158,8 +155,8 @@ function or() {
   //or() needs to allow multiple middleware to run without terminating the response
   //this object absorbs a middleware's attempts to send a response on its own
   let mockRes = {
-    status : (x) => {return mockRes;},
-    send : (x) => {return mockRes;},
+    status : () => {return mockRes;},
+    send : () => {return mockRes;},
   };
   return (req,res,next) => {
     for(let i = 0; i < arguments.length ; i ++){
@@ -168,7 +165,7 @@ function or() {
         return next();
       }
     }
-    return sendResponse(res,httpCodes.InternalServerError("No conditions passed"));  
+    return sendResponse(res,httpCodes.InternalServerError("No conditions passed"));
   };
 }
 
