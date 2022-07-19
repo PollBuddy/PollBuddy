@@ -3,7 +3,7 @@ import { MDBContainer } from "mdbreact";
 import {Link} from "react-router-dom";
 import "./GroupSettings.scss";
 import {withRouter} from "../PropsWrapper/PropsWrapper";
-
+import Popup3 from "../Popup3/Popup3";
 class GroupSettings extends Component{
   constructor(props) {
     super(props);
@@ -63,23 +63,16 @@ class GroupSettings extends Component{
           <p className="fontSizeLarge">
             Member Settings
           </p>
-          <button onClick={this.handleLeaveGroup} className="button">Leave Group</button>
-          <MDBContainer fluid>
-            { this.state.showConfirm
-              ?
-              <MDBContainer className="form-group">
-                <p>Are you sure you want to leave this group?</p>
-                <input onClick={this.handleLeaveGroup.bind(this, false)} className="button float-left" type="submit" value="No"/>
-                <input onClick={this.handleLeaveGroup.bind(this, true)} className="button float-right" type="submit" value="Yes"/>
-              </MDBContainer>
-              :
-              <button style={{width:"17em"}}
-                className="button"
-                onClick={this.handleLeaveConfirm}
-                >Leave Group
-                </button>
-            }
-          </MDBContainer>
+          <button style={{width:"17em"}}
+            className="button"
+            onClick={this.handleLeaveConfirm}
+            >Leave Group
+          </button>
+          <Popup3 isOpen={this.state.showConfirm}>
+            <p>Are you sure you want to leave this group?</p>
+            <input onClick={this.handleLeaveGroup.bind(this, false)} className="button float-left" type="submit" value="No"/>
+            <input onClick={this.handleLeaveGroup.bind(this, true)} className="button float-right" type="submit" value="Yes"/>
+          </Popup3>
         </MDBContainer>
       );
     } else if (this.state.isAdmin) {
@@ -100,22 +93,18 @@ class GroupSettings extends Component{
             </button>
           </Link>
           
-          <MDBContainer fluid>
-            { this.state.showConfirm
-              ?
-              <MDBContainer className="form-group">
-                <p>Are you sure you want to delete this group?</p>
-                <input onClick={this.handleDeleteGroup.bind(this, false)} className="button float-left" type="submit" value="No"/>
-                <input onClick={this.handleDeleteGroup.bind(this, true)} className="button float-right" type="submit" value="Yes"/>
-              </MDBContainer>
-              :
-              <button style={{width:"17em"}}
-                className="button"
-                onClick={this.handleLeaveConfirm}
-                >Delete this Group
-                </button>
-            }
-          </MDBContainer>
+          <button style={{width:"17em"}}
+            className="button"
+            onClick={this.handleLeaveConfirm}
+            >Delete this Group
+          </button>
+          <Popup3 isOpen={this.state.showConfirm}>
+            <p>Are you sure you want to delete this group?</p>
+            <div>
+              <input onClick={this.handleDeleteGroup.bind(this, false)} className="button float-left" type="submit" value="No"/>
+              <input onClick={this.handleDeleteGroup.bind(this, true)} className="button float-right" type="submit" value="Yes"/>
+            </div>
+          </Popup3>
         </MDBContainer>
       );
     }
