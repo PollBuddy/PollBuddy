@@ -38,12 +38,6 @@ class GroupSettings extends Component{
     this.props.router.navigate("/groups");
   };
 
-  getGroupCode = async () => {
-    var code;
-    code = this.state.id;
-    return code;
-  }
-
   render(){
     if (this.state.isMember) {
       return (
@@ -76,13 +70,6 @@ class GroupSettings extends Component{
             onClick={this.handleDeleteGroup}
           >Delete this Group
           </button>
-
-          <button style={{width: "17em"}}
-            className="button"
-            onClick={display.this.getGroupCode}
-          >Get Invite Code
-          </button>
-          
         </MDBContainer>
       );
     }
