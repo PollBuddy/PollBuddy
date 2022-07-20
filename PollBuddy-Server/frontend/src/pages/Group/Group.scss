@@ -1,0 +1,20 @@
+.myPolls {
+    width: 20em;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.SortDropdown label{
+    font-weight: normal;
+    margin-right: 0;
+}
+
+.SortDropdown select {
+    cursor: pointer;
+    height: 2em;
+    width: 8em;
+    margin-left: 0.5em;
+    outline: none;
+    border: none;
+}
