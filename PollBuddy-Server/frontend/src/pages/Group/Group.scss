@@ -1,3 +1,4 @@
+
 .myPolls {
     width: 20em;
     display: flex;
@@ -5,16 +6,27 @@
     align-items: center;
 }
 
-.SortDropdown label{
-    font-weight: normal;
-    margin-right: 0;
+.SortDropdown {
+    label{
+        font-weight: normal;
+        font-size: small;
+        margin-right: 0;
+    }
+
+    select {
+        cursor: pointer;
+        height: 2em;
+        width: 7.5em;
+        margin-left: 0.5em;
+        outline: none;
+        border: none;
+        border-bottom: 1.5px solid white;
+        background: transparent;
+        color: white;
+    }
+
+    option {
+        background-color: var(--darkest-purple-header-color);
+    }
 }
 
-.SortDropdown select {
-    cursor: pointer;
-    height: 2em;
-    width: 8em;
-    margin-left: 0.5em;
-    outline: none;
-    border: none;
-}

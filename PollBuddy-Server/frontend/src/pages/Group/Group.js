@@ -149,6 +149,7 @@ class Group extends Component {
                 </p>
                 <div className="SortDropdown">
                   <label>
+                    Sort by
                     <select value={this.state.selected} onChange={this.handleSelectionChange.bind(this)}>
                       {this.sortOptions.map((option) => (
                           <option value={option.value}>{option.label}</option>
