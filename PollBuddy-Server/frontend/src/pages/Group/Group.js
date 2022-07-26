@@ -1,4 +1,4 @@
-import React, {Component, useState} from "react";
+import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 import GroupSettings from "../../components/GroupSettings/GroupSettings";
@@ -152,7 +152,7 @@ class Group extends Component {
                     Sort by
                     <select value={this.state.selected} onChange={this.handleSelectionChange.bind(this)}>
                       {this.sortOptions.map((option) => (
-                          <option value={option.value}>{option.label}</option>
+                        <option value={option.value}>{option.label}</option>
                       ))}
                     </select>
                   </label>
@@ -160,7 +160,7 @@ class Group extends Component {
               </div>
 
               {this.state.polls.length === 0 ? (
-                <p>You don't have any polls available at this time.<br/> <br/></p>
+                <p style={{margin: "auto"}}>You don't have any polls available at this time.<br/> <br/></p>
               ) : (
                 <React.Fragment>
                   {this.state.polls.map((poll, index) => (
