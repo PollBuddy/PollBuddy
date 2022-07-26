@@ -4,7 +4,7 @@ import {MDBContainer} from "mdbreact";
 import GroupSettings from "../../components/GroupSettings/GroupSettings";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
-import "./Group.scss"
+import "./Group.scss";
 class Group extends Component {
   constructor(props) {
     super(props);
@@ -18,14 +18,14 @@ class Group extends Component {
       originalPolls: [],
       doneLoading: false,
       showError: null,
-      selected: 'createTime'
+      selected: "createTime"
     };
 
     this.sortOptions = [
       { label: "Create Time", value: "creatTime" },
       { label: "Open Time", value: "openTime"},
       { label: "Close Time", value: "closeTime"}
-    ]
+    ];
   }
   componentDidMount() {
     this.props.updateTitle(this.state.name);
@@ -80,30 +80,28 @@ class Group extends Component {
   };
 
   sortByCreateTime() {
-    var oriPolls = this.state.originalPolls;
+    const oriPolls = this.state.originalPolls;
     this.setState( {polls: oriPolls} );
   }
 
   sortByOpenTime() {
-    var sortedPolls = JSON.parse(JSON.stringify(this.state.polls)).sort((p1, p2) => new Date(p1.openTime).getTime() - new Date(p2.openTime).getTime());
+    const sortedPolls = JSON.parse(JSON.stringify(this.state.polls)).sort((p1, p2) => new Date(p1.openTime).getTime() - new Date(p2.openTime).getTime());
     this.setState({polls: sortedPolls});
   }
 
   sortByCloseTime() {
-    var sortedPolls = JSON.parse(JSON.stringify(this.state.polls)).sort((p1, p2) => new Date(p1.closeTime).getTime() - new Date(p2.closeTime).getTime());
+    const sortedPolls = JSON.parse(JSON.stringify(this.state.polls)).sort((p1, p2) => new Date(p1.closeTime).getTime() - new Date(p2.closeTime).getTime());
     this.setState({polls: sortedPolls});
   }
   
   handleSelectionChange(e) {
     const select= e.target.value;
     this.setState({selected: select});
-    if (select == "creatTime") {
+    if (select === "creatTime") {
       this.sortByCreateTime();
-    }
-    else if (select == "openTime") {
+    } else if (select === "openTime") {
       this.sortByOpenTime();
-    }
-    else if (select == "closeTime") {
+    } else if (select === "closeTime") {
       this.sortByCloseTime();
     }
   }  
