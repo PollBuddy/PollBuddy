@@ -88,7 +88,7 @@ export default class QuestionResults extends Component {
               },
               ticks: {
                 beginAtZero: true,
-                fontColor: "white",
+                fontColor: "black",
                 fontSize: 20,
                 fontFamily: "Baloo 2",
                 precision: 0,
