@@ -20,4 +20,4 @@
 # them with the poll code.
 # You can get this poll code from the url in your group or edit page...
 # HERE: https://pollbuddy.app/polls/-->62a392e5e6344863715ee44f<--
-#                                              ^    Poll Code here    ^
+#        send this to your students->^    Poll Code here    ^
