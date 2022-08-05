@@ -117,6 +117,11 @@ class AccountInfo extends Component {
       [id]: value
     });
   }
+// Updates that shows the missing buttons for the password 
+  showPassword() {
+    this.setState(state => ({showPassword: !state.showPassword}));
+    this.setState(this.showPassword);
+  }
 
   saveChanges(){
     const schema = Joi.object({
@@ -224,9 +229,7 @@ class AccountInfo extends Component {
     this.setState({done: true});
   }
 
-  showPassword() {
-    this.setState(state => ({showPassword: !state.showPassword}));
-  }
+ 
 
   handleLogOutEverywhere(){
     this.setState(state => ({
