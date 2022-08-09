@@ -8,7 +8,7 @@ import LoginWithPollBuddy from "./pages/LoginWithPollBuddy/LoginWithPollBuddy";
 import GroupCreation from "./pages/GroupCreation/GroupCreation";
 import GroupJoin from "./pages/GroupJoin/GroupJoin";
 import GroupEdit from "./pages/GroupEdit/GroupEdit";
-import GroupInvite from "./pages/Invite/Invitepage"
+import GroupInvite from "./pages/Invite/Invite"
 import Group from "./pages/Group/Group";
 import PollEditor from "./pages/PollEditor/PollEditor";
 import Notfound from "./pages/Error404/Error404";

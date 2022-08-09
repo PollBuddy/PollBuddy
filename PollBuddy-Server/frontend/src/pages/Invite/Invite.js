@@ -6,7 +6,7 @@ import GroupInvite from "./Invite.md";
 
 
 
-export default class GroupInvite extends Component {
+export default class Invite extends Component {
 
     constructor(props) {
       super(props);
