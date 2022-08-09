@@ -8,6 +8,7 @@ import LoginWithPollBuddy from "./pages/LoginWithPollBuddy/LoginWithPollBuddy";
 import GroupCreation from "./pages/GroupCreation/GroupCreation";
 import GroupJoin from "./pages/GroupJoin/GroupJoin";
 import GroupEdit from "./pages/GroupEdit/GroupEdit";
+import GroupInvite from "./pages/Invite/Invitepage"
 import Group from "./pages/Group/Group";
 import PollEditor from "./pages/PollEditor/PollEditor";
 import Notfound from "./pages/Error404/Error404";
@@ -115,6 +116,9 @@ export default class App extends React.Component {
 
             {/* Group Edit Page */}
             <Route exact path="/groups/:groupID/edit" element={<PrivateComponent state = {true} element={<GroupEdit updateTitle={this.updateTitle} />}/>} />
+
+            {/* Group Invite Page */}
+            <Route exact path="/groups/:groupID/Invite" element={<PrivateComponent state = {true} element={<GroupInvite updateTitle={this.updateTitle} />}/>} />
 
             {/* Group Join Page */}
             <Route exact path="/groups/join" element={<PrivateComponent state = {true} element={<GroupJoin updateTitle={this.updateTitle} />}/>}/>
