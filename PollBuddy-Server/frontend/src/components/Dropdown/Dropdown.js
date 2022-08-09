@@ -80,11 +80,10 @@ function LoggedInMenu(props) {
       <a href="/account">Account</a>
       <a href="/code">Enter Poll Code</a>
       <a href="/groups">Groups</a>
-      <a href="polls/history">History</a>
-      <a href="/quickstartguide">Start Guide</a>
-      <a href="#" id="logout">Logout</a> 
+      <a href="/guide">Quick Start Guide</a>
+      <a href="#" id="logout">Logout</a>
     </div>
-    //Logout routes to '/' in the event listeners above
+    // Logout routes to '/' in the event listeners above
   );
 }
 
@@ -95,6 +94,7 @@ function LoggedOutMenu(props) {
     <div className = "Dropdown" ref={wrapperRef}>
       <a href="/login">Login</a>
       <a href="/register">Register</a>
+      <a href="/guide">Quick Start Guide</a>
       <a href="/code">Enter Poll Code</a>
     </div>
   );

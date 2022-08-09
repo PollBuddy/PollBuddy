@@ -95,7 +95,7 @@ export default class App extends React.Component {
             <Route exact path="/privacy" element={<Privacy updateTitle={this.updateTitle} />} />
 
             {/* Quick Start Guide */}
-            <Route exact path="/quickstartguide" element={<QuickStartGuide updateTitle={this.updateTitle} />}/>
+            <Route exact path="/guide" element={<QuickStartGuide updateTitle={this.updateTitle} />}/>
 
 
             {/* Enter Poll Code Page */}
