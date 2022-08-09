@@ -64,38 +64,35 @@ export default class QuestionResults extends Component {
         responsive: true,
         maintainAspectRatio: true,
         scales: {
-          xAxes: [
-            {
-              barPercentage: 1,
-              gridLines: {
-                gridLines: {
-                  display: true,
-                  color: "rgba(255, 255, 255, 0.9)"
-                }
-              },
-              ticks: {
-                fontColor: "white",
-                fontSize: 20,
-                fontFamily: "Baloo 2",
-              }
-            }
-          ],
-          yAxes: [
-            {
+          xAxes: {
+            barPercentage: 1,
+            gridLines: {
               gridLines: {
                 display: true,
                 color: "rgba(255, 255, 255, 0.9)"
-              },
-              ticks: {
-                beginAtZero: true,
-                fontColor: "black",
-                fontSize: 20,
-                fontFamily: "Baloo 2",
-                precision: 0,
-                stepSize: 1
               }
+            },
+            ticks: {
+              fontColor: "white",
+              fontSize: 20,
+              fontFamily: "Baloo 2",
             }
-          ]
+          },
+          yAxes: {
+            gridLines: {
+              display: true,
+              color: "rgba(255, 255, 255, 0.9)"
+            },
+            ticks: {
+              beginAtZero: true,
+              fontColor: "white",
+              fontSize: 20,
+              fontFamily: "Baloo 2",
+              precision: 0,
+              stepSize: 1,
+              min: 0
+            }
+          }
         }
       }
     };
