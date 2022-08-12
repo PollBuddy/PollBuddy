@@ -36,11 +36,11 @@ class GroupSettings extends Component{
 
       if (response.status == 200) {
         this.props.router.navigate("/groups");
-        return
+        return;
       }
     }
     this.setState({showConfirm: false});
-  };
+  }
 
   async handleDeleteGroup(deleteGroup) {
     if (deleteGroup) {
@@ -50,11 +50,11 @@ class GroupSettings extends Component{
 
       if (response.status == 200) {
         this.props.router.navigate("/groups");
-        return
+        return;
       }
     }
     this.setState({showConfirm: false});
-  };
+  }
 
   render(){
     if (this.state.isMember) {
