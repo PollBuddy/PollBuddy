@@ -98,6 +98,11 @@ class GroupSettings extends Component{
               <input onClick={this.handleDeleteGroup.bind(this, true)} className="button float-right" type="submit" value="Yes"/>
             </div>
           </Popup3>
+          <button style={{width: "17em"}}
+            className="button"
+            onClick={display.this.getGroupCode}
+          >Get Invite Code
+          </button>
         </MDBContainer>
       );
     }
