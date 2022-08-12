@@ -10,7 +10,6 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import { purple } from '@mui/material/colors';
 import {createTheme, ThemeProvider} from "@mui/material";
-import {Link} from "react-router-dom";
 
 class PollEditor extends Component {
   constructor(props) {
@@ -389,22 +388,6 @@ class PollEditor extends Component {
                   >
                     Delete Poll
                   </button>
-                </div>
-                <div className={"pollButtons"}>
-                  <Link to={"/polls/" + this.state.pollID + "/view"} className="button pollButton">
-                    Open viewer
-                  </Link>
-                </div>
-                <div className={"pollButtons"}>
-                  <Link to={"/polls/" + this.state.pollID + "/results"} className="button pollButton">
-                    Open results graph
-                  </Link>
-                  <a
-                    id="downloadBtn" className="button pollButton"
-                    href={process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/csv"}
-                  >
-                    Download results CSV
-                  </a>
                 </div>
               </MDBContainer>
               <MDBContainer className="Poll_Editor_box box">

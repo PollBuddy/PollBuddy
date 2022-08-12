@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const bson = require("bson");
 const bcrypt = require("bcrypt");
 
 const mongoConnection = require("../modules/mongoConnection.js");
@@ -97,6 +98,7 @@ const getUserGroups = async function(userID) {
 
 
 const editUser = async function(userID, jsonContent) {
+  let idCode;
   try {
     const user = await getUserInternal(userID);
     if (!user) { return httpCodes.BadRequest(); }

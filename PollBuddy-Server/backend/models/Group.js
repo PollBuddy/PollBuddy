@@ -1,9 +1,11 @@
 const Joi = require("joi");
-const { createModel } = require("../modules/utils");
+const bson = require("bson");
+const { createResponse, getResultErrors, isEmpty, createModel } = require("../modules/utils");
 const mongoConnection = require("../modules/mongoConnection.js");
-const { httpCodes } = require("../modules/httpCodes.js");
-const {getGroupInternal, getPollInternal, getUserInternal, isGroupAdminByGroup, isGroupUserByGroup,
-  isGroupMemberByGroup } = require("../modules/modelUtils");
+const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
+const {getGroupInternal, isGroupMember, isGroupAdmin, getPollInternal, getUserInternal, isGroupAdminByGroup,
+  isGroupUserByGroup, isGroupMemberByGroup
+} = require("../modules/modelUtils");
 const {objectID} = require("../modules/validatorUtils");
 
 const validators = {

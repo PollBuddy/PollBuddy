@@ -6,9 +6,8 @@ const mongoConnection = require("../modules/mongoConnection.js");
 const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
 const rpi = require("../modules/rpi");
 
-const { isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
-const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups,
-  editUser, userParamsValidator } = require("../models/User.js");
+const { createResponse, validateID, isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
+const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups, createUser, editUser, userParamsValidator } = require("../models/User.js");
 const {paramValidator} = require("../modules/validatorUtils");
 
 const {send} = require("../modules/email.js");
@@ -674,7 +673,6 @@ router.post("/me/groups", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-// eslint-disable-next-line no-unused-vars
 router.get("/forgotpassword/",function (req,res) {
   return sendResponse(res,httpCodes.MethodNotAllowed("GET is not available for this route."));
 });
@@ -688,7 +686,6 @@ router.get("/forgotpassword/",function (req,res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-// eslint-disable-next-line no-unused-vars
 router.post("/forgotpassword/",function (req,res) {
   return sendResponse(res,httpCodes.MethodNotAllowed("POST is not available for this route."));
 });
@@ -702,7 +699,6 @@ router.post("/forgotpassword/",function (req,res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-// eslint-disable-next-line no-unused-vars
 router.get("/forgotpassword/submit",function (req,res) {
   return sendResponse(res,httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
@@ -721,19 +717,19 @@ router.get("/forgotpassword/submit",function (req,res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.post("/forgotpassword/submit/",function (req, res) {
+router.post("/forgotpassword/submit/",function (req,res) {
   let email = req.body.email;
   const username = req.body.username;
 
   let document;
 
-  if (email) {
+  if(email){
     email = email.toLowerCase();
-    document = mongoConnection.getDB().collection("users").findOne({"Email": email});
-  } else if(username){
-    document = mongoConnection.getDB().collection("users").findOne({"UserName": username});
-  } else{
-    return sendResponse(res, httpCodes.InternalServerError("Neither username nor email provided."));
+    document = mongoConnection.getDB().collection("users").findOne({"Email":email});
+  }else if(username){
+    document = mongoConnection.getDB().collection("users").findOne({"UserName":username});
+  }else{
+    return sendResponse(res,httpCodes.InternalServerError("Neither username nor email provided."));
   }
 
   document
@@ -749,32 +745,32 @@ router.post("/forgotpassword/submit/",function (req, res) {
           let expireTime = new Date();
           expireTime.setHours(expireTime.getHours()+1);
 
-          mongoConnection.getDB().collection("users").updateOne({"_id": result._id},{ "$set": { "ResetPasswordToken" : key, "ResetPasswordTokenExpiration" : expireTime } }, function (err) {
+          mongoConnection.getDB().collection("users").updateOne({"_id": result._id},{ "$set": { "ResetPasswordToken" : key, "ResetPasswordTokenExpiration" : expireTime } },function (err, response) {
             if (err) {
-              return sendResponse(res, httpCodes.InternalServerError("Could not update user data."));
+              return sendResponse(res,httpCodes.InternalServerError("Could not update user data."));
             } else{
-              let emailBody =
+              let emailBody = 
               "Hello, " + result.UserName + "\n"
               +"\n You are receiving this email because a password reset request was sent to this account."
               +"\n\n If you requested a password reset, follow the link below:"
               +"\n  " + process.env.FRONTEND_URL + "/login/reset"
               +"\n Your password reset token is: " + key
               +"\n\n If you did not make a password reset request, you can safely ignore this message.\n\n";
-
-              send(result.Email,"Poll Buddy Password Reset",emailBody,function (success) {
+              
+              send(result.Email,"Poll Buddy Password Reset",emailBody,function (success,messages) {
                 if (success){
-                  return sendResponse(res, httpCodes.Ok());
+                  return sendResponse(res,httpCodes.Ok());
                 }else{
-                  return sendResponse(res, httpCodes.InternalServerError("Could not send email."));
+                  return sendResponse(res,httpCodes.InternalServerError("Could not send email."));
                 }
               });
             }
           });
         }else{
-          return sendResponse(res, httpCodes.InternalServerError("Could not find user."));
+          return sendResponse(res,httpCodes.InternalServerError("Could not find user."));
         }
       },
-      () => {return sendResponse(res, httpCodes.InternalServerError("Could not find user."));}
+      err => {return sendResponse(res,httpCodes.InternalServerError("Could not find user."));}
     );
 });
 
@@ -787,7 +783,6 @@ router.post("/forgotpassword/submit/",function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-// eslint-disable-next-line no-unused-vars
 router.get("/forgotpassword/validate",function (req,res) {
   return sendResponse(res,httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
@@ -797,7 +792,7 @@ router.get("/forgotpassword/validate",function (req,res) {
  * This is the predicate determining if a user can reset their password at the given moment
  * @getdata {void} None
  * @postdata {void} resetPasswordToken : String , username : String
- * @returns {void} on success : Status 200
+ * @returns {void} on success : Status 200 
  * On failure : Status 500 { "result": "failure", "error": "Token is invalid (token expired)"}
  *              Status 500 { "result": "failure", "error": "Token is invalid (user with token not found)"}
  * @name backend/users/forgotpassword_POST
@@ -830,7 +825,6 @@ router.post("/forgotpassword/validate",function (req,res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-// eslint-disable-next-line no-unused-vars
 router.get("/forgotpassword/change",function (req,res) {
   return sendResponse(res.httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
@@ -859,8 +853,7 @@ router.post("/forgotpassword/change",function (req,res) {
     .test(newPassword);
 
   if(newPasswordValid){
-    // eslint-disable-next-line no-unused-vars
-    mongoConnection.getDB().collection("users").findOne({"UserName":username, "ResetPasswordToken":token}, function (searchError, searchResult){
+    mongoConnection.getDB().collection("users").findOne({"UserName":username,"ResetPasswordToken":token},function (searchError,searchResult){
       if(searchResult){
         let expiration = searchResult.ResetPasswordTokenExpiration;
         let currentDate = new Date();
@@ -869,7 +862,7 @@ router.post("/forgotpassword/change",function (req,res) {
             if(hashError){
               return sendResponse(res,httpCodes.InternalServerError("Could not hash password."));
             }else{
-              mongoConnection.getDB().collection("users").updateOne({"_id":searchResult._id},{"$set":{"Password":hash},"$unset":{"ResetPasswordTokenExpiration":"","ResetPasswordToken":""}},function(updateError){
+              mongoConnection.getDB().collection("users").updateOne({"_id":searchResult._id},{"$set":{"Password":hash},"$unset":{"ResetPasswordTokenExpiration":"","ResetPasswordToken":""}},function(updateError,updateResult){
                 if(updateError){
                   return sendResponse(res,httpCodes.InternalServerError("Could not update password."));
                 }else{
@@ -877,8 +870,8 @@ router.post("/forgotpassword/change",function (req,res) {
                 }
               });
             }
-          });
-
+          }); 
+          
         }else{
           return sendResponse(res,httpCodes.InternalServerError("Token expired."));
         }

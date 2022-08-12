@@ -12,7 +12,6 @@ import Group from "./pages/Group/Group";
 import PollEditor from "./pages/PollEditor/PollEditor";
 import Notfound from "./pages/Error404/Error404";
 import FAQ from "./pages/FAQ/FAQ";
-import QuickStartGuide from "./pages/QuickStartGuide/QuickStartGuide";
 import AccountInfo from "./pages/AccountInfo/AccountInfo";
 import Privacy from "./pages/Privacy/Privacy";
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
@@ -93,10 +92,6 @@ export default class App extends React.Component {
 
             {/* Data Privacy Page */}
             <Route exact path="/privacy" element={<Privacy updateTitle={this.updateTitle} />} />
-
-            {/* Quick Start Guide */}
-            <Route exact path="/guide" element={<QuickStartGuide updateTitle={this.updateTitle} />}/>
-
 
             {/* Enter Poll Code Page */}
             <Route exact path="/code" element={<Code updateTitle={this.updateTitle} />} />

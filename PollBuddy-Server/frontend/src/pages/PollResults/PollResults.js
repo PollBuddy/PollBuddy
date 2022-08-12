@@ -15,6 +15,7 @@ class PollResults extends Component {
       doneLoading: false,
       questions: {},
       currentQuestion: 0,
+      
     };
   }
 
@@ -94,12 +95,6 @@ class PollResults extends Component {
               );
             }
           })}
-          <a
-            id="downloadBtn" className="button"
-            href={process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.router.params.pollID + "/csv"}
-          >
-            Download full results CSV
-          </a>
         </MDBContainer>
       );
     }
