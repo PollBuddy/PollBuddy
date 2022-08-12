@@ -1,13 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
-const Joi = require("joi");
 const {createResponse, validateID, checkPollPublic, isLoggedIn, isDevelopmentMode, getResultErrors, isEmpty} = require("../modules/utils");
 const {sendResponse, httpCodes} = require("../modules/httpCodes.js");
 const {createPoll, getPoll, editPoll, createPollValidator, editPollValidator, createQuestionValidator, createQuestion,
-  editQuestionValidator, editQuestion, submitQuestionValidator, submitQuestion, getPollResults, deletePoll, pollParamsValidator
-} = require("../models/Poll");
+  editQuestionValidator, editQuestion, submitQuestionValidator, submitQuestion, getPollResults, getPollResultsCSV,
+  deletePoll, pollParamsValidator} = require("../models/Poll");
 const {paramValidator} = require("../modules/validatorUtils");
+const {Parser} = require("json2csv");
+const {getPollInternal} = require("../modules/modelUtils");
+const sanitize = require("sanitize-filename");
+
 
 // This file handles /api/polls URLs
 
@@ -112,6 +115,7 @@ router.get("/:id/submit", function (req, res) {
 });
 
 
+// eslint-disable-next-line no-unused-vars
 router.get("/:id/createQuestion", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
@@ -125,6 +129,7 @@ router.post("/:id/createQuestion", isLoggedIn, paramValidator(pollParamsValidato
   return sendResponse(res, response);
 });
 
+// eslint-disable-next-line no-unused-vars
 router.get("/:id/editQuestion", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
@@ -140,6 +145,7 @@ router.post("/:id/editQuestion", isLoggedIn, paramValidator(pollParamsValidator)
   return sendResponse(res, response);
 });
 
+// eslint-disable-next-line no-unused-vars
 router.get("/:id/submitQuestion", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
@@ -159,40 +165,6 @@ router.post("/:id/submitQuestion", paramValidator(pollParamsValidator), async (r
 });
 
 /**
- * Get the answers of a poll, using its specified id
- * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-pollAnswers
- * @property {string} id - ID of the poll.
- * @throws 500 - An error occurred while communicating with the database.
- * @returns {Poll} response
- * @param {string} path - Express path.
- * @name GET api/polls/pollAnswers
- * @param {function} callback - Function handler for endpoint.
- */
-router.get("/pollAnswers", function (req, res) {
-  let id = new mongoConnection.getMongo().ObjectID(req.params.id);
-  // eslint-disable-next-line no-unused-vars
-  mongoConnection.getDB().collection("poll_answers").deleteOne({"_id": id}, function (err, _res) {
-    if (err) {
-      return res.status(500).send(createResponse("", err)); // TODO: Error message
-    }
-  });
-  return res.status(200).send(createResponse("", "")); // TODO: Success message;
-});
-
-/**
- * This route is not used.
- * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-pollAnswers
- * @throws 405 - Route not used
- * @name POST api/polls/pollAnswers
- * @param {string} path - Express path.
- * @param {function} callback - Function handler for endpoint.
- */
-// eslint-disable-next-line no-unused-vars
-router.post("/pollAnswers", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
-});
-
-/**
  * This route is not used.
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-iddelete
  * @throws 405 - Route not used
@@ -200,6 +172,7 @@ router.post("/pollAnswers", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.get("/:id/delete", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
@@ -283,6 +256,7 @@ router.get("/:id", paramValidator(pollParamsValidator), async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/:id", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
@@ -341,8 +315,7 @@ router.post("/:id/view", function (req, res) {
 });
 
 /**
- * Calculate and output the correct results or error-handling messages
- * for the poll answers
+ * Calculate and output the correct results or error-handling messages for the poll answers
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-idresults
  * @returns {Poll} results
  * @throws 400 - Invalid ObjectID.
@@ -364,7 +337,48 @@ router.get("/:id/results", isLoggedIn, paramValidator(pollParamsValidator), asyn
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+// eslint-disable-next-line no-unused-vars
 router.post("/:id/results", async (req, res) => {
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
+});
+
+/**
+ * Calculate and output the correct results or error-handling messages for the poll answers, but in CSV format
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-idcsv
+ * @returns {Poll} results
+ * @throws 400 - Invalid ObjectID.
+ * @throws 500 - ObjectID could not be found in polls or poll_answers.
+ * @name GET api/polls/{id}/csv
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+router.get("/:id/csv", isLoggedIn, paramValidator(pollParamsValidator), async (req, res) => {
+
+  let data = await getPollResultsCSV(req.session.userData.userID, req.params.id);
+  let poll = await getPollInternal(req.params.id);
+
+  // Set up the static fields
+  const fields = ["QuestionNumber", "QuestionText", "UserName", "Email", "FirstName", "LastName", "SchoolAffiliation", "AnswerText", "Correct"];
+
+  const opts = { fields };
+
+  const json2csv = new Parser(opts);
+  const csv = json2csv.parse(data);
+  res.header("Content-Type", "text/csv");
+  res.attachment(sanitize("Poll Results for " + poll.Title +  " - Poll Buddy.csv"));
+  return res.send(csv);
+});
+
+/**
+ * This route is not used.
+ * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-idresults
+ * @throws 405 - Route not used
+ * @name POST api/polls/{id}/csv
+ * @param {string} path - Express path.
+ * @param {function} callback - Function handler for endpoint.
+ */
+// eslint-disable-next-line no-unused-vars
+router.post("/:id/csv", async (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 

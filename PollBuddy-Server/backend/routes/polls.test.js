@@ -1,14 +1,13 @@
 require("dotenv").config();
 const express = require("express");
 const supertest = require("supertest");
-const bcrypt = require("bcrypt");
 const mongo = require("mongodb");
 const MongoClient = mongo.MongoClient;
 
-var mongoConnection = require("../modules/mongoConnection.js");
-var pollsRouter = require("./polls");
+const mongoConnection = require("../modules/mongoConnection.js");
+const pollsRouter = require("./polls");
 
-var { testUser, testUser2, testGroup, createUser, createGroup } = require("../modules/testingUtils.js");
+const {createUser, createGroup} = require("../modules/testingUtils.js");
 const {createPoll, testPoll, testPoll2, sampleQuestion, sampleQuestion2} = require("../modules/testingUtils");
 const bson = require("bson");
 
@@ -17,6 +16,7 @@ let session = {};
 
 mockApp.use(express.json());
 mockApp.use(express.urlencoded({ extended: false }));
+// eslint-disable-next-line no-unused-vars
 mockApp.use(function (req, res, next) {
   req.session = session;
   next();
@@ -150,7 +150,7 @@ describe("/api/groups/:pollID", () => {
 
 
 describe("/api/polls/:id/results", () => {
-  
+
   it("POST: route unavailable", async () => {
     await app.post("/api/polls/0/results")
       .expect(405)
@@ -184,10 +184,10 @@ describe("/api/polls/:id/results", () => {
             answers: [{answer: true}]
           })
           .expect(200)
-          .then(async (response) => {
+          .then(async () => {
             await app.get("/api/polls/" + poll.insertedId + "/results")
               .expect(200)
-              .then(async (response) => {
+              .then(async () => {
                 expect(response.body.result).toBe("success");
                 expect(response.body.data.title).toBe(testPoll.Title);
                 expect(response.body.data.description).toBe(testPoll.Description);
@@ -581,5 +581,5 @@ describe("/api/polls/:pollID/editQuestion", () => {
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });
-  });  
+  });
 });

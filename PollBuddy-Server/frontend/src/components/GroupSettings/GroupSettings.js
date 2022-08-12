@@ -56,6 +56,12 @@ class GroupSettings extends Component{
     this.setState({showConfirm: false});
   }
 
+  getGroupCode = async () => {
+    var code;
+    code = this.state.id;
+    return code;
+  }
+
   render(){
     if (this.state.isMember) {
       return (
@@ -91,6 +97,7 @@ class GroupSettings extends Component{
           <button style={{width:"17em"}} className="button" onClick={this.handleLeaveConfirm}>
             Delete this Group
           </button>
+
           <Popup3 isOpen={this.state.showConfirm}>
             <p>Are you sure you want to delete this group?</p>
             <div>
@@ -98,6 +105,13 @@ class GroupSettings extends Component{
               <input onClick={this.handleDeleteGroup.bind(this, true)} className="button float-right" type="submit" value="Yes"/>
             </div>
           </Popup3>
+
+          <button style={{width: "17em"}}
+            className="button"
+            onClick={display.this.getGroupCode}
+          >Get Invite Code
+          </button>
+          
         </MDBContainer>
       );
     }

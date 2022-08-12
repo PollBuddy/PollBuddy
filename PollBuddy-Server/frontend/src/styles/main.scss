@@ -189,7 +189,7 @@ textarea {
 }
 
 .two-box:not(:first-child), .box:not(:first-child) {
-  margin: var(--box-margin) 0 0;
+  margin: var(--box-margin) 0;
 }
 
 .two-box .box {
@@ -315,20 +315,24 @@ a {
   font-style: italic;
 }
 
+a.button {
+ font-style: normal;
+}
+
 a:hover {
-  color: var(--white-most-text) !important;
-  text-decoration: underline;
+color: var(--white-most-text) !important;
+text-decoration: underline;
 }
 
 ::selection {
-  color: var(--darkest-purple-header-color);
-  background: var(--light-purple-logo-text);
+color: var(--darkest-purple-header-color);
+background: var(--light-purple-logo-text);
 }
 
 .float-right {
-  float: right;
+float: right;
 }
 
 .float-left {
-  float: left;
+float: left;
 }
