@@ -29,12 +29,8 @@ class GroupSettings extends Component{
     this.createNewPoll
   }
 
-  handleLeaveGroup = async () => {
-    await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/leave", {
-      method: "POST",
-    });
-    this.props.router.navigate("/groups");
-  };
+  
+
 
   handleDeleteGroup = async () => {
     await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/delete", {
@@ -42,6 +38,14 @@ class GroupSettings extends Component{
     });
     this.props.router.navigate("/groups");
   };
+
+  handleLeaveGroup = async () => {
+    await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/leave", {
+      method: "POST",
+    });
+    this.props.router.navigate("/groups");
+  };
+
 
   getGroupCode = async () => {
     var code;
