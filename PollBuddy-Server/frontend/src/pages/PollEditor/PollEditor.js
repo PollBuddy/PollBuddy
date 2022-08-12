@@ -84,6 +84,16 @@ class PollEditor extends Component {
     }));
   }
 
+  createQuestion() {
+    this.setState(prevState => ({
+      //...prevState,
+      askedQuestions: [
+        ...prevState.askedQuestions,
+        prevState.questions[prevState.questionDispatcherIndex]
+      ]
+    }));
+  }
+
   onInput = (e) => {
     this.setState({
       [e.target.name]: e.target.value
