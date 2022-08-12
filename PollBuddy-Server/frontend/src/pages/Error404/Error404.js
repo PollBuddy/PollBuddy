@@ -18,5 +18,6 @@ export default class Error404 extends Component {
       </MDBContainer>
 
     );
+    
   }
 }

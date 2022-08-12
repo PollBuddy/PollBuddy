@@ -24,6 +24,11 @@ class GroupSettings extends Component{
     this.props.router.navigate("/polls/new?groupID=" + this.state.id);
   };
 
+  if(getGroupCode)
+  {
+    this.createNewPoll
+  }
+
   handleLeaveGroup = async () => {
     await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/leave", {
       method: "POST",
