@@ -10,3 +10,17 @@ ReactDOM.render(<App />, document.getElementById("root"));
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+
+function registerValidSW(swUrl, config) {
+    navigator.serviceWorker
+      .register(swUrl)
+      .then(registration => {
+        registration.onupdatefound = () => {
+          const installingWorker = registration.installing;
+          if (installingWorker == null) {
+            return;
+          }
+        }
+    }
+
