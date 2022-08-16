@@ -20,21 +20,7 @@ class Group extends Component {
     };
   }
 
- GroupSettings() {
-    constructor(props) {
-      super(props);
-      this.state = {
-        id: props.router.params.groupID,
-        name: "",
-        description: "",
-        isMember: false,
-        isAdmin: false,
-        polls: [],
-        doneLoading: true,
-        showError: null
-      };
-    }
-
+ 
 
 
 
@@ -60,6 +46,7 @@ class Group extends Component {
             this.setState({
               showError: true,
             });
+            
           }
         } else {
           this.setState({
@@ -88,6 +75,7 @@ class Group extends Component {
     } else if(this.state.isMember) {
       this.props.router.navigate("/polls/" + pollID + "/view");
     }
+    
   };
 
   render() {
