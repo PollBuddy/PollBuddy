@@ -15,10 +15,29 @@ class Group extends Component {
       isMember: false,
       isAdmin: false,
       polls: [],
-      doneLoading: false,
+      doneLoading: true,
       showError: null
     };
   }
+
+ GroupSettings() {
+    constructor(props) {
+      super(props);
+      this.state = {
+        id: props.router.params.groupID,
+        name: "",
+        description: "",
+        isMember: false,
+        isAdmin: false,
+        polls: [],
+        doneLoading: true,
+        showError: null
+      };
+    }
+
+
+
+
 
   componentDidMount() {
     this.props.updateTitle(this.state.name);
