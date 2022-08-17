@@ -9,10 +9,13 @@ class LoginDefault extends Component {
     super(props);
     this.state = {};
   }
-
+  componentDidMount(){
+    this.props.updateTitle("Log Out");
+  }
   componentDidMount() {
     this.props.updateTitle("Log in");
   }
+
 
   render() {
     return (
