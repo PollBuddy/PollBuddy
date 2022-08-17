@@ -52,6 +52,9 @@ class Group extends Component {
     fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/polls", {
       method: "GET"
     })
+    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/polls", {
+      method: "Pull"
+    })
       .then((response) => response.json())
       .then((response) => {
         console.log(response);
