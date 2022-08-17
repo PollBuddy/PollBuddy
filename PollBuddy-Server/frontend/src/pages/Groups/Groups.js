@@ -38,7 +38,12 @@ class Groups extends Component {
       this.setState({ leaveGroupButtonText: "Exit Leave Group" });
     } else {
       this.setState({ leaveGroupButtonText: "Leave Group" });
+    } else {
+      this.setState({ leaveGroupButtonText: "Group" });
     }
+    }
+
+    
   };
 
   render() {
