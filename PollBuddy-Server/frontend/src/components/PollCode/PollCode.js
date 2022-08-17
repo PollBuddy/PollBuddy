@@ -24,6 +24,14 @@ export default class PollCode extends Component {
     const validCodeRegex = RegExp(/^[a-zA-z0-9]{6}$/);
     this.setState({valid: validCodeRegex.test(code)});
   }
+  handleCodeChange(event) {
+    // gets code string from input
+    const code = event.target.value;
+    this.setState({code: code});
+
+    const validCodeRegex = RegExp(/^[a-zA-z0-9]{6}$/);
+    this.setState({valid: validCodeRegex.test(code)});
+  }
 
   submitCode() {
     // set error message if input is invalid
