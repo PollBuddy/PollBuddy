@@ -14,10 +14,10 @@ export default class Homepage extends Component {
     errMsg: ""
   };
 
-
   componentDidMount() {
     this.props.updateTitle("Home");
   }
+  
 
   render() {
     const isLoggedIn = localStorage.getItem("loggedIn") === "true";
@@ -56,3 +56,5 @@ export default class Homepage extends Component {
     );
   }
 }
+
+
