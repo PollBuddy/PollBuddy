@@ -70,7 +70,7 @@ export default class QuestionResults extends Component {
               gridLines: {
                 gridLines: {
                   display: true,
-                  color: "rgba(0, 0, 0, 0.99)"
+                  color: "rgba(0, 0, 0, 0.9)"
                 }
               },
               ticks: {
@@ -84,7 +84,7 @@ export default class QuestionResults extends Component {
             {
               gridLines: {
                 display: true,
-                color: "rgba(0, 0, 0, 0.99)"
+                color: "rgba(0, 0, 0, 0.9)"
               },
               ticks: {
                 beginAtZero: true,

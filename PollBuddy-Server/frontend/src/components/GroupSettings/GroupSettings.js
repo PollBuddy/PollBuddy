@@ -4,11 +4,14 @@ import {Link} from "react-router-dom";
 import "./GroupSettings.scss";
 import {withRouter} from "../PropsWrapper/PropsWrapper";
 
-class GroupSettings extends Component{
-  constructor(props) {
-    super(props);
-    this.state = this.props.state;
-  }
+
+
+  class Group
+   extends Component{
+    constructor(props) {
+      super(props);
+      this.state = this.props.state;
+    }
 
   toggleTextBox(elementId, selector, text) {
     if(document.getElementById(elementId).style.display === "block") {
