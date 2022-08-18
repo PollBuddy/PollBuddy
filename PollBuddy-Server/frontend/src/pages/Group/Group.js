@@ -75,6 +75,9 @@ class Group extends Component {
     } else if(this.state.isMember) {
       this.props.router.navigate("/polls/" + pollID + "/view");
     }
+    else if(this.state.isMember){
+      this.props.router.navigate("/polls/" + pollID + "/click");
+    }
     
   };
 
