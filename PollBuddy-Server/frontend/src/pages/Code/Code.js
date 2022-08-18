@@ -8,6 +8,9 @@ export default class Code extends Component {
   componentDidMount() {
     this.props.updateTitle("Enter Poll Code");
   }
+  Component(){
+    this.props.updateTitle("Poll Code Entered");
+  }
 
   render() {
     return (
