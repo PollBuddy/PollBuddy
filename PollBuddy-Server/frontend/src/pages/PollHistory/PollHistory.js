@@ -22,6 +22,7 @@ export default class Groups extends Component {
       {id:"3", title:"CSCI 2300 - Intro to Algorithms"},
       {id:"4", title:"CSCI 2500 - Computer Organization"},
       {id:"5", title:"CSCI 2960 - RCOS"}
+      {id:"6", title:"CSCI 2600 - Principles of Software"}
     ]
   };
 

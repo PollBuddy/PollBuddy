@@ -17,6 +17,10 @@ export default class Privacy extends Component {
     });
   }
 
+  Component(){
+    this.setState({terms:text});
+  }
+
   componentDidMount() {
     this.props.updateTitle("Privacy");
   }
