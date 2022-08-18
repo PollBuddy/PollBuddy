@@ -78,6 +78,14 @@ class Group extends Component {
     
   };
 
+  AddGroup = (pollID) => {
+    if(groupID)
+    {
+      this.AddGroup;
+    }
+  }
+  
+
   render() {
     if (this.state.showError) {
       return (

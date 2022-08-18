@@ -28,11 +28,7 @@ class PollCreation extends Component {//this class will likely need to call Grou
     };
   };
 
-  onInput = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  };
+  
 
   onSubmit = async () => {
     this.setState({showError: false});
@@ -64,6 +60,16 @@ class PollCreation extends Component {//this class will likely need to call Grou
       return this.state.showError ? <ErrorText text={"An unknown error has occurred."}/> : null;
     }
   }
+
+  onInput = (e) => {
+    this.setInterval(() => {
+      if(localStorage.getItem("loggedIn") === "true"){
+        this.setState({successfulLogin: true}); // Tell it to redirect to the next page if already logged in
+      }
+    }, interval);({
+      [e.target.name]: e.target.value
+    });
+  };
 
   render() {
     return (
