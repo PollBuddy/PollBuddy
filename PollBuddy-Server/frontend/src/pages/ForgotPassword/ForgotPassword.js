@@ -16,6 +16,9 @@ class ForgotPassword extends Component {
   componentDidMount() {
     this.props.updateTitle("Forgot Password");
   }
+  componentDidMount() {
+    this.props;
+  }
 
   requestReset(){
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/forgotpassword/submit", {

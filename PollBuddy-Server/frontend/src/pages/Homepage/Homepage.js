@@ -17,6 +17,9 @@ export default class Homepage extends Component {
   componentDidMount() {
     this.props.updateTitle("Home");
   }
+  Component(){
+    this.state.updateTitle("Group")
+  }
   
 
   render() {

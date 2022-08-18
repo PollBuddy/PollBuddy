@@ -64,6 +64,7 @@ export default class QuestionResults extends Component {
         responsive: true,
         maintainAspectRatio: true,
         scales: {
+<<<<<<< HEAD
           xAxes: [
             {
               barPercentage: 1,
@@ -92,9 +93,37 @@ export default class QuestionResults extends Component {
                 fontSize: 20,
                 fontFamily: "Baloo 2",
                 precision: 0
+=======
+          xAxes: {
+            barPercentage: 1,
+            gridLines: {
+              gridLines: {
+                display: true,
+                color: "rgba(255, 255, 255, 0.9)"
+>>>>>>> c97630b49a649fdc0e7592f132471241b526ea0a
               }
+            },
+            ticks: {
+              fontColor: "white",
+              fontSize: 20,
+              fontFamily: "Baloo 2",
             }
-          ]
+          },
+          yAxes: {
+            gridLines: {
+              display: true,
+              color: "rgba(255, 255, 255, 0.9)"
+            },
+            ticks: {
+              beginAtZero: true,
+              fontColor: "white",
+              fontSize: 20,
+              fontFamily: "Baloo 2",
+              precision: 0,
+              stepSize: 1,
+              min: 0
+            }
+          }
         }
       }
     };
