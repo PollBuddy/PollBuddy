@@ -236,14 +236,6 @@ class PollEditor extends Component {
     });
   };
 
-  addAnswer = () => {
-    this.setState({
-      currentAnswers: [...this.state.currentAnswers, {
-        text: "",
-        correct: false,
-      }]
-    });
-  };
 
   deleteAnswer = (answerIndex) => {
     let currentAnswers = [...this.state.currentAnswers];
@@ -253,6 +245,18 @@ class PollEditor extends Component {
     });
   };
 
+
+  
+  addAnswer = () => {
+    this.setState({
+      currentAnswers: [...this.state.currentAnswers, {
+        text: "",
+        correct: false,
+      }]
+    });
+  }; 
+
+  
   onAnswerInput = (e) => {
     let currentAnswers = [...this.state.currentAnswers];
     currentAnswers[parseInt(e.target.name)].text = e.target.value;
