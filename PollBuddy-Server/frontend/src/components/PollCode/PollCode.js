@@ -13,7 +13,7 @@ export default class PollCode extends Component {
     };
 
     this.handleCodeChange = this.handleCodeChange.bind(this);
-    this.submitCode = this.submitCode.bind(this);
+    
   }
 
   handleCodeChange(event) {
