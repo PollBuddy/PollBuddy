@@ -11,12 +11,9 @@ export default class PollCode extends Component {
       valid: false,
       errMsg: ""
     };
-
-    this.handleCodeChange = this.handleCodeChange.bind(this);
-    
   }
 
-  handleCodeChange(event) {
+  handleCodeChange = (event) => {
     // gets code string from input
     const code = event.target.value;
     this.setState({code: code});
@@ -25,7 +22,7 @@ export default class PollCode extends Component {
     this.setState({valid: validCodeRegex.test(code)});
   }
 
-  submitCode() {
+  submitCode = () => {
     // set error message if input is invalid
     this.setState({errMsg:
     !this.state.valid ? "Code must be 6 characters, A-Z, 0-9" : ""});

@@ -40,10 +40,6 @@ class AccountInfo extends Component {
       logOutEverywhere: false
     };
     this.changePassword = this.handleToggleClick.bind(this);
-
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleLogOutEverywhere = this.handleLogOutEverywhere.bind(this);
   }
 
 
@@ -109,7 +105,7 @@ class AccountInfo extends Component {
   }
 
   // Update the input states when inputs change
-  handleInputChange(event) {
+  handleInputChange = (event) => {
     const target = event.target;
     const value = target.value;
     const id = target.id;
@@ -228,7 +224,7 @@ class AccountInfo extends Component {
     this.setState(state => ({showPassword: !state.showPassword}));
   }
 
-  handleLogOutEverywhere(){
+  handleLogOutEverywhere = () =>{
     this.setState(state => ({
       logOutEverywhere: !state.logOutEverywhere
     }));
