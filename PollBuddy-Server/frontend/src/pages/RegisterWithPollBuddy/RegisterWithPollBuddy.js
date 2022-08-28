@@ -24,11 +24,9 @@ export default class RegisterWithPollBuddy extends Component {
       registrationSuccessful: false,
       showPassword: false
     };
-
-    this.showPassword = this.showPassword.bind(this);
   }
 
-  showPassword() {
+  showPassword = () => {
     this.setState({
       showPassword: !this.state.showPassword
     });
@@ -38,7 +36,7 @@ export default class RegisterWithPollBuddy extends Component {
     this.props.updateTitle("Register with Poll Buddy");
   }
 
-  handleRegister() {
+  handleRegister = () => {
     // do input validation
     const schema = Joi.object({
       username: Joi.string()
@@ -111,7 +109,6 @@ export default class RegisterWithPollBuddy extends Component {
   }
 
   render() {
-    this.handleRegister = this.handleRegister.bind(this);
 
     if(this.state.registrationSuccessful) {
       return (

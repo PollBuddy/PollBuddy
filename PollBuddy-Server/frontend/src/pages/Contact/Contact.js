@@ -32,13 +32,11 @@ export default class Contact extends Component {
     };
   }
 
-  handleSendTicket() {
+  handleSendTicket = () => {
     this.setState({ formUp: false, done : true });
   }
 
   render() {
-    this.handleSendTicket = this.handleSendTicket.bind(this);
-
     return(
       <MDBContainer fluid className="page">
         <MDBContainer className = "box">

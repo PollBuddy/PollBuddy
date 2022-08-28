@@ -24,7 +24,7 @@ class GroupJoin extends Component {
   handleChange = (e) => {
     this.setState({groupCode: e.target.value});
   };
-  async handleConfirmationResponse(join) {
+  handleConfirmationResponse = async (join) => {
     if (join) {
       let response = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.groupCode + "/join", {
         method: "POST",
@@ -45,8 +45,8 @@ class GroupJoin extends Component {
             ?
             <MDBContainer className="form-group">
               <p>Are you sure you want to join this group?</p>
-              <input onClick={this.handleConfirmationResponse.bind(this, false)} className="button float-left" type="submit" value="No"/>
-              <input onClick={this.handleConfirmationResponse.bind(this, true)} className="button float-right" type="submit" value="Yes"/>
+              <input onClick={() => this.handleConfirmationResponse(false)} className="button float-left" type="submit" value="No"/>
+              <input onClick={() => this.handleConfirmationResponse(true)} className="button float-right" type="submit" value="Yes"/>
             </MDBContainer>
             :
             <MDBContainer className="form-group">

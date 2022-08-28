@@ -15,8 +15,6 @@ import {Link} from "react-router-dom";
 class PollEditor extends Component {
   constructor(props) {
     super(props);
-    this.askQuestion = this.askQuestion.bind(this);
-    this.handleRandomize = this.handleRandomize.bind(this);
 
     this.state = {
       askedQuestions: [],
@@ -70,11 +68,11 @@ class PollEditor extends Component {
       });
   }
 
-  handleRandomize() {
+  handleRandomize = () => {
     this.setState({randomQuestions: !this.state.randomQuestions});
   }
 
-  askQuestion() {
+  askQuestion = () => {
     this.setState(prevState => ({
       //...prevState,
       askedQuestions: [

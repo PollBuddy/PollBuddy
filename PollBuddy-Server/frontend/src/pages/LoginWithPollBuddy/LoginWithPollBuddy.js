@@ -27,7 +27,7 @@ class LoginWithPollBuddy extends Component {
       this.setState({successfulLogin: true}); // Tell it to redirect to the next page if already logged in
     }
   }
-  handleLogin() {
+  handleLogin = () => {
     const schema = Joi.object({
       username: Joi.string()
         .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$"))
@@ -89,7 +89,6 @@ class LoginWithPollBuddy extends Component {
   }
 
   render() {
-    this.handleLogin = this.handleLogin.bind(this); // This is needed so stuff like this.setState works
     if(this.state.successfulLogin) { // Basically redirect if the person is logged in or if their login succeeds
       let route = "";
       if (this.state.prevRoute) {

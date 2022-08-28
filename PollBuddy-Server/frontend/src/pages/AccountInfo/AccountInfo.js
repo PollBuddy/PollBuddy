@@ -39,7 +39,7 @@ class AccountInfo extends Component {
       showPassword: false,
       logOutEverywhere: false
     };
-    this.changePassword = this.handleToggleClick.bind(this);
+    this.changePassword = this.handleToggleClick;
   }
 
 
@@ -98,7 +98,7 @@ class AccountInfo extends Component {
       });
   }
 
-  handleToggleClick() {
+  handleToggleClick = () => {
     this.setState(state => ({
       changePassword: !state.changePassword
     }));
@@ -220,7 +220,7 @@ class AccountInfo extends Component {
     this.setState({done: true});
   }
 
-  showPassword() {
+  showPassword = () => {
     this.setState(state => ({showPassword: !state.showPassword}));
   }
 
@@ -290,7 +290,7 @@ class AccountInfo extends Component {
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
                   <label htmlFor="newPasswordText">New password:</label>
                   <input type={this.state.showPassword ? "text" : "password"} placeholder="••••••••••••" className="form-control textBox" id="newPasswordText" readOnly={this.state.passwordLocked} onChange={this.handleInputChange}/>
-                  <i className="AccountInfo-i fas fa-eye" onClick={this.showPassword.bind(this)}/>
+                  <i className="AccountInfo-i fas fa-eye" onClick={this.showPassword}/>
                 </MDBCol>
               </MDBContainer>
             </MDBContainer>
