@@ -52,13 +52,13 @@ export default class App extends React.Component {
     }
   };
 
-  updateTitle(t) {
+  updateTitle = (t) => {
     this.setState({pageTitle: t});
     document.title = t + " - Poll Buddy";
   }
 
   render() {
-    this.updateTitle = this.updateTitle.bind(this);
+    
     return (
       <BrowserRouter>
 

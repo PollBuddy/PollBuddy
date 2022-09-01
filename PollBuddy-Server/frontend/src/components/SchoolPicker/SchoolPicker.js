@@ -7,8 +7,6 @@ export default class SchoolPicker extends Component {
 
   constructor(props) {
     super(props);
-    this.sortItems = this.sortItems.bind(this);
-    this.renderDropdownItem = this.renderDropdownItem.bind(this);
 
     this.state = {
       "schoolInfo": {
@@ -44,7 +42,7 @@ export default class SchoolPicker extends Component {
     }
   }
 
-  sortItems(itemA, itemB, value) {
+  sortItems = (itemA, itemB, value) => {
     const lowA = itemA.label.toLowerCase();
     const lowB = itemB.label.toLowerCase();
     const indexA = lowA.indexOf(value.toLowerCase());
@@ -55,7 +53,7 @@ export default class SchoolPicker extends Component {
     return (lowA < lowB ? -1 : 1);
   }
 
-  renderDropdownItem(item) {
+  renderDropdownItem = (item) => {
     return(
       <div key={item.key} className="auto_comp">
         {item.label}

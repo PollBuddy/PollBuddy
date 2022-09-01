@@ -18,11 +18,9 @@ export default class RegisterWithSchool extends Component {
       "schoolInfo": {},
       errorText: ""
     };   
-
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(){
+  handleSubmit = () => {
     if(!(this.state.value in this.state.schoolInfo.schoolLinkDict)) {
       this.setState({errorText: "Invalid school"});
     } else {

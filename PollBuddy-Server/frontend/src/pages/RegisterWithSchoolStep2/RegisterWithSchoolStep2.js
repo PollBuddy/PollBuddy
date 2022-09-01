@@ -58,7 +58,7 @@ class RegisterWithSchoolStep2 extends Component {
     console.log(this.state);
   }
 
-  handleRegister() {
+  handleRegister = () => {
     // do input validation
     const schema = Joi.object({
       username: Joi.string()
@@ -136,7 +136,6 @@ class RegisterWithSchoolStep2 extends Component {
   }
 
   render() {
-    this.handleRegister = this.handleRegister.bind(this);
     if (this.state.error != null) {
       return (
         <ErrorText text={this.state.error}> </ErrorText>

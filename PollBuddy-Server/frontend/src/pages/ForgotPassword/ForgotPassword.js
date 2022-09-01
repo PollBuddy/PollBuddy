@@ -10,14 +10,13 @@ class ForgotPassword extends Component {
     this.state = {
       emailInput : "",
     };
-    this.requestReset = this.requestReset.bind(this);
   }
 
   componentDidMount() {
     this.props.updateTitle("Forgot Password");
   }
 
-  requestReset(){
+  requestReset = () => {
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/forgotpassword/submit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty

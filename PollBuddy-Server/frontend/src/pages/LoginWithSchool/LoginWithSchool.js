@@ -13,14 +13,13 @@ export default class LoginWithSchool extends Component {
       "schoolInfo": {},
       errorText: ""
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
     this.props.updateTitle("Login With School");
   }
 
-  handleSubmit() {
+  handleSubmit = () => {
     if(!(this.state.value in this.state.schoolInfo.schoolLinkDict)) {
       this.setState({errorText: "Invalid school"});
     } else {
@@ -29,7 +28,6 @@ export default class LoginWithSchool extends Component {
   }
 
   render() {
-
     if(!this.state.doneLoading) {
       return (
         <MDBContainer fluid className="page">

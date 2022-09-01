@@ -10,8 +10,7 @@ import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 class ResetPassword extends Component {
   constructor(props) {
     super(props);
-    this.handleLogOutCheck = this.handleLogOutCheck.bind(this);
-    this.attemptPasswordReset = this.attemptPasswordReset.bind(this);
+
 
     this.state = {
       logOutCheck: true,
@@ -23,7 +22,7 @@ class ResetPassword extends Component {
     };
   }
 
-  handleLogOutCheck() {
+  handleLogOutCheck = () => {
     this.setState({logOutCheck: !this.state.logOutCheck});
   }
 
@@ -35,7 +34,7 @@ class ResetPassword extends Component {
     this.setState({errorText:text});
   }
 
-  attemptPasswordReset(){
+  attemptPasswordReset = () => {
     this.setState({errorText:""});
 
     if(this.state.newPassword === this.state.confirmedPassword){
