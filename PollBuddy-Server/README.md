@@ -16,3 +16,5 @@ The pretty UI you see when you open your browser to Poll Buddy
 Express based
 
 Serves the API requests made by the frontend
+
+Nicholas Bezanis
