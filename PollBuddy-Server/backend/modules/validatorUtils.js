@@ -2,16 +2,6 @@ const {sendResponse, httpCodes} = require("./httpCodes");
 const Joi = require("joi");
 const bson = require("bson");
 
-function paramValidator(params) {
-  return function(req, res, next) {
-    let validID = params.validate(req.params);
-    if (validID.error) {
-      return sendResponse(res, httpCodes.BadRequest());
-    }
-    next();
-  };
-}
-
 const objectID = (value, helpers) => {
   let validate = Joi.string().hex().length(24).validate(value);
   if (validate.error) {
@@ -20,12 +10,38 @@ const objectID = (value, helpers) => {
   try {
     let id = new bson.ObjectID(value);
     return id;
-  } catch(err) {
+  } catch (err) {
     return helpers.error("any.invalid");
   }
 };
 
+function paramValidator(validator) {
+  return function (req, res, next) {
+    let result = validator.validate(req.params);
+    if (result.error) {
+      sendResponse(res, httpCodes.BadRequest());
+      return;
+    }
+    req.params = result.value;
+    next();
+  };
+}
+
+function bodyValidator(validator) {
+  return function (req, res, next) {
+    let result = validator.validate(req.body);
+    if (result.error) {
+      sendResponse(res, httpCodes.BadRequest());
+      return;
+    }
+    req.body = result.value;
+    next();
+  };
+}
+
+
 module.exports = {
   paramValidator,
+  bodyValidator,
   objectID,
 };

@@ -1,6 +1,7 @@
 const bson = require("bson");
 const mongoConnection = require("../modules/mongoConnection.js");
-const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
+const {httpCodes, sendResponse} = require("../modules/httpCodes.js");
+
 /**
  * Helper function for creating the specified http response (https://pollbuddy.app/api/users).
  * For sample usage see https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Overview#helper-functions
@@ -49,9 +50,9 @@ async function validateID(collection, id) {
  * @param {req} req request object
  * @param {callback} callback handler for (err,result) returned by database query
  */
-function getCurrentUser(req,callback) {
-  mongoConnection.getDB().collection("users").findOne({ _id: bson.ObjectId(req.session.userData.userID) }, { projection: { Password: false } }, (err, result) => {
-    callback(err,result);
+function getCurrentUser(req, callback) {
+  mongoConnection.getDB().collection("users").findOne({_id: bson.ObjectId(req.session.userData.userID)}, {projection: {Password: false}}, (err, result) => {
+    callback(err, result);
   });
 }
 
@@ -84,8 +85,8 @@ async function checkPollPublic(req, res, next) {
 
 // Checks if a JS object is empty or not. Returns true if so, false otherwise.
 function isEmpty(obj) {
-  for(let prop in obj) {
-    if(Object.prototype.hasOwnProperty.call(obj,prop)) {
+  for (let prop in obj) {
+    if (Object.prototype.hasOwnProperty.call(obj, prop)) {
       return false;
     }
   }
@@ -103,11 +104,11 @@ function isEmpty(obj) {
  * predicate to check If user is logged in in the request
  * @see {Predicate}
  */
-function isLoggedIn(req,res,next) {
-  if(req.session.userData && req.session.userData.userID){
+function isLoggedIn(req, res, next) {
+  if (req.session.userData && req.session.userData.userID) {
     next();
-  }else{
-    return sendResponse(res,httpCodes.InternalServerError("User is not logged in"));
+  } else {
+    return sendResponse(res, httpCodes.Unauthorized("User is not logged in"));
   }
 }
 
@@ -116,7 +117,7 @@ function isLoggedIn(req,res,next) {
  * Also checks to make sure that the user is logged in
  * @see {Predicate}
  */
-let isSiteAdmin = and([isLoggedIn, (req,res,next) => {
+let isSiteAdmin = and([isLoggedIn, (req, res, next) => {
   let userID = req.session.userData.userID;
   let user = mongoConnection.getDB().collection("users").findOne({_id: userID});
   if (user.SiteAdmin) {
@@ -132,7 +133,7 @@ let isSiteAdmin = and([isLoggedIn, (req,res,next) => {
  */
 // eslint-disable-next-line no-unused-vars
 function isDevelopmentMode(req, res, next) {
-  if(process.env.DEVELOPMENT_MODE === "true"){
+  if (process.env.DEVELOPMENT_MODE === "true") {
     next();
   } else {
     return sendResponse(res, httpCodes.InternalServerError("App is not running in development mode."));
@@ -155,17 +156,23 @@ function or() {
   //or() needs to allow multiple middleware to run without terminating the response
   //this object absorbs a middleware's attempts to send a response on its own
   let mockRes = {
-    status : () => {return mockRes;},
-    send : () => {return mockRes;},
+    status: () => {
+      return mockRes;
+    },
+    send: () => {
+      return mockRes;
+    },
   };
-  return (req,res,next) => {
-    for(let i = 0; i < arguments.length ; i ++){
-      arguments[i](req,mockRes,() => {succeeded = true;});
-      if(succeeded){
+  return (req, res, next) => {
+    for (let i = 0; i < arguments.length; i++) {
+      arguments[i](req, mockRes, () => {
+        succeeded = true;
+      });
+      if (succeeded) {
         return next();
       }
     }
-    return sendResponse(res,httpCodes.InternalServerError("No conditions passed"));
+    return sendResponse(res, httpCodes.InternalServerError("No conditions passed"));
   };
 }
 
@@ -185,20 +192,27 @@ function and() {
   //this object absorbs a middleware's attempts to send a response on its own
   //the first failed middleware's response is echoed here instead
   let mockRes = {
-    status : (x) => {statusCode = x; return mockRes;},
-    send : (x) => {responseData = x; return mockRes;},
+    status: (x) => {
+      statusCode = x;
+      return mockRes;
+    },
+    send: (x) => {
+      responseData = x;
+      return mockRes;
+    },
   };
 
-  return (req,res,next) => {
-    for(let i = 0; i < arguments.length ; i ++){
+  return (req, res, next) => {
+    for (let i = 0; i < arguments.length; i++) {
       statusCode = null;
       responseData = null;
-      arguments[i](req,mockRes,() => {});
+      arguments[i](req, mockRes, () => {
+      });
 
       // the middleware attempted to send a response
       // echo it then short-ciruit
-      if(statusCode){
-        return sendResponse(res,responseData);
+      if (statusCode) {
+        return sendResponse(res, responseData);
       }
     }
     next();
@@ -219,7 +233,7 @@ function getResultErrors(result) {
 
 }
 
-function createModel(schema, data){
+function createModel(schema, data) {
   let model = Object.assign({}, schema);
   for (let key of Object.keys(model)) {
     if (Object.prototype.hasOwnProperty.call(data, key)) {

@@ -1,9 +1,10 @@
 const Joi = require("joi");
 const bson = require("bson");
-const { createModel } = require("../modules/utils");
+const {createModel} = require("../modules/utils");
 const mongoConnection = require("../modules/mongoConnection.js");
-const { httpCodes } = require("../modules/httpCodes.js");
-const {getGroupInternal, isGroupMember, isGroupAdmin, getPollInternal, getQuestionInternal, isPollAdmin,
+const {httpCodes} = require("../modules/httpCodes.js");
+const {
+  getGroupInternal, isGroupMember, isGroupAdmin, getPollInternal, getQuestionInternal, isPollAdmin,
   getUserInternal
 } = require("../modules/modelUtils");
 const {objectID} = require("../modules/validatorUtils");
@@ -48,11 +49,6 @@ const pollAnswerSchema = {
   Questions: [],
 };
 
-const PollAnswerQuestionSchema = {
-  QuestionID: "",
-  Answers: [],
-};
-
 const createPollValidator = Joi.object({
   title: pollValidators.title.required(),
   description: pollValidators.description.required(),
@@ -91,7 +87,7 @@ const submitQuestionValidator = Joi.object({
   answers: Joi.array().items(Joi.custom(objectID)).required(),
 });
 
-const getQuestion = function(question, isAdmin) {
+const getQuestion = function (question, isAdmin) {
   let answers = [];
   for (let answer of question.Answers) {
     answers.push({
@@ -112,9 +108,9 @@ const getQuestion = function(question, isAdmin) {
 /**
  * errorCode === 100 means that the poll does not exist
 
-*/
+ */
 
-const getPoll = async function(userID, pollID) {
+const getPoll = async function (userID, pollID) {
   try {
     let poll = await getPollInternal(pollID);
     if (!poll) {
@@ -129,7 +125,7 @@ const getPoll = async function(userID, pollID) {
       isUserPollAdmin = await isPollAdmin(userID, pollID);
     }
     if (!isUserPollAdmin) {
-      if(Date.now() > Date.parse(poll.OpenTime) && Date.now() < Date.parse(poll.CloseTime)) {
+      if (Date.now() > poll.OpenTime && Date.now() < poll.CloseTime) {
         if (userID) {
           if (poll.Group) {
             let isUserGroupMember = await isGroupMember(poll.Group, userID);
@@ -166,7 +162,7 @@ const getPoll = async function(userID, pollID) {
       questions.push(getQuestion(question, isUserPollAdmin));
     }
     let pollAnswers = await mongoConnection.getDB().collection("poll_answers")
-      .findOne({ PollID: poll._id, UserID: userID });
+      .findOne({PollID: poll._id, UserID: userID});
     if (pollAnswers) {
       for (let question of questions) {
         let questionAnswers = pollAnswers.Questions.find((e) => {
@@ -184,20 +180,24 @@ const getPoll = async function(userID, pollID) {
       closeTime: poll.CloseTime,
       questions: questions,
     });
-  } catch(err) {
+  } catch (err) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
 };
 
 
-const getPollResults = async function(userID, pollID) {
+const getPollResults = async function (userID, pollID) {
   try {
     let poll = await getPollInternal(pollID);
-    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+    if (!poll) {
+      return httpCodes.NotFound("Invalid Poll: Poll does not exist.");
+    }
 
     let isUserPollAdmin = await isPollAdmin(userID, pollID);
-    if (!isUserPollAdmin) { return httpCodes.Unauthorized(); }
+    if (!isUserPollAdmin) {
+      return httpCodes.Unauthorized();
+    }
 
     let questions = [];
     let questionResults = {};
@@ -209,7 +209,7 @@ const getPollResults = async function(userID, pollID) {
         count: 0,
       };
       for (let answer of question.Answers) {
-        questionResults[question._id][answer._id] =  {
+        questionResults[question._id][answer._id] = {
           count: 0,
         };
       }
@@ -218,7 +218,7 @@ const getPollResults = async function(userID, pollID) {
     }
 
     await mongoConnection.getDB().collection("poll_answers")
-      .find({ PollID: poll._id }).forEach((pollAnswers) => {
+      .find({PollID: poll._id}).forEach((pollAnswers) => {
         for (let question of pollAnswers.Questions) {
           if (questionResults[question.QuestionID]) {
             questionResponses[question.QuestionID].count++;
@@ -243,43 +243,59 @@ const getPollResults = async function(userID, pollID) {
       description: poll.Description,
       questions: questions,
     });
-  } catch(err) {
+  } catch (err) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
 };
 
-const getPollResultsCSV = async function(userID, pollID) {
+const getPollResultsCSV = async function (userID, pollID) {
   try {
     let poll = await getPollInternal(pollID);
-    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+    if (!poll) {
+      return httpCodes.NotFound("Invalid Poll: Poll does not exist.");
+    }
 
     let isUserPollAdmin = await isPollAdmin(userID, pollID);
-    if (!isUserPollAdmin) { return httpCodes.Unauthorized(); }
+    if (!isUserPollAdmin) {
+      return httpCodes.Unauthorized();
+    }
 
-    let pollAnswers = await mongoConnection.getDB().collection("poll_answers").find({ PollID: poll._id }).toArray();
+    let pollAnswers = await mongoConnection.getDB().collection("poll_answers").find({PollID: poll._id}).toArray();
     let output = [];
 
     // Index the questions
     let questionIndexes = {};
     let questionNumber = 1;
-    for(let question of poll.Questions) {
+    for (let question of poll.Questions) {
       questionIndexes[question._id.toString()] = questionNumber;
       questionNumber++;
     }
 
     // Go over every submitted raw database answer
-    for(let rawAnswer of pollAnswers) {
+    for (let rawAnswer of pollAnswers) {
 
       // Get the user data
       let user;
-      if(rawAnswer.userID === null) {
+      if (rawAnswer.userID === null) {
         // No User ID was found, so the user must be anonymous
-        user = { UserName: "Anonymous", Email: "Anonymous", FirstName: "Anonymous", LastName: "Anonymous", SchoolAffiliation: ""};
+        user = {
+          UserName: "Anonymous",
+          Email: "Anonymous",
+          FirstName: "Anonymous",
+          LastName: "Anonymous",
+          SchoolAffiliation: ""
+        };
       } else {
         user = await getUserInternal(rawAnswer.UserID);
         if (user === null) {
-          user = { UserName: "Deleted User", Email: "Deleted User", FirstName: "Deleted User", LastName: "Deleted User", SchoolAffiliation: ""};
+          user = {
+            UserName: "Deleted User",
+            Email: "Deleted User",
+            FirstName: "Deleted User",
+            LastName: "Deleted User",
+            SchoolAffiliation: ""
+          };
         }
       }
 
@@ -329,27 +345,33 @@ const getPollResultsCSV = async function(userID, pollID) {
 
     return output;
 
-  } catch(err) {
+  } catch (err) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
 };
 
 
-const createPoll = async function(userID, pollData) {
+const createPoll = async function (userID, pollData) {
   try {
     let newPoll = {
       Title: pollData.title,
       Description: pollData.description,
       MaxAllowedChoices: pollData.maxAllowedChoices,
+      OpenTime: Date.now(),
+      CloseTime: Date.now() + (24 * 60 * 60 * 1000)
     };
 
     if (pollData.group) {
       let group = await getGroupInternal(pollData.group);
-      if (!group) { return httpCodes.BadRequest("Invalid Group: Group does not exist."); }
+      if (!group) {
+        return httpCodes.BadRequest("Invalid Group: Group does not exist.");
+      }
 
       let isUserGroupAdmin = await isGroupAdmin(group._id, userID);
-      if (!isUserGroupAdmin) { return httpCodes.Unauthorized("Unauthorized: Cannot create poll in this group."); }
+      if (!isUserGroupAdmin) {
+        return httpCodes.Unauthorized("Unauthorized: Cannot create poll in this group.");
+      }
       newPoll.Group = group._id;
     } else {
       newPoll.Creator = userID;
@@ -360,10 +382,12 @@ const createPoll = async function(userID, pollData) {
 
     if (poll.Group) {
       await mongoConnection.getDB().collection("groups").updateOne(
-        { _id: poll.Group, },
-        {"$addToSet": {
-          "Polls": result.insertedId,
-        }}
+        {_id: poll.Group,},
+        {
+          "$addToSet": {
+            "Polls": result.insertedId,
+          }
+        }
       );
     }
 
@@ -376,22 +400,28 @@ const createPoll = async function(userID, pollData) {
   }
 };
 
-const editPoll = async function(userID, pollID, pollData) {
+const editPoll = async function (userID, pollID, pollData) {
   try {
     let poll = await getPollInternal(pollID);
-    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+    if (!poll) {
+      return httpCodes.NotFound("Invalid Poll: Poll does not exist.");
+    }
 
     let isUserPollAdmin = await isPollAdmin(userID, pollID);
-    if (!isUserPollAdmin) { return httpCodes.Unauthorized("Unauthorized: Cannot Edit Poll"); }
+    if (!isUserPollAdmin) {
+      return httpCodes.Unauthorized("Unauthorized: Cannot Edit Poll");
+    }
 
     await mongoConnection.getDB().collection("polls").updateOne(
-      { _id: poll._id },
-      { "$set": {
-        Title: pollData.title,
-        Description: pollData.description,
-        OpenTime: pollData.openTime,
-        CloseTime: pollData.closeTime,
-      }}
+      {_id: poll._id},
+      {
+        "$set": {
+          Title: pollData.title,
+          Description: pollData.description,
+          OpenTime: pollData.openTime.valueOf(),
+          CloseTime: pollData.closeTime.valueOf(),
+        }
+      }
     );
     return httpCodes.Ok();
   } catch (err) {
@@ -400,38 +430,48 @@ const editPoll = async function(userID, pollID, pollData) {
   }
 };
 
-const deletePoll = async function(userID, pollID) {
+const deletePoll = async function (userID, pollID) {
   try {
     let poll = await getPollInternal(pollID);
-    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+    if (!poll) {
+      return httpCodes.NotFound("Invalid Poll: Poll does not exist.");
+    }
 
     let isUserPollAdmin = await isPollAdmin(userID, pollID);
-    if (!isUserPollAdmin) { return httpCodes.Unauthorized("Unauthorized: Cannot Delete Poll"); }
+    if (!isUserPollAdmin) {
+      return httpCodes.Unauthorized("Unauthorized: Cannot Delete Poll");
+    }
 
-    await mongoConnection.getDB().collection("polls").deleteOne({ _id: poll._id });
+    await mongoConnection.getDB().collection("polls").deleteOne({_id: poll._id});
 
     if (poll.Group) {
       await mongoConnection.getDB().collection("groups").updateOne(
-        { _id: poll.Group, },
-        {"$pull": {
-          "Polls": poll._id,
-        }}
+        {_id: poll.Group,},
+        {
+          "$pull": {
+            "Polls": poll._id,
+          }
+        }
       );
     }
     return httpCodes.Ok();
-  } catch(err) {
+  } catch (err) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
 };
 
-const createQuestion = async function(userID, pollID, questionData) {
+const createQuestion = async function (userID, pollID, questionData) {
   try {
     let poll = await getPollInternal(pollID);
-    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+    if (!poll) {
+      return httpCodes.NotFound("Invalid Poll: Poll does not exist.");
+    }
 
     let isUserPollAdmin = await isPollAdmin(userID, pollID);
-    if (!isUserPollAdmin) { return httpCodes.Unauthorized("Unauthorized: Cannot Create Poll"); }
+    if (!isUserPollAdmin) {
+      return httpCodes.Unauthorized("Unauthorized: Cannot Create Poll");
+    }
 
     let answers = [];
     for (let answer of questionData.answers) {
@@ -448,10 +488,12 @@ const createQuestion = async function(userID, pollID, questionData) {
       MaxAllowedChoices: questionData.maxAllowedChoices,
     });
     await mongoConnection.getDB().collection("polls").updateOne(
-      { _id: poll._id },
-      { "$addToSet": {
-        "Questions": question,
-      }}
+      {_id: poll._id},
+      {
+        "$addToSet": {
+          "Questions": question,
+        }
+      }
     );
     return httpCodes.Ok(getQuestion(question, true));
   } catch (err) {
@@ -460,16 +502,22 @@ const createQuestion = async function(userID, pollID, questionData) {
   }
 };
 
-const editQuestion = async function(userID, pollID, questionData) {
+const editQuestion = async function (userID, pollID, questionData) {
   try {
     let poll = await getPollInternal(pollID);
-    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+    if (!poll) {
+      return httpCodes.NotFound("Invalid Poll: Poll does not exist.");
+    }
 
     let isUserPollAdmin = await isPollAdmin(userID, pollID);
-    if (!isUserPollAdmin) { return httpCodes.Unauthorized("Unauthorized: Cannot Edit Question"); }
+    if (!isUserPollAdmin) {
+      return httpCodes.Unauthorized("Unauthorized: Cannot Edit Question");
+    }
 
     let question = await getQuestionInternal(poll._id, questionData.id);
-    if (!question) { return httpCodes.BadRequest("Invalid Question: Question does not exist."); }
+    if (!question) {
+      return httpCodes.BadRequest("Invalid Question: Question does not exist.");
+    }
 
     let answers = [];
     for (let newAnswer of questionData.answers) {
@@ -491,12 +539,14 @@ const editQuestion = async function(userID, pollID, questionData) {
     }
 
     await mongoConnection.getDB().collection("polls").updateOne(
-      { _id: poll._id, "Questions._id": question._id, },
-      { "$set": {
-        "Questions.$.Text": questionData.text,
-        "Questions.$.Answers": answers,
-        "Questions.$.MaxAllowedChoices": questionData.maxAllowedChoices,
-      }}
+      {_id: poll._id, "Questions._id": question._id,},
+      {
+        "$set": {
+          "Questions.$.Text": questionData.text,
+          "Questions.$.Answers": answers,
+          "Questions.$.MaxAllowedChoices": questionData.maxAllowedChoices,
+        }
+      }
     );
     let updatedQuestion = await getQuestionInternal(poll._id, questionData.id);
     return httpCodes.Ok(getQuestion(updatedQuestion, true));
@@ -506,44 +556,54 @@ const editQuestion = async function(userID, pollID, questionData) {
   }
 };
 
-const deleteQuestion = async function(userID, pollID, questionID) {
+const deleteQuestion = async function (userID, pollID, questionID) {
   try {
     let poll = await getPollInternal(pollID);
-    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+    if (!poll) {
+      return httpCodes.NotFound("Invalid Poll: Poll does not exist.");
+    }
 
     let isUserPollAdmin = await isPollAdmin(userID, pollID);
-    if (!isUserPollAdmin) { return httpCodes.Unauthorized("Unauthorized: Cannot Delete Question"); }
+    if (!isUserPollAdmin) {
+      return httpCodes.Unauthorized("Unauthorized: Cannot Delete Question");
+    }
 
     await mongoConnection.getDB().collection("polls").updateOne(
-      { _id: poll._id },
-      { "$pull": {
-        "Questions.$._id": questionID.id,
-      }}
+      {_id: poll._id},
+      {
+        "$pull": {
+          "Questions.$._id": questionID.id,
+        }
+      }
     );
 
     return httpCodes.Ok();
-  } catch(err) {
+  } catch (err) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
 };
 
-const submitQuestion = async function(userID, pollID, submitData) {
+const submitQuestion = async function (userID, pollID, submitData) {
   try {
     let poll = await getPollInternal(pollID);
-    if (!poll) { return httpCodes.NotFound("Invalid Poll: Poll does not exist."); }
+    if (!poll) {
+      return httpCodes.NotFound("Invalid Poll: Poll does not exist.");
+    }
 
-    if(Date.now() < Date.parse(poll.OpenTime) || Date.now() > Date.parse(poll.CloseTime)) {
+    if (Date.now() < poll.OpenTime || Date.now() > poll.CloseTime) {
       return httpCodes.BadRequest("Poll is not open for submissions.");
     }
 
     let question = await getQuestionInternal(poll._id, submitData.id);
-    if (!question) { return httpCodes.BadRequest("Invalid Question: Question does not exist."); }
+    if (!question) {
+      return httpCodes.BadRequest("Invalid Question: Question does not exist.");
+    }
 
     let pollAnswers = null;
     if (userID) {
       pollAnswers = await mongoConnection.getDB().collection("poll_answers")
-        .findOne({ PollID: poll._id, UserID: userID });
+        .findOne({PollID: poll._id, UserID: userID});
     }
 
     if (!pollAnswers) {

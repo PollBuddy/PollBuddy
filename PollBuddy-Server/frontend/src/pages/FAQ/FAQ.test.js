@@ -14,6 +14,7 @@ function updateTitle() {
 
 // Create basic render test
 it("renders without crashing", () => {
+  fetch.mockResponseOnce(JSON.stringify({text: "Test"}));
   // Create div element
   const div = document.createElement("div");
   // Render about on the div

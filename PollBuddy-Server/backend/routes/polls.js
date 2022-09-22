@@ -1,11 +1,21 @@
 const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
-const {createResponse, validateID, checkPollPublic, isLoggedIn, isDevelopmentMode, getResultErrors, isEmpty} = require("../modules/utils");
+const {
+  createResponse,
+  validateID,
+  checkPollPublic,
+  isLoggedIn,
+  isDevelopmentMode,
+  getResultErrors,
+  isEmpty
+} = require("../modules/utils");
 const {sendResponse, httpCodes} = require("../modules/httpCodes.js");
-const {createPoll, getPoll, editPoll, createPollValidator, editPollValidator, createQuestionValidator, createQuestion,
+const {
+  createPoll, getPoll, editPoll, createPollValidator, editPollValidator, createQuestionValidator, createQuestion,
   editQuestionValidator, editQuestion, submitQuestionValidator, submitQuestion, getPollResults, getPollResultsCSV,
-  deletePoll, pollParamsValidator} = require("../models/Poll");
+  deletePoll, pollParamsValidator
+} = require("../models/Poll");
 const {paramValidator} = require("../modules/validatorUtils");
 const {Parser} = require("json2csv");
 const {getPollInternal} = require("../modules/modelUtils");
@@ -43,9 +53,11 @@ router.get("/new", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/new", isLoggedIn, async (req, res) => {
-  let validResult = createPollValidator.validate(req.body, { abortEarly: false });
+  let validResult = createPollValidator.validate(req.body, {abortEarly: false});
   let errors = getResultErrors(validResult);
-  if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest(errors)); }
+  if (!isEmpty(errors)) {
+    return sendResponse(res, httpCodes.BadRequest(errors));
+  }
 
   let result = await createPoll(req.session.userData.userID, validResult.value);
   return sendResponse(res, result);
@@ -94,8 +106,10 @@ router.get("/:id/edit", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/:id/edit", isLoggedIn, paramValidator(pollParamsValidator), async (req, res) => {
-  let validResult = editPollValidator.validate(req.body, { abortEarly: false });
-  if (validResult.error) { return sendResponse(res, httpCodes.BadRequest()); }
+  let validResult = editPollValidator.validate(req.body, {abortEarly: false});
+  if (validResult.error) {
+    return sendResponse(res, httpCodes.BadRequest());
+  }
 
   let response = await editPoll(req.session.userData.userID, req.params.id, validResult.value);
   return sendResponse(res, response);
@@ -121,9 +135,11 @@ router.get("/:id/createQuestion", async (req, res) => {
 });
 
 router.post("/:id/createQuestion", isLoggedIn, paramValidator(pollParamsValidator), async (req, res) => {
-  let validResult = createQuestionValidator.validate(req.body, { abortEarly: false });
+  let validResult = createQuestionValidator.validate(req.body, {abortEarly: false});
   let errors = getResultErrors(validResult);
-  if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest()); }
+  if (!isEmpty(errors)) {
+    return sendResponse(res, httpCodes.BadRequest());
+  }
 
   let response = await createQuestion(req.session.userData.userID, req.params.id, validResult.value);
   return sendResponse(res, response);
@@ -135,11 +151,12 @@ router.get("/:id/editQuestion", async (req, res) => {
 });
 
 router.post("/:id/editQuestion", isLoggedIn, paramValidator(pollParamsValidator), async (req, res) => {
-  let validResult = editQuestionValidator.validate(req.body, { abortEarly: false });
-  console.log(validResult);
+  let validResult = editQuestionValidator.validate(req.body, {abortEarly: false});
 
   let errors = getResultErrors(validResult);
-  if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest(errors)); }
+  if (!isEmpty(errors)) {
+    return sendResponse(res, httpCodes.BadRequest(errors));
+  }
 
   let response = await editQuestion(req.session.userData.userID, req.params.id, validResult.value);
   return sendResponse(res, response);
@@ -151,9 +168,11 @@ router.get("/:id/submitQuestion", async (req, res) => {
 });
 
 router.post("/:id/submitQuestion", paramValidator(pollParamsValidator), async (req, res) => {
-  let validResult = submitQuestionValidator.validate(req.body, { abortEarly: false });
+  let validResult = submitQuestionValidator.validate(req.body, {abortEarly: false});
   let errors = getResultErrors(validResult);
-  if (!isEmpty(errors)) { return sendResponse(res, httpCodes.BadRequest(errors)); }
+  if (!isEmpty(errors)) {
+    return sendResponse(res, httpCodes.BadRequest(errors));
+  }
 
   let userID = null;
   if (req.session.userData && req.session.userData.userID) {
@@ -360,12 +379,12 @@ router.get("/:id/csv", isLoggedIn, paramValidator(pollParamsValidator), async (r
   // Set up the static fields
   const fields = ["QuestionNumber", "QuestionText", "UserName", "Email", "FirstName", "LastName", "SchoolAffiliation", "AnswerText", "Correct"];
 
-  const opts = { fields };
+  const opts = {fields};
 
   const json2csv = new Parser(opts);
   const csv = json2csv.parse(data);
   res.header("Content-Type", "text/csv");
-  res.attachment(sanitize("Poll Results for " + poll.Title +  " - Poll Buddy.csv"));
+  res.attachment(sanitize("Poll Results for " + poll.Title + " - Poll Buddy.csv"));
   return res.send(csv);
 });
 
