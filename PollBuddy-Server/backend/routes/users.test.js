@@ -5,18 +5,18 @@ const bcrypt = require("bcrypt");
 const mongo = require("mongodb");
 const MongoClient = mongo.MongoClient;
 
-const { userSchema } = require("../models/User.js");
-const { createModel } = require("../modules/utils.js");
+const {userSchema} = require("../models/User.js");
+const {createModel} = require("../modules/utils.js");
 const mongoConnection = require("../modules/mongoConnection.js");
 const usersRouter = require("./users");
-const { testUser, testUser2, testGroup, createUser, createGroup } = require("../modules/testingUtils.js");
+const {testUser, testUser2, testGroup, createUser, createGroup} = require("../modules/testingUtils.js");
 const {testGroup2} = require("../modules/testingUtils");
 
 let mockApp = express();
 let session = {};
 
 mockApp.use(express.json());
-mockApp.use(express.urlencoded({ extended: false }));
+mockApp.use(express.urlencoded({extended: false}));
 // eslint-disable-next-line no-unused-vars
 mockApp.use(function (req, res, next) {
   req.session = session;
@@ -51,26 +51,6 @@ beforeEach(async () => {
     await mongoConnection.getDB().collection(collection.name).deleteMany({});
   });
 });
-
-let createUserSchoolAffiliated = async function(update) {
-  let userData = {
-    UserName: testUser.UserName,
-    Email: testUser.Email,
-    Password: testUser.PasswordHash,
-    FirstName: testUser.FirstName,
-    LastName: testUser.LastName,
-    SchoolAffiliation: "RPI"
-  };
-
-  if (update) {
-    for (let [key, value] of Object.entries(update)) {
-      userData[key] = value;
-    }
-  }
-
-  let user = createModel(userSchema, userData);
-  return await mongoConnection.getDB().collection("users").insertOne(user);
-};
 
 describe("/api/users", () => {
   it("GET: empty url request", async () => {
@@ -146,8 +126,8 @@ describe("/api/users/login", () => {
       });
   });
 
-  it("POST: login with school affiliation failure", async() => {
-    await createUserSchoolAffiliated();
+  it("POST: login with school affiliation failure", async () => {
+    await createUser({SchoolAffiliation: "RPI"});
     let userLogin = {
       userNameEmail: testUser.Email,
       password: testUser.Password,
@@ -161,14 +141,14 @@ describe("/api/users/login", () => {
       });
   });
 
-  it("POST: login with password failure", async() => {
+  it("POST: login with password failure", async () => {
     await createUser();
     let userLogin = {
       userNameEmail: testUser.Email,
       password: "",
     };
 
-    await app.post("/api/users/login", )
+    await app.post("/api/users/login",)
       .send(userLogin)
       .expect(401)
       .then((response) => {
@@ -209,56 +189,56 @@ describe("/api/users/login", () => {
   });
 
 });
-
-
-
-describe("/api/users/login/rpi", () => {
-
-  it("POST: route unavailable", async() => {
-    await app.post("/api/users/login/rpi")
-      .expect(405)
-      .then((response) => {
-        expect(response.body.result).toBe("failure");
-      });
-  });
-
-  it("GET requests login rpi failure", async () => {
-    let res = await createUser();
-    // eslint-disable-next-line camelcase
-    session = { cas_user: "notregistereduser", userData: { userID: res.insertedId } };
-    await app.get("/api/users/login/rpi")
-      .expect(302)
-      .then(async () => {});
-  });
-
-  it("GET requests login rpi success", async () => {
-    await createUser();
-    session = { userDataTemp: { userName: "__rpi_" + testUser.UserName, email: testUser.Email } };
-    await app.post("/api/users/register/rpi")
-      .send({
-        userName: "__rpi_" + testUser.UserName,
-        email: testUser.Email,
-        password: testUser.Password,
-        firstName: testUser.FirstName,
-        lastName: testUser.LastName
-      })
-      .expect(200).then(async (response) => {
-        expect(response.body.result).toBe("success");
-        expect(response.body.data.firstName).toBe(testUser.FirstName);
-        expect(response.body.data.lastName).toBe(testUser.LastName);
-        expect(response.body.data.userName).toBe("__rpi_" + testUser.UserName);
-
-        // eslint-disable-next-line camelcase
-        session = { cas_user: testUser.UserName, userData: { userID: session.userData.userID } };
-
-        await app.get("/api/users/login/rpi")
-          .expect(302);
-      });
-  });
-
-});
-
-
+//
+//
+//
+// describe("/api/users/login/rpi", () => {
+//
+//   it("POST: route unavailable", async() => {
+//     await app.post("/api/users/login/rpi")
+//       .expect(405)
+//       .then((response) => {
+//         expect(response.body.result).toBe("failure");
+//       });
+//   });
+//
+//   it("GET requests login rpi failure", async () => {
+//     let res = await createUser();
+//     // eslint-disable-next-line camelcase
+//     session = { cas_user: "notregistereduser", userData: { userID: res.insertedId } };
+//     await app.get("/api/users/login/rpi")
+//       .expect(302)
+//       .then(async () => {});
+//   });
+//
+//   it("GET requests login rpi success", async () => {
+//     await createUser();
+//     session = { userDataTemp: { userName: "__rpi_" + testUser.UserName, email: testUser.Email } };
+//     await app.post("/api/users/register/rpi")
+//       .send({
+//         userName: "__rpi_" + testUser.UserName,
+//         email: testUser.Email,
+//         password: testUser.Password,
+//         firstName: testUser.FirstName,
+//         lastName: testUser.LastName
+//       })
+//       .expect(200).then(async (response) => {
+//         expect(response.body.result).toBe("success");
+//         expect(response.body.data.firstName).toBe(testUser.FirstName);
+//         expect(response.body.data.lastName).toBe(testUser.LastName);
+//         expect(response.body.data.userName).toBe("__rpi_" + testUser.UserName);
+//
+//         // eslint-disable-next-line camelcase
+//         session = { cas_user: testUser.UserName, userData: { userID: session.userData.userID } };
+//
+//         await app.get("/api/users/login/rpi")
+//           .expect(302);
+//       });
+//   });
+//
+// });
+//
+//
 describe("/api/users/register", () => {
 
   it("GET: route unavailable", async () => {
@@ -363,10 +343,10 @@ describe("/api/users/register", () => {
         await app.post("/api/users/register")
           .send({
             userName: testUser.UserName,
-            email: testUser.Email,
-            password: testUser.Password,
-            firstName: testUser.FirstName,
-            lastName: testUser.LastName,
+            email: testUser2.Email,
+            password: testUser2.Password,
+            firstName: testUser2.FirstName,
+            lastName: testUser2.LastName,
           })
           .expect(400)
           .then(async (response) => {
@@ -378,10 +358,10 @@ describe("/api/users/register", () => {
     mongoConnection.getDB().collection("users").dropIndex("username");
   });
 
-  it("POST: register failure duplicate other error", async () => {
+  it("POST: register failure duplicate email", async () => {
 
     // Create unique indexes
-    mongoConnection.getDB().collection("users").createIndex({"FirstName": 1}, {name: "firstname", unique: true});
+    mongoConnection.getDB().collection("users").createIndex({"Email": 1}, {name: "email", unique: true});
 
     await app.post("/api/users/register")
       .send({
@@ -395,11 +375,11 @@ describe("/api/users/register", () => {
       .then(async () => {
         await app.post("/api/users/register")
           .send({
-            userName: testUser.UserName,
+            userName: testUser2.UserName,
             email: testUser.Email,
-            password: testUser.Password,
-            firstName: testUser.FirstName,
-            lastName: testUser.LastName,
+            password: testUser2.Password,
+            firstName: testUser2.FirstName,
+            lastName: testUser2.LastName,
           })
           .expect(400)
           .then(async (response) => {
@@ -407,127 +387,127 @@ describe("/api/users/register", () => {
           });
       });
 
-    mongoConnection.getDB().collection("users").dropIndex("firstname");
+    mongoConnection.getDB().collection("users").dropIndex("email");
   });
 });
 
-describe("/api/users/register/rpi", () => {
-
-  it("GET: register rpi success", async() => {
-    let res = await createUser();
-    // eslint-disable-next-line camelcase
-    session = { cas_return_to: "", cas_user: "mcdanz", userData: { userID: res.insertedId } };
-    await app.get("/api/users/register/rpi")
-      .send({
-        userName: testUser.UserName,
-        email: testUser.Email,
-        password: testUser.Password,
-        firstName: testUser.FirstName,
-        lastName: testUser.LastName
-      })
-      .expect(302);
-  });
-
-  it("POST: register rpi success", async() => {
-    await createUser();
-    session = { userDataTemp: { userName: testUser.UserName + "2", email: testUser.Email + "2" } };
-    await app.post("/api/users/register/rpi")
-      .send({
-        userName: testUser.UserName + "2",
-        email: testUser.Email + "2",
-        password: testUser.Password,
-        firstName: testUser.FirstName,
-        lastName: testUser.LastName
-      })
-      .expect(200)
-      .then(async (response) => {
-        expect(response.body.result).toBe("success");
-        expect(response.body.data.firstName).toBe(testUser.FirstName);
-        expect(response.body.data.lastName).toBe(testUser.LastName);
-        expect(response.body.data.userName).toBe(testUser.UserName + "2");
-
-        let res = await mongoConnection.getDB().collection("users").findOne({
-          UserName: testUser.UserName + "2",
-          Email: testUser.Email + "2",
-          FirstName: testUser.FirstName,
-          LastName: testUser.LastName,
-          SchoolAffiliation: "RPI"
-        });
-
-        expect(res).toBeTruthy();
-        expect(session.userData.userID).toBe(res._id.toString());
-      });
-  });
-
-  it("POST: register rpi name failure", async() => {
-    await createUser();
-    session = { userDataTemp: { userName: testUser.UserName, email: testUser.Email } };
-    await app.post("/api/users/register/rpi")
-      .send({
-        userName: testUser.UserName,
-        email: testUser.Email,
-        password: testUser.Password,
-        firstName: "",
-        lastName: 2
-      })
-      .expect(400)
-      .then(async (response) => {
-        expect(response.body.result).toBe("failure");
-      });
-  });
-
-  it("POST: register rpi failure duplicate", async () => {
-
-    // Create unique indexes
-    mongoConnection.getDB().collection("users").createIndex({"UserName": 1}, {unique: true});
-    session = { userDataTemp: { userName: testUser.UserName + "3", email: testUser.Email + "3" } };
-
-    await app.post("/api/users/register/rpi")
-      .send({
-        userName: testUser.UserName + "3",
-        email: testUser.Email + "3",
-        password: testUser.Password,
-        firstName: testUser.FirstName,
-        lastName: testUser.LastName
-      })
-      .expect(200)
-      .then(async () => {
-        session = { userDataTemp: { userName: testUser.UserName + "3", email: testUser.Email + "3" } };
-
-        await app.post("/api/users/register/rpi")
-          .send({
-            userName: testUser.UserName + "3",
-            email: testUser.Email + "3",
-            password: testUser.Password,
-            firstName: testUser.FirstName,
-            lastName: testUser.LastName,
-          })
-          .expect(400)
-          .then(async (response) => {
-            expect(response.body.result).toBe("failure");
-
-          });
-      });
-  });
-
-  it("POST: register temp data failure", async() => {
-    await createUser();
-    session = { };
-    await app.post("/api/users/register/rpi")
-      .send({
-        userName: testUser.UserName,
-        email: testUser.Email,
-        password: testUser.Password,
-        firstName: testUser.FirstName,
-        lastName: testUser.LastName
-      })
-      .expect(500)
-      .then(async (response) => {
-        expect(response.body.result).toBe("failure");
-      });
-  });
-
-});
+// describe("/api/users/register/rpi", () => {
+//
+//   it("GET: register rpi success", async () => {
+//     let res = await createUser();
+//     // eslint-disable-next-line camelcase
+//     session = {cas_return_to: "", cas_user: "mcdanz", userData: {userID: res.insertedId}};
+//     await app.get("/api/users/register/rpi")
+//       .send({
+//         userName: testUser.UserName,
+//         email: testUser.Email,
+//         password: testUser.Password,
+//         firstName: testUser.FirstName,
+//         lastName: testUser.LastName
+//       })
+//       .expect(302);
+//   });
+//
+//   it("POST: register rpi success", async () => {
+//     await createUser();
+//     session = {userDataTemp: {userName: testUser.UserName + "2", email: testUser.Email + "2"}};
+//     await app.post("/api/users/register/rpi")
+//       .send({
+//         userName: testUser.UserName + "2",
+//         email: testUser.Email + "2",
+//         password: testUser.Password,
+//         firstName: testUser.FirstName,
+//         lastName: testUser.LastName
+//       })
+//       .expect(200)
+//       .then(async (response) => {
+//         expect(response.body.result).toBe("success");
+//         expect(response.body.data.firstName).toBe(testUser.FirstName);
+//         expect(response.body.data.lastName).toBe(testUser.LastName);
+//         expect(response.body.data.userName).toBe(testUser.UserName + "2");
+//
+//         let res = await mongoConnection.getDB().collection("users").findOne({
+//           UserName: testUser.UserName + "2",
+//           Email: testUser.Email + "2",
+//           FirstName: testUser.FirstName,
+//           LastName: testUser.LastName,
+//           SchoolAffiliation: "RPI"
+//         });
+//
+//         expect(res).toBeTruthy();
+//         expect(session.userData.userID).toBe(res._id.toString());
+//       });
+//   });
+//
+//   it("POST: register rpi name failure", async () => {
+//     await createUser();
+//     session = {userDataTemp: {userName: testUser.UserName, email: testUser.Email}};
+//     await app.post("/api/users/register/rpi")
+//       .send({
+//         userName: testUser.UserName,
+//         email: testUser.Email,
+//         password: testUser.Password,
+//         firstName: "",
+//         lastName: 2
+//       })
+//       .expect(400)
+//       .then(async (response) => {
+//         expect(response.body.result).toBe("failure");
+//       });
+//   });
+//
+//   it("POST: register rpi failure duplicate", async () => {
+//
+//     // Create unique indexes
+//     mongoConnection.getDB().collection("users").createIndex({"UserName": 1}, {unique: true});
+//     session = {userDataTemp: {userName: testUser.UserName + "3", email: testUser.Email + "3"}};
+//
+//     await app.post("/api/users/register/rpi")
+//       .send({
+//         userName: testUser.UserName + "3",
+//         email: testUser.Email + "3",
+//         password: testUser.Password,
+//         firstName: testUser.FirstName,
+//         lastName: testUser.LastName
+//       })
+//       .expect(200)
+//       .then(async () => {
+//         session = {userDataTemp: {userName: testUser.UserName + "3", email: testUser.Email + "3"}};
+//
+//         await app.post("/api/users/register/rpi")
+//           .send({
+//             userName: testUser.UserName + "3",
+//             email: testUser.Email + "3",
+//             password: testUser.Password,
+//             firstName: testUser.FirstName,
+//             lastName: testUser.LastName,
+//           })
+//           .expect(400)
+//           .then(async (response) => {
+//             expect(response.body.result).toBe("failure");
+//
+//           });
+//       });
+//   });
+//
+//   it("POST: register temp data failure", async () => {
+//     await createUser();
+//     session = {};
+//     await app.post("/api/users/register/rpi")
+//       .send({
+//         userName: testUser.UserName,
+//         email: testUser.Email,
+//         password: testUser.Password,
+//         firstName: testUser.FirstName,
+//         lastName: testUser.LastName
+//       })
+//       .expect(500)
+//       .then(async (response) => {
+//         expect(response.body.result).toBe("failure");
+//       });
+//   });
+//
+// });
 
 describe("/api/users/logout", () => {
 
@@ -540,7 +520,7 @@ describe("/api/users/logout", () => {
   });
 
   it("POST: logout user success", async () => {
-    session = { userData: {} };
+    session = {userData: {}};
     await app.post("/api/users/logout")
       .expect(200)
       .then(async (response) => {
@@ -555,7 +535,7 @@ describe("/api/users/me", () => {
 
   it("GET: get logged in user", async () => {
     let res = await createUser();
-    session = { userData: { userID: res.insertedId } };
+    session = {userData: {userID: res.insertedId}};
     await app.get("/api/users/me")
       .expect(200)
       .then(async (response) => {
@@ -607,7 +587,7 @@ describe("/api/users/me/edit", () => {
       EmailLocked: false,
       SchoolAffiliation: "",
     });
-    session = { userData: { userID: res.insertedId } };
+    session = {userData: {userID: res.insertedId}};
     await app.post("/api/users/me/edit")
       .send({
         firstName: testUser2.FirstName,
@@ -645,7 +625,7 @@ describe("/api/users/me/edit", () => {
       EmailLocked: true,
       SchoolAffiliation: "RPI",
     });
-    session = { userData: { userID: res.insertedId } };
+    session = {userData: {userID: res.insertedId}};
     await app.post("/api/users/me/edit")
       .send({
         firstName: testUser2.FirstName,
@@ -665,7 +645,7 @@ describe("/api/users/me/edit", () => {
     let res = await createUser({
       SchoolAffiliation: "",
     });
-    session = { userData: { userID: res.insertedId } };
+    session = {userData: {userID: res.insertedId}};
     await app.post("/api/users/me/edit")
       .send({
         password: testUser2.Password,
@@ -692,7 +672,7 @@ describe("/api/users/me/groups", () => {
     let user = await createUser();
     let adminGroup = await createGroup({Admins: [user.insertedId.toString()]});
     let memberGroup = await createGroup({Name: testGroup2.Name, Members: [user.insertedId.toString()]});
-    session = { userData: { userID: user.insertedId } };
+    session = {userData: {userID: user.insertedId}};
     await app.get("/api/users/me/groups")
       .expect(200)
       .then(async (response) => {
@@ -706,7 +686,7 @@ describe("/api/users/me/groups", () => {
 
   it.skip("GET: user groups success", async () => {
     await createUser();
-    session = { userData: {userID: "1" } };
+    session = {userData: {userID: "1"}};
     await app.get("/api/users/me/groups")
       .expect(200)
       .then(async (response) => {
@@ -839,7 +819,7 @@ describe("/api/users/:id/edit", () => {
     let res = await createUser({
       SchoolAffiliation: "",
     });
-    session = { userData: { userID: res.insertedId } };
+    session = {userData: {userID: res.insertedId}};
     await app.post("/api/users/" + res.insertedId + "/edit")
       .send({
         password: testUser2.Password,
@@ -867,7 +847,7 @@ describe("/api/users/:id/groups", () => {
     let user = await createUser();
     let adminGroup = await createGroup({Admins: [user.insertedId.toString()]});
     let memberGroup = await createGroup({Name: testGroup2.Name, Members: [user.insertedId.toString()]});
-    await app.get("/api/users/"+ user.insertedId + "/groups")
+    await app.get("/api/users/" + user.insertedId + "/groups")
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");

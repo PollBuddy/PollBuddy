@@ -172,15 +172,17 @@ const HTTP_CODES = [
 let httpCodes = {};
 for (let httpCode of HTTP_CODES) {
   if (httpCode.statusCode >= 400) {
-    httpCodes[httpCode.status] = function(error) {
+    httpCodes[httpCode.status] = function (error) {
       let response = JSON.parse(JSON.stringify(httpCode));
+      response.ok = false;
       response.result = "failure";
       response.error = error;
       return response;
     };
   } else if (httpCode.statusCode >= 200) {
-    httpCodes[httpCode.status] = function(data) {
+    httpCodes[httpCode.status] = function (data) {
       let response = JSON.parse(JSON.stringify(httpCode));
+      response.ok = true;
       response.result = "success";
       response.data = data;
       return response;
@@ -189,7 +191,8 @@ for (let httpCode of HTTP_CODES) {
 }
 
 function sendResponse(res, response) {
-  return res.status(response.statusCode).json(response);
+  res.status(response.statusCode).json(response);
+  return;
 }
 
 module.exports = {

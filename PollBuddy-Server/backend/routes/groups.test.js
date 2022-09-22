@@ -6,13 +6,21 @@ const MongoClient = mongo.MongoClient;
 
 const mongoConnection = require("../modules/mongoConnection.js");
 const groupsRouter = require("./groups");
-const {testUser, testGroup, createUser, createGroup, createPoll, testPoll, testGroup2} = require("../modules/testingUtils");
+const {
+  testUser,
+  testGroup,
+  createUser,
+  createGroup,
+  createPoll,
+  testPoll,
+  testGroup2
+} = require("../modules/testingUtils");
 
 let mockApp = express();
 let session = {};
 
 mockApp.use(express.json());
-mockApp.use(express.urlencoded({ extended: false }));
+mockApp.use(express.urlencoded({extended: false}));
 // eslint-disable-next-line no-unused-vars
 mockApp.use(function (req, res, next) {
   req.session = session;
@@ -53,7 +61,7 @@ describe("/api/groups/:id", () => {
   it("GET: get group as non-member", async () => {
     let user = await createUser();
     let group = await createGroup();
-    session = { userData: { userID: user.insertedId } };
+    session = {userData: {userID: user.insertedId}};
     await app.get("/api/groups/" + group.insertedId)
       .expect(200)
       .then(async (response) => {
@@ -66,8 +74,8 @@ describe("/api/groups/:id", () => {
 
   it("GET: get group as member", async () => {
     let user = await createUser();
-    let group = await createGroup({ Members: [ user.insertedId ] });
-    session = { userData: { userID: user.insertedId } };
+    let group = await createGroup({Members: [user.insertedId]});
+    session = {userData: {userID: user.insertedId}};
     await app.get("/api/groups/" + group.insertedId)
       .expect(200)
       .then(async (response) => {
@@ -80,8 +88,8 @@ describe("/api/groups/:id", () => {
 
   it("GET: get group as admin", async () => {
     let user = await createUser();
-    let group = await createGroup({ Admins: [ user.insertedId ] });
-    session = { userData: { userID: user.insertedId } };
+    let group = await createGroup({Admins: [user.insertedId]});
+    session = {userData: {userID: user.insertedId}};
     await app.get("/api/groups/" + group.insertedId)
       .expect(200)
       .then(async (response) => {
@@ -114,7 +122,7 @@ describe("/api/groups/new", () => {
 
   it("POST: create group", async () => {
     let user = await createUser();
-    session = { userData: { userID: user.insertedId } };
+    session = {userData: {userID: user.insertedId}};
     await app.post("/api/groups/new")
       .send({
         name: testGroup.Name,
@@ -156,7 +164,7 @@ describe("/api/groups/:id/edit", () => {
   it("POST: edit group", async () => {
     let user = await createUser();
     let group = await createGroup({Admins: [user.insertedId]});
-    session = { userData: { userID: user.insertedId } };
+    session = {userData: {userID: user.insertedId}};
     await app.post("/api/groups/" + group.insertedId + "/edit")
       .send({
         name: testGroup2.Name,
@@ -176,7 +184,7 @@ describe("/api/groups/:id/edit", () => {
   it("POST: non-admin edit group", async () => {
     let user = await createUser();
     let group = await createGroup();
-    session = { userData: { userID: user.insertedId } };
+    session = {userData: {userID: user.insertedId}};
     await app.post("/api/groups/" + group.insertedId + "/edit")
       .expect(403)
       .then(async (response) => {
@@ -199,7 +207,7 @@ describe("/api/groups/:id/admins", () => {
   it("GET: get group admins", async () => {
     let user = await createUser();
     let group = await createGroup({Admins: [user.insertedId]});
-    session = { userData: { userID: user.insertedId } };
+    session = {userData: {userID: user.insertedId}};
     await app.get("/api/groups/" + group.insertedId + "/admins")
       .expect(200)
       .then(async (response) => {
@@ -212,7 +220,7 @@ describe("/api/groups/:id/admins", () => {
   it("GET: non-admin get group admins", async () => {
     let user = await createUser();
     let group = await createGroup();
-    session = { userData: { userID: user.insertedId } };
+    session = {userData: {userID: user.insertedId}};
     await app.get("/api/groups/" + group.insertedId + "/admins")
       .expect(403)
       .then(async (response) => {
@@ -235,7 +243,7 @@ describe("/api/groups/:id/members", () => {
   it("GET: get group members", async () => {
     let user = await createUser();
     let group = await createGroup({Admins: [user.insertedId], Members: [user.insertedId]});
-    session = { userData: { userID: user.insertedId } };
+    session = {userData: {userID: user.insertedId}};
     await app.get("/api/groups/" + group.insertedId + "/members")
       .expect(200)
       .then(async (response) => {
@@ -248,7 +256,7 @@ describe("/api/groups/:id/members", () => {
   it("GET: non-admin get group members", async () => {
     let user = await createUser();
     let group = await createGroup();
-    session = { userData: { userID: user.insertedId } };
+    session = {userData: {userID: user.insertedId}};
     await app.get("/api/groups/" + group.insertedId + "/members")
       .expect(403)
       .then(async (response) => {
@@ -270,49 +278,80 @@ describe("/api/groups/:id/polls", () => {
 
   it("GET: get group polls as admin", async () => {
     let user = await createUser();
-    let group = await createGroup({ Admins: [user.insertedId]});
-    let poll = await createPoll({ Group: group.insertedId, AllowSubmissions: false });
-    session = { userData: { userID: user.insertedId } };
+    let group = await createGroup({Admins: [user.insertedId]});
+    // Poll not open
+    let poll1 = await createPoll({
+      Group: group.insertedId,
+      OpenTime: Date.now() + (24 * 60 * 60 * 1000),
+      CloseTime: Date.now() + (24 * 60 * 60 * 1000)
+    });
+    // Poll currently open
+    let poll2 = await createPoll({
+      Group: group.insertedId,
+      OpenTime: Date.now() - (24 * 60 * 60 * 1000),
+      CloseTime: Date.now() + (24 * 60 * 60 * 1000)
+    });
+    // Poll already closed
+    let poll3 = await createPoll({
+      Group: group.insertedId,
+      OpenTime: Date.now() - (24 * 60 * 60 * 1000),
+      CloseTime: Date.now() - (24 * 60 * 60 * 1000)
+    });
+    session = {userData: {userID: user.insertedId}};
     await app.get("/api/groups/" + group.insertedId + "/polls")
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
-        expect(response.body.data[0].id.toString()).toEqual(poll.insertedId.toString());
+
+        // Admins should be able to retrieve all polls.
+        expect(response.body.data[0].id.toString()).toEqual(poll1.insertedId.toString());
         expect(response.body.data[0].title).toEqual(testPoll.Title);
+
+        expect(response.body.data[1].id.toString()).toEqual(poll2.insertedId.toString());
+        expect(response.body.data[1].title).toEqual(testPoll.Title);
+
+        expect(response.body.data[2].id.toString()).toEqual(poll3.insertedId.toString());
+        expect(response.body.data[2].title).toEqual(testPoll.Title);
       });
   });
 
-  it("GET: get visible group polls as member", async () => {
+  it("GET: get group polls as member", async () => {
     let user = await createUser();
-    let group = await createGroup({ Members: [user.insertedId]});
-    let poll = await createPoll({ Group: group.insertedId, AllowSubmissions: true });
-    session = { userData: { userID: user.insertedId } };
+    let group = await createGroup({Members: [user.insertedId]});
+    // Poll not open
+    let poll1 = await createPoll({
+      Group: group.insertedId,
+      OpenTime: Date.now() + (24 * 60 * 60 * 1000),
+      CloseTime: Date.now() + (24 * 60 * 60 * 1000)
+    });
+    // Poll currently open
+    let poll2 = await createPoll({
+      Group: group.insertedId,
+      OpenTime: Date.now() - (24 * 60 * 60 * 1000),
+      CloseTime: Date.now() + (24 * 60 * 60 * 1000)
+    });
+    // Poll already closed
+    let poll3 = await createPoll({
+      Group: group.insertedId,
+      OpenTime: Date.now() - (24 * 60 * 60 * 1000),
+      CloseTime: Date.now() - (24 * 60 * 60 * 1000)
+    });
+    session = {userData: {userID: user.insertedId}};
     await app.get("/api/groups/" + group.insertedId + "/polls")
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
-        expect(response.body.data[0].id.toString()).toEqual(poll.insertedId.toString());
-        expect(response.body.data[0].title).toEqual(testPoll.Title);
-      });
-  });
 
-  it("GET: get non-visible group polls as member", async () => {
-    let user = await createUser();
-    let group = await createGroup({ Members: [user.insertedId]});
-    await createPoll({ Group: group.insertedId, AllowSubmissions: false });
-    session = { userData: { userID: user.insertedId } };
-    await app.get("/api/groups/" + group.insertedId + "/polls")
-      .expect(200)
-      .then(async (response) => {
-        expect(response.body.result).toBe("success");
-        expect(response.body.data).toHaveLength(0);
+        // Members should only be able to retrieve currently open polls.
+        expect(response.body.data[0].id.toString()).toEqual(poll2.insertedId.toString());
+        expect(response.body.data[0].title).toEqual(testPoll.Title);
       });
   });
 
   it("GET: get polls as non-member", async () => {
     let user = await createUser();
     let group = await createGroup();
-    session = { userData: { userID: user.insertedId } };
+    session = {userData: {userID: user.insertedId}};
     await app.get("/api/groups/" + group.insertedId + "/polls")
       .expect(403)
       .then(async (response) => {
@@ -343,7 +382,7 @@ describe("/api/groups/:id/join", () => {
   it("POST: join group", async () => {
     let user = await createUser();
     let group = await createGroup();
-    session = { userData: { userID: user.insertedId } };
+    session = {userData: {userID: user.insertedId}};
     await app.post("/api/groups/" + group.insertedId + "/join")
       .expect(200)
       .then(async (response) => {
@@ -358,8 +397,8 @@ describe("/api/groups/:id/join", () => {
 
   it("POST: join group as user", async () => {
     let user = await createUser();
-    let group = await createGroup({ Admins: [user.insertedId]});
-    session = { userData: { userID: user.insertedId } };
+    let group = await createGroup({Admins: [user.insertedId]});
+    session = {userData: {userID: user.insertedId}};
     await app.post("/api/groups/" + group.insertedId + "/join")
       .expect(403)
       .then(async (response) => {
@@ -381,8 +420,8 @@ describe("/api/groups/:id/leave", () => {
 
   it("POST: leave group", async () => {
     let user = await createUser();
-    let group = await createGroup({ Members: [user.insertedId] });
-    session = { userData: { userID: user.insertedId } };
+    let group = await createGroup({Members: [user.insertedId]});
+    session = {userData: {userID: user.insertedId}};
     await app.post("/api/groups/" + group.insertedId + "/leave")
       .expect(200)
       .then(async (response) => {
@@ -396,8 +435,8 @@ describe("/api/groups/:id/leave", () => {
 
   it("POST: leave group as non member", async () => {
     let user = await createUser();
-    let group = await createGroup({ Admins: [user.insertedId]});
-    session = { userData: { userID: user.insertedId } };
+    let group = await createGroup({Admins: [user.insertedId]});
+    session = {userData: {userID: user.insertedId}};
     await app.post("/api/groups/" + group.insertedId + "/join")
       .expect(403)
       .then(async (response) => {
@@ -419,8 +458,8 @@ describe("/api/groups/:id/delete", () => {
 
   it("POST: delete group", async () => {
     let user = await createUser();
-    let group = await createGroup({ Admins: [user.insertedId] });
-    session = { userData: { userID: user.insertedId } };
+    let group = await createGroup({Admins: [user.insertedId]});
+    session = {userData: {userID: user.insertedId}};
     await app.post("/api/groups/" + group.insertedId + "/delete")
       .expect(200)
       .then(async (response) => {
@@ -435,7 +474,7 @@ describe("/api/groups/:id/delete", () => {
   it("POST: non-admin delete group", async () => {
     let user = await createUser();
     let group = await createGroup();
-    session = { userData: { userID: user.insertedId } };
+    session = {userData: {userID: user.insertedId}};
     await app.post("/api/groups/" + group.insertedId + "/delete")
       .expect(403)
       .then(async (response) => {
