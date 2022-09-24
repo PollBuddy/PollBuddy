@@ -1,10 +1,10 @@
 let list = [];
 
 module.exports = {
-  append: function(name, urlSuffix) {
+  append: function (name, urlSuffix) {
     list.push([name, urlSuffix]);
   },
-  getList: function(){
+  getList: function () {
     return list;
   }
 };

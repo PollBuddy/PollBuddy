@@ -4,17 +4,17 @@ const supertest = require("supertest");
 const mongo = require("mongodb");
 const MongoClient = mongo.MongoClient;
 
-const mongoConnection = require("../modules/mongoConnection.js");
+const mongoConnection = require("../../modules/mongoConnection.js");
 const pollsRouter = require("./polls");
 
-const {createUser, createGroup} = require("../modules/testingUtils.js");
+const {createUser, createGroup} = require("../../modules/testingUtils.js");
 const {
   createPoll,
   testPoll,
   testPoll2,
   sampleQuestion,
   sampleQuestion2,
-} = require("../modules/testingUtils");
+} = require("../../modules/testingUtils");
 const bson = require("bson");
 
 let mockApp = express();

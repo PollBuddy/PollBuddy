@@ -15,7 +15,6 @@ const cors = require("cors");
 app.use(cors());
 
 
-
 // Express Session
 const expressSession = require("express-session");
 const MongoStore = require("connect-mongo");
@@ -50,11 +49,11 @@ app.use(expressSession({
 const influxConnection = require("./modules/influx.js");
 
 // Handles /api/groups routes URLs
-const groupsRouter = require("./routes/groups");
+const groupsRouter = require("./routes/groups/groups");
 // Handles /api/polls routes URLs
-const pollsRouter = require("./routes/polls");
+const pollsRouter = require("./routes/polls/polls");
 // Handles /api/users routes URLs
-const usersRouter = require("./routes/users");
+const usersRouter = require("./routes/users/users");
 
 // Response Time Logging to InfluxDB
 app.use((req, res, next) => {
@@ -90,7 +89,7 @@ email.initialize();
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 

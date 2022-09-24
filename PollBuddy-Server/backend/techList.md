@@ -32,7 +32,8 @@ NPM link: <https://www.npmjs.com/package/cookie-parser>
 
 ## cors
 
-This is a package for enabling CORS ([Cross-Origin Resource Sharing](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)).
+This is a package for enabling
+CORS ([Cross-Origin Resource Sharing](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)).
 
 NPM Link: <https://www.npmjs.com/package/cors>
 
@@ -44,7 +45,8 @@ NPM Link: <https://www.npmjs.com/package/debug>
 
 ## dotenv
 
-dotenv loads environment variables from a .env file into process.env (a Node.js method for setting the user environment).
+dotenv loads environment variables from a .env file into process.env (a Node.js method for setting the user environment)
+.
 
 NPM Link: <https://www.npmjs.com/package/dotenv>
 
@@ -83,7 +85,8 @@ var usersRouter = require("./routes/users");
 app.use("/api/users", usersRouter);
 ```
 
-directs any calls to `/api/users` to the file `./routes/users`, which is where we store our Express functions for users information.
+directs any calls to `/api/users` to the file `./routes/users`, which is where we store our Express functions for users
+information.
 
 NPM Link: <https://www.npmjs.com/package/express>
 
@@ -112,7 +115,9 @@ NPM Link: <https://www.npmjs.com/package/http-errors>
 
 Influx is a package to access InfluxDB databases in Node.js.
 
-We mainly use it to log API response amounts and times, the time it takes to for mongoDB queries to run, and frontend page accesses. We then use this anonymous data to help us analyze the app for any performance issues and areas that need improvement.
+We mainly use it to log API response amounts and times, the time it takes to for mongoDB queries to run, and frontend
+page accesses. We then use this anonymous data to help us analyze the app for any performance issues and areas that need
+improvement.
 
 NPM Link: <https://www.npmjs.com/package/influx>
 
@@ -122,8 +127,7 @@ Also see <https://docs.influxdata.com/influxdb/cloud/> for full documentation.
 
 joi is a package that acts as a schema descriptor as well as a data validator for JavaScript
 
-joi is used mainly to validate that user input data such as logins, passwords, emails, names, etc.
-are valid
+joi is used mainly to validate that user input data such as logins, passwords, emails, names, etc. are valid
 
 NPM Link: <https://www.npmjs.com/package/joi>
 
@@ -137,15 +141,22 @@ NPM link: <https://www.npmjs.com/package/morgan>
 
 MongoDB is the database that Poll Buddy uses to store information.
 
-At the top of the information hierarchy there are collections, e.g. "users". Every collection contains .JSON files with IDs unique to their collections (these are usually strings of characters and numbers). Each object can then have other data types used in them.
+At the top of the information hierarchy there are collections, e.g. "users". Every collection contains .JSON files with
+IDs unique to their collections (these are usually strings of characters and numbers). Each object can then have other
+data types used in them.
 
-Please refer to the [Database Schema Wiki Page](https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Database-Schema) to see how we use MongoDB to store data for our app.
+Please refer to
+the [Database Schema Wiki Page](https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Database-Schema) to
+see how we use MongoDB to store data for our app.
 
 NPM link: <https://www.npmjs.com/package/mongodb>
 
 ## Node.js
 
-Node.js is an open source JavaScript runtime environment that allows JavaScript code to executed outside the browser. It runs a single-threaded event loop while optimizing code to limit blocking (waiting on one block of code to execute before calling the next). People have written a plethora of packages that run on Node.js that can help with your code (found at <https://www.npmjs.com>). The frontend and backend of Poll Buddy use Node.js.
+Node.js is an open source JavaScript runtime environment that allows JavaScript code to executed outside the browser. It
+runs a single-threaded event loop while optimizing code to limit blocking (waiting on one block of code to execute
+before calling the next). People have written a plethora of packages that run on Node.js that can help with your code (
+found at <https://www.npmjs.com>). The frontend and backend of Poll Buddy use Node.js.
 
 See: <https://nodejs.org/api/> for the full documentation
 
