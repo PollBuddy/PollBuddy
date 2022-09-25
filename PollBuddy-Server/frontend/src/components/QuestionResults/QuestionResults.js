@@ -1,10 +1,10 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import "./QuestionResults.scss";
-import { Bar } from "react-chartjs-2";
-import { Chart as ChartJS } from 'chart.js/auto';
-import { MDBContainer, MDBIcon } from "mdbreact";
+import {Bar} from "react-chartjs-2";
+import {Chart as ChartJS} from 'chart.js/auto';
+import {MDBContainer, MDBIcon} from "mdbreact";
 
-import Countdown, { zeroPad } from "react-countdown";
+import Countdown, {zeroPad} from "react-countdown";
 
 export default class QuestionResults extends Component {
   constructor(props) {
@@ -64,33 +64,25 @@ export default class QuestionResults extends Component {
         responsive: true,
         maintainAspectRatio: true,
         scales: {
-          xAxes: {
+          x: {
             barPercentage: 1,
-            gridLines: {
-              gridLines: {
-                display: true,
-                color: "rgba(255, 255, 255, 0.9)"
-              }
+            grid: {
+              color: "rgba(255, 255, 255, 0.5)",
             },
             ticks: {
-              fontColor: "white",
-              fontSize: 20,
-              fontFamily: "Baloo 2",
+              color: "white",
             }
           },
-          yAxes: {
-            gridLines: {
-              display: true,
-              color: "rgba(255, 255, 255, 0.9)"
+          y: {
+            grid: {
+              color: "rgba(255, 255, 255, 0.5)",
             },
             ticks: {
               beginAtZero: true,
-              fontColor: "white",
-              fontSize: 20,
-              fontFamily: "Baloo 2",
               precision: 0,
               stepSize: 1,
-              min: 0
+              min: 0,
+              color: "white",
             }
           }
         }
