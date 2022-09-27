@@ -4,7 +4,7 @@ const {createModel} = require("../modules/utils");
 const mongoConnection = require("../modules/mongoConnection.js");
 const {httpCodes} = require("../modules/httpCodes.js");
 const {
-  getGroupInternal, isGroupMember, isGroupAdmin, getPollInternal, getQuestionInternal, isPollAdmin,
+  getGroupInternal, isGroupMember, getPollInternal, getQuestionInternal, isPollAdmin,
   getUserInternal
 } = require("../modules/modelUtils");
 const {objectID} = require("../modules/validatorUtils");
@@ -363,14 +363,9 @@ const createPoll = async function (userID, pollData) {
     };
 
     if (pollData.group) {
-      let group = await getGroupInternal(pollData.group);
+      let group = await getGroupInternal(pollData.group, userID);
       if (!group) {
-        return httpCodes.BadRequest("Invalid Group: Group does not exist.");
-      }
-
-      let isUserGroupAdmin = await isGroupAdmin(group._id, userID);
-      if (!isUserGroupAdmin) {
-        return httpCodes.Unauthorized("Unauthorized: Cannot create poll in this group.");
+        return httpCodes.BadRequest("Invalid operation");
       }
       newPoll.Group = group._id;
     } else {

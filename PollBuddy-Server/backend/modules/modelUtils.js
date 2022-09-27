@@ -5,9 +5,9 @@ const getID = function (ID) {
   return new bson.ObjectID(ID);
 };
 
-const getGroupInternal = async function(groupID) {
+const getGroupInternal = async function(groupID, userID) {
   let idCode = new bson.ObjectID(groupID);
-  return await mongoConnection.getDB().collection("groups").findOne({"_id": idCode});
+  return await mongoConnection.getDB().collection("groups").findOne({"_id": idCode, "Admins": [userID]});
 };
 
 const isGroupAdmin = async function(groupID, userID) {
@@ -80,9 +80,8 @@ const getQuestionInternal = async function(pollID, questionID) {
 const isPollAdmin = async function(userID, pollID) {
   let poll = await getPollInternal(pollID);
   if (poll.Group) {
-    let group = await getGroupInternal(poll.Group);
-    let isUserGroupAdmin = await isGroupAdmin(group._id, userID);
-    if (!isUserGroupAdmin) { return false; }
+    let group = await getGroupInternal(poll.Group, userID);
+    if (!group) { return false; }
   } else {
     let isUserPollCreator = poll.Creator.toString() === userID.toString();
     if (!isUserPollCreator) { return false; }
@@ -93,7 +92,6 @@ const isPollAdmin = async function(userID, pollID) {
 module.exports = {
   getGroupInternal,
   isGroupMember,
-  isGroupAdmin,
   getPollInternal,
   getUserInternal,
   getQuestionInternal,
