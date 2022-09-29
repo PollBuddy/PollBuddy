@@ -258,6 +258,9 @@ router.post("/", isDevelopmentMode, function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
+/**
+ * Antonio - get -> post
+ */
 router.get("/:id", paramValidator(pollParamsValidator), async (req, res) => {
   let userID = null;
   if (req.session.userData && req.session.userData.userID) {

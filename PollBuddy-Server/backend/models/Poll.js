@@ -109,7 +109,6 @@ const getQuestion = function (question, isAdmin) {
 
 /**
  * errorCode === 100 means that the poll does not exist
- * Antonio - Switch get -> post
  */
 
 const getPoll = async function (userID, pollID) {
