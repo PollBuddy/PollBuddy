@@ -27,6 +27,7 @@ const pollSchema = {
   RequiresLogin: true,
   OpenTime: Date.now(),
   CloseTime: Date.now() + (10 * 365.25 * 24 * 60 * 60 * 1000), // Now + 10 years
+  Password: "",
   Questions: [],
 };
 
