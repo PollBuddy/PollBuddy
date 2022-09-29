@@ -422,6 +422,7 @@ const editPoll = async function (userID, pollID, pollData) {
           Description: pollData.description,
           OpenTime: pollData.openTime.valueOf(),
           CloseTime: pollData.closeTime.valueOf(),
+          Password: pollData.password,
         }
       }
     );
