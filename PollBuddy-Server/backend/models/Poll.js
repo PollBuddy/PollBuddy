@@ -61,6 +61,7 @@ const editPollValidator = Joi.object({
   description: pollValidators.description.required(),
   openTime: Joi.date().required(),
   closeTime: Joi.date().required(),
+  password: Join.string().length(5).required(),
 });
 
 const createQuestionValidator = Joi.object({
