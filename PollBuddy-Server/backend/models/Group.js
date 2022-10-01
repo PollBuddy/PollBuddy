@@ -37,7 +37,7 @@ const editGroupValidator = Joi.object({
 
 const getGroup = async function (groupID, userID) {
   try {
-    const group = await getGroupInternal(groupID, userID);
+    const group = await getGroupInternal(groupID);
     if (!group) {
       return httpCodes.NotFound();
     }
@@ -76,14 +76,9 @@ const createGroup = async function (userID, groupData) {
 
 const editGroup = async function (groupID, userID, groupData) {
   try {
-    const group = await getGroupInternal(groupID, userID);
+    const group = await getGroupInternal(groupID, {"Admins": userID});
     if (!group) {
       return httpCodes.NotFound();
-    }
-
-    let isAdmin = isGroupAdminByGroup(group, userID);
-    if (!isAdmin) {
-      return httpCodes.Forbidden();
     }
 
     await mongoConnection.getDB().collection("groups").updateOne(
@@ -104,14 +99,9 @@ const editGroup = async function (groupID, userID, groupData) {
 
 const getGroupMembers = async function (groupID, userID) {
   try {
-    const group = await getGroupInternal(groupID, userID);
+    const group = await getGroupInternal(groupID, {"Admins": userID});
     if (!group) {
       return httpCodes.NotFound();
-    }
-
-    let isAdmin = isGroupAdminByGroup(group, userID);
-    if (!isAdmin) {
-      return httpCodes.Forbidden();
     }
 
     let members = [];
@@ -131,14 +121,9 @@ const getGroupMembers = async function (groupID, userID) {
 
 const getGroupAdmins = async function (groupID, userID) {
   try {
-    const group = await getGroupInternal(groupID, userID);
+    const group = await getGroupInternal(groupID, {"Admins": userID});
     if (!group) {
       return httpCodes.NotFound();
-    }
-
-    let isAdmin = isGroupAdminByGroup(group, userID);
-    if (!isAdmin) {
-      return httpCodes.Forbidden();
     }
 
     let admins = [];
@@ -158,7 +143,7 @@ const getGroupAdmins = async function (groupID, userID) {
 
 const getGroupPolls = async function (userID, groupID) {
   try {
-    const group = await getGroupInternal(groupID, userID);
+    const group = await getGroupInternal(groupID);
     if (!group) {
       return httpCodes.NotFound();
     }
@@ -189,14 +174,9 @@ const getGroupPolls = async function (userID, groupID) {
 
 const joinGroup = async function (groupID, userID) {
   try {
-    const group = await getGroupInternal(groupID, userID);
+    const group = await getGroupInternal(groupID, {"Members": { "$nin": ["userID"]}});
     if (!group) {
       return httpCodes.NotFound();
-    }
-
-    const isUser = isGroupUserByGroup(group, userID);
-    if (isUser) {
-      return httpCodes.Forbidden();
     }
 
     await mongoConnection.getDB().collection("groups").updateOne(
@@ -216,14 +196,9 @@ const joinGroup = async function (groupID, userID) {
 
 const leaveGroup = async function (groupID, userID) {
   try {
-    let group = await getGroupInternal(groupID, userID);
+    let group = await getGroupInternal(groupID, {"Members": userID});
     if (!group) {
       return httpCodes.NotFound();
-    }
-
-    const isMember = isGroupMemberByGroup(group, userID);
-    if (!isMember) {
-      return httpCodes.Forbidden();
     }
 
     await mongoConnection.getDB().collection("groups").updateOne(
@@ -243,14 +218,9 @@ const leaveGroup = async function (groupID, userID) {
 
 const deleteGroup = async function (groupID, userID) {
   try {
-    let group = await getGroupInternal(groupID, userID);
+    let group = await getGroupInternal(groupID, {"Admins": userID});
     if (!group) {
       return httpCodes.NotFound();
-    }
-
-    let isAdmin = isGroupAdminByGroup(group, userID);
-    if (!isAdmin) {
-      return httpCodes.Forbidden();
     }
 
     await mongoConnection.getDB().collection("groups").deleteOne({_id: group._id});
