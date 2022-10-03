@@ -1,8 +1,8 @@
 import React from "react";
 import { MDBContainer } from "mdbreact";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./GroupSettings.scss";
-import {withRouter} from "../PropsWrapper/PropsWrapper";
+import { withRouter } from "../PropsWrapper/PropsWrapper";
 
 /*----------------------------------------------------------------------------*/
 
