@@ -5,7 +5,9 @@ import rcosLogo from "../../images/rcos.png";
 import githubLogo from "../../images/github.png";
 import { MDBContainer } from "mdbreact";
 
-export default function Footer() {
+/*----------------------------------------------------------------------------*/
+
+function Footer() {
   return (
     <footer className="Footer-foot">
       <MDBContainer className="Footer-foot-links">
@@ -45,3 +47,7 @@ export default function Footer() {
     </footer>
   );
 }
+
+/*----------------------------------------------------------------------------*/
+
+export default Footer;

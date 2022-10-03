@@ -84,7 +84,7 @@ function LoggedInMenu(props) {
       <a href="/code">Enter Poll Code</a>
       <a href="/groups">Groups</a>
       <a href="/guide">Quick Start Guide</a>
-      <a id="logout">Logout</a>
+      <a href="#" id="logout">Logout</a>
     </div>
     // Logout routes to '/' in the event listeners above.
   );
