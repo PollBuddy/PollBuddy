@@ -1,103 +1,100 @@
-import React, { Component } from "react";
-import {
-  MDBContainer
-} from "mdbreact";
-
+import React from "react";
+import { MDBContainer } from "mdbreact";
 import Countdown, { zeroPad } from "react-countdown";
 import "./Timer.scss";
 
-export default class Timer extends Component {
-  render(){
-    const clockFormatDays = ({ days, completed }) => {
+/*----------------------------------------------------------------------------*/
 
-      if (completed) {
-        // Render a completed state
-        return <span>00</span>;
-      } else {
-        // Render a countdown
-        return <span>{zeroPad(days)}</span>;
-      }
-    };
-    const clockFormatHours = ({ hours, completed }) => {
+function Timer({ noTimeLeft, timeLeft, CloseTime, onTimeEnd }) {
+  const clockFormatDays = React.useCallback(({ days, completed }) => {
+    if (completed) {
+      // Render a completed state.
+      return <span>00</span>;
+    } else {
+      // Render a countdown.
+      return <span>{zeroPad(days)}</span>;
+    }
+  }, [ zeroPad ]);
 
-      if (completed) {
-        // Render a completed state
-        return <span>00</span>;
-      } else {
-        // Render a countdown
-        return <span>{zeroPad(hours)}</span>;
-      }
-    };
-    const clockFormatMinutes = ({ minutes, completed }) => {
+  const clockFormatHours = React.useCallback(({ hours, completed }) => {
+    if (completed) {
+      // Render a completed state.
+      return <span>00</span>;
+    } else {
+      // Render a countdown.
+      return <span>{zeroPad(hours)}</span>;
+    }
+  }, [ zeroPad ]);
 
-      if (completed) {
-        // Render a completed state
-        return <span>00</span>;
-      } else {
-        // Render a countdown
-        return <span>{zeroPad(minutes)}</span>;
-      }
-    };
-    const clockFormatSeconds = ({ seconds, completed }) => {
+  const clockFormatMinutes = React.useCallback(({ minutes, completed }) => {
+    if (completed) {
+      // Render a completed state.
+      return <span>00</span>;
+    } else {
+      // Render a countdown.
+      return <span>{zeroPad(minutes)}</span>;
+    }
+  }, [ zeroPad ]);
 
-      if (completed) {
-        // Render a completed state
-        this.props.noTimeLeft();
-        return <span>00</span>;
-      } else {
-        // Render a countdown
-        return <span>{zeroPad(seconds)}</span>;
-      }
-    };
-    let countdown = ( (this.props.timeLeft) ?(
-      <MDBContainer>
-        <MDBContainer className="time-grid" title = "Question Countdown">
-          <button className = "button time-info">
-            <Countdown
-              renderer={clockFormatDays}
-              date={ this.props.CloseTime }//stored in milliseconds
-              onComplete={this.props.onTimeEnd}
-            />
-          </button>
-          <button className = "button time-info">
-            <Countdown
-              renderer={clockFormatHours}
-              date={ this.props.CloseTime }//stored in milliseconds
-              onComplete={this.props.onTimeEnd}
-            />
-          </button>
-          <button className = "button time-info">
-            <Countdown
-              renderer={clockFormatMinutes}
-              date={ this.props.CloseTime }//stored in milliseconds
-              onComplete={this.props.onTimeEnd}
-            />
-          </button>
-          <button className = "button time-info">
-            <Countdown
-              renderer={clockFormatSeconds}
-              date={ this.props.CloseTime }//stored in milliseconds
-              onComplete={this.props.onTimeEnd}
-            />
-          </button>
-          <button className={"time-info-text"}>
-            <span>Days</span>
-          </button>
-          <button className={"time-info-text"}>
-            <span>Hrs</span>
-          </button>
-          <button className={"time-info-text"}>
-            <span>Mins</span>
-          </button>
-          <button className={"time-info-text"}>
-            <span>Secs</span>
-          </button>
-        </MDBContainer>
+  const clockFormatSeconds = React.useCallback(({ seconds, completed }) => {
+    if (completed) {
+      // Render a completed state.
+      noTimeLeft();
+      return <span>00</span>;
+    } else {
+      // Render a countdown.
+      return <span>{zeroPad(seconds)}</span>;
+    }
+  }, [ zeroPad ]);
+
+  return timeLeft ? (
+    <MDBContainer>
+      <MDBContainer className="time-grid" title = "Question Countdown">
+        <button className = "button time-info">
+          <Countdown
+            renderer={clockFormatDays}
+            date={CloseTime} // Stored in milliseconds.
+            onComplete={onTimeEnd}/>
+        </button>
+        <button className = "button time-info">
+          <Countdown
+            renderer={clockFormatHours}
+            date={CloseTime} // Stored in milliseconds.
+            onComplete={onTimeEnd}/>
+        </button>
+        <button className = "button time-info">
+          <Countdown
+            renderer={clockFormatMinutes}
+            date={CloseTime} // Stored in milliseconds.
+            onComplete={onTimeEnd}/>
+        </button>
+        <button className = "button time-info">
+          <Countdown
+            renderer={clockFormatSeconds}
+            date={CloseTime} // Stored in milliseconds.
+            onComplete={onTimeEnd}/>
+        </button>
+        <button className={"time-info-text"}>
+          <span>Days</span>
+        </button>
+        <button className={"time-info-text"}>
+          <span>Hrs</span>
+        </button>
+        <button className={"time-info-text"}>
+          <span>Mins</span>
+        </button>
+        <button className={"time-info-text"}>
+          <span>Secs</span>
+        </button>
       </MDBContainer>
-    ) : (
-      <button className="button time-info-closed" title = "Question Countdown">Question Closed!</button>
-    )
-    );
-    return(countdown);
-  }
+    </MDBContainer>
+  ) : (
+    <button className="button time-info-closed" title="Question Countdown">
+      Question Closed!
+    </button>
+  );
 }
+
+/*----------------------------------------------------------------------------*/
+
+export default Timer;
