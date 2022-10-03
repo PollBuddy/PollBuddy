@@ -8,7 +8,7 @@ export default function Dropdown() {
 }
 
 function DropdownButton() {
-  const [open, setOpen] = useState(false);
+  const [ open, setOpen ] = useState(false);
 
   const handleStateChange = useCallback(() => {
     setOpen(s => !s);
@@ -71,7 +71,7 @@ function useOutsideAlerter(ref, menuProps) {
       // Unbind the event listener on clean up.
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [ref]);
+  }, [ ref, menuProps, navigate ]);
 }
 
 function LoggedInMenu(props) {
@@ -84,7 +84,7 @@ function LoggedInMenu(props) {
       <a href="/code">Enter Poll Code</a>
       <a href="/groups">Groups</a>
       <a href="/guide">Quick Start Guide</a>
-      <a href="#" id="logout">Logout</a>
+      <a id="logout">Logout</a>
     </div>
     // Logout routes to '/' in the event listeners above.
   );

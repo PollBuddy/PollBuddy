@@ -1,11 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import "mdbreact/dist/css/mdb.css";
 import "./Footer.scss";
 import rcosLogo from "../../images/rcos.png";
 import githubLogo from "../../images/github.png";
 import { MDBContainer } from "mdbreact";
 
-export default function Footer({ }) {
+export default function Footer() {
   return (
     <footer className="Footer-foot">
       <MDBContainer className="Footer-foot-links">
@@ -14,7 +14,7 @@ export default function Footer({ }) {
             About
           </a>
           <a href="https://info.rpi.edu/statement-of-accessibility"
-             target="_blank" rel="noopener noreferrer">
+            target="_blank" rel="noopener noreferrer">
             Accessibility
           </a>
         </span>
@@ -38,7 +38,7 @@ export default function Footer({ }) {
           <img src={rcosLogo} alt="RCOS" />
         </a>
         <a href="https://github.com/PollBuddy/PollBuddy" target="_blank"
-           rel="noopener noreferrer">
+          rel="noopener noreferrer">
           <img src={githubLogo} alt="Github" />
         </a>
       </MDBContainer>

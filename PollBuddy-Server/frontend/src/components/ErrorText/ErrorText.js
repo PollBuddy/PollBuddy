@@ -8,8 +8,8 @@ export default function ErrorText({ text }) {
       {/* Pass in a text prop to customize the error text. */}
       <p>
         { text === undefined
-        ? "An error has occurred. Please try again later."
-        : "ERROR: " + text + " Please try again."
+          ? "An error has occurred. Please try again later."
+          : "ERROR: " + text + " Please try again."
         }
       </p>
     </MDBContainer>
