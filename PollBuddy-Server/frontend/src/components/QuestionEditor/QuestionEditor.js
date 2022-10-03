@@ -1,5 +1,5 @@
-import React, {Component} from "react";
-import {MDBContainer} from "mdbreact";
+import React from "react";
+import { MDBContainer } from "mdbreact";
 import "./QuestionEditor.scss";
 
 /*----------------------------------------------------------------------------*/
