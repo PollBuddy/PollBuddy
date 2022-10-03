@@ -10,8 +10,12 @@ function sortItems(itemA, itemB, value) {
   const lowB = itemB.label.toLowerCase();
   const indexA = lowA.indexOf(value.toLowerCase());
   const indexB = lowB.indexOf(value.toLowerCase());
-  if (indexA !== indexB) return indexA - indexB;
-  return lowA < lowB ? -1 : 1;
+
+  if (indexA !== indexB) {
+    return indexA - indexB;
+  } else {
+    return lowA < lowB ? -1 : 1;
+  }
 };
 
 function DropdownItem({ key, label }) {
@@ -31,7 +35,7 @@ function SchoolPicker(props) {
   });
 
   React.useEffect(async () => {
-    if (schoolInfo != null) return;
+    if (schoolInfo != null) { return; }
 
     const resp = await fetch(process.env.REACT_APP_BACKEND_URL + "/schools", {
       method: "GET",
@@ -40,7 +44,7 @@ function SchoolPicker(props) {
       headers: { "Content-Type": "application/json" },
     });
 
-    const data = await response.json();
+    const data = await resp.json();
     // Handle response.
     const schools = [ ...schoolInfo.schools ];
     const schoolLinkDict = [ ...schoolInfo.schoolLinkDict ];

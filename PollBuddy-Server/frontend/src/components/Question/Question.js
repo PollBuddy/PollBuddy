@@ -106,9 +106,9 @@ function Question({ data, updateQuestion, nextQuestion }) {
     <btn className={"question-btn-and-text"}
       onClick={() => selectAnswer(answer.id)}>
       <MDBContainer className={ // className="question-label-bubble"
-          isAnswerSelected(answer.id) ?
-            "question-label-bubble question-label-bubble-active" :
-            "question-label-bubble question-label-bubble-inactive"}>
+        isAnswerSelected(answer.id) ?
+          "question-label-bubble question-label-bubble-active" :
+          "question-label-bubble question-label-bubble-inactive"}>
         {CHOICE_ORDER[index]}
       </MDBContainer>
       {answer.text}
