@@ -1,24 +1,24 @@
-import React, { Component, useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import "mdbreact/dist/css/mdb.css";
 import "./Dropdown.scss";
 import { useNavigate } from "react-router-dom";
 
-export default class Dropdown extends Component {
-  render() {
-    return (
-      <DropdownButton />
-    );
-  }
+export default function Dropdown() {
+  return <DropdownButton/>;
 }
 
 function DropdownButton() {
   const [open, setOpen] = useState(false);
-  function handleStateChange() {
-    setOpen(!open);
-  }
+
+  const handleStateChange = useCallback(() => {
+    setOpen(s => !s);
+  }, [ setOpen ]);
+
   return (
     <span>
-      <span className="Dropdown-button button" onClick={handleStateChange}>Menu</span>
+      <span className="Dropdown-button button" onClick={handleStateChange}>
+        Menu
+      </span>
       {open && <DropdownMenu onStateChange={handleStateChange} />}
     </span>
   );
@@ -27,15 +27,16 @@ function DropdownButton() {
 function useOutsideAlerter(ref, menuProps) {
   const navigate = useNavigate();
   useEffect(() => {
-    // Close menu if click outside
+    // Close menu if click outside.
     function handleClickOutside(event) {
       if (ref.current && !ref.current.contains(event.target)) {
         menuProps.onStateChange();
       }
     }
-    // Bind the event listener
+    // Bind the event listener.
     document.addEventListener("click", handleClickOutside);
-    // Stop propagation to Logout (so we don't log out every menu click) only if logged in
+    // Stop propagation to Logout (so we don't log out every menu click) only
+    // if logged in.
     if(localStorage.getItem("loggedIn") === "true") {
       document.getElementById("logout").addEventListener("click",function(e) {
         e.stopPropagation();
@@ -58,15 +59,16 @@ function useOutsideAlerter(ref, menuProps) {
           } else {
             console.log("Error Logging Out");
           }
-          //Navigates after response so that the redirect does not interrupt response
+          // Navigates after response so that the redirect does not interrupt
+          // response.
           navigate("/");
-          //Reloads the page so that the logged-in menu closes
-          //history.go(0);
+          // Reloads the page so that the logged-in menu closes
+          // history.go(0);
         });
       });
     }
     return () => {
-      // Unbind the event listener on clean up
+      // Unbind the event listener on clean up.
       document.removeEventListener("click", handleClickOutside);
     };
   }, [ref]);
@@ -75,21 +77,23 @@ function useOutsideAlerter(ref, menuProps) {
 function LoggedInMenu(props) {
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef, props);
+
   return (
-    <div className = "Dropdown" ref={wrapperRef}>
+    <div className="Dropdown" ref={wrapperRef}>
       <a href="/account">Account</a>
       <a href="/code">Enter Poll Code</a>
       <a href="/groups">Groups</a>
       <a href="/guide">Quick Start Guide</a>
       <a href="#" id="logout">Logout</a>
     </div>
-    // Logout routes to '/' in the event listeners above
+    // Logout routes to '/' in the event listeners above.
   );
 }
 
 function LoggedOutMenu(props) {
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef, props);
+
   return (
     <div className = "Dropdown" ref={wrapperRef}>
       <a href="/login">Login</a>
