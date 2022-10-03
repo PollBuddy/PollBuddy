@@ -16,7 +16,7 @@ function sortItems(itemA, itemB, value) {
   } else {
     return lowA < lowB ? -1 : 1;
   }
-};
+}
 
 function DropdownItem({ key, label }) {
   return <div key={key} className="auto_comp">{label}</div>;
