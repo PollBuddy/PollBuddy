@@ -1,12 +1,16 @@
-import React, { Component } from "react";
+import React from "react";
 import "./LoadingWheel.scss";
 
-export default class LoadingWheel extends Component {
-  render() {
-    return (
-      <div className="Loading-Wheel">
-        <div/><div/><div/><div/>
-      </div>
-    );
-  }
+/*----------------------------------------------------------------------------*/
+
+function LoadingWheel() {
+  return (
+    <div className="Loading-Wheel">
+      <div/><div/><div/><div/>
+    </div>
+  );
 }
+
+/*----------------------------------------------------------------------------*/
+
+export default LoadingWheel;

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import "mdbreact/dist/css/mdb.css";
 import "./Header.scss";
 import logo from "../../images/logo.png";
