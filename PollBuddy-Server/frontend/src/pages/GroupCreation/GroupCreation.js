@@ -7,7 +7,7 @@ import { useFn, useTitle } from '../../hooks';
 
 /*----------------------------------------------------------------------------*/
 
-function GroupCreation({ updateTitle }) {
+function GroupCreation({ updateTitle, router }) {
   useTitle(updateTitle, "Group Creation");
 
   const [ name, setName ] = React.useState("");

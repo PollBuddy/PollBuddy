@@ -19,7 +19,7 @@ function ClockFormat({ minutes, seconds, completed }) {
       </p>
     );
   }
-};
+}
 
 function Recorded({ updateTitle }) {
   useTitle(updateTitle, "Answer Recorded!");

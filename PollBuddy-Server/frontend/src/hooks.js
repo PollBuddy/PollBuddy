@@ -8,16 +8,14 @@ import React from 'react';
 // If the argument is just one function, then that argument acts as a selector
 // for arguments when the returned function is called.
 function useFn(func, ...args) {
-  if (args.length === 1 && typeof args[0] === "function") {
-    const select = args[0];
-    return React.useCallback((...input) => {
+  return React.useCallback((...input) => {
+    if (args.length === 1 && typeof args[0] === "function") {
+      const select = args[0];
       return func(select(...input));
-    }, arguments);
-  } else {
-    return React.useCallback(() => {
+    } else {
       return func(...args);
-    }, arguments);
-  }
+    }
+  }, arguments);
 }
 
 function useTitle(updateTitle, title) {

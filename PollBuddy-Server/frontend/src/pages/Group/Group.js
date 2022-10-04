@@ -52,7 +52,7 @@ function Group({ updateTitle, router }) {
     const response = await out.json();
 
     console.log(response);
-    if (response.result !== "success") return;
+    if (response.result !== "success") { return; }
     setPolls(response.data);
   }, [ groupID, setPolls ]);
 
