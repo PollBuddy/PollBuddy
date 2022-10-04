@@ -233,6 +233,81 @@ const deleteGroup = async function (groupID, userID) {
   }
 };
 
+const promoteUser = async function (groupID, userID, toPromoteID){
+  try{
+    const group = await getGroupInternal(groupID);
+    if (!group) { return httpCodes.NotFound(); }
+
+    const isAdmin = isGroupAdminByGroup(group, userID);
+    if (!isAdmin) { return httpCodes.Forbidden(); }
+
+    const isMember = isGroupMemberByGroup(group, toPromoteID);
+    if (!isMember) { return httpCodes.Forbidden(); }
+
+    const isPromoteAdmin = isGroupAdminByGroup(group, toPromoteID);
+    if(isPromoteAdmin) { return httpCodes.Forbidden(); }
+
+    await mongoConnection.getDB().collection("groups").updateOne(
+        { _id: group._id, },
+        {"$pull": {
+            "Members": toPromoteID,
+          }}
+    );
+    await mongoConnection.getDB().collection("groups").updateOne(
+        {_id: group._id,},
+        {
+          "$addToSet": {
+            "Admins": toPromoteID,
+          }
+        }
+    );
+  }catch (err) {
+    console.log(err);
+    return httpCodes.InternalServerError();
+  }
+};
+
+const demoteUser = async function (groupID, userID, toDemoteID){
+  const group = await getGroupInternal(groupID);
+  if (!group) { return httpCodes.NotFound(); }
+
+  const isAdmin = isGroupAdminByGroup(group, userID);
+  if (!isAdmin) { return httpCodes.Forbidden(); }
+
+  const isMember = isGroupMemberByGroup(group, toDemoteID);
+  if (!isMember) {
+    const isDemoteAdmin = isGroupAdminByGroup(group, toDemoteID);
+    if(!isDemoteAdmin){
+      return httpCodes.Forbidden();
+    }else{
+      await mongoConnection.getDB().collection("groups").updateOne(
+          {_id: group._id,},
+          {
+            "$pull": {
+              "Admins": toDemoteID,
+            }
+          }
+      );
+      await mongoConnection.getDB().collection("groups").updateOne(
+          {_id: group._id,},
+          {
+            "$addToSet": {
+              "Members": toDemoteID,
+            }
+          }
+      );
+    }
+  }else{
+    let response = await leaveGroup(groupID, toDemoteID);
+    return response;
+  }
+
+  const isDemoteAdmin = isGroupAdminByGroup(group, toDemoteID);
+  if(isDemoteAdmin) {
+
+  }
+};
+
 module.exports = {
   createGroupValidator,
   groupSchema,
@@ -245,6 +320,8 @@ module.exports = {
   leaveGroup,
   deleteGroup,
   editGroup,
+  promoteUser,
+  demoteUser,
   editGroupValidator,
   groupParamsValidator,
   promoteUserValidator,

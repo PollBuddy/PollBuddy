@@ -3,7 +3,7 @@ const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
 const {createResponse, isDevelopmentMode, isLoggedIn} = require("../modules/utils");
 const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
-const {getGroupPolls, joinGroup, leaveGroup, deleteGroup, editGroup, editGroupValidator, createGroupValidator, getGroup, createGroup, getGroupMembers, getGroupAdmins, groupParamsValidator,
+const {getGroupPolls, joinGroup, leaveGroup, deleteGroup, editGroup, promoteUser, demoteUser, editGroupValidator, createGroupValidator, getGroup, createGroup, getGroupMembers, getGroupAdmins, groupParamsValidator,
   demoteUserValidator,
   promoteUserValidator
 } = require("../models/Group");
