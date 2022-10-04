@@ -1,6 +1,6 @@
-import React, {Component} from "react";
+import React from "react";
 import "mdbreact/dist/css/mdb.css";
-import {MDBContainer} from "mdbreact";
+import { MDBContainer } from "mdbreact";
 import ReactMarkdown from "react-markdown";
 import aboutMdPath from "./About.md";
 
