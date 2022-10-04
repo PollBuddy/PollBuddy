@@ -248,18 +248,16 @@ const promoteUser = async function (groupID, userID, toPromoteID){
     if(isPromoteAdmin) { return httpCodes.Forbidden(); }
 
     await mongoConnection.getDB().collection("groups").updateOne(
-        { _id: group._id, },
-        {"$pull": {
-            "Members": toPromoteID,
-          }}
+      { _id: group._id, },
+      {"$pull": {
+        "Members": toPromoteID,
+      }}
     );
     await mongoConnection.getDB().collection("groups").updateOne(
-        {_id: group._id,},
-        {
-          "$addToSet": {
-            "Admins": toPromoteID,
-          }
-        }
+      {_id: group._id,},
+      {"$addToSet": {
+        "Admins": toPromoteID,
+      }}
     );
   }catch (err) {
     console.log(err);
@@ -281,30 +279,21 @@ const demoteUser = async function (groupID, userID, toDemoteID){
       return httpCodes.Forbidden();
     }else{
       await mongoConnection.getDB().collection("groups").updateOne(
-          {_id: group._id,},
-          {
-            "$pull": {
-              "Admins": toDemoteID,
-            }
-          }
+        {_id: group._id,},
+        {"$pull": {
+          "Admins": toDemoteID,
+        }}
       );
       await mongoConnection.getDB().collection("groups").updateOne(
-          {_id: group._id,},
-          {
-            "$addToSet": {
-              "Members": toDemoteID,
-            }
-          }
+        {_id: group._id,},
+        {"$addToSet": {
+          "Members": toDemoteID,
+        }}
       );
     }
   }else{
     let response = await leaveGroup(groupID, toDemoteID);
     return response;
-  }
-
-  const isDemoteAdmin = isGroupAdminByGroup(group, toDemoteID);
-  if(isDemoteAdmin) {
-
   }
 };
 
