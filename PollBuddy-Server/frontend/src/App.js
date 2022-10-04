@@ -255,7 +255,7 @@ function App() {
             {/* Home Page */}
             <Route exact path="/" element={<Homepage updateTitle={updateTitle} />} />
             {/* About Poll Buddy Page */}
-            <Route exact path="/about" element={<About updateTitle={updateTitle} />} />
+            <Route exact path="/about" element={About} />
             {/* Contact Us Page */}
             <Route exact path="/contact" element={<Contact updateTitle={updateTitle} />} />
             {/* Frequently Asked Questions (FAQ) Page */}
