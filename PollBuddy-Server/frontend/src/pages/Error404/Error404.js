@@ -1,13 +1,12 @@
 import React from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
+import { useTitle } from '../../hooks';
 
 /*----------------------------------------------------------------------------*/
 
 function Error404({ updateTitle }) {
-  React.useEffect(() => {
-    updateTitle?.("Page Not Found");
-  }, [ updateTitle ]);
+  useTitle(updateTitle, "Page Not Found");
 
   return (
     <MDBContainer className="page">

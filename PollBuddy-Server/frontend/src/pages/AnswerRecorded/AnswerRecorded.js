@@ -3,6 +3,7 @@ import "mdbreact/dist/css/mdb.css";
 import Countdown, { zeroPad } from "react-countdown";
 import { MDBContainer } from "mdbreact";
 import { Link, Navigate } from "react-router-dom";
+import { useTitle } from '../../hooks';
 
 /*----------------------------------------------------------------------------*/
 
@@ -21,11 +22,9 @@ function ClockFormat({ minutes, seconds, completed }) {
 };
 
 function Recorded({ updateTitle }) {
-  const timeLimit = 5;
+  useTitle(updateTitle, "Answer Recorded!");
 
-  React.useEffect(() => {
-    updateTitle?.("Answer Recorded!");
-  }, [ updateTitle ]);
+  const timeLimit = 5000;
 
   return (
     <MDBContainer fluid className="page">
@@ -35,7 +34,7 @@ function Recorded({ updateTitle }) {
       <p className="fontSizeLarge">
         Time remaining:
       </p>
-      <Countdown renderer={ClockFormat} date={Date.now() + 1000*timeLimit} />
+      <Countdown renderer={ClockFormat} date={Date.now() + timeLimit} />
 
       <Link to={"/myclasses"}>
         <button className = "button">Leave Poll?</button>

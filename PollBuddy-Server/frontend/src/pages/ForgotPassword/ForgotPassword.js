@@ -2,15 +2,14 @@ import React from "react";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import { withRouter } from "../../components/PropsWrapper/PropsWrapper";
+import { useTitle } from '../../hooks';
 
 /*----------------------------------------------------------------------------*/
 
 function ForgotPassword({ updateTitle, router }) {
-  const [ emailInput, setEmailInput ] = React.useState("");
+  useTitle(updateTitle, "Forgot Password");
 
-  React.useEffect(() => {
-    updateTitle?.("Forgot Password");
-  }, [ updateTitle ]);
+  const [ emailInput, setEmailInput ] = React.useState("");
 
   const requestReset = React.useCallback(async () => {
     const URL = process.env.REACT_APP_BACKEND_URL +

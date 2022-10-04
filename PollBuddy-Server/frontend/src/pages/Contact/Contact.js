@@ -1,6 +1,6 @@
-import React, {Component} from "react";
+import React, { Component } from "react";
 import autosize from "autosize";
-import {MDBContainer} from "mdbreact";
+import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 
 import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";

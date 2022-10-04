@@ -3,10 +3,13 @@ import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 import ReactMarkdown from "react-markdown";
 import aboutMdPath from "./About.md";
+import { useTitle } from '../../hooks';
 
 /*----------------------------------------------------------------------------*/
 
 function About({ updateTitle }) {
+  useTitle(updateTitle, "About");
+  
   const [ terms, setTerms ] = React.useState(null);
 
   React.useEffect(async () => {
@@ -14,10 +17,6 @@ function About({ updateTitle }) {
     const text = await response.text();
     setTerms(text);
   }, [ setTerms ]);
-
-  React.useEffect(() => {
-    updateTitle?.("About");
-  }, [ updateTitle ]);
 
   return (
     <MDBContainer className="page">

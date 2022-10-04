@@ -3,15 +3,14 @@ import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import ReactMarkdown from "react-markdown";
 import faqFile from "./faq.md";
+import { useTitle } from '../../hooks';
 
 /*----------------------------------------------------------------------------*/
 
 function FAQ({ updateTitle }) {
-  const [ questions, setQuestions ] = React.useState(null);
+  useTitle(updateTitle, "Frequently Asked Questions");
 
-  React.useEffect(() => {
-    updateTitle?.("Frequestly Asked Questions");
-  }, [ updateTitle ]);
+  const [ questions, setQuestions ] = React.useState(null);
 
   React.useEffect(async () => {
     const response = await fetch(faqFile);
