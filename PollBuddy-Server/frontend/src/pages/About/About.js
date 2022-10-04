@@ -4,33 +4,31 @@ import {MDBContainer} from "mdbreact";
 import ReactMarkdown from "react-markdown";
 import aboutMdPath from "./About.md";
 
+/*----------------------------------------------------------------------------*/
 
+function About({ updateTitle }) {
+  const [ terms, setTerms ] = React.useState(null);
 
-export default class About extends Component {
+  React.useEffect(async () => {
+    const response = await fetch(aboutMdPath);
+    const text = await response.text();
+    setTerms(text);
+  }, [ setTerms ]);
 
-  constructor(props) {
-    super(props);
-    this.state = {terms: null};
-  }
+  React.useEffect(() => {
+    updateTitle?.("About");
+  }, [ updateTitle ]);
 
-  componentWillMount() {
-    fetch(aboutMdPath).then((response) => response.text()).then((text) => {
-      this.setState({terms: text});
-    });
-  }
-
-  componentDidMount() {
-    this.props.updateTitle("About");
-  }
-
-  render() {
-    return (
-      <MDBContainer className="page">
-        <div className="box box-body-text">
-          {/* Render page from markdown file using react-markdown */}
-          <ReactMarkdown children={this.state.terms} unwrapDisallowed={true} />
-        </div>
-      </MDBContainer>
-    );
-  }
+  return (
+    <MDBContainer className="page">
+      <div className="box box-body-text">
+        {/* Render page from markdown file using react-markdown. */}
+        <ReactMarkdown children={terms} unwrapDisallowed />
+      </div>
+    </MDBContainer>
+  );
 }
+
+/*----------------------------------------------------------------------------*/
+
+export default About;
