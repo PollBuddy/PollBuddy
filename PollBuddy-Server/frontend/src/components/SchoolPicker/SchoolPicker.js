@@ -2,6 +2,7 @@ import React from "react";
 import Autocomplete from "react-autocomplete-pollbuddy";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
+import { useAsyncEffect } from '../../hooks';
 
 /*----------------------------------------------------------------------------*/
 
@@ -34,7 +35,7 @@ function SchoolPicker(props) {
     schoolLinkDict: { },
   });
 
-  React.useEffect(async () => {
+  useAsyncEffect(async () => {
     if (schoolInfo != null) { return; }
 
     const resp = await fetch(process.env.REACT_APP_BACKEND_URL + "/schools", {

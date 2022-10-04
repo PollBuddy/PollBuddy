@@ -3,7 +3,7 @@ import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import ReactMarkdown from "react-markdown";
 import faqFile from "./faq.md";
-import { useTitle } from '../../hooks';
+import { useTitle, useAsyncEffect } from '../../hooks';
 
 /*----------------------------------------------------------------------------*/
 
@@ -12,7 +12,7 @@ function FAQ({ updateTitle }) {
 
   const [ questions, setQuestions ] = React.useState(null);
 
-  React.useEffect(async () => {
+  useAsyncEffect(async () => {
     const response = await fetch(faqFile);
     const text = await response.text();
     setQuestions(text);

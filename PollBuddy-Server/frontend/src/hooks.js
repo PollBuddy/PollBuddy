@@ -18,12 +18,21 @@ function useFn(func, ...args) {
   }, arguments);
 }
 
+// This helper function updates the title of the webpage when a component is
+// loaded.
 function useTitle(updateTitle, title) {
   React.useEffect(() => {
     updateTitle?.(title);
   }, [ updateTitle, title ]);
 }
 
+// This helper effect allows users to run an asynchronous effect.
+function useAsyncEffect(func, deps) {
+  React.useEffect(() => {
+    func();
+  }, deps);
+}
+
 /*----------------------------------------------------------------------------*/
 
-export { useFn, useTitle };
+export { useFn, useTitle, useAsyncEffect };

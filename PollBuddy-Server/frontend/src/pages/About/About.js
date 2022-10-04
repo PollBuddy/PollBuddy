@@ -4,6 +4,7 @@ import { MDBContainer } from "mdbreact";
 import ReactMarkdown from "react-markdown";
 import aboutMdPath from "./About.md";
 import { useTitle } from '../../hooks';
+import { useAsyncEffect } from '../../hooks';
 
 /*----------------------------------------------------------------------------*/
 
@@ -12,7 +13,7 @@ function About({ updateTitle }) {
   
   const [ terms, setTerms ] = React.useState(null);
 
-  React.useEffect(async () => {
+  useAsyncEffect(async () => {
     const response = await fetch(aboutMdPath);
     const text = await response.text();
     setTerms(text);

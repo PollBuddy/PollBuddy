@@ -4,6 +4,7 @@ import { MDBContainer } from "mdbreact";
 import GroupSettings from "../../components/GroupSettings/GroupSettings";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import { withRouter } from "../../components/PropsWrapper/PropsWrapper";
+import { useAsyncEffect } from '../../hooks';
 
 /*----------------------------------------------------------------------------*/
 
@@ -23,7 +24,7 @@ function Group({ updateTitle, router }) {
   });
 
   // Get poll metadata.
-  React.useEffect(async () => {
+  useAsyncEffect(async () => {
     updateTitle?.(data.name);
 
     const URL = process.env.REACT_APP_BACKEND_URL + "/groups/" + groupID;
@@ -46,7 +47,7 @@ function Group({ updateTitle, router }) {
   }, [ updateTitle, setShowError, groupID, data, setData, setDoneLoading ]);
 
   // Get poll data.
-  React.useEffect(async () => {
+  useAsyncEffect(async () => {
     const URL = `${process.env.REACT_APP_BACKEND_URL}/groups/${groupID}/polls`;
     const out = await fetch(URL, { method: "GET" });
     const response = await out.json();
