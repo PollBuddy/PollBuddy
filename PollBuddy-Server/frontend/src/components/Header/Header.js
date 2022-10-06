@@ -28,10 +28,10 @@ export default class Header extends Component {
   }
   render() {
     return (
-      <header className = "Header-bar">
-        <a href = "/">
-          <img src = {logo} className = "Header-bar-logo" alt = "logo" />
-        </a>
+      <header className="Header-bar">
+        <Link to="/">
+          <img src={logo} className="Header-bar-logo" alt="logo" />
+        </Link>
         <Dropdown />
       </header>
     );

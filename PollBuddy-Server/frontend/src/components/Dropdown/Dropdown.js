@@ -77,11 +77,11 @@ function LoggedInMenu(props) {
   useOutsideAlerter(wrapperRef, props);
   return (
     <div className = "Dropdown" ref={wrapperRef}>
-      <a href="/account">Account</a>
-      <a href="/code">Enter Poll Code</a>
-      <a href="/groups">Groups</a>
-      <a href="/guide">Quick Start Guide</a>
-      <a href="#" id="logout">Logout</a>
+      <Link to="/account">Account</Link>
+      <Link to="/code">Enter Poll Code</Link>
+      <Link to="/groups">Groups</Link>
+      <Link to="/guide">Quick Start Guide</Link>
+      <Link to="#" id="logout">Logout</Link>
     </div>
     // Logout routes to '/' in the event listeners above
   );
@@ -92,10 +92,10 @@ function LoggedOutMenu(props) {
   useOutsideAlerter(wrapperRef, props);
   return (
     <div className = "Dropdown" ref={wrapperRef}>
-      <a href="/login">Login</a>
-      <a href="/register">Register</a>
-      <a href="/guide">Quick Start Guide</a>
-      <a href="/code">Enter Poll Code</a>
+      <Link to="/login">Login</Link>
+      <Link to="/register">Register</Link>
+      <Link to="/guide">Quick Start Guide</Link>
+      <Link to="/code">Enter Poll Code</Link>
     </div>
   );
 }
