@@ -1,7 +1,7 @@
 import React, { Component, useState, useRef, useEffect } from "react";
 import "mdbreact/dist/css/mdb.css";
 import "./Dropdown.scss";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default class Dropdown extends Component {
   render() {
