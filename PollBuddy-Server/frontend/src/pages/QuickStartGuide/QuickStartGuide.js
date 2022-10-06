@@ -1,36 +1,32 @@
-import React, {Component} from "react";
+import React from "react";
 import "mdbreact/dist/css/mdb.css";
 import {MDBContainer} from "mdbreact";
 import ReactMarkdown from "react-markdown";
 import quickStartGuide from "./QuickStartGuide.md";
+import { useTitle, useAsyncEffect } from '../../hooks';
 
+/*----------------------------------------------------------------------------*/
 
+function QuickStartGuide() {
+  useTitle("Quickstart Guide");
+  const [ terms, setTerms ] = React.useState(null);
 
-export default class QuickStartGuide extends Component {
+  useAsyncEffect(async () => {
+    const response = await fetch(quickStartGuide);
+    const text = await response.text();
+    setTerms(text);
+  }, [ setTerms ]);
 
-  constructor(props) {
-    super(props);
-    this.state = {terms: null};
-  }
-
-  componentWillMount() {
-    fetch(quickStartGuide).then((response) => response.text()).then((text) => {
-      this.setState({terms: text});
-    });
-  }
-
-  componentDidMount() {
-    this.props.updateTitle("QuickStartGuide");
-  }
-
-  render() {
-    return (
-      <MDBContainer className="page">
-        <div className="box box-body-text">
-          {/* Render page from markdown file using react-markdown */}
-          <ReactMarkdown children={this.state.terms} unwrapDisallowed={true} />
-        </div>
+  return (
+    <MDBContainer fluid className="page">
+      <MDBContainer className="box box-body-text">
+        {/* Render page from markdown file using react-markdown */}
+        <ReactMarkdown children={terms} unwrapDisallowed/>
       </MDBContainer>
-    );
-  }
+    </MDBContainer>
+  );
 }
+
+/*----------------------------------------------------------------------------*/
+
+export default React.memo(QuickStartGuide);

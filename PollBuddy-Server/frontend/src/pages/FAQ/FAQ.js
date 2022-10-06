@@ -1,35 +1,32 @@
-import React, {Component} from "react";
-import {MDBContainer} from "mdbreact";
+import React from "react";
+import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import ReactMarkdown from "react-markdown";
 import faqFile from "./faq.md";
+import { useAsyncEffect, useTitle } from "../../hooks";
 
-export default class FAQ extends Component {
+/*----------------------------------------------------------------------------*/
 
-  constructor(props) {
-    super(props);
-    this.state = {questions: null};
-  }
+function FAQ() {
+  useTitle("Fequently Asked Questions");
+  const [ questions, setQuestions ] = React.useState(null);
 
-  componentWillMount() {
-    fetch(faqFile).then((response) => response.text()).then((text) => {
-      this.setState({questions: text});
-    });
-  }
+  useAsyncEffect(async () => {
+    const response = await fetch(faqFile);
+    const text = await response.text();
+    setQuestions(text);
+  }, [ setQuestions ]);
 
-  componentDidMount() {
-    this.props.updateTitle("Frequently Asked Questions");
-  }
-
-  render() {
-    return (
-      <MDBContainer fluid className="page">
-        <MDBContainer className="box box-body-text">
-          <h1>Frequently Asked Questions</h1>
-          <ReactMarkdown children={this.state.questions}/>
-        </MDBContainer>
+  return (
+    <MDBContainer fluid className="page">
+      <MDBContainer className="box box-body-text">
+        <h1>Frequently Asked Questions</h1>
+        <ReactMarkdown children={questions}/>
       </MDBContainer>
-    );
-  }
-
+    </MDBContainer>
+  );
 }
+
+/*----------------------------------------------------------------------------*/
+
+export default React.memo(FAQ);

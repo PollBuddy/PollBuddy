@@ -46,187 +46,8 @@ import { PageContext } from './hooks';
 
 /*----------------------------------------------------------------------------*/
 
-class _App extends React.Component {
-
-  state = {
-    pageTitle: "",
-    userInfo: {
-      sessionIdentifier: ""
-    }
-  };
-
-  updateTitle(t) {
-    this.setState({pageTitle: t});
-    document.title = t + " - Poll Buddy";
-  }
-
-  render() {
-    updateTitle = updateTitle.bind(this);
-    return (
-      <BrowserRouter>
-
-        <MDBContainer id="wrapper">
-          {/* Popup2 test: Popup2 still needs a handleClose function that will activate onClick of the button, this handle func should probably be a prop passed from parent component*/}
-          {/*<Popup2 dim={true} text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."/>*/}
-
-          <Header userInfo={this.state.userInfo} />
-
-          {/*
-            Using React BrowserRouter now
-
-            See https://codeburst.io/getting-started-with-react-router-5c978f70df91
-            We will likely want to nest a lot of these later, this link has some details how
-          */}
-
-          <Routes>
-
-            {/* --- Main Site Pages --- */}
-
-            {/* Home Page */}
-            <Route exact path="/" element={<Homepage updateTitle={updateTitle} />} />
-
-            {/* About Poll Buddy Page */}
-            <Route exact path="/about" element={<About updateTitle={updateTitle} />} />
-
-            {/* Contact Us Page */}
-            <Route exact path="/contact" element={<Contact updateTitle={updateTitle} />} />
-
-            {/* Frequently Asked Questions (FAQ) Page */}
-            <Route exact path="/faq" element={<FAQ updateTitle={updateTitle} />}/>
-
-            {/* Data Privacy Page */}
-            <Route exact path="/privacy" element={<Privacy updateTitle={updateTitle} />} />
-
-            {/* Quick Start Guide */}
-            <Route exact path="/guide" element={<QuickStartGuide updateTitle={updateTitle} />}/>
-
-
-            {/* Enter Poll Code Page */}
-            <Route exact path="/code" element={<Code updateTitle={updateTitle} />} />
-
-
-            {/* --- Group Pages --- */}
-
-            {/* My Groups Page */}
-            <Route exact path="/groups" element={<PrivateComponent state = {true} element={<Groups updateTitle={updateTitle} />}/>}/>
-
-            {/* Group Creation Page */}
-            <Route exact path="/groups/new" element={<PrivateComponent state = {true} element={<GroupCreation updateTitle={updateTitle} />}/>}/>
-
-            {/* Group's Page */}
-            <Route exact path="/groups/:groupID" element={<PrivateComponent state = {true} element={<Group updateTitle={updateTitle} />}/>}/>
-
-            {/* Group Edit Page */}
-            <Route exact path="/groups/:groupID/edit" element={<PrivateComponent state = {true} element={<GroupEdit updateTitle={updateTitle} />}/>} />
-
-            {/* Group Join Page */}
-            <Route exact path="/groups/join" element={<PrivateComponent state = {true} element={<GroupJoin updateTitle={updateTitle} />}/>}/>
-
-            {/* --- Poll Pages --- */}
-
-            {/* My Poll Histories Page */}
-            {/* This route (and any others that route through /polls/that are not polls)
-                need to be listed BEFORE the Poll ID Redirect to ensure they are not
-                treated like a :pollID */}
-            <Route exact path="/polls/history" element={<PrivateComponent state = {true} element={<PollHistory updateTitle={updateTitle} />}/>}/>
-
-            {/* Poll Creation */}
-            <Route exact path="/polls/new" element={<PollCreation updateTitle={updateTitle} />}/>
-
-            {/* Poll ID Redirect */}
-            {/* Redirects from poll ID page (404) to view page */}
-            <Route exact path="/polls/:pollID" element={<PrivateComponent state = {true} element={<Navigate to={"view"} push={true}/>}/>}/>
-
-
-            {/* Poll Viewer Page */}
-            <Route exact path="/polls/:pollID/view" element={<PollViewer updateTitle={updateTitle} />}/>
-
-            {/* Poll Editor Page */}
-            <Route exact path="/polls/:pollID/edit" element={<PrivateComponent state = {true} element={<PollEditor updateTitle={updateTitle} />}/>}/>
-
-            {/* Poll Manager Page */}
-            <Route exact path="/polls/:pollID/manage" element={<PrivateComponent state = {true} element={<PollManager updateTitle={updateTitle} />}/>}/>
-
-            {/* Poll Results Page */}
-            {/*use the render function so that we can retrieve :groupID from inside the component*/}
-            <Route exact path="/polls/:pollID/results" element={<PollResults updateTitle={updateTitle} />}/>
-
-            {/* QuestionResults Ended Page */}
-            {/* A page that shows when a question is closed by an instructor
-                Note: this will be removed soon I believe. */}
-            <Route exact path="/questionEnded" element={<PrivateComponent state = {true} element={<QuestionEnded updateTitle={updateTitle} />}/>}/>
-
-            {/* Answer Recorded Page */}
-            {/* A page that shows after you answered the question, or after time runs out.
-             Note: this will be removed soon I believe. */}
-            <Route exact path="/answerRecorded" element={<PrivateComponent state = {true} element={<AnswerRecorded updateTitle={updateTitle} />}/>}/>
-
-
-            {/* --- Login Pages --- */}
-
-            {/* Login Main Page */}
-            <Route exact path="/login" element={<PrivateComponent state = {false} element={<LoginDefault updateTitle={updateTitle} />}/>}/>
-
-            {/* Login with Poll Buddy Account Page */}
-            <Route exact path="/login/pollbuddy" element={<PrivateComponent state = {false} element={<LoginWithPollBuddy updateTitle={updateTitle} />}/>}/>
-
-            {/* Login with School Account Page */}
-            <Route exact path="/login/school" element={<PrivateComponent state = {false} element={<LoginWithSchool updateTitle={updateTitle} />}/>}/>
-
-            {/* Login with School Account Step 2 Page */}
-            <Route exact path="/login/school/step2" element={<PrivateComponent state = {false} element={<LoginWithSchoolStep2 updateTitle={updateTitle} />}/>}/>
-
-            {/* Forgot Password Page */}
-            <Route exact path="/login/forgot" element={<PrivateComponent state = {false} element={<ForgotPassword updateTitle={updateTitle} />}/>}/>
-
-            {/* Reset Password Page */}
-            <Route exact path="/login/reset" element={<PrivateComponent state = {false} element={<ResetPassword updateTitle={updateTitle} />}/>}/>
-
-
-            {/* --- Registration Pages --- */}
-
-            {/* Register Main Page */}
-            <Route exact path="/register" element={<PrivateComponent state = {false} element={<RegisterDefault updateTitle={updateTitle} />}/>}/>
-
-            {/* Register with Poll Buddy Account Page */}
-            <Route exact path="/register/pollbuddy" element={<PrivateComponent state = {false} element={<RegisterWithPollBuddy updateTitle={updateTitle} />}/>}/>
-
-            {/* Register with School Account Page */}
-            <Route exact path="/register/school" element={<PrivateComponent state = {false} element={<RegisterWithSchool updateTitle={updateTitle} />}/>}/>
-
-            {/* Register with School Account Step 2 Page */}
-            <Route exact path="/register/school/step2" element={<PrivateComponent state = {false} element={<RegisterWithSchoolStep2 updateTitle={updateTitle} />}/>}/>
-
-
-            {/* --- Account and User Settings Pages --- */}
-
-            {/* Account Info Page */}
-            <Route exact path="/account" element={<PrivateComponent state = {true} element={<AccountInfo updateTitle={updateTitle} />}/>}/>
-
-            {/* --- Other Pages --- */}
-
-            {/* Default Route/Error 404 Page */}
-            <Route path="*" element={<Notfound updateTitle={updateTitle} />}/>
-          </Routes>
-
-          <Footer/>
-
-        </MDBContainer>
-
-      </BrowserRouter>
-
-    );
-  }
-}
-
-/*----------------------------------------------------------------------------*/
-
-const PageContext = React.createContext([ "", () => {} ]);
-
 function App() {
-  const pageState = React.useState("");
-  const [ , setPageTitle ] = pageState;
-
+  const [ , setPageTitle ] = React.useState("");
   const [ userInfo, ] = React.useState({ sessionIdentifier: "" });
 
   const updateTitle = React.useCallback(newTitle => {
@@ -236,7 +57,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <PageContext.Provider value={pageState}>
+      <PageContext.Provider value={updateTitle}>
         <MDBContainer id="wrapper">
           {/* Popup2 test: Popup2 still needs a handleClose function that will activate onClick of the button, this handle func should probably be a prop passed from parent component*/}
           {/*<Popup2 dim={true} text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."/>*/}
@@ -253,19 +74,19 @@ function App() {
           <Routes>
             {/* --- Main Site Pages --- */}
             {/* Home Page */}
-            <Route exact path="/" element={<Homepage updateTitle={updateTitle} />} />
+            <Route exact path="/" element={<Homepage />}/>
             {/* About Poll Buddy Page */}
-            <Route exact path="/about" element={About} />
+            <Route exact path="/about" element={<About />}/>
             {/* Contact Us Page */}
-            <Route exact path="/contact" element={<Contact updateTitle={updateTitle} />} />
+            <Route exact path="/contact" element={<Contact />} />
             {/* Frequently Asked Questions (FAQ) Page */}
-            <Route exact path="/faq" element={<FAQ updateTitle={updateTitle} />}/>
+            <Route exact path="/faq" element={<FAQ />} />
             {/* Data Privacy Page */}
-            <Route exact path="/privacy" element={<Privacy updateTitle={updateTitle} />} />
+            <Route exact path="/privacy" element={<Privacy />} />
             {/* Quick Start Guide */}
-            <Route exact path="/guide" element={<QuickStartGuide updateTitle={updateTitle} />}/>
+            <Route exact path="/guide" element={<QuickStartGuide />}/>
             {/* Enter Poll Code Page */}
-            <Route exact path="/code" element={<Code updateTitle={updateTitle} />} />
+            <Route exact path="/code" element={<Code />} />
             
             {/* --- Group Pages --- */}
             {/* My Groups Page */}

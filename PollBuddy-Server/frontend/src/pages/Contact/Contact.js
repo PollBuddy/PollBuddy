@@ -1,113 +1,139 @@
-import React, {Component} from "react";
+import React from "react";
 import autosize from "autosize";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 
 import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";
+import { useTitle, useAsyncEffect, useFn } from '../../hooks';
 
-export default class Contact extends Component {
+/*----------------------------------------------------------------------------*/
 
-  componentDidMount() {
-    this.props.updateTitle("Contact Us");
+function Contact() {
+  useTitle("Contact Us");
+
+  const [ formUp, setFormUp ] = React.useState(false);
+  const [ done, setDone ] = React.useState(false);
+  const [ email, setEmail ] = React.useState("");
+  const [ value, setValue ] = React.useState("");
+  const [ fullName, setFullName ] = React.useState("");
+  const [ , setDesc ] = React.useState("");
+
+  React.useEffect(() => {
     autosize(document.querySelector("textarea"));
-  }
+  }, [ ]);
 
-  constructor(props) {
-    super(props);
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/me", {
+  useAsyncEffect(async () => {
+    const resp = await fetch(`${process.env.REACT_APP_BACKEND_URL}/users/me`, {
       method: "GET",
-      headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
-    }).then(response => response.json())
-      // handle response
-      .then(data => {
-        this.setState({fullName: data.data.FirstName+ " " +data.data.LastName, value: data.data.SchoolAffiliation, email: data.data.Email});
-      });
-    this.state = {
-      formUp: false,
-      done: false,
-      email: "",
-      value: "",
-      fullName: "",
-      descriptionOfIssue: ""
-    };
-  }
+      // HEADERS LIKE SO ARE NECESSARY for some reason
+      // https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+      headers: { "Content-Type": "application/json" },
+    });
 
-  handleSendTicket() {
-    this.setState({ formUp: false, done : true });
-  }
+    const { data } = await resp.json();
+    const { FirstName, LastName, SchoolAffiliation, Email } = data;
 
-  render() {
-    this.handleSendTicket = this.handleSendTicket.bind(this);
+    setFullName(FirstName + " " + LastName);
+    setValue(SchoolAffiliation);
+    setEmail(Email);
+  }, [ setFullName, setValue, setEmail ]);
 
-    return(
-      <MDBContainer fluid className="page">
-        <MDBContainer className = "box">
-          <p className="fontSizeLarge">
-            Looking to get in touch with a developer? Shoot an email over to <a href="mailto:contact@pollbuddy.app">contact@pollbuddy.app</a> or click the button below to open a support ticket form.
-          </p>
-          <p>
-            Alternatively, it would be greatly appreciated if you reported technical
-            problems, such as bugs or design complaints/suggestions, by <a href="https://github.com/PollBuddy/PollBuddy/issues/new/choose">opening an issue</a> on our <a href="https://github.com/PollBuddy/PollBuddy">GitHub repository.</a>
-          </p>
-          <button
-            className="button"
-            style={{ display: this.state.formUp ? "none" : ""}}
-            onClick={() => this.setState({ formUp: true, done: false })}
-          >
-            File Support Ticket
+  const handleSendTicket = React.useCallback(() => {
+    setFormUp(false);
+    setDone(true);
+  }, [ setFormUp, setDone ]);
+
+  const handleTicket = React.useCallback(() => {
+    setFormUp(true);
+    setDone(false);
+  }, [ setFormUp, setDone ]);
+
+  const handleFullName = useFn(setFullName, e => e.target.value);
+  const handleValue = useFn(setValue, e => e.target.value);
+  const handleEmail = useFn(setEmail, e => e.target.value);
+  const handleDesc = useFn(setDesc, e => e.target.value);
+
+  const inputStyles = {
+    display: formUp ? "flex" : "none",
+    width: "50%", // Add this to CSS it is static.
+  };
+
+  const fileStyles = {
+    display: formUp ? "none" : "",
+  };
+
+  return (
+    <MDBContainer fluid className="page">
+      <MDBContainer className = "box">
+        <p className="fontSizeLarge">
+          Looking to get in touch with a developer? Shoot an email over to
+          <a href="mailto:contact@pollbuddy.app">contact@pollbuddy.app</a>
+          or click the button below to open a support ticket form.
+        </p>
+        <p>
+          Alternatively, it would be greatly appreciated if you reported
+          technical problems, such as bugs or design complaints/suggestions, by
+          <a href="https://github.com/PollBuddy/PollBuddy/issues/new/choose">
+            opening an issue
+          </a>
+          on our
+          <a href="https://github.com/PollBuddy/PollBuddy">
+            GitHub repository.
+          </a>
+        </p>
+        <button className="button" style={fileStyles} onClick={handleTicket}>
+          File Support Ticket
+        </button>
+      </MDBContainer>
+      <MDBContainer fluid className="box" style={inputStyles}>
+        <p className="fontSizeLarge">Support Ticket Information</p>
+        <MDBContainer className="form-group">
+          <label htmlFor="name">Full name:</label>
+          <input required
+            className="form-control textBox"
+            id="name"
+            placeholder="Name"
+            value={fullName}
+            onChange={handleFullName}
+          />
+
+          <label htmlFor="school">School (if applicable):</label>
+          <SchoolPicker value={value} onChange={handleValue}
+            onSelect={setValue}/>
+
+          <label htmlFor="email">Email:</label>
+          <input required
+            className="form-control textBox"
+            id="email"
+            placeholder="Email"
+            value={email}
+            onChange={handleEmail}
+          />
+
+          <label htmlFor="description">Description of the issue:</label>
+          <textarea required
+            className="form-control textBox"
+            id="description"
+            maxLength="500"
+            placeholder="500 character limit"
+            onChange={handleDesc}
+          />
+
+          <button className="button" onClick={handleSendTicket}>
+            Send Ticket
           </button>
         </MDBContainer>
-        <MDBContainer fluid className="box"
-          style={{ display: this.state.formUp ? "flex" : "none", width: "50%" }}
-        >
-          <p className="fontSizeLarge">Support Ticket Information</p>
-          <MDBContainer className="form-group">
-            <label htmlFor="name">Full name:</label>
-            <input required
-              className="form-control textBox"
-              id="name"
-              placeholder="Name"
-              value={this.state.fullName}
-              onChange={(evt) => { this.setState({fullName: evt.target.value}); }}
-            />
-            <label htmlFor="school">School (if applicable):</label>
-            <SchoolPicker
-              value={this.state.value}
-              onChange={e => this.setState({ value: e.target.value })}
-              onSelect={value => this.setState({ value })}
-            />
-            <label htmlFor="email">Email:</label>
-            <input required
-              className="form-control textBox"
-              id="email"
-              placeholder="Email"
-              value={this.state.email}
-              onChange={(evt) => { this.setState({email: evt.target.value}); }}
-            />
-            <label htmlFor="description">Description of the issue:</label>
-            <textarea required
-              className="form-control textBox"
-              id="description"
-              maxLength="500"
-              placeholder="500 character limit"
-              onChange={(evt) => {
-                this.setState({descriptionOfIssue: evt.target.value});
-              }}
-            />
-            <button className="button" onClick={this.handleSendTicket}>
-              Send Ticket
-            </button>
-          </MDBContainer>
-        </MDBContainer>
-        <MDBContainer fluid className = "box"
-          style={{ display: this.state.done ? "flex" : "none", width: "50%" }}
-        >
-          <p className = "fontSizeLarge">
-            Thank you for your support! Your form has been submitted. If you have any other issues, please file another support form.
-          </p>
-        </MDBContainer>
       </MDBContainer>
-    );
-  }
-
+      <MDBContainer fluid className = "box" style={inputStyles}>
+        <p className = "fontSizeLarge">
+          Thank you for your support! Your form has been submitted. If you have
+          any other issues, please file another support form.
+        </p>
+      </MDBContainer>
+    </MDBContainer>
+  );
 }
+
+/*----------------------------------------------------------------------------*/
+
+export default React.memo(Contact);

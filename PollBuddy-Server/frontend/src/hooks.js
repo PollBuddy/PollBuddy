@@ -23,14 +23,12 @@ const PageContext = React.createContext([ "", () => {} ]);
 
 // This helper function updates the title of the webpage when a component is
 // loaded.
-function useTitle(title) {
-  const [ title, setTitle ] = React.useContext(PageContext);
+function useTitle(newTitle) {
+  const updateTitle = React.useContext(PageContext);
 
-  React.useEffect(newTitle => {
-    setTitle(newTitle);
-  }, [ setTitle ]);
-
-  return title;
+  React.useEffect(() => {
+    updateTitle(newTitle);
+  }, [ updateTitle, newTitle ]);
 }
 
 // This helper effect allows users to run an asynchronous effect.
