@@ -42,22 +42,20 @@ import Footer from "./components/Footer/Footer.js";
 //import Popup2 from "./components/Popup2/Popup2";
 import "./styles/main.scss";
 
-import { PageContext } from './hooks';
+import { TitleProvider } from './hooks';
 
 /*----------------------------------------------------------------------------*/
 
 function App() {
-  const [ , setPageTitle ] = React.useState("");
   const [ userInfo, ] = React.useState({ sessionIdentifier: "" });
 
   const updateTitle = React.useCallback(newTitle => {
-    setPageTitle(newTitle);
     document.title = newTitle + " - Pollbuddy";
-  }, [ setPageTitle ]);
+  }, [ ]);
 
   return (
     <BrowserRouter>
-      <PageContext.Provider value={updateTitle}>
+      <TitleProvider>
         <MDBContainer id="wrapper">
           {/* Popup2 test: Popup2 still needs a handleClose function that will activate onClick of the button, this handle func should probably be a prop passed from parent component*/}
           {/*<Popup2 dim={true} text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."/>*/}
@@ -165,7 +163,7 @@ function App() {
           <Footer/>
 
         </MDBContainer>
-      </PageContext.Provider>
+      </TitleProvider>
     </BrowserRouter>
 
   );

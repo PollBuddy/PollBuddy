@@ -3,15 +3,13 @@ import ReactDOM from "react-dom";
 import Privacy from "./Privacy";
 import { BrowserRouter } from "react-router-dom";
 
+/*----------------------------------------------------------------------------*/
+
 jest.mock("react-markdown", () => (props) => {
   return <>{props.children}</>;
 });
 
 jest.mock("./Privacy.md", () => "Test");
-
-function updateTitle() {
-  return false;
-}
 
 beforeEach(() => {
   fetch.resetMocks();
@@ -25,7 +23,7 @@ it("renders without crashing", () => {
   // Render about on the div
   ReactDOM.render(
     <BrowserRouter>
-      <Privacy updateTitle={updateTitle}/>
+      <Privacy />
     </BrowserRouter>, div);
   // Clean unmount
   ReactDOM.unmountComponentAtNode(div);
