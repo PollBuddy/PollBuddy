@@ -15,14 +15,14 @@ function useFn(func, ...args) {
     } else {
       return func(...args);
     }
-  }, [ func, ...args ]);
+  }, [ func, ...args ]); // eslint-disable-line react-hooks/exhaustive-deps
 }
 
 // This helper effect allows users to run an asynchronous effect.
 function useAsyncEffect(func, deps) {
   React.useEffect(() => {
     func();
-  }, deps);
+  }, deps); // eslint-disable-line react-hooks/exhaustive-deps
 }
 
 /*----------------------------------------------------------------------------*/
@@ -31,14 +31,15 @@ function useAsyncEffect(func, deps) {
 const PageContext = React.createContext({ current: null });
 
 // This helper function updates the title of the webpage when a component is
-// loaded. Returns the current document title (minus the " - Pollbuddy") part.
+// loaded. Returns the current document title (minus the " - Poll Buddy") part.
 function useTitle(newTitle) {
-  const title = React.useContext(PageContext) ?? [];
+  const title = React.useContext(PageContext);
 
   React.useEffect(() => {
+    if (title == null) { return; }
     title.current = newTitle;
     document.title = newTitle + " - Poll Buddy";
-  }, [ newTitle ]);
+  }, [ newTitle, title ]);
 
   return title.current;
 }

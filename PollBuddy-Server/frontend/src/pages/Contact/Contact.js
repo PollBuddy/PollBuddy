@@ -33,7 +33,7 @@ function Contact() {
       headers: { "Content-Type": "application/json" },
     });
 
-    if (!resp.ok) { return }
+    if (!resp.ok) { return; }
 
     const { data } = await resp.json();
     const { FirstName, LastName, SchoolAffiliation, Email } = data;
