@@ -13,8 +13,8 @@ it("renders without crashing", () => {
   ReactDOM.render(
     <BrowserRouter>
       <GroupEdit updateTitle={() => false}/>
-    </BrowserRouter>
-  , div);
+    </BrowserRouter>,
+    div);
   // Clean unmount
   ReactDOM.unmountComponentAtNode(div);
 });

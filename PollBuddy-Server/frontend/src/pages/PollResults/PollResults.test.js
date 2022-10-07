@@ -15,8 +15,8 @@ it("renders without crashing", () => {
   ReactDOM.render(
     <BrowserRouter>
       <PollResults updateTitle={updateTitle}/>
-    </BrowserRouter>
-  , div);
+    </BrowserRouter>,
+    div);
   // Clean unmount
   ReactDOM.unmountComponentAtNode(div);
 });
