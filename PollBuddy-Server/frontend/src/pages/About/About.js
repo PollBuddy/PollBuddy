@@ -17,8 +17,6 @@ function About() {
     setTerms(text);
   }, [ setTerms ]);
 
-  console.log(1);
-
   return (
     <MDBContainer className="page">
       <div className="box box-body-text">

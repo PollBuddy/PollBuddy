@@ -28,31 +28,27 @@ function useAsyncEffect(func, deps) {
 /*----------------------------------------------------------------------------*/
 
 // Using contexts instead of ever changing values for the page title.
-const PageContext = React.createContext([ "", () => {} ]);
+const PageContext = React.createContext({ current: null });
 
 // This helper function updates the title of the webpage when a component is
-// loaded.
+// loaded. Returns the current document title (minus the " - Pollbuddy") part.
 function useTitle(newTitle) {
-  const [ title, updateTitle ] = React.useContext(PageContext) ?? [];
+  const title = React.useContext(PageContext) ?? [];
 
   React.useEffect(() => {
-    updateTitle?.(newTitle);
-  }, [ updateTitle, newTitle ]);
+    title.current = newTitle;
+    document.title = newTitle + " - Poll Buddy";
+  }, [ newTitle ]);
 
-  return title;
+  return title.current;
 }
 
 // This helper component provides a page context for its children.
 function _TitleProvider({ initial, children }) {
-  const [ title, setTitle ] = React.useState(initial ?? "");
-
-  const updateTitle = React.useCallback(newTitle => {
-    setTitle(newTitle);
-    document.title = newTitle + " - Pollbuddy";
-  }, [ setTitle ]);
+  const title = React.useRef(initial ?? "");
 
   return (
-    <PageContext.Provider value={[ title, updateTitle ]}>
+    <PageContext.Provider value={title}>
       {children}
     </PageContext.Provider>
   );
