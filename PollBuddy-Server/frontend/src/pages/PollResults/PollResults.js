@@ -70,7 +70,7 @@ class PollResults extends Component {
       return (
         <MDBContainer fluid className="page">
           <div className="questions-bar">
-            {this.state.questions.map((question, index) => {
+            {this.state.questions.map((_, index) => {
               return (
                 <div>
                   <div className={
@@ -84,15 +84,14 @@ class PollResults extends Component {
               );
             })}
           </div>
-          {this.state.questions.map((question, index) => {
-            if (this.state.currentQuestion === index) {
-              return (
-                <QuestionResults data={{
-                  questionNumber: this.state.currentQuestion + 1,
-                  question: this.state.questions[this.state.currentQuestion],
-                }}/>
-              );
-            }
+          {this.state.questions.map((_, index) => {
+            if (this.state.currentQuestion !== index) { return null; }
+            return (
+              <QuestionResults data={{
+                questionNumber: this.state.currentQuestion + 1,
+                question: this.state.questions[this.state.currentQuestion],
+              }}/>
+            );
           })}
           <a
             id="downloadBtn" className="button"

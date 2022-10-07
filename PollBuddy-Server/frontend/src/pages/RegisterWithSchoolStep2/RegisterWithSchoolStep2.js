@@ -12,19 +12,22 @@ class RegisterWithSchoolStep2 extends Component {
   constructor(props) {
     super(props);
 
+    let data, firstName, firstNamePrefilled, lastName, lastNamePrefilled;
+    let userName, userNamePrefilled, email, emailPrefilled;
+
     // Process args
     // TODO: Some of this should probably be in a try/catch or something for robustness
     if(this.props.router.location.search) {
       console.log("Getting things");
-      let data = JSON.parse(new URLSearchParams(this.props.router.location.search).get("data"));
-      let firstName = data["firstName"];
-      let firstNamePrefilled = true;
-      let lastName = data["lastName"];
-      let lastNamePrefilled = true;
-      let userName = data["userName"];
-      let userNamePrefilled = true;
-      let email = data["email"];
-      let emailPrefilled = true;
+      data = JSON.parse(new URLSearchParams(this.props.router.location.search).get("data"));
+      firstName = data["firstName"];
+      firstNamePrefilled = true;
+      lastName = data["lastName"];
+      lastNamePrefilled = true;
+      userName = data["userName"];
+      userNamePrefilled = true;
+      email = data["email"];
+      emailPrefilled = true;
 
       if(firstName == null) { firstName = ""; firstNamePrefilled = false; }
       if(lastName == null) { lastName = ""; lastNamePrefilled = false; }
