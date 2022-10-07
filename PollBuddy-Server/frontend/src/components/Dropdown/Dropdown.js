@@ -83,7 +83,9 @@ function DropdownButton() {
 
   return (
     <span>
-      <span className="Dropdown-button button" onClick={handleClickStop}>Menu</span>
+      <span className="Dropdown-button button" onClick={handleClickStop}>
+        Menu
+      </span>
       {open && <DropdownMenu />}
     </span>
   );
