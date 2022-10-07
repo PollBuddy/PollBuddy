@@ -266,6 +266,12 @@ router.get("/:id", paramValidator(pollParamsValidator), async (req, res) => {
   if (req.session.userData && req.session.userData.userID) {
     userID = req.session.userData.userID;
   }
+  
+  //let pollPassword = req.body.password;
+  console.log("##############################");
+  //console.log(pollPassword)
+  console.log("##############################");
+  
   let result = await getPoll(userID, req.params.id);
   return sendResponse(res, result);
 });

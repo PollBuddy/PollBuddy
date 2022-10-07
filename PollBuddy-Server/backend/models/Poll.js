@@ -360,7 +360,8 @@ const createPoll = async function (userID, pollData) {
       Description: pollData.description,
       MaxAllowedChoices: pollData.maxAllowedChoices,
       OpenTime: Date.now(),
-      CloseTime: Date.now() + (24 * 60 * 60 * 1000)
+      CloseTime: Date.now() + (24 * 60 * 60 * 1000),
+      Password: "",
     };
 
     if (pollData.group) {

@@ -34,6 +34,8 @@ class PollEditor extends Component {
       questions: [],
       pollTitle: "",
       pollDescription: "",
+      requiresPassword: false,
+      pollPassword: "diggy",
       openTime: Date.now(),
       closeTime: Date.now(),
       loadingPollQuestions: false,
@@ -97,6 +99,29 @@ class PollEditor extends Component {
       openTime: this.state.openTime,
       closeTime: this.state.closeTime,
     };
+  };
+
+  testFunc = () => {
+    console.log("me when ur mom");
+    return;
+  };
+
+  changePassword = () => {
+    if (this.state.requiresPassword){
+      // true -> false
+      this.state.pollPassword = "";
+      this.state.requiresPassword = false;
+      console.log("Turn to false");
+      console.log(this.state.requiresPassword);
+      console.log(this.state.pollPassword);
+      return;
+    }
+    this.state.pollPassword = "12345"
+    this.state.requiresPassword = true;
+    console.log("Turn to true");
+    console.log(this.state.requiresPassword);
+    console.log(this.state.pollPassword);
+    // false -> true
   };
 
   savePoll = () => {
@@ -346,6 +371,17 @@ class PollEditor extends Component {
                   name="pollDescription"
                   value={this.state.pollDescription}
                   onChange={this.onInput}/>
+                <div class="pwd">
+                  <p>Poll Password</p>
+                  <input
+                      type="checkbox"
+                      value={this.state.requiresPassword}
+                      onChange={this.changePassword}
+                      id="reqPassword"
+                      name="reqPassword"
+                  />
+                </div>
+                <p className="fontSizeLarge">{this.state.pollPassword}</p>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <ThemeProvider theme={defaultMaterialTheme}>
                     <DateTimePicker
@@ -394,6 +430,12 @@ class PollEditor extends Component {
                   <Link to={"/polls/" + this.state.pollID + "/view"} className="button pollButton">
                     Open viewer
                   </Link>
+                  <button
+                      id="descriptionBtn" className="button pollButton"
+                      onClick={this.testFunc}
+                  >
+                    Test dat boi
+                  </button>
                 </div>
                 <div className={"pollButtons"}>
                   <Link to={"/polls/" + this.state.pollID + "/results"} className="button pollButton">
