@@ -12,19 +12,22 @@ class RegisterWithSchoolStep2 extends Component {
   constructor(props) {
     super(props);
 
+    let data, firstName, firstNamePrefilled, lastName, lastNamePrefilled;
+    let userName, userNamePrefilled, email, emailPrefilled;
+
     // Process args
     // TODO: Some of this should probably be in a try/catch or something for robustness
     if(this.props.router.location.search) {
       console.log("Getting things");
-      var data = JSON.parse(new URLSearchParams(this.props.router.location.search).get("data"));
-      var firstName = data["firstName"];
-      var firstNamePrefilled = true;
-      var lastName = data["lastName"];
-      var lastNamePrefilled = true;
-      var userName = data["userName"];
-      var userNamePrefilled = true;
-      var email = data["email"];
-      var emailPrefilled = true;
+      data = JSON.parse(new URLSearchParams(this.props.router.location.search).get("data"));
+      firstName = data["firstName"];
+      firstNamePrefilled = true;
+      lastName = data["lastName"];
+      lastNamePrefilled = true;
+      userName = data["userName"];
+      userNamePrefilled = true;
+      email = data["email"];
+      emailPrefilled = true;
 
       if(firstName == null) { firstName = ""; firstNamePrefilled = false; }
       if(lastName == null) { lastName = ""; lastNamePrefilled = false; }
@@ -75,10 +78,10 @@ class RegisterWithSchoolStep2 extends Component {
         .max(256)
         .error(new Error("Last name must be less than 256 characters.")),
     });
-    var userNameValid = schema.validate({ username: this.state.username });
-    var emailValid = schema.validate({ email: this.state.email });
-    var firstNameValid = schema.validate({ firstname: this.state.firstname});
-    var lastNameValid = schema.validate({ lastname: this.state.lastname});
+    let userNameValid = schema.validate({ username: this.state.username });
+    let emailValid = schema.validate({ email: this.state.email });
+    let firstNameValid = schema.validate({ firstname: this.state.firstname});
+    let lastNameValid = schema.validate({ lastname: this.state.lastname});
 
 
     // Update component's state
