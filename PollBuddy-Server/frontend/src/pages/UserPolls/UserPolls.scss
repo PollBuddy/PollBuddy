@@ -1,0 +1,29 @@
+.question-label {
+    margin: 8px;
+    padding: 5px;
+    border-radius: 100%;
+    display: inline-block;
+    text-align: center;
+    border: 2px solid var(--base-purple-logo-bg);
+    width: var(--font-size-large);
+    height: var(--font-size-large);
+  }
+  
+  .question-label:hover {
+    color: var(--light-purple-logo-text);
+    cursor: pointer;
+  }
+  
+  .question-label-inactive {
+    background: transparent;
+  }
+  
+  .question-label-active {
+    background: var(--base-purple-logo-bg);
+  }
+  
+  .questions-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
