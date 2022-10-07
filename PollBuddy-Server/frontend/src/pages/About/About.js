@@ -3,7 +3,7 @@ import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 import ReactMarkdown from "react-markdown";
 import aboutMdPath from "./About.md";
-import { useTitle, useAsyncEffect } from '../../hooks';
+import { useTitle, useAsyncEffect } from "../../hooks";
 
 /*----------------------------------------------------------------------------*/
 
@@ -16,6 +16,8 @@ function About() {
     const text = await response.text();
     setTerms(text);
   }, [ setTerms ]);
+
+  console.log(1);
 
   return (
     <MDBContainer className="page">

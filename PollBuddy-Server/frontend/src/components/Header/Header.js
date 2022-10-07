@@ -3,7 +3,7 @@ import "mdbreact/dist/css/mdb.css";
 import "./Header.scss";
 import logo from "../../images/logo.png";
 import Dropdown from "../Dropdown/Dropdown.js";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 export default class Header extends Component {
   constructor(props) {

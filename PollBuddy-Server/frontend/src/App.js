@@ -42,7 +42,7 @@ import Footer from "./components/Footer/Footer.js";
 //import Popup2 from "./components/Popup2/Popup2";
 import "./styles/main.scss";
 
-import { TitleProvider } from './hooks';
+import { TitleProvider } from "./hooks";
 
 /*----------------------------------------------------------------------------*/
 

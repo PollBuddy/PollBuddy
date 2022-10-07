@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Link, Navigate} from "react-router-dom";
+import { Link } from "react-router-dom";
 import { MDBContainer } from "mdbreact";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";

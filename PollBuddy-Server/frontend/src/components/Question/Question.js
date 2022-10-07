@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import "./Question.scss";
 import {
   MDBContainer,
-  MDBIcon
+  // MDBIcon
 } from "mdbreact";
 
-import {Navigate} from "react-router-dom";
-import Timer from "../Timer/Timer.js";
+// import {Navigate} from "react-router-dom";
+// import Timer from "../Timer/Timer.js";
 
 
 export default class Question extends Component {
@@ -60,7 +60,7 @@ export default class Question extends Component {
   }
 
   onTimeEnd(){
-    this.state.canChoose = false;
+    this.setState({ canChoose: false });
   }
 
 

@@ -4,11 +4,11 @@ import autosize from "autosize";
 import "./PollEditor.scss";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import TextField from '@mui/material/TextField';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateTimePicker from '@mui/lab/DateTimePicker';
-import { purple } from '@mui/material/colors';
+import TextField from "@mui/material/TextField";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DateTimePicker from "@mui/lab/DateTimePicker";
+import { purple } from "@mui/material/colors";
 import {createTheme, ThemeProvider} from "@mui/material";
 import {Link} from "react-router-dom";
 

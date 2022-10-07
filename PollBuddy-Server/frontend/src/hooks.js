@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 /*----------------------------------------------------------------------------*/
 
@@ -15,7 +15,7 @@ function useFn(func, ...args) {
     } else {
       return func(...args);
     }
-  }, arguments);
+  }, [ func, ...args ]);
 }
 
 // This helper effect allows users to run an asynchronous effect.

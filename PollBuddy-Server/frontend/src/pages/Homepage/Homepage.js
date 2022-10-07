@@ -5,7 +5,7 @@ import { MDBContainer } from "mdbreact";
 import logo from "../../images/logo.png";
 import { Link } from "react-router-dom";
 import PollCode from "../../components/PollCode/PollCode";
-import { useTitle } from '../../hooks';
+import { useTitle } from "../../hooks";
 
 /*----------------------------------------------------------------------------*/
 

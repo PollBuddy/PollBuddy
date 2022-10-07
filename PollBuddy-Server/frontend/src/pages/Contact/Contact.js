@@ -4,7 +4,10 @@ import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 
 import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";
-import { useTitle, useAsyncEffect, useFn } from '../../hooks';
+import { useTitle, useAsyncEffect, useFn } from "../../hooks";
+
+const ISSUE_LINK = "https://github.com/PollBuddy/PollBuddy/issues/new/choose";
+const REPO_LINK = "https://github.com/PollBuddy/PollBuddy";
 
 /*----------------------------------------------------------------------------*/
 
@@ -29,6 +32,8 @@ function Contact() {
       // https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
       headers: { "Content-Type": "application/json" },
     });
+
+    if (!resp.ok) { return }
 
     const { data } = await resp.json();
     const { FirstName, LastName, SchoolAffiliation, Email } = data;
@@ -58,6 +63,11 @@ function Contact() {
     width: "50%", // Add this to CSS it is static.
   };
 
+  const doneStyles = {
+    display: done ? "flex" : "none",
+    width: "50%", // ^ And this one too.
+  };
+
   const fileStyles = {
     display: formUp ? "none" : "",
   };
@@ -66,20 +76,16 @@ function Contact() {
     <MDBContainer fluid className="page">
       <MDBContainer className = "box">
         <p className="fontSizeLarge">
-          Looking to get in touch with a developer? Shoot an email over to
-          <a href="mailto:contact@pollbuddy.app">contact@pollbuddy.app</a>
-          or click the button below to open a support ticket form.
+          Looking to get in touch with a developer? Shoot an email over to 
+          <a href="mailto:contact@pollbuddy.app"> contact@pollbuddy.app </a>
+          or click the button below to open a support ticket form. 
         </p>
         <p>
           Alternatively, it would be greatly appreciated if you reported
           technical problems, such as bugs or design complaints/suggestions, by
-          <a href="https://github.com/PollBuddy/PollBuddy/issues/new/choose">
-            opening an issue
-          </a>
+          <a href={ISSUE_LINK}> opening an issue </a>
           on our
-          <a href="https://github.com/PollBuddy/PollBuddy">
-            GitHub repository.
-          </a>
+          <a href={REPO_LINK}> GitHub repository.</a>
         </p>
         <button className="button" style={fileStyles} onClick={handleTicket}>
           File Support Ticket
@@ -124,7 +130,7 @@ function Contact() {
           </button>
         </MDBContainer>
       </MDBContainer>
-      <MDBContainer fluid className = "box" style={inputStyles}>
+      <MDBContainer fluid className = "box" style={doneStyles}>
         <p className = "fontSizeLarge">
           Thank you for your support! Your form has been submitted. If you have
           any other issues, please file another support form.

@@ -75,7 +75,7 @@ class PollManager extends Component {
   timeLimit = 5;
 
   render() {
-    const clockFormat = ({ days, hours, minutes, seconds, completed }) => {
+    const clockFormat = ({ days, hours, /*minutes, */ seconds, completed }) => {
 
       if (completed) {
         // Render a completed state

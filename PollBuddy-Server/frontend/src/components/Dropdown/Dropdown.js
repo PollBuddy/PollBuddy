@@ -69,7 +69,7 @@ function useOutsideAlerter(ref, menuProps) {
       // Unbind the event listener on clean up
       document.removeEventListener("click", handleClickOutside);
     };
-  }, [ref]);
+  }, [ref, menuProps, navigate]);
 }
 
 function LoggedInMenu(props) {

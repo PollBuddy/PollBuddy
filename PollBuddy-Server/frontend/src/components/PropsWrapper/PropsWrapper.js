@@ -7,7 +7,7 @@ export function withRouter(C) {
     let location = useLocation();
     let navigate = useNavigate();
     let params = useParams();
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, /*setSearchParams*/] = useSearchParams();
     return (<C {...props} router={{ location, navigate, params, searchParams }} />);
   }
 

@@ -4,7 +4,7 @@ import "./Footer.scss";
 import rcosLogo from "../../images/rcos.png";
 import githubLogo from "../../images/github.png";
 import {MDBContainer} from "mdbreact";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const ACCESS_LINK = "https://info.rpi.edu/statement-of-accessibility";
 const RCOS_LINK = "https://rcos.io/";

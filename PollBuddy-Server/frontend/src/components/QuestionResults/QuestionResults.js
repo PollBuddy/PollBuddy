@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import "./QuestionResults.scss";
 import {Bar} from "react-chartjs-2";
-import {Chart as ChartJS} from 'chart.js/auto';
-import {MDBContainer, MDBIcon} from "mdbreact";
+// import {Chart as ChartJS} from 'chart.js/auto';
+import {MDBContainer} from "mdbreact";
 
-import Countdown, {zeroPad} from "react-countdown";
+// import Countdown, {zeroPad} from "react-countdown";
 
 export default class QuestionResults extends Component {
   constructor(props) {
