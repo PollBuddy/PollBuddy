@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Groups from "./Groups";
 import {BrowserRouter} from "react-router-dom";
-import GroupEdit from "../GroupEdit/GroupEdit";
+// import GroupEdit from "../GroupEdit/GroupEdit";
 
 function updateTitle() {
   return false;

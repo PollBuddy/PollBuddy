@@ -15,14 +15,14 @@ function useFn(func, ...args) {
     } else {
       return func(...args);
     }
-  }, [ func, ...args ]);
+  }, [ func, ...args ]); // eslint-disable-line react-hooks/exhaustive-deps
 }
 
 // This helper effect allows users to run an asynchronous effect.
 function useAsyncEffect(func, deps) {
   React.useEffect(() => {
     func();
-  }, deps);
+  }, deps); // eslint-disable-line react-hooks/exhaustive-deps
 }
 
 /*----------------------------------------------------------------------------*/

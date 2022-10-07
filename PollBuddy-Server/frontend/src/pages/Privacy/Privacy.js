@@ -1,9 +1,9 @@
 import React from "react";
 import "mdbreact/dist/css/mdb.css";
-import {MDBContainer} from "mdbreact";
+import { MDBContainer } from "mdbreact";
 import ReactMarkdown from "react-markdown";
 import privacyMdPath from "./Privacy.md";
-import { useTitle, useAsyncEffect } from '../../hooks';
+import { useTitle, useAsyncEffect } from "../../hooks";
 
 /*----------------------------------------------------------------------------*/
 
