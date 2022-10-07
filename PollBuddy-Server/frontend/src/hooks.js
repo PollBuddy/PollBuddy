@@ -2,6 +2,8 @@ import React from "react";
 
 /*----------------------------------------------------------------------------*/
 
+/* eslint-disable */
+
 // This is a function binder hook, that memoizes the arguments and function for
 // cleaner syntax and clearer components.
 
@@ -24,6 +26,8 @@ function useAsyncEffect(func, deps) {
     func();
   }, deps);
 }
+
+/* eslint-enable */
 
 /*----------------------------------------------------------------------------*/
 
