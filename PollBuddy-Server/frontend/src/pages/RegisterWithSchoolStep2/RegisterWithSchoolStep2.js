@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import {Navigate} from "react-router-dom";
+// import {Navigate} from "react-router-dom";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";

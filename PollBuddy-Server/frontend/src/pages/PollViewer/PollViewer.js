@@ -118,8 +118,15 @@ class PollViewer extends Component {
   };
 
   updateQuestion = (newAnswers) => {
-    this.state.questions[this.state.currentQuestion].currentAnswers =
-      newAnswers;
+    const currQuestion = {
+      ...this.state.questions[this.state.currentQuestion],
+      currentAnswers: newAnswers
+    };
+
+    const newQuestions = [ ...this.state.questions ];
+    newQuestions[this.state.currentQuestion] = currQuestion;
+    this.setState({ questions: newQuestions });
+
     localStorage.setItem(
       this.state.questions[this.state.currentQuestion].id,
       JSON.stringify(newAnswers)
@@ -187,41 +194,48 @@ class PollViewer extends Component {
         </MDBContainer>
       );
     } else {
+      const questionBar = [];
+      const questionResults = [];
+
+      for (let index = 0; index < this.state.questions.length; index++) {
+        questionBar.push(
+          <div
+            className={
+              this.state.currentQuestion === index
+                ? "question-label question-label-active"
+                : "question-label question-label-inactive"
+            }
+            onClick={() => this.displayQuestion(index)}
+          >
+            {index + 1}
+          </div>
+        );
+  
+        if (this.state.currentQuestion !== index) {
+          questionResults.push(null);
+        } else {
+          questionResults.push(
+            <Question
+              nextQuestion={this.nextQuestion}
+              updateQuestion={this.updateQuestion}
+              data={{
+                pollID: this.state.pollID,
+                questionNumber: this.state.currentQuestion + 1,
+                question: this.state.questions[this.state.currentQuestion],
+                perPoll: this.state.perPoll,
+              }}
+            />
+          );
+        }
+      }
+
       return (
         <MDBContainer className="page" style={{ justifyContent: "start" }}>
           {pollTimer()}
           <div className="questions-bar">
-            {this.state.questions.map((question, index) => {
-              return (
-                <div
-                  className={
-                    this.state.currentQuestion === index
-                      ? "question-label question-label-active"
-                      : "question-label question-label-inactive"
-                  }
-                  onClick={() => this.displayQuestion(index)}
-                >
-                  {index + 1}
-                </div>
-              );
-            })}
+            {questionBar}
           </div>
-          {this.state.questions.map((question, index) => {
-            if (this.state.currentQuestion === index) {
-              return (
-                <Question
-                  nextQuestion={this.nextQuestion}
-                  updateQuestion={this.updateQuestion}
-                  data={{
-                    pollID: this.state.pollID,
-                    questionNumber: this.state.currentQuestion + 1,
-                    question: this.state.questions[this.state.currentQuestion],
-                    perPoll: this.state.perPoll,
-                  }}
-                />
-              );
-            }
-          })}
+          {questionResults}
         </MDBContainer>
       );
     }
