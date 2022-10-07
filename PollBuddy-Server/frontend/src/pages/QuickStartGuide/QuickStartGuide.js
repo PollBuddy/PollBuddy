@@ -5,8 +5,6 @@ import ReactMarkdown from "react-markdown";
 import quickStartGuide from "./QuickStartGuide.md";
 import { useTitle, useAsyncEffect } from "../../hooks";
 
-/*----------------------------------------------------------------------------*/
-
 function QuickStartGuide() {
   useTitle("Quickstart Guide");
   const [ terms, setTerms ] = React.useState(null);
@@ -26,7 +24,5 @@ function QuickStartGuide() {
     </MDBContainer>
   );
 }
-
-/*----------------------------------------------------------------------------*/
 
 export default React.memo(QuickStartGuide);

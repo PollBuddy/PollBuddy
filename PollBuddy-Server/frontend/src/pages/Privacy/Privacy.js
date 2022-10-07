@@ -5,8 +5,6 @@ import ReactMarkdown from "react-markdown";
 import privacyMdPath from "./Privacy.md";
 import { useTitle, useAsyncEffect } from "../../hooks";
 
-/*----------------------------------------------------------------------------*/
-
 function Privacy() {
   useTitle("Fequently Asked Questions");
   const [ terms, setTerms ] = React.useState(null);
@@ -27,7 +25,5 @@ function Privacy() {
     </MDBContainer>
   );
 }
-
-/*----------------------------------------------------------------------------*/
 
 export default React.memo(Privacy);

@@ -1,7 +1,5 @@
 import React from "react";
 
-/*----------------------------------------------------------------------------*/
-
 /* eslint-disable */
 
 // This is a function binder hook, that memoizes the arguments and function for
@@ -28,8 +26,6 @@ function useAsyncEffect(func, deps) {
 }
 
 /* eslint-enable */
-
-/*----------------------------------------------------------------------------*/
 
 // Using contexts instead of ever changing values for the page title.
 const PageContext = React.createContext({ current: null });
@@ -60,7 +56,5 @@ function _TitleProvider({ initial, children }) {
 }
 
 const TitleProvider = React.memo(_TitleProvider);
-
-/*----------------------------------------------------------------------------*/
 
 export { useFn, useTitle, useAsyncEffect, TitleProvider };

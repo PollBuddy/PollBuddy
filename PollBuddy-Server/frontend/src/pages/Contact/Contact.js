@@ -9,8 +9,6 @@ import { useTitle, useAsyncEffect, useFn } from "../../hooks";
 const ISSUE_LINK = "https://github.com/PollBuddy/PollBuddy/issues/new/choose";
 const REPO_LINK = "https://github.com/PollBuddy/PollBuddy";
 
-/*----------------------------------------------------------------------------*/
-
 function Contact() {
   useTitle("Contact Us");
 
@@ -139,7 +137,5 @@ function Contact() {
     </MDBContainer>
   );
 }
-
-/*----------------------------------------------------------------------------*/
 
 export default React.memo(Contact);

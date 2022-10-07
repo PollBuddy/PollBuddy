@@ -7,8 +7,6 @@ import { Link } from "react-router-dom";
 import PollCode from "../../components/PollCode/PollCode";
 import { useTitle } from "../../hooks";
 
-/*----------------------------------------------------------------------------*/
-
 function Homepage() {
   useTitle("Home");
   const loggedIn = localStorage.getItem("loggedIn") === "true";
@@ -51,7 +49,5 @@ function Homepage() {
     </MDBContainer>
   );
 }
-
-/*----------------------------------------------------------------------------*/
 
 export default React.memo(Homepage);

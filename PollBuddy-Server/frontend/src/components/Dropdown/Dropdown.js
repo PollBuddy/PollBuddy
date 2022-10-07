@@ -4,8 +4,6 @@ import "./Dropdown.scss";
 import { useNavigate, Link } from "react-router-dom";
 import { useFn } from "../../hooks";
 
-/*----------------------------------------------------------------------------*/
-
 function LoggedInMenu() {
   const navigate = useNavigate();
 
@@ -54,8 +52,6 @@ function LoggedOutMenu() {
   );
 }
 
-/*----------------------------------------------------------------------------*/
-
 function DropdownMenu(props) {
   if (localStorage.getItem("loggedIn") === "true") {
     return LoggedInMenu(props);
@@ -94,7 +90,5 @@ function DropdownButton() {
 function Dropdown() {
   return <DropdownButton />;
 }
-
-/*----------------------------------------------------------------------------*/
 
 export default Dropdown;

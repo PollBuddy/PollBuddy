@@ -4,8 +4,6 @@ import { MDBContainer } from "mdbreact";
 import PollCode from "../../components/PollCode/PollCode";
 import { useTitle } from "../../hooks";
 
-/*----------------------------------------------------------------------------*/
-
 function Code() {
   useTitle("Enter Poll Code");
  
@@ -15,7 +13,5 @@ function Code() {
     </MDBContainer>
   );
 }
-
-/*----------------------------------------------------------------------------*/
 
 export default React.memo(Code);

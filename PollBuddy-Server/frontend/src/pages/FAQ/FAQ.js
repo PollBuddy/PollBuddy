@@ -5,8 +5,6 @@ import ReactMarkdown from "react-markdown";
 import faqFile from "./faq.md";
 import { useAsyncEffect, useTitle } from "../../hooks";
 
-/*----------------------------------------------------------------------------*/
-
 function FAQ() {
   useTitle("Fequently Asked Questions");
   const [ questions, setQuestions ] = React.useState(null);
@@ -26,7 +24,5 @@ function FAQ() {
     </MDBContainer>
   );
 }
-
-/*----------------------------------------------------------------------------*/
 
 export default React.memo(FAQ);

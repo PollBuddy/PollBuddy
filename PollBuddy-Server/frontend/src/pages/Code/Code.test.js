@@ -3,8 +3,6 @@ import ReactDOM from "react-dom";
 import Code from "./Code";
 import { BrowserRouter } from "react-router-dom";
 
-/*----------------------------------------------------------------------------*/
-
 // Create basic render test
 it("renders without crashing", () => {
   // Create div element

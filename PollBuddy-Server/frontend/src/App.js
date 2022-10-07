@@ -44,8 +44,6 @@ import "./styles/main.scss";
 
 import { TitleProvider } from "./hooks";
 
-/*----------------------------------------------------------------------------*/
-
 function App() {
   const [ userInfo, ] = React.useState({ sessionIdentifier: "" });
 
@@ -168,7 +166,5 @@ function App() {
 
   );
 }
-
-/*----------------------------------------------------------------------------*/
 
 export default React.memo(App);

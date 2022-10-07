@@ -3,8 +3,6 @@ import ReactDOM from "react-dom";
 import Privacy from "./Privacy";
 import { BrowserRouter } from "react-router-dom";
 
-/*----------------------------------------------------------------------------*/
-
 jest.mock("react-markdown", () => (props) => {
   return <>{props.children}</>;
 });

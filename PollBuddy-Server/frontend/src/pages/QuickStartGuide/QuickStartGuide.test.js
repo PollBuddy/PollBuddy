@@ -2,8 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import QuickStartGuide from "./QuickStartGuide";
 
-/*----------------------------------------------------------------------------*/
-
 jest.mock("react-markdown", () => (props) => {
   return <>{props.children}</>;
 });

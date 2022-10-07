@@ -2,8 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Contact from "./Contact";
 
-/*----------------------------------------------------------------------------*/
-
 // Create basic render test
 it("renders without crashing", () => {
   fetch.mockResponseOnce(JSON.stringify({data: {data: {

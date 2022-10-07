@@ -5,8 +5,6 @@ import ReactMarkdown from "react-markdown";
 import aboutMdPath from "./About.md";
 import { useTitle, useAsyncEffect } from "../../hooks";
 
-/*----------------------------------------------------------------------------*/
-
 function About() {
   useTitle("About");
   const [ terms, setTerms ] = React.useState(null);
@@ -26,7 +24,5 @@ function About() {
     </MDBContainer>
   );
 }
-
-/*----------------------------------------------------------------------------*/
 
 export default React.memo(About);
