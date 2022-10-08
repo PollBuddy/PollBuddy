@@ -56,11 +56,11 @@ function _LoggedOutMenu() {
 
 const LoggedOutMenu = React.memo(_LoggedOutMenu);
 
-function _DropdownMenu(props) {
+function _DropdownMenu() {
   if (localStorage.getItem("loggedIn") === "true") {
-    return LoggedInMenu(props);
+    return <LoggedInMenu />;
   } else {
-    return LoggedOutMenu(props);
+    return <LoggedOutMenu />;
   }
 }
 
