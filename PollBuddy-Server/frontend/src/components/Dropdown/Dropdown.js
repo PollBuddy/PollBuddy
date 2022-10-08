@@ -4,7 +4,7 @@ import "./Dropdown.scss";
 import { useNavigate, Link } from "react-router-dom";
 import { useFn } from "../../hooks";
 
-function LoggedInMenu() {
+function _LoggedInMenu() {
   const navigate = useNavigate();
 
   const handleLogout = React.useCallback(async () => {
@@ -41,7 +41,9 @@ function LoggedInMenu() {
   );
 }
 
-function LoggedOutMenu() {
+const LoggedInMenu = React.memo(_LoggedInMenu);
+
+function _LoggedOutMenu() {
   return (
     <div className="Dropdown">
       <Link to="/login">Login</Link>
@@ -52,7 +54,9 @@ function LoggedOutMenu() {
   );
 }
 
-function DropdownMenu(props) {
+const LoggedOutMenu = React.memo(_LoggedOutMenu);
+
+function _DropdownMenu(props) {
   if (localStorage.getItem("loggedIn") === "true") {
     return LoggedInMenu(props);
   } else {
@@ -60,7 +64,9 @@ function DropdownMenu(props) {
   }
 }
 
-function DropdownButton() {
+const DropdownMenu = React.memo(_DropdownMenu);
+
+function _DropdownButton() {
   const [ open, setOpen ] = React.useState(false);
 
   const handleClickStop = React.useCallback(event => {
@@ -87,8 +93,10 @@ function DropdownButton() {
   );
 }
 
+const DropdownButton = React.memo(_DropdownButton);
+
 function Dropdown() {
   return <DropdownButton />;
 }
 
-export default Dropdown;
+export default React.memo(Dropdown);
