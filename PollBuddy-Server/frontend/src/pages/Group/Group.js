@@ -20,47 +20,42 @@ class Group extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.props.updateTitle(this.state.name);
-    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id, {
+    let httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id, {
       method: "GET"
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.result === "success") {
-          this.props.updateTitle(response.data.name);
-          if (response.data.isMember || response.data.isAdmin ) {
-            this.setState({
-              name: response.data.name,
-              description: response.data.description,
-              isMember: response.data.isMember,
-              isAdmin: response.data.isAdmin,
-              doneLoading: true
-            });
-          } else {
-            this.setState({
-              showError: true,
-            });
-          }
-        } else {
-          this.setState({
-            showError: true,
-          });
-        }
+    });
+    let response = await httpResponse.json();
+    if (response.result === "success") {
+      this.props.updateTitle(response.data.name);
+      if (response.data.isMember || response.data.isAdmin ) {
+        this.setState({
+          name: response.data.name,
+          description: response.data.description,
+          isMember: response.data.isMember,
+          isAdmin: response.data.isAdmin,
+          doneLoading: true
+        });
+      } else {
+        this.setState({
+          showError: true,
+        });
+      }
+    } else {
+      this.setState({
+        showError: true,
       });
-
-    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/polls", {
+    }
+    httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/polls", {
       method: "GET"
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        if (response.result === "success") {
-          this.setState({
-            polls: response.data,
-          });
-        }
+    });
+    response = await httpResponse.json();
+    console.log(response);
+    if (response.result === "success") {
+      this.setState({
+        polls: response.data,
       });
+    }
   }
 
   pollButtonClick = (pollID) => {
