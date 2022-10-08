@@ -55,7 +55,7 @@ class PollResults extends Component {
 
     for (let index = 0; index < this.state.questions.length; index++) {
       questionBar.push(
-        <div>
+        <div key={index}>
           <div className={
             this.state.currentQuestion === index ?
               "question-label question-label-active" :
@@ -70,7 +70,7 @@ class PollResults extends Component {
         questionResults.push(null);
       } else {
         questionResults.push(
-          <QuestionResults data={{
+          <QuestionResults key={index} data={{
             questionNumber: this.state.currentQuestion + 1,
             question: this.state.questions[this.state.currentQuestion],
           }}/>
