@@ -1,6 +1,6 @@
 import React from "react";
 import { MDBContainer } from "mdbreact";
-import {Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./GroupSettings.scss";
 
 function GroupSettings({ state }) {
