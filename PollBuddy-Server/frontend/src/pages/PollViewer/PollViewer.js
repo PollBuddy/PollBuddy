@@ -200,6 +200,7 @@ class PollViewer extends Component {
       for (let index = 0; index < this.state.questions.length; index++) {
         questionBar.push(
           <div
+            key={index}
             className={
               this.state.currentQuestion === index
                 ? "question-label question-label-active"
@@ -218,6 +219,7 @@ class PollViewer extends Component {
             <Question
               nextQuestion={this.nextQuestion}
               updateQuestion={this.updateQuestion}
+              key={index}
               data={{
                 pollID: this.state.pollID,
                 questionNumber: this.state.currentQuestion + 1,
