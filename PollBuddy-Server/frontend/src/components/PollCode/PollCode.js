@@ -3,7 +3,7 @@ import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import { Link } from "react-router-dom";
 
-const POLL_REGEX = /^[a-zA-z0-9]{6}$/;
+const POLL_REGEX = /^[a-zA-Z0-9]{6}$/;
 
 function PollCode() {
   const [ code, setCode ] = React.useState("testcode");
