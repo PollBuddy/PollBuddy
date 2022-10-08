@@ -363,7 +363,8 @@ const createPoll = async function (userID, pollData) {
     };
 
     if (pollData.group) {
-      let group = await getGroupInternal(pollData.group, {"Admins": userID});
+      let idCode = new bson.ObjectID(pollData.group);
+      let group = await getGroupInternal({"_id": idCode, "Admins": userID});
       if (!group) {
         return httpCodes.BadRequest("Invalid operation");
       }

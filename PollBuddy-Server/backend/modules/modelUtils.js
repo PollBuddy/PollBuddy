@@ -5,30 +5,22 @@ const getID = function (ID) {
   return new bson.ObjectID(ID);
 };
 
-const getGroupInternal = async function(groupID, constraints={}) {
-  let idCode = new bson.ObjectID(groupID);
-  constraints["_id"] = idCode;
-  return await mongoConnection.getDB().collection("groups").findOne(constraints);
+const getGroupInternal = async function(query={}) {
+  return await mongoConnection.getDB().collection("groups").findOne(query);
 };
 
 const isGroupAdmin = async function(groupID, userID) {
-  let idCode = new bson.ObjectID(groupID);
-  let group = await mongoConnection.getDB().collection("groups").findOne({ "_id": idCode });
-  for (let admin of group.Admins) {
-    if (admin.toString() === userID.toString()) {
-      return true;
-    }
+  let group = getGroupInternal({"_id": groupID, "Admins": userID});
+  if (group) {
+    return true;
   }
   return false;
 };
 
 const isGroupMember = async function(groupID, userID) {
-  let idCode = new bson.ObjectID(groupID);
-  let group = await mongoConnection.getDB().collection("groups").findOne({ "_id": idCode });
-  for (let member of group.Members) {
-    if (member.toString() === userID.toString()) {
-      return true;
-    }
+  let group = getGroupInternal({"_id": groupID, "Members": userID});
+  if (group) {
+    return true;
   }
   return false;
 };

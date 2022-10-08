@@ -37,7 +37,7 @@ const editGroupValidator = Joi.object({
 
 const getGroup = async function (groupID, userID) {
   try {
-    const group = await getGroupInternal(groupID);
+    const group = await getGroupInternal({"_id": groupID});
     if (!group) {
       return httpCodes.NotFound();
     }
@@ -76,7 +76,7 @@ const createGroup = async function (userID, groupData) {
 
 const editGroup = async function (groupID, userID, groupData) {
   try {
-    const group = await getGroupInternal(groupID, {"Admins": userID});
+    const group = await getGroupInternal({"_id": groupID, "Admins": userID});
     if (!group) {
       return httpCodes.NotFound();
     }
@@ -99,7 +99,7 @@ const editGroup = async function (groupID, userID, groupData) {
 
 const getGroupMembers = async function (groupID, userID) {
   try {
-    const group = await getGroupInternal(groupID, {"Admins": userID});
+    const group = await getGroupInternal({"_id": groupID, "Admins": userID});
     if (!group) {
       return httpCodes.NotFound();
     }
@@ -121,7 +121,7 @@ const getGroupMembers = async function (groupID, userID) {
 
 const getGroupAdmins = async function (groupID, userID) {
   try {
-    const group = await getGroupInternal(groupID, {"Admins": userID});
+    const group = await getGroupInternal({"_id": groupID, "Admins": userID});
     if (!group) {
       return httpCodes.NotFound();
     }
@@ -143,7 +143,7 @@ const getGroupAdmins = async function (groupID, userID) {
 
 const getGroupPolls = async function (userID, groupID) {
   try {
-    const group = await getGroupInternal(groupID);
+    const group = await getGroupInternal({"_id": groupID});
     if (!group) {
       return httpCodes.NotFound();
     }
@@ -174,7 +174,7 @@ const getGroupPolls = async function (userID, groupID) {
 
 const joinGroup = async function (groupID, userID) {
   try {
-    const group = await getGroupInternal(groupID, {"Members": { "$nin": ["userID"]}});
+    const group = await getGroupInternal({"_id": groupID, "Members": { "$nin": ["userID"]}});
     if (!group) {
       return httpCodes.NotFound();
     }
@@ -196,7 +196,7 @@ const joinGroup = async function (groupID, userID) {
 
 const leaveGroup = async function (groupID, userID) {
   try {
-    let group = await getGroupInternal(groupID, {"Members": userID});
+    let group = await getGroupInternal({"_id": groupID, "Members": userID});
     if (!group) {
       return httpCodes.NotFound();
     }
@@ -218,7 +218,7 @@ const leaveGroup = async function (groupID, userID) {
 
 const deleteGroup = async function (groupID, userID) {
   try {
-    let group = await getGroupInternal(groupID, {"Admins": userID});
+    let group = await getGroupInternal({"_id": groupID, "Admins": userID});
     if (!group) {
       return httpCodes.NotFound();
     }
