@@ -47,59 +47,58 @@ class AccountInfo extends Component {
   }
 
 
-  componentDidMount(){
+  async componentDidMount() {
     this.props.updateTitle("Account Info");
 
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/me", {
+    const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/me", {
       method: "GET"
-    }).then(response => response.json())
-      .then(data => {
-        console.log(data);
-        // Load states from database values
-        data = data.data;
-        if(data.userName) {
-          this.setState({
-            userName: data.userName,
-            userNameLoaded: true,
-            userNameLocked: data.userNameLocked
-          });
-        }
-        if(data.firstName) {
-          this.setState({
-            firstName: data.firstName,
-            firstNameLoaded: true,
-            firstNameLocked: data.firstNameLocked
-          });
-        }
-        if(data.lastName) {
-          this.setState({
-            lastName: data.lastName,
-            lastNameLoaded: true,
-            lastNameLocked: data.lastNameLocked
-          });
-        }
-        if(data.email) {
-          this.setState({
-            email: data.email,
-            emailLoaded: true,
-            emailLocked: data.emailLocked
-          });
-        }
-        if(data.schoolAffiliation) {
-          this.setState({
-            school: data.schoolAffiliation,
-            passwordLocked: true
-          });
-        }
-        if(data.logOutEverywhere) {
-          this.setState({
-            logOutEverywhere: data.logOutEverywhere
-          });
-        }
-        this.setState({
-          doneLoading: true
-        });
+    });
+    let data = await response.json();
+    console.log(data);
+    // Load states from database values
+    data = data.data;
+    if(data.userName) {
+      this.setState({
+        userName: data.userName,
+        userNameLoaded: true,
+        userNameLocked: data.userNameLocked
       });
+    }
+    if(data.firstName) {
+      this.setState({
+        firstName: data.firstName,
+        firstNameLoaded: true,
+        firstNameLocked: data.firstNameLocked
+      });
+    }
+    if(data.lastName) {
+      this.setState({
+        lastName: data.lastName,
+        lastNameLoaded: true,
+        lastNameLocked: data.lastNameLocked
+      });
+    }
+    if(data.email) {
+      this.setState({
+        email: data.email,
+        emailLoaded: true,
+        emailLocked: data.emailLocked
+      });
+    }
+    if(data.schoolAffiliation) {
+      this.setState({
+        school: data.schoolAffiliation,
+        passwordLocked: true
+      });
+    }
+    if(data.logOutEverywhere) {
+      this.setState({
+        logOutEverywhere: data.logOutEverywhere
+      });
+    }
+    this.setState({
+      doneLoading: true
+    });
   }
 
   handleToggleClick() {
