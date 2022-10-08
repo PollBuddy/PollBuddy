@@ -11,10 +11,10 @@ export default class FAQ extends Component {
     this.state = {questions: null};
   }
 
-  componentWillMount() {
-    fetch(faqFile).then((response) => response.text()).then((text) => {
-      this.setState({questions: text});
-    });
+  async componentWillMount() {
+    const response = await fetch(faqFile);
+    const text = await response.text();
+    this.setState({questions: text});
   }
 
   componentDidMount() {
