@@ -1,84 +1,59 @@
-import React, { Component } from "react";
+import React from "react";
 import "mdbreact/dist/css/mdb.css";
-import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import { MDBContainer } from "mdbreact";
 import ErrorText from "../../components/ErrorText/ErrorText";
+import { useFn, useTitle } from "../../hooks";
+import { useNavigate } from "react-router-dom";
 
-class GroupCreation extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: "",
-      description: "",
-      showError: false,
-    };
-  }
+const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-  componentDidMount(){
-    this.props.updateTitle("Group Creation");
-  }
+function GroupCreation() {
+  const navigate = useNavigate();
+  useTitle("Group Creation");
 
-  getGroupData = () => {
-    return {
-      name: this.state.name,
-      description: this.state.description,
-    };
-  };
+  const [ name, setName ] = React.useState("");
+  const [ desc, setDesc ] = React.useState("");
+  const [ error, setError ]  = React.useState(false);
 
-  onInput = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  };
+  const handleName = useFn(setName, e => e.target.value);
+  const handleDesc = useFn(setDesc, e => e.target.value);
 
-  onSubmit = async () => {
-    this.setState({showError: false});
-    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/new", {
+  const handleSubmit = React.useCallback(async () => {
+    setError(false);
+    const response = await fetch(BACKEND + "/groups/new", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
-      body: JSON.stringify(this.getGroupData())
-    }).then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        if (response.result === "success") {
-          this.props.router.navigate("/groups/" + response.data.id);
-        } else {
-          this.setState({showError: true});
-        }
-      });
-  };
+      // HEADERS LIKE SO ARE NECESSARY for some reason
+      // https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: name, description: desc })
+    });
+    
+    const { result, data } = await response.json();
 
-  checkError() {
-    return this.state.showError ? <ErrorText/> : null;
-  }
+    if (result === "success") {
+      navigate("/groups/" + data.id);
+    } else {
+      setError(true);
+    }
+  }, [ setError, navigate, name, desc ]);
 
-  render() {
-    return (
-      <MDBContainer className="page">
-        <MDBContainer className="box">
-          <MDBContainer className="form-group">
-            <label htmlFor="groupName">Group Name:</label>
-            <input
-              name="name"
-              id="groupName"
-              className="form-control textBox"
-              onInput={this.onInput}
-            />
-            <label htmlFor="groupName">Group Description:</label>
-            <input
-              name="description"
-              id="groupDescription"
-              className="form-control textBox"
-              onInput={this.onInput}
-            />
-          </MDBContainer>
-          {this.checkError()}
-          <button className="button" onClick={this.onSubmit}>
-            Create Group
-          </button>
+  return (
+    <MDBContainer className="page">
+      <MDBContainer className="box">
+        <MDBContainer className="form-group">
+          <label htmlFor="groupName">Group Name:</label>
+          <input name="name" id="groupName" className="form-control textBox"
+            onInput={handleName}/>
+
+          <label htmlFor="groupName">Group Description:</label>
+          <input name="description" id="groupDescription"
+            className="form-control textBox" onInput={handleDesc}/>
         </MDBContainer>
+        { error && <ErrorText/> }
+        <button className="button" onClick={handleSubmit}>Create Group</button>
       </MDBContainer>
-    );
-  }
+    </MDBContainer>
+  );
 }
-export default withRouter(GroupCreation);
+
+export default React.memo(GroupCreation);
