@@ -1,131 +1,100 @@
-import React, {Component} from "react";
-import {Link} from "react-router-dom";
-import {MDBContainer} from "mdbreact";
+import React from "react";
+import { Link, useParams } from "react-router-dom";
+import { MDBContainer } from "mdbreact";
 import GroupSettings from "../../components/GroupSettings/GroupSettings";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
+import { useAsyncEffect, useTitle } from "../../hooks";
 
-class Group extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      id: props.router.params.groupID,
-      name: "",
-      description: "",
-      isMember: false,
-      isAdmin: false,
-      polls: [],
-      doneLoading: false,
-      showError: null
-    };
-  }
+const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-  componentDidMount() {
-    this.props.updateTitle(this.state.name);
-    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id, {
-      method: "GET"
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        if (response.result === "success") {
-          this.props.updateTitle(response.data.name);
-          if (response.data.isMember || response.data.isAdmin ) {
-            this.setState({
-              name: response.data.name,
-              description: response.data.description,
-              isMember: response.data.isMember,
-              isAdmin: response.data.isAdmin,
-              doneLoading: true
-            });
-          } else {
-            this.setState({
-              showError: true,
-            });
-          }
-        } else {
-          this.setState({
-            showError: true,
-          });
-        }
-      });
+function PollList({ polls, isAdmin }) {
+  if (polls.length === 0) {
+    return <p>You don't have any polls available at this time.<br/> <br/></p>;
+  } else {
+    return polls.map(({ id, title }, index) => (
+      <Link to={"/polls/" + id + (isAdmin ? "/edit" : "/view")}
+        style={{ width: "17em" }} key={index}>
 
-    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/polls", {
-      method: "GET"
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        if (response.result === "success") {
-          this.setState({
-            polls: response.data,
-          });
-        }
-      });
-  }
-
-  pollButtonClick = (pollID) => {
-    if (this.state.isAdmin) {
-      this.props.router.navigate("/polls/" + pollID + "/edit");
-    } else if(this.state.isMember) {
-      this.props.router.navigate("/polls/" + pollID + "/view");
-    }
-  };
-
-  render() {
-    if (this.state.showError) {
-      return (
-        <MDBContainer fluid className="page">
-          <MDBContainer fluid className="box">
-            <p className="fontSizeLarge">
-              Error loading data! Please try again.
-            </p>
-          </MDBContainer>
-        </MDBContainer>
-      );
-    } else if (!this.state.doneLoading) {
-      return (
-        <MDBContainer className="page">
-          <LoadingWheel/>
-        </MDBContainer>
-      );
-    } else if (!this.state.isMember && !this.state.isAdmin) {
-      //TODO: Display join button to the user if they are not in group
-      return (
-        <MDBContainer className="page">
-          <p className="fontSizeLarge">
-            { this.state.name }
-          </p>
-          <button className="button">
-            Join
-          </button>
-        </MDBContainer>
-      );
-    } else {
-      return (
-        <MDBContainer className="page">
-          <MDBContainer className="two-box">
-            <GroupSettings state={this.state}/>
-            <MDBContainer className="box">
-              <p className="fontSizeLarge">
-                My Polls
-              </p>
-              {this.state.polls.length === 0 ? (
-                <p>You don't have any polls available at this time.<br/> <br/></p>
-              ) : (
-                <React.Fragment>
-                  {this.state.polls.map((poll, index) => (
-                    <Link to={"/polls/" + poll.id + (this.state.isAdmin ? "/edit" : "/view")} style={{width: "17em"}}>
-                      <button style={{  width: "20em" }} className="button">{"Poll " + (index + 1) + ": " + poll.title}</button>
-                    </Link>
-                  ))}
-                </React.Fragment>
-              )}
-            </MDBContainer>
-          </MDBContainer>
-        </MDBContainer>
-      );
-    }
+        <button style={{ width: "20em" }} className="button">
+          {`Poll ${index + 1}: ${title}`}
+        </button>
+      </Link>
+    ));
   }
 }
 
-export default withRouter(Group);
+function Group() {
+  const [ name, setName ] = React.useState("");
+  const [ isMember, setIsMember ] = React.useState(false);
+  const [ isAdmin, setIsAdmin ] = React.useState(false);
+  const [ polls, setPolls ] = React.useState([ ]);
+  const [ loaded, setLoaded ] = React.useState(false);
+  const [ error, setError ] = React.useState(false);
+
+  const { groupID: ID } = useParams();
+  useTitle(name);
+
+  useAsyncEffect(async () => {
+    const response = await fetch(`${BACKEND}/groups/${ID}`, { method: "GET" });
+    const { result, data } = await response.json();
+
+    if (result !== "success") {
+      setError(true);
+    } else if (!data.isMember && !data.isAdmin) {
+      setError(true);
+    } else {
+      setName(data.name);
+      setIsAdmin(data.isAdmin);
+      setIsMember(data.isMember);
+      setLoaded(true);
+    }
+  }, [ setError, setName, setIsAdmin, setIsMember, setLoaded, ID ]);
+  
+  useAsyncEffect(async () => {
+    const URL = `${BACKEND}/groups/${ID}/polls`;
+    const response = await fetch(URL, { method: "GET" });
+    const { result, data } = await response.json();
+
+    if (result === "success") {
+      setPolls(data);
+    }
+  }, [ setPolls, ID ]);
+
+  if (error) {
+    return (
+      <MDBContainer fluid className="page">
+        <MDBContainer fluid className="box">
+          <p className="fontSizeLarge">Error loading data! Please try again.</p>
+        </MDBContainer>
+      </MDBContainer>
+    );
+  } else if (!loaded) {
+    return (
+      <MDBContainer className="page">
+        <LoadingWheel/>
+      </MDBContainer>
+    );
+  } else if (!isMember && !isAdmin) {
+    // TODO: Display join button to the user if they are not in group.
+    return (
+      <MDBContainer className="page">
+        <p className="fontSizeLarge">{name}</p>
+        <button className="button">Join</button>
+      </MDBContainer>
+    );
+  } else {
+    return (
+      <MDBContainer className="page">
+        <MDBContainer className="two-box">
+          <GroupSettings isMember={isMember} isAdmin={isAdmin} id={ID}/>
+          <MDBContainer className="box">
+            <p className="fontSizeLarge">My Polls</p>
+            <PollList polls={polls} isAdmin={isAdmin}/>
+          </MDBContainer>
+        </MDBContainer>
+      </MDBContainer>
+    );
+  }
+}
+
+export default React.memo(Group);

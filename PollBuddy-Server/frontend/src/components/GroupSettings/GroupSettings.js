@@ -3,8 +3,7 @@ import { MDBContainer } from "mdbreact";
 import { Link, useNavigate } from "react-router-dom";
 import "./GroupSettings.scss";
 
-function GroupSettings({ state }) {
-  const { isMember, isAdmin, id } = state;
+function GroupSettings({ isMember, isAdmin, id }) {
   const navigate = useNavigate();
 
   const createPoll = React.useCallback(() => {
