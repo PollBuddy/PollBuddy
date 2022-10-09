@@ -11,7 +11,7 @@ function PrivateComponent({ state, element }) {
   const [ loggedIn, ] = useLocal("loggedIn");
   const isLoggedIn = loggedIn === "true";
 
-  if (isLoggedIn === state) {
+  if (isLoggedIn === (state ?? false)) {
     return element;
   } else if (state) {
     return <Navigate state={{ prevRoute: location.pathname }} to="/login"/>;
