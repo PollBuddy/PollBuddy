@@ -25,6 +25,15 @@ function useAsyncEffect(func, deps) {
   }, deps);
 }
 
+// This helper hook allows one useCallback to run multiple functions at once.
+function useCall(...funcs) {
+  return React.useCallback(() => {
+    const last = funcs.pop();
+    for (const func of funcs) { func?.(); }
+    return last?.();
+  }, funcs);
+}
+
 /* eslint-enable */
 
 // Using contexts instead of ever changing values for the page title.
@@ -83,4 +92,4 @@ function useLocal(key) {
   return [ value, changeValue ];
 }
 
-export { useFn, useTitle, useAsyncEffect, TitleProvider, useLocal };
+export { useFn, useTitle, useAsyncEffect, TitleProvider, useLocal, useCall };
