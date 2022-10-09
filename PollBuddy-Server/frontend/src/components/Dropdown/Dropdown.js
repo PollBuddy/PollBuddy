@@ -2,7 +2,7 @@ import React from "react";
 import "mdbreact/dist/css/mdb.css";
 import "./Dropdown.scss";
 import { useNavigate, Link } from "react-router-dom";
-import { useFn } from "../../hooks";
+import { useFn, useLocal } from "../../hooks";
 
 function _LoggedInMenu() {
   const navigate = useNavigate();
@@ -24,9 +24,6 @@ function _LoggedInMenu() {
     // Navigates after response so that the redirect does not interrupt
     // response.
     navigate("/");
-
-    // Reloads the page so that the logged-in menu closes.
-    // history.go(0);
   }, [ navigate ]);
 
   return (
@@ -57,7 +54,8 @@ function _LoggedOutMenu() {
 const LoggedOutMenu = React.memo(_LoggedOutMenu);
 
 function _DropdownMenu() {
-  if (localStorage.getItem("loggedIn") === "true") {
+  const [ loggedIn, ] = useLocal("loggedIn");
+  if (loggedIn === "true") {
     return <LoggedInMenu />;
   } else {
     return <LoggedOutMenu />;

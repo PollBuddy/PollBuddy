@@ -57,4 +57,30 @@ function _TitleProvider({ initial, children }) {
 
 const TitleProvider = React.memo(_TitleProvider);
 
-export { useFn, useTitle, useAsyncEffect, TitleProvider };
+// This hook detects changes to localStorage and provides a way to easily
+// access and change values in localStorage.
+function useLocal(key) {
+  const [ value, setValue ] = React.useState(localStorage.getItem(key));
+
+  const onEvent = React.useCallback(event => {
+    if (event.storageArea !== localStorage) { return; }
+    if (event.key == null) {
+      setValue(null);
+    } else if (event.key === key) {
+      setValue(event.newValue);
+    }
+  }, [ key, setValue ]);
+
+  const changeValue = React.useCallback(newValue => {
+    localStorage.setItem(key, newValue);
+  }, [ key ]);
+
+  React.useEffect(() => {
+    window.addEventListener("storage", onEvent);
+    return () => window.removeEventListener("storage", onEvent);
+  }, [ onEvent ]);
+
+  return [ value, changeValue ];
+}
+
+export { useFn, useTitle, useAsyncEffect, TitleProvider, useLocal };

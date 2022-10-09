@@ -5,14 +5,14 @@ import { MDBContainer } from "mdbreact";
 import logo from "../../images/logo.png";
 import { Link } from "react-router-dom";
 import PollCode from "../../components/PollCode/PollCode";
-import { useTitle } from "../../hooks";
+import { useTitle, useLocal } from "../../hooks";
 
 function Homepage() {
   useTitle("Home");
-  const loggedIn = localStorage.getItem("loggedIn") === "true";
+  const [ loggedIn, ] = useLocal("loggedIn");
 
   let innerView = null;
-  if (loggedIn) {
+  if (loggedIn === "true") {
     innerView = <>
       <Link to="/account">
         <button className="button">My Account</button>
