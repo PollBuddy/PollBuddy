@@ -144,7 +144,7 @@ function App() {
             {/* Register with School Account Page */}
             <Route exact path="/register/school" element={<PrivateComponent element={<RegisterWithSchool />}/>}/>
             {/* Register with School Account Step 2 Page */}
-            <Route exact path="/register/school/step2" element={<PrivateComponent element={<RegisterWithSchoolStep2 updateTitle={updateTitle} />}/>}/>
+            <Route exact path="/register/school/step2" element={<PrivateComponent element={<RegisterWithSchoolStep2 />}/>}/>
 
             {/* --- Account and User Settings Pages --- */}
             {/* Account Info Page */}

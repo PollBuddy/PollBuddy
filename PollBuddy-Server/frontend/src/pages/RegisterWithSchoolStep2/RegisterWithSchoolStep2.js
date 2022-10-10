@@ -1,213 +1,158 @@
-import React, {Component} from "react";
-import {MDBContainer} from "mdbreact";
+import React from "react";
+import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import { ErrorText, LoadingWheel, withRouter } from "../../components";
+import { ErrorText } from "../../components";
+import { useFn, useTitle } from "../../hooks";
+import { useNavigate, useParams } from "react-router-dom";
 const Joi = require("joi");
 
+const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-class RegisterWithSchoolStep2 extends Component {
-  constructor(props) {
-    super(props);
+const SCHEMA = Joi.object({
+  username: Joi.string()
+    .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$"))
+    .error(new Error("Username must be between 3 and 32 characters. Valid ch" +
+      "aracters include letters, numbers, underscores, dashes, and periods.")),
+  email: Joi.string()
+    .email({ tlds: { allow: false }, minDomainSegments: 2 })
+    .max(320)
+    .error(new Error("Invalid email format.")),
+  firstname: Joi.string()
+    .min(1)
+    .max(256)
+    .error(new Error("First name must be between 1 and 256 characters.")),
+  lastname: Joi.string()
+    .allow("")
+    .max(256)
+    .error(new Error("Last name must be less than 256 characters.")),
+});
 
-    let data, firstName, firstNamePrefilled, lastName, lastNamePrefilled;
-    let userName, userNamePrefilled, email, emailPrefilled;
+function RegisterWithSchoolStep2() {
+  useTitle("Register with School");
+  const navigate = useNavigate();
 
-    // Process args
-    // TODO: Some of this should probably be in a try/catch or something for robustness
-    if(this.props.router.location.search) {
-      console.log("Getting things");
-      data = JSON.parse(new URLSearchParams(this.props.router.location.search).get("data"));
-      firstName = data["firstName"];
-      firstNamePrefilled = true;
-      lastName = data["lastName"];
-      lastNamePrefilled = true;
-      userName = data["userName"];
-      userNamePrefilled = true;
-      email = data["email"];
-      emailPrefilled = true;
+  const { data: _data } = useParams();
+  const params = JSON.parse(_data ?? "{}");
 
-      if(firstName == null) { firstName = ""; firstNamePrefilled = false; }
-      if(lastName == null) { lastName = ""; lastNamePrefilled = false; }
-      if(userName == null) { userName = ""; userNamePrefilled = false; }
-      if(email == null) { email = ""; emailPrefilled = false; }
-    }
+  const [ first, setFirst ] = React.useState(params.firstName ?? "");
+  const [ firstError, setFirstError ] = React.useState(null);
+  const firstPrefill = !!params.firstName;
 
-    // Set up the state
-    this.state = {
-      firstName: firstName,
-      firstNamePrefilled: firstNamePrefilled,
-      lastName: lastName,
-      lastNamePrefilled: lastNamePrefilled,
-      userName: userName,
-      userNamePrefilled: userNamePrefilled,
-      email: email,
-      emailPrefilled: emailPrefilled,
-      userNameValid: true,
-      emailValid: true,
-      emailExists: false,
-      firstNameValid: true,
-      lastNameValid: true,
-      error: null,
-      doneLoading: true,
-    };
+  const [ last, setLast ] = React.useState(params.lastName ?? "");
+  const [ lastError, setLastError ] = React.useState(null);
+  const lastPrefill = !!params.lastName;
 
-  }
+  const [ user, setUser ] = React.useState(params.userName ?? "");
+  const [ userError, setUserError ] = React.useState(null);
+  const userPrefill = !!params.userName;
 
-  componentDidMount() {
-    this.props.updateTitle("Register with School");
-    console.log(this.state);
-  }
+  const [ email, setEmail ] = React.useState(params.email ?? "");
+  const [ emailError, setEmailError ] = React.useState(null);
+  const emailPrefill = !!params.email;
 
-  handleRegister() {
-    // do input validation
-    const schema = Joi.object({
-      username: Joi.string()
-        .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$"))
-        .error(new Error("Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.")),
-      email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2}).max(320)
-        .error(new Error("Invalid email format.")),
-      firstname: Joi.string()
-        .min(1)
-        .max(256)
-        .error(new Error("First name must be between 1 and 256 characters.")),
-      lastname: Joi.string()
-        .allow("")
-        .max(256)
-        .error(new Error("Last name must be less than 256 characters.")),
-    });
-    let userNameValid = schema.validate({ username: this.state.username });
-    let emailValid = schema.validate({ email: this.state.email });
-    let firstNameValid = schema.validate({ firstname: this.state.firstname});
-    let lastNameValid = schema.validate({ lastname: this.state.lastname});
+  const [ error, setError ] = React.useState(null);
 
+  const handleRegister = React.useCallback(async () => {
+    // Do input validation.
+    const firstValid = SCHEMA.validate({ firstname: first });
+    const lastValid = SCHEMA.validate({ lastname: last });
+    const userValid = SCHEMA.validate({ username: user });
+    const emailValid = SCHEMA.validate({ email: email });
 
-    // Update component's state
-    this.setState({
-      firstNameValid: firstNameValid,
-      lastNameValid: lastNameValid,
-      userNameValid: userNameValid,
-      emailValid: emailValid,
-      emailExists: false
-    });
+    // Update component's state.
+    setFirstError(firstValid.error?.toString());
+    setLastError(lastValid.error?.toString());
+    setUserError(userValid.error?.toString());
+    setEmailError(emailValid.error?.toString());
 
-    if (userNameValid.error || emailValid.error || lastNameValid.error || firstNameValid.error) {
-      return;
-    }
+    if (userValid.error || emailValid.error || lastValid.error ||
+        firstValid.error) { return; }
 
     // If all are valid, submit a request to the backend to do the registration
-    // TODO: This URL is going to need to be fixed and made dynamic
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/register/rpi", {
+    // TODO: This URL is going to need to be fixed and made dynamic.
+    const response = await fetch(BACKEND + "/users/register/rpi", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
-        firstName: this.state.firstName,
-        lastName: this.state.lastName,
-        userName: this.state.userName,
-        email: this.state.email,
-      })
-    }).then(response => response.json())
-      .then(response => {
+        firstName: first,
+        lastName: last,
+        userName: user,
+        email: email,
+      }),
+    });
 
-        // TODO: Debug print, delete
-        console.log(response);
-        if (response != null) {
-          if (response.result === "success") {
-            // Save data about the user
-            localStorage.setItem("loggedIn", "true");
-            localStorage.setItem("firstName", response.data.firstName);
-            localStorage.setItem("lastName", response.data.lastName);
-            localStorage.setItem("userName", response.data.userName);
+    const data = await response.json();
+    if (data == null) { return; }
 
-            // Redirect to the groups page
-            return this.props.router.navigate("/groups", { replace: true });
-          } else {
-            // Something went wrong, handle it
+    // TODO: Debug print, delete.
+    console.log(data);
 
-            if (response.error === "Validation failed") {
-              this.setState({error: response.data.errors});
-            } else {
-              this.setState({error: response.error});
-            }
-            console.log("ERROR: " + this.state.error);
+    if (data.result === "success") {
+      // Save data about the user.
+      localStorage.setItem("loggedIn", "true");
+      localStorage.setItem("firstName", data.data.firstName);
+      localStorage.setItem("lastName", data.data.lastName);
+      localStorage.setItem("userName", data.data.userName);
 
-          }
-        }
-      });
-  }
-
-  render() {
-    this.handleRegister = this.handleRegister.bind(this);
-    if (this.state.error != null) {
-      return (
-        <ErrorText text={this.state.error}> </ErrorText>
-      );
-    } else if(!this.state.doneLoading){
-      return (
-        <MDBContainer className="page">
-          <LoadingWheel/>
-        </MDBContainer>
-      );
+      // Redirect to the groups page.
+      return navigate("/groups", { replace: true });
     } else {
+      // Something went wrong, handle it.
+      if (data.error === "Validation failed") {
+        setError(data.data.errors);
+      } else {
+        setError(data.error);
+      }
 
-      return (
-        <MDBContainer fluid className="page">
-          <MDBContainer fluid className="box">
-            <p className="fontSizeLarge">
-              Register with School
-            </p>
-            <p>
-              To finish creating your account, fill in the text boxes, then press submit.
-            </p>
-            <MDBContainer className="form-group">
-
-              <label htmlFor="firstnameText">First Name:</label>
-              <input placeholder="SIS" className="form-control textBox" id="firstnameText"
-                value={this.state.firstName} readOnly={this.state.firstNamePrefilled}
-                onChange={(evt) => {
-                  this.setState({firstName: evt.target.value});
-                }}
-              />
-              {this.state.firstNameValid.error &&
-                <p style={{color: "red"}}>{ this.state.firstNameValid.error.toString() }</p>
-              }
-              <label htmlFor="lastnameText">Last Name:</label>
-              <input placeholder="Man" className="form-control textBox" id="lastnameText"
-                value={this.state.lastName} readOnly={this.state.lastNamePrefilled}
-                onChange={(evt) => {
-                  this.setState({lastName: evt.target.value});
-                }}
-              />
-              {this.state.lastNameValid.error &&
-                <p style={{color: "red"}}>{ this.state.lastNameValid.error.toString() }</p>
-              }
-              <label htmlFor="usernameText">Username:</label>
-              <input placeholder="mans" className="form-control textBox" id="usernameText"
-                value={this.state.userName} readOnly={this.state.userNamePrefilled}
-                onChange={(evt) => {
-                  this.setState({userName: evt.target.value});
-                }}
-              />
-              {this.state.userNameValid.error &&
-                <p style={{color: "red"}}>{ this.state.userNameValid.error.toString() }</p>
-              }
-              <label htmlFor="emailText">Email:</label>
-              <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText" value={this.state.email} readOnly={this.state.emailPrefilled} onChange={(evt) => {
-                this.setState({email: evt.target.value});
-              }}/>
-              {this.state.emailValid.error &&
-                <p style={{color: "red"}}>{ this.state.emailValid.error.toString() }</p>
-              }
-              {this.state.emailExists &&
-                <p style={{color: "red"}}>A user with this email already exists!</p>
-              }
-
-            </MDBContainer>
-            <button className="button" onClick={this.handleRegister}>Submit</button>
-          </MDBContainer>
-        </MDBContainer>
-      );
+      console.log("ERROR: " + error);
     }
+  }, [ email, error, first, last, navigate, user ]);
+
+  const handleFirst = useFn(setFirst, e => e.target.value);
+  const handleLast = useFn(setLast, e => e.target.value);
+  const handleUser = useFn(setUser, e => e.target.value);
+  const handleEmail = useFn(setEmail, e => e.target.value);
+
+  const errorStyle = { color: "red" };
+
+  if (error != null) {
+    return <ErrorText text={error}></ErrorText>;
+  } else {
+    return (
+      <MDBContainer fluid className="page">
+        <MDBContainer fluid className="box">
+          <p className="fontSizeLarge">Register with School</p>
+          <p>To finish creating your account, fill in the text boxes, then press submit.</p>
+          <MDBContainer className="form-group">
+            <label htmlFor="firstnameText">First Name:</label>
+            <input placeholder="SIS" className="form-control textBox"
+              id="firstnameText" value={first} readOnly={firstPrefill}
+              onChange={handleFirst}/>
+            { firstError && <p style={errorStyle}>{firstError}</p> }
+
+            <label htmlFor="lastnameText">Last Name:</label>
+            <input placeholder="Man" className="form-control textBox"
+              id="lastnameText" value={last} readOnly={lastPrefill}
+              onChange={handleLast}/>
+            { lastError && <p style={errorStyle}>{lastError}</p> }
+
+            <label htmlFor="usernameText">Username:</label>
+            <input placeholder="mans" className="form-control textBox"
+              id="usernameText" value={user} readOnly={userPrefill}
+              onChange={handleUser}/>
+            { userError && <p style={{color: "red"}}>{userError}</p> }
+
+            <label htmlFor="emailText">Email:</label>
+            <input placeholder="mans@rpi.edu" className="form-control textBox"
+              id="emailText" value={email} readOnly={emailPrefill}
+              onChange={handleEmail}/>
+            { emailError && <p style={errorStyle}>{emailError}</p> }
+          </MDBContainer>
+          <button className="button" onClick={handleRegister}>Submit</button>
+        </MDBContainer>
+      </MDBContainer>
+    );
   }
 }
 
-export default withRouter(RegisterWithSchoolStep2);
+export default React.memo(RegisterWithSchoolStep2);
