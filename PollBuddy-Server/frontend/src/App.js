@@ -92,7 +92,7 @@ function App() {
             {/* Group's Page */}
             <Route exact path="/groups/:groupID" element={<PrivateComponent state element={<Group />}/>}/>
             {/* Group Edit Page */}
-            <Route exact path="/groups/:groupID/edit" element={<PrivateComponent state element={<GroupEdit updateTitle={updateTitle} />}/>} />
+            <Route exact path="/groups/:groupID/edit" element={<PrivateComponent state element={<GroupEdit />}/>} />
             {/* Group Join Page */}
             <Route exact path="/groups/join" element={<PrivateComponent state element={<GroupJoin updateTitle={updateTitle} />}/>}/>
             
