@@ -20,33 +20,4 @@ function PrivateComponent({ state, element }) {
   }
 }
 
-// These are some alternative, more concise versions of PrivateComponent.
-
-// This one makes the page accessable only if you are not logged in.
-function _PublicPage({ page: Page }) {
-  const [ loggedIn, ] = useLocal("loggedIn");
-
-  if (loggedIn === "true") {
-    return <Page/>;
-  } else {
-    return <Navigate to="/"/>;
-  }
-}
-
-export const PublicPage = React.memo(_PublicPage);
-
-// This one make the page accessable only if you are logged in.
-function _PrivatePage({ page: Page }) {
-  const { pathname } = useLocation();
-  const [ loggedIn, ] = useLocal("loggedIn");
-
-  if (loggedIn) {
-    return <Page/>;
-  } else {
-    return <Navigate state={{ prevRoute: pathname }} to="/login"/>;
-  }
-}
-
-export const PrivatePage = React.memo(_PrivatePage);
-
 export default React.memo(PrivateComponent);
