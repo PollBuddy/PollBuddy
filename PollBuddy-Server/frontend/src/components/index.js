@@ -1,5 +1,5 @@
 export { default as Dropdown } from "./Dropdown/Dropdown";
-export { default as ErrrorText } from "./ErrorText/ErrorText";
+export { default as ErrorText } from "./ErrorText/ErrorText";
 export { default as Footer } from "./Footer/Footer";
 export { default as GroupSettings } from "./GroupSettings/GroupSettings";
 export { default as Header } from "./Header/Header";
