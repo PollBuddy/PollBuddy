@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import ErrorText from "../../components/ErrorText/ErrorText";
-import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import { ErrorText, LoadingWheel, withRouter } from "../../components";
 import {Navigate} from "react-router-dom";
-import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
 class LoginWithSchoolStep2 extends Component {
   constructor(props) {

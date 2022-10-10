@@ -1,8 +1,7 @@
 import React from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
-import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import ErrorText from "../../components/ErrorText/ErrorText";
+import { LoadingWheel, ErrorText } from "../../components";
 import { useAsyncEffect, useFn, useTitle } from "../../hooks";
 import { useNavigate, useParams } from "react-router-dom";
 

@@ -1,10 +1,7 @@
 import React, { Component } from "react";
-// import { Bar } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
-import QuestionResults from "../../components/QuestionResults/QuestionResults";
+import { LoadingWheel, withRouter, QuestionResults } from "../../components";
 import "./PollResults.scss";
 
 class PollResults extends Component {

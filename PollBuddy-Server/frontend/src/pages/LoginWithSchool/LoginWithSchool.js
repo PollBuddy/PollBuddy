@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";
+import { LoadingWheel, SchoolPicker } from "../../components";
 
 export default class LoginWithSchool extends Component {
   constructor(props) {

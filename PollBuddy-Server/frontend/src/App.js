@@ -35,10 +35,7 @@ import LoginWithSchool from "./pages/LoginWithSchool/LoginWithSchool";
 import LoginWithSchoolStep2 from "./pages/LoginWithSchoolStep2/LoginWithSchoolStep2";
 
 import Code from "./pages/Code/Code";
-import PrivateComponent from "./components/PrivateComponent/PrivateComponent";
-
-import Header from "./components/Header/Header.js";
-import Footer from "./components/Footer/Footer.js";
+import { PrivateComponent, Header, Footer } from "./components";
 //import Popup2 from "./components/Popup2/Popup2";
 import "./styles/main.scss";
 

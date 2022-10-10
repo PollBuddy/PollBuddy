@@ -1,7 +1,7 @@
 import React from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
-import ErrorText from "../../components/ErrorText/ErrorText";
+import { ErrorText } from "../../components";
 import { useFn, useTitle } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 

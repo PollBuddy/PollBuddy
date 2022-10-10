@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
-import ErrorText from "../../components/ErrorText/ErrorText";
-import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
+import { ErrorText, withRouter } from "../../components";
 
 class PollCreation extends Component {//this class will likely need to call Groups/new and do more with that...
   constructor(props) {

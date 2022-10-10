@@ -1,11 +1,8 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
-
 import "./ResetPassword.scss";
-
 import "mdbreact/dist/css/mdb.css";
-
-import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
+import { withRouter } from "../../components";
 
 class ResetPassword extends Component {
   constructor(props) {

@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
-import Question from "../../components/Question/Question";
-import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import { withRouter } from "../../components/PropsWrapper/PropsWrapper";
+import { Question, LoadingWheel, withRouter, Timer } from "../../components";
 import "./PollViewer.scss";
-import Timer from "../../components/Timer/Timer";
 
 class PollViewer extends Component {
   constructor(props) {

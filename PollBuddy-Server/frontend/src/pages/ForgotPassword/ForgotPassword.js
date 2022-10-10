@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import { withRouter } from "../../components/PropsWrapper/PropsWrapper";
+import { withRouter } from "../../components";
 
 class ForgotPassword extends Component {
 

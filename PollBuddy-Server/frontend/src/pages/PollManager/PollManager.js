@@ -4,7 +4,7 @@ import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import {Link} from "react-router-dom";
 import Countdown, {zeroPad} from "react-countdown";
-import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
+import { withRouter } from "../../components";
 
 class PollManager extends Component {
   componentDidMount(){

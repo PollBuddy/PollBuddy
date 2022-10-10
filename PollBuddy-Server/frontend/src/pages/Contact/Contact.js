@@ -2,8 +2,7 @@ import React from "react";
 import autosize from "autosize";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-
-import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";
+import { SchoolPicker } from "../../components";
 import { useTitle, useAsyncEffect, useFn } from "../../hooks";
 
 const ISSUE_LINK = "https://github.com/PollBuddy/PollBuddy/issues/new/choose";

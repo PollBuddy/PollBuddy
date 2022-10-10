@@ -3,7 +3,7 @@ import {Navigate} from "react-router-dom";
 import "mdbreact/dist/css/mdb.css";
 import "./LoginWithPollBuddy.scss";
 import { MDBContainer } from "mdbreact";
-import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
+import { withRouter } from "../../components";
 const Joi = require("joi");
 
 class LoginWithPollBuddy extends Component {

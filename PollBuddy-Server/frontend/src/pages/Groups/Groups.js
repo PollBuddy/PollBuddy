@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { MDBContainer } from "mdbreact";
-import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import { LoadingWheel } from "../../components";
 import "../../styles/main.scss";
 import "./Groups.scss";
 import { useAsyncEffect, useTitle } from "../../hooks";

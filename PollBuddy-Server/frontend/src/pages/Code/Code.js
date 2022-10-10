@@ -1,7 +1,7 @@
 import React from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
-import PollCode from "../../components/PollCode/PollCode";
+import { PollCode } from "../../components";
 import { useTitle } from "../../hooks";
 
 function Code() {

@@ -1,8 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { MDBContainer } from "mdbreact";
-import GroupSettings from "../../components/GroupSettings/GroupSettings";
-import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import { GroupSettings, LoadingWheel } from "../../components";
 import { useAsyncEffect, useTitle } from "../../hooks";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;

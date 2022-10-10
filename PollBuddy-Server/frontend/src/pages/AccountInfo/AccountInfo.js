@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
-import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import { LoadingWheel, withRouter } from "../../components";
 import "./AccountInfo.scss";
-import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 const Joi = require("joi");
 
 
