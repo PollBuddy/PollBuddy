@@ -130,7 +130,7 @@ function App() {
             {/* Login with School Account Page */}
             <Route exact path="/login/school" element={<PrivateComponent element={<LoginWithSchool />}/>}/>
             {/* Login with School Account Step 2 Page */}
-            <Route exact path="/login/school/step2" element={<PrivateComponent element={<LoginWithSchoolStep2 updateTitle={updateTitle} />}/>}/>
+            <Route exact path="/login/school/step2" element={<PrivateComponent element={<LoginWithSchoolStep2 />}/>}/>
             {/* Forgot Password Page */}
             <Route exact path="/login/forgot" element={<PrivateComponent element={<ForgotPassword updateTitle={updateTitle} />}/>}/>
             {/* Reset Password Page */}
