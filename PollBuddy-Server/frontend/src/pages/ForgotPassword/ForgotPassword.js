@@ -1,60 +1,54 @@
-import React, {Component} from "react";
+import React from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import { withRouter } from "../../components";
+import { useTitle, useFn } from "../../hooks";
+import { useNavigate } from "react-router-dom";
 
-class ForgotPassword extends Component {
+const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-  constructor(props){
-    super(props);
-    this.state = {
-      emailInput : "",
-    };
-    this.requestReset = this.requestReset.bind(this);
-  }
+function ForgotPassword() {
+  useTitle("Forgot Password");
 
-  componentDidMount() {
-    this.props.updateTitle("Forgot Password");
-  }
+  const navigate = useNavigate();
+  const [ email, setEmail ] = React.useState("");
+  const handleEmail = useFn(setEmail, e => e.target.value);
 
-  requestReset(){
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/forgotpassword/submit", {
+  const onReset = React.useCallback(async () => {
+    const response = await fetch(BACKEND + "/users/forgotpassword/submit", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
-      body: JSON.stringify({"email" : this.state.emailInput})
-    }).then(response => response.json())
-      .then(
-        val => {
-          if(!(val.result === "success")){
-            console.log("failed to update data");
-          }else{
-            const { router } = this.props;
-            router.navigate("/login/reset");
-          }
-        },
-        err => {console.log(err);}
-      );
-  }
+      // HEADERS LIKE SO ARE NECESSARY for some reason
+      // https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email : email }),
+    });
 
+    try {
+      const { result } = await response.json();
 
-  render() {
-    return (
-      <MDBContainer fluid className="page">
-        <MDBContainer fluid className="box">
-          <h1>Forgot Your Password?</h1>
-          <p>
-            Enter your email and we will send you a reset.
-          </p>
-          <MDBContainer className="form-group">
-            <label htmlFor="emailText">Email:</label>
-            <input placeholder="Enter email" className="form-control textBox" id="emailText" onChange={(e)=> this.setState({emailInput:e.target.value})}/>
-          </MDBContainer>
-          <button className="button" onClick={this.requestReset}>Reset Password</button>
+      if (result === "success") {
+        navigate("/login/reset");
+      } else {
+        console.log("failed to update data");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }, [ email, navigate ]);
 
+  return (
+    <MDBContainer fluid className="page">
+      <MDBContainer fluid className="box">
+        <h1>Forgot Your Password?</h1>
+        <p>Enter your email and we will send you a reset.</p>
+        <MDBContainer className="form-group">
+          <label htmlFor="emailText">Email:</label>
+          <input placeholder="Enter email" className="form-control textBox"
+            id="emailText" onChange={handleEmail}/>
         </MDBContainer>
+        <button className="button" onClick={onReset}>Reset Password</button>
       </MDBContainer>
-    );
-  }
+    </MDBContainer>
+  );
 }
 
-export default withRouter(ForgotPassword);
+export default React.memo(ForgotPassword);
