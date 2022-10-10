@@ -124,7 +124,7 @@ function App() {
             
             {/* --- Login Pages --- */}
             {/* Login Main Page */}
-            <Route exact path="/login" element={<PrivateComponent element={<LoginDefault updateTitle={updateTitle} />}/>}/>
+            <Route exact path="/login" element={<PrivateComponent element={<LoginDefault />}/>}/>
             {/* Login with Poll Buddy Account Page */}
             <Route exact path="/login/pollbuddy" element={<PrivateComponent element={<LoginWithPollBuddy updateTitle={updateTitle} />}/>}/>
             {/* Login with School Account Page */}
