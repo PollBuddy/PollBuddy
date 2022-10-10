@@ -94,7 +94,7 @@ function App() {
             {/* Group Edit Page */}
             <Route exact path="/groups/:groupID/edit" element={<PrivateComponent state element={<GroupEdit />}/>} />
             {/* Group Join Page */}
-            <Route exact path="/groups/join" element={<PrivateComponent state element={<GroupJoin updateTitle={updateTitle} />}/>}/>
+            <Route exact path="/groups/join" element={<PrivateComponent state element={<GroupJoin />}/>}/>
             
             {/* --- Poll Pages --- */}
             {/* My Poll Histories Page */}
