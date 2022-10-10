@@ -13,7 +13,7 @@ function LoginWithSchool() {
   const [ error, setError ] = React.useState("");
 
   const onSubmit = React.useCallback(() => {
-    const link = schoolInfo.schoolLinkDict[school];
+    const link = schoolInfo?.schoolLinkDict[school];
     if (link) {
       window.location.replace("/api/users/login/" + link);
     } else {

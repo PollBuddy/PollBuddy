@@ -142,7 +142,7 @@ function App() {
             {/* Register with Poll Buddy Account Page */}
             <Route exact path="/register/pollbuddy" element={<PrivateComponent element={<RegisterWithPollBuddy />}/>}/>
             {/* Register with School Account Page */}
-            <Route exact path="/register/school" element={<PrivateComponent element={<RegisterWithSchool updateTitle={updateTitle} />}/>}/>
+            <Route exact path="/register/school" element={<PrivateComponent element={<RegisterWithSchool />}/>}/>
             {/* Register with School Account Step 2 Page */}
             <Route exact path="/register/school/step2" element={<PrivateComponent element={<RegisterWithSchoolStep2 updateTitle={updateTitle} />}/>}/>
 
