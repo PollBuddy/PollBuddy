@@ -36,7 +36,7 @@ import LoginWithSchoolStep2 from "./pages/LoginWithSchoolStep2/LoginWithSchoolSt
 
 import Code from "./pages/Code/Code";
 import { PrivateComponent, Header, Footer } from "./components";
-//import Popup2 from "./components/Popup2/Popup2";
+// import Popup2 from "./components/Popup2/Popup2";
 import "./styles/main.scss";
 
 import { TitleProvider } from "./hooks";
