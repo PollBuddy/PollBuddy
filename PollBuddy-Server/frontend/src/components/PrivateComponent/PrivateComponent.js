@@ -28,7 +28,7 @@ function _PublicPage({ page: Page }) {
 
   if (loggedIn === "true") {
     return <Page/>;
-  } else if (state) {
+  } else {
     return <Navigate to="/"/>;
   }
 }
