@@ -138,7 +138,7 @@ function App() {
 
             {/* --- Registration Pages --- */}
             {/* Register Main Page */}
-            <Route exact path="/register" element={<PrivateComponent element={<RegisterDefault updateTitle={updateTitle} />}/>}/>
+            <Route exact path="/register" element={<PrivateComponent element={<RegisterDefault />}/>}/>
             {/* Register with Poll Buddy Account Page */}
             <Route exact path="/register/pollbuddy" element={<PrivateComponent element={<RegisterWithPollBuddy updateTitle={updateTitle} />}/>}/>
             {/* Register with School Account Page */}
