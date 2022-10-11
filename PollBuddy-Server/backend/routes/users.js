@@ -675,6 +675,20 @@ router.post("/me/groups", function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
+router.get("/me/polls/",function (req,res) {
+  return sendResponse(res,httpCodes.MethodNotAllowed("GET is not available for this route."));
+});
+
+/**
+ * This route is not used. It is simply there to have some response to /api/users/forgotpassword/ when using GET
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} Status 405 { "result": "failure", "error": "GET is not available for this routee."}
+ * @name backend/users/forgotpassword_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+// eslint-disable-next-line no-unused-vars
 router.get("/forgotpassword/",function (req,res) {
   return sendResponse(res,httpCodes.MethodNotAllowed("GET is not available for this route."));
 });

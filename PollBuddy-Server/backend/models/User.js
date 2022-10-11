@@ -95,6 +95,20 @@ const getUserGroups = async function(userID) {
   }
 };
 
+const getUserPolls = async function(userID) {
+  try {
+    const user = await getUserInternal(userID);
+    if (!user) { return httpCodes.BadRequest(); }
+
+    let UserPolls = [];
+
+    //todo: get data from database once database has the correct implementation!!!\
+    return httpCodes.Ok(UserPolls);
+  } catch(err) {
+    console.error(err);
+    return httpCodes.InternalServerError();
+  }
+}
 
 const editUser = async function(userID, jsonContent) {
   try {
