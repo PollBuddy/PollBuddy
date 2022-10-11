@@ -34,11 +34,11 @@ const editGroupValidator = Joi.object({
 });
 
 const promoteUserValidator = Joi.object({
-  userId: Joi.custom(objectID).required(),
+  userID: Joi.custom(objectID).required(),
 });
 
 const demoteUserValidator = Joi.object({
-  userId: Joi.custom(objectID).required(),
+  userID: Joi.custom(objectID).required(),
 });
 
 const getGroup = async function(groupID, userID) {
@@ -241,24 +241,25 @@ const promoteUser = async function (groupID, userID, toPromoteID){
     const isAdmin = isGroupAdminByGroup(group, userID);
     if (!isAdmin) { return httpCodes.Forbidden(); }
 
-    const isMember = isGroupMemberByGroup(group, toPromoteID);
+    const isMember = isGroupMemberByGroup(group, toPromoteID.userID);
     if (!isMember) { return httpCodes.Forbidden(); }
 
-    const isPromoteAdmin = isGroupAdminByGroup(group, toPromoteID);
+    const isPromoteAdmin = isGroupAdminByGroup(group, toPromoteID.userID);
     if(isPromoteAdmin) { return httpCodes.Forbidden(); }
 
     await mongoConnection.getDB().collection("groups").updateOne(
       { _id: group._id, },
       {"$pull": {
-        "Members": toPromoteID,
+        "Members": toPromoteID.userID,
       }}
     );
     await mongoConnection.getDB().collection("groups").updateOne(
       {_id: group._id,},
       {"$addToSet": {
-        "Admins": toPromoteID,
+        "Admins": toPromoteID.userID,
       }}
     );
+    return httpCodes.Ok();
   }catch (err) {
     console.log(err);
     return httpCodes.InternalServerError();
@@ -272,24 +273,25 @@ const demoteUser = async function (groupID, userID, toDemoteID){
   const isAdmin = isGroupAdminByGroup(group, userID);
   if (!isAdmin) { return httpCodes.Forbidden(); }
 
-  const isMember = isGroupMemberByGroup(group, toDemoteID);
+  const isMember = isGroupMemberByGroup(group, toDemoteID.userID);
   if (!isMember) {
-    const isDemoteAdmin = isGroupAdminByGroup(group, toDemoteID);
+    const isDemoteAdmin = isGroupAdminByGroup(group, toDemoteID.userID);
     if(!isDemoteAdmin){
       return httpCodes.Forbidden();
     }else{
       await mongoConnection.getDB().collection("groups").updateOne(
         {_id: group._id,},
         {"$pull": {
-          "Admins": toDemoteID,
+          "Admins": toDemoteID.userID,
         }}
       );
       await mongoConnection.getDB().collection("groups").updateOne(
         {_id: group._id,},
         {"$addToSet": {
-          "Members": toDemoteID,
+          "Members": toDemoteID.userID,
         }}
       );
+      return httpCodes.Ok();
     }
   }else{
     let response = await leaveGroup(groupID, toDemoteID);
