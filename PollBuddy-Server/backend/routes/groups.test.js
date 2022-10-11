@@ -463,75 +463,75 @@ describe("/api/groups/:id/promote", () => {
     let group = await createGroup({Admins: [user.insertedId], Members: [toPromoteUser.insertedId]});
     session = {userData: {userID: user.insertedId}};
     await app.post("/api/groups/" + group.insertedId + "/promote")
-        .send({
-            userID: toPromoteUser.insertedId
-        })
-        .expect(200)
-        .then(async (response) => {
-          expect(response.body.result).toBe("success");
-          let res = await mongoConnection.getDB().collection("groups").findOne({
-            _id: group.insertedId
-          });
-          expect(res.Members).toHaveLength(0);
-          expect(res.Admins).toHaveLength(2);
-          expect(res.Admins[1].toString()).toEqual(toPromoteUser.insertedId.toString());
+      .send({
+        userID: toPromoteUser.insertedId
+      })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        let res = await mongoConnection.getDB().collection("groups").findOne({
+          _id: group.insertedId
         });
+        expect(res.Members).toHaveLength(0);
+        expect(res.Admins).toHaveLength(2);
+        expect(res.Admins[1].toString()).toEqual(toPromoteUser.insertedId.toString());
+      });
   });
 
   it("POST: promote admin as admin", async () => {
-      let user = await createUser();
-      let toPromoteUser = await createUser();
-      let group = await createGroup({Admins: [user.insertedId, toPromoteUser.insertedId]});
-      session = {userData: {userID: user.insertedId}};
-      await app.post("/api/groups/" + group.insertedId + "/promote")
-          .send({
-              userID: toPromoteUser.insertedId
-          })
-          .expect(403)
-          .then(async (response) => {
-              expect(response.body.result).toBe("failure");
-          });
+    let user = await createUser();
+    let toPromoteUser = await createUser();
+    let group = await createGroup({Admins: [user.insertedId, toPromoteUser.insertedId]});
+    session = {userData: {userID: user.insertedId}};
+    await app.post("/api/groups/" + group.insertedId + "/promote")
+      .send({
+        userID: toPromoteUser.insertedId
+      })
+      .expect(403)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
   });
 
   it("POST: promote as member", async () => {
-      let user = await createUser();
-      let toPromoteUser = await createUser();
-      let group = await createGroup({Members: [user.insertedId, toPromoteUser.insertedId]});
-      session = {userData: {userID: user.insertedId}};
-      await app.post("/api/groups/" + group.insertedId + "/promote")
-          .send({
-              userID: toPromoteUser.insertedId
-          })
-          .expect(403)
-          .then(async (response) => {
-              expect(response.body.result).toBe("failure");
-          });
+    let user = await createUser();
+    let toPromoteUser = await createUser();
+    let group = await createGroup({Members: [user.insertedId, toPromoteUser.insertedId]});
+    session = {userData: {userID: user.insertedId}};
+    await app.post("/api/groups/" + group.insertedId + "/promote")
+      .send({
+        userID: toPromoteUser.insertedId
+      })
+      .expect(403)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
   });
 
   it("POST: promote nonexistent as admin", async () => {
-      let user = await createUser();
-      let toPromoteUser = await createUser();
-      let group = await createGroup({Admins: [user.insertedId]});
-      session = {userData: {userID: user.insertedId}};
-      await app.post("/api/groups/" + group.insertedId + "/promote")
-          .send({
-              userID: toPromoteUser.insertedId
-          })
-          .expect(403)
-          .then(async (response) => {
-              expect(response.body.result).toBe("failure");
-          });
+    let user = await createUser();
+    let toPromoteUser = await createUser();
+    let group = await createGroup({Admins: [user.insertedId]});
+    session = {userData: {userID: user.insertedId}};
+    await app.post("/api/groups/" + group.insertedId + "/promote")
+      .send({
+        userID: toPromoteUser.insertedId
+      })
+      .expect(403)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
   });
 
   it("POST: promote as not logged in member", async () => {
-      let user = await createUser();
-      let toPromoteUser = await createUser();
-      let group = await createGroup({Admins: [user.insertedId], Members: [toPromoteUser.insertedId]});
-      await app.post("/api/groups/" + group.insertedId + "/promote")
-          .expect(401)
-          .then(async (response) => {
-              expect(response.body.result).toBe("failure");
-          });
+    let user = await createUser();
+    let toPromoteUser = await createUser();
+    let group = await createGroup({Admins: [user.insertedId], Members: [toPromoteUser.insertedId]});
+    await app.post("/api/groups/" + group.insertedId + "/promote")
+      .expect(401)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
   });
 });
 
