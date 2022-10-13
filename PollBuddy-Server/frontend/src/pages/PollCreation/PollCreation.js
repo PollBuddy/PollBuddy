@@ -1,99 +1,83 @@
-import React, { Component } from "react";
+import React from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
-import { ErrorText, withRouter } from "../../components";
+import { ErrorText } from "../../components";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { selectTarget, useCompose, useTitle } from "../../hooks";
 
-class PollCreation extends Component {//this class will likely need to call Groups/new and do more with that...
-  constructor(props) {
-    super(props);
-    this.state = {
-      groupID: props.router.searchParams.get("groupID"),
-      title: "",
-      description: "",
-      showError: false,
-      errors: [],
-    };
-  }
+const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
-  componentDidMount(){
-    this.props.updateTitle("Poll Creation");
-  }
+// This class will likely need to call Groups/new and do more with that...
+function PollCreation() {
+  useTitle("Poll Creation");
 
-  getPollData = () => {
-    return {
-      title: this.state.title,
-      description: this.state.description,
-      group: this.state.groupID || undefined,
-    };
-  };
+  const [ params, ] = useSearchParams();
+  const groupID = params.get("groupID");
+  const navigate = useNavigate();
+  const [ title, setTitle ] = React.useState("");
+  const [ desc, setDesc ] = React.useState("");
+  const [ error, setError ] = React.useState(null);
 
-  onInput = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
+  const onSubmit = React.useCallback(async () => {
+    setError(null);
+    console.log({
+      title: title,
+      description: desc,
+      group: groupID,
     });
-  };
-
-  onSubmit = async () => {
-    this.setState({showError: false});
-    await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/new", {
+    const response = await fetch(BACKEND + "/polls/new", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(this.getPollData())
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        if (response.result === "success") {
-          this.props.router.navigate("/polls/" + response.data.id + "/edit");
-        } else {
-          this.setState({errors: response.error});
-          this.setState({showError: true});
-        }
-      });
-  };
+      body: JSON.stringify({
+        title: title,
+        description: desc,
+        group: groupID,
+      })
+    });
 
-  checkError() {
-    if(this.state.errors.title === true && this.state.errors.description === true) {
-      return this.state.showError ? <ErrorText text={"Must enter a title and description!"}/> : null;
-    } else if(this.state.errors.title === true) {
-      return this.state.showError ? <ErrorText text={"Must enter a title!"}/> : null;
-    } else if(this.state.errors.description === true) {
-      return this.state.showError ? <ErrorText text={"Must enter a description!"}/> : null;
+    const data = await response.json();
+    console.log(data);
+
+    if (data.result === "success") {
+      navigate(`/polls/${data.data.id}/edit`);
     } else {
-      return this.state.showError ? <ErrorText text={"An unknown error has occurred."}/> : null;
+      setError(data.error);
     }
+  }, [ desc, groupID, navigate, title ]);
+
+  let errorView;
+  if (error == null) {
+    errorView = null;
+  } else if (error.title && error.description) {
+    errorView = <ErrorText text="Must enter a title and description!"/>;
+  } else if (error.title) {
+    errorView = <ErrorText text="Must enter a title!"/>;
+  } else if (error.description) {
+    errorView = <ErrorText text="Must enter a description!"/>;
+  } else {
+    errorView = <ErrorText text="An unknown error has occurred."/>;
   }
 
-  render() {
-    return (
-      <MDBContainer className="page">
-        <MDBContainer className="box">
-          <MDBContainer className="form-group">
-            <label htmlFor="pollTitle">Poll Title:</label>
-            <input
-              name="title"
-              id="pollTitle"
-              placeholder="Title"
-              className="form-control textBox"
-              onInput={this.onInput}
-            />
-            <label htmlFor="pollDescription">Poll Description:</label>
-            <input
-              name="description"
-              id="pollDescription"
-              placeholder="Description"
-              className="form-control textBox"
-              onInput={this.onInput}
-            />
-          </MDBContainer>
-          {this.checkError()}
-          <button className="button" onClick={this.onSubmit}>
-            Create Poll
-          </button>
+  const handleTitle = useCompose(setTitle, selectTarget);
+  const handleDesc = useCompose(setDesc, selectTarget);
+
+  return (
+    <MDBContainer className="page">
+      <MDBContainer className="box">
+        <MDBContainer className="form-group">
+          <label htmlFor="pollTitle">Poll Title:</label>
+          <input name="title" id="pollTitle" placeholder="Title"
+            className="form-control textBox" onInput={handleTitle}/>
+            
+          <label htmlFor="pollDescription">Poll Description:</label>
+          <input name="description" id="pollDescription" onInput={handleDesc}
+            placeholder="Description" className="form-control textBox"/>
         </MDBContainer>
+        {errorView}
+        <button className="button" onClick={onSubmit}>Create Poll</button>
       </MDBContainer>
-    );
-  }
+    </MDBContainer>
+  );
 }
 
-export default withRouter(PollCreation);
+export default React.memo(PollCreation);

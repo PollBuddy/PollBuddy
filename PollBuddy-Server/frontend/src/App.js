@@ -100,7 +100,7 @@ function App() {
                 treated like a :pollID */}
             <Route exact path="/polls/history" element={<PrivateComponent state element={<PollHistory />}/>}/>
             {/* Poll Creation */}
-            <Route exact path="/polls/new" element={<PollCreation updateTitle={updateTitle} />}/>
+            <Route exact path="/polls/new" element={<PollCreation />}/>
             {/* Poll ID Redirect */}
             {/* Redirects from poll ID page (404) to view page */}
             <Route exact path="/polls/:pollID" element={<PrivateComponent state element={<Navigate push to="view"/>}/>}/>
