@@ -109,7 +109,7 @@ function App() {
             {/* Poll Editor Page */}
             <Route exact path="/polls/:pollID/edit" element={<PrivateComponent state element={<PollEditor updateTitle={updateTitle} />}/>}/>
             {/* Poll Manager Page */}
-            <Route exact path="/polls/:pollID/manage" element={<PrivateComponent state element={<PollManager updateTitle={updateTitle} />}/>}/>
+            <Route exact path="/polls/:pollID/manage" element={<PrivateComponent state element={<PollManager />}/>}/>
             {/* Poll Results Page */}
             {/*use the render function so that we can retrieve :groupID from inside the component*/}
             <Route exact path="/polls/:pollID/results" element={<PollResults updateTitle={updateTitle} />}/>
