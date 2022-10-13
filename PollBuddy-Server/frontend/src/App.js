@@ -116,11 +116,11 @@ function App() {
             {/* QuestionResults Ended Page */}
             {/* A page that shows when a question is closed by an instructor
                 Note: this will be removed soon I believe. */}
-            <Route exact path="/questionEnded" element={<PrivateComponent state element={<QuestionEnded updateTitle={updateTitle} />}/>}/>
+            <Route exact path="/questionEnded" element={<PrivateComponent state element={<QuestionEnded />}/>}/>
             {/* Answer Recorded Page */}
             {/* A page that shows after you answered the question, or after time runs out.
               Note: this will be removed soon I believe. */}
-            <Route exact path="/answerRecorded" element={<PrivateComponent state element={<AnswerRecorded updateTitle={updateTitle} />}/>}/>
+            <Route exact path="/answerRecorded" element={<PrivateComponent state element={<AnswerRecorded />}/>}/>
             
             {/* --- Login Pages --- */}
             {/* Login Main Page */}
