@@ -33,11 +33,10 @@ function Contact() {
     if (!resp.ok) { return; }
 
     const { data } = await resp.json();
-    const { FirstName, LastName, SchoolAffiliation, Email } = data;
-
-    setFullName(FirstName + " " + LastName);
-    setValue(SchoolAffiliation);
-    setEmail(Email);
+    const { firstName, lastName, schoolAffiliation, email } = data;
+    setFullName(firstName + " " + lastName);
+    setValue(schoolAffiliation);
+    setEmail(email);
   }, [ setFullName, setValue, setEmail ]);
 
   const handleSendTicket = React.useCallback(() => {
