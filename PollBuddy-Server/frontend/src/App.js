@@ -98,7 +98,7 @@ function App() {
             {/* This route (and any others that route through /polls/that are not polls)
                 need to be listed BEFORE the Poll ID Redirect to ensure they are not
                 treated like a :pollID */}
-            <Route exact path="/polls/history" element={<PrivateComponent state element={<PollHistory updateTitle={updateTitle} />}/>}/>
+            <Route exact path="/polls/history" element={<PrivateComponent state element={<PollHistory />}/>}/>
             {/* Poll Creation */}
             <Route exact path="/polls/new" element={<PollCreation updateTitle={updateTitle} />}/>
             {/* Poll ID Redirect */}
