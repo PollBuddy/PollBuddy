@@ -3,7 +3,7 @@ import autosize from "autosize";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import { SchoolPicker } from "../../components";
-import { useTitle, useAsyncEffect, useFn } from "../../hooks";
+import { useTitle, useAsyncEffect, useCompose, selectTarget } from "../../hooks";
 
 const ISSUE_LINK = "https://github.com/PollBuddy/PollBuddy/issues/new/choose";
 const REPO_LINK = "https://github.com/PollBuddy/PollBuddy";
@@ -50,10 +50,10 @@ function Contact() {
     setDone(false);
   }, [ setFormUp, setDone ]);
 
-  const handleFullName = useFn(setFullName, e => e.target.value);
-  const handleValue = useFn(setValue, e => e.target.value);
-  const handleEmail = useFn(setEmail, e => e.target.value);
-  const handleDesc = useFn(setDesc, e => e.target.value);
+  const handleFullName = useCompose(setFullName, selectTarget);
+  const handleValue = useCompose(setValue, selectTarget);
+  const handleEmail = useCompose(setEmail, selectTarget);
+  const handleDesc = useCompose(setDesc, selectTarget);
 
   const inputStyles = {
     display: formUp ? "flex" : "none",

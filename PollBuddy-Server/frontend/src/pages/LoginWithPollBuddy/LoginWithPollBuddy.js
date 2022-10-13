@@ -3,7 +3,7 @@ import { Navigate, useLocation, Link } from "react-router-dom";
 import "mdbreact/dist/css/mdb.css";
 import "./LoginWithPollBuddy.scss";
 import { MDBContainer } from "mdbreact";
-import { useFn, useLocal, useTitle } from "../../hooks";
+import { selectTarget, useCompose, useLocal, useTitle } from "../../hooks";
 const Joi = require("joi");
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
@@ -35,8 +35,8 @@ function LoginWithPollBuddy() {
   const [ user, setUser ] = React.useState("");
   const [ pswd, setPswd ] = React.useState("");
 
-  const handleUser = useFn(setUser, e => e.target.value);
-  const handlePswd = useFn(setPswd, e => e.target.value);
+  const handleUser = useCompose(setUser, selectTarget);
+  const handlePswd = useCompose(setPswd, selectTarget);
 
   const handleLogin = React.useCallback(async () => {
     // We need to validate each separately because either username or email

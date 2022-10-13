@@ -3,7 +3,7 @@ import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import { Navigate } from "react-router-dom";
 import "./RegisterWithPollBuddy.scss";
-import { useFn, useTitle } from "../../hooks";
+import { selectTarget, selectToggle, useCompose, useTitle } from "../../hooks";
 const Joi = require("joi");
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
@@ -51,9 +51,7 @@ function RegisterWithPollBuddy() {
   const [ success, setSuccess ] = React.useState(false);
   const [ showPswd, setShowPswd ] = React.useState(false);
 
-  const togglePswd = React.useCallback(() => {
-    setShowPswd(s => !s);
-  }, [ setShowPswd ]);
+  const togglePswd = useCompose(setShowPswd, selectToggle);
 
   const handleRegister = React.useCallback(async () => {
     // Do input validation.
@@ -95,11 +93,11 @@ function RegisterWithPollBuddy() {
     }
   }, [ email, first, last, pswd, user ]);
 
-  const handleFirst = useFn(setFirst, e => e.target.value);
-  const handleLast = useFn(setLast, e => e.target.value);
-  const handleUser = useFn(setUser, e => e.target.value);
-  const handleEmail = useFn(setEmail, e => e.target.value);
-  const handlePswd = useFn(setPswd, e => e.target.value);
+  const handleFirst = useCompose(setFirst, selectTarget);
+  const handleLast = useCompose(setLast, selectTarget);
+  const handleUser = useCompose(setUser, selectTarget);
+  const handleEmail = useCompose(setEmail, selectTarget);
+  const handlePswd = useCompose(setPswd, selectTarget);
 
   const errorStyles = { color: "red" };
 

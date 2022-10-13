@@ -2,7 +2,7 @@ import React from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useFn, useTitle } from "../../hooks";
+import { selectTarget, useCompose, useFn, useTitle } from "../../hooks";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
 
@@ -14,7 +14,7 @@ function GroupJoin() {
   const [ confirm, setConfirm ] = React.useState(false);
 
   const handleCode = useFn(setConfirm, true);
-  const handleChange = useFn(setCode, e => e.target.value);
+  const handleChange = useCompose(setCode, selectTarget);
 
   const noJoin = useFn(navigate, "groups");
   const yesJoin = React.useCallback(async () => {

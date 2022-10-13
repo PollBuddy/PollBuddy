@@ -2,7 +2,7 @@ import React from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 import { LoadingWheel, ErrorText } from "../../components";
-import { useAsyncEffect, useFn, useTitle } from "../../hooks";
+import { selectTarget, useAsyncEffect, useCompose, useTitle } from "../../hooks";
 import { useNavigate, useParams } from "react-router-dom";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
@@ -85,8 +85,8 @@ function GroupEdit() {
     setLoadingUsers(false);
   }, [ groupID, setUsers, setLoadingUsers ]);
 
-  const handleName = useFn(setNameInput, e => e.target.value);
-  const handleDesc = useFn(setDescInput, e => e.target.value);
+  const handleName = useCompose(setNameInput, selectTarget);
+  const handleDesc = useCompose(setDescInput, selectTarget);
 
   const onSubmit = React.useCallback(async () => {
     setLoadingGroups(true);

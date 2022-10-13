@@ -2,7 +2,7 @@ import React from "react";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import { ErrorText } from "../../components";
-import { useFn, useTitle } from "../../hooks";
+import { selectTarget, useCompose, useTitle } from "../../hooks";
 import { useNavigate, useParams } from "react-router-dom";
 const Joi = require("joi");
 
@@ -108,10 +108,10 @@ function RegisterWithSchoolStep2() {
     }
   }, [ email, error, first, last, navigate, user ]);
 
-  const handleFirst = useFn(setFirst, e => e.target.value);
-  const handleLast = useFn(setLast, e => e.target.value);
-  const handleUser = useFn(setUser, e => e.target.value);
-  const handleEmail = useFn(setEmail, e => e.target.value);
+  const handleFirst = useCompose(setFirst, selectTarget);
+  const handleLast = useCompose(setLast, selectTarget);
+  const handleUser = useCompose(setUser, selectTarget);
+  const handleEmail = useCompose(setEmail, selectTarget);
 
   const errorStyle = { color: "red" };
 

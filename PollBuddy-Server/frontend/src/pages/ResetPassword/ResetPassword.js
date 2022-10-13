@@ -2,7 +2,7 @@ import React from "react";
 import { MDBContainer } from "mdbreact";
 import "./ResetPassword.scss";
 import "mdbreact/dist/css/mdb.css";
-import { useFn, useTitle } from "../../hooks";
+import { selectTarget, selectToggle, useCompose, useTitle } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
@@ -18,7 +18,7 @@ function ResetPassword() {
   const [ newPswd, setNewPswd ] = React.useState("");
   const [ confirmPswd, setCorfirmPswd ] = React.useState("");
 
-  const handleLogOut = useFn(setLogOut, s => !s);
+  const handleLogOut = useCompose(setLogOut, selectToggle);
 
   const onReset = React.useCallback(async () => {
     setError("");
@@ -51,10 +51,10 @@ function ResetPassword() {
     }
   }, [ code, confirmPswd, navigate, newPswd, user ]);
 
-  const onCode = useFn(setCode, e => e.target.value);
-  const onUser = useFn(setUser, e => e.target.value);
-  const onPswd = useFn(setNewPswd, e => e.target.value);
-  const onConfirm = useFn(setCorfirmPswd, e => e.target.value);
+  const onCode = useCompose(setCode, selectTarget);
+  const onUser = useCompose(setUser, selectTarget);
+  const onPswd = useCompose(setNewPswd, selectTarget);
+  const onConfirm = useCompose(setCorfirmPswd, selectTarget);
 
   return (
     <MDBContainer fluid className="page">

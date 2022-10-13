@@ -5,17 +5,23 @@ import React from "react";
 // This is a function binder hook, that memoizes the arguments and function for
 // cleaner syntax and clearer components.
 
-// If the argument is just one function, then that argument acts as a selector
-// for arguments when the returned function is called.
+// TIP: All of the ...args should be primitive/memoized, otherwise this hook
+// serves no performative purposes (still looks nice though).
 function useFn(func, ...args) {
-  return React.useCallback((...input) => {
-    if (args.length === 1 && typeof args[0] === "function") {
-      const select = args[0];
-      return func(select(...input));
-    } else {
-      return func(...args);
-    }
-  }, [ func, ...args ]);
+  return React.useCallback(() => func(...args), [ func, ...args ]);
+}
+
+// Helper hook with returns the composition of its arguments.
+
+// NOTE: this applies the functions in reverse order. This is done to match how
+// compositions of functions are done in mathematics:
+// https://en.wikipedia.org/wiki/Function_composition
+function useCompose(...funcs) {
+  funcs.reverse();
+
+  return React.useCallback(input => {
+    return funcs.reduce((acc, cur) => cur?.(acc), input);
+  }, funcs);
 }
 
 // This helper effect allows users to run an asynchronous effect.
@@ -35,6 +41,16 @@ function useCall(...funcs) {
 }
 
 /* eslint-enable */
+
+// Helper function that toggles its input.
+function selectToggle(value) {
+  return !value;
+}
+
+// Helper function that gets the target value of the input.
+function selectTarget(event) {
+  return event.target.value;
+}
 
 // Using contexts instead of ever changing values for the page title.
 const PageContext = React.createContext({ current: null });
@@ -92,4 +108,7 @@ function useLocal(key) {
   return [ value, changeValue ];
 }
 
-export { useFn, useTitle, useAsyncEffect, TitleProvider, useLocal, useCall };
+export {
+  useFn, useTitle, useAsyncEffect, TitleProvider, useLocal, useCall, useCompose,
+  selectToggle, selectTarget,
+};

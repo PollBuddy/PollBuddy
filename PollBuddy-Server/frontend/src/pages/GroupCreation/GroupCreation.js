@@ -2,7 +2,7 @@ import React from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
 import { ErrorText } from "../../components";
-import { useFn, useTitle } from "../../hooks";
+import { selectTarget, useCompose, useTitle } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
@@ -15,8 +15,8 @@ function GroupCreation() {
   const [ desc, setDesc ] = React.useState("");
   const [ error, setError ]  = React.useState(false);
 
-  const handleName = useFn(setName, e => e.target.value);
-  const handleDesc = useFn(setDesc, e => e.target.value);
+  const handleName = useCompose(setName, selectTarget);
+  const handleDesc = useCompose(setDesc, selectTarget);
 
   const handleSubmit = React.useCallback(async () => {
     setError(false);

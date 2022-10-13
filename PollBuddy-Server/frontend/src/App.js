@@ -103,7 +103,7 @@ function App() {
             <Route exact path="/polls/new" element={<PollCreation updateTitle={updateTitle} />}/>
             {/* Poll ID Redirect */}
             {/* Redirects from poll ID page (404) to view page */}
-            <Route exact path="/polls/:pollID" element={<PrivateComponent state element={<Navigate to={"view"} push={true}/>}/>}/>
+            <Route exact path="/polls/:pollID" element={<PrivateComponent state element={<Navigate push to="view"/>}/>}/>
             {/* Poll Viewer Page */}
             <Route exact path="/polls/:pollID/view" element={<PollViewer updateTitle={updateTitle} />}/>
             {/* Poll Editor Page */}
@@ -148,7 +148,7 @@ function App() {
 
             {/* --- Account and User Settings Pages --- */}
             {/* Account Info Page */}
-            <Route exact path="/account" element={<PrivateComponent state element={<AccountInfo updateTitle={updateTitle} />}/>}/>
+            <Route exact path="/account" element={<PrivateComponent state element={<AccountInfo />}/>}/>
 
             {/* --- Other Pages --- */}
             {/* Default Route/Error 404 Page */}

@@ -1,7 +1,7 @@
 import React from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import { useTitle, useFn } from "../../hooks";
+import { useTitle, useCompose, selectTarget } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
@@ -11,7 +11,7 @@ function ForgotPassword() {
 
   const navigate = useNavigate();
   const [ email, setEmail ] = React.useState("");
-  const handleEmail = useFn(setEmail, e => e.target.value);
+  const handleEmail = useCompose(setEmail, selectTarget);
 
   const onReset = React.useCallback(async () => {
     const response = await fetch(BACKEND + "/users/forgotpassword/submit", {

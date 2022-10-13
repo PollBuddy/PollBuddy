@@ -2,7 +2,7 @@ import React from "react";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import { LoadingWheel, SchoolPicker } from "../../components";
-import { useFn, useTitle } from "../../hooks";
+import { selectTarget, useCompose, useTitle } from "../../hooks";
 
 function RegisterWithSchool() {
   useTitle("Register with School");
@@ -21,7 +21,7 @@ function RegisterWithSchool() {
     }
   }, [ school, schoolInfo ]);
 
-  const onSchool = useFn(setSchool, e => e.target.value);
+  const onSchool = useCompose(setSchool, selectTarget);
 
   const onDoneLoading = React.useCallback(info => {
     setLoaded(true);
