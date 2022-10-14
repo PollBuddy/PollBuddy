@@ -44,10 +44,6 @@ import { TitleProvider } from "./hooks";
 function App() {
   const [ userInfo, ] = React.useState({ sessionIdentifier: "" });
 
-  const updateTitle = React.useCallback(newTitle => {
-    document.title = newTitle + " - Pollbuddy";
-  }, [ ]);
-
   return (
     <BrowserRouter>
       <TitleProvider>

@@ -11,7 +11,6 @@ it("renders without crashing", () => {
   ReactDOM.render(
     <BrowserRouter>
       <PollEditor />
-  {/* match={{params: {pollID: "12345"}, isExact: true, path: "", url: ""}} */}
     </BrowserRouter>, div);
   // Clean unmount
   ReactDOM.unmountComponentAtNode(div);
