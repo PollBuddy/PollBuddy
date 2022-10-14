@@ -112,7 +112,7 @@ function App() {
             <Route exact path="/polls/:pollID/manage" element={<PrivateComponent state element={<PollManager />}/>}/>
             {/* Poll Results Page */}
             {/*use the render function so that we can retrieve :groupID from inside the component*/}
-            <Route exact path="/polls/:pollID/results" element={<PollResults updateTitle={updateTitle} />}/>
+            <Route exact path="/polls/:pollID/results" element={<PollResults />}/>
             {/* QuestionResults Ended Page */}
             {/* A page that shows when a question is closed by an instructor
                 Note: this will be removed soon I believe. */}

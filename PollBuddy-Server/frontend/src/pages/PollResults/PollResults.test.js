@@ -3,10 +3,6 @@ import ReactDOM from "react-dom";
 import PollResults from "./PollResults";
 import { BrowserRouter } from "react-router-dom";
 
-function updateTitle() {
-  return false;
-}
-
 // Create basic render test
 it("renders without crashing", () => {
   // Create div element
@@ -14,7 +10,7 @@ it("renders without crashing", () => {
   // Render about on the div
   ReactDOM.render(
     <BrowserRouter>
-      <PollResults updateTitle={updateTitle}/>
+      <PollResults />
     </BrowserRouter>,
     div);
   // Clean unmount
