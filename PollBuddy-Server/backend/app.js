@@ -64,15 +64,22 @@ app.use((req, res, next) => {
     const duration = Date.now() - start;
     console.log(`Request to ${req.path} took ${duration}ms`);
 
+    console.log(req.originalUrl) // '/admin/new?a=b' (WARNING: beware query string)
+    console.log(req.baseUrl) // '/admin'
+    console.log(req.path) // '/new'
+    console.log(req.baseUrl + req.path) // '/admin/new' (full path without query string)
+    console.log(res.statusCode)
+
     influxConnection.log([
       {
         measurement: "response_times",
         tags: {
           host: os.hostname(),
           platform: "backend",
-          path: req.path
+          path: req.baseUrl + req.path
         },
         fields: {
+          status: res.statusCode,
           duration: duration
         },
         timestamp: new Date()
