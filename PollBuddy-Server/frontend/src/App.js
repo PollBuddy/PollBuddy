@@ -105,7 +105,7 @@ function App() {
             {/* Redirects from poll ID page (404) to view page */}
             <Route exact path="/polls/:pollID" element={<PrivateComponent state element={<Navigate push to="view"/>}/>}/>
             {/* Poll Viewer Page */}
-            <Route exact path="/polls/:pollID/view" element={<PollViewer updateTitle={updateTitle} />}/>
+            <Route exact path="/polls/:pollID/view" element={<PollViewer />}/>
             {/* Poll Editor Page */}
             <Route exact path="/polls/:pollID/edit" element={<PrivateComponent state element={<PollEditor updateTitle={updateTitle} />}/>}/>
             {/* Poll Manager Page */}
