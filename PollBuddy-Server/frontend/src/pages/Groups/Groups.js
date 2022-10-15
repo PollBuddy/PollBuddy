@@ -19,17 +19,15 @@ class Groups extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.props.updateTitle("My Groups");
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/groups")
-      .then((response) => response.json())
-      .then((response) => {
-        this.setState({
-          adminGroups: response.data.admin,
-          memberGroups: response.data.member,
-          doneLoading: true
-        });
-      });
+    const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/groups");
+    const response = await httpResponse.json();
+    this.setState({
+      adminGroups: response.data.admin,
+      memberGroups: response.data.member,
+      doneLoading: true
+    });
   }
 
   toggleLeaveGroup = () => {
