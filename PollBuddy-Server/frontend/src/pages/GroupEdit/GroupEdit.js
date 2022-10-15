@@ -30,48 +30,43 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
     this.loadUsers();
   }
 
-  loadGroup = () => {
+  loadGroup = async () => {
+    const httpResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}`);
+    const response = await httpResponse.json();
     fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}`)
-      .then((response => response.json()))
-      .then((response) => {
-        if (response.result === "success") {
-          this.setState({
-            name: response.data.name,
-            nameInput: response.data.name,
-            description: response.data.description,
-            descriptionInput: response.data.description,
-            loadingGroupData: false,
-          });
-        } else {
-          this.props.router.navigate("/groups");
-        }
+    if (response.result === "success") {
+      this.setState({
+        name: response.data.name,
+        nameInput: response.data.name,
+        description: response.data.description,
+        descriptionInput: response.data.description,
+        loadingGroupData: false,
       });
+    } else {
+      this.props.router.navigate("/groups");
+    }
   };
 
-  loadAdmins = () => {
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}/admins`)
-      .then((response => response.json()))
-      .then((response) => {
-        if (response.result === "success") {
-          this.setState({
-            admins: response.data,
-            loadingAdmins: false,
-          });
-        }
+  loadAdmins = async () => {
+    const httpResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}/admins`);
+    const response = await httpResponse.json();
+    if (response.result === "success") {
+      this.setState({
+        admins: response.data,
+        loadingAdmins: false,
       });
+    }
   };
 
-  loadUsers = () => {
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}/members`)
-      .then((response => response.json()))
-      .then((response) => {
-        if (response.result === "success") {
-          this.setState({
-            users: response.data,
-            loadingUsers: false,
-          });
-        }
+  loadUsers = async () => {
+    const httpResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}/members`);
+    const response = await httpResponse.json()
+    if (response.result === "success") {
+      this.setState({
+        users: response.data,
+        loadingUsers: false,
       });
+    }
   };
 
   onInput = (e) => {
@@ -87,28 +82,27 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
     };
   };
 
-  onSubmit = () => {
+  onSubmit = async () => {
     this.setState({ loadingGroupData: true });
-    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/edit", {
+    const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/edit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
       body: JSON.stringify(this.getGroupData())
-    }).then((response) => response.json())
-      .then((response) => {
-        if (response.result === "success") {
-          this.setState({
-            showError: false,
-            name: this.state.nameInput,
-            description: this.state.descriptionInput,
-            loadingGroupData: false,
-          });
-        } else {
-          this.setState({
-            showError: true,
-            loadingGroupData: false,
-          });
-        }
+    });
+    const response = await httpResponse.json();
+    if (response.result === "success") {
+      this.setState({
+        showError: false,
+        name: this.state.nameInput,
+        description: this.state.descriptionInput,
+        loadingGroupData: false,
       });
+    } else {
+      this.setState({
+        showError: true,
+        loadingGroupData: false,
+      });
+    }
   };
 
   checkError = () => {
