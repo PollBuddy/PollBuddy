@@ -234,6 +234,15 @@ class PollEditor extends Component {
       displayNewQuestion: false,
       displayEditQuestion: false,
     });
+    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/deleteQuestion", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          text: this.state.questionTextInput,
+          answers: this.state.currentAnswers,
+          maxAllowedChoices: this.state.maxAllowedChoices,
+        })
+      })
   };
 
   addAnswer = () => {
@@ -526,7 +535,7 @@ class PollEditor extends Component {
                             type="submit" className="button"
                             onClick={this.cancelQuestion}
                           >
-                            Cancel
+                            {this.state.displayNewQuestion ? "Cancel" : "Delete"}
                           </button>
                         </MDBContainer>
                       </>

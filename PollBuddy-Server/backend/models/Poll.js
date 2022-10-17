@@ -82,6 +82,17 @@ const editQuestionValidator = Joi.object({
   maxAllowedChoices: Joi.number().required(),
 });
 
+const deleteQuestionValidator = Joi.object({
+  id: Joi.custom(objectID).required(),
+  text: Joi.string().required(),
+  answers: Joi.array().items(Joi.object({
+    id: Joi.custom(objectID),
+    text: Joi.string().required(),
+    correct: Joi.boolean().required(),
+  })).required(),
+  maxAllowedChoices: Joi.number().required(),
+});
+
 const submitQuestionValidator = Joi.object({
   id: Joi.custom(objectID).required(),
   answers: Joi.array().items(Joi.custom(objectID)).required(),
