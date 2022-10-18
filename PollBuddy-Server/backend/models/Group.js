@@ -106,7 +106,7 @@ const getGroupMembers = async function (groupID, userID) {
 
     let members = [];
     for (let groupUserID of group.Members) {
-      let user = await getUserInternal(groupUserID);
+      let user = await getUserInternal({"_id": groupUserID});
       members.push({
         id: user._id,
         userName: user.UserName,
@@ -128,7 +128,7 @@ const getGroupAdmins = async function (groupID, userID) {
 
     let admins = [];
     for (let groupAdminID of group.Admins) {
-      let admin = await getUserInternal(groupAdminID);
+      let admin = await getUserInternal({"_id": groupAdminID});
       admins.push({
         id: admin._id,
         userName: admin.UserName,
@@ -157,7 +157,7 @@ const getGroupPolls = async function (userID, groupID) {
 
     let polls = [];
     for (let pollID of group.Polls) {
-      let poll = await getPollInternal(pollID);
+      let poll = await getPollInternal({"_id": pollID});
       if (isAdmin || Date.now() > poll.OpenTime && Date.now() < poll.CloseTime) {
         polls.push({
           id: poll._id,

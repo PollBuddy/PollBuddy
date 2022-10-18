@@ -51,18 +51,18 @@ const isGroupUserByGroup = function(group, userID) {
   return isGroupAdminByGroup(group, userID) || isGroupMemberByGroup(group, userID);
 };
 
-const getPollInternal = async function(pollID) {
-  let idCode = new bson.ObjectID(pollID);
-  return await mongoConnection.getDB().collection("polls").findOne({"_id": idCode});
+const getPollInternal = async function(query={}) {
+  return await mongoConnection.getDB().collection("polls").findOne(query);
 };
 
-const getUserInternal = async function(userID) {
-  let idCode = new bson.ObjectID(userID);
-  return await mongoConnection.getDB().collection("users").findOne({ "_id": idCode });
+const getUserInternal = async function(query={}) {
+  let idCode = new bson.ObjectID(query["_id"]);
+  query["_id"] = idCode;
+  return await mongoConnection.getDB().collection("users").findOne({"_id": idCode});
 };
 
 const getQuestionInternal = async function(pollID, questionID) {
-  let poll = await getPollInternal(pollID);
+  let poll = await getPollInternal({"_id": pollID});
   for (let question of poll.Questions) {
     if (question._id.toString() === questionID.toString()) {
       return question;
@@ -71,9 +71,20 @@ const getQuestionInternal = async function(pollID, questionID) {
 };
 
 const isPollAdmin = async function(userID, pollID) {
-  let poll = await getPollInternal(pollID);
+  let poll = await getPollInternal({"_id": pollID});
   if (poll.Group) {
-    let group = await getGroupInternal(poll.Group, {"Admins": userID});
+    let group = await getGroupInternal({"_id": poll.Group, "Admins": userID});
+    if (!group) { return false; }
+  } else {
+    let isUserPollCreator = poll.Creator.toString() === userID.toString();
+    if (!isUserPollCreator) { return false; }
+  }
+  return true;
+};
+
+const isPollAdminByPoll = async function(userID, poll) {
+  if (poll && poll.Group) {
+    let group = await getGroupInternal({"_id": poll.Group, "Admins": userID});
     if (!group) { return false; }
   } else {
     let isUserPollCreator = poll.Creator.toString() === userID.toString();
@@ -89,6 +100,7 @@ module.exports = {
   getUserInternal,
   getQuestionInternal,
   isPollAdmin,
+  isPollAdminByPoll,
   getID,
   isGroupAdminByGroup,
   isGroupMemberByGroup,
