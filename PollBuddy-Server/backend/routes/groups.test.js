@@ -446,7 +446,6 @@ describe("/api/groups/:id/leave", () => {
 
 });
 
-//Write Cases here
 describe("/api/groups/:id/promote", () => {
 
   it("GET: route unavailable", async () => {
@@ -535,40 +534,97 @@ describe("/api/groups/:id/promote", () => {
   });
 });
 
-describe("/api/groups/:id/delete", () => {
+describe("/api/groups/:id/demote", () => {
 
   it("GET: route unavailable", async () => {
-    await app.get("/api/groups/0/delete")
+    await app.get("/api/groups/0/demote")
       .expect(405)
       .then((response) => {
         expect(response.body.result).toBe("failure");
       });
   });
 
-  it("POST: delete group", async () => {
+  it("POST: demote admin as admin", async () => {
     let user = await createUser();
-    let group = await createGroup({Admins: [user.insertedId]});
+    let toDemoteUser = await createUser();
+    let group = await createGroup({Admins: [user.insertedId, toDemoteUser.insertedId]});
     session = {userData: {userID: user.insertedId}};
-    await app.post("/api/groups/" + group.insertedId + "/delete")
+    await app.post("/api/groups/" + group.insertedId + "/demote")
+      .send({
+        userID: toDemoteUser.insertedId
+      })
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
         let res = await mongoConnection.getDB().collection("groups").findOne({
           _id: group.insertedId
         });
-        expect(res).toBeNull();
+        expect(res.Members).toHaveLength(1);
+        expect(res.Admins).toHaveLength(1);
+        expect(res.Admins[0].toString()).toEqual(user.insertedId.toString());
+        expect(res.Members[0].toString()).toEqual(toDemoteUser.insertedId.toString());
+      });
+  });
+  
+  it("POST: demote/kick member as admin", async () => {
+    let user = await createUser();
+    let toDemoteUser = await createUser();
+    let group = await createGroup({Admins: [user.insertedId], Members: [toDemoteUser.insertedId]});
+    session = {userData: {userID: user.insertedId}};
+    await app.post("/api/groups/" + group.insertedId + "/demote")
+      .send({
+        userID: toDemoteUser.insertedId
+      })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        let res = await mongoConnection.getDB().collection("groups").findOne({
+          _id: group.insertedId
+        });
+        expect(res.Members).toHaveLength(0);
+        expect(res.Admins).toHaveLength(1);
+        expect(res.Admins[0].toString()).toEqual(user.insertedId.toString());
       });
   });
 
-  it("POST: non-admin delete group", async () => {
+  it("POST: demote as member", async () => {
     let user = await createUser();
-    let group = await createGroup();
+    let toDemoteUser = await createUser();
+    let group = await createGroup({Members: [user.insertedId, toDemoteUser.insertedId]});
     session = {userData: {userID: user.insertedId}};
-    await app.post("/api/groups/" + group.insertedId + "/delete")
+    await app.post("/api/groups/" + group.insertedId + "/demote")
+      .send({
+        userID: toDemoteUser.insertedId
+      })
+      .expect(403)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+  
+  it("POST: demote nonexistent as admin", async () => {
+    let user = await createUser();
+    let toDemoteUser = await createUser();
+    let group = await createGroup({Admins: [user.insertedId]});
+    session = {userData: {userID: user.insertedId}};
+    await app.post("/api/groups/" + group.insertedId + "/demote")
+      .send({
+        userID: toDemoteUser.insertedId
+      })
       .expect(403)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });
   });
 
+  it("POST: user not logged in", async () => {
+    let user = await createUser();
+    let toDemoteUser = await createUser();
+    let group = await createGroup({Admins: [user.insertedId], Members: [toDemoteUser.insertedId]});
+    await app.post("/api/groups/" + group.insertedId + "/demote")
+      .expect(401)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
 });

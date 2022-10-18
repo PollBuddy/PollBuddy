@@ -294,7 +294,7 @@ const demoteUser = async function (groupID, userID, toDemoteID){
       return httpCodes.Ok();
     }
   }else{
-    let response = await leaveGroup(groupID, toDemoteID);
+    let response = await leaveGroup(groupID, toDemoteID.userID);
     return response;
   }
 };
