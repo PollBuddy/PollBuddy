@@ -80,7 +80,7 @@ spec:
               name: reporting
           env:
             - name: REPORTING_DB_URL
-              value: poll-buddy-reporting-db-service-master.default.svc.cluster.local
+              value: poll-buddy-reporting-db-service-master
             - name: REPORTING_DB_NAME
               valueFrom:
                 configMapKeyRef:
