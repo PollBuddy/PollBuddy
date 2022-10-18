@@ -9,7 +9,7 @@ const objectID = (value, helpers) => {
   }
   try {
     return new bson.ObjectID(value);
-    
+
   } catch (err) {
     return helpers.error("any.invalid");
   }
