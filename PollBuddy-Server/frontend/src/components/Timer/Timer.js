@@ -1,103 +1,64 @@
-import React, { Component } from "react";
-import {
-  MDBContainer
-} from "mdbreact";
-
-import Countdown, { zeroPad } from "react-countdown";
+import React from "react";
+import { MDBContainer } from "mdbreact";
+import Countdown from "react-countdown";
 import "./Timer.scss";
+import { useCall } from "../../hooks";
 
-export default class Timer extends Component {
-  render(){
-    const clockFormatDays = ({ days, completed }) => {
+const subTimer = text => <span style={{ whiteSpace: "pre" }}>{text}</span>;
 
-      if (completed) {
-        // Render a completed state
-        return <span>00</span>;
-      } else {
-        // Render a countdown
-        return <span>{zeroPad(days)}</span>;
-      }
-    };
-    const clockFormatHours = ({ hours, completed }) => {
+const clockDays = ({ formatted }) => subTimer(formatted.days);
+const clockHours = ({ formatted }) => subTimer(formatted.hours);
+const clockMins = ({ formatted }) => subTimer(formatted.minutes);
+const clockSecs = ({ formatted }) => subTimer(formatted.seconds);
 
-      if (completed) {
-        // Render a completed state
-        return <span>00</span>;
-      } else {
-        // Render a countdown
-        return <span>{zeroPad(hours)}</span>;
-      }
-    };
-    const clockFormatMinutes = ({ minutes, completed }) => {
-
-      if (completed) {
-        // Render a completed state
-        return <span>00</span>;
-      } else {
-        // Render a countdown
-        return <span>{zeroPad(minutes)}</span>;
-      }
-    };
-    const clockFormatSeconds = ({ seconds, completed }) => {
-
-      if (completed) {
-        // Render a completed state
-        this.props.noTimeLeft();
-        return <span>00</span>;
-      } else {
-        // Render a countdown
-        return <span>{zeroPad(seconds)}</span>;
-      }
-    };
-    let countdown = ( (this.props.timeLeft) ?(
+// CloseTime is stored in milliseconds.
+function Timer({ timeLeft, CloseTime, onTimeEnd, noTimeLeft }) {
+  // When the entire timer is done (seconds is 0), noTimeLeft should also be
+  // called.
+  const handleEnd = useCall(noTimeLeft, onTimeEnd);
+  
+  if (timeLeft) {
+    return (
       <MDBContainer>
-        <MDBContainer className="time-grid" title = "Question Countdown">
-          <button className = "button time-info">
+        <MDBContainer className="time-grid" title="Question Countdown">
+          <button className="button time-info">
             <Countdown
-              renderer={clockFormatDays}
-              date={ this.props.CloseTime }//stored in milliseconds
-              onComplete={this.props.onTimeEnd}
-            />
+              renderer={clockDays} date={CloseTime} onComplete={onTimeEnd}/>
           </button>
-          <button className = "button time-info">
+          <button className="button time-info">
             <Countdown
-              renderer={clockFormatHours}
-              date={ this.props.CloseTime }//stored in milliseconds
-              onComplete={this.props.onTimeEnd}
-            />
+              renderer={clockHours} date={CloseTime} onComplete={onTimeEnd}/>
           </button>
-          <button className = "button time-info">
+          <button className="button time-info">
             <Countdown
-              renderer={clockFormatMinutes}
-              date={ this.props.CloseTime }//stored in milliseconds
-              onComplete={this.props.onTimeEnd}
-            />
+              renderer={clockMins} date={CloseTime} onComplete={onTimeEnd}/>
           </button>
-          <button className = "button time-info">
+          <button className="button time-info">
             <Countdown
-              renderer={clockFormatSeconds}
-              date={ this.props.CloseTime }//stored in milliseconds
-              onComplete={this.props.onTimeEnd}
-            />
+              renderer={clockSecs} date={CloseTime} onComplete={handleEnd}/>
           </button>
-          <button className={"time-info-text"}>
+          <button className="time-info-text">
             <span>Days</span>
           </button>
-          <button className={"time-info-text"}>
+          <button className="time-info-text">
             <span>Hrs</span>
           </button>
-          <button className={"time-info-text"}>
+          <button className="time-info-text">
             <span>Mins</span>
           </button>
-          <button className={"time-info-text"}>
+          <button className="time-info-text">
             <span>Secs</span>
           </button>
         </MDBContainer>
       </MDBContainer>
-    ) : (
-      <button className="button time-info-closed" title = "Question Countdown">Question Closed!</button>
-    )
     );
-    return(countdown);
+  } else {
+    return (
+      <button className="button time-info-closed" title="Question Countdown">
+        Question Closed!
+      </button>
+    );
   }
 }
+
+export default React.memo(Timer);

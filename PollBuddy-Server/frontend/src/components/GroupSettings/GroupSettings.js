@@ -1,78 +1,60 @@
-import React, { Component } from "react";
+import React from "react";
 import { MDBContainer } from "mdbreact";
-import {Link} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./GroupSettings.scss";
-import {withRouter} from "../PropsWrapper/PropsWrapper";
 
-class GroupSettings extends Component{
-  constructor(props) {
-    super(props);
-    this.state = this.props.state;
-  }
+function GroupSettings({ isMember, isAdmin, id }) {
+  const navigate = useNavigate();
 
-  toggleTextBox(elementId, selector, text) {
-    if(document.getElementById(elementId).style.display === "block") {
-      document.getElementById(elementId).style.display = "none";
-      document.querySelector(selector).textContent = text;
-    } else {
-      document.getElementById(elementId).style.display = "block";
-      document.querySelector(selector).textContent = "Submit";
-    }
-  }
+  const createPoll = React.useCallback(() => {
+    navigate("/polls/new?groupID=" + id);
+  }, [ navigate, id ]);
 
-  createNewPoll = async () => {
-    this.props.router.navigate("/polls/new?groupID=" + this.state.id);
-  };
+  const handleLeave = React.useCallback(async () => {
+    const URL = `${process.env.REACT_APP_BACKEND_URL}/groups/${id}/leave`;
+    await fetch(URL, { method: "POST" });
+    navigate("/groups");
+  }, [ navigate, id ]);
 
-  handleLeaveGroup = async () => {
-    await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/leave", {
-      method: "POST",
-    });
-    this.props.router.navigate("/groups");
-  };
+  const handleDelete = React.useCallback(async () => {
+    const URL = `${process.env.REACT_APP_BACKEND_URL}/groups/${id}/delete`;
+    await fetch(URL, { method: "POST" });
+    navigate("/groups");
+  }, [ navigate, id ]);
 
-  handleDeleteGroup = async () => {
-    await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/delete", {
-      method: "POST",
-    });
-    this.props.router.navigate("/groups");
-  };
+  const buttonStyles = { width: "17em" };
 
-  render(){
-    if (this.state.isMember) {
-      return (
-        <MDBContainer className="box">
-          <p className="fontSizeLarge">
-            Member Settings
-          </p>
-          <button onClick={this.handleLeaveGroup} className="button">Leave Group</button>
-        </MDBContainer>
-      );
-    } else if (this.state.isAdmin) {
-      return (
-        <MDBContainer className="box">
-          <p className="fontSizeLarge">
-            Admin Settings
-          </p>
-          <button style={{width: "17em"}}
-            className="button"
-            onClick={this.createNewPoll}
-          >Create New Poll
+  if (isMember) {
+    return (
+      <MDBContainer className="box">
+        <p className="fontSizeLarge">
+          Member Settings
+        </p>
+        <button onClick={handleLeave} className="button">
+          Leave Group
+        </button>
+      </MDBContainer>
+    );
+  } else if (isAdmin) {
+    return (
+      <MDBContainer className="box">
+        <p className="fontSizeLarge">
+          Admin Settings
+        </p>
+        <button style={buttonStyles} className="button" onClick={createPoll}>
+          Create New Poll
+        </button>
+        <Link to={"/groups/"+ id +"/edit"}>
+          <button style={buttonStyles} className="button">
+            Edit Group
           </button>
-          <Link to={"/groups/"+ this.state.id +"/edit"}>
-            <button style={{width: "17em"}}
-              className="button"
-            >Edit Group
-            </button>
-          </Link>
-          <button style={{width: "17em"}}
-            className="button"
-            onClick={this.handleDeleteGroup}
-          >Delete this Group
-          </button>
-        </MDBContainer>
-      );
-    }
+        </Link>
+        <button style={buttonStyles} className="button" onClick={handleDelete}>
+          Delete this Group
+        </button>
+      </MDBContainer>
+    );
   }
 }
-export default withRouter(GroupSettings);
+
+export default React.memo(GroupSettings);

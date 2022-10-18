@@ -1,81 +1,56 @@
-import React, { Component } from "react";
+import React from "react";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import SchoolPicker from "../../components/SchoolPicker/SchoolPicker";
+import { LoadingWheel, SchoolPicker } from "../../components";
+import { selectTarget, useCompose, useTitle } from "../../hooks";
 
-export default class RegisterWithSchool extends Component {
-  componentDidMount() {
-    this.props.updateTitle("Register with School");
-  }
+function RegisterWithSchool() {
+  useTitle("Register with School");
 
-  constructor(props) {
-    super(props);
-    
-    this.state = {
-      value: "",
-      doneLoading: false,
-      "schoolInfo": {},
-      errorText: ""
-    };   
+  const [ school, setSchool ] = React.useState("");
+  const [ loaded, setLoaded ] = React.useState(false);
+  const [ error, setError ] = React.useState("");
+  const [ schoolInfo, setSchoolInfo ] = React.useState({ });
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleSubmit(){
-    if(!(this.state.value in this.state.schoolInfo.schoolLinkDict)) {
-      this.setState({errorText: "Invalid school"});
+  const onSubmit = React.useCallback(() => {
+    const link = schoolInfo?.schoolLinkDict[school];
+    if (link) {
+      window.location.replace("/api/users/register/" + link);
     } else {
-      window.location.replace("/api/users/register/" + this.state.schoolInfo.schoolLinkDict[this.state.value]);
+      setError("Invalid school");
     }
+  }, [ school, schoolInfo ]);
+
+  const onSchool = useCompose(setSchool, selectTarget);
+
+  const onDoneLoading = React.useCallback(info => {
+    setLoaded(true);
+    setSchoolInfo(info);
+  }, [ setLoaded, setSchoolInfo ]);
+
+  if (!loaded) {
+    return (
+      <MDBContainer className="page">
+        <SchoolPicker value={school} onChange={onSchool} onSelect={setSchool}
+          onDoneLoading={onDoneLoading}/>
+        <LoadingWheel/>
+      </MDBContainer>
+    );
   }
-
-  render() {
-    if(!this.state.doneLoading) {
-      return(
-        <MDBContainer className="page">
-
-          <SchoolPicker
-            value={this.state.value}
-            onChange={e => this.setState({ value: e.target.value })}
-            onSelect={value => this.setState({ value })}
-            onDoneLoading={(schoolInfo) => {
-              this.setState({"doneLoading": true, "schoolInfo": schoolInfo});
-            }
-            }
-          />
-
-          <LoadingWheel/>
-        </MDBContainer>
-      );
-    } else {
-      return (
-        <MDBContainer fluid className="page">
-          <MDBContainer fluid className="box">
-            <p className="fontSizeLarge">
-              Register with School
-            </p>
-            <p>
-              To create an account, select your school name.
-            </p>
-            <p>
-              School Name:
-            </p>
-
-            <SchoolPicker
-              value={this.state.value}
-              onChange={e => this.setState({ value: e.target.value })}
-              onSelect={value => this.setState({ value })}
-              schoolInfo = {this.state.schoolInfo}
-            />
-
-            <p> {this.state.errorText} </p>
-
-            <button className="btn button" onClick={this.handleSubmit}>Submit</button>
-
-          </MDBContainer>
-        </MDBContainer>
-      );
-    }
-  }
+  
+  return (
+    <MDBContainer fluid className="page">
+      <MDBContainer fluid className="box">
+        <p className="fontSizeLarge">Register with School</p>
+        <p>To create an account, select your school name.</p>
+        <p>School Name:</p>
+        <SchoolPicker value={school} onChange={onSchool} onSelect={setSchool}
+          onDoneLoading={onDoneLoading}/>
+        <p>{error}</p>
+        <button className="btn button" onClick={onSubmit}>Submit</button>
+      </MDBContainer>
+    </MDBContainer>
+  );
 }
+
+export default React.memo(RegisterWithSchool);

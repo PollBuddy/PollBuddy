@@ -1,22 +1,18 @@
-import React, { Component } from "react";
+import React from "react";
 import "mdbreact/dist/css/mdb.css";
 import { MDBContainer } from "mdbreact";
+import { useTitle } from "../../hooks";
 
-export default class Error404 extends Component {
+function Error404() {
+  useTitle("Page Not Found");
 
-  componentDidMount(){
-    this.props.updateTitle("Page Not Found");
-  }
-  render() {
-    return (
-      <MDBContainer className="page">
-        <MDBContainer className="box">
-          <p className="fontSizeLarge">
-            Error: page not found.
-          </p>
-        </MDBContainer>
+  return (
+    <MDBContainer className="page">
+      <MDBContainer className="box">
+        <p className="fontSizeLarge">Error: page not found.</p>
       </MDBContainer>
-
-    );
-  }
+    </MDBContainer>
+  );
 }
+
+export default React.memo(Error404);

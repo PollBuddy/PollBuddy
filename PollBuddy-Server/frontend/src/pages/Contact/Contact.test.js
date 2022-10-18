@@ -2,10 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import Contact from "./Contact";
 
-function updateTitle() {
-  return false;
-}
-
 // Create basic render test
 it("renders without crashing", () => {
   fetch.mockResponseOnce(JSON.stringify({data: {data: {
@@ -17,7 +13,7 @@ it("renders without crashing", () => {
   // Create div element
   const div = document.createElement("div");
   // Render about on the div
-  ReactDOM.render(<Contact updateTitle={updateTitle}/>, div);
+  ReactDOM.render(<Contact />, div);
   // Clean unmount
   ReactDOM.unmountComponentAtNode(div);
 });

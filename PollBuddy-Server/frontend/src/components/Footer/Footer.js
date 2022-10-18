@@ -1,43 +1,46 @@
-import React, { Component } from "react";
+import React from "react";
 import "mdbreact/dist/css/mdb.css";
 import "./Footer.scss";
 import rcosLogo from "../../images/rcos.png";
 import githubLogo from "../../images/github.png";
-import {MDBContainer} from "mdbreact";
+import { MDBContainer } from "mdbreact";
+import { Link } from "react-router-dom";
 
-export default class Footer extends Component {
-  render() {
-    return (
-      <footer className = "Footer-foot">
-        <MDBContainer className = "Footer-foot-links">
-          <span><a href = "/about">
-            About
-          </a>
-          <a href = "https://info.rpi.edu/statement-of-accessibility" target = "_blank" rel = "noopener noreferrer">
+const ACCESS_LINK = "https://info.rpi.edu/statement-of-accessibility";
+const RCOS_LINK = "https://rcos.io/";
+const GITHUB_LINK = "https://github.com/PollBuddy/PollBuddy";
+
+function Footer() {
+  return (
+    <footer className="Footer-foot">
+      <MDBContainer className="Footer-foot-links">
+        <span>
+          <Link to="/about">About</Link>
+          <a href={ACCESS_LINK} target="_blank" rel="noopener noreferrer">
             Accessibility
-          </a></span>
-          <span><a href = "/contact">
-            Contact
           </a>
-          <a href = "/faq">
-            FAQ
-          </a>
-          <a href = "/privacy">
-            Privacy
-          </a></span>
-        </MDBContainer>
-        <MDBContainer className = "Footer-foot-links Footer-copy">
-          <span>&copy; 2019-{new Date().getFullYear()} Poll Buddy</span>
-        </MDBContainer>
-        <MDBContainer className = "Footer-foot-links">
-          <a href = "https://rcos.io/" target = "_blank" rel="noopener noreferrer">
-            <img src = {rcosLogo} alt = "RCOS" />
-          </a>
-          <a href = "https://github.com/PollBuddy/PollBuddy" target = "_blank" rel="noopener noreferrer">
-            <img src = {githubLogo} alt = "Github" />
-          </a>
-        </MDBContainer>
-      </footer>
-    );
-  }
+        </span>
+        <span>
+          <Link to="/contact">Contact</Link>
+          <Link to="/faq">FAQ</Link>
+          <Link to="/privacy">Privacy</Link>
+        </span>
+      </MDBContainer>
+      <MDBContainer className="Footer-foot-links Footer-copy">
+        <span>
+          &copy; 2019-{new Date().getFullYear()} Poll Buddy
+        </span>
+      </MDBContainer>
+      <MDBContainer className="Footer-foot-links">
+        <a href={RCOS_LINK} target="_blank" rel="noopener noreferrer">
+          <img src={rcosLogo} alt="RCOS" />
+        </a>
+        <a href={GITHUB_LINK} target="_blank" rel="noopener noreferrer">
+          <img src={githubLogo} alt="Github" />
+        </a>
+      </MDBContainer>
+    </footer>
+  );
 }
+
+export default React.memo(Footer);

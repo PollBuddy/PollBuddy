@@ -3,10 +3,6 @@ import ReactDOM from "react-dom";
 import ResetPassword from "./ResetPassword";
 import {BrowserRouter} from "react-router-dom";
 
-function updateTitle() {
-  return false;
-}
-
 // Create basic render test
 it("renders without crashing", () => {
   // Create div element
@@ -14,7 +10,7 @@ it("renders without crashing", () => {
   // Render about on the div
   ReactDOM.render(
     <BrowserRouter>
-      <ResetPassword updateTitle={updateTitle}/>
+      <ResetPassword />
     </BrowserRouter>, div);
   // Clean unmount
   ReactDOM.unmountComponentAtNode(div);

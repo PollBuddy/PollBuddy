@@ -1,6 +1,6 @@
 import React from "react";
-import {BrowserRouter, Route, Routes, Navigate} from "react-router-dom";
-import {MDBContainer} from "mdbreact";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { MDBContainer } from "mdbreact";
 
 import Groups from "./pages/Groups/Groups";
 import Homepage from "./pages/Homepage/Homepage";
@@ -35,38 +35,23 @@ import LoginWithSchool from "./pages/LoginWithSchool/LoginWithSchool";
 import LoginWithSchoolStep2 from "./pages/LoginWithSchoolStep2/LoginWithSchoolStep2";
 
 import Code from "./pages/Code/Code";
-import PrivateComponent from "./components/PrivateComponent/PrivateComponent";
-
-import Header from "./components/Header/Header.js";
-import Footer from "./components/Footer/Footer.js";
-
-//import Popup2 from "./components/Popup2/Popup2";
+import { PrivateComponent, Header, Footer } from "./components";
+// import Popup2 from "./components/Popup2/Popup2";
 import "./styles/main.scss";
 
-export default class App extends React.Component {
+import { TitleProvider } from "./hooks";
 
-  state = {
-    pageTitle: "",
-    userInfo: {
-      sessionIdentifier: ""
-    }
-  };
+function App() {
+  const [ userInfo, ] = React.useState({ sessionIdentifier: "" });
 
-  updateTitle(t) {
-    this.setState({pageTitle: t});
-    document.title = t + " - Poll Buddy";
-  }
-
-  render() {
-    this.updateTitle = this.updateTitle.bind(this);
-    return (
-      <BrowserRouter>
-
+  return (
+    <BrowserRouter>
+      <TitleProvider>
         <MDBContainer id="wrapper">
           {/* Popup2 test: Popup2 still needs a handleClose function that will activate onClick of the button, this handle func should probably be a prop passed from parent component*/}
           {/*<Popup2 dim={true} text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."/>*/}
 
-          <Header userInfo={this.state.userInfo} />
+          <Header userInfo={userInfo} />
 
           {/*
             Using React BrowserRouter now
@@ -76,142 +61,103 @@ export default class App extends React.Component {
           */}
 
           <Routes>
-
             {/* --- Main Site Pages --- */}
-
             {/* Home Page */}
-            <Route exact path="/" element={<Homepage updateTitle={this.updateTitle} />} />
-
+            <Route exact path="/" element={<Homepage />}/>
             {/* About Poll Buddy Page */}
-            <Route exact path="/about" element={<About updateTitle={this.updateTitle} />} />
-
+            <Route exact path="/about" element={<About />}/>
             {/* Contact Us Page */}
-            <Route exact path="/contact" element={<Contact updateTitle={this.updateTitle} />} />
-
+            <Route exact path="/contact" element={<Contact />} />
             {/* Frequently Asked Questions (FAQ) Page */}
-            <Route exact path="/faq" element={<FAQ updateTitle={this.updateTitle} />}/>
-
+            <Route exact path="/faq" element={<FAQ />} />
             {/* Data Privacy Page */}
-            <Route exact path="/privacy" element={<Privacy updateTitle={this.updateTitle} />} />
-
+            <Route exact path="/privacy" element={<Privacy />} />
             {/* Quick Start Guide */}
-            <Route exact path="/guide" element={<QuickStartGuide updateTitle={this.updateTitle} />}/>
-
-
+            <Route exact path="/guide" element={<QuickStartGuide />}/>
             {/* Enter Poll Code Page */}
-            <Route exact path="/code" element={<Code updateTitle={this.updateTitle} />} />
-
-
+            <Route exact path="/code" element={<Code />} />
+            
             {/* --- Group Pages --- */}
-
             {/* My Groups Page */}
-            <Route exact path="/groups" element={<PrivateComponent state = {true} element={<Groups updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/groups" element={<PrivateComponent state element={<Groups />}/>}/>
             {/* Group Creation Page */}
-            <Route exact path="/groups/new" element={<PrivateComponent state = {true} element={<GroupCreation updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/groups/new" element={<PrivateComponent state element={<GroupCreation />}/>}/>
             {/* Group's Page */}
-            <Route exact path="/groups/:groupID" element={<PrivateComponent state = {true} element={<Group updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/groups/:groupID" element={<PrivateComponent state element={<Group />}/>}/>
             {/* Group Edit Page */}
-            <Route exact path="/groups/:groupID/edit" element={<PrivateComponent state = {true} element={<GroupEdit updateTitle={this.updateTitle} />}/>} />
-
+            <Route exact path="/groups/:groupID/edit" element={<PrivateComponent state element={<GroupEdit />}/>} />
             {/* Group Join Page */}
-            <Route exact path="/groups/join" element={<PrivateComponent state = {true} element={<GroupJoin updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/groups/join" element={<PrivateComponent state element={<GroupJoin />}/>}/>
+            
             {/* --- Poll Pages --- */}
-
             {/* My Poll Histories Page */}
             {/* This route (and any others that route through /polls/that are not polls)
                 need to be listed BEFORE the Poll ID Redirect to ensure they are not
                 treated like a :pollID */}
-            <Route exact path="/polls/history" element={<PrivateComponent state = {true} element={<PollHistory updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/polls/history" element={<PrivateComponent state element={<PollHistory />}/>}/>
             {/* Poll Creation */}
-            <Route exact path="/polls/new" element={<PollCreation updateTitle={this.updateTitle} />}/>
-
+            <Route exact path="/polls/new" element={<PollCreation />}/>
             {/* Poll ID Redirect */}
             {/* Redirects from poll ID page (404) to view page */}
-            <Route exact path="/polls/:pollID" element={<PrivateComponent state = {true} element={<Navigate to={"view"} push={true}/>}/>}/>
-
-
+            <Route exact path="/polls/:pollID" element={<PrivateComponent state element={<Navigate push to="view"/>}/>}/>
             {/* Poll Viewer Page */}
-            <Route exact path="/polls/:pollID/view" element={<PollViewer updateTitle={this.updateTitle} />}/>
-
+            <Route exact path="/polls/:pollID/view" element={<PollViewer />}/>
             {/* Poll Editor Page */}
-            <Route exact path="/polls/:pollID/edit" element={<PrivateComponent state = {true} element={<PollEditor updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/polls/:pollID/edit" element={<PrivateComponent state element={<PollEditor />}/>}/>
             {/* Poll Manager Page */}
-            <Route exact path="/polls/:pollID/manage" element={<PrivateComponent state = {true} element={<PollManager updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/polls/:pollID/manage" element={<PrivateComponent state element={<PollManager />}/>}/>
             {/* Poll Results Page */}
             {/*use the render function so that we can retrieve :groupID from inside the component*/}
-            <Route exact path="/polls/:pollID/results" element={<PollResults updateTitle={this.updateTitle} />}/>
-
+            <Route exact path="/polls/:pollID/results" element={<PollResults />}/>
             {/* QuestionResults Ended Page */}
             {/* A page that shows when a question is closed by an instructor
                 Note: this will be removed soon I believe. */}
-            <Route exact path="/questionEnded" element={<PrivateComponent state = {true} element={<QuestionEnded updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/questionEnded" element={<PrivateComponent state element={<QuestionEnded />}/>}/>
             {/* Answer Recorded Page */}
             {/* A page that shows after you answered the question, or after time runs out.
-             Note: this will be removed soon I believe. */}
-            <Route exact path="/answerRecorded" element={<PrivateComponent state = {true} element={<AnswerRecorded updateTitle={this.updateTitle} />}/>}/>
-
-
+              Note: this will be removed soon I believe. */}
+            <Route exact path="/answerRecorded" element={<PrivateComponent state element={<AnswerRecorded />}/>}/>
+            
             {/* --- Login Pages --- */}
-
             {/* Login Main Page */}
-            <Route exact path="/login" element={<PrivateComponent state = {false} element={<LoginDefault updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/login" element={<PrivateComponent element={<LoginDefault />}/>}/>
             {/* Login with Poll Buddy Account Page */}
-            <Route exact path="/login/pollbuddy" element={<PrivateComponent state = {false} element={<LoginWithPollBuddy updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/login/pollbuddy" element={<PrivateComponent element={<LoginWithPollBuddy />}/>}/>
             {/* Login with School Account Page */}
-            <Route exact path="/login/school" element={<PrivateComponent state = {false} element={<LoginWithSchool updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/login/school" element={<PrivateComponent element={<LoginWithSchool />}/>}/>
             {/* Login with School Account Step 2 Page */}
-            <Route exact path="/login/school/step2" element={<PrivateComponent state = {false} element={<LoginWithSchoolStep2 updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/login/school/step2" element={<PrivateComponent element={<LoginWithSchoolStep2 />}/>}/>
             {/* Forgot Password Page */}
-            <Route exact path="/login/forgot" element={<PrivateComponent state = {false} element={<ForgotPassword updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/login/forgot" element={<PrivateComponent element={<ForgotPassword />}/>}/>
             {/* Reset Password Page */}
-            <Route exact path="/login/reset" element={<PrivateComponent state = {false} element={<ResetPassword updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/login/reset" element={<PrivateComponent element={<ResetPassword />}/>}/>
 
             {/* --- Registration Pages --- */}
-
             {/* Register Main Page */}
-            <Route exact path="/register" element={<PrivateComponent state = {false} element={<RegisterDefault updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/register" element={<PrivateComponent element={<RegisterDefault />}/>}/>
             {/* Register with Poll Buddy Account Page */}
-            <Route exact path="/register/pollbuddy" element={<PrivateComponent state = {false} element={<RegisterWithPollBuddy updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/register/pollbuddy" element={<PrivateComponent element={<RegisterWithPollBuddy />}/>}/>
             {/* Register with School Account Page */}
-            <Route exact path="/register/school" element={<PrivateComponent state = {false} element={<RegisterWithSchool updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/register/school" element={<PrivateComponent element={<RegisterWithSchool />}/>}/>
             {/* Register with School Account Step 2 Page */}
-            <Route exact path="/register/school/step2" element={<PrivateComponent state = {false} element={<RegisterWithSchoolStep2 updateTitle={this.updateTitle} />}/>}/>
-
+            <Route exact path="/register/school/step2" element={<PrivateComponent element={<RegisterWithSchoolStep2 />}/>}/>
 
             {/* --- Account and User Settings Pages --- */}
-
             {/* Account Info Page */}
-            <Route exact path="/account" element={<PrivateComponent state = {true} element={<AccountInfo updateTitle={this.updateTitle} />}/>}/>
+            <Route exact path="/account" element={<PrivateComponent state element={<AccountInfo />}/>}/>
 
             {/* --- Other Pages --- */}
-
             {/* Default Route/Error 404 Page */}
-            <Route path="*" element={<Notfound updateTitle={this.updateTitle} />}/>
+            <Route path="*" element={<Notfound />}/>
           </Routes>
 
           <Footer/>
 
         </MDBContainer>
+      </TitleProvider>
+    </BrowserRouter>
 
-      </BrowserRouter>
-
-    );
-  }
+  );
 }
+
+export default React.memo(App);

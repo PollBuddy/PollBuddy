@@ -1,11 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Homepage from "./Homepage";
-import {BrowserRouter} from "react-router-dom";
-
-function updateTitle() {
-  return false;
-}
+import { BrowserRouter } from "react-router-dom";
 
 // Create basic render test
 it("renders without crashing", () => {
@@ -14,7 +10,7 @@ it("renders without crashing", () => {
   // Render about on the div
   ReactDOM.render(
     <BrowserRouter>
-      <Homepage updateTitle={updateTitle}/>
+      <Homepage />
     </BrowserRouter>, div);
   // Clean unmount
   ReactDOM.unmountComponentAtNode(div);

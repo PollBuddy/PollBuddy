@@ -1,44 +1,40 @@
-import React, {Component} from "react";
+import React from "react";
 import "mdbreact/dist/css/mdb.css";
-import Countdown, {zeroPad} from "react-countdown";
+import Countdown from "react-countdown";
 import { MDBContainer } from "mdbreact";
 import { Link, Navigate } from "react-router-dom";
+import { useTitle } from "../../hooks";
 
-
-export default class recorded extends Component {
-  componentDidMount(){
-    this.props.updateTitle("Answer Recorded!");
+const clockFormat = ({ formatted: { minutes, seconds }, completed }) => {
+  if (completed) {
+    // Render a completed state.
+    return <Navigate push to="/QuestionEnded" />;
+  } else {
+    // Render a countdown.
+    return <p className="fontSizeLarge">{minutes}:{seconds}</p>;
   }
-  timeLimit = 5;
+};
 
-  render() {
-    const clockFormat = ({ minutes, seconds, completed }) => {
-      if (completed) {
-        // Render a completed state
-        return <Navigate to={"/QuestionEnded"} push={true}/>;
-      } else {
-        // Render a countdown
-        return <p className="fontSizeLarge">{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
-      }
-    };
-    return (
-      <MDBContainer fluid className="page">
-        <Link to={"/pollViewer"}>
-          <button className = "button">Change Answer?</button>
-        </Link>
-        <p className="fontSizeLarge">
-          Time remaining:
-        </p>
-        <Countdown renderer={clockFormat} date={Date.now() + this.timeLimit*1000} />
+function AnswerRecorded() {
+  useTitle("Answer Recorded!");
 
-        <Link to={"/myclasses"}>
-          <button className = "button">Leave Poll?</button>
-        </Link>
+  const timeLimit = 5;
 
-        <p className="fontSizeSmall"> Waiting for next question... </p>
+  return (
+    <MDBContainer fluid className="page">
+      <Link to="/pollViewer">
+        <button className = "button">Change Answer?</button>
+      </Link>
+      <p className="fontSizeLarge">Time remaining:</p>
+      <Countdown renderer={clockFormat} date={Date.now() + 1000*timeLimit} />
 
+      <Link to="/myclasses">
+        <button className = "button">Leave Poll?</button>
+      </Link>
 
-      </MDBContainer>
-    );
-  }
+      <p className="fontSizeSmall"> Waiting for next question... </p>
+    </MDBContainer>
+  );
 }
+
+export default React.memo(AnswerRecorded);

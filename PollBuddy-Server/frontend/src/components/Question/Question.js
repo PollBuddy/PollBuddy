@@ -1,188 +1,133 @@
-import React, { Component } from "react";
+import React from "react";
 import "./Question.scss";
-import {
-  MDBContainer,
-  MDBIcon
-} from "mdbreact";
+import { MDBContainer } from "mdbreact";
+import { useFn } from "../../hooks";
 
-import {Navigate} from "react-router-dom";
-import Timer from "../Timer/Timer.js";
+const BACKEND = process.env.REACT_APP_BACKEND_URL;
+const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+function _Answer({ selectAnswer, selected, answer, index }) {
+  const { id, text } = answer;
+  const handleClick = useFn(selectAnswer, id);
 
-export default class Question extends Component {
-  choiceOrder;
-  questionStartTime;
-  constructor(props) {
-    super(props);
+  const selectClass = selected // "question-label-bubble"
+    ? "question-label-bubble question-label-bubble-active"
+    : "question-label-bubble question-label-bubble-inactive";
 
-    this.choiceOrder = [
-      "A",
-      "B",
-      "C",
-      "D",
-      "E",
-      "F",
-      "G",
-      "H",
-      "I",
-      "J",
-      "K",
-      "L",
-      "M",
-      "N",
-      "O",
-      "P",
-      "Q",
-      "R",
-      "S",
-      "T",
-      "U",
-      "V",
-      "W",
-      "X",
-      "Y",
-      "Z",
-    ];
-    this.questionStartTime = Date.now();
-    let closeTime = new Date();
-    closeTime.setHours(closeTime.getHours() + 2);
-    let question = props.data.question;
-    this.state = {
-      pollID: props.data.pollID,
-      questionNumber: props.data.questionNumber,
-      question: question,
-      currentAnswers: question.currentAnswers || [],
-      perPoll: true,
-      timeLeft: true,
-      closeTime: closeTime,
-      pollCloseTime: props.data.pollCloseTime,
-    };
-  }
+  return (
+    <div className="question-btn-and-text" onClick={handleClick}>
+      <MDBContainer className={selectClass}>{LETTERS[index]}</MDBContainer>
+      {text}
+    </div>
+  );
+}
 
-  onTimeEnd(){
-    this.state.canChoose = false;
-  }
+const Answer = React.memo(_Answer);
 
+function Question({ updateQuestion, nextQuestion, data }) {
+  const { question, questionNumber, pollID } = data;
+  const [ answers, setAnswers ] = React.useState(question.currentAnswers ?? []);
+  const timeLeft = true;
 
-  selectChoice(index) {
-    if(!this.state.canChoose){
-      return;
-    }
-    let tempChoices = this.state.studentChoices;
-    let count = 0;
-    //push the index to the queue
-    this.state.choicesQueue.push(index);
-    //count the number of booleans that are true in the array
-    for (let i = 0; i < this.state.studentChoices.length; i++) {
-      if (this.state.studentChoices[i]) {
-        count++;
-      }
-    }
-    //if the number of true booleans is greater than the maximum number of
-    //allowed choices (specified by the json) then pop from the queue to set the first
-    //choice chosen back to false
-    if (count >= this.state.data.MaxAllowedChoices) {
-      tempChoices[this.state.choicesQueue.shift()] = false;
-    }
-    //make the boolean at the selected index true and update state
-    tempChoices[index] = true;
-    this.setState(prevState => ({
-      ...prevState,
-      studentChoices: tempChoices,
-    }));
-  }
+  // onTimeEnd() {
+  //   this.setState({ canChoose: false });
+  // }
 
-  isAnswerSelected = (answerID) => {
-    let i = this.state.currentAnswers.indexOf(answerID);
-    return i >= 0;
-  };
+  // selectChoice(index) {
+  //   if(!this.state.canChoose){
+  //     return;
+  //   }
+  //   let tempChoices = this.state.studentChoices;
+  //   let count = 0;
+  //   //push the index to the queue
+  //   this.state.choicesQueue.push(index);
+  //   //count the number of booleans that are true in the array
+  //   for (let i = 0; i < this.state.studentChoices.length; i++) {
+  //     if (this.state.studentChoices[i]) {
+  //       count++;
+  //     }
+  //   }
+  //   //if the number of true booleans is greater than the maximum number of
+  //   //allowed choices (specified by the json) then pop from the queue to set
+  //   //the first choice chosen back to false
+  //   if (count >= this.state.data.MaxAllowedChoices) {
+  //     tempChoices[this.state.choicesQueue.shift()] = false;
+  //   }
+  //   //make the boolean at the selected index true and update state
+  //   tempChoices[index] = true;
+  //   this.setState(prevState => ({
+  //     ...prevState,
+  //     studentChoices: tempChoices,
+  //   }));
+  // }
 
-  selectAnswer = (answerID) => {
-    let currentAnswers = [...this.state.currentAnswers];
-    let i = currentAnswers.indexOf(answerID);
+  // noTimeLeft = () => {
+  //   this.setState({timeLeft: false});
+  // };
+
+  const selectAnswer = React.useCallback(answerID => {
+    const nextAnswers = [ ...answers ];
+    const i = nextAnswers.indexOf(answerID);
+
     if (i >= 0) {
-      currentAnswers.splice(i, 1);
+      nextAnswers.splice(i, 1);
     } else {
-      currentAnswers.push(answerID);
-      if (currentAnswers.length > this.state.question.maxAllowedChoices) {
-        currentAnswers.shift();
+      nextAnswers.push(answerID);
+      if (nextAnswers.length > question.maxAllowedChoices) {
+        nextAnswers.shift();
       }
     }
 
-    this.props.updateQuestion(currentAnswers);
-    this.setState({
-      currentAnswers: currentAnswers,
-    });
-  };
+    updateQuestion(nextAnswers);
+    setAnswers(nextAnswers);
+  }, [ answers, updateQuestion, setAnswers, question ]);
 
-  getSubmitData = () => {
-    return {
-      id: this.state.question.id,
-      answers: this.state.currentAnswers,
-    };
-  };
-
-  submitQuestion = async () => {
-    await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/submitQuestion/", {
+  const submitQuestion = React.useCallback(async () => {
+    const resp = await fetch(`${BACKEND}/polls/${pollID}/submitQuestion/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(this.getSubmitData())
-    })
-      .then(response => response.json())
-      .then(response => {
-        console.log(response);
-      });
-    this.props.nextQuestion();
-  };
+      body: JSON.stringify({ id: question.id, answers: answers })
+    });
 
-  noTimeLeft = () => {
-    this.setState({timeLeft: false});
-  };
+    const out = await resp.json();
+    console.log(out);
+    nextQuestion();
+  }, [ question, answers, nextQuestion, pollID ]);
 
-  render() {
-    return (
-      <MDBContainer className="box">
-        <p className="fontSizeLarge">Question {this.state.questionNumber}: {this.state.question.text}</p>
-        { // only display image if there is one
-          this.state.question.img &&
-          <img
-            className="question-img-fluid"
-            src={this.state.data.img}
-            alt={""}/>
-        }
-        <MDBContainer>
-          {this.state.question.answers.map((answer, index) => {
-            return (
-              <btn className={"question-btn-and-text"} onClick={() => {
-                this.selectAnswer(answer.id);
-              }}>
-                <MDBContainer
-                  // className="question-label-bubble"
-                  className={
-                    this.isAnswerSelected(answer.id) ?
-                      "question-label-bubble question-label-bubble-active" :
-                      "question-label-bubble question-label-bubble-inactive"
-                  }
-                >
-                  {this.choiceOrder[index]}
-                </MDBContainer>
-                {answer.text}
-              </btn>
-            );
-          })}
-        </MDBContainer>
-        { /* This should work, but is being commented out for now since per-question times are not implemented fully yet
-        <MDBContainer className = "button time-info-label">
-          <span>Question Time Remaining</span>
-        </MDBContainer>
-        <Timer timeLeft={this.state.timeLeft} noTimeLeft = {() => this.noTimeLeft()}
-          CloseTime={this.state.closeTime} onTimeEnd={this.onTimeEnd} />
-          */ }
-        <MDBContainer>
-          {(this.state.timeLeft) &&
-           <button className="button" onClick={this.submitQuestion}>Save</button>}
-        </MDBContainer>
+  const answerViews = question.answers.map((answer, index) => (
+    <Answer key={index}
+      answer={answer}
+      index={index}
+      selectAnswer={selectAnswer}
+      selected={answers.indexOf(answer.id) >= 0}/>
+  ));
+
+  return (
+    <MDBContainer className="box">
+      <p className="fontSizeLarge">
+        Question {questionNumber}: {question.text}
+      </p>
+      { question.img && // Only display image if there is one.
+        <img className="question-img-fluid" src={data.img} alt=""/>
+      }
+      <MDBContainer>{answerViews}</MDBContainer>
+      {/*
+      This should work, but is being commented out for now since
+      per-question times are not implemented fully yet:
+      
+      <MDBContainer className = "button time-info-label">
+        <span>Question Time Remaining</span>
       </MDBContainer>
-    );
-  }
+      <Timer timeLeft={this.state.timeLeft} noTimeLeft={() => this.noTimeLeft()}
+        CloseTime={this.state.closeTime} onTimeEnd={this.onTimeEnd} />
+      */}
+      <MDBContainer>
+        { timeLeft &&
+          <button className="button" onClick={submitQuestion}>Save</button>
+        }
+      </MDBContainer>
+    </MDBContainer>
+  );
 }
+
+export default React.memo(Question);

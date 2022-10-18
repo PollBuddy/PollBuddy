@@ -8,17 +8,13 @@ jest.mock("react-markdown", () => (props) => {
 
 jest.mock("./faq.md", () => "Test");
 
-function updateTitle() {
-  return false;
-}
-
 // Create basic render test
 it("renders without crashing", () => {
   fetch.mockResponseOnce(JSON.stringify({text: "Test"}));
   // Create div element
   const div = document.createElement("div");
   // Render about on the div
-  ReactDOM.render(<FAQ updateTitle={updateTitle}/>, div);
+  ReactDOM.render(<FAQ />, div);
   // Clean unmount
   ReactDOM.unmountComponentAtNode(div);
 });

@@ -1,50 +1,46 @@
-import React, {Component} from "react";
-import {MDBContainer} from "mdbreact";
+import React from "react";
+import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
-export default class PollCode extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      code: "testcode",
-      valid: false,
-      errMsg: ""
-    };
+const POLL_REGEX = /^[a-zA-Z0-9]{6}$/;
 
-    this.handleCodeChange = this.handleCodeChange.bind(this);
-    this.submitCode = this.submitCode.bind(this);
-  }
+function PollCode() {
+  const [ code, setCode ] = React.useState("testcode");
+  const [ valid, setValid ] = React.useState(false);
+  const [ errMsg, setErrMsg ] = React.useState("");
 
-  handleCodeChange(event) {
-    // gets code string from input
-    const code = event.target.value;
-    this.setState({code: code});
+  const handleCodeChange = React.useCallback(event => {
+    // Gets code string from input.
+    const value = event.target.value;
+    setCode(value);
+    setValid(POLL_REGEX.test(value));
+  }, [ setCode, setValid ]);
 
-    const validCodeRegex = RegExp(/^[a-zA-z0-9]{6}$/);
-    this.setState({valid: validCodeRegex.test(code)});
-  }
+  const submitCode = React.useCallback(() => {
+    // Set error message if input is invalid.
+    setErrMsg(valid ? "" : "Code must be 6 characters, A-Z, 0-9");
+  }, [ setErrMsg, valid ]);
 
-  submitCode() {
-    // set error message if input is invalid
-    this.setState({errMsg:
-    !this.state.valid ? "Code must be 6 characters, A-Z, 0-9" : ""});
-  }
+  return (
+    <MDBContainer className="box">
+      <MDBContainer className="form-group">
+        <label htmlFor="pollCodeText">
+          Already have a Poll Code? Enter it here:
+        </label>
+        <input placeholder="Ex: P8C0D3"
+          onChange={handleCodeChange}
+          className="form-control textBox"/>
 
-  render() {
-    return(
-      <MDBContainer className="box">
-        <MDBContainer className="form-group">
-          <label htmlFor="pollCodeText">Already have a Poll Code? Enter it here:</label>
-          <input placeholder="Ex: P8C0D3" onChange={this.handleCodeChange} className="form-control textBox"/>
-          <p style={{color: "red", textAlign: "center"}}>{this.state.errMsg}</p>
-        </MDBContainer>
-        <Link to={this.state.valid ? "/polls/" + this.state.code + "/view" : ""}>
-          <button className = "button" onClick={this.submitCode}>
-            Join Poll
-          </button>
-        </Link>
+        <p style={{ color: "red", textAlign: "center" }}>{errMsg}</p>
       </MDBContainer>
-    );
-  }
+      <Link to={valid ? `/polls/${code}/view` : ""}>
+        <button className = "button" onClick={submitCode}>
+          Join Poll
+        </button>
+      </Link>
+    </MDBContainer>
+  );
 }
+
+export default React.memo(PollCode);

@@ -9,10 +9,6 @@ jest.mock("react-markdown", () => (props) => {
 
 jest.mock("./Privacy.md", () => "Test");
 
-function updateTitle() {
-  return false;
-}
-
 beforeEach(() => {
   fetch.resetMocks();
 });
@@ -25,7 +21,7 @@ it("renders without crashing", () => {
   // Render about on the div
   ReactDOM.render(
     <BrowserRouter>
-      <Privacy updateTitle={updateTitle}/>
+      <Privacy />
     </BrowserRouter>, div);
   // Clean unmount
   ReactDOM.unmountComponentAtNode(div);

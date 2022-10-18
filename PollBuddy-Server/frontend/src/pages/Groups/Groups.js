@@ -1,116 +1,104 @@
-import React, {Component} from "react";
-import {Link, Navigate} from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 import { MDBContainer } from "mdbreact";
-import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
-import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import { LoadingWheel } from "../../components";
 import "../../styles/main.scss";
 import "./Groups.scss";
+import { useAsyncEffect, useTitle } from "../../hooks";
 
-class Groups extends Component {
+const BACKEND = process.env.REACT_APP_BACKEND_URL;
+const buttonStyles = { width: "20em" };
 
-  constructor(props){
-    super(props);
-    this.state = {
-      error: null,
-      redirect: false,
-      doneLoading: false,
-      adminGroups: [],
-      memberGroups: [],
-    };
-  }
-
-  componentDidMount() {
-    this.props.updateTitle("My Groups");
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/groups")
-      .then((response) => response.json())
-      .then((response) => {
-        this.setState({
-          adminGroups: response.data.admin,
-          memberGroups: response.data.member,
-          doneLoading: true
-        });
-      });
-  }
-
-  toggleLeaveGroup = () => {
-    this.setState(prevState => ({ showXs: !prevState.showXs }));
-    if (this.state.leaveGroupButtonText === "Leave Group") {
-      this.setState({ leaveGroupButtonText: "Exit Leave Group" });
-    } else {
-      this.setState({ leaveGroupButtonText: "Leave Group" });
-    }
-  };
-
-  render() {
-    if (this.state.error != null) {
-      return (
-        <MDBContainer fluid className="page">
-          <MDBContainer fluid className="box">
-            <p className="fontSizeLarge">
-              Error! Please try again.
-            </p>
-          </MDBContainer>
-        </MDBContainer>
-      );
-    } else if(!this.state.doneLoading){
-      return (
-        <MDBContainer className="page">
-          <LoadingWheel/>
-        </MDBContainer>
-      );
-    } else {
-      return (
-        <MDBContainer className="page">
-          <MDBContainer className="box">
-            <p className="fontSizeLarge">
-              Groups
-            </p>
-            <p className="fontSizeLarge">
-              As a Group Admin:
-            </p>
-            {this.state.adminGroups.length === 0 ? (
-              <p>You are not the admin of any groups.<br/> <br/></p>
-            ) : (
-              <React.Fragment>
-                {this.state.adminGroups.map((e) => (
-                  <Link to={"/groups/" + e.id}>
-                    <button style={{  width: "20em" }} className="button">{e.name}</button>
-                  </Link>
-                ))}
-              </React.Fragment>
-            )}
-
-            <p className="fontSizeLarge">
-              As a Group Member:
-            </p>
-            {this.state.memberGroups.length === 0 ? (
-              <p>You are not a member of any groups.<br/> <br/></p>
-            ) : (
-              <React.Fragment>
-                {this.state.memberGroups.map((e) => (
-                  <div>
-                    <Link to={"/groups/" + e.id}>
-                      <button style={{  width: "20em" }} className="button">{e.name}</button>
-                    </Link>
-                  </div>
-                ))}
-              </React.Fragment>
-            )}
-
-            <p className="fontSizeLarge">
-              Group Management:
-            </p>
-            <Link to={"/groups/new"}>
-              <button style={{width: "20em"}} className="button">Create New Group</button>
-            </Link>
-            <Link to={"/groups/join"}>
-              <button style={{width: "20em"}} className="button">Join Group</button>
-            </Link>
-          </MDBContainer>
-        </MDBContainer>
-      );
-    }
+function AdminGroups({ groups }) {
+  if (groups.length === 0) {
+    return <p>You are not the admin of any groups.<br/> <br/></p>;
+  } else {
+    return groups.map((group, index) => (
+      <Link to={"/groups/" + group.id} key={index}>
+        <button style={buttonStyles} className="button">{group.name}</button>
+      </Link>
+    ));
   }
 }
-export default withRouter(Groups);
 
+function MemberGroups({ groups }) {
+  if (groups.length === 0) {
+    return <p>You are not a member of any groups.<br/> <br/></p>;
+  } else {
+    return groups.map((group, index) => (
+      <div key={index}>
+        <Link to={"/groups/" + group.id}>
+          <button style={buttonStyles} className="button">{group.name}</button>
+        </Link>
+      </div>
+    ));
+  }
+}
+
+function Groups() {
+  useTitle("My Groups");
+
+  const [ adminGroups, setAdminGroups ] = React.useState([ ]);
+  const [ memberGroups, setMemberGroups ] = React.useState([ ]);
+  const [ loading, setLoading ] = React.useState(true);
+  const [ error, setError ] = React.useState(null);
+
+  useAsyncEffect(async () => {
+    try {
+      const response = await fetch(BACKEND + "/users/me/groups");
+      const { data } = await response.json();
+      setAdminGroups(data.admin);
+      setMemberGroups(data.member);
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+      setError(err || true);
+    }
+  }, [ setAdminGroups, setMemberGroups, setLoading, setError ]);
+
+  if (error) {
+    return (
+      <MDBContainer fluid className="page">
+        <MDBContainer fluid className="box">
+          <p className="fontSizeLarge">
+            Error! Please try again.
+          </p>
+        </MDBContainer>
+      </MDBContainer>
+    );
+  } else if (loading) {
+    return (
+      <MDBContainer className="page">
+        <LoadingWheel/>
+      </MDBContainer>
+    );
+  } else {
+    return (
+      <MDBContainer className="page">
+        <MDBContainer className="box">
+          <p className="fontSizeLarge">Groups</p>
+  
+          <p className="fontSizeLarge">As a Group Admin:</p>
+          <AdminGroups groups={adminGroups}/>
+  
+          <p className="fontSizeLarge">As a Group Member:</p>
+          <MemberGroups groups={memberGroups}/>
+  
+          <p className="fontSizeLarge">Group Management:</p>
+          <Link to="/groups/new">
+            <button style={buttonStyles} className="button">
+              Create New Group
+            </button>
+          </Link>
+          <Link to="/groups/join">
+            <button style={buttonStyles} className="button">
+              Join Group
+            </button>
+          </Link>
+        </MDBContainer>
+      </MDBContainer>
+    );
+  }
+}
+
+export default React.memo(Groups);
