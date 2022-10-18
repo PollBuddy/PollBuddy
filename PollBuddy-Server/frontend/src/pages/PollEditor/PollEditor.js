@@ -102,9 +102,16 @@ class PollEditor extends Component {
   };
 
   testFunc = () => {
-    console.log("me when ur mom");
     return;
   };
+
+  generateNewPassword = () => {
+    this.state.pollPassword = "";
+    for(let i = 0; i < 5; i++){
+      this.state.pollPassword += Math.floor(Math.random() * 10);
+    }
+    return;
+  }
 
   changePassword = () => {
     if (this.state.requiresPassword){
@@ -432,7 +439,7 @@ class PollEditor extends Component {
                   </Link>
                   <button
                       id="descriptionBtn" className="button pollButton"
-                      onClick={this.testFunc}
+                      onClick={this.generateNewPassword}
                   >
                     Test dat boi
                   </button>
