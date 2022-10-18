@@ -87,7 +87,7 @@ const submitQuestionValidator = Joi.object({
   answers: Joi.array().items(Joi.custom(objectID)).required(),
 });
 
-const getQuestion = function (question, isAdmin) {
+function getQuestion(question, isAdmin) {
   let answers = [];
   for (let answer of question.Answers) {
     answers.push({
@@ -103,14 +103,9 @@ const getQuestion = function (question, isAdmin) {
     maxAllowedChoices: question.MaxAllowedChoices,
     selectedAnswers: [],
   };
-};
+}
 
-/**
- * errorCode === 100 means that the poll does not exist
-
- */
-
-const getPoll = async function (userID, pollID) {
+async function getPoll(userID, pollID) {
   try {
     let poll = await getPollInternal(pollID);
     if (!poll) {
@@ -184,10 +179,10 @@ const getPoll = async function (userID, pollID) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
 
-const getPollResults = async function (userID, pollID) {
+async function getPollResults(userID, pollID) {
   try {
     let poll = await getPollInternal(pollID);
     if (!poll) {
@@ -247,9 +242,9 @@ const getPollResults = async function (userID, pollID) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
-const getPollResultsCSV = async function (userID, pollID) {
+async function getPollResultsCSV(userID, pollID) {
   try {
     let poll = await getPollInternal(pollID);
     if (!poll) {
@@ -349,10 +344,9 @@ const getPollResultsCSV = async function (userID, pollID) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
-
-const createPoll = async function (userID, pollData) {
+async function createPoll(userID, pollData) {
   try {
     let newPoll = {
       Title: pollData.title,
@@ -398,9 +392,9 @@ const createPoll = async function (userID, pollData) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
-const editPoll = async function (userID, pollID, pollData) {
+async function editPoll(userID, pollID, pollData) {
   try {
     let poll = await getPollInternal(pollID);
     if (!poll) {
@@ -428,9 +422,9 @@ const editPoll = async function (userID, pollID, pollData) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
-const deletePoll = async function (userID, pollID) {
+async function deletePoll(userID, pollID) {
   try {
     let poll = await getPollInternal(pollID);
     if (!poll) {
@@ -459,9 +453,9 @@ const deletePoll = async function (userID, pollID) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
-const createQuestion = async function (userID, pollID, questionData) {
+async function createQuestion(userID, pollID, questionData) {
   try {
     let poll = await getPollInternal(pollID);
     if (!poll) {
@@ -500,9 +494,9 @@ const createQuestion = async function (userID, pollID, questionData) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
-const editQuestion = async function (userID, pollID, questionData) {
+async function editQuestion(userID, pollID, questionData) {
   try {
     let poll = await getPollInternal(pollID);
     if (!poll) {
@@ -554,9 +548,9 @@ const editQuestion = async function (userID, pollID, questionData) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
-const deleteQuestion = async function (userID, pollID, questionID) {
+async function deleteQuestion(userID, pollID, questionID) {
   try {
     let poll = await getPollInternal(pollID);
     if (!poll) {
@@ -582,9 +576,9 @@ const deleteQuestion = async function (userID, pollID, questionID) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
-const submitQuestion = async function (userID, pollID, submitData) {
+async function submitQuestion(userID, pollID, submitData) {
   try {
     let poll = await getPollInternal(pollID);
     if (!poll) {
@@ -655,7 +649,7 @@ const submitQuestion = async function (userID, pollID, submitData) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
 module.exports = {
   getPoll,
@@ -675,5 +669,4 @@ module.exports = {
   editQuestionValidator,
   submitQuestionValidator,
   pollParamsValidator
-
 };

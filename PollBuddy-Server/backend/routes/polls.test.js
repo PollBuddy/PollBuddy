@@ -717,6 +717,15 @@ describe("/api/polls/:pollID/editQuestion", () => {
     session = {userData: {userID: user.insertedId}};
     await app
       .post("/api/polls/" + poll.insertedId + "/editQuestion")
+      .send({
+        id: new bson.ObjectID(),
+        text: "sample.question2",
+        answers: [
+          {text: "sample.answer", correct: true},
+          {text: "sample.answer2", correct: false},
+        ],
+        maxAllowedChoices: 1,
+      })
       .expect(401)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");

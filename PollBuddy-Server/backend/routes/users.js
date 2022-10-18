@@ -1,16 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-
 const mongoConnection = require("../modules/mongoConnection.js");
-const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
+const {httpCodes, sendResponse} = require("../modules/httpCodes.js");
 const rpi = require("../modules/rpi");
-
-const { isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
-const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups,
-  editUser, userParamsValidator } = require("../models/User.js");
+const {isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
+const {
+  userLoginValidator, userInformationValidator, userRegisterValidator, userSchema, getUser, getUserGroups,
+  editUser, userParamsValidator
+} = require("../models/User.js");
 const {paramValidator} = require("../modules/validatorUtils");
-
 const {send} = require("../modules/email.js");
 
 // This file handles /api/users URLs
@@ -25,8 +24,8 @@ const {send} = require("../modules/email.js");
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/", function (req, res) {
-  debugRoute(req,res);
+router.get("/", (req, res) => {
+  debugRoute(req, res);
 });
 
 /**
@@ -39,8 +38,8 @@ router.get("/", function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/", function (req, res) {
-  debugRoute(req,res);
+router.post("/", (req, res) => {
+  debugRoute(req, res);
 });
 
 /**
@@ -53,7 +52,7 @@ router.post("/", function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/login", function (req, res) {
+router.get("/login", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
@@ -72,7 +71,7 @@ router.get("/login", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
  */
-router.post("/login", function (req, res) {
+router.post("/login", (req, res) => {
 
   // This is used to figure out if the entered userNameEmail value is a username or an email address, plus make
   // sure that a username and a password were even supplied and worth trying to validate. This is probably a
@@ -82,7 +81,7 @@ router.post("/login", function (req, res) {
     userName: req.body.userNameEmail,
     email: req.body.userNameEmail,
     password: req.body.password
-  }, { abortEarly: false });
+  }, {abortEarly: false});
 
   // Check the results out
   let errors = getResultErrors(validResult);
@@ -153,13 +152,25 @@ router.post("/login", function (req, res) {
 
   // Finally, use that function to check the database for a match
   if (mode === "userName") {
-    mongoConnection.getDB().collection("users").findOne({ UserName: req.body.userNameEmail }, {
-      _id: true, FirstName: true, LastName: true, UserName: true, Password: true, SchoolAffiliation: true, collation: { locale: "en_US", strength: 2 }
+    mongoConnection.getDB().collection("users").findOne({UserName: req.body.userNameEmail}, {
+      _id: true,
+      FirstName: true,
+      LastName: true,
+      UserName: true,
+      Password: true,
+      SchoolAffiliation: true,
+      collation: {locale: "en_US", strength: 2}
     }, validate);
 
   } else if (mode === "email") {
-    mongoConnection.getDB().collection("users").findOne({ Email: req.body.userNameEmail }, {
-      _id: true, FirstName: true, LastName: true, UserName: true, Password: true, SchoolAffiliation: true, collation: { locale: "en_US", strength: 2 }
+    mongoConnection.getDB().collection("users").findOne({Email: req.body.userNameEmail}, {
+      _id: true,
+      FirstName: true,
+      LastName: true,
+      UserName: true,
+      Password: true,
+      SchoolAffiliation: true,
+      collation: {locale: "en_US", strength: 2}
     }, validate);
 
   } else {
@@ -187,7 +198,7 @@ router.post("/login", function (req, res) {
  * @param {middleware} middleware - Express middleware to redirect the user to CAS
  * @param {callback} callback - function handler for data received after CAS redirection
  */
-router.get("/login/rpi", rpi.bounce, function (req, res) {
+router.get("/login/rpi", rpi.bounce, (req, res) => {
 
   // The user is first bounced to the RPI CAS login and only after will they end up in here.
   // Therefore, this only runs if the user is logged in with CAS successfully.
@@ -196,8 +207,8 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
   if (req.session.cas_user) {
 
     // Check to make sure they're already registered
-    mongoConnection.getDB().collection("users").findOne({ UserName: "__rpi_" + req.session.cas_user.toLowerCase() }, {
-      projection: { _id: true, UserName: true, FirstName: true, LastName: true }
+    mongoConnection.getDB().collection("users").findOne({UserName: "__rpi_" + req.session.cas_user.toLowerCase()}, {
+      projection: {_id: true, UserName: true, FirstName: true, LastName: true}
     }, (err, result) => {
       if (err) {
         // Something went wrong
@@ -228,7 +239,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
 
           // Send the user the login with school step 2 page with relevant information
           return res.redirect("/login/school/step2?result=success&data=" + JSON.stringify(
-            { "firstName": result.FirstName, "lastName": result.LastName, "userName": result.UserName }
+            {"firstName": result.FirstName, "lastName": result.LastName, "userName": result.UserName}
           ));
         }
       }
@@ -252,7 +263,7 @@ router.get("/login/rpi", rpi.bounce, function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/login/rpi", function (req, res) {
+router.post("/login/rpi", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
@@ -266,7 +277,7 @@ router.post("/login/rpi", function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/register", function (req, res) {
+router.get("/register", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
@@ -286,14 +297,14 @@ router.get("/register", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
  */
-router.post("/register", function (req, res) {
+router.post("/register", (req, res) => {
   const validResult = userRegisterValidator.validate({
     userName: req.body.userName,
     email: req.body.email,
     password: req.body.password,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
-  }, { abortEarly: false });
+  }, {abortEarly: false});
 
   let errors = getResultErrors(validResult);
   if (validResult.value.userName.startsWith("__")) {
@@ -401,7 +412,7 @@ router.post("/register", function (req, res) {
  * @param {middleware} middleware - Express middleware to redirect the user to CAS
  * @param {callback} callback - function handler for data received after CAS redirection
  */
-router.get("/register/rpi", rpi.bounce, function (req, res) {
+router.get("/register/rpi", rpi.bounce, (req, res) => {
 
   // The user is first bounced to the RPI CAS login and only after will they end up in here.
   // Therefore, this only runs if the user has logged in with CAS successfully.
@@ -425,8 +436,10 @@ router.get("/register/rpi", rpi.bounce, function (req, res) {
     delete req.session.cas_user;
 
     // Send the user to the registration step 2 page with relevant info to prefill
-    return res.redirect("/register/school/step2?result=success&data=" + JSON.stringify({ "userName":
-      req.session.userDataTemp.userName, "email": req.session.userDataTemp.email, "school": "rpi"}));
+    return res.redirect("/register/school/step2?result=success&data=" + JSON.stringify({
+      "userName":
+      req.session.userDataTemp.userName, "email": req.session.userDataTemp.email, "school": "rpi"
+    }));
 
   } else {
     // Something went wrong
@@ -455,7 +468,7 @@ router.get("/register/rpi", rpi.bounce, function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
  */
-router.post("/register/rpi", function (req, res) {
+router.post("/register/rpi", (req, res) => {
 
   // The user is first bounced to the RPI CAS login and only after will they end up in here.
   // Therefore, this only runs if the user has logged in with CAS successfully.
@@ -466,7 +479,7 @@ router.post("/register/rpi", function (req, res) {
   const validResult = userInformationValidator.validate({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
-  }, { abortEarly: false });
+  }, {abortEarly: false});
 
   let errors = getResultErrors(validResult);
   let errorMsg = {};
@@ -555,7 +568,7 @@ router.post("/register/rpi", function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/logout", function (req, res) {
+router.get("/logout", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
@@ -571,7 +584,7 @@ router.get("/logout", function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/logout", function (req, res) {
+router.post("/logout", (req, res) => {
   // Delete the userData in the session
   delete req.session.userData;
   return sendResponse(res, httpCodes.Ok("User was logged out successfully."));
@@ -587,7 +600,7 @@ router.post("/logout", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/me", isLoggedIn, async function (req, res) {
+router.get("/me", isLoggedIn, async (req, res) => {
   let response = await getUser(req.session.userData.userID);
   return sendResponse(res, response);
 });
@@ -602,7 +615,7 @@ router.get("/me", isLoggedIn, async function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/me", function (req, res) {
+router.post("/me", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
@@ -616,7 +629,7 @@ router.post("/me", function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/me/edit", function (req, res) {
+router.get("/me/edit", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
@@ -631,7 +644,7 @@ router.get("/me/edit", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.post("/me/edit", isLoggedIn, async function (req, res) {
+router.post("/me/edit", isLoggedIn, async (req, res) => {
   let response = await editUser(req.session.userData.userID, req.body);
   return sendResponse(res, response);
 });
@@ -646,7 +659,7 @@ router.post("/me/edit", isLoggedIn, async function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/me/groups", isLoggedIn, async function (req, res) {
+router.get("/me/groups", isLoggedIn, async (req, res) => {
   let response = await getUserGroups(req.session.userData.userID);
   return sendResponse(res, response);
 });
@@ -661,7 +674,7 @@ router.get("/me/groups", isLoggedIn, async function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/me/groups", function (req, res) {
+router.post("/me/groups", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
@@ -675,8 +688,8 @@ router.post("/me/groups", function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/forgotpassword/",function (req,res) {
-  return sendResponse(res,httpCodes.MethodNotAllowed("GET is not available for this route."));
+router.get("/forgotpassword/", (req, res) => {
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route."));
 });
 
 /**
@@ -689,8 +702,8 @@ router.get("/forgotpassword/",function (req,res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/forgotpassword/",function (req,res) {
-  return sendResponse(res,httpCodes.MethodNotAllowed("POST is not available for this route."));
+router.post("/forgotpassword/", (req, res) => {
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route."));
 });
 
 /**
@@ -703,8 +716,8 @@ router.post("/forgotpassword/",function (req,res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/forgotpassword/submit",function (req,res) {
-  return sendResponse(res,httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
+router.get("/forgotpassword/submit", (req, res) => {
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -721,7 +734,7 @@ router.get("/forgotpassword/submit",function (req,res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.post("/forgotpassword/submit/",function (req, res) {
+router.post("/forgotpassword/submit/", (req, res) => {
   let email = req.body.email;
   const username = req.body.username;
 
@@ -730,51 +743,58 @@ router.post("/forgotpassword/submit/",function (req, res) {
   if (email) {
     email = email.toLowerCase();
     document = mongoConnection.getDB().collection("users").findOne({"Email": email});
-  } else if(username){
+  } else if (username) {
     document = mongoConnection.getDB().collection("users").findOne({"UserName": username});
-  } else{
+  } else {
     return sendResponse(res, httpCodes.InternalServerError("Neither username nor email provided."));
   }
 
   document
     .then(
       result => {
-        if(result) {
+        if (result) {
           const alphabet = "ABCDEFGHKLMNPQRSTUVWXYZabcdefghkmnpqrstuvwxyz23456789";
           let key = "";
-          for(let i = 0; i < 32 ; i++) {
+          for (let i = 0; i < 32; i++) {
             key += alphabet[Math.floor(Math.random() * alphabet.length)];
           }
 
           let expireTime = new Date();
-          expireTime.setHours(expireTime.getHours()+1);
+          expireTime.setHours(expireTime.getHours() + 1);
 
-          mongoConnection.getDB().collection("users").updateOne({"_id": result._id},{ "$set": { "ResetPasswordToken" : key, "ResetPasswordTokenExpiration" : expireTime } }, function (err) {
+          mongoConnection.getDB().collection("users").updateOne({"_id": result._id}, {
+            "$set": {
+              "ResetPasswordToken": key,
+              "ResetPasswordTokenExpiration": expireTime
+            }
+          }, function (err) {
             if (err) {
               return sendResponse(res, httpCodes.InternalServerError("Could not update user data."));
-            } else{
+            } else {
               let emailBody =
-              "Hello, " + result.UserName + "\n"
-              +"\n You are receiving this email because a password reset request was sent to this account."
-              +"\n\n If you requested a password reset, follow the link below:"
-              +"\n  " + process.env.FRONTEND_URL + "/login/reset"
-              +"\n Your password reset token is: " + key
-              +"\n\n If you did not make a password reset request, you can safely ignore this message.\n\n";
+                "Hello, " + result.UserName + "\n"
+                + "\n You are receiving this email because a password reset request was sent to this account."
+                + "\n\n If you requested a password reset, follow the link below:"
+                + "\n  " + process.env.FRONTEND_URL + "/login/reset"
+                + "\n Your password reset token is: " + key
+                + "\n\n If you did not make a password reset request, you can safely ignore this message.\n\n";
 
-              send(result.Email,"Poll Buddy Password Reset",emailBody,function (success) {
-                if (success){
+              send(result.Email, "Poll Buddy Password Reset", emailBody, function (success) {
+                if (success) {
                   return sendResponse(res, httpCodes.Ok());
-                }else{
+                } else {
                   return sendResponse(res, httpCodes.InternalServerError("Could not send email."));
                 }
               });
             }
           });
-        }else{
+        } else {
           return sendResponse(res, httpCodes.InternalServerError("Could not find user."));
         }
       },
-      () => {return sendResponse(res, httpCodes.InternalServerError("Could not find user."));}
+      () => {
+        return sendResponse(res, httpCodes.InternalServerError("Could not find user."));
+      }
     );
 });
 
@@ -788,8 +808,8 @@ router.post("/forgotpassword/submit/",function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/forgotpassword/validate",function (req,res) {
-  return sendResponse(res,httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
+router.get("/forgotpassword/validate", (req, res) => {
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
 /**
@@ -804,19 +824,22 @@ router.get("/forgotpassword/validate",function (req,res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.post("/forgotpassword/validate",function (req,res) {
+router.post("/forgotpassword/validate", (req, res) => {
   const token = req.body.resetPasswordToken;
   const username = req.body.username;
-  mongoConnection.getDB().collection("users").findOne({"UserName":username,"ResetPasswordToken":token}, function(error,result) {
-    if(result){
+  mongoConnection.getDB().collection("users").findOne({
+    "UserName": username,
+    "ResetPasswordToken": token
+  }, function (error, result) {
+    if (result) {
       let currentDate = new Date();
-      if( currentDate < result.ResetPasswordTokenExpiration ){
-        return sendResponse(res,httpCodes.Ok());
+      if (currentDate < result.ResetPasswordTokenExpiration) {
+        return sendResponse(res, httpCodes.Ok());
       } else {
-        return sendResponse(res,httpCodes.InternalServerError("Token is invalid (token expired)."));
+        return sendResponse(res, httpCodes.InternalServerError("Token is invalid (token expired)."));
       }
     } else {
-      return sendResponse(res,httpCodes.InternalServerError("Token is invalid (user with token not found)."));
+      return sendResponse(res, httpCodes.InternalServerError("Token is invalid (user with token not found)."));
     }
   });
 });
@@ -831,7 +854,7 @@ router.post("/forgotpassword/validate",function (req,res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/forgotpassword/change",function (req,res) {
+router.get("/forgotpassword/change", (req, res) => {
   return sendResponse(res.httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
@@ -850,7 +873,7 @@ router.get("/forgotpassword/change",function (req,res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.post("/forgotpassword/change",function (req,res) {
+router.post("/forgotpassword/change", (req, res) => {
   let token = req.body.resetPasswordToken;
   let username = req.body.username;
   let newPassword = req.body.password;
@@ -858,36 +881,42 @@ router.post("/forgotpassword/change",function (req,res) {
   let newPasswordValid = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/)
     .test(newPassword);
 
-  if(newPasswordValid){
+  if (newPasswordValid) {
     // eslint-disable-next-line no-unused-vars
-    mongoConnection.getDB().collection("users").findOne({"UserName":username, "ResetPasswordToken":token}, function (searchError, searchResult){
-      if(searchResult){
+    mongoConnection.getDB().collection("users").findOne({
+      "UserName": username,
+      "ResetPasswordToken": token
+    }, function (searchError, searchResult) {
+      if (searchResult) {
         let expiration = searchResult.ResetPasswordTokenExpiration;
         let currentDate = new Date();
-        if(currentDate < expiration){
-          bcrypt.hash(newPassword, 10, function (hashError,hash) {
-            if(hashError){
-              return sendResponse(res,httpCodes.InternalServerError("Could not hash password."));
-            }else{
-              mongoConnection.getDB().collection("users").updateOne({"_id":searchResult._id},{"$set":{"Password":hash},"$unset":{"ResetPasswordTokenExpiration":"","ResetPasswordToken":""}},function(updateError){
-                if(updateError){
-                  return sendResponse(res,httpCodes.InternalServerError("Could not update password."));
-                }else{
-                  return sendResponse(res,httpCodes.Ok());
+        if (currentDate < expiration) {
+          bcrypt.hash(newPassword, 10, function (hashError, hash) {
+            if (hashError) {
+              return sendResponse(res, httpCodes.InternalServerError("Could not hash password."));
+            } else {
+              mongoConnection.getDB().collection("users").updateOne({"_id": searchResult._id}, {
+                "$set": {"Password": hash},
+                "$unset": {"ResetPasswordTokenExpiration": "", "ResetPasswordToken": ""}
+              }, function (updateError) {
+                if (updateError) {
+                  return sendResponse(res, httpCodes.InternalServerError("Could not update password."));
+                } else {
+                  return sendResponse(res, httpCodes.Ok());
                 }
               });
             }
           });
 
-        }else{
-          return sendResponse(res,httpCodes.InternalServerError("Token expired."));
+        } else {
+          return sendResponse(res, httpCodes.InternalServerError("Token expired."));
         }
-      }else{
-        return sendResponse(res,httpCodes.InternalServerError("User with token not found."));
+      } else {
+        return sendResponse(res, httpCodes.InternalServerError("User with token not found."));
       }
     });
-  }else{
-    return sendResponse(res,httpCodes.InternalServerError("Invalid password."));
+  } else {
+    return sendResponse(res, httpCodes.InternalServerError("Invalid password."));
   }
 });
 
@@ -907,7 +936,7 @@ router.post("/forgotpassword/change",function (req,res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/:id", paramValidator(userParamsValidator), async function (req, res) {
+router.get("/:id", paramValidator(userParamsValidator), async (req, res) => {
   let response = await getUser(req.params.id);
   return sendResponse(res, response);
 });
@@ -922,7 +951,7 @@ router.get("/:id", paramValidator(userParamsValidator), async function (req, res
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/:id", function (req, res) {
+router.post("/:id", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
@@ -936,7 +965,7 @@ router.post("/:id", function (req, res) {
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/:id/edit", function (req, res) {
+router.get("/:id/edit", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
@@ -952,7 +981,7 @@ router.get("/:id/edit", function (req, res) {
  * @param {string} path - Express path
  * @param {callback} callback - function handler for data received
  */
-router.post("/:id/edit", paramValidator(userParamsValidator), async function (req, res) {
+router.post("/:id/edit", paramValidator(userParamsValidator), async (req, res) => {
   let response = await editUser(req.params.id, req.body);
   return sendResponse(res, response);
 });
@@ -968,7 +997,7 @@ router.post("/:id/edit", paramValidator(userParamsValidator), async function (re
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-router.get("/:id/groups", paramValidator(userParamsValidator), async function (req, res) {
+router.get("/:id/groups", paramValidator(userParamsValidator), async (req, res) => {
   let response = await getUserGroups(req.params.id);
   return sendResponse(res, response);
 });
@@ -983,7 +1012,7 @@ router.get("/:id/groups", paramValidator(userParamsValidator), async function (r
  * @param {callback} callback - function handler for route
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/:id/groups", function (req, res) {
+router.post("/:id/groups", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 

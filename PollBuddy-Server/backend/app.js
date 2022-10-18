@@ -15,7 +15,6 @@ const cors = require("cors");
 app.use(cors());
 
 
-
 // Express Session
 const expressSession = require("express-session");
 const MongoStore = require("connect-mongo");
@@ -90,7 +89,7 @@ email.initialize();
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -101,6 +100,7 @@ app.use("/api/users", usersRouter);
 const schoolsModule = require("./modules/schoolList.js");
 
 const {createResponse} = require("./modules/utils");
+const {sendResponse, httpCodes} = require("./modules/httpCodes");
 
 // eslint-disable-next-line no-unused-vars
 app.get("/api/schools", (req, res) => {
@@ -121,7 +121,7 @@ app.get("/api/schools", (req, res) => {
  */
 // eslint-disable-next-line no-unused-vars
 app.get("/", function (req, res) {
-  return res.status(200).send(createResponse("Backend is up."));
+  return sendResponse(res, httpCodes.Ok("Backend is up."));
 });
 
 /**
@@ -136,7 +136,7 @@ app.get("/", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 app.get("/api", function (req, res) {
-  return res.status(200).send(createResponse("Backend is up."));
+  return sendResponse(res, httpCodes.Ok("Backend is up."));
 });
 
 /**
@@ -151,7 +151,7 @@ app.get("/api", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 app.get("/api/healthcheck", function (req, res) {
-  return res.status(200).send(createResponse("Backend is working."));
+  return sendResponse(res, httpCodes.Ok("Backend is working."));
 });
 
 /**
@@ -163,7 +163,7 @@ app.get("/api/healthcheck", function (req, res) {
  */
 // eslint-disable-next-line no-unused-vars
 app.use(function (req, res, next) {
-  res.status(404).send(createResponse(null, "API route not found."));
+  return sendResponse(res, httpCodes.NotFound("API route not found."));
 });
 
 

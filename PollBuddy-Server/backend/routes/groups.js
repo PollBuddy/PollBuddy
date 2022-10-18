@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
 const {
-  createResponse,
   isDevelopmentMode,
   isLoggedIn,
 } = require("../modules/utils");
@@ -21,7 +20,7 @@ const {
   getGroupAdmins,
   groupParamsValidator,
 } = require("../models/Group");
-const {paramValidator} = require("../modules/validatorUtils");
+const {paramValidator, bodyValidator} = require("../modules/validatorUtils");
 
 // This file handles /api/groups URLs
 
@@ -34,7 +33,7 @@ const {paramValidator} = require("../modules/validatorUtils");
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/new", function (req, res) {
+router.get("/new", (req, res) => {
   return sendResponse(
     res,
     httpCodes.MethodNotAllowed("GET is not available for this route. Use POST.")
@@ -56,17 +55,10 @@ router.get("/new", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/new", isLoggedIn, async (req, res) => {
-  let validResult = createGroupValidator.validate(req.body, {
-    abortEarly: false,
-  });
-  if (validResult.error) {
-    return sendResponse(res, httpCodes.BadRequest());
-  }
-
+router.post("/new", isLoggedIn, bodyValidator(createGroupValidator), async (req, res) => {
   let response = await createGroup(
     req.session.userData.userID,
-    validResult.value
+    req.body
   );
   return sendResponse(res, response);
 });
@@ -80,12 +72,11 @@ router.post("/new", isLoggedIn, async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/:id/edit", function (req, res) {
-  return res
-    .status(405)
-    .send(
-      createResponse(null, "GET is not available for this route. Use POST.")
-    );
+router.get("/:id/edit", (req, res) => {
+  return sendResponse(
+    res,
+    httpCodes.MethodNotAllowed("GET is not available for this route. Use POST.")
+  );
 });
 
 /**
@@ -112,18 +103,12 @@ router.post(
   "/:id/edit",
   isLoggedIn,
   paramValidator(groupParamsValidator),
+  bodyValidator(editGroupValidator),
   async (req, res) => {
-    let validResult = editGroupValidator.validate(req.body, {
-      abortEarly: false,
-    });
-    if (validResult.error) {
-      return sendResponse(res, httpCodes.BadRequest());
-    }
-
     let response = await editGroup(
       req.params.id,
       req.session.userData.userID,
-      validResult.value
+      req.body
     );
     return sendResponse(res, response);
   }
@@ -138,7 +123,7 @@ router.post(
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/:id/delete", function (req, res) {
+router.get("/:id/delete", (req, res) => {
   return sendResponse(
     res,
     httpCodes.MethodNotAllowed("GET is not available for this route. Use POST.")
@@ -162,7 +147,6 @@ router.post(
   isLoggedIn,
   paramValidator(groupParamsValidator),
   async (req, res) => {
-    //use router.delete??
     let response = await deleteGroup(
       req.params.id,
       req.session.userData.userID
@@ -195,14 +179,13 @@ router.get("/", isDevelopmentMode, async (req, res) => {
       .collection("groups")
       .find({})
       .toArray();
-    return res.status(200).send(createResponse(groups));
+    return sendResponse(res, httpCodes.Ok(groups));
   } catch (e) {
     console.log(e);
-    return res
-      .status(500)
-      .send(
-        createResponse(null, "An error occurred while reading the database.")
-      );
+    return sendResponse(
+      res,
+      httpCodes.InternalServerError("An error occurred while reading the database.")
+    );
   }
 });
 
@@ -215,12 +198,11 @@ router.get("/", isDevelopmentMode, async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/", isDevelopmentMode, function (req, res) {
-  res
-    .status(405)
-    .send(
-      createResponse(null, "POST is not available for this route. Use GET.")
-    );
+router.post("/", isDevelopmentMode, (req, res) => {
+  return sendResponse(
+    res,
+    httpCodes.MethodNotAllowed("POST is not available for this route. Use GET.")
+  );
 });
 
 /**
@@ -262,7 +244,7 @@ router.get(
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/:id", function (req, res) {
+router.post("/:id", (req, res) => {
   return sendResponse(
     res,
     httpCodes.MethodNotAllowed("POST is not available for this route. Use GET.")
@@ -306,7 +288,7 @@ router.get(
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/:id/polls", function (req, res) {
+router.post("/:id/polls", (req, res) => {
   return sendResponse(
     res,
     httpCodes.MethodNotAllowed("POST is not available for this route. Use GET.")
@@ -350,7 +332,7 @@ router.get(
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/:id/members", function (req, res) {
+router.post("/:id/members", (req, res) => {
   return sendResponse(
     res,
     httpCodes.MethodNotAllowed("POST is not available for this route. Use GET.")
@@ -394,7 +376,7 @@ router.get(
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/:id/admins", function (req, res) {
+router.post("/:id/admins", (req, res) => {
   return sendResponse(
     res,
     httpCodes.MethodNotAllowed("POST is not available for this route. Use GET.")
@@ -410,7 +392,7 @@ router.post("/:id/admins", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/:id/join", async (req, res) => {
+router.get("/:id/join", (req, res) => {
   return sendResponse(
     res,
     httpCodes.MethodNotAllowed("GET is not available for this route. Use POST.")
@@ -450,7 +432,7 @@ router.post(
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/:id/leave", async (req, res) => {
+router.get("/:id/leave", (req, res) => {
   return sendResponse(
     res,
     httpCodes.MethodNotAllowed("GET is not available for this route. Use POST.")
@@ -488,20 +470,5 @@ router.post(
  * @property {String} groupID - id of the group to check
  * @returns {Boolean} response - True if the user has access, false otherwise
  */
-
-function checkUserPermission(userID, groupID) {
-  // TODO: add checks to make sure IDs are valid
-  let users = mongoConnection
-    .getDB()
-    .collection("groups")
-    .find({_id: groupID}, {_id: 0, Users: 1})[0].Users; //get list of users
-  for (let user in users) {
-    if (user === userID) {
-      //check for existence
-      return true; //true if userID is found
-    }
-  }
-  return false; //false if userID is not found
-}
 
 module.exports = router;
