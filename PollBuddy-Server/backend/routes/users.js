@@ -666,17 +666,18 @@ router.post("/me/groups", function (req, res) {
 });
 
 /**
- * This route is not used. It is simply there to have some response to /api/users/forgotpassword/ when using GET
+ * This route is used to retrieve all the UserPolls this user owns
  * @getdata {void} None
  * @postdata {void} None
- * @returns {void} Status 405 { "result": "failure", "error": "GET is not available for this routee."}
- * @name backend/users/forgotpassword_GET
+ * @returns {void} On success: Status 200
+ * On failure: Status 500: { "result": "failure", "error": "Error: Unable to retrieve groups from database" }
+ * @name backend/users/me/polls_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
-// eslint-disable-next-line no-unused-vars
-router.get("/me/polls/",function (req,res) {
-  return sendResponse(res,httpCodes.MethodNotAllowed("GET is not available for this route."));
+router.get("/me/polls", isLoggedIn, async function (req, res) {
+  let response = await getUserPolls(req.session.userData.userID);
+  return sendResponse(res, response);
 });
 
 /**
