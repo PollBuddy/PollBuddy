@@ -11,6 +11,7 @@ jest.mock("./QuickStartGuide.md", () => "Test");
 function updateTitle() {
   return false;
 }
+//TODO: fix
 
 // Create basic render test
 it("renders without crashing", () => {

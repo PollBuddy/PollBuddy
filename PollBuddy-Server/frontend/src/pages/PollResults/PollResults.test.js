@@ -5,6 +5,7 @@ import PollResults from "./PollResults";
 function updateTitle() {
   return false;
 }
+//TODO: fix
 
 // Create basic render test
 it("renders without crashing", () => {
