@@ -120,7 +120,7 @@ app.get("/api/schools", (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-app.get("/", function (req, res) {
+app.get("/", (req, res) => {
   return sendResponse(res, httpCodes.Ok("Backend is up."));
 });
 
@@ -135,7 +135,7 @@ app.get("/", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-app.get("/api", function (req, res) {
+app.get("/api", (req, res) => {
   return sendResponse(res, httpCodes.Ok("Backend is up."));
 });
 
@@ -150,7 +150,7 @@ app.get("/api", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-app.get("/api/healthcheck", function (req, res) {
+app.get("/api/healthcheck", (req, res) => {
   return sendResponse(res, httpCodes.Ok("Backend is working."));
 });
 
@@ -162,7 +162,7 @@ app.get("/api/healthcheck", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   return sendResponse(res, httpCodes.NotFound("API route not found."));
 });
 
@@ -178,7 +178,7 @@ app.use(function (req, res, next) {
  * @throws error code of given error, or 500 - server error
  * @param {function} callback - Function handler for endpoint.
  */
-app.use(function (err, req, res) {
+app.use((err, req, res) => {
 
   console.log(err);
 
