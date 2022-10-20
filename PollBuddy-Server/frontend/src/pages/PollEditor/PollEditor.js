@@ -120,14 +120,14 @@ class PollEditor extends Component {
       this.state.requiresPassword = false;
       console.log("Turn to false");
       console.log(this.state.requiresPassword);
-      console.log(this.state.pollPassword);
+      console.log("Password: " + this.state.pollPassword);
       return;
     }
-    this.state.pollPassword = "12345"
     this.state.requiresPassword = true;
+    this.generateNewPassword();
     console.log("Turn to true");
     console.log(this.state.requiresPassword);
-    console.log(this.state.pollPassword);
+    console.log("Password: " + this.state.pollPassword);
     // false -> true
   };
 
