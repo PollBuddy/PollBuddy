@@ -36,10 +36,10 @@ describe("The dropdown component:", () => {
     await userEvent.click(document.body);
 
     // Check if dropdown not visible.
-    expect(screen.getByText.bind("Login")).toThrow();
-    expect(screen.getByText.bind("Register")).toThrow();
-    expect(screen.getByText.bind("Quick Start Guide")).toThrow();
-    expect(screen.getByText.bind("Enter Poll Code")).toThrow();
+    expect(screen.getByText.bind(this, "Login")).toThrow();
+    expect(screen.getByText.bind(this, "Register")).toThrow();
+    expect(screen.getByText.bind(this, "Quick Start Guide")).toThrow();
+    expect(screen.getByText.bind(this, "Enter Poll Code")).toThrow();
   });
 
   it("Has correct options when logged in.", async () => {
