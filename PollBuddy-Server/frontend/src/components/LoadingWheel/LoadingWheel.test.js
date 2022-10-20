@@ -1,13 +1,14 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import LoadingWheel from "./LoadingWheel";
+import React from 'react';
+import { render, /*screen, act*/ } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+// import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
 
-// Create basic render test
-it("renders without crashing", () => {
-  // Create div element
-  const div = document.createElement("div");
-  // Render about on the div
-  ReactDOM.render(<LoadingWheel />, div);
-  // Clean unmount
-  ReactDOM.unmountComponentAtNode(div);
+import LoadingWheel from './LoadingWheel';
+
+describe("The Footer component:", () => {
+  it("Loads correctly.", () => {
+    // Just make sure it can load.
+    render(<BrowserRouter><LoadingWheel/></BrowserRouter>);
+  });
 });
