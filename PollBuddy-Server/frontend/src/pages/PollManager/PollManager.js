@@ -12,6 +12,7 @@ class PollManager extends Component {
   }
 
   state = {
+    data: {},
     dataBar: {
       labels: ["Hooman", "Snek", "Pupper", "Catto", "Doggo", "Birb"],
       datasets: [
@@ -100,6 +101,7 @@ class PollManager extends Component {
             <p className="fontSizeLarge">
               Time remaining:
             </p>
+            {/*TODO: the data variable is never populated with data*/}
             <Countdown renderer={clockFormat} date={ this.state.data.TimeLimit } />
 
             <Link to={"/polls/:pollID/manage"}>
