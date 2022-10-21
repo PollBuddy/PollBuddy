@@ -67,6 +67,7 @@ class PollEditor extends Component {
           closeTime: response.data.closeTime,
           loadingPollData: false,
         });
+        console.log(this.state.openTime);
       });
   }
 

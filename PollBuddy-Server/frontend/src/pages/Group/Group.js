@@ -4,7 +4,7 @@ import {MDBContainer} from "mdbreact";
 import GroupSettings from "../../components/GroupSettings/GroupSettings";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
-
+import "./Group.scss";
 class Group extends Component {
   constructor(props) {
     super(props);
@@ -15,11 +15,18 @@ class Group extends Component {
       isMember: false,
       isAdmin: false,
       polls: [],
+      originalPolls: [],
       doneLoading: false,
-      showError: null
+      showError: null,
+      selected: "createTime"
     };
-  }
 
+    this.sortOptions = [
+      { label: "Create Time", value: "creatTime" },
+      { label: "Open Time", value: "openTime"},
+      { label: "Close Time", value: "closeTime"}
+    ];
+  }
   componentDidMount() {
     this.props.updateTitle(this.state.name);
     fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id, {
@@ -58,6 +65,7 @@ class Group extends Component {
         if (response.result === "success") {
           this.setState({
             polls: response.data,
+            originalPolls: response.data
           });
         }
       });
@@ -70,6 +78,33 @@ class Group extends Component {
       this.props.router.navigate("/polls/" + pollID + "/view");
     }
   };
+
+  sortByCreateTime() {
+    const oriPolls = this.state.originalPolls;
+    this.setState( {polls: oriPolls} );
+  }
+
+  sortByOpenTime() {
+    const sortedPolls = JSON.parse(JSON.stringify(this.state.polls)).sort((p1, p2) => new Date(p1.openTime).getTime() - new Date(p2.openTime).getTime());
+    this.setState({polls: sortedPolls});
+  }
+
+  sortByCloseTime() {
+    const sortedPolls = JSON.parse(JSON.stringify(this.state.polls)).sort((p1, p2) => new Date(p1.closeTime).getTime() - new Date(p2.closeTime).getTime());
+    this.setState({polls: sortedPolls});
+  }
+  
+  handleSelectionChange(e) {
+    const select= e.target.value;
+    this.setState({selected: select});
+    if (select === "creatTime") {
+      this.sortByCreateTime();
+    } else if (select === "openTime") {
+      this.sortByOpenTime();
+    } else if (select === "closeTime") {
+      this.sortByCloseTime();
+    }
+  }  
 
   render() {
     if (this.state.showError) {
@@ -106,11 +141,24 @@ class Group extends Component {
           <MDBContainer className="two-box">
             <GroupSettings state={this.state}/>
             <MDBContainer className="box">
-              <p className="fontSizeLarge">
-                My Polls
-              </p>
+              <div className="myPolls">
+                <p className="fontSizeLarge">
+                  My Polls
+                </p>
+                <div className="SortDropdown">
+                  <label>
+                    Sort by
+                    <select value={this.state.selected} onChange={this.handleSelectionChange.bind(this)}>
+                      {this.sortOptions.map((option) => (
+                        <option value={option.value}>{option.label}</option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+              </div>
+
               {this.state.polls.length === 0 ? (
-                <p>You don't have any polls available at this time.<br/> <br/></p>
+                <p style={{margin: "auto"}}>You don't have any polls available at this time.<br/> <br/></p>
               ) : (
                 <React.Fragment>
                   {this.state.polls.map((poll, index) => (

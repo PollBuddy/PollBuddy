@@ -177,6 +177,8 @@ const getGroupPolls = async function (userID, groupID) {
         polls.push({
           id: poll._id,
           title: poll.Title,
+          openTime: poll.OpenTime,
+          closeTime: poll.CloseTime
         });
       }
     }
