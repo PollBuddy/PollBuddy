@@ -11,7 +11,10 @@ jest.mock("./QuickStartGuide.md", () => "Test");
 function updateTitle() {
   return false;
 }
-//TODO: fix
+
+global.fetch = jest.fn(() => Promise.resolve({
+  json: () => Promise.resolve({text: ""})
+}));
 
 // Create basic render test
 it("renders without crashing", () => {
