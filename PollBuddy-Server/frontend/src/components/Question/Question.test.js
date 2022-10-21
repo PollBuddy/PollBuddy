@@ -1,14 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Question from "./Question";
-//TODO: fix
 
 // Create basic render test
 it("renders without crashing", () => {
   // Create div element
   const div = document.createElement("div");
   // Render about on the div
-  ReactDOM.render(<Question />, div);
+  ReactDOM.render(<Question data={{question: {answers: []}}}/>, div);
   // Clean unmount
   ReactDOM.unmountComponentAtNode(div);
 });
