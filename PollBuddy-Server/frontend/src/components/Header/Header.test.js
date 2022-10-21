@@ -1,11 +1,10 @@
 import React from 'react';
-import { render, screen, component, /*act*/ } from '@testing-library/react';
+import { render, screen, /*act*/ } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 // import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
 import Header from './Header';
-import Dropdown from '../Dropdown/Dropdown';
 
 const USER_INFO = { sessionIdentifier: "" };
 
