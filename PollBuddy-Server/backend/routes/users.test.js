@@ -874,4 +874,83 @@ describe("/api/users/:id/groups", () => {
       });
   });
 
+  
+});
+
+describe("/me/polls", () => {
+  it("GET: route unavailable", async () => {
+    await app.get("/me/polls")
+      .expect(405)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("GET: get group polls as creator", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+    // Poll not open
+    let poll1 = await createPoll({
+      OpenTime: Date.now() + (24 * 60 * 60 * 1000),
+      CloseTime: Date.now() + (24 * 60 * 60 * 1000)
+    });
+    // Poll currently open
+    let poll2 = await createPoll({
+      OpenTime: Date.now() - (24 * 60 * 60 * 1000),
+      CloseTime: Date.now() + (24 * 60 * 60 * 1000)
+    });
+    // Poll already closed
+    let poll3 = await createPoll({
+      OpenTime: Date.now() - (24 * 60 * 60 * 1000),
+      CloseTime: Date.now() - (24 * 60 * 60 * 1000)
+    });
+    await app.get("/me/polls")
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+
+        // Admins should be able to retrieve all polls.
+        expect(response.body.data[0].id.toString()).toEqual(poll1.insertedId.toString());
+        expect(response.body.data[0].title).toEqual(testPoll.Title);
+
+        expect(response.body.data[1].id.toString()).toEqual(poll2.insertedId.toString());
+        expect(response.body.data[1].title).toEqual(testPoll.Title);
+
+        expect(response.body.data[2].id.toString()).toEqual(poll3.insertedId.toString());
+        expect(response.body.data[2].title).toEqual(testPoll.Title);
+      });
+  });
+    
+  it("GET: get group polls as not creator", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+
+    // Poll not open
+    let poll1 = await createPoll({
+      OpenTime: Date.now() + (24 * 60 * 60 * 1000),
+      CloseTime: Date.now() + (24 * 60 * 60 * 1000)
+    });
+    // Poll currently open
+    let poll2 = await createPoll({
+      OpenTime: Date.now() - (24 * 60 * 60 * 1000),
+      CloseTime: Date.now() + (24 * 60 * 60 * 1000)
+    });
+    // Poll already closed
+    let poll3 = await createPoll({
+      OpenTime: Date.now() - (24 * 60 * 60 * 1000),
+      CloseTime: Date.now() - (24 * 60 * 60 * 1000)
+    });
+    let user2 = await createUser();
+    session = {userData: {userID: user2.insertedId}};
+    await app.get("/" + user1._id + "/polls")
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+
+        // Members should only be able to retrieve currently open polls.
+        expect(response.body.data[0].id.toString()).toEqual(poll2.insertedId.toString());
+        expect(response.body.data[0].title).toEqual(testPoll.Title);
+      });
+  });
+
 });
