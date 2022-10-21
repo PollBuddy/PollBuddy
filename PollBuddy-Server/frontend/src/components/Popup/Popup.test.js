@@ -1,13 +1,36 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import Popup from "./Popup";
+import React from 'react';
+import { render, screen, act, waitFor } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
 
-// Create basic render test
-it("renders without crashing", () => {
-  // Create div element
-  const div = document.createElement("div");
-  // Render about on the div
-  ReactDOM.render(<Popup />, div);
-  // Clean unmount
-  ReactDOM.unmountComponentAtNode(div);
+import Popup from './Popup';
+
+describe("The Footer component:", () => {
+  it("Loads correctly.", () => {
+    // Just make sure it can load.
+    render(<BrowserRouter><Popup /></BrowserRouter>);
+  });
+
+  it("Hides when not open.", () => {
+    render(<BrowserRouter><Popup>TEST</Popup></BrowserRouter>);
+
+    expect(screen.getByText.bind(this, "TEST")).toThrow();
+  });
+
+  it("Visible when open.", () => {
+    render(<BrowserRouter><Popup isOpen>TEST</Popup></BrowserRouter>);
+
+    expect(screen.getByText.bind(this, "TEST")).not.toThrow();
+    expect(screen.getByText.bind(this, "X")).not.toThrow();
+  });
+
+  it("OnClick handle works.", async () => {
+    let GOOD = false;
+    const onClick = () => { GOOD = true; };
+    render(<BrowserRouter><Popup isOpen onClose={onClick}>TEST</Popup></BrowserRouter>);
+
+    await userEvent.click(screen.getByText("X"));
+    await waitFor(() => GOOD, { timeout: 5000 });
+  });
 });
