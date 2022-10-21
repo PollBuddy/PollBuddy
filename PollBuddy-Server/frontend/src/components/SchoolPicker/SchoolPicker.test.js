@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import SchoolPicker from "./SchoolPicker";
-//TODO: fix
 
 // Create basic render test
 it("renders without crashing", async () => {
