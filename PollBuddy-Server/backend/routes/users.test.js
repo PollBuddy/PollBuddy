@@ -942,14 +942,22 @@ describe("/me/polls", () => {
     });
     let user2 = await createUser();
     session = {userData: {userID: user2.insertedId}};
-    await app.get("/" + user1._id + "/polls")
+    await app.get("/api/polls/" + poll.insertedId)
+      .expect(403)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+    await app.get("/api/polls/" + poll2.id)
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
-
-        // Members should only be able to retrieve currently open polls.
-        expect(response.body.data[0].id.toString()).toEqual(poll2.insertedId.toString());
-        expect(response.body.data[0].title).toEqual(testPoll.Title);
+        expect(response.body.data.title).toEqual(testPoll.Title);
+        expect(response.body.data.description).toEqual(testPoll.Description);
+      });
+    await app.get("/api/polls/" + poll.insertedId)
+      .expect(403)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
       });
   });
 
