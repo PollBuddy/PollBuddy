@@ -6,7 +6,6 @@ import { BrowserRouter } from "react-router-dom";
 function updateTitle() {
   return false;
 }
-//TODO: fix
 
 // Create basic render test
 it("renders without crashing", () => {
@@ -15,7 +14,7 @@ it("renders without crashing", () => {
   // Render about on the div
   ReactDOM.render(
     <BrowserRouter>
-      <QuestionResults updateTitle={updateTitle}/>
+      <QuestionResults updateTitle={updateTitle} data={{question: {answers: []}}}/>
     </BrowserRouter>, div);
   // Clean unmount
   ReactDOM.unmountComponentAtNode(div);
