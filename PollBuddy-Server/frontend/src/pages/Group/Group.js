@@ -16,7 +16,9 @@ class Group extends Component {
       isAdmin: false,
       polls: [],
       doneLoading: false,
-      showError: null
+      showError: null,
+      nameInput: "",
+      descriptionInput: "",
     };
   }
 
@@ -35,7 +37,9 @@ class Group extends Component {
               description: response.data.description,
               isMember: response.data.isMember,
               isAdmin: response.data.isAdmin,
-              doneLoading: true
+              doneLoading: true,
+              nameInput: response.data.name,
+              descriptionInput: response.data.description,
             });
           } else {
             this.setState({
@@ -71,6 +75,75 @@ class Group extends Component {
     }
   };
 
+  toggleTextBox(elementId, selector, text) {
+    if(document.getElementById(elementId).style.display === "block") {
+      document.getElementById(elementId).style.display = "none";
+      document.querySelector(selector).textContent = text;
+    } else {
+      document.getElementById(elementId).style.display = "block";
+      document.querySelector(selector).textContent = "Submit";
+    }
+  }
+
+  createNewPoll = async () => {
+    this.props.router.navigate("/polls/new?groupID=" + this.state.id);
+  };
+
+  handleLeaveGroup = async () => {
+    await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/leave", {
+      method: "POST",
+    });
+    this.props.router.navigate("/groups");
+  };
+
+  handleDeleteGroup = async () => {
+    await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/delete", {
+      method: "POST",
+    });
+    this.props.router.navigate("/groups");
+  };
+
+  onInput = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value
+    });
+  };
+
+  onSubmit = () => {
+    this.setState({ doneLoading: false });
+    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/edit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+      body: JSON.stringify(this.getGroupData())
+    }).then((response) => response.json())
+      .then((response) => {
+        if (response.result === "success") {
+          this.setState({
+            showError: false,
+            name: this.state.nameInput,
+            description: this.state.descriptionInput,
+            doneLoading: true,
+          });
+        } else {
+          this.setState({
+            showError: true,
+            doneLoading: true,
+          });
+        }
+      });
+  };
+
+  getGroupData = () => {
+    return {
+      name: this.state.nameInput,
+      description: this.state.descriptionInput,
+    };
+  };
+
+  checkError = () => {
+    return this.state.showError ? <ErrorText/> : null;
+  };
+  
   render() {
     if (this.state.showError) {
       return (
@@ -104,7 +177,64 @@ class Group extends Component {
       return (
         <MDBContainer className="page">
           <MDBContainer className="two-box">
-            <GroupSettings state={this.state}/>
+            {this.state.isMember &&
+                <MDBContainer className="box">
+                  <p className="fontSizeLarge">
+                    Member Settings
+                  </p>
+                  <button onClick={this.handleLeaveGroup} className="button">Leave Group</button>
+                </MDBContainer>
+            }
+            {this.state.isAdmin &&
+                <MDBContainer className="box">
+                    <MDBContainer className="form-group">
+                      <p className="fontSizeLarge">
+                        Admin Settings
+                      </p>
+                      <p className="fontSizeMedium">
+                        Group Name:
+                      </p>
+                      <input
+                        name="nameInput"
+                        id="groupName"
+                        className="form-control textBox"
+                        value={this.state.nameInput}
+                        onInput={this.onInput}
+                      />
+                      <p className="fontSizeMedium">
+                        Group Description:
+                      </p>
+                      <input
+                        name="descriptionInput"
+                        id="groupDescription"
+                        className="form-control textBox"
+                        value={this.state.descriptionInput}
+                        onInput={this.onInput}
+                      />
+                    </MDBContainer>
+                    {this.checkError()}
+                  <button style={{width: "17em"}}
+                  className="button" onClick={this.onSubmit}>
+                    Save Changes
+                  </button >
+                  <button style={{width: "17em"}}
+                    className="button"
+                    onClick={this.createNewPoll}
+                  >Create New Poll
+                  </button>
+                  <Link to={"/groups/"+ this.state.id +"/edit"}>
+                    <button style={{width: "17em"}}
+                      className="button"
+                    >Edit Group
+                    </button>
+                  </Link>
+                  <button style={{width: "17em"}}
+                    className="button"
+                    onClick={this.handleDeleteGroup}
+                  >Delete this Group
+                  </button>
+                </MDBContainer>
+            }
             <MDBContainer className="box">
               <p className="fontSizeLarge">
                 My Polls
