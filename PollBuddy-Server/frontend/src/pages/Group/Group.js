@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
-import GroupSettings from "../../components/GroupSettings/GroupSettings";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
@@ -31,7 +30,7 @@ class Group extends Component {
       .then((response) => {
         if (response.result === "success") {
           this.props.updateTitle(response.data.name);
-          if (response.data.isMember || response.data.isAdmin ) {
+          if (response.data.isMember || response.data.isAdmin) {
             this.setState({
               name: response.data.name,
               description: response.data.description,
@@ -70,13 +69,13 @@ class Group extends Component {
   pollButtonClick = (pollID) => {
     if (this.state.isAdmin) {
       this.props.router.navigate("/polls/" + pollID + "/edit");
-    } else if(this.state.isMember) {
+    } else if (this.state.isMember) {
       this.props.router.navigate("/polls/" + pollID + "/view");
     }
   };
 
   toggleTextBox(elementId, selector, text) {
-    if(document.getElementById(elementId).style.display === "block") {
+    if (document.getElementById(elementId).style.display === "block") {
       document.getElementById(elementId).style.display = "none";
       document.querySelector(selector).textContent = text;
     } else {
@@ -110,10 +109,10 @@ class Group extends Component {
   };
 
   onSubmit = () => {
-    this.setState({ doneLoading: false });
+    this.setState({doneLoading: false});
     fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/edit", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+      headers: {"Content-Type": "application/json"},//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
       body: JSON.stringify(this.getGroupData())
     }).then((response) => response.json())
       .then((response) => {
@@ -143,7 +142,7 @@ class Group extends Component {
   checkError = () => {
     return this.state.showError ? <ErrorText/> : null;
   };
-  
+
   render() {
     if (this.state.showError) {
       return (
@@ -166,7 +165,7 @@ class Group extends Component {
       return (
         <MDBContainer className="page">
           <p className="fontSizeLarge">
-            { this.state.name }
+            {this.state.name}
           </p>
           <button className="button">
             Join
@@ -178,62 +177,62 @@ class Group extends Component {
         <MDBContainer className="page">
           <MDBContainer className="two-box">
             {this.state.isMember &&
-                <MDBContainer className="box">
-                  <p className="fontSizeLarge">
-                    Member Settings
-                  </p>
-                  <button onClick={this.handleLeaveGroup} className="button">Leave Group</button>
-                </MDBContainer>
+              <MDBContainer className="box">
+                <p className="fontSizeLarge">
+                  Member Settings
+                </p>
+                <button onClick={this.handleLeaveGroup} className="button">Leave Group</button>
+              </MDBContainer>
             }
             {this.state.isAdmin &&
-                <MDBContainer className="box">
-                    <MDBContainer className="form-group">
-                      <p className="fontSizeLarge">
-                        Admin Settings
-                      </p>
-                      <p className="fontSizeMedium">
-                        Group Name:
-                      </p>
-                      <input
-                        name="nameInput"
-                        id="groupName"
-                        className="form-control textBox"
-                        value={this.state.nameInput}
-                        onInput={this.onInput}
-                      />
-                      <p className="fontSizeMedium">
-                        Group Description:
-                      </p>
-                      <input
-                        name="descriptionInput"
-                        id="groupDescription"
-                        className="form-control textBox"
-                        value={this.state.descriptionInput}
-                        onInput={this.onInput}
-                      />
-                    </MDBContainer>
-                    {this.checkError()}
-                  <button style={{width: "17em"}}
-                  className="button" onClick={this.onSubmit}>
-                    Save Changes
-                  </button >
-                  <button style={{width: "17em"}}
-                    className="button"
-                    onClick={this.createNewPoll}
-                  >Create New Poll
-                  </button>
-                  <Link to={"/groups/"+ this.state.id +"/edit"}>
-                    <button style={{width: "17em"}}
-                      className="button"
-                    >Edit Group
-                    </button>
-                  </Link>
-                  <button style={{width: "17em"}}
-                    className="button"
-                    onClick={this.handleDeleteGroup}
-                  >Delete this Group
-                  </button>
+              <MDBContainer className="box">
+                <MDBContainer className="form-group">
+                  <p className="fontSizeLarge">
+                    Admin Settings
+                  </p>
+                  <p className="fontSizeMedium">
+                    Group Name:
+                  </p>
+                  <input
+                    name="nameInput"
+                    id="groupName"
+                    className="form-control textBox"
+                    value={this.state.nameInput}
+                    onInput={this.onInput}
+                  />
+                  <p className="fontSizeMedium">
+                    Group Description:
+                  </p>
+                  <input
+                    name="descriptionInput"
+                    id="groupDescription"
+                    className="form-control textBox"
+                    value={this.state.descriptionInput}
+                    onInput={this.onInput}
+                  />
                 </MDBContainer>
+                {this.checkError()}
+                <button style={{width: "17em"}}
+                  className="button" onClick={this.onSubmit}>
+                  Save Changes
+                </button>
+                <button style={{width: "17em"}}
+                  className="button"
+                  onClick={this.createNewPoll}
+                >Create New Poll
+                </button>
+                <Link to={"/groups/" + this.state.id + "/edit"}>
+                  <button style={{width: "17em"}}
+                    className="button"
+                  >Edit Group
+                  </button>
+                </Link>
+                <button style={{width: "17em"}}
+                  className="button"
+                  onClick={this.handleDeleteGroup}
+                >Delete this Group
+                </button>
+              </MDBContainer>
             }
             <MDBContainer className="box">
               <p className="fontSizeLarge">
@@ -245,7 +244,8 @@ class Group extends Component {
                 <React.Fragment>
                   {this.state.polls.map((poll, index) => (
                     <Link to={"/polls/" + poll.id + (this.state.isAdmin ? "/edit" : "/view")} style={{width: "17em"}}>
-                      <button style={{  width: "20em" }} className="button">{"Poll " + (index + 1) + ": " + poll.title}</button>
+                      <button style={{width: "20em"}}
+                        className="button">{"Poll " + (index + 1) + ": " + poll.title}</button>
                     </Link>
                   ))}
                 </React.Fragment>
