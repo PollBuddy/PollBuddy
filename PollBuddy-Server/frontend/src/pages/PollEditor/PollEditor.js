@@ -235,14 +235,15 @@ class PollEditor extends Component {
       displayEditQuestion: false,
     });
     fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/deleteQuestion", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          text: this.state.questionTextInput,
-          answers: this.state.currentAnswers,
-          maxAllowedChoices: this.state.maxAllowedChoices,
-        })
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: this.state.currentQuestion.id,
+        text: this.state.questionTextInput,
+        answers: this.state.currentAnswers,
+        maxAllowedChoices: this.state.maxAllowedChoices,
       })
+    });
   };
 
   addAnswer = () => {
