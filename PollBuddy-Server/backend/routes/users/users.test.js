@@ -5,12 +5,12 @@ const bcrypt = require("bcrypt");
 const mongo = require("mongodb");
 const MongoClient = mongo.MongoClient;
 
-const {userSchema} = require("../models/User.js");
-const {createModel} = require("../modules/utils.js");
-const mongoConnection = require("../modules/mongoConnection.js");
+const {userSchema} = require("../../models/User.js");
+const {createModel} = require("../../modules/utils.js");
+const mongoConnection = require("../../modules/mongoConnection.js");
 const usersRouter = require("./users");
-const {testUser, testUser2, testGroup, createUser, createGroup} = require("../modules/testingUtils.js");
-const {testGroup2} = require("../modules/testingUtils");
+const {testUser, testUser2, testGroup, createUser, createGroup} = require("../../modules/testingUtils.js");
+const {testGroup2} = require("../../modules/testingUtils");
 
 let mockApp = express();
 let session = {};

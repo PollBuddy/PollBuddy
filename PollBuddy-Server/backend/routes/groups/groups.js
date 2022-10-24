@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const mongoConnection = require("../modules/mongoConnection.js");
+const mongoConnection = require("../../modules/mongoConnection.js");
 const {
   isDevelopmentMode,
   isLoggedIn,
-} = require("../modules/utils");
-const {httpCodes, sendResponse} = require("../modules/httpCodes.js");
+} = require("../../modules/utils");
+const {httpCodes, sendResponse} = require("../../modules/httpCodes.js");
 const {
   getGroupPolls,
   joinGroup,
@@ -19,8 +19,8 @@ const {
   getGroupMembers,
   getGroupAdmins,
   groupParamsValidator,
-} = require("../models/Group");
-const {paramValidator, bodyValidator} = require("../modules/validatorUtils");
+} = require("../../models/Group");
+const {paramValidator, bodyValidator} = require("../../modules/validatorUtils");
 
 // This file handles /api/groups URLs
 

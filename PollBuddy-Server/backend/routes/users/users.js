@@ -1,16 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
-const mongoConnection = require("../modules/mongoConnection.js");
-const {httpCodes, sendResponse} = require("../modules/httpCodes.js");
-const rpi = require("../modules/rpi");
-const {isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
+const mongoConnection = require("../../modules/mongoConnection.js");
+const {httpCodes, sendResponse} = require("../../modules/httpCodes.js");
+const rpi = require("../../modules/rpi");
+const {isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute} = require("../../modules/utils"); // object destructuring, only import desired functions
 const {
   userLoginValidator, userInformationValidator, userRegisterValidator, userSchema, getUser, getUserGroups,
   editUser, userParamsValidator
-} = require("../models/User.js");
-const {paramValidator} = require("../modules/validatorUtils");
-const {send} = require("../modules/email.js");
+} = require("../../models/User.js");
+const {paramValidator} = require("../../modules/validatorUtils");
+const {send} = require("../../modules/email.js");
 
 // This file handles /api/users URLs
 

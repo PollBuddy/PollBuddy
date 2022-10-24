@@ -1,19 +1,19 @@
 const express = require("express");
 const router = express.Router();
-const mongoConnection = require("../modules/mongoConnection.js");
+const mongoConnection = require("../../modules/mongoConnection.js");
 const {
   isLoggedIn,
   isDevelopmentMode,
-} = require("../modules/utils");
-const {sendResponse, httpCodes} = require("../modules/httpCodes.js");
+} = require("../../modules/utils");
+const {sendResponse, httpCodes} = require("../../modules/httpCodes.js");
 const {
   createPoll, getPoll, editPoll, createPollValidator, editPollValidator, createQuestionValidator, createQuestion,
   editQuestionValidator, editQuestion, submitQuestionValidator, submitQuestion, getPollResults, getPollResultsCSV,
   deletePoll, pollParamsValidator
-} = require("../models/Poll");
-const {paramValidator, bodyValidator} = require("../modules/validatorUtils");
+} = require("../../models/Poll");
+const {paramValidator, bodyValidator} = require("../../modules/validatorUtils");
 const {Parser} = require("json2csv");
-const {getPollInternal} = require("../modules/modelUtils");
+const {getPollInternal} = require("../../modules/modelUtils");
 const sanitize = require("sanitize-filename");
 
 // This file handles /api/polls URLs
