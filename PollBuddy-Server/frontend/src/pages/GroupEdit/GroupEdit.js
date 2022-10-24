@@ -48,7 +48,7 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
         }
       });
   };
-  
+
   render() {
     return (
       <MDBContainer fluid className="page">
