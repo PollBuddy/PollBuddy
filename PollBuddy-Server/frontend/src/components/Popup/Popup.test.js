@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, act, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
@@ -25,7 +25,7 @@ describe("The Footer component:", () => {
     expect(screen.getByText.bind(this, "X")).not.toThrow();
   });
 
-  it("OnClick handle works.", async () => {
+  it("onClick handle works.", async () => {
     let GOOD = false;
     const onClick = () => { GOOD = true; };
     render(<BrowserRouter><Popup isOpen onClose={onClick}>TEST</Popup></BrowserRouter>);
