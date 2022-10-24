@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
+import ErrorText from "../../components/ErrorText/ErrorText";
 
 class Group extends Component {
   constructor(props) {

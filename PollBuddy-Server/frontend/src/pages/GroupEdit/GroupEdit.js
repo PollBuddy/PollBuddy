@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import "mdbreact/dist/css/mdb.css";
 import {MDBContainer} from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import ErrorText from "../../components/ErrorText/ErrorText";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
 class GroupEdit extends Component {//this class will likely need to call Groups/new and do more with that...
