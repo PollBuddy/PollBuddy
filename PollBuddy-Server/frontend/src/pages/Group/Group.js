@@ -179,7 +179,16 @@ class Group extends Component {
             {this.state.isMember &&
               <MDBContainer className="box">
                 <p className="fontSizeLarge">
-                  Member Settings
+                  Group Name
+                </p>
+                <p className="fontSizeMedium">
+                  {this.state.name}
+                </p>
+                <p className="fontSizeLarge">
+                  Group Description
+                </p>
+                <p className="fontSizeMedium">
+                  {this.state.description}
                 </p>
                 <button onClick={this.handleLeaveGroup} className="button">Leave Group</button>
               </MDBContainer>
@@ -188,10 +197,7 @@ class Group extends Component {
               <MDBContainer className="box">
                 <MDBContainer className="form-group">
                   <p className="fontSizeLarge">
-                    Admin Settings
-                  </p>
-                  <p className="fontSizeMedium">
-                    Group Name:
+                    Group Name
                   </p>
                   <input
                     name="nameInput"
@@ -200,8 +206,8 @@ class Group extends Component {
                     value={this.state.nameInput}
                     onInput={this.onInput}
                   />
-                  <p className="fontSizeMedium">
-                    Group Description:
+                  <p className="fontSizeLarge">
+                    Group Description
                   </p>
                   <input
                     name="descriptionInput"
