@@ -85,7 +85,7 @@ spec:
                   name: poll-buddy-backend-configmap-master
                   key: frontend_url
             - name: DB_URL
-              value: poll-buddy-db-service-master.default.svc.cluster.local
+              value: poll-buddy-db-service-master
             - name: DB_NAME
               valueFrom:
                 configMapKeyRef:
@@ -102,7 +102,7 @@ spec:
                   name: poll-buddy-db-secrets-master
                   key: user-password
             - name: REPORTING_DB_URL
-              value: poll-buddy-reporting-db-service-master.default.svc.cluster.local
+              value: poll-buddy-reporting-db-service-master
             - name: REPORTING_DB_NAME
               valueFrom:
                 configMapKeyRef:
