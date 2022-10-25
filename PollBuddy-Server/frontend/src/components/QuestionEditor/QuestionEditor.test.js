@@ -9,7 +9,7 @@ import QuestionEditor from './QuestionEditor';
 // THIS COMPONENT IS NOT BEING USED, SO WHEN THIS COMPONENT IS BEING USED, MAKE
 // VIABLE TESTS FOR THIS.
 
-describe("The LoadingWheel component:", () => {
+describe("The QuestionEditor component:", () => {
   it("Loads correctly.", () => {
     // Just make sure it can load.
     render(<BrowserRouter><QuestionEditor/></BrowserRouter>);

@@ -14,7 +14,7 @@ const DATA = {
   },
 };
 
-describe("The LoadingWheel component:", () => {
+describe("The QuestionResults component:", () => {
   it("Loads correctly.", () => {
     // Just make sure it can load.
     render(<BrowserRouter><QuestionResults data={DATA}/></BrowserRouter>);
