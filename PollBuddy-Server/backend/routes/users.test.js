@@ -942,19 +942,19 @@ describe("/me/polls", () => {
     });
     let user2 = await createUser();
     session = {userData: {userID: user2.insertedId}};
-    await app.get("/api/polls/" + poll.insertedId)
+    await app.get("/api/polls/" + poll1.insertedId)
       .expect(403)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });
-    await app.get("/api/polls/" + poll2.id)
+    await app.get("/api/polls/" + poll2.insertedId)
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
         expect(response.body.data.title).toEqual(testPoll.Title);
         expect(response.body.data.description).toEqual(testPoll.Description);
       });
-    await app.get("/api/polls/" + poll.insertedId)
+    await app.get("/api/polls/" + poll3.insertedId)
       .expect(403)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
