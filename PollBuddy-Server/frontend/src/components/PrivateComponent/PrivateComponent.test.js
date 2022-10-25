@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 
 import PrivateComponent from './PrivateComponent';
 
-describe("The Footer component:", () => {
+describe("The PrivateComponent component:", () => {
   it("Loads correctly.", async () => {
     // Just make sure it can load.
     render(
