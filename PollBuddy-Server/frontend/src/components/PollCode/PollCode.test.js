@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 
 import PollCode from './PollCode';
 
-describe("The Footer component:", () => {
+describe("The PollCode component:", () => {
   it("Loads correctly.", () => {
     // Just make sure it can load.
     render(<BrowserRouter><PollCode/></BrowserRouter>);

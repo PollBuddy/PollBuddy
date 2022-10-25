@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 
 import Popup2 from './Popup2';
 
-describe("The Footer component:", () => {
+describe("The Popup2 component:", () => {
   it("Loads correctly.", () => {
     // Just make sure it can load.
     render(<BrowserRouter><Popup2 /></BrowserRouter>);

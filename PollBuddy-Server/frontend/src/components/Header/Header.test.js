@@ -8,7 +8,7 @@ import Header from './Header';
 
 const USER_INFO = { sessionIdentifier: "" };
 
-describe("The Footer component:", () => {
+describe("The Header component:", () => {
   it("Loads correctly.", () => {
     // Just make sure it can load.
     render(<BrowserRouter><Header userInfo={USER_INFO}/></BrowserRouter>);

@@ -6,7 +6,7 @@ import '@testing-library/jest-dom';
 
 import LoadingWheel from './LoadingWheel';
 
-describe("The Footer component:", () => {
+describe("The LoadingWheel component:", () => {
   it("Loads correctly.", () => {
     // Just make sure it can load.
     render(<BrowserRouter><LoadingWheel/></BrowserRouter>);

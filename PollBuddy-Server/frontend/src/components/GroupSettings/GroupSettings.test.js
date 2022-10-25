@@ -18,7 +18,7 @@ const ADM_DATA = {
   id: "TEST",
 }
 
-describe("The Footer component:", () => {
+describe("The GroupSettings component:", () => {
   it("Loads correctly.", () => {
     // Just make sure it can load.
     render(<BrowserRouter><GroupSettings state={MEM_DATA}/></BrowserRouter>);
