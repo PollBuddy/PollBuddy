@@ -5,7 +5,7 @@ const mongoConnection = require("../modules/mongoConnection.js");
 const {httpCodes} = require("../modules/httpCodes.js");
 const {
   getGroupInternal, isGroupMember, getPollInternal, getQuestionInternal, isPollAdmin,
-  getUserInternal, isPollAdminByPoll
+  getUserInternal, isPollAdminByPoll, getQuestionInternalByPoll
 } = require("../modules/modelUtils");
 const {objectID} = require("../modules/validatorUtils");
 
@@ -509,7 +509,7 @@ const editQuestion = async function (userID, pollID, questionData) {
       return httpCodes.Unauthorized("Unauthorized: Cannot Edit Question");
     }
 
-    let question = await getQuestionInternal(poll._id, questionData.id);
+    let question = await getQuestionInternalByPoll(poll, questionData.id);
     if (!question) {
       return httpCodes.BadRequest("Invalid Question: Question does not exist.");
     }
@@ -590,7 +590,7 @@ const submitQuestion = async function (userID, pollID, submitData) {
       return httpCodes.BadRequest("Poll is not open for submissions.");
     }
 
-    let question = await getQuestionInternal(poll._id, submitData.id);
+    let question = await getQuestionInternalByPoll(poll, submitData.id);
     if (!question) {
       return httpCodes.BadRequest("Invalid Question: Question does not exist.");
     }

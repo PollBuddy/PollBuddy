@@ -70,6 +70,14 @@ const getQuestionInternal = async function(pollID, questionID) {
   }
 };
 
+const getQuestionInternalByPoll = async function(poll, questionID) {
+  for (let question of poll.Questions) {
+    if (question._id.toString() === questionID.toString()) {
+      return question;
+    }
+  }
+};
+
 const isPollAdmin = async function(userID, pollID) {
   let poll = await getPollInternal({"_id": pollID});
   if (poll.Group) {
@@ -105,4 +113,5 @@ module.exports = {
   isGroupAdminByGroup,
   isGroupMemberByGroup,
   isGroupUserByGroup,
+  getQuestionInternalByPoll
 };
