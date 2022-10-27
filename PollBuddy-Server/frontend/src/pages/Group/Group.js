@@ -34,12 +34,12 @@ class Group extends Component {
           if (response.data.isMember || response.data.isAdmin) {
             this.setState({
               name: response.data.name,
+              nameInput: response.data.name,
               description: response.data.description,
-              isMember: response.data.isMember,
+              descriptionInput: response.data.description,
+              isMember: !response.data.isAdmin && response.data.isMember,
               isAdmin: response.data.isAdmin,
               doneLoading: true,
-              nameInput: response.data.name,
-              descriptionInput: response.data.description,
             });
           } else {
             this.setState({
