@@ -58,7 +58,7 @@ class RegisterWithSchoolStep2 extends Component {
     console.log(this.state);
   }
 
-  handleRegister() {
+  async handleRegister() {
     // do input validation
     const schema = Joi.object({
       username: Joi.string()
@@ -96,7 +96,7 @@ class RegisterWithSchoolStep2 extends Component {
 
     // If all are valid, submit a request to the backend to do the registration
     // TODO: This URL is going to need to be fixed and made dynamic
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/register/rpi", {
+    const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/register/rpi", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
@@ -105,34 +105,32 @@ class RegisterWithSchoolStep2 extends Component {
         userName: this.state.userName,
         email: this.state.email,
       })
-    }).then(response => response.json())
-      .then(response => {
+    })
+    const response = await httpResponse.json();
+    // TODO: Debug print, delete
+    console.log(response);
+    if (response != null) {
+      if (response.result === "success") {
+        // Save data about the user
+        localStorage.setItem("loggedIn", "true");
+        localStorage.setItem("firstName", response.data.firstName);
+        localStorage.setItem("lastName", response.data.lastName);
+        localStorage.setItem("userName", response.data.userName);
 
-        // TODO: Debug print, delete
-        console.log(response);
-        if (response != null) {
-          if (response.result === "success") {
-            // Save data about the user
-            localStorage.setItem("loggedIn", "true");
-            localStorage.setItem("firstName", response.data.firstName);
-            localStorage.setItem("lastName", response.data.lastName);
-            localStorage.setItem("userName", response.data.userName);
+        // Redirect to the groups page
+        return this.props.router.navigate("/groups", { replace: true });
+      } else {
+        // Something went wrong, handle it
 
-            // Redirect to the groups page
-            return this.props.router.navigate("/groups", { replace: true });
-          } else {
-            // Something went wrong, handle it
-
-            if (response.error === "Validation failed") {
-              this.setState({error: response.data.errors});
-            } else {
-              this.setState({error: response.error});
-            }
-            console.log("ERROR: " + this.state.error);
-
-          }
+        if (response.error === "Validation failed") {
+          this.setState({error: response.data.errors});
+        } else {
+          this.setState({error: response.error});
         }
-      });
+        console.log("ERROR: " + this.state.error);
+
+      }
+    }
   }
 
   render() {
