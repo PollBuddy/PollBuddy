@@ -17,23 +17,23 @@ class ForgotPassword extends Component {
     this.props.updateTitle("Forgot Password");
   }
 
-  requestReset(){
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/forgotpassword/submit", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
-      body: JSON.stringify({"email" : this.state.emailInput})
-    }).then(response => response.json())
-      .then(
-        val => {
-          if(!(val.result === "success")){
-            console.log("failed to update data");
-          }else{
-            const { router } = this.props;
-            router.navigate("/login/reset");
-          }
-        },
-        err => {console.log(err);}
-      );
+  async requestReset() {
+   try {
+     const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/forgotpassword/submit", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+        body: JSON.stringify({"email": this.state.emailInput})
+      });
+      const val = await httpResponse.json();
+      if (!(val.result === "success")) {
+        console.log("failed to update data");
+      } else {
+        const {router} = this.props;
+        router.navigate("/login/reset");
+      }
+    } catch(err) {
+      console.log(err);
+    }
   }
 
 
