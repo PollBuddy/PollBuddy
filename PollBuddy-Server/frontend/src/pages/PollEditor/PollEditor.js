@@ -35,7 +35,7 @@ class PollEditor extends Component {
       pollTitle: "",
       pollDescription: "",
       requiresPassword: false,
-      pollPassword: "lmao",
+      pollPassword: "",
       openTime: Date.now(),
       closeTime: Date.now(),
       loadingPollQuestions: false,
@@ -119,7 +119,7 @@ class PollEditor extends Component {
   changePassword = () => {
     if (this.state.requiresPassword){
       // true -> false
-      this.state.pollPassword = "";
+      // this.state.pollPassword = "";
       this.state.requiresPassword = false;
       console.log("Turn to false");
       console.log(this.state.requiresPassword);
@@ -127,7 +127,7 @@ class PollEditor extends Component {
       return;
     }
     this.state.requiresPassword = true;
-    this.generateNewPassword();
+    // this.generateNewPassword();
     console.log("Turn to true");
     console.log(this.state.requiresPassword);
     console.log("Password: " + this.state.pollPassword);

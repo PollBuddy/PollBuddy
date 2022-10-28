@@ -180,13 +180,21 @@ const getPoll = async function (userID, pollID) {
       openTime: poll.OpenTime,
       closeTime: poll.CloseTime,
       questions: questions,
-      pollPassword: poll.pollPassword,
+      pollPassword: generatePassword(),
     });
   } catch (err) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
 };
+
+generatePassword = () => {
+  let pwd = "";
+  for(let i = 0; i < 5; i++){
+    pwd += Math.floor(Math.random() * 10);
+  }
+  return pwd;
+}
 
 
 const getPollResults = async function (userID, pollID) {
