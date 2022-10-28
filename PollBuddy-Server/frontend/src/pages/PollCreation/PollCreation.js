@@ -36,21 +36,19 @@ class PollCreation extends Component {//this class will likely need to call Grou
 
   onSubmit = async () => {
     this.setState({showError: false});
-    await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/new", {
+    const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/new", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(this.getPollData())
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        if (response.result === "success") {
-          this.props.router.navigate("/polls/" + response.data.id + "/edit");
-        } else {
-          this.setState({errors: response.error});
-          this.setState({showError: true});
-        }
-      });
+    });
+    const response = await httpResponse.json();
+    console.log(response);
+    if (response.result === "success") {
+      this.props.router.navigate("/polls/" + response.data.id + "/edit");
+    } else {
+      this.setState({errors: response.error});
+      this.setState({showError: true});
+    }
   };
 
   checkError() {
