@@ -35,7 +35,7 @@ class PollEditor extends Component {
       pollTitle: "",
       pollDescription: "",
       requiresPassword: false,
-      pollPassword: "diggy",
+      pollPassword: "lmao",
       openTime: Date.now(),
       closeTime: Date.now(),
       loadingPollQuestions: false,
@@ -60,6 +60,7 @@ class PollEditor extends Component {
     })
       .then(response => response.json())
       .then((response) => {
+        console.log("RESPONSE######################");
         console.log(response);
         this.setState({
           pollTitle: response.data.title,
@@ -67,6 +68,7 @@ class PollEditor extends Component {
           questions: response.data.questions,
           openTime: response.data.openTime,
           closeTime: response.data.closeTime,
+          pollPassword: response.data.pollPassword,
           loadingPollData: false,
         });
       });
@@ -98,6 +100,7 @@ class PollEditor extends Component {
       description: this.state.pollDescription,
       openTime: this.state.openTime,
       closeTime: this.state.closeTime,
+      pollPassword: this.state.pollPassword,
     };
   };
 
@@ -379,7 +382,6 @@ class PollEditor extends Component {
                   value={this.state.pollDescription}
                   onChange={this.onInput}/>
                 <div class="pwd">
-                  <p>Poll Password</p>
                   <input
                       type="checkbox"
                       value={this.state.requiresPassword}
@@ -387,8 +389,8 @@ class PollEditor extends Component {
                       id="reqPassword"
                       name="reqPassword"
                   />
+                  <p> Use Poll Password:  <b>{this.state.pollPassword}</b></p>
                 </div>
-                <p className="fontSizeLarge">{this.state.pollPassword}</p>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                   <ThemeProvider theme={defaultMaterialTheme}>
                     <DateTimePicker

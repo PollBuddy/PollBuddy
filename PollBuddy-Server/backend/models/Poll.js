@@ -180,6 +180,7 @@ const getPoll = async function (userID, pollID) {
       openTime: poll.OpenTime,
       closeTime: poll.CloseTime,
       questions: questions,
+      pollPassword: poll.pollPassword,
     });
   } catch (err) {
     console.error(err);
@@ -352,6 +353,13 @@ const getPollResultsCSV = async function (userID, pollID) {
   }
 };
 
+const generateNewPassword = function() {
+  pollPassword = "";
+  for(let i = 0; i < 5; i++){
+    pollPassword += Math.floor(Math.random() * 10);
+  }
+  return pollPassword;
+}
 
 const createPoll = async function (userID, pollData) {
   try {
@@ -361,7 +369,7 @@ const createPoll = async function (userID, pollData) {
       MaxAllowedChoices: pollData.maxAllowedChoices,
       OpenTime: Date.now(),
       CloseTime: Date.now() + (24 * 60 * 60 * 1000),
-      Password: "",
+      Password: "please",
     };
 
     if (pollData.group) {
