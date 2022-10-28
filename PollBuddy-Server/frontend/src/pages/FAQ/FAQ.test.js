@@ -13,7 +13,7 @@ function updateTitle() {
 }
 
 global.fetch = jest.fn(() => Promise.resolve({
-  json: () => Promise.resolve({text: ""})
+  text: () => Promise.resolve({text: ""})
 }));
 
 // Create basic render test

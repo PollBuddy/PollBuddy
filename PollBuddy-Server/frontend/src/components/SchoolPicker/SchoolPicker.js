@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Autocomplete from "react-autocomplete-pollbuddy";
+import Autocomplete from "react-autocomplete";
 import { MDBContainer } from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 
@@ -35,7 +35,7 @@ export default class SchoolPicker extends Component {
         schoolLinkDict[data[i][0]] = data[i][1];
       }
       this.setState({"schoolInfo": {"schools": schools, "schoolLinkDict": schoolLinkDict}}); //missing semicolon
-      this.props.onDoneLoading(this.state.schoolInfo);
+      this.props.onDoneLoading?.(this.state.schoolInfo);
     } else {
       // Get info that was passed in
       this.setState({"schoolInfo": this.props.schoolInfo});
