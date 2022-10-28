@@ -61,56 +61,57 @@ class Groups extends Component {
     } else {
       return (
         <MDBContainer className="page">
-          <MDBContainer className="box">
-            <p className="fontSizeLarge">
-              Groups
-            </p>
-            <p className="fontSizeLarge">
-              As a Group Admin:
-            </p>
-            {this.state.adminGroups.length === 0 ? (
-              <p>You are not the admin of any groups.<br/> <br/></p>
-            ) : (
-              <React.Fragment>
-                {this.state.adminGroups.map((e) => (
-                  <Link to={"/groups/" + e.id}>
-                    <button style={{  width: "20em" }} className="button">{e.name}</button>
-                  </Link>
-                ))}
-              </React.Fragment>
-            )}
-
-            <p className="fontSizeLarge">
-              As a Group Member:
-            </p>
-            {this.state.memberGroups.length === 0 ? (
-              <p>You are not a member of any groups.<br/> <br/></p>
-            ) : (
-              <React.Fragment>
-                {this.state.memberGroups.map((e) => (
-                  <div>
-                    <Link to={"/groups/" + e.id}>
-                      <button style={{  width: "20em" }} className="button">{e.name}</button>
+            <MDBContainer className="two-box">
+                <MDBContainer className="box">
+                    <p className="fontSizeLarge">
+                      Group Management
+                    </p>
+                    <Link to={"/groups/new"}>
+                      <button style={{width: "20em"}} className="button">Create New Group</button>
                     </Link>
-                  </div>
-                ))}
-              </React.Fragment>
-            )}
-
-            <p className="fontSizeLarge">
-              Group Management:
-            </p>
-            <Link to={"/groups/new"}>
-              <button style={{width: "20em"}} className="button">Create New Group</button>
-            </Link>
-            <Link to={"/groups/join"}>
-              <button style={{width: "20em"}} className="button">Join Group</button>
-            </Link>
-          </MDBContainer>
+                    <Link to={"/groups/join"}>
+                      <button style={{width: "20em"}} className="button">Join Group</button>
+                    </Link>
+                </MDBContainer>
+                <MDBContainer className="box">
+                  <p className="fontSizeLarge">
+                    Groups
+                  </p>
+                  <p className="fontSizeLarge">
+                    As a Group Admin
+                  </p>
+                  {this.state.adminGroups.length === 0 ? (
+                    <p>You are not the admin of any groups.<br/> <br/></p>
+                  ) : (
+                    <React.Fragment>
+                      {this.state.adminGroups.map((e) => (
+                        <Link to={"/groups/" + e.id}>
+                          <button style={{  width: "20em" }} className="button">{e.name}</button>
+                        </Link>
+                      ))}
+                    </React.Fragment>
+                  )}
+                  <p className="fontSizeLarge">
+                    As a Group Member
+                  </p>
+                  {this.state.memberGroups.length === 0 ? (
+                    <p>You are not a member of any groups.<br/> <br/></p>
+                  ) : (
+                    <React.Fragment>
+                      {this.state.memberGroups.map((e) => (
+                        <div>
+                          <Link to={"/groups/" + e.id}>
+                            <button style={{  width: "20em" }} className="button">{e.name}</button>
+                          </Link>
+                        </div>
+                      ))}
+                    </React.Fragment>
+                  )}
+                </MDBContainer>
+            </MDBContainer>
         </MDBContainer>
       );
     }
   }
 }
 export default withRouter(Groups);
-
