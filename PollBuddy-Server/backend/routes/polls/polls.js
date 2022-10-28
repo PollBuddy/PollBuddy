@@ -1,26 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const mongoConnection = require("../modules/mongoConnection.js");
+const mongoConnection = require("../../modules/mongoConnection.js");
 const {
-  createResponse,
-  validateID,
-  checkPollPublic,
   isLoggedIn,
   isDevelopmentMode,
-  getResultErrors,
-  isEmpty
-} = require("../modules/utils");
-const {sendResponse, httpCodes} = require("../modules/httpCodes.js");
+} = require("../../modules/utils");
+const {sendResponse, httpCodes} = require("../../modules/httpCodes.js");
 const {
   createPoll, getPoll, editPoll, createPollValidator, editPollValidator, createQuestionValidator, createQuestion,
   editQuestionValidator, editQuestion, submitQuestionValidator, submitQuestion, getPollResults, getPollResultsCSV,
   deletePoll, pollParamsValidator
-} = require("../models/Poll");
-const {paramValidator} = require("../modules/validatorUtils");
+} = require("../../models/Poll");
+const {paramValidator, bodyValidator} = require("../../modules/validatorUtils");
 const {Parser} = require("json2csv");
-const {getPollInternal} = require("../modules/modelUtils");
+const {getPollInternal} = require("../../modules/modelUtils");
 const sanitize = require("sanitize-filename");
-
 
 // This file handles /api/polls URLs
 
@@ -33,7 +27,7 @@ const sanitize = require("sanitize-filename");
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/new", function (req, res) {
+router.get("/new", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
@@ -52,14 +46,8 @@ router.get("/new", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/new", isLoggedIn, async (req, res) => {
-  let validResult = createPollValidator.validate(req.body, {abortEarly: false});
-  let errors = getResultErrors(validResult);
-  if (!isEmpty(errors)) {
-    return sendResponse(res, httpCodes.BadRequest(errors));
-  }
-
-  let result = await createPoll(req.session.userData.userID, validResult.value);
+router.post("/new", isLoggedIn, bodyValidator(createPollValidator), async (req, res) => {
+  let result = await createPoll(req.session.userData.userID, req.body);
   return sendResponse(res, result);
 });
 
@@ -72,7 +60,7 @@ router.post("/new", isLoggedIn, async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/:id/edit", function (req, res) {
+router.get("/:id/edit", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
@@ -105,81 +93,43 @@ router.get("/:id/edit", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/edit", isLoggedIn, paramValidator(pollParamsValidator), async (req, res) => {
-  let validResult = editPollValidator.validate(req.body, {abortEarly: false});
-  if (validResult.error) {
-    return sendResponse(res, httpCodes.BadRequest());
-  }
-
-  let response = await editPoll(req.session.userData.userID, req.params.id, validResult.value);
-  return sendResponse(res, response);
-});
-
-/**
- * This route is not used.
- * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-idsubmit
- * @throws 405 - Route not used
- * @name GET api/polls/{id}/submit
- * @param {string} path - Express path.
- * @param {function} callback - Function handler for endpoint.
- */
-// eslint-disable-next-line no-unused-vars
-router.get("/:id/submit", function (req, res) {
-  return res.status(405).send(createResponse(null, "GET is not available for this route. Use POST."));
-});
-
-
-// eslint-disable-next-line no-unused-vars
-router.get("/:id/createQuestion", async (req, res) => {
-  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
-});
-
-router.post("/:id/createQuestion", isLoggedIn, paramValidator(pollParamsValidator), async (req, res) => {
-  let validResult = createQuestionValidator.validate(req.body, {abortEarly: false});
-  let errors = getResultErrors(validResult);
-  if (!isEmpty(errors)) {
-    return sendResponse(res, httpCodes.BadRequest());
-  }
-
-  let response = await createQuestion(req.session.userData.userID, req.params.id, validResult.value);
+router.post("/:id/edit", isLoggedIn, paramValidator(pollParamsValidator), bodyValidator(editPollValidator), async (req, res) => {
+  let response = await editPoll(req.session.userData.userID, req.params.id, req.body);
   return sendResponse(res, response);
 });
 
 // eslint-disable-next-line no-unused-vars
-router.get("/:id/editQuestion", async (req, res) => {
+router.get("/:id/createQuestion", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
-router.post("/:id/editQuestion", isLoggedIn, paramValidator(pollParamsValidator), async (req, res) => {
-  let validResult = editQuestionValidator.validate(req.body, {abortEarly: false});
-
-  let errors = getResultErrors(validResult);
-  if (!isEmpty(errors)) {
-    return sendResponse(res, httpCodes.BadRequest(errors));
-  }
-
-  let response = await editQuestion(req.session.userData.userID, req.params.id, validResult.value);
+router.post("/:id/createQuestion", isLoggedIn, paramValidator(pollParamsValidator), bodyValidator(createQuestionValidator), async (req, res) => {
+  let response = await createQuestion(req.session.userData.userID, req.params.id, req.body);
   return sendResponse(res, response);
 });
 
 // eslint-disable-next-line no-unused-vars
-router.get("/:id/submitQuestion", async (req, res) => {
+router.get("/:id/editQuestion", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
-router.post("/:id/submitQuestion", paramValidator(pollParamsValidator), async (req, res) => {
-  let validResult = submitQuestionValidator.validate(req.body, {abortEarly: false});
-  let errors = getResultErrors(validResult);
-  if (!isEmpty(errors)) {
-    return sendResponse(res, httpCodes.BadRequest(errors));
-  }
+router.post("/:id/editQuestion", isLoggedIn, paramValidator(pollParamsValidator), bodyValidator(editQuestionValidator), async (req, res) => {
+  let response = await editQuestion(req.session.userData.userID, req.params.id, req.body);
+  return sendResponse(res, response);
+});
 
+// eslint-disable-next-line no-unused-vars
+router.get("/:id/submitQuestion", (req, res) => {
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
+});
+
+router.post("/:id/submitQuestion", paramValidator(pollParamsValidator), bodyValidator(submitQuestionValidator), async (req, res) => {
   let userID = null;
   if (req.session.userData && req.session.userData.userID) {
     userID = req.session.userData.userID;
   }
 
-  let response = await submitQuestion(userID, req.params.id, validResult.value);
+  let response = await submitQuestion(userID, req.params.id, req.body);
   return sendResponse(res, response);
 });
 
@@ -192,7 +142,7 @@ router.post("/:id/submitQuestion", paramValidator(pollParamsValidator), async (r
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.get("/:id/delete", async (req, res) => {
+router.get("/:id/delete", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
@@ -228,11 +178,11 @@ router.post("/:id/delete", isLoggedIn, paramValidator(pollParamsValidator), asyn
 router.get("/", isDevelopmentMode, async (req, res) => {
   try {
     const polls = await mongoConnection.getDB().collection("polls").find({}).toArray();
-    return res.status(200).send(createResponse(polls));
+    return sendResponse(res, httpCodes.Ok(polls));
   } catch (e) {
     console.log(e);
   }
-  return res.status(500).send(createResponse(null, "An error occurred while communicating with the database."));
+  return sendResponse(res, httpCodes.InternalServerError("An error occurred while communicating with the database."));
 });
 
 /**
@@ -244,8 +194,8 @@ router.get("/", isDevelopmentMode, async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/", isDevelopmentMode, function (req, res) {
-  res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
+router.post("/", isDevelopmentMode, (req, res) => {
+  return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
 /**
@@ -263,6 +213,7 @@ router.get("/:id", paramValidator(pollParamsValidator), async (req, res) => {
   if (req.session.userData && req.session.userData.userID) {
     userID = req.session.userData.userID;
   }
+
   let result = await getPoll(userID, req.params.id);
   return sendResponse(res, result);
 });
@@ -276,61 +227,8 @@ router.get("/:id", paramValidator(pollParamsValidator), async (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/:id", async (req, res) => {
+router.post("/:id", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
-});
-
-/**
- * Validate a specified ID for a poll, and send questions to the poll.
- * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-idview
- * @returns {Poll} openQuestions
- * @throws 400 - Invalid Poll ID
- * @throws 500 - Failed connection to the poll database
- * @name POST api/polls/{id}/view
- * @param {string} path - Express path.
- * @param {function} callback - Function handler for endpoint.
- */
-router.get("/:id/view", checkPollPublic, async function (req, res) {
-  const id = await validateID("polls", req.params.id);
-  if (!id) {
-    return res.status(400).send(createResponse(null, "Invalid ID."));
-  }
-
-  mongoConnection.getDB().collection("polls").find({"_id": id}).toArray(function (err, result) {
-    if (err) {
-      return res.status(500).send(createResponse("", err)); // TODO: Error message;
-    }
-
-    // Loop through the poll's questions and add to openQuestions the QuestionResults Number, Text and Answer Choices if
-    // the question is set as Visible.
-    let openQuestions = [];
-    for (let i = 0; i < result[0].Questions.length; i++) {
-      if (result[0].Questions[i].Visible) {
-        let q = {};
-        q.QuestionNumber = result[0].Questions[i].QuestionNumber;
-        q.QuestionText = result[0].Questions[i].QuestionText;
-        q.AnswerChoices = result[0].Questions[i].AnswerChoices;
-        q.MaxAllowedChoices = result[0].Questions[i].MaxAllowedChoices;
-        q.TimeLimit = result[0].Questions[i].TimeLimit;
-        openQuestions.push(q);
-      }
-    }
-    // Send the open questions
-    res.status(200).send(createResponse({"Questions": openQuestions, "PollID": id}));
-  });
-});
-
-/**
- * This route is not used.
- * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#post-idview
- * @throws 405 - Route not used
- * @name POST api/polls/{id}/view
- * @param {string} path - Express path.
- * @param {function} callback - Function handler for endpoint.
- */
-// eslint-disable-next-line no-unused-vars
-router.post("/:id/view", function (req, res) {
-  return res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
 
 /**
@@ -357,7 +255,7 @@ router.get("/:id/results", isLoggedIn, paramValidator(pollParamsValidator), asyn
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/:id/results", async (req, res) => {
+router.post("/:id/results", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
 
@@ -397,51 +295,8 @@ router.get("/:id/csv", isLoggedIn, paramValidator(pollParamsValidator), async (r
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-router.post("/:id/csv", async (req, res) => {
+router.post("/:id/csv", (req, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
 });
-
-// Given a userID and a pollID, this function returns true if the user has permission to access the poll, and false otherwise.
-// If the poll is linked to a group (there is information in the .Group data), the group is checked for user access permissions.
-// If the poll is not linked, it returns true by default.
-function checkUserPermission(userID, pollID) { //TODO add checks to make sure IDs are valid
-  const groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id": 0, "Groups": 1})[0].Group; //get groupID attached to poll
-  if (groupID !== undefined && groupID.length !== 0) {
-    // groupID returned something
-    const users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id": 0, "Users": 1})[0].Users; //get list of users in group
-    for (let user in users) {
-      if (user === userID) {
-        return true;
-      }
-    }
-    return false;
-  }
-  // Return true if the poll isn't linked to a group
-  return true;
-}
-
-// Given an adminID (really just a userID) and a pollID, this function returns true if the user has admin permissions for the poll, and false otherwise.
-// If the poll is linked to a group (there is information in the ".Group" data), the group is checked for admin access.
-// If the poll is not linked, it checks the internal .Admin data and returns true see if it finds the adminID, and false otherwise.
-function checkAdminPermission(adminID, pollID) { //TODO add checks to make sure IDs are valid
-  let groupID = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id": 0, "Groups": 1})[0].Group; //get groupID attached to the poll
-  if (groupID.length === 0 || groupID.length === undefined) { //groupID returned something
-    let admins = mongoConnection.getDB().collection("polls").find({"_id": pollID}, {"_id": 0, "Admins": 1})[0].Admins; //get list of admins in attached group
-    for (let admin in admins) {
-      if (admin === adminID) { //check for adminID in list
-        return true;
-      }
-    }
-  } else { //groupID didn't return something
-    let admins = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id": 0, "Admins": 1})[0].Admins; //get internal list of Admins
-    for (let admin in admins) {
-      if (admin === adminID) { //check for adminID in list
-        return true;
-      }
-    }
-  }
-
-  return false; //adminID wasn't found
-}
 
 module.exports = router;

@@ -4,17 +4,17 @@ const supertest = require("supertest");
 const mongo = require("mongodb");
 const MongoClient = mongo.MongoClient;
 
-const mongoConnection = require("../modules/mongoConnection.js");
+const mongoConnection = require("../../modules/mongoConnection.js");
 const pollsRouter = require("./polls");
 
-const {createUser, createGroup} = require("../modules/testingUtils.js");
+const {createUser, createGroup} = require("../../modules/testingUtils.js");
 const {
   createPoll,
   testPoll,
   testPoll2,
   sampleQuestion,
   sampleQuestion2,
-} = require("../modules/testingUtils");
+} = require("../../modules/testingUtils");
 const bson = require("bson");
 
 let mockApp = express();
@@ -717,6 +717,15 @@ describe("/api/polls/:pollID/editQuestion", () => {
     session = {userData: {userID: user.insertedId}};
     await app
       .post("/api/polls/" + poll.insertedId + "/editQuestion")
+      .send({
+        id: new bson.ObjectID(),
+        text: "sample.question2",
+        answers: [
+          {text: "sample.answer", correct: true},
+          {text: "sample.answer2", correct: false},
+        ],
+        maxAllowedChoices: 1,
+      })
       .expect(401)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");

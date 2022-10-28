@@ -8,8 +8,8 @@ const objectID = (value, helpers) => {
     return helpers.error("any.invalid");
   }
   try {
-    let id = new bson.ObjectID(value);
-    return id;
+    return new bson.ObjectID(value);
+
   } catch (err) {
     return helpers.error("any.invalid");
   }
@@ -19,8 +19,7 @@ function paramValidator(validator) {
   return function (req, res, next) {
     let result = validator.validate(req.params);
     if (result.error) {
-      sendResponse(res, httpCodes.BadRequest());
-      return;
+      return sendResponse(res, httpCodes.BadRequest());
     }
     req.params = result.value;
     next();
@@ -29,16 +28,17 @@ function paramValidator(validator) {
 
 function bodyValidator(validator) {
   return function (req, res, next) {
-    let result = validator.validate(req.body);
+    let result = validator.validate(req.body, {
+      abortEarly: false,
+    });
     if (result.error) {
-      sendResponse(res, httpCodes.BadRequest());
-      return;
+      console.log(result.error);
+      return sendResponse(res, httpCodes.BadRequest());
     }
     req.body = result.value;
     next();
   };
 }
-
 
 module.exports = {
   paramValidator,

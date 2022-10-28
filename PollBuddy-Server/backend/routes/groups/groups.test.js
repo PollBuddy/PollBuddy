@@ -4,7 +4,7 @@ const supertest = require("supertest");
 const mongo = require("mongodb");
 const MongoClient = mongo.MongoClient;
 
-const mongoConnection = require("../modules/mongoConnection.js");
+const mongoConnection = require("../../modules/mongoConnection.js");
 const groupsRouter = require("./groups");
 const {
   testUser,
@@ -14,7 +14,7 @@ const {
   createPoll,
   testPoll,
   testGroup2
-} = require("../modules/testingUtils");
+} = require("../../modules/testingUtils");
 
 let mockApp = express();
 let session = {};

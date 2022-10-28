@@ -15,7 +15,6 @@ const cors = require("cors");
 app.use(cors());
 
 
-
 // Express Session
 const expressSession = require("express-session");
 const MongoStore = require("connect-mongo");
@@ -50,11 +49,11 @@ app.use(expressSession({
 const influxConnection = require("./modules/influx.js");
 
 // Handles /api/groups routes URLs
-const groupsRouter = require("./routes/groups");
+const groupsRouter = require("./routes/groups/groups");
 // Handles /api/polls routes URLs
-const pollsRouter = require("./routes/polls");
+const pollsRouter = require("./routes/polls/polls");
 // Handles /api/users routes URLs
-const usersRouter = require("./routes/users");
+const usersRouter = require("./routes/users/users");
 
 // Response Time Logging to InfluxDB
 app.use((req, res, next) => {
@@ -63,6 +62,12 @@ app.use((req, res, next) => {
   res.on("finish", () => {
     const duration = Date.now() - start;
     console.log(`Request to ${req.path} took ${duration}ms`);
+    
+    console.log(req.originalUrl); // '/admin/new?a=b' (WARNING: beware query string)
+    console.log(req.baseUrl); // '/admin'
+    console.log(req.path); // '/new'
+    console.log(req.baseUrl + req.path); // '/admin/new' (full path without query string)
+    console.log(res.statusCode);
 
     influxConnection.log([
       {
@@ -70,9 +75,10 @@ app.use((req, res, next) => {
         tags: {
           host: os.hostname(),
           platform: "backend",
-          path: req.path
+          path: req.baseUrl + req.path
         },
         fields: {
+          status: res.statusCode,
           duration: duration
         },
         timestamp: new Date()
@@ -90,7 +96,7 @@ email.initialize();
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -101,6 +107,7 @@ app.use("/api/users", usersRouter);
 const schoolsModule = require("./modules/schoolList.js");
 
 const {createResponse} = require("./modules/utils");
+const {sendResponse, httpCodes} = require("./modules/httpCodes");
 
 // eslint-disable-next-line no-unused-vars
 app.get("/api/schools", (req, res) => {
@@ -120,8 +127,8 @@ app.get("/api/schools", (req, res) => {
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-app.get("/", function (req, res) {
-  return res.status(200).send(createResponse("Backend is up."));
+app.get("/", (req, res) => {
+  return sendResponse(res, httpCodes.Ok("Backend is up."));
 });
 
 /**
@@ -135,8 +142,8 @@ app.get("/", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-app.get("/api", function (req, res) {
-  return res.status(200).send(createResponse("Backend is up."));
+app.get("/api", (req, res) => {
+  return sendResponse(res, httpCodes.Ok("Backend is up."));
 });
 
 /**
@@ -150,8 +157,8 @@ app.get("/api", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-app.get("/api/healthcheck", function (req, res) {
-  return res.status(200).send(createResponse("Backend is working."));
+app.get("/api/healthcheck", (req, res) => {
+  return sendResponse(res, httpCodes.Ok("Backend is working."));
 });
 
 /**
@@ -162,8 +169,8 @@ app.get("/api/healthcheck", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 // eslint-disable-next-line no-unused-vars
-app.use(function (req, res, next) {
-  res.status(404).send(createResponse(null, "API route not found."));
+app.use((req, res, next) => {
+  return sendResponse(res, httpCodes.NotFound("API route not found."));
 });
 
 
@@ -178,7 +185,7 @@ app.use(function (req, res, next) {
  * @throws error code of given error, or 500 - server error
  * @param {function} callback - Function handler for endpoint.
  */
-app.use(function (err, req, res) {
+app.use((err, req, res) => {
 
   console.log(err);
 

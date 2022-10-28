@@ -35,7 +35,7 @@ const editGroupValidator = Joi.object({
   description: validators.description,
 });
 
-const getGroup = async function (groupID, userID) {
+async function getGroup(groupID, userID) {
   try {
     const group = await getGroupInternal(groupID);
     if (!group) {
@@ -55,9 +55,9 @@ const getGroup = async function (groupID, userID) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
-const createGroup = async function (userID, groupData) {
+async function createGroup(userID, groupData) {
   try {
     let group = createModel(groupSchema, {
       Name: groupData.name,
@@ -72,9 +72,9 @@ const createGroup = async function (userID, groupData) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
-const editGroup = async function (groupID, userID, groupData) {
+async function editGroup(groupID, userID, groupData) {
   try {
     const group = await getGroupInternal(groupID);
     if (!group) {
@@ -100,9 +100,9 @@ const editGroup = async function (groupID, userID, groupData) {
     console.log(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
-const getGroupMembers = async function (groupID, userID) {
+async function getGroupMembers(groupID, userID) {
   try {
     const group = await getGroupInternal(groupID);
     if (!group) {
@@ -127,9 +127,9 @@ const getGroupMembers = async function (groupID, userID) {
     console.log(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
-const getGroupAdmins = async function (groupID, userID) {
+async function getGroupAdmins(groupID, userID) {
   try {
     const group = await getGroupInternal(groupID);
     if (!group) {
@@ -154,9 +154,9 @@ const getGroupAdmins = async function (groupID, userID) {
     console.log(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
-const getGroupPolls = async function (userID, groupID) {
+async function getGroupPolls(userID, groupID) {
   try {
     const group = await getGroupInternal(groupID);
     if (!group) {
@@ -185,9 +185,9 @@ const getGroupPolls = async function (userID, groupID) {
     console.log(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
-const joinGroup = async function (groupID, userID) {
+async function joinGroup(groupID, userID) {
   try {
     const group = await getGroupInternal(groupID);
     if (!group) {
@@ -212,9 +212,9 @@ const joinGroup = async function (groupID, userID) {
     console.log(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
-const leaveGroup = async function (groupID, userID) {
+async function leaveGroup(groupID, userID) {
   try {
     let group = await getGroupInternal(groupID);
     if (!group) {
@@ -239,9 +239,9 @@ const leaveGroup = async function (groupID, userID) {
     console.log(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
-const deleteGroup = async function (groupID, userID) {
+async function deleteGroup(groupID, userID) {
   try {
     let group = await getGroupInternal(groupID);
     if (!group) {
@@ -259,7 +259,7 @@ const deleteGroup = async function (groupID, userID) {
     console.log(err);
     return httpCodes.InternalServerError();
   }
-};
+}
 
 module.exports = {
   createGroupValidator,
