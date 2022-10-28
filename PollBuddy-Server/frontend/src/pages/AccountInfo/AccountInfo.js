@@ -117,7 +117,7 @@ class AccountInfo extends Component {
     });
   }
 
-  saveChanges(){
+  async saveChanges(){
     const schema = Joi.object({
       username: Joi.string()
         .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$"))
@@ -203,8 +203,8 @@ class AccountInfo extends Component {
       }
       passwordInput = passwordValid.value.password;
     }
-    
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
+
+    const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
@@ -215,11 +215,9 @@ class AccountInfo extends Component {
         password: this.state.passwordLocked ? undefined : passwordInput,
         logOutEverywhere: this.state.logOutEverywhere
       })
-    })
-      .then(response => response.json())
-      .then(response => {
-        console.log(response);
-      });
+    });
+    const response = await httpResponse.json();
+    console.log(response);
     this.setState({done: true});
   }
 
@@ -227,20 +225,19 @@ class AccountInfo extends Component {
     this.setState(state => ({showPassword: !state.showPassword}));
   }
 
-  handleLogOutEverywhere(){
+  async handleLogOutEverywhere(){
     this.setState(state => ({
       logOutEverywhere: !state.logOutEverywhere
     }));
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
+    const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: {
         password: this.state.password, // TODO: needs to be verified to function
         logOutEverywhere: this.state.logOutEverywhere
       }
-    }).then(response => {
-      console.log(response);
     });
+    console.log(response);
   }
 
   render() {
