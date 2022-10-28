@@ -37,17 +37,13 @@ function useOutsideAlerter(ref, menuProps) {
     document.addEventListener("click", handleClickOutside);
     // Stop propagation to Logout (so we don't log out every menu click) only if logged in
     if(localStorage.getItem("loggedIn") === "true") {
-      document.getElementById("logout").addEventListener("click",function(e) {
+      document.getElementById("logout").addEventListener("click",async function(e) {
         e.stopPropagation();
-        fetch(process.env.REACT_APP_BACKEND_URL + "/users/logout", {
+        const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/logout", {
           method: "POST"
-        }).then(response => {
-          if(response.ok) {
-            return response.json();
-          } else {
-            console.log("Error Logging Out");
-          }
-        }).then(response => {
+        });
+        if(httpResponse.ok) {
+          const response = httpResponse.json();
           console.log(response);
           if(response.result === "success") {
             //Logout has succeeded, Clear frontend user data
@@ -62,7 +58,9 @@ function useOutsideAlerter(ref, menuProps) {
           navigate("/");
           //Reloads the page so that the logged-in menu closes
           //history.go(0);
-        });
+        }else {
+          console.log("Error Logging Out");
+        }
       });
     }
     return () => {
