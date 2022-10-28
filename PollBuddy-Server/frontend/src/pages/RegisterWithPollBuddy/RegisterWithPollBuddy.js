@@ -38,7 +38,7 @@ export default class RegisterWithPollBuddy extends Component {
     this.props.updateTitle("Register with Poll Buddy");
   }
 
-  handleRegister() {
+  async handleRegister() {
     // do input validation
     const schema = Joi.object({
       username: Joi.string()
@@ -85,17 +85,18 @@ export default class RegisterWithPollBuddy extends Component {
       return;
     }
 
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/register", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({
-        firstName: this.state.firstname,
-        lastName: this.state.lastname,
-        userName: this.state.username.toLowerCase(),
-        email: this.state.email.toLowerCase(),
-        password: this.state.password
-      })
-    }).then(response => {
+    try {
+      const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/register", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          firstName: this.state.firstname,
+          lastName: this.state.lastname,
+          userName: this.state.username.toLowerCase(),
+          email: this.state.email.toLowerCase(),
+          password: this.state.password
+        })
+      });
       if (response.status === 200) {
         //needs some authentication before and if authentication passes then set local storage and such refer to GroupCreation page to see the way to make POST requests to the backend
         localStorage.setItem("loggedIn", "true");
@@ -104,10 +105,10 @@ export default class RegisterWithPollBuddy extends Component {
       } else {
         // TODO: This needs to be handled
       }
-    }).catch(err => {
+    } catch (err) {
       console.log(err);
       this.setState({error: "An error occurred during login. Please try again"});
-    });
+    }
   }
 
   render() {
