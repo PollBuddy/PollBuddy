@@ -174,7 +174,7 @@ const getGroupPolls = async function (userID, groupID) {
 
 const joinGroup = async function (groupID, userID) {
   try {
-    const group = await getGroupInternal({"_id": groupID, "Members": { "$nin": ["userID"]}});
+    const group = await getGroupInternal({"_id": groupID, "Members": { "$nin": [userID]}, "Admins": { "$nin": [userID]}});
     if (!group) {
       return httpCodes.NotFound();
     }

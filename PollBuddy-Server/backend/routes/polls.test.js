@@ -77,7 +77,7 @@ describe("/api/polls/:pollID", () => {
     let user = await createUser();
     let poll = await createPoll({Creator: user.insertedId});
     session = {userData: {userID: user.insertedId}};
-    await app
+    await app 
       .get("/api/polls/" + poll.insertedId)
       .expect(200)
       .then(async (response) => {
@@ -310,7 +310,7 @@ describe("/api/polls/new", () => {
         description: testPoll.Description,
         group: group.insertedId,
       })
-      .expect(401)
+      .expect(400)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });

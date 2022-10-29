@@ -18,7 +18,7 @@ const isGroupAdmin = async function(groupID, userID) {
 };
 
 const isGroupMember = async function(groupID, userID) {
-  let group = getGroupInternal({"_id": groupID, "Members": userID});
+  let group = await getGroupInternal({"_id": groupID, "Members": userID});
   if (group) {
     return true;
   }
