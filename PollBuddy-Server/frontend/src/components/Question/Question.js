@@ -8,7 +8,6 @@ import {
 import {Navigate} from "react-router-dom";
 import Timer from "../Timer/Timer.js";
 
-
 export default class Question extends Component {
   choiceOrder;
   questionStartTime;
@@ -62,7 +61,6 @@ export default class Question extends Component {
   onTimeEnd(){
     this.state.canChoose = false;
   }
-
 
   selectChoice(index) {
     if(!this.state.canChoose){

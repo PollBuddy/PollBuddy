@@ -3,18 +3,25 @@ import "mdbreact/dist/css/mdb.css";
 import {MDBContainer} from "mdbreact";
 import ReactMarkdown from "react-markdown";
 import privacyMdPath from "./Privacy.md";
+import faqFile from "../FAQ/faq.md";
 
 export default class Privacy extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {terms: null};
+    this.state = {
+      terms: null
+    };
   }
 
   componentWillMount() {
-    fetch(privacyMdPath).then((response) => response.text()).then((text) => {
-      this.setState({terms: text});
-    });
+    this.getText();
+  }
+
+  async getText() {
+    const httpResponse = await fetch(privacyMdPath);
+    const text = await httpResponse.text();
+    this.setState({questions: text});
   }
 
   componentDidMount() {
@@ -27,8 +34,7 @@ export default class Privacy extends Component {
       <MDBContainer className="page">
         <MDBContainer className="box box-body-text">
           <h1>Our Privacy Policy</h1>
-          {/* Render page from markdown file using react-markdown */}
-          <ReactMarkdown children={this.state.terms} />
+          <ReactMarkdown children={this.state.terms}/>
         </MDBContainer>
       </MDBContainer>
     );

@@ -1,15 +1,14 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import {Navigate} from "react-router-dom";
 import "mdbreact/dist/css/mdb.css";
 import "./LoginWithPollBuddy.scss";
-import { MDBContainer } from "mdbreact";
+import {MDBContainer} from "mdbreact";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
-const Joi = require("joi");
+import Joi from "joi";
 
 class LoginWithPollBuddy extends Component {
 
-  
-  constructor(props){
+  constructor(props) {
     super(props);
     let prevRoute = "/";
     if (props.router.location.state && props.router.location.state.prevRoute) {
@@ -23,16 +22,21 @@ class LoginWithPollBuddy extends Component {
       userNameEmail: "",
       password: ""
     };
-    if(localStorage.getItem("loggedIn") === "true"){
+    if (localStorage.getItem("loggedIn") === "true") {
       this.setState({successfulLogin: true}); // Tell it to redirect to the next page if already logged in
     }
   }
-  handleLogin() {
+
+  componentDidMount() {
+    this.props.updateTitle("Login With Poll Buddy");
+  }
+
+  handleLogin = async () => {
     const schema = Joi.object({
       username: Joi.string()
         .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$"))
         .error(new Error("Please enter a valid username or email.")),
-      email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2}).max(320)
+      email: Joi.string().email({tlds: {allow: false}, minDomainSegments: 2}).max(320)
         .error(new Error("Please enter a valid username or email.")),
       password: Joi.string()
         .pattern(new RegExp("^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$"))
@@ -41,56 +45,48 @@ class LoginWithPollBuddy extends Component {
         .error(new Error("Please enter a valid password.")),
     });
     //we need to validate each separately because either username or email could work
-    const validUsername = schema.validate({ username: this.state.userNameEmail });
-    const validEmail = schema.validate({ email: this.state.userNameEmail });
-    const validPassword = schema.validate({ password: this.state.password });
+    const validUsername = schema.validate({username: this.state.userNameEmail});
+    const validEmail = schema.validate({email: this.state.userNameEmail});
+    const validPassword = schema.validate({password: this.state.password});
 
     //error in username/email
-    if(validUsername.error && validEmail.error){
+    if (validUsername.error && validEmail.error) {
       this.setState({error: validUsername.error.toString()});
       return;
     }
     //error in password
-    if(validPassword.error){
-      this.setState({error:validPassword.error.toString()});
+    if (validPassword.error) {
+      this.setState({error: validPassword.error.toString()});
       return;
     }
     //no errors
     this.setState({error: ""});
 
     // login request to backend
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/login", {
+    let httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/login", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
         userNameEmail: this.state.userNameEmail,
         password: this.state.password
       })
-    }).then(response => {
-      if (response.status === 200) {
-        //needs some authentication before and if authentication passes then set local storage and such refer to GroupCreation page to see the way to make POST requests to the backend
-        localStorage.setItem("loggedIn", "true");//maybe have an admin/teacher var instead of just true
-        this.setState({successfulLogin: true}); // Tell it to redirect to the next page if successful
-      } else {
-        this.setState({error: "Invalid username/email and password combination"});
-        this.setState({numLoginAttempts: this.state.numLoginAttempts + 1});
-        if (this.state.numLoginAttempts >= 5) { // If too many login attempts, offer to reset password
-          this.setState({error: this.state.error + "\nForgot your password? Try clicking \"Forgot Password?\" to reset your password."});
-        }
-      }
-    }).catch(err => {
-      console.log(err);
-      this.setState({error: "An error occurred during login. Please try again"});
     });
-  }
-
-  componentDidMount(){
-    this.props.updateTitle("Login With Poll Buddy");
-  }
+    let response = await httpResponse.json();
+    if (response.result === "success") {
+      //needs some authentication before and if authentication passes then set local storage and such refer to GroupCreation page to see the way to make POST requests to the backend
+      localStorage.setItem("loggedIn", "true");//maybe have an admin/teacher var instead of just true
+      this.setState({successfulLogin: true}); // Tell it to redirect to the next page if successful
+    } else {
+      this.setState({error: "Invalid username/email and password combination"});
+      this.setState({numLoginAttempts: this.state.numLoginAttempts + 1});
+      if (this.state.numLoginAttempts >= 5) { // If too many login attempts, offer to reset password
+        this.setState({error: this.state.error + "\nForgot your password? Try clicking \"Forgot Password?\" to reset your password."});
+      }
+    }
+  };
 
   render() {
-    this.handleLogin = this.handleLogin.bind(this); // This is needed so stuff like this.setState works
-    if(this.state.successfulLogin) { // Basically redirect if the person is logged in or if their login succeeds
+    if (this.state.successfulLogin) {
       let route = "";
       if (this.state.prevRoute) {
         route += this.state.prevRoute;
@@ -104,20 +100,24 @@ class LoginWithPollBuddy extends Component {
         <MDBContainer className="box">
           <MDBContainer className="form-group">
             <label htmlFor="userNameEmail">Username or Email:</label>
-            <input type="userNameEmail" placeholder="Your username or email" className="form-control textBox" id="userNameEmail"
-              onChange={(evt) => { this.setState({userNameEmail: evt.target.value}); }}/>
+            <input type="userNameEmail" placeholder="Your username or email" className="form-control textBox"
+              id="userNameEmail"
+              onChange={(evt) => {
+                this.setState({userNameEmail: evt.target.value});
+              }}/>
             <label htmlFor="password">Password:</label>
             <input type="password" placeholder="••••••••••••" className="form-control textBox" id="password"
-              onChange={(evt) => { this.setState({password: evt.target.value}); }}/>
+              onChange={(evt) => {
+                this.setState({password: evt.target.value});
+              }}/>
           </MDBContainer>
+          <p style={{color: "red"}}>{this.state.error}</p>
+          <button className="button" onClick={this.handleLogin}>Submit</button>
 
-          <p style={{color: "red"}}>{ this.state.error }</p>
-          <button className = "button" onClick={this.handleLogin}>Submit</button>
-
-          <a className="Login-link" href = "/register">
+          <a className="Login-link" href="/register">
             Register
           </a>
-          <a className="Login-link" href = "/login/forgot">
+          <a className="Login-link" href="/login/forgot">
             Forgot Password?
           </a>
         </MDBContainer>

@@ -1,14 +1,14 @@
 import React, {Component} from "react";
-import { MDBContainer } from "mdbreact";
+import {MDBContainer} from "mdbreact";
 import autosize from "autosize";
 import "./PollEditor.scss";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import TextField from '@mui/material/TextField';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateTimePicker from '@mui/lab/DateTimePicker';
-import { purple } from '@mui/material/colors';
+import TextField from "@mui/material/TextField";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DateTimePicker from "@mui/lab/DateTimePicker";
+import {purple} from "@mui/material/colors";
 import {createTheme, ThemeProvider} from "@mui/material";
 import {Link} from "react-router-dom";
 
@@ -53,11 +53,14 @@ class PollEditor extends Component {
   async componentDidMount() {
     autosize(document.querySelector("textarea"));
     this.props.updateTitle("Poll Editor");
+    this.getPollData();
+  }
+
+  async getPollData() {
     const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID, {
       method: "GET"
     });
     const response = await httpResponse.json();
-    console.log(response);
     this.setState({
       pollTitle: response.data.title,
       pollDescription: response.data.description,
@@ -88,23 +91,19 @@ class PollEditor extends Component {
     });
   };
 
-  getPollData = () => {
-    return {
-      title: this.state.pollTitle,
-      description: this.state.pollDescription,
-      openTime: this.state.openTime,
-      closeTime: this.state.closeTime,
-    };
-  };
-
   savePoll = async () => {
     this.setState({
       loadingPollData: true,
     });
     const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/edit", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(this.getPollData())
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        title: this.state.pollTitle,
+        description: this.state.pollDescription,
+        openTime: this.state.openTime,
+        closeTime: this.state.closeTime,
+      })
     });
     const response = await httpResponse.json();
     if (response.result === "success") {
@@ -155,7 +154,7 @@ class PollEditor extends Component {
     if (this.state.displayNewQuestion) {
       const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/createQuestion", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
           text: this.state.questionTextInput,
           answers: this.state.currentAnswers,
@@ -182,7 +181,7 @@ class PollEditor extends Component {
     } else if (this.state.displayEditQuestion) {
       const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/editQuestion", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
           id: this.state.currentQuestion.id,
           text: this.state.questionTextInput,
@@ -276,12 +275,12 @@ class PollEditor extends Component {
   }
 
   moveQuestionUp(index) {
-    let reorderedQuestions = this.move(index, index-1);
+    let reorderedQuestions = this.move(index, index - 1);
     this.setState({questions: reorderedQuestions});
   }
 
   moveQuestionDown(index) {
-    let reorderedQuestions = this.move(index, index+1);
+    let reorderedQuestions = this.move(index, index + 1);
     this.setState({questions: reorderedQuestions});
   }
 
@@ -296,10 +295,11 @@ class PollEditor extends Component {
     return this.state.questions;
   }
 
-  onOpenTimeChange = (e) =>{
+  onOpenTimeChange = (e) => {
     this.setState({openTime: Date.parse(e)});
   };
-  onCloseTimeChange = (e) =>{
+
+  onCloseTimeChange = (e) => {
     this.setState({closeTime: Date.parse(e)});
   };
 
@@ -328,7 +328,8 @@ class PollEditor extends Component {
                 </p>
                 <p>Poll Title</p>
                 <input
-                  type="GroupName" placeholder="Poll title" className="form-control textBox" id="pollTitle" maxLength="100"
+                  type="GroupName" placeholder="Poll title" className="form-control textBox" id="pollTitle"
+                  maxLength="100"
                   name="pollTitle"
                   value={this.state.pollTitle}
                   onChange={this.onInput}/>
@@ -345,9 +346,9 @@ class PollEditor extends Component {
                       value={this.state.openTime}
                       onChange={this.onOpenTimeChange}
                       renderInput={(props) => <TextField {...props} sx={{
-                        svg: { color },
-                        input: { color },
-                        label: { color }
+                        svg: {color},
+                        input: {color},
+                        label: {color}
                       }}
                       />}
                     />
@@ -357,9 +358,9 @@ class PollEditor extends Component {
                   <ThemeProvider theme={defaultMaterialTheme}>
                     <DateTimePicker
                       renderInput={(props) => <TextField {...props} sx={{
-                        svg: { color },
-                        input: { color },
-                        label: { color }
+                        svg: {color},
+                        input: {color},
+                        label: {color}
                       }}
                       />}
                       label="Poll Close Time"
@@ -409,19 +410,19 @@ class PollEditor extends Component {
                     <LoadingWheel/>
                   </MDBContainer> :
                   <>
-                    { !(this.state.displayEditQuestion || this.state.displayNewQuestion) &&
+                    {!(this.state.displayEditQuestion || this.state.displayNewQuestion) &&
                       <div id="poll_questions" className="Poll_Editor_center">
                         {this.state.questions.length === 0 && !this.state.displayNewQuestion ? (
                           <p>Sorry, you don't have any questions.</p>
                         ) : (
                           <React.Fragment>
                             {this.state.questions.map((question, index) => (
-                              <div id={"question-" + (index+1)}>
+                              <div id={"question-" + (index + 1)}>
                                 <button
-                                  style={{  width: "17em" }} className="button"
+                                  style={{width: "17em"}} className="button"
                                   onClick={() => this.editQuestion(question)}
                                 >
-                                  {"Question " + (index+1) + ": " + question.text}
+                                  {"Question " + (index + 1) + ": " + question.text}
                                 </button>
                               </div>
                             ))}
@@ -435,7 +436,7 @@ class PollEditor extends Component {
                         </button>
                       </div>
                     }
-                    { (this.state.displayEditQuestion || this.state.displayNewQuestion) &&
+                    {(this.state.displayEditQuestion || this.state.displayNewQuestion) &&
                       <>
                         <MDBContainer className="form-group">
                           <input
@@ -452,7 +453,9 @@ class PollEditor extends Component {
                           </p>
                           <button
                             type="submit" className="button"
-                            onClick={() => { this.incrementMaxAllowedChoices(1); }}
+                            onClick={() => {
+                              this.incrementMaxAllowedChoices(1);
+                            }}
                           >
                             +
                           </button>
@@ -461,7 +464,9 @@ class PollEditor extends Component {
                           </p>
                           <button
                             type="submit" className="button"
-                            onClick={() => { this.incrementMaxAllowedChoices(-1); }}
+                            onClick={() => {
+                              this.incrementMaxAllowedChoices(-1);
+                            }}
                           >
                             -
                           </button>
@@ -478,7 +483,7 @@ class PollEditor extends Component {
                                 <input
                                   id={"questionAnswer-" + (index)}
                                   className="form-control textBox"
-                                  placeholder={"Answer " + (index+1)}
+                                  placeholder={"Answer " + (index + 1)}
                                   name={index}
                                   value={value.text}
                                   onInput={this.onAnswerInput}
@@ -492,7 +497,9 @@ class PollEditor extends Component {
                                 />
                                 <button
                                   type="submit" className="button"
-                                  onClick={() => { this.deleteAnswer(index); }}
+                                  onClick={() => {
+                                    this.deleteAnswer(index);
+                                  }}
                                 >
                                   Delete
                                 </button>

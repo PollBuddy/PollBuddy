@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import "mdbreact/dist/css/mdb.css";
-import { MDBContainer } from "mdbreact";
+import {MDBContainer} from "mdbreact";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
@@ -16,17 +16,9 @@ class PollCreation extends Component {//this class will likely need to call Grou
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.updateTitle("Poll Creation");
   }
-
-  getPollData = () => {
-    return {
-      title: this.state.title,
-      description: this.state.description,
-      group: this.state.groupID || undefined,
-    };
-  };
 
   onInput = (e) => {
     this.setState({
@@ -36,34 +28,22 @@ class PollCreation extends Component {//this class will likely need to call Grou
 
   onSubmit = async () => {
     this.setState({showError: false});
-    await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/new", {
+    let httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/new", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(this.getPollData())
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        if (response.result === "success") {
-          this.props.router.navigate("/polls/" + response.data.id + "/edit");
-        } else {
-          this.setState({errors: response.error});
-          this.setState({showError: true});
-        }
-      });
-  };
-
-  checkError() {
-    if(this.state.errors.title === true && this.state.errors.description === true) {
-      return this.state.showError ? <ErrorText text={"Must enter a title and description!"}/> : null;
-    } else if(this.state.errors.title === true) {
-      return this.state.showError ? <ErrorText text={"Must enter a title!"}/> : null;
-    } else if(this.state.errors.description === true) {
-      return this.state.showError ? <ErrorText text={"Must enter a description!"}/> : null;
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        title: this.state.title,
+        description: this.state.description,
+        group: this.state.groupID || undefined,
+      })
+    });
+    let response = httpResponse.json();
+    if (response.result === "success") {
+      this.props.router.navigate("/polls/" + response.data.id + "/edit");
     } else {
-      return this.state.showError ? <ErrorText text={"An unknown error has occurred."}/> : null;
+      this.setState({showError: true});
     }
-  }
+  };
 
   render() {
     return (
@@ -87,7 +67,7 @@ class PollCreation extends Component {//this class will likely need to call Grou
               onInput={this.onInput}
             />
           </MDBContainer>
-          {this.checkError()}
+          <ErrorText show={this.state.showError}/>
           <button className="button" onClick={this.onSubmit}>
             Create Poll
           </button>

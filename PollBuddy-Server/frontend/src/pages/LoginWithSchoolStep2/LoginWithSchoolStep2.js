@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { MDBContainer } from "mdbreact";
+import React, {Component} from "react";
+import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
@@ -12,14 +12,14 @@ class LoginWithSchoolStep2 extends Component {
 
     // Process args
     // TODO: Some of this should probably be in a try/catch or something for robustness
-    if(this.props.router.location.search) {
+    if (this.props.router.location.search) {
       console.log("Getting things");
       let result = new URLSearchParams(this.props.router.location.search).get("result");
       let data = JSON.parse(new URLSearchParams(this.props.router.location.search).get("data"));
       let error = new URLSearchParams(this.props.router.location.search).get("error");
 
       // Set up the state
-      if(error) {
+      if (error) {
         this.state = {
           result: result,
           error: error,
@@ -42,7 +42,6 @@ class LoginWithSchoolStep2 extends Component {
         doneLoading: true,
       };
     }
-
   }
 
   componentDidMount() {
@@ -51,12 +50,12 @@ class LoginWithSchoolStep2 extends Component {
 
   render() {
     if (this.state.result === "failure") {
-      if(this.state.error === "User is not registered."){
+      if (this.state.error === "User is not registered.") {
         console.log("Error: " + this.state.error);
         alert("Error: You are not registered! Redirecting to registration page...");
         // Redirect to register page
         return (<Navigate to="/register/school" push={true}/>);
-      } else if(this.state.error === "User has not logged in with RPI."){
+      } else if (this.state.error === "User has not logged in with RPI.") {
         console.log("Error: " + this.state.error);
         alert("Error: Something went wrong with the school login process. Please try again, redirecting to login page...");
         // Redirect to login page
@@ -67,7 +66,7 @@ class LoginWithSchoolStep2 extends Component {
           <ErrorText text={this.state.error}> </ErrorText>
         );
       }
-    } else if(!this.state.doneLoading){
+    } else if (!this.state.doneLoading) {
       return (
         <MDBContainer className="page">
           <LoadingWheel/>

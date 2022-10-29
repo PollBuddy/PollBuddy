@@ -4,16 +4,22 @@ import {MDBContainer} from "mdbreact";
 import ReactMarkdown from "react-markdown";
 import quickStartGuide from "./QuickStartGuide.md";
 
-
-
 export default class QuickStartGuide extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {terms: null};
+    this.state = {
+      terms: null
+    };
   }
 
   async componentWillMount() {
+    const response = await fetch(quickStartGuide);
+    const text = await response.text();
+    this.setState({terms: text});
+  }
+
+  async getText() {
     const response = await fetch(quickStartGuide);
     const text = await response.text();
     this.setState({terms: text});
@@ -27,8 +33,7 @@ export default class QuickStartGuide extends Component {
     return (
       <MDBContainer className="page">
         <div className="box box-body-text">
-          {/* Render page from markdown file using react-markdown */}
-          <ReactMarkdown children={this.state.terms} unwrapDisallowed={true} />
+          <ReactMarkdown children={this.state.terms} unwrapDisallowed={true}/>
         </div>
       </MDBContainer>
     );

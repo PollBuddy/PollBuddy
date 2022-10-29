@@ -3,7 +3,6 @@ import {Link} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
-import ErrorText from "../../components/ErrorText/ErrorText";
 
 class Group extends Component {
   constructor(props) {
@@ -24,13 +23,18 @@ class Group extends Component {
 
   async componentDidMount() {
     this.props.updateTitle(this.state.name);
+    this.getGroupData();
+    this.getGroupPolls();
+  }
+
+  async getGroupData() {
     let httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id, {
       method: "GET"
     });
     let response = await httpResponse.json();
     if (response.result === "success") {
       this.props.updateTitle(response.data.name);
-      if (response.data.isMember || response.data.isAdmin ) {
+      if (response.data.isMember || response.data.isAdmin) {
         this.setState({
           name: response.data.name,
           description: response.data.description,
@@ -48,33 +52,17 @@ class Group extends Component {
         showError: true,
       });
     }
-    httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/polls", {
+  }
+
+  async getGroupPolls() {
+    let httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/polls", {
       method: "GET"
     });
-    response = await httpResponse.json();
-    console.log(response);
+    let response = await httpResponse.json();
     if (response.result === "success") {
       this.setState({
         polls: response.data,
       });
-    }
-  }
-
-  pollButtonClick = (pollID) => {
-    if (this.state.isAdmin) {
-      this.props.router.navigate("/polls/" + pollID + "/edit");
-    } else if (this.state.isMember) {
-      this.props.router.navigate("/polls/" + pollID + "/view");
-    }
-  };
-
-  toggleTextBox(elementId, selector, text) {
-    if (document.getElementById(elementId).style.display === "block") {
-      document.getElementById(elementId).style.display = "none";
-      document.querySelector(selector).textContent = text;
-    } else {
-      document.getElementById(elementId).style.display = "block";
-      document.querySelector(selector).textContent = "Submit";
     }
   }
 
@@ -102,39 +90,30 @@ class Group extends Component {
     });
   };
 
-  onSubmit = () => {
+  onSubmit = async () => {
     this.setState({doneLoading: false});
-    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/edit", {
+    let httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/edit", {
       method: "POST",
-      headers: {"Content-Type": "application/json"},//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
-      body: JSON.stringify(this.getGroupData())
-    }).then((response) => response.json())
-      .then((response) => {
-        if (response.result === "success") {
-          this.setState({
-            showError: false,
-            name: this.state.nameInput,
-            description: this.state.descriptionInput,
-            doneLoading: true,
-          });
-        } else {
-          this.setState({
-            showError: true,
-            doneLoading: true,
-          });
-        }
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        name: this.state.nameInput,
+        description: this.state.descriptionInput,
+      })
+    });
+    let response = await httpResponse.json();
+    if (response.result === "success") {
+      this.setState({
+        showError: false,
+        name: this.state.nameInput,
+        description: this.state.descriptionInput,
+        doneLoading: true,
       });
-  };
-
-  getGroupData = () => {
-    return {
-      name: this.state.nameInput,
-      description: this.state.descriptionInput,
-    };
-  };
-
-  checkError = () => {
-    return this.state.showError ? <ErrorText/> : null;
+    } else {
+      this.setState({
+        showError: true,
+        doneLoading: true,
+      });
+    }
   };
 
   render() {
@@ -211,7 +190,6 @@ class Group extends Component {
                     onInput={this.onInput}
                   />
                 </MDBContainer>
-                {this.checkError()}
                 <button style={{width: "17em"}}
                   className="button" onClick={this.onSubmit}>
                   Save Changes

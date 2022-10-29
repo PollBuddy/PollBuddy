@@ -1,12 +1,17 @@
 {
-  "extends": ["eslint:recommended", "react-app", "react-app/jest"],
+  "extends": [
+    "eslint:recommended",
+    "react-app",
+    "react-app/jest"
+  ],
   "rules": {
     "no-unused-vars": [
       "warn",
       {
         "vars": "all",
         "args": "all"
-      }],
+      }
+    ],
     "indent": [
       "error",
       2
@@ -30,7 +35,9 @@
     "brace-style": [
       "error",
       "1tbs",
-      { "allowSingleLine": true }
+      {
+        "allowSingleLine": true
+      }
     ],
     "default-case": "warn",
     "eqeqeq": "warn",
@@ -40,6 +47,13 @@
     "no-shadow": "warn",
     "no-duplicate-imports": "error",
     "camelcase": "warn",
-    "no-var": "warn"
+    "no-var": "warn",
+    "no-multiple-empty-lines": [
+      "warn",
+      {
+        "max": 1,
+        "maxEOF": 0
+      }
+    ]
   }
 }

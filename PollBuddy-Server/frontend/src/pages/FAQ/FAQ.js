@@ -11,14 +11,15 @@ export default class FAQ extends Component {
     this.state = {questions: null};
   }
 
-  async componentWillMount() {
-    const response = await fetch(faqFile);
-    const text = await response.text();
-    this.setState({questions: text});
-  }
-
   componentDidMount() {
     this.props.updateTitle("Frequently Asked Questions");
+    this.getText();
+  }
+
+  async getText() {
+    const httpResponse = await fetch(faqFile);
+    const text = await httpResponse.text();
+    this.setState({questions: text});
   }
 
   render() {
