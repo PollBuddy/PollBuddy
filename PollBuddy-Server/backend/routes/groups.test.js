@@ -186,7 +186,7 @@ describe("/api/groups/:id/edit", () => {
     let group = await createGroup();
     session = {userData: {userID: user.insertedId}};
     await app.post("/api/groups/" + group.insertedId + "/edit")
-      .expect(403)
+      .expect(404)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });
@@ -222,7 +222,7 @@ describe("/api/groups/:id/admins", () => {
     let group = await createGroup();
     session = {userData: {userID: user.insertedId}};
     await app.get("/api/groups/" + group.insertedId + "/admins")
-      .expect(403)
+      .expect(404)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });
@@ -258,7 +258,7 @@ describe("/api/groups/:id/members", () => {
     let group = await createGroup();
     session = {userData: {userID: user.insertedId}};
     await app.get("/api/groups/" + group.insertedId + "/members")
-      .expect(403)
+      .expect(404)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });
@@ -400,7 +400,7 @@ describe("/api/groups/:id/join", () => {
     let group = await createGroup({Admins: [user.insertedId]});
     session = {userData: {userID: user.insertedId}};
     await app.post("/api/groups/" + group.insertedId + "/join")
-      .expect(403)
+      .expect(404)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });
@@ -433,12 +433,12 @@ describe("/api/groups/:id/leave", () => {
       });
   });
 
-  it("POST: leave group as non member", async () => {
+  it("POST: join group as group member", async () => {
     let user = await createUser();
     let group = await createGroup({Admins: [user.insertedId]});
     session = {userData: {userID: user.insertedId}};
     await app.post("/api/groups/" + group.insertedId + "/join")
-      .expect(403)
+      .expect(404)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });
@@ -476,7 +476,7 @@ describe("/api/groups/:id/delete", () => {
     let group = await createGroup();
     session = {userData: {userID: user.insertedId}};
     await app.post("/api/groups/" + group.insertedId + "/delete")
-      .expect(403)
+      .expect(404)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });

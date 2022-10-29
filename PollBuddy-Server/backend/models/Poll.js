@@ -4,15 +4,15 @@ const {createModel} = require("../modules/utils");
 const mongoConnection = require("../modules/mongoConnection.js");
 const {httpCodes} = require("../modules/httpCodes.js");
 const {
-  getGroupInternal, isGroupMember, isGroupAdmin, getPollInternal, getQuestionInternal, isPollAdmin,
-  getUserInternal
+  getGroupInternal, isGroupMember, getPollInternal, getQuestionInternal, isPollAdmin,
+  getUserInternal, isPollAdminByPoll, getQuestionInternalByPoll
 } = require("../modules/modelUtils");
 const {objectID} = require("../modules/validatorUtils");
 
 const pollValidators = {
   title: Joi.string().min(1).max(32),
   description: Joi.string().min(0).max(128),
-  group: Joi.string(),
+  group: Joi.custom(objectID).required(),
 };
 
 const pollParamsValidator = Joi.object({
@@ -112,7 +112,7 @@ const getQuestion = function (question, isAdmin) {
 
 const getPoll = async function (userID, pollID) {
   try {
-    let poll = await getPollInternal(pollID);
+    let poll = await getPollInternal({"_id": pollID});
     if (!poll) {
       return httpCodes.NotFound({
         errorCode: 100,
@@ -122,7 +122,7 @@ const getPoll = async function (userID, pollID) {
 
     let isUserPollAdmin = false;
     if (userID) {
-      isUserPollAdmin = await isPollAdmin(userID, pollID);
+      isUserPollAdmin = await isPollAdminByPoll(userID, poll);
     }
     if (!isUserPollAdmin) {
       if (Date.now() > poll.OpenTime && Date.now() < poll.CloseTime) {
@@ -189,12 +189,12 @@ const getPoll = async function (userID, pollID) {
 
 const getPollResults = async function (userID, pollID) {
   try {
-    let poll = await getPollInternal(pollID);
+    let poll = await getPollInternal({"_id": pollID});
     if (!poll) {
       return httpCodes.NotFound("Invalid Poll: Poll does not exist.");
     }
 
-    let isUserPollAdmin = await isPollAdmin(userID, pollID);
+    let isUserPollAdmin = await isPollAdminByPoll(userID, poll);
     if (!isUserPollAdmin) {
       return httpCodes.Unauthorized();
     }
@@ -251,12 +251,12 @@ const getPollResults = async function (userID, pollID) {
 
 const getPollResultsCSV = async function (userID, pollID) {
   try {
-    let poll = await getPollInternal(pollID);
+    let poll = await getPollInternal({"_id": pollID});
     if (!poll) {
       return httpCodes.NotFound("Invalid Poll: Poll does not exist.");
     }
 
-    let isUserPollAdmin = await isPollAdmin(userID, pollID);
+    let isUserPollAdmin = await isPollAdminByPoll(userID, poll);
     if (!isUserPollAdmin) {
       return httpCodes.Unauthorized();
     }
@@ -287,7 +287,7 @@ const getPollResultsCSV = async function (userID, pollID) {
           SchoolAffiliation: ""
         };
       } else {
-        user = await getUserInternal(rawAnswer.UserID);
+        user = await getUserInternal({"_id": rawAnswer.UserID});
         if (user === null) {
           user = {
             UserName: "Deleted User",
@@ -363,14 +363,9 @@ const createPoll = async function (userID, pollData) {
     };
 
     if (pollData.group) {
-      let group = await getGroupInternal(pollData.group);
+      let group = await getGroupInternal({"_id": pollData.group, "Admins": userID});
       if (!group) {
-        return httpCodes.BadRequest("Invalid Group: Group does not exist.");
-      }
-
-      let isUserGroupAdmin = await isGroupAdmin(group._id, userID);
-      if (!isUserGroupAdmin) {
-        return httpCodes.Unauthorized("Unauthorized: Cannot create poll in this group.");
+        return httpCodes.BadRequest("Invalid operation");
       }
       newPoll.Group = group._id;
     } else {
@@ -402,12 +397,12 @@ const createPoll = async function (userID, pollData) {
 
 const editPoll = async function (userID, pollID, pollData) {
   try {
-    let poll = await getPollInternal(pollID);
+    let poll = await getPollInternal({"_id": pollID});
     if (!poll) {
       return httpCodes.NotFound("Invalid Poll: Poll does not exist.");
     }
 
-    let isUserPollAdmin = await isPollAdmin(userID, pollID);
+    let isUserPollAdmin = await isPollAdminByPoll(userID, poll);
     if (!isUserPollAdmin) {
       return httpCodes.Unauthorized("Unauthorized: Cannot Edit Poll");
     }
@@ -432,12 +427,12 @@ const editPoll = async function (userID, pollID, pollData) {
 
 const deletePoll = async function (userID, pollID) {
   try {
-    let poll = await getPollInternal(pollID);
+    let poll = await getPollInternal({"_id": pollID});
     if (!poll) {
       return httpCodes.NotFound("Invalid Poll: Poll does not exist.");
     }
 
-    let isUserPollAdmin = await isPollAdmin(userID, pollID);
+    let isUserPollAdmin = await isPollAdminByPoll(userID, poll);
     if (!isUserPollAdmin) {
       return httpCodes.Unauthorized("Unauthorized: Cannot Delete Poll");
     }
@@ -463,12 +458,12 @@ const deletePoll = async function (userID, pollID) {
 
 const createQuestion = async function (userID, pollID, questionData) {
   try {
-    let poll = await getPollInternal(pollID);
+    let poll = await getPollInternal({"_id": pollID});
     if (!poll) {
       return httpCodes.NotFound("Invalid Poll: Poll does not exist.");
     }
 
-    let isUserPollAdmin = await isPollAdmin(userID, pollID);
+    let isUserPollAdmin = await isPollAdminByPoll(userID, poll);
     if (!isUserPollAdmin) {
       return httpCodes.Unauthorized("Unauthorized: Cannot Create Poll");
     }
@@ -504,17 +499,17 @@ const createQuestion = async function (userID, pollID, questionData) {
 
 const editQuestion = async function (userID, pollID, questionData) {
   try {
-    let poll = await getPollInternal(pollID);
+    let poll = await getPollInternal({"_id": pollID});
     if (!poll) {
       return httpCodes.NotFound("Invalid Poll: Poll does not exist.");
     }
 
-    let isUserPollAdmin = await isPollAdmin(userID, pollID);
+    let isUserPollAdmin = await isPollAdminByPoll(userID, poll);
     if (!isUserPollAdmin) {
       return httpCodes.Unauthorized("Unauthorized: Cannot Edit Question");
     }
 
-    let question = await getQuestionInternal(poll._id, questionData.id);
+    let question = await getQuestionInternalByPoll(poll, questionData.id);
     if (!question) {
       return httpCodes.BadRequest("Invalid Question: Question does not exist.");
     }
@@ -558,12 +553,12 @@ const editQuestion = async function (userID, pollID, questionData) {
 
 const deleteQuestion = async function (userID, pollID, questionID) {
   try {
-    let poll = await getPollInternal(pollID);
+    let poll = await getPollInternal({"_id": pollID});
     if (!poll) {
       return httpCodes.NotFound("Invalid Poll: Poll does not exist.");
     }
 
-    let isUserPollAdmin = await isPollAdmin(userID, pollID);
+    let isUserPollAdmin = await isPollAdminByPoll(userID, poll);
     if (!isUserPollAdmin) {
       return httpCodes.Unauthorized("Unauthorized: Cannot Delete Question");
     }
@@ -586,7 +581,7 @@ const deleteQuestion = async function (userID, pollID, questionID) {
 
 const submitQuestion = async function (userID, pollID, submitData) {
   try {
-    let poll = await getPollInternal(pollID);
+    let poll = await getPollInternal({"_id": pollID});
     if (!poll) {
       return httpCodes.NotFound("Invalid Poll: Poll does not exist.");
     }
@@ -595,7 +590,7 @@ const submitQuestion = async function (userID, pollID, submitData) {
       return httpCodes.BadRequest("Poll is not open for submissions.");
     }
 
-    let question = await getQuestionInternal(poll._id, submitData.id);
+    let question = await getQuestionInternalByPoll(poll, submitData.id);
     if (!question) {
       return httpCodes.BadRequest("Invalid Question: Question does not exist.");
     }

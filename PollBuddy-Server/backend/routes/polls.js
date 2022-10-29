@@ -374,7 +374,7 @@ router.post("/:id/results", async (req, res) => {
 router.get("/:id/csv", isLoggedIn, paramValidator(pollParamsValidator), async (req, res) => {
 
   let data = await getPollResultsCSV(req.session.userData.userID, req.params.id);
-  let poll = await getPollInternal(req.params.id);
+  let poll = await getPollInternal({"_id": req.params.id});
 
   // Set up the static fields
   const fields = ["QuestionNumber", "QuestionText", "UserName", "Email", "FirstName", "LastName", "SchoolAffiliation", "AnswerText", "Correct"];

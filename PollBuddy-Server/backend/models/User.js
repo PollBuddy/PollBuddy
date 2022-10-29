@@ -47,7 +47,9 @@ const userSchema = {
 
 const getUser = async function(userID) {
   try {
-    const user = await getUserInternal(userID);
+    // let idCode = new bson.ObjectID(userID);
+    const user = await getUserInternal({"_id": userID});
+    console.log(userID);
     if (!user) { return httpCodes.BadRequest(); }
     return httpCodes.Ok({
       firstName: user.FirstName,
@@ -68,7 +70,7 @@ const getUser = async function(userID) {
 
 const getUserGroups = async function(userID) {
   try {
-    const user = await getUserInternal(userID);
+    const user = await getUserInternal({"_id": userID});
     if (!user) { return httpCodes.BadRequest(); }
     let groups = {
       admin: [],
@@ -98,7 +100,7 @@ const getUserGroups = async function(userID) {
 
 const editUser = async function(userID, jsonContent) {
   try {
-    const user = await getUserInternal(userID);
+    const user = await getUserInternal({"_id": userID});
     if (!user) { return httpCodes.BadRequest(); }
 
     const updatedUser = Joi.object({
