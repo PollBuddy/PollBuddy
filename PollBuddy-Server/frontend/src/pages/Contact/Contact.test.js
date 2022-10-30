@@ -6,18 +6,21 @@ function updateTitle() {
   return false;
 }
 
-// Create basic render test
-it("renders without crashing", () => {
-  fetch.mockResponseOnce(JSON.stringify({data: {data: {
+global.fetch = jest.fn(() => Promise.resolve({
+  json: () => Promise.resolve({ data: {
     FirstName: "John",
     LastName: "Doe",
     SchoolAffiliation: "RPI",
-    email: "johndoe@rpi.edu"
-  }}}));
+    Email: "johndoe@rpi.edu"
+  } })
+}));
+
+// Create basic render test
+it("renders without crashing", () => {
   // Create div element
   const div = document.createElement("div");
   // Render about on the div
-  ReactDOM.render(<Contact updateTitle={updateTitle}/>, div);
+  ReactDOM.render(<Contact updateTitle={updateTitle} onDoneLoading={() => {}}/>, div);
   // Clean unmount
   ReactDOM.unmountComponentAtNode(div);
 });

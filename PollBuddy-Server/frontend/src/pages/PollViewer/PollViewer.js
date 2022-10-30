@@ -29,67 +29,65 @@ class PollViewer extends Component {
    * if response.error fails, redirect to the homepage
    */
 
-  componentDidMount() {
+  async componentDidMount() {
     this.props.updateTitle("Poll Viewer");
-    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID, {
+    const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID, {
       method: "GET",
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        console.log(response);
-        if (response.result === "success") {
-          if (response.data.questions.length === 0) {
-            this.setState({
-              errorMessage:
-                "This poll has no questions for you to answer at this time.",
-              showError: true,
-            });
-          }
-          for (let question of response.data.questions) {
-            this.shuffleArray(question.answers);
-            let currentAnswers = [...question.selectedAnswers];
-            let savedAnswers = localStorage.getItem(question.id);
-            if (savedAnswers) {
-              currentAnswers = JSON.parse(savedAnswers);
-            }
-            question.currentAnswers = currentAnswers;
-          }
-          this.setState({
-            pollTitle: response.data.title,
-            pollDescription: response.data.description,
-            questions: response.data.questions,
-            //perPoll: response.data.perPoll,
-            pollCloseTime: response.data.closeTime,
-            doneLoading: true,
-          });
-        } else if (response.error) {
-          this.setState({
-            showError: true,
-          });
-          if (response.error.errorCode === 100) {
-            this.setState({
-              errorMessage: "Invalid Poll: Poll does not exist",
-            });
-          } else if (response.error.errorCode === 101) {
-            this.setState({
-              errorMessage:
-                "You are not a member of the group associated with this poll",
-            });
-          } else if (response.error.errorCode === 102) {
-            this.setState({
-              errorMessage: "You must login in order to access this poll",
-            });
-          } else if (response.error.errorCode === 103) {
-            this.setState({
-              errorMessage:
-                "The poll you are trying to access is currently not allowing submissions",
-            });
-          }
-        } else {
-          // invalid poll ID given
-          this.props.router.navigate("/");
+    });
+    const response = await httpResponse.json();
+    console.log(response);
+    if (response.result === "success") {
+      if (response.data.questions.length === 0) {
+        this.setState({
+          errorMessage:
+            "This poll has no questions for you to answer at this time.",
+          showError: true,
+        });
+      }
+      for (let question of response.data.questions) {
+        this.shuffleArray(question.answers);
+        let currentAnswers = [...question.selectedAnswers];
+        let savedAnswers = localStorage.getItem(question.id);
+        if (savedAnswers) {
+          currentAnswers = JSON.parse(savedAnswers);
         }
+        question.currentAnswers = currentAnswers;
+      }
+      this.setState({
+        pollTitle: response.data.title,
+        pollDescription: response.data.description,
+        questions: response.data.questions,
+        //perPoll: response.data.perPoll,
+        pollCloseTime: response.data.closeTime,
+        doneLoading: true,
       });
+    } else if (response.error) {
+      this.setState({
+        showError: true,
+      });
+      if (response.error.errorCode === 100) {
+        this.setState({
+          errorMessage: "Invalid Poll: Poll does not exist",
+        });
+      } else if (response.error.errorCode === 101) {
+        this.setState({
+          errorMessage:
+            "You are not a member of the group associated with this poll",
+        });
+      } else if (response.error.errorCode === 102) {
+        this.setState({
+          errorMessage: "You must login in order to access this poll",
+        });
+      } else if (response.error.errorCode === 103) {
+        this.setState({
+          errorMessage:
+            "The poll you are trying to access is currently not allowing submissions",
+        });
+      }
+    } else {
+      // invalid poll ID given
+      this.props.router.navigate("/");
+    }
   }
 
   displayQuestion = (index) => {

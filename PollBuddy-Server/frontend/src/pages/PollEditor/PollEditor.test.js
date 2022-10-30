@@ -7,6 +7,10 @@ function updateTitle() {
   return false;
 }
 
+global.fetch = jest.fn(() => Promise.resolve({
+  json: () => Promise.resolve({ data: { } })
+}));
+
 // Create basic render test
 it("renders without crashing", () => {
   // Create div element

@@ -50,24 +50,22 @@ class PollEditor extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     autosize(document.querySelector("textarea"));
     this.props.updateTitle("Poll Editor");
-    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID, {
+    const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID, {
       method: "GET"
-    })
-      .then(response => response.json())
-      .then((response) => {
-        console.log(response);
-        this.setState({
-          pollTitle: response.data.title,
-          pollDescription: response.data.description,
-          questions: response.data.questions,
-          openTime: response.data.openTime,
-          closeTime: response.data.closeTime,
-          loadingPollData: false,
-        });
-      });
+    });
+    const response = await httpResponse.json();
+    console.log(response);
+    this.setState({
+      pollTitle: response.data.title,
+      pollDescription: response.data.description,
+      questions: response.data.questions,
+      openTime: response.data.openTime,
+      closeTime: response.data.closeTime,
+      loadingPollData: false,
+    });
   }
 
   handleRandomize() {
@@ -99,29 +97,27 @@ class PollEditor extends Component {
     };
   };
 
-  savePoll = () => {
+  savePoll = async () => {
     this.setState({
       loadingPollData: true,
     });
-    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/edit", {
+    const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/edit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(this.getPollData())
-    })
-      .then(response => response.json())
-      .then((response) => {
-        if (response.result === "success") {
-          this.setState({
-            showError: false,
-            loadingPollData: false,
-          });
-        } else {
-          this.setState({
-            showError: true,
-            loadingPollData: false,
-          });
-        }
+    });
+    const response = await httpResponse.json();
+    if (response.result === "success") {
+      this.setState({
+        showError: false,
+        loadingPollData: false,
       });
+    } else {
+      this.setState({
+        showError: true,
+        loadingPollData: false,
+      });
+    }
   };
 
   deletePoll = async () => {
@@ -151,13 +147,13 @@ class PollEditor extends Component {
     });
   };
 
-  submitQuestion = () => {
+  submitQuestion = async () => {
     this.setState({
       showQuestionError: false,
       loadingPollQuestions: true,
     });
     if (this.state.displayNewQuestion) {
-      fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/createQuestion", {
+      const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/createQuestion", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -165,28 +161,26 @@ class PollEditor extends Component {
           answers: this.state.currentAnswers,
           maxAllowedChoices: this.state.maxAllowedChoices,
         })
-      })
-        .then(response => response.json())
-        .then((response) => {
-          if (response.result === "success") {
-            this.setState({
-              showQuestionError: false,
-              currentQuestion: false,
-              currentAnswers: [],
-              maxAllowedChoices: 1,
-              loadingPollQuestions: false,
-              displayNewQuestion: false,
-              questions: [...this.state.questions, response.data],
-            });
-          } else {
-            this.setState({
-              showQuestionError: true,
-              loadingPollQuestions: false,
-            });
-          }
+      });
+      const response = await httpResponse.json();
+      if (response.result === "success") {
+        this.setState({
+          showQuestionError: false,
+          currentQuestion: false,
+          currentAnswers: [],
+          maxAllowedChoices: 1,
+          loadingPollQuestions: false,
+          displayNewQuestion: false,
+          questions: [...this.state.questions, response.data],
         });
+      } else {
+        this.setState({
+          showQuestionError: true,
+          loadingPollQuestions: false,
+        });
+      }
     } else if (this.state.displayEditQuestion) {
-      fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/editQuestion", {
+      const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/editQuestion", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -195,37 +189,35 @@ class PollEditor extends Component {
           answers: this.state.currentAnswers,
           maxAllowedChoices: this.state.maxAllowedChoices,
         })
-      })
-        .then(response => response.json())
-        .then((response) => {
-          if (response.result === "success") {
-            let questions = [...this.state.questions];
-            let currentQuestionIndex = -1;
-            for (let questionIndex in questions) {
-              if (questions[questionIndex].id === this.state.currentQuestion.id) {
-                currentQuestionIndex = questionIndex;
-                break;
-              }
-            }
-            if (currentQuestionIndex !== -1) {
-              questions[currentQuestionIndex] = response.data;
-            }
-            this.setState({
-              questions: questions,
-              showQuestionError: false,
-              currentQuestion: false,
-              currentAnswers: [],
-              maxAllowedChoices: 1,
-              loadingPollQuestions: false,
-              displayEditQuestion: false,
-            });
-          } else {
-            this.setState({
-              showQuestionError: true,
-              loadingPollQuestions: false,
-            });
+      });
+      const response = await httpResponse.json();
+      if (response.result === "success") {
+        let questions = [...this.state.questions];
+        let currentQuestionIndex = -1;
+        for (let questionIndex in questions) {
+          if (questions[questionIndex].id === this.state.currentQuestion.id) {
+            currentQuestionIndex = questionIndex;
+            break;
           }
+        }
+        if (currentQuestionIndex !== -1) {
+          questions[currentQuestionIndex] = response.data;
+        }
+        this.setState({
+          questions: questions,
+          showQuestionError: false,
+          currentQuestion: false,
+          currentAnswers: [],
+          maxAllowedChoices: 1,
+          loadingPollQuestions: false,
+          displayEditQuestion: false,
         });
+      } else {
+        this.setState({
+          showQuestionError: true,
+          loadingPollQuestions: false,
+        });
+      }
     }
   };
 
