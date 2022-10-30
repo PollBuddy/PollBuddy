@@ -10,18 +10,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js 16
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          cache: 'npm'
-          cache-dependency-path: PollBuddy-Server/frontend/package-lock.json
-      - name: Frontend NPM Install
+      - name: Docker Build
         working-directory: ./PollBuddy-Server/frontend
-        run: npm ci
-      - name: Frontend Test
-        working-directory: ./PollBuddy-Server/frontend
-        run: npm run test
+        run: docker build . --file Dockerfile.test -t frontend-test
+      - name: Docker Run
+          working-directory: ./PollBuddy-Server/frontend
+          run: docker run frontend-test
 
   backend-test:
     name: Backend Test
@@ -29,16 +23,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js 16
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          cache: 'npm'
-          cache-dependency-path: PollBuddy-Server/backend/package-lock.json
-      - name: Backend NPM Install
-        working-directory: ./PollBuddy-Server/backend
-        run: npm ci
-      - name: Backend Test
-        working-directory: ./PollBuddy-Server/backend
-        run: npm run test
+      - name: Docker Build
+          working-directory: ./PollBuddy-Server/backend
+          run: docker build . --file Dockerfile.test -t backend-test
+      - name: Docker Run
+          working-directory: ./PollBuddy-Server/backend
+          run: docker run backend-test
 
