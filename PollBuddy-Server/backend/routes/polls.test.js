@@ -48,13 +48,16 @@ afterAll(() => {
   }, 1000);
 });
 
-beforeEach(async () => {
-  session = {};
-
-  let collections = await mongoConnection.getDB().listCollections().toArray();
-  for (let collection of collections) {
-    await mongoConnection.getDB().collection(collection.name).deleteMany({});
+beforeEach(() => {
+  async function clearDatabase() {
+    session = {};
+    let collections = await mongoConnection.getDB().listCollections().toArray();
+    for (let collection of collections) {
+      await mongoConnection.getDB().collection(collection.name).deleteMany({});
+    }
   }
+
+  return clearDatabase();
 });
 
 describe("/api/polls/:pollID", () => {

@@ -44,12 +44,15 @@ afterAll(() => {
 });
 
 beforeEach(async () => {
-  session = {};
-
-  let collections = await mongoConnection.getDB().listCollections().toArray();
-  for (let collection of collections) {
-    await mongoConnection.getDB().collection(collection.name).deleteMany({});
+  async function clearDatabase() {
+    session = {};
+    let collections = await mongoConnection.getDB().listCollections().toArray();
+    for (let collection of collections) {
+      await mongoConnection.getDB().collection(collection.name).deleteMany({});
+    }
   }
+
+  return clearDatabase();
 });
 
 describe("/api/users", () => {
