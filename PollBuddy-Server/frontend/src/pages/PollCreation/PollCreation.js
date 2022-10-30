@@ -37,7 +37,7 @@ class PollCreation extends Component {//this class will likely need to call Grou
         group: this.state.groupID || undefined,
       })
     });
-    let response = httpResponse.json();
+    let response = await httpResponse.json();
     if (response.result === "success") {
       this.props.router.navigate("/polls/" + response.data.id + "/edit");
     } else {

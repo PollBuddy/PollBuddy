@@ -106,7 +106,7 @@ class RegisterWithSchoolStep2 extends Component {
 
     // If all are valid, submit a request to the backend to do the registration
     // TODO: This URL is going to need to be fixed and made dynamic
-    let httpResponse = fetch(process.env.REACT_APP_BACKEND_URL + "/users/register/rpi", {
+    let httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/register/rpi", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
@@ -116,7 +116,7 @@ class RegisterWithSchoolStep2 extends Component {
         email: this.state.email,
       })
     });
-    let response = response.json();
+    let response = await httpResponse.json();
     // TODO: Debug print, delete
     if (response != null) {
       if (response.result === "success") {

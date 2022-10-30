@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import Autocomplete from "react-autocomplete";
+import Autocomplete from "react-autocomplete-pollbuddy";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 
@@ -21,18 +21,18 @@ export default class SchoolPicker extends Component {
 
   async getSchools() {
     if (this.props.schoolInfo == null) {
-      const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/schools",
+      const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/schools",
         {
           method: "GET",
           headers: {"Content-Type": "application/json"},//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
         }
       );
-      const data = await response.json();
+      const response = await httpResponse.json();
       let schools = this.state.schoolInfo.schools;
       let schoolLinkDict = this.state.schoolInfo.schoolLinkDict;
-      for (let i = 0; i < data.length; i++) {
-        schools.push({key: i, label: data[i][0]});
-        schoolLinkDict[data[i][0]] = data[i][1];
+      for (let i = 0; i < response.length; i++) {
+        schools.push({key: i, label: response[i][0]});
+        schoolLinkDict[response[i][0]] = response[i][1];
       }
       this.setState({"schoolInfo": {"schools": schools, "schoolLinkDict": schoolLinkDict}}); //missing semicolon
       this.props.onDoneLoading?.(this.state.schoolInfo);

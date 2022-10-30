@@ -94,7 +94,7 @@ export default class RegisterWithPollBuddy extends Component {
         password: this.state.password
       })
     });
-    let response = httpResponse.json();
+    let response = await httpResponse.json();
     if (response.result === "success") {
       //needs some authentication before and if authentication passes then set local storage and such refer to GroupCreation page to see the way to make POST requests to the backend
       localStorage.setItem("loggedIn", "true");

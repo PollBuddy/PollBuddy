@@ -13,10 +13,8 @@ export default class QuickStartGuide extends Component {
     };
   }
 
-  async componentWillMount() {
-    const response = await fetch(quickStartGuide);
-    const text = await response.text();
-    this.setState({terms: text});
+  componentDidMount() {
+    this.getText();
   }
 
   async getText() {

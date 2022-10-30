@@ -15,9 +15,6 @@ import {Link} from "react-router-dom";
 class PollEditor extends Component {
   constructor(props) {
     super(props);
-    this.askQuestion = this.askQuestion.bind(this);
-    this.handleRandomize = this.handleRandomize.bind(this);
-
     this.state = {
       askedQuestions: [],
       questionDispatcherIndex: 0,
@@ -50,7 +47,7 @@ class PollEditor extends Component {
     };
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     autosize(document.querySelector("textarea"));
     this.props.updateTitle("Poll Editor");
     this.getPollData();
@@ -71,11 +68,11 @@ class PollEditor extends Component {
     });
   }
 
-  handleRandomize() {
+  handleRandomize = () => {
     this.setState({randomQuestions: !this.state.randomQuestions});
-  }
+  };
 
-  askQuestion() {
+  askQuestion = () => {
     this.setState(prevState => ({
       //...prevState,
       askedQuestions: [
@@ -83,7 +80,7 @@ class PollEditor extends Component {
         prevState.questions[prevState.questionDispatcherIndex]
       ]
     }));
-  }
+  };
 
   onInput = (e) => {
     this.setState({
