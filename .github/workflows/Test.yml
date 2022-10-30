@@ -14,8 +14,8 @@ jobs:
         working-directory: ./PollBuddy-Server/frontend
         run: docker build . --file Dockerfile.test -t frontend-test
       - name: Docker Run
-          working-directory: ./PollBuddy-Server/frontend
-          run: docker run frontend-test
+        working-directory: ./PollBuddy-Server/frontend
+        run: docker run frontend-test
 
   backend-test:
     name: Backend Test
@@ -24,9 +24,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Docker Build
-          working-directory: ./PollBuddy-Server/backend
-          run: docker build . --file Dockerfile.test -t backend-test
+        working-directory: ./PollBuddy-Server/backend
+        run: docker build . --file Dockerfile.test -t backend-test
       - name: Docker Run
-          working-directory: ./PollBuddy-Server/backend
-          run: docker run backend-test
+        working-directory: ./PollBuddy-Server/backend
+        run: docker run backend-test
 
