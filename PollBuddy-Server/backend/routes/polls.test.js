@@ -52,9 +52,9 @@ beforeEach(async () => {
   session = {};
 
   let collections = await mongoConnection.getDB().listCollections().toArray();
-  collections.forEach(async (collection) => {
+  for (let collection of collections) {
     await mongoConnection.getDB().collection(collection.name).deleteMany({});
-  });
+  }
 });
 
 describe("/api/polls/:pollID", () => {
