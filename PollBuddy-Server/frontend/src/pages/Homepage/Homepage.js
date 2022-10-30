@@ -10,7 +10,6 @@ export default class Homepage extends Component {
 
   componentDidMount() {
     this.props.updateTitle("Home");
-    this.state = {};
   }
 
   render() {

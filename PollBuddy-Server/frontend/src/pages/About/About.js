@@ -13,6 +13,7 @@ export default class About extends Component {
 
   componentDidMount() {
     this.props.updateTitle("About");
+    this.getText();
   }
 
   async getText() {

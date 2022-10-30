@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import "./Question.scss";
 import {
   MDBContainer,
@@ -11,6 +11,7 @@ import Timer from "../Timer/Timer.js";
 export default class Question extends Component {
   choiceOrder;
   questionStartTime;
+
   constructor(props) {
     super(props);
 
@@ -58,12 +59,12 @@ export default class Question extends Component {
     };
   }
 
-  onTimeEnd(){
+  onTimeEnd() {
     this.state.canChoose = false;
   }
 
   selectChoice(index) {
-    if(!this.state.canChoose){
+    if (!this.state.canChoose) {
       return;
     }
     let tempChoices = this.state.studentChoices;
@@ -121,15 +122,12 @@ export default class Question extends Component {
   };
 
   submitQuestion = async () => {
-    await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/submitQuestion/", {
+    let httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/submitQuestion/", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify(this.getSubmitData())
-    })
-      .then(response => response.json())
-      .then(response => {
-        console.log(response);
-      });
+    });
+    let response = httpResponse.json();
     this.props.nextQuestion();
   };
 
@@ -175,10 +173,10 @@ export default class Question extends Component {
         </MDBContainer>
         <Timer timeLeft={this.state.timeLeft} noTimeLeft = {() => this.noTimeLeft()}
           CloseTime={this.state.closeTime} onTimeEnd={this.onTimeEnd} />
-          */ }
+          */}
         <MDBContainer>
           {(this.state.timeLeft) &&
-           <button className="button" onClick={this.submitQuestion}>Save</button>}
+            <button className="button" onClick={this.submitQuestion}>Save</button>}
         </MDBContainer>
       </MDBContainer>
     );

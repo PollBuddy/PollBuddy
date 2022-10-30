@@ -14,7 +14,8 @@ export default class Privacy extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
+    this.props.updateTitle("Privacy");
     this.getText();
   }
 
@@ -24,12 +25,7 @@ export default class Privacy extends Component {
     this.setState({questions: text});
   }
 
-  componentDidMount() {
-    this.props.updateTitle("Privacy");
-  }
-
   render() {
-
     return (
       <MDBContainer className="page">
         <MDBContainer className="box box-body-text">
