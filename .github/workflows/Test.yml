@@ -1,0 +1,44 @@
+name: Test
+
+on:
+  push:
+
+jobs:
+  frontend-test:
+    name: Frontend Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+          cache-dependency-path: PollBuddy-Server/frontend/package-lock.json
+      - name: Frontend NPM Install
+        working-directory: ./PollBuddy-Server/frontend
+        run: npm ci
+      - name: Frontend Test
+        working-directory: ./PollBuddy-Server/frontend
+        run: npm run test
+
+  backend-test:
+    name: Backend Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: 'npm'
+          cache-dependency-path: PollBuddy-Server/backend/package-lock.json
+      - name: Backend NPM Install
+        working-directory: ./PollBuddy-Server/backend
+        run: npm ci
+      - name: Backend Test
+        working-directory: ./PollBuddy-Server/backend
+        run: npm run test
+

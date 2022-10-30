@@ -3,7 +3,6 @@ import "mdbreact/dist/css/mdb.css";
 import {MDBContainer} from "mdbreact";
 import ReactMarkdown from "react-markdown";
 import privacyMdPath from "./Privacy.md";
-import faqFile from "../FAQ/faq.md";
 
 export default class Privacy extends Component {
 
@@ -22,7 +21,7 @@ export default class Privacy extends Component {
   async getText() {
     const httpResponse = await fetch(privacyMdPath);
     const text = await httpResponse.text();
-    this.setState({questions: text});
+    this.setState({terms: text});
   }
 
   render() {
