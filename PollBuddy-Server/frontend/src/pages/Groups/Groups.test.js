@@ -1,33 +1,27 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+// import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+
 import Groups from "./Groups";
-import {BrowserRouter} from "react-router-dom";
-import GroupEdit from "../GroupEdit/GroupEdit";
 
 function updateTitle() {
   return false;
 }
 
-beforeEach(() => {
-  fetch.resetMocks();
-});
-
-// Create basic render test
-it("renders without crashing", () => {
-  fetch.mockResponseOnce(JSON.stringify({
-    ok: true,
-    result: "success",
-    data: {
-      admin: [],
-      member: [],
-    },
-  }));
-  // Create div element
-  const div = document.createElement("div");
-  // Render about on the div
-  ReactDOM.render(<BrowserRouter>
-    <Groups updateTitle={updateTitle}/>
-  </BrowserRouter>, div);
-  // Clean unmount
-  ReactDOM.unmountComponentAtNode(div);
+describe("The Groups page:", () => {
+  it("Loads correctly.", async () => {
+    // Just make sure it can load.
+    fetch.mockResponseOnce(JSON.stringify({
+      ok: true,
+      result: "success",
+      data: {
+        admin: [],
+        member: [],
+      },
+    }));
+    render(<BrowserRouter><Groups updateTitle={updateTitle}/></BrowserRouter>);
+    await waitFor(() => expect(screen.getByText("Groups")));
+  });
 });

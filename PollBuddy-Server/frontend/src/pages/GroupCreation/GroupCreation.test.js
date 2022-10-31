@@ -1,25 +1,22 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import { render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+// import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+
 import GroupCreation from "./GroupCreation";
-import {BrowserRouter} from "react-router-dom";
 
 function updateTitle() {
   return false;
 }
 
 global.fetch = jest.fn(() => Promise.resolve({
-  json: () => Promise.resolve({text: ""})
+  json: () => Promise.resolve({ text: "" })
 }));
 
-// Create basic render test
-it("renders without crashing", () => {
-  // Create div element
-  const div = document.createElement("div");
-  // Render about on the div
-  ReactDOM.render(
-    <BrowserRouter>
-      <GroupCreation updateTitle={updateTitle}/>
-    </BrowserRouter>, div);
-  // Clean unmount
-  ReactDOM.unmountComponentAtNode(div);
+describe("The GroupCreation page:", () => {
+  it("Loads correctly.", async () => {
+    // Just make sure it can load.
+    render(<BrowserRouter><GroupCreation updateTitle={updateTitle}/></BrowserRouter>);
+  });
 });

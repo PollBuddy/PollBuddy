@@ -11,7 +11,7 @@ export default class FAQ extends Component {
     this.state = {questions: null};
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     const response = await fetch(faqFile);
     const text = await response.text();
     this.setState({questions: text});

@@ -1,14 +1,22 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import { render, waitFor } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+// import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+
 import SchoolPicker from "./SchoolPicker";
 
-// Create basic render test
-it("renders without crashing", async () => {
-  fetch.mockResponseOnce(JSON.stringify({ data: { schools: [ ], schoolLinkDict: { } } }));
-  // Create div element
-  const div = document.createElement("div");
-  // Render about on the div
-  ReactDOM.render(<SchoolPicker onDoneLoading={() => {}}/>, div);
-  // Clean unmount
-  ReactDOM.unmountComponentAtNode(div);
+// TODO: The warnings for this test need to be fixed with react-autocomplete,
+// but the module is no longer maintained. Create a fork of it and change:
+// (Line 55) componentWillMount --> UNSAFE_componentWillMount
+// (Line 55) componentWillReceiveProps --> UNSAFE_componentWillReceiveProps
+
+describe("The SchoolPicker component:", () => {
+  it("Loads correctly.", async () => {
+    let loaded = false;
+    // Just make sure it can load.
+    fetch.mockResponseOnce(JSON.stringify({ data: { schools: [ ], schoolLinkDict: { } } }));
+    render(<BrowserRouter><SchoolPicker onDoneLoading={() => loaded = true}/></BrowserRouter>);
+    await waitFor(() => expect(loaded).toBe(true));
+  });
 });

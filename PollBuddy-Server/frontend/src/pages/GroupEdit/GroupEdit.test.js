@@ -1,20 +1,22 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import { render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+// import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+
 import GroupEdit from "./GroupEdit";
-import {BrowserRouter} from "react-router-dom";
 
 global.fetch = jest.fn(() => Promise.resolve({
   json: () => Promise.resolve({text: ""})
 }));
 
-// Create basic render test
-it("renders without crashing", () => {
-  // Create div element
-  const div = document.createElement("div");
-  // Render about on the div
-  ReactDOM.render(<BrowserRouter>
-    <GroupEdit updateTitle={()=>{}}/>
-  </BrowserRouter>, div);
-  // Clean unmount
-  ReactDOM.unmountComponentAtNode(div);
+function updateTitle() {
+  return false;
+}
+
+describe("The GroupEdit page:", () => {
+  it("Loads correctly.", async () => {
+    // Just make sure it can load.
+    render(<BrowserRouter><GroupEdit updateTitle={updateTitle}/></BrowserRouter>);
+  });
 });

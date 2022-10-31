@@ -1,21 +1,23 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import { render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+// import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+
 import PollManager from "./PollManager";
-import { BrowserRouter } from "react-router-dom";
 
 function updateTitle() {
   return false;
 }
 
-// Create basic render test
-it("renders without crashing", () => {
-  // Create div element
-  const div = document.createElement("div");
-  // Render about on the div
-  ReactDOM.render(
-    <BrowserRouter>
-      <PollManager updateTitle={updateTitle}/>
-    </BrowserRouter>, div);
-  // Clean unmount
-  ReactDOM.unmountComponentAtNode(div);
+// Because the Bar from ChartJS causes errors.
+jest.mock("react-chartjs-2", () => ({
+  Bar: () => <canvas/>,
+}));
+
+describe("The PollManager page:", () => {
+  it("Loads correctly.", async () => {
+    // Just make sure it can load.
+    render(<BrowserRouter><PollManager updateTitle={updateTitle}/></BrowserRouter>);
+  });
 });

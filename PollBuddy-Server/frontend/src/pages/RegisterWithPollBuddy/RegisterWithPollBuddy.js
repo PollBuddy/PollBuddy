@@ -157,10 +157,10 @@ export default class RegisterWithPollBuddy extends Component {
               <p style={{color: "red"}}> A user with this email already exists. </p>
             }
             <label htmlFor="passwordText">Password:</label>
-            <p class="password_container">
+            <p className="password_container">
               <input type={this.state.showPassword ? "text" : "password"} placeholder="••••••••••••" className="form-control textBox" id="passwordText"
                 onChange= {(evt) => { this.setState({password: evt.target.value}); }}/>
-              <i class="fas fa-eye" onClick={this.showPassword}></i>
+              <i className="fas fa-eye" onClick={this.showPassword}></i>
             </p>
 
             {this.state.passValid.error &&

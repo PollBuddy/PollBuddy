@@ -1,25 +1,23 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import { render, waitFor, screen } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+// import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+
 import AccountInfo from "./AccountInfo";
-import {BrowserRouter} from "react-router-dom";
 
 function updateTitle() {
   return false;
 }
 
-global.fetch = jest.fn(() => Promise.resolve({
-  json: () => Promise.resolve({data: {}})
-}));
-
 // Create basic render test
-it("renders without crashing", () => {
-  // Create div element
-  const div = document.createElement("div");
-  // Render about on the div
-  ReactDOM.render(
-    <BrowserRouter>
-      <AccountInfo updateTitle={updateTitle}/>
-    </BrowserRouter>, div);
-  // Clean unmount
-  ReactDOM.unmountComponentAtNode(div);
+describe("The AccountInfo page:", () => {
+  it("Loads correctly.", async () => {
+    // Just make sure it can load.
+    fetch.mockResponseOnce(JSON.stringify({ data: { } }));
+    render(<BrowserRouter><AccountInfo updateTitle={updateTitle}/></BrowserRouter>);
+    await waitFor(() =>
+      expect(screen.getByText.bind(null, "Account Settings")).not.toThrow()
+    );
+  });
 });

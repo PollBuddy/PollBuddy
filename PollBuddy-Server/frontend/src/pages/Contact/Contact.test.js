@@ -1,5 +1,9 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+// import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+
 import Contact from "./Contact";
 
 function updateTitle() {
@@ -15,12 +19,12 @@ global.fetch = jest.fn(() => Promise.resolve({
   } })
 }));
 
-// Create basic render test
-it("renders without crashing", () => {
-  // Create div element
-  const div = document.createElement("div");
-  // Render about on the div
-  ReactDOM.render(<Contact updateTitle={updateTitle} onDoneLoading={() => {}}/>, div);
-  // Clean unmount
-  ReactDOM.unmountComponentAtNode(div);
+describe("The Contact page:", () => {
+  it("Loads correctly.", async () => {
+    // Just make sure it can load.
+    render(<BrowserRouter><Contact updateTitle={updateTitle} onDoneLoading={() => {}}/></BrowserRouter>);
+    await waitFor(() =>
+      expect(screen.getByDisplayValue.bind(null, "John Doe")).not.toThrow()
+    );
+  });
 });

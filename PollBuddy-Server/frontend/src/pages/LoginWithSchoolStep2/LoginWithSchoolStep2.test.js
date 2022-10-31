@@ -1,21 +1,31 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { BrowserRouter, Link, Route, Routes, Outlet } from 'react-router-dom';
+import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+
 import LoginWithSchoolStep2 from "./LoginWithSchoolStep2";
-import {BrowserRouter} from "react-router-dom";
 
 function updateTitle() {
   return false;
 }
 
-// Create basic render test
-it("renders without crashing", () => {
-  // Create div element
-  const div = document.createElement("div");
-  // Render about on the div
-  ReactDOM.render(
-    <BrowserRouter>
-      <LoginWithSchoolStep2 updateTitle={updateTitle}/>
-    </BrowserRouter>, div);
-  // Clean unmount
-  ReactDOM.unmountComponentAtNode(div);
+let assignMock = jest.fn();
+
+delete window.location;
+window.location = { assign: assignMock };
+
+describe("The LoginWithSchoolStep2 page:", () => {
+  it("Loads correctly.", async () => {
+    // Just make sure it can load.
+    render(<BrowserRouter>
+      <Link to="/TEST">GOTO TEST</Link>
+      <Routes>
+        <Route exact path="/" element={<Outlet />}/>
+        <Route exact path="/TEST" element={<LoginWithSchoolStep2 updateTitle={updateTitle}/>}/>
+      </Routes>
+    </BrowserRouter>);
+    
+    await userEvent.click(screen.getByText("GOTO TEST"));
+  });
 });

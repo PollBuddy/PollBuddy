@@ -83,7 +83,7 @@ class PollManager extends Component {
         return <p className="fontSizeLarge"> Question closed! </p>;
       } else {
         // Render a countdown
-        return <p className="fontSizeLarge">{zeroPad(days)}:{zeroPad(hours)}:zeroPad(minutes)}:{zeroPad(seconds)}</p>;
+        return <p className="fontSizeLarge">{zeroPad(days)}:{zeroPad(hours)}:{zeroPad(minutes)}:{zeroPad(seconds)}</p>;
       }
     };
     return (

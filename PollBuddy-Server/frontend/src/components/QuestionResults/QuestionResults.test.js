@@ -14,6 +14,10 @@ const DATA = {
   },
 };
 
+jest.mock("react-chartjs-2", () => ({
+  Bar: () => <canvas/>,
+}));
+
 describe("The QuestionResults component:", () => {
   it("Loads correctly.", () => {
     // Just make sure it can load.

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Link, Outlet, Route, Routes } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 
@@ -13,6 +13,8 @@ describe("The PrivateComponent component:", () => {
       <BrowserRouter>
         <Link to="/TEST">GO TO</Link>
         <Routes>
+          <Route exact path="/" element={<Outlet/>}/>
+          <Route exact path="/login" element={<Outlet/>}/>
           <Route exact path="/TEST" element={<PrivateComponent state element="TEST"/>}/>
         </Routes>
       </BrowserRouter>
@@ -29,6 +31,8 @@ describe("The PrivateComponent component:", () => {
       <BrowserRouter>
         <Link to="/TEST">GO TO</Link>
         <Routes>
+          <Route exact path="/" element={<Outlet/>}/>
+          <Route exact path="/login" element={<Outlet/>}/>
           <Route exact path="/TEST" element={<PrivateComponent state element="TEST"/>}/>
         </Routes>
       </BrowserRouter>
@@ -46,6 +50,8 @@ describe("The PrivateComponent component:", () => {
       <BrowserRouter>
         <Link to="/TEST">GO TO</Link>
         <Routes>
+          <Route exact path="/" element={<Outlet/>}/>
+          <Route exact path="/login" element={<Outlet/>}/>
           <Route exact path="/TEST" element={<PrivateComponent state element="TEST"/>}/>
         </Routes>
       </BrowserRouter>
@@ -64,6 +70,8 @@ describe("The PrivateComponent component:", () => {
       <BrowserRouter>
         <Link to="/TEST">GO TO</Link>
         <Routes>
+          <Route exact path="/" element={<Outlet/>}/>
+          <Route exact path="/login" element={<Outlet/>}/>
           <Route exact path="/TEST" element={<PrivateComponent state={false} element="TEST"/>}/>
         </Routes>
       </BrowserRouter>
@@ -81,6 +89,8 @@ describe("The PrivateComponent component:", () => {
       <BrowserRouter>
         <Link to="/TEST">GO TO</Link>
         <Routes>
+          <Route exact path="/" element={<Outlet/>}/>
+          <Route exact path="/login" element={<Outlet/>}/>
           <Route exact path="/TEST" element={<PrivateComponent state={false} element="TEST"/>}/>
         </Routes>
       </BrowserRouter>

@@ -13,9 +13,8 @@ export default class About extends Component {
     this.state = {terms: null};
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     const response = await fetch(aboutMdPath);
-    console.log(response);
     const text = await response.text();
     this.setState({terms: text});
   }
