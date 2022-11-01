@@ -15,10 +15,10 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
       description: "",
       descriptionInput: "",
       admins: [],
-      users: [],
+      members: [],
       loadingGroupData: true,
       loadingAdmins: true,
-      loadingUsers: true,
+      loadingMembers: true,
       showError: false,
     };
   }
@@ -27,7 +27,7 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
     this.props.updateTitle("Edit");
     this.loadGroup();
     this.loadAdmins();
-    this.loadUsers();
+    this.loadMembers();
   }
 
   loadGroup = () => {
@@ -61,14 +61,14 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
       });
   };
 
-  loadUsers = () => {
+  loadMembers = () => {
     fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}/members`)
       .then((response => response.json()))
       .then((response) => {
         if (response.result === "success") {
           this.setState({
-            users: response.data,
-            loadingUsers: false,
+            members: response.data,
+            loadingMembers: false,
           });
         }
       });
@@ -113,6 +113,63 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
 
   checkError = () => {
     return this.state.showError ? <ErrorText/> : null;
+  };
+
+
+  handleDemoteAdmin = async (demoteId) => {
+    let httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/demote", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userID: demoteId.id
+      })
+    });
+    let response = await httpResponse.json();
+    if(response.result === "success") {
+      this.setState((prevState) => {
+        const index = prevState.admins.indexOf(demoteId);
+        prevState.admins.splice(index, 1);
+        return {
+          members: [...prevState.members, demoteId],
+        };
+      });
+    }
+  };
+  handleDemoteMember = async (demoteId) => {
+    let httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/demote", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userID: demoteId.id
+      })
+    });
+    let response = await httpResponse.json();
+    if(response.result === "success") {
+      this.setState((prevState) => {
+        const index = prevState.members.indexOf(demoteId);
+        prevState.members.splice(index, 1);
+        return {members: [...prevState.members]};
+      });
+    }
+  };
+  handlePromoteMember = async (promoteId) => {
+    let httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/promote", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userID: promoteId.id
+      })
+    });
+    let response = await httpResponse.json();
+    if(response.result === "success") {
+      this.setState((prevState) => {
+        const index = prevState.members.indexOf(promoteId);
+        prevState.members.splice(index, 1);
+        return {
+          admins: [...prevState.admins, promoteId],
+        };
+      });
+    }
   };
 
   render() {
@@ -166,11 +223,20 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
                 <React.Fragment>
                   {this.state.admins.length === 0 ?
                     <p>Sorry, there are no admins in this group.</p> :
-                    <React.Fragment>
-                      {this.state.admins.map((admin) => (
-                        <button style={{  width: "12em" }} className="button">{admin.userName}</button>
-                      ))}
-                    </React.Fragment>
+                    <MDBContainer>
+                      <React.Fragment>
+                        {this.state.admins.map((admin) => (
+                          <React.Fragment>
+                            <button style={{  width: "7em" }} className="button">{admin.userName}</button>
+                            <button
+                              type="submit" className="button"
+                              onClick={() => { this.handleDemoteAdmin(admin); }}
+                            >-</button>
+                          </React.Fragment>
+                        ))}
+                      </React.Fragment>
+
+                    </MDBContainer>
                   }
                 </React.Fragment>
               }
@@ -179,16 +245,31 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
               <p className="fontSizeLarge">
                 Members
               </p>
-              {this.state.loadingUsers ?
+              {this.state.loadingMembers ?
                 <LoadingWheel /> :
                 <React.Fragment>
-                  {this.state.users.length === 0 ?
+                  {this.state.members.length === 0 ?
                     <p>Sorry, there are no members in this group.</p> :
-                    <React.Fragment>
-                      {this.state.users.map((user) => (
-                        <button style={{  width: "12em" }} className="button">{user.userName}</button>
-                      ))}
-                    </React.Fragment>
+                    <MDBContainer>
+                      <React.Fragment>
+                        {this.state.members.map((user) => (
+                          <React.Fragment>
+                            <button type="submit" className="button"
+                              onClick={() => { this.handlePromoteMember(user); }}
+                            >+</button>
+                            <button style={{  width: "7em" }} className="button">{user.userName}</button>
+                            <button
+                              type="submit" className="button"
+                              onClick={() => { this.handleDemoteMember(user); }}
+                            >-</button>
+                          </React.Fragment>
+                          //<button type="submit" className="button">+</button>
+                          //<button style={{  width: "7em" }} className="button">{user.userName}</button>
+                          // <button type="submit" className="button">-</button>
+                        ))}
+                        {/*<button type="submit" className="button">-</button>*/}
+                      </React.Fragment>
+                    </MDBContainer>
                   }
                 </React.Fragment>
               }

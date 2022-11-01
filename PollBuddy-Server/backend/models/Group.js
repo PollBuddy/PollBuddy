@@ -250,13 +250,13 @@ const promoteUser = async function (groupID, userID, toPromoteID){
     await mongoConnection.getDB().collection("groups").updateOne(
       { _id: group._id, },
       {"$pull": {
-        "Members": toPromoteID.userID,
+        "Members": toPromoteID.userID.toString(),
       }}
     );
     await mongoConnection.getDB().collection("groups").updateOne(
       {_id: group._id,},
       {"$addToSet": {
-        "Admins": toPromoteID.userID,
+        "Admins": toPromoteID.userID.toString(),
       }}
     );
     return httpCodes.Ok();
@@ -273,6 +273,10 @@ const demoteUser = async function (groupID, userID, toDemoteID){
   const isAdmin = isGroupAdminByGroup(group, userID);
   if (!isAdmin) { return httpCodes.Forbidden(); }
 
+  if(userID.toString() === toDemoteID.userID.toString()){
+    return httpCodes.Forbidden();
+  }
+
   const isMember = isGroupMemberByGroup(group, toDemoteID.userID);
   if (!isMember) {
     const isDemoteAdmin = isGroupAdminByGroup(group, toDemoteID.userID);
@@ -282,19 +286,19 @@ const demoteUser = async function (groupID, userID, toDemoteID){
       await mongoConnection.getDB().collection("groups").updateOne(
         {_id: group._id,},
         {"$pull": {
-          "Admins": toDemoteID.userID,
+          "Admins": toDemoteID.userID.toString(),
         }}
       );
       await mongoConnection.getDB().collection("groups").updateOne(
         {_id: group._id,},
         {"$addToSet": {
-          "Members": toDemoteID.userID,
+          "Members": toDemoteID.userID.toString(),
         }}
       );
       return httpCodes.Ok();
     }
   }else{
-    let response = await leaveGroup(groupID, toDemoteID.userID);
+    let response = await leaveGroup(groupID, toDemoteID.userID.toString());
     return response;
   }
 };
