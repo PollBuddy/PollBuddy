@@ -47,7 +47,7 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
         }
       });
   };
-  
+
   handleDemoteAdmin = async (demoteId) => {
     let httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/demote", {
       method: "POST",
@@ -113,25 +113,22 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
             </p>
             {this.state.loadingAdmins ?
               <LoadingWheel/> :
-              <React.Fragment>
+              <MDBContainer>
                 {this.state.admins.length === 0 ?
                   <p>Sorry, there are no admins in this group.</p> :
-                  <MDBContainer>
-                    <React.Fragment>
-                      {this.state.admins.map((admin) => (
-                        <React.Fragment>
-                          <button style={{  width: "7em" }} className="button">{admin.userName}</button>
-                          <button
-                            type="submit" className="button"
-                            onClick={() => { this.handleDemoteAdmin(admin); }}
-                          >-</button>
-                        </React.Fragment>
-                      ))}
-                    </React.Fragment>
-
-                  </MDBContainer>
+                  <React.Fragment>
+                    {this.state.admins.map((admin) => (
+                      <div>
+                        <button style={{  width: "12em" }} className="button">{admin.userName}</button>
+                        <button
+                          type="submit" className="button"
+                          onClick={() => { this.handleDemoteAdmin(admin); }}
+                        >-</button>
+                      </div>
+                    ))}
+                  </React.Fragment>
                 }
-              </React.Fragment>
+              </MDBContainer>
             }
           </MDBContainer>
           <MDBContainer className="box">
@@ -140,27 +137,25 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
             </p>
             {this.state.loadingMembers ?
               <LoadingWheel/> :
-              <React.Fragment>
+              <MDBContainer>
                 {this.state.members.length === 0 ?
                   <p>Sorry, there are no members in this group.</p> :
-                  <MDBContainer>
-                    <React.Fragment>
-                      {this.state.members.map((user) => (
-                        <React.Fragment>
-                          <button type="submit" className="button"
-                            onClick={() => { this.handlePromoteMember(user); }}
-                          >+</button>
-                          <button style={{  width: "7em" }} className="button">{user.userName}</button>
-                          <button
-                            type="submit" className="button"
-                            onClick={() => { this.handleDemoteMember(user); }}
-                          >-</button>
-                        </React.Fragment>
-                      ))}
-                    </React.Fragment>
-                  </MDBContainer>
+                  <React.Fragment>
+                    {this.state.members.map((user) => (
+                      <div>
+                        <button type="submit" className="button"
+                          onClick={() => { this.handlePromoteMember(user); }}
+                        >+</button>
+                        <button style={{  width: "12em" }} className="button">{user.userName}</button>
+                        <button
+                          type="submit" className="button"
+                          onClick={() => { this.handleDemoteMember(user); }}
+                        >-</button>
+                      </div>
+                    ))}
+                  </React.Fragment>
                 }
-              </React.Fragment>
+              </MDBContainer>
             }
           </MDBContainer>
         </MDBContainer>
