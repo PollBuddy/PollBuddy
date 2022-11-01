@@ -677,6 +677,7 @@ router.post("/me/groups", function (req, res) {
  */
 router.get("/me/polls", isLoggedIn, async function (req, res) {
   let response = await getUserPolls(req.session.userData.userID);
+  console.log("/me/polls data retrieved");
   return sendResponse(res, response);
 });
 

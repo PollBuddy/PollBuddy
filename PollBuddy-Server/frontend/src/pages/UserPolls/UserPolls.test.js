@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Group from "./Group";
+import UserPolls from "./UserPolls";
 import { BrowserRouter } from "react-router-dom";
 
 function updateTitle() {
@@ -14,7 +14,7 @@ it("renders without crashing", () => {
   // Render about on the div
   ReactDOM.render(
     <BrowserRouter>
-      <Group updateTitle={updateTitle}/>
+      <UserPolls updateTitle={updateTitle}/>
     </BrowserRouter>, div);
   // Clean unmount
   ReactDOM.unmountComponentAtNode(div);

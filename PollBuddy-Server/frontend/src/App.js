@@ -23,6 +23,7 @@ import RegisterWithPollBuddy from "./pages/RegisterWithPollBuddy/RegisterWithPol
 import PollCreation from "./pages/PollCreation/PollCreation";
 import PollViewer from "./pages/PollViewer/PollViewer";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import UserPolls from "./pages/UserPolls/UserPolls";
 import PollResults from "./pages/PollResults/PollResults";
 import PollManager from "./pages/PollManager/PollManager";
 import PollHistory from "./pages/PollHistory/PollHistory";
@@ -120,6 +121,9 @@ export default class App extends React.Component {
             <Route exact path="/groups/join" element={<PrivateComponent state = {true} element={<GroupJoin updateTitle={this.updateTitle} />}/>}/>
 
             {/* --- Poll Pages --- */}
+
+            {/* UserPolls Page */}
+            <Route exact path="/polls" element={<PrivateComponent state = {true} element={<UserPolls updateTitle={this.updateTitle} />}/>}/>
 
             {/* My Poll Histories Page */}
             {/* This route (and any others that route through /polls/that are not polls)
