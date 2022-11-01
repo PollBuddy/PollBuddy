@@ -27,12 +27,12 @@ class LoginWithPollBuddy extends Component {
       this.setState({successfulLogin: true}); // Tell it to redirect to the next page if already logged in
     }
   }
-  handleLogin() {
+  async handleLogin() {
     const schema = Joi.object({
       username: Joi.string()
         .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$"))
         .error(new Error("Please enter a valid username or email.")),
-      email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2}).max(320)
+      email: Joi.string().email({tlds: {allow: false}, minDomainSegments: 2}).max(320)
         .error(new Error("Please enter a valid username or email.")),
       password: Joi.string()
         .pattern(new RegExp("^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$"))
@@ -41,32 +41,34 @@ class LoginWithPollBuddy extends Component {
         .error(new Error("Please enter a valid password.")),
     });
     //we need to validate each separately because either username or email could work
-    const validUsername = schema.validate({ username: this.state.userNameEmail });
-    const validEmail = schema.validate({ email: this.state.userNameEmail });
-    const validPassword = schema.validate({ password: this.state.password });
+    const validUsername = schema.validate({username: this.state.userNameEmail});
+    const validEmail = schema.validate({email: this.state.userNameEmail});
+    const validPassword = schema.validate({password: this.state.password});
 
     //error in username/email
-    if(validUsername.error && validEmail.error){
+    if (validUsername.error && validEmail.error) {
       this.setState({error: validUsername.error.toString()});
       return;
     }
     //error in password
-    if(validPassword.error){
-      this.setState({error:validPassword.error.toString()});
+    if (validPassword.error) {
+      this.setState({error: validPassword.error.toString()});
       return;
     }
     //no errors
     this.setState({error: ""});
 
-    // login request to backend
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userNameEmail: this.state.userNameEmail,
-        password: this.state.password
-      })
-    }).then(response => {
+    try {
+      // login request to backend
+      const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          userNameEmail: this.state.userNameEmail,
+          password: this.state.password
+        })
+      });
+      const response = await httpResponse.json();
       if (response.status === 200) {
         //needs some authentication before and if authentication passes then set local storage and such refer to GroupCreation page to see the way to make POST requests to the backend
         localStorage.setItem("loggedIn", "true");//maybe have an admin/teacher var instead of just true
@@ -78,10 +80,10 @@ class LoginWithPollBuddy extends Component {
           this.setState({error: this.state.error + "\nForgot your password? Try clicking \"Forgot Password?\" to reset your password."});
         }
       }
-    }).catch(err => {
+    } catch(err) {
       console.log(err);
       this.setState({error: "An error occurred during login. Please try again"});
-    });
+    }
   }
 
   componentDidMount(){
