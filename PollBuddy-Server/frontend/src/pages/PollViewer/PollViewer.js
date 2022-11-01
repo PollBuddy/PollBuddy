@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import "mdbreact/dist/css/mdb.css";
-import { MDBContainer } from "mdbreact";
+import {MDBContainer} from "mdbreact";
 import Question from "../../components/Question/Question";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import { withRouter } from "../../components/PropsWrapper/PropsWrapper";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import "./PollViewer.scss";
 import Timer from "../../components/Timer/Timer";
 
@@ -25,17 +25,16 @@ class PollViewer extends Component {
     };
   }
 
-  /**
-   * if response.error fails, redirect to the homepage
-   */
-
   async componentDidMount() {
     this.props.updateTitle("Poll Viewer");
+    this.getPollData();
+  }
+
+  async getPollData() {
     const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID, {
       method: "GET",
     });
     const response = await httpResponse.json();
-    console.log(response);
     if (response.result === "success") {
       if (response.data.questions.length === 0) {
         this.setState({
@@ -85,8 +84,7 @@ class PollViewer extends Component {
         });
       }
     } else {
-      // invalid poll ID given
-      this.props.router.navigate("/");
+      this.props.router.navigate("/polls");
     }
   }
 
@@ -125,7 +123,7 @@ class PollViewer extends Component {
   };
 
   noPollTimeLeft = () => {
-    this.setState({ pollTimeLeft: false });
+    this.setState({pollTimeLeft: false});
   };
 
   render() {
@@ -135,13 +133,13 @@ class PollViewer extends Component {
       if (
         this.state.perPoll &&
         Date.parse(this.state.pollCloseTime) - Date.now() <
-          100 * 24 * 60 * 60 * 1000
+        100 * 24 * 60 * 60 * 1000
       ) {
         return (
           <div>
             <MDBContainer
               className="box"
-              style={{ width: "275px", maxWidth: "275px" }}
+              style={{width: "275px", maxWidth: "275px"}}
             >
               <MDBContainer>
                 <span>Poll Time Remaining</span>
@@ -153,8 +151,8 @@ class PollViewer extends Component {
                 onTimeEnd={this.onTimeEnd}
               />
             </MDBContainer>
-            <br />
-            <br />
+            <br/>
+            <br/>
           </div>
         );
       }
@@ -171,7 +169,7 @@ class PollViewer extends Component {
     } else if (!this.state.doneLoading) {
       return (
         <MDBContainer className="page">
-          <LoadingWheel />
+          <LoadingWheel/>
         </MDBContainer>
       );
     } else if (this.state.currentQuestion === -1) {
@@ -186,7 +184,7 @@ class PollViewer extends Component {
       );
     } else {
       return (
-        <MDBContainer className="page" style={{ justifyContent: "start" }}>
+        <MDBContainer className="page" style={{justifyContent: "start"}}>
           {pollTimer()}
           <div className="questions-bar">
             {this.state.questions.map((question, index) => {

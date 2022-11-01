@@ -62,7 +62,7 @@ app.use((req, res, next) => {
   res.on("finish", () => {
     const duration = Date.now() - start;
     console.log(`Request to ${req.path} took ${duration}ms`);
-    
+
     console.log(req.originalUrl); // '/admin/new?a=b' (WARNING: beware query string)
     console.log(req.baseUrl); // '/admin'
     console.log(req.path); // '/new'

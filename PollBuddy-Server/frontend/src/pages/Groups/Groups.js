@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {Link, Navigate} from "react-router-dom";
-import { MDBContainer } from "mdbreact";
+import {MDBContainer} from "mdbreact";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import "../../styles/main.scss";
@@ -8,7 +8,7 @@ import "./Groups.scss";
 
 class Groups extends Component {
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       error: null,
@@ -21,6 +21,10 @@ class Groups extends Component {
 
   async componentDidMount() {
     this.props.updateTitle("My Groups");
+    this.getUserGroups();
+  }
+
+  async getUserGroups() {
     const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/groups");
     const response = await httpResponse.json();
     this.setState({
@@ -30,17 +34,8 @@ class Groups extends Component {
     });
   }
 
-  toggleLeaveGroup = () => {
-    this.setState(prevState => ({ showXs: !prevState.showXs }));
-    if (this.state.leaveGroupButtonText === "Leave Group") {
-      this.setState({ leaveGroupButtonText: "Exit Leave Group" });
-    } else {
-      this.setState({ leaveGroupButtonText: "Leave Group" });
-    }
-  };
-
   render() {
-    if (this.state.error != null) {
+    if (this.state.error) {
       return (
         <MDBContainer fluid className="page">
           <MDBContainer fluid className="box">
@@ -50,7 +45,7 @@ class Groups extends Component {
           </MDBContainer>
         </MDBContainer>
       );
-    } else if(!this.state.doneLoading){
+    } else if (!this.state.doneLoading) {
       return (
         <MDBContainer className="page">
           <LoadingWheel/>
@@ -72,7 +67,7 @@ class Groups extends Component {
               <React.Fragment>
                 {this.state.adminGroups.map((e) => (
                   <Link to={"/groups/" + e.id}>
-                    <button style={{  width: "20em" }} className="button">{e.name}</button>
+                    <button style={{width: "20em"}} className="button">{e.name}</button>
                   </Link>
                 ))}
               </React.Fragment>
@@ -88,7 +83,7 @@ class Groups extends Component {
                 {this.state.memberGroups.map((e) => (
                   <div>
                     <Link to={"/groups/" + e.id}>
-                      <button style={{  width: "20em" }} className="button">{e.name}</button>
+                      <button style={{width: "20em"}} className="button">{e.name}</button>
                     </Link>
                   </div>
                 ))}
@@ -110,5 +105,5 @@ class Groups extends Component {
     }
   }
 }
-export default withRouter(Groups);
 
+export default withRouter(Groups);

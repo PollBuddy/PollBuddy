@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import "mdbreact/dist/css/mdb.css";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
-import { MDBContainer } from "mdbreact";
+import {MDBContainer} from "mdbreact";
 import ErrorText from "../../components/ErrorText/ErrorText";
 
 class GroupCreation extends Component {
@@ -14,16 +14,9 @@ class GroupCreation extends Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.updateTitle("Group Creation");
   }
-
-  getGroupData = () => {
-    return {
-      name: this.state.name,
-      description: this.state.description,
-    };
-  };
 
   onInput = (e) => {
     this.setState({
@@ -35,21 +28,19 @@ class GroupCreation extends Component {
     this.setState({showError: false});
     const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/new", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
-      body: JSON.stringify(this.getGroupData())
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        name: this.state.name,
+        description: this.state.description,
+      })
     });
     const response = await httpResponse.json();
-    console.log(response);
     if (response.result === "success") {
       this.props.router.navigate("/groups/" + response.data.id);
     } else {
       this.setState({showError: true});
     }
   };
-
-  checkError() {
-    return this.state.showError ? <ErrorText/> : null;
-  }
 
   render() {
     return (
@@ -71,7 +62,7 @@ class GroupCreation extends Component {
               onInput={this.onInput}
             />
           </MDBContainer>
-          {this.checkError()}
+          <ErrorText show={this.state.showError}/>
           <button className="button" onClick={this.onSubmit}>
             Create Group
           </button>
@@ -80,4 +71,5 @@ class GroupCreation extends Component {
     );
   }
 }
+
 export default withRouter(GroupCreation);

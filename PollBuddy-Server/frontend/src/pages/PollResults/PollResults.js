@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { Bar } from "react-chartjs-2";
-import { MDBContainer } from "mdbreact";
+import React, {Component} from "react";
+import {Bar} from "react-chartjs-2";
+import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
@@ -38,6 +38,25 @@ class PollResults extends Component {
       // }
       // this.setState({correctAnswers: this.state.correctAnswers + this.state.questionData.CorrectAnswers[this.state.questionData.CorrectAnswers.length-1]});
       this.setState({"doneLoading": true});
+    }
+  }
+
+  async getPollResults() {
+    this.props.updateTitle("Poll Results");
+    const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.router.params.pollID + "/results", {
+      method: "GET"
+    });
+    const response = await httpResponse.json();
+    if (response.result === "success") {
+      this.setState({
+        questions: response.data.questions,
+        doneLoading: true,
+      });
+    } else {
+      this.setState({
+        showError: true,
+        doneLoading: true,
+      });
     }
   }
 

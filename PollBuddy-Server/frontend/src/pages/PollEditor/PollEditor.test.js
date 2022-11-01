@@ -1,25 +1,27 @@
-import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-// import userEvent from '@testing-library/user-event';
-import '@testing-library/jest-dom';
-
+import React from "react";
+import ReactDOM from "react-dom";
 import PollEditor from "./PollEditor";
+import {BrowserRouter} from "react-router-dom";
 
 function updateTitle() {
   return false;
 }
 
-global.fetch = jest.fn(() => Promise.resolve({
-  json: () => Promise.resolve({ data: {
-    questions: []
-  } })
-}));
-
-describe("The PollEditor page:", () => {
-  it("Loads correctly.", async () => {
-    // Just make sure it can load.
-    render(<BrowserRouter><PollEditor updateTitle={updateTitle}/></BrowserRouter>);
-    await waitFor(() => expect(screen.getByText("Poll Details")));
-  });
+// Create basic render test
+it("renders without crashing", () => {
+  global.fetch = jest.fn(() => Promise.resolve({
+    json: () => Promise.resolve({data: {}})
+  }));
+  // Create div element
+  const div = document.createElement("div");
+  // Render about on the div
+  ReactDOM.render(
+    <BrowserRouter>
+      <PollEditor
+        updateTitle={updateTitle}
+        // match={{params: {pollID: "12345"}, isExact: true, path: "", url: ""}}
+      />
+    </BrowserRouter>, div);
+  // Clean unmount
+  ReactDOM.unmountComponentAtNode(div);
 });

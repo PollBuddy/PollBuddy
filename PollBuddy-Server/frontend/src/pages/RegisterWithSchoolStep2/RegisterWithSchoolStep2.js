@@ -5,8 +5,8 @@ import {Navigate} from "react-router-dom";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
-const Joi = require("joi");
 
+const Joi = require("joi");
 
 class RegisterWithSchoolStep2 extends Component {
   constructor(props) {
@@ -14,9 +14,9 @@ class RegisterWithSchoolStep2 extends Component {
 
     // Process args
     // TODO: Some of this should probably be in a try/catch or something for robustness
-    if(this.props.router.location.search) {
+    if (this.props.router.location.search) {
       console.log("Getting things");
-      var data = JSON.parse(new URLSearchParams(this.props.router.location.search).get("data"));
+      let data = JSON.parse(new URLSearchParams(this.props.router.location.search).get("data"));
       var firstName = data["firstName"];
       var firstNamePrefilled = true;
       var lastName = data["lastName"];
@@ -26,10 +26,22 @@ class RegisterWithSchoolStep2 extends Component {
       var email = data["email"];
       var emailPrefilled = true;
 
-      if(firstName == null) { firstName = ""; firstNamePrefilled = false; }
-      if(lastName == null) { lastName = ""; lastNamePrefilled = false; }
-      if(userName == null) { userName = ""; userNamePrefilled = false; }
-      if(email == null) { email = ""; emailPrefilled = false; }
+      if (firstName == null) {
+        firstName = "";
+        firstNamePrefilled = false;
+      }
+      if (lastName == null) {
+        lastName = "";
+        lastNamePrefilled = false;
+      }
+      if (userName == null) {
+        userName = "";
+        userNamePrefilled = false;
+      }
+      if (email == null) {
+        email = "";
+        emailPrefilled = false;
+      }
     }
 
     // Set up the state
@@ -55,16 +67,15 @@ class RegisterWithSchoolStep2 extends Component {
 
   componentDidMount() {
     this.props.updateTitle("Register with School");
-    console.log(this.state);
   }
 
-  handleRegister() {
+  handleRegister = async () => {
     // do input validation
     const schema = Joi.object({
       username: Joi.string()
         .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$"))
         .error(new Error("Username must be between 3 and 32 characters. Valid characters include letters, numbers, underscores, dashes, and periods.")),
-      email: Joi.string().email({ tlds: {allow: false}, minDomainSegments: 2}).max(320)
+      email: Joi.string().email({tlds: {allow: false}, minDomainSegments: 2}).max(320)
         .error(new Error("Invalid email format.")),
       firstname: Joi.string()
         .min(1)
@@ -75,11 +86,10 @@ class RegisterWithSchoolStep2 extends Component {
         .max(256)
         .error(new Error("Last name must be less than 256 characters.")),
     });
-    var userNameValid = schema.validate({ username: this.state.username });
-    var emailValid = schema.validate({ email: this.state.email });
-    var firstNameValid = schema.validate({ firstname: this.state.firstname});
-    var lastNameValid = schema.validate({ lastname: this.state.lastname});
-
+    let userNameValid = schema.validate({username: this.state.username});
+    let emailValid = schema.validate({email: this.state.email});
+    let firstNameValid = schema.validate({firstname: this.state.firstname});
+    let lastNameValid = schema.validate({lastname: this.state.lastname});
 
     // Update component's state
     this.setState({
@@ -96,7 +106,7 @@ class RegisterWithSchoolStep2 extends Component {
 
     // If all are valid, submit a request to the backend to do the registration
     // TODO: This URL is going to need to be fixed and made dynamic
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/register/rpi", {
+    let httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/register/rpi", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
@@ -105,50 +115,43 @@ class RegisterWithSchoolStep2 extends Component {
         userName: this.state.userName,
         email: this.state.email,
       })
-    }).then(response => response.json())
-      .then(response => {
+    });
+    let response = await httpResponse.json();
+    // TODO: Debug print, delete
+    if (response != null) {
+      if (response.result === "success") {
+        // Save data about the user
+        localStorage.setItem("loggedIn", "true");
+        localStorage.setItem("firstName", response.data.firstName);
+        localStorage.setItem("lastName", response.data.lastName);
+        localStorage.setItem("userName", response.data.userName);
 
-        // TODO: Debug print, delete
-        console.log(response);
-        if (response != null) {
-          if (response.result === "success") {
-            // Save data about the user
-            localStorage.setItem("loggedIn", "true");
-            localStorage.setItem("firstName", response.data.firstName);
-            localStorage.setItem("lastName", response.data.lastName);
-            localStorage.setItem("userName", response.data.userName);
-
-            // Redirect to the groups page
-            return this.props.router.navigate("/groups", { replace: true });
-          } else {
-            // Something went wrong, handle it
-
-            if (response.error === "Validation failed") {
-              this.setState({error: response.data.errors});
-            } else {
-              this.setState({error: response.error});
-            }
-            console.log("ERROR: " + this.state.error);
-
-          }
+        // Redirect to the groups page
+        return this.props.router.navigate("/groups", {replace: true});
+      } else {
+        // Something went wrong, handle it
+        if (response.error === "Validation failed") {
+          this.setState({error: response.data.errors});
+        } else {
+          this.setState({error: response.error});
         }
-      });
-  }
+        console.log("ERROR: " + this.state.error);
+      }
+    }
+  };
 
   render() {
-    this.handleRegister = this.handleRegister.bind(this);
     if (this.state.error != null) {
       return (
         <ErrorText text={this.state.error}> </ErrorText>
       );
-    } else if(!this.state.doneLoading){
+    } else if (!this.state.doneLoading) {
       return (
         <MDBContainer className="page">
           <LoadingWheel/>
         </MDBContainer>
       );
     } else {
-
       return (
         <MDBContainer fluid className="page">
           <MDBContainer fluid className="box">
@@ -159,7 +162,6 @@ class RegisterWithSchoolStep2 extends Component {
               To finish creating your account, fill in the text boxes, then press submit.
             </p>
             <MDBContainer className="form-group">
-
               <label htmlFor="firstnameText">First Name:</label>
               <input placeholder="SIS" className="form-control textBox" id="firstnameText"
                 value={this.state.firstName} readOnly={this.state.firstNamePrefilled}
@@ -168,7 +170,7 @@ class RegisterWithSchoolStep2 extends Component {
                 }}
               />
               {this.state.firstNameValid.error &&
-                <p style={{color: "red"}}>{ this.state.firstNameValid.error.toString() }</p>
+                <p style={{color: "red"}}>{this.state.firstNameValid.error.toString()}</p>
               }
               <label htmlFor="lastnameText">Last Name:</label>
               <input placeholder="Man" className="form-control textBox" id="lastnameText"
@@ -178,7 +180,7 @@ class RegisterWithSchoolStep2 extends Component {
                 }}
               />
               {this.state.lastNameValid.error &&
-                <p style={{color: "red"}}>{ this.state.lastNameValid.error.toString() }</p>
+                <p style={{color: "red"}}>{this.state.lastNameValid.error.toString()}</p>
               }
               <label htmlFor="usernameText">Username:</label>
               <input placeholder="mans" className="form-control textBox" id="usernameText"
@@ -188,19 +190,19 @@ class RegisterWithSchoolStep2 extends Component {
                 }}
               />
               {this.state.userNameValid.error &&
-                <p style={{color: "red"}}>{ this.state.userNameValid.error.toString() }</p>
+                <p style={{color: "red"}}>{this.state.userNameValid.error.toString()}</p>
               }
               <label htmlFor="emailText">Email:</label>
-              <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText" value={this.state.email} readOnly={this.state.emailPrefilled} onChange={(evt) => {
-                this.setState({email: evt.target.value});
-              }}/>
+              <input placeholder="mans@rpi.edu" className="form-control textBox" id="emailText" value={this.state.email}
+                readOnly={this.state.emailPrefilled} onChange={(evt) => {
+                  this.setState({email: evt.target.value});
+                }}/>
               {this.state.emailValid.error &&
-                <p style={{color: "red"}}>{ this.state.emailValid.error.toString() }</p>
+                <p style={{color: "red"}}>{this.state.emailValid.error.toString()}</p>
               }
               {this.state.emailExists &&
                 <p style={{color: "red"}}>A user with this email already exists!</p>
               }
-
             </MDBContainer>
             <button className="button" onClick={this.handleRegister}>Submit</button>
           </MDBContainer>

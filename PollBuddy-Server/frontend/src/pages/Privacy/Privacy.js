@@ -8,27 +8,28 @@ export default class Privacy extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {terms: null};
-  }
-
-  componentDidMount() {
-    fetch(privacyMdPath).then((response) => response.text()).then((text) => {
-      this.setState({terms: text});
-    });
+    this.state = {
+      terms: null
+    };
   }
 
   componentDidMount() {
     this.props.updateTitle("Privacy");
+    this.getText();
+  }
+
+  async getText() {
+    const httpResponse = await fetch(privacyMdPath);
+    const text = await httpResponse.text();
+    this.setState({terms: text});
   }
 
   render() {
-
     return (
       <MDBContainer className="page">
         <MDBContainer className="box box-body-text">
           <h1>Our Privacy Policy</h1>
-          {/* Render page from markdown file using react-markdown */}
-          <ReactMarkdown children={this.state.terms} />
+          <ReactMarkdown children={this.state.terms}/>
         </MDBContainer>
       </MDBContainer>
     );

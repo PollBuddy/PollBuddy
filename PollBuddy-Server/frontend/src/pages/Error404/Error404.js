@@ -1,12 +1,13 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import "mdbreact/dist/css/mdb.css";
-import { MDBContainer } from "mdbreact";
+import {MDBContainer} from "mdbreact";
 
 export default class Error404 extends Component {
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.updateTitle("Page Not Found");
   }
+
   render() {
     return (
       <MDBContainer className="page">
@@ -16,7 +17,6 @@ export default class Error404 extends Component {
           </p>
         </MDBContainer>
       </MDBContainer>
-
     );
   }
 }
