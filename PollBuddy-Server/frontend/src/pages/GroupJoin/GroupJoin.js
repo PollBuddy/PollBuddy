@@ -9,20 +9,38 @@ class GroupJoin extends Component {
     let groupCode = props.router.searchParams.get("code");
     this.state = {
       groupCode: groupCode || "",
-      showConfirm: false
+      showConfirm: false,
+      name: "",
+      description: ""
     };
   }
-  
+
   componentDidMount(){
     this.props.updateTitle("Join Group");
   }
 
   handleEnterCode = () => {
-    this.setState({showConfirm: true});
+      fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.groupCode, {
+        method: "GET"
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          console.log(response);
+          if (response.result === "success") {
+            this.setState({
+              showConfirm: true,
+              name: response.data.name,
+              description: response.data.description,
+            });
+        } else {
+            this.setState({groupCode: ""})
+        }
+        });
   };
 
   handleChange = (e) => {
     this.setState({groupCode: e.target.value});
+
   };
   async handleConfirmationResponse(join) {
     if (join) {
@@ -35,6 +53,8 @@ class GroupJoin extends Component {
       }
     }
     this.props.router.navigate("/groups");
+
+
   }
 
   render() {
@@ -43,7 +63,13 @@ class GroupJoin extends Component {
         <MDBContainer fluid className="box">
           { this.state.showConfirm
             ?
-            <MDBContainer className="form-group">
+              <MDBContainer className="form-group">
+              <p className="fontSizeLarge">
+                Name: {this.state.name}
+              </p>
+              <p className="fontSizeLarge">
+                Description: {this.state.description}
+              </p>
               <p>Are you sure you want to join this group?</p>
               <input onClick={this.handleConfirmationResponse.bind(this, false)} className="button float-left" type="submit" value="No"/>
               <input onClick={this.handleConfirmationResponse.bind(this, true)} className="button float-right" type="submit" value="Yes"/>
@@ -54,7 +80,7 @@ class GroupJoin extends Component {
               <input className="form-control textBox" type="text" name="groupCode" value={this.state.groupCode} onChange={this.handleChange}/>
               <input onClick={this.handleEnterCode} className="button float-right" type="submit" value="OK"/>
             </MDBContainer>
-          }
+        }
         </MDBContainer>
       </MDBContainer>
     );
