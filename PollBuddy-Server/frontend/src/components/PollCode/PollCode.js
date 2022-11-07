@@ -35,7 +35,7 @@ export default class PollCode extends Component {
     return(
       <MDBContainer className="box">
         <MDBContainer className="form-group">
-          <label htmlFor="pollCodeText">Already have a Poll Code? Enter it here:</label>
+          <label htmlFor="pollCodeText">Already have a Poll Code?</label>
           <input placeholder="Ex: P8C0D3" onChange={this.handleCodeChange} className="form-control textBox"/>
           <p style={{color: "red", textAlign: "center"}}>{this.state.errMsg}</p>
         </MDBContainer>

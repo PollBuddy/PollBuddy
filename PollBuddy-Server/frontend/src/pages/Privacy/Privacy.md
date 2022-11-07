@@ -1,4 +1,5 @@
 Poll Buddy is dedicated to transparency and trust. As a part of our commitment to provide the highest quality user experience, Poll Buddy prioritizes your privacy. Poll Buddy protects user data and confidential information to the maximum extent possible. Your personal information is collected on an as-needed basis and is not actively shared with anyone, except where explicitly allowed by you. Data is stored on a private web server with restricted access privileges.
+
 Poll Buddy needs to collect certain information in order to deliver a functional product. Some examples of this may include:
 - Name
 - Email

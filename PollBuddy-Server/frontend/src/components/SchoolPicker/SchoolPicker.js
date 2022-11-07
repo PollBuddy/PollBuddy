@@ -73,7 +73,7 @@ export default class SchoolPicker extends Component {
           shouldItemRender={(item, value2) => item.label.toLowerCase().indexOf(value2.toLowerCase()) >= 0}
           inputProps={{
             className: "form-control textBox",
-            placeholder: "Enter school name",
+            placeholder: "Enter School Name",
             "aria-labelledby": "schoolNameText"
           }}
           wrapperStyle={{ display: "block" }}

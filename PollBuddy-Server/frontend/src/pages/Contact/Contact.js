@@ -66,7 +66,7 @@ export default class Contact extends Component {
             <input required
               className="form-control textBox"
               id="name"
-              placeholder="Name"
+              placeholder="First and Last Name"
               value={this.state.fullName}
               onChange={(evt) => { this.setState({fullName: evt.target.value}); }}
             />

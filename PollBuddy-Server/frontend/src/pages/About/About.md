@@ -1,4 +1,4 @@
-# Welcome to Poll Buddy!
+# **Welcome to Poll Buddy!**
 # An affordable and compatible in-class quizzing platform.
 
 Many professors use iClickers in the classroom to create polls, ask questions, take attendance, and quiz their students. Unfortunately, these devices come with many drawbacks:
