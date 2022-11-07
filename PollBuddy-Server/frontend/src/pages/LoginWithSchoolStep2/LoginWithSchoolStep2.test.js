@@ -10,10 +10,7 @@ function updateTitle() {
   return false;
 }
 
-let assignMock = jest.fn();
-
-delete window.location;
-window.location = { assign: assignMock };
+window.alert = jest.fn();
 
 describe("The LoginWithSchoolStep2 page:", () => {
   it("Loads correctly.", async () => {

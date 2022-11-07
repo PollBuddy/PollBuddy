@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, waitFor, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 // import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
@@ -12,17 +12,18 @@ jest.mock("react-markdown", () => (props) => {
 
 jest.mock("./Privacy.md", () => "Test");
 
+global.fetch = jest.fn(() => Promise.resolve({
+  text: () => Promise.resolve("TEST")
+}));
+
 function updateTitle() {
   return false;
 }
-
-beforeEach(() => {
-  fetch.resetMocks();
-});
 
 describe("The Privacy page:", () => {
   it("Loads correctly.", async () => {
     // Just make sure it can load.
     render(<BrowserRouter><Privacy updateTitle={updateTitle}/></BrowserRouter>);
+    await waitFor(() => expect(screen.getByText("TEST")));
   });
 });

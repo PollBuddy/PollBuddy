@@ -14,6 +14,8 @@ global.fetch = jest.fn(() => Promise.resolve({
   json: () => Promise.resolve({ result: "success", data: { questions: [ ] } })
 }));
 
+global.alert = () => {};
+
 describe("The PollResults page:", () => {
   it("Loads correctly.", async () => {
     // Just make sure it can load.

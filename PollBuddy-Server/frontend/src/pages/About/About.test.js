@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, /*screen, act*/ } from '@testing-library/react';
+import { render, screen, waitFor, /*screen, act*/ } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 // import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
@@ -17,13 +17,14 @@ function updateTitle() {
 }
 
 global.fetch = jest.fn(() => Promise.resolve({
-  text: () => Promise.resolve({text: ""})
+  text: () => Promise.resolve("TEST")
 }));
 
 // Create basic render test
 describe("The About page:", () => {
-  it("Loads correctly.", () => {
+  it("Loads correctly.", async () => {
     // Just make sure it can load.
     render(<BrowserRouter><About updateTitle={updateTitle}/></BrowserRouter>);
+    await waitFor(() => expect(screen.getByText("TEST")));
   });
 });

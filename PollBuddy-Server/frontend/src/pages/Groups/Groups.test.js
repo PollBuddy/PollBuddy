@@ -10,17 +10,20 @@ function updateTitle() {
   return false;
 }
 
+global.fetch = jest.fn(() => Promise.resolve({
+  json: () => Promise.resolve({
+    ok: true,
+    result: "success",
+    data: {
+      admin: [],
+      member: [],
+    },
+  }),
+}));
+
 describe("The Groups page:", () => {
   it("Loads correctly.", async () => {
     // Just make sure it can load.
-    fetch.mockResponseOnce(JSON.stringify({
-      ok: true,
-      result: "success",
-      data: {
-        admin: [],
-        member: [],
-      },
-    }));
     render(<BrowserRouter><Groups updateTitle={updateTitle}/></BrowserRouter>);
     await waitFor(() => expect(screen.getByText("Groups")));
   });
