@@ -104,34 +104,21 @@ class PollEditor extends Component {
     };
   };
 
-  testFunc = () => {
-    return;
-  };
-
   generateNewPassword = () => {
     this.state.pollPassword = "";
     for(let i = 0; i < 5; i++){
       this.state.pollPassword += Math.floor(Math.random() * 10);
     }
-    return;
   }
 
   changePassword = () => {
     if (this.state.requiresPassword){
       // true -> false
-      // this.state.pollPassword = "";
       this.state.requiresPassword = false;
-      console.log("Turn to false");
-      console.log(this.state.requiresPassword);
-      console.log("Password: " + this.state.pollPassword);
       return;
     }
-    this.state.requiresPassword = true;
-    // this.generateNewPassword();
-    console.log("Turn to true");
-    console.log(this.state.requiresPassword);
-    console.log("Password: " + this.state.pollPassword);
     // false -> true
+    this.state.requiresPassword = true;
   };
 
   savePoll = () => {

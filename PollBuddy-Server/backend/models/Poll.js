@@ -180,7 +180,7 @@ const getPoll = async function (userID, pollID) {
       openTime: poll.OpenTime,
       closeTime: poll.CloseTime,
       questions: questions,
-      pollPassword: generatePassword(),
+      pollPassword: poll.Password,
     });
   } catch (err) {
     console.error(err);
@@ -377,7 +377,7 @@ const createPoll = async function (userID, pollData) {
       MaxAllowedChoices: pollData.maxAllowedChoices,
       OpenTime: Date.now(),
       CloseTime: Date.now() + (24 * 60 * 60 * 1000),
-      Password: "please",
+      Password: generateNewPassword(),
     };
 
     if (pollData.group) {
