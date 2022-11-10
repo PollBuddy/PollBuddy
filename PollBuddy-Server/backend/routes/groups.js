@@ -131,7 +131,8 @@ router.get("/:id/delete", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/delete", isLoggedIn, paramValidator(groupParamsValidator), async (req, res) => {//use router.delete??
+router.post("/:id/delete", isLoggedIn, paramValidator(groupParamsValidator), async (req, res) => {
+  //use router.delete??
   let response = await deleteGroup(req.params.id, req.session.userData.userID);
   return sendResponse(res, response);
 });
