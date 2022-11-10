@@ -1,7 +1,7 @@
 const Influx = require("influx");
 let influx;
 
-if(process.env.REPORTING_DB_URL) {
+if (process.env.REPORTING_DB_URL) {
   influx = new Influx.InfluxDB({
     // You must run in Kubernetes for this to work by default
     host: process.env.REPORTING_DB_URL,
