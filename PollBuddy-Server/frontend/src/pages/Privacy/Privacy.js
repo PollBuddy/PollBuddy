@@ -26,7 +26,7 @@ export default class Privacy extends Component {
     return (
       <MDBContainer className="page">
         <MDBContainer className="box box-body-text">
-          <h1>Our Privacy Policy</h1>
+          <h1><strong>Our Privacy Policy</strong></h1>
           {/* Render page from markdown file using react-markdown */}
           <ReactMarkdown children={this.state.terms} />
         </MDBContainer>

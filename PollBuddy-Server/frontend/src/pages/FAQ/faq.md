@@ -1,4 +1,4 @@
-**Here's some common questions from your fellow Poll Buddies:**
+Here's some common questions from your fellow Poll Buddies:
 
 *Where can I find Poll Buddy's source code?*
 - Our source code can be explored and downloaded from our [GitHub repository](https://github.com/PollBuddy/PollBuddy).
