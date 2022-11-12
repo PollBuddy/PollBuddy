@@ -62,9 +62,9 @@ class Groups extends Component {
       return (
         <MDBContainer className="page">
           <MDBContainer className="box">
-            <p className="fontSizeLarge">
-              Groups
-            </p>
+            <h3>
+              <strong><u>GROUPS</u></strong>
+            </h3>
             <p className="fontSizeLarge">
               As a Group Admin:
             </p>

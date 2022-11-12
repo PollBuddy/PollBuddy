@@ -383,6 +383,8 @@ class PollEditor extends Component {
                   >
                     Save Changes
                   </button>
+                </div>
+                <div className={"pollButtons"}>
                   <button
                     id="descriptionBtn" className="button pollButton"
                     onClick={this.deletePoll}
@@ -399,6 +401,8 @@ class PollEditor extends Component {
                   <Link to={"/polls/" + this.state.pollID + "/results"} className="button pollButton">
                     Open results graph
                   </Link>
+                </div>
+                <div className={"pollButtons"}>
                   <a
                     id="downloadBtn" className="button pollButton"
                     href={process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/csv"}
@@ -420,7 +424,7 @@ class PollEditor extends Component {
                     { !(this.state.displayEditQuestion || this.state.displayNewQuestion) &&
                       <div id="poll_questions" className="Poll_Editor_center">
                         {this.state.questions.length === 0 && !this.state.displayNewQuestion ? (
-                          <p>Sorry, you don't have any questions.</p>
+                          <p>There are no questions created for this poll.</p>
                         ) : (
                           <React.Fragment>
                             {this.state.questions.map((question, index) => (
@@ -456,7 +460,7 @@ class PollEditor extends Component {
                         </MDBContainer>
                         <div className="maxAllowedChoices">
                           <p>
-                            Max Allowed Choices
+                           Max Allowed Choices 
                           </p>
                           <button
                             type="submit" className="button"
@@ -465,7 +469,7 @@ class PollEditor extends Component {
                             +
                           </button>
                           <p className="fontSizeLarge">
-                            {this.state.maxAllowedChoices}
+                            {"  " + this.state.maxAllowedChoices + "  "}
                           </p>
                           <button
                             type="submit" className="button"
@@ -478,7 +482,7 @@ class PollEditor extends Component {
                           Answers
                         </p>
                         {this.state.currentAnswers.length === 0 ? (
-                          <p>Sorry, this question has no answers.</p>
+                          <p>This question has no answers.</p>
                         ) : (
                           <React.Fragment>
                             {this.state.currentAnswers.map((value, index) => (

@@ -255,37 +255,37 @@ class AccountInfo extends Component {
       return (
         <MDBContainer className="page">
           <MDBContainer className="box">
-            <h1>Account Settings</h1>
+            <h1><strong>Account Settings</strong></h1>
             <MDBContainer>
               <MDBRow className="AccountInfo-accountInputs">
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
-                  <label htmlFor="firstnameText">First Name:</label>
+                  <label htmlFor="firstnameText"><center>First Name:</center></label>
                   <input defaultValue={this.state.firstNameLoaded ? this.state.firstName : undefined } className="form-control textBox" id="firstnameText" readOnly={this.state.firstNameLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
-                  <label htmlFor="lastnameText">Last Name:</label>
+                  <label htmlFor="lastnameText"><center>Last Name:</center></label>
                   <input defaultValue={this.state.lastNameLoaded ? this.state.lastName : undefined } className="form-control textBox" id="lastnameText" readOnly={this.state.lastNameLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
               </MDBRow>
 
               <MDBRow className="AccountInfo-accountInputs">
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
-                  <label htmlFor="usernameText">Username:</label>
+                  <label htmlFor="usernameText"><center> Username:</center></label>
                   <input value={this.state.userName} className="form-control textBox" id="usernameText" readOnly={this.state.userNameLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
-                  <label htmlFor="emailText">Email:</label>
+                  <label htmlFor="emailText"><center> Email:</center></label>
                   <input defaultValue={this.state.emailLoaded ? this.state.email : undefined } className="form-control textBox" id="emailText" readOnly={this.state.emailLocked} onChange={this.handleInputChange}/>
                 </MDBCol>
               </MDBRow>
 
               <MDBRow className="AccountInfo-accountInputs">
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
-                  <label htmlFor="school">School:</label>
+                  <label htmlFor="school"><center> School:</center></label>
                   <input className="form-control textBox" id="school" value={this.state.school} readOnly />
                 </MDBCol>
                 <MDBCol md="6" className="AccountInfo-mdbcol-6">
-                  <label htmlFor="passwordChange">Password:</label>
+                  <label htmlFor="passwordChange"><center> Password:</center></label>
                   <p id="AccountInfo-passwordChange" onClick={this.changePassword}>{this.state.changePassword ? "Cancel password change" : "Click to change password"}</p>
                 </MDBCol>
               </MDBRow>
@@ -309,7 +309,7 @@ class AccountInfo extends Component {
               className="fontSizeLarge"
               style={{ display: this.state.done ? "" : "none"}}
             >
-              Your changes have been submitted. Thank you.
+              Your changes have been submitted. Thank you!
             </p>
             <p className="fontSizeLarge" style={{display: this.state.error ? "": "none"}}>{this.state.errorMessage}</p>
             <button
