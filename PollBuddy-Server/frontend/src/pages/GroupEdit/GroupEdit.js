@@ -1,8 +1,7 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 import "mdbreact/dist/css/mdb.css";
-import { MDBContainer } from "mdbreact";
+import {MDBContainer} from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import ErrorText from "../../components/ErrorText/ErrorText";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
 class GroupEdit extends Component {//this class will likely need to call Groups/new and do more with that...
@@ -10,24 +9,17 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
     super(props);
     this.state = {
       id: props.router.params.groupID,
-      name: "",
-      nameInput: "",
-      description: "",
-      descriptionInput: "",
       admins: [],
-      users: [],
-      loadingGroupData: true,
+      members: [],
       loadingAdmins: true,
-      loadingUsers: true,
-      showError: false,
+      loadingMembers: true,
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.updateTitle("Edit");
-    this.loadGroup();
     this.loadAdmins();
-    this.loadUsers();
+    this.loadMembers();
   }
 
   loadGroup = async () => {
@@ -69,10 +61,24 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
     }
   };
 
-  onInput = (e) => {
-    this.setState({
-      [e.target.name]: e.target.value
+  handleDemoteAdmin = async (demoteId) => {
+    let httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/demote", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userID: demoteId.id
+      })
     });
+    let response = await httpResponse.json();
+    if(response.result === "success") {
+      this.setState((prevState) => {
+        const index = prevState.admins.indexOf(demoteId);
+        prevState.admins.splice(index, 1);
+        return {
+          members: [...prevState.members, demoteId],
+        };
+      });
+    }
   };
 
   getGroupData = () => {
@@ -104,93 +110,83 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
       });
     }
   };
-
-  checkError = () => {
-    return this.state.showError ? <ErrorText/> : null;
+  handlePromoteMember = async (promoteId) => {
+    let httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/promote", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        userID: promoteId.id
+      })
+    });
+    let response = await httpResponse.json();
+    if(response.result === "success") {
+      this.setState((prevState) => {
+        const index = prevState.members.indexOf(promoteId);
+        prevState.members.splice(index, 1);
+        return {
+          admins: [...prevState.admins, promoteId],
+        };
+      });
+    }
   };
-
   render() {
-    if (this.state.loadingGroupData === true) {
-      return (
-        <MDBContainer fluid className="page">
-          <LoadingWheel/>
-        </MDBContainer>
-      );
-    } else {
-      return (
-        <MDBContainer fluid className="page">
-          <MDBContainer className="two-box">
-            <MDBContainer className="box">
-              <MDBContainer className="form-group">
-                <p className="fontSizeLarge">
-                  {this.state.name}
-                </p>
-                <p className="fontSizeMedium">
-                  Group Name:
-                </p>
-                <input
-                  name="nameInput"
-                  id="groupName"
-                  className="form-control textBox"
-                  value={this.state.nameInput}
-                  onInput={this.onInput}
-                />
-                <p className="fontSizeMedium">
-                  Group Description:
-                </p>
-                <input
-                  name="descriptionInput"
-                  id="groupDescription"
-                  className="form-control textBox"
-                  value={this.state.descriptionInput}
-                  onInput={this.onInput}
-                />
-              </MDBContainer>
-              {this.checkError()}
-              <button className="button" onClick={this.onSubmit}>
-                Save Changes
-              </button>
-            </MDBContainer>
-            <MDBContainer className="box">
-              <p className="fontSizeLarge">
-                Admins
-              </p>
-              {this.state.loadingAdmins ?
-                <LoadingWheel /> :
-                <React.Fragment>
-                  {this.state.admins.length === 0 ?
-                    <p>Sorry, there are no admins in this group.</p> :
-                    <React.Fragment>
-                      {this.state.admins.map((admin) => (
+    return (
+      <MDBContainer fluid className="page">
+        <MDBContainer className="two-box">
+          <MDBContainer className="box">
+            <p className="fontSizeLarge">
+              Admins
+            </p>
+            {this.state.loadingAdmins ?
+              <LoadingWheel/> :
+              <MDBContainer>
+                {this.state.admins.length === 0 ?
+                  <p>Sorry, there are no admins in this group.</p> :
+                  <React.Fragment>
+                    {this.state.admins.map((admin) => (
+                      <div>
                         <button style={{  width: "12em" }} className="button">{admin.userName}</button>
-                      ))}
-                    </React.Fragment>
-                  }
-                </React.Fragment>
-              }
-            </MDBContainer>
-            <MDBContainer className="box">
-              <p className="fontSizeLarge">
-                Members
-              </p>
-              {this.state.loadingUsers ?
-                <LoadingWheel /> :
-                <React.Fragment>
-                  {this.state.users.length === 0 ?
-                    <p>Sorry, there are no members in this group.</p> :
-                    <React.Fragment>
-                      {this.state.users.map((user) => (
+                        <button
+                          type="submit" className="button"
+                          onClick={() => { this.handleDemoteAdmin(admin); }}
+                        >-</button>
+                      </div>
+                    ))}
+                  </React.Fragment>
+                }
+              </MDBContainer>
+            }
+          </MDBContainer>
+          <MDBContainer className="box">
+            <p className="fontSizeLarge">
+              Members
+            </p>
+            {this.state.loadingMembers ?
+              <LoadingWheel/> :
+              <MDBContainer>
+                {this.state.members.length === 0 ?
+                  <p>Sorry, there are no members in this group.</p> :
+                  <React.Fragment>
+                    {this.state.members.map((user) => (
+                      <div>
+                        <button type="submit" className="button"
+                          onClick={() => { this.handlePromoteMember(user); }}
+                        >+</button>
                         <button style={{  width: "12em" }} className="button">{user.userName}</button>
-                      ))}
-                    </React.Fragment>
-                  }
-                </React.Fragment>
-              }
-            </MDBContainer>
+                        <button
+                          type="submit" className="button"
+                          onClick={() => { this.handleDemoteMember(user); }}
+                        >-</button>
+                      </div>
+                    ))}
+                  </React.Fragment>
+                }
+              </MDBContainer>
+            }
           </MDBContainer>
         </MDBContainer>
-      );
-    }
+      </MDBContainer>
+    );
   }
 }
 

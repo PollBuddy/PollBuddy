@@ -120,12 +120,13 @@ function shutdown() {
 
   // Check if services have shut down
   function checkStatuses() {
-    if(expressStatus && mongoStatus) {
+    if (expressStatus && mongoStatus) {
       process.exit(0);
     } else {
       setTimeout(checkStatuses, 500);
     }
   }
+
   setTimeout(checkStatuses, 500);
 
   // Kill everything if not shut down in 7.5 seconds
