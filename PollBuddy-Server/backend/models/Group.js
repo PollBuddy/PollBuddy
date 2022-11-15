@@ -17,6 +17,7 @@ const groupSchema = {
   Admins: [],
   Polls: [],
   Members: [],
+  //Code: "",
 };
 
 const groupParamsValidator = Joi.object({
@@ -40,6 +41,8 @@ const promoteUserValidator = Joi.object({
 const demoteUserValidator = Joi.object({
   userID: Joi.custom(objectID).required(),
 });
+
+//add get group by code function maybe
 
 const getGroup = async function(groupID, userID) {
   try {
@@ -67,6 +70,7 @@ const createGroup = async function(userID, groupData) {
       Name: groupData.name,
       Description: groupData.description,
       Admins: [userID],
+      //Code: generate code here
     });
     const result = await mongoConnection.getDB().collection("groups").insertOne(group);
     return httpCodes.Ok({
