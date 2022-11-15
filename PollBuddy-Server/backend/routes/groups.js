@@ -2,8 +2,22 @@ const express = require("express");
 const router = express.Router();
 const mongoConnection = require("../modules/mongoConnection.js");
 const {createResponse, isDevelopmentMode, isLoggedIn} = require("../modules/utils");
-const { httpCodes, sendResponse } = require("../modules/httpCodes.js");
-const {getGroupPolls, joinGroup, leaveGroup, deleteGroup, editGroup, promoteUser, demoteUser, editGroupValidator, createGroupValidator, getGroup, createGroup, getGroupMembers, getGroupAdmins, groupParamsValidator,
+const {httpCodes, sendResponse} = require("../modules/httpCodes.js");
+const {
+  getGroupPolls,
+  joinGroup,
+  leaveGroup,
+  deleteGroup,
+  editGroup,
+  promoteUser,
+  demoteUser,
+  editGroupValidator,
+  createGroupValidator,
+  getGroup,
+  createGroup,
+  getGroupMembers,
+  getGroupAdmins,
+  groupParamsValidator,
   demoteUserValidator,
   promoteUserValidator
 } = require("../models/Group");
@@ -40,8 +54,10 @@ router.get("/new", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/new", isLoggedIn, async (req, res) => {
-  let validResult = createGroupValidator.validate(req.body, { abortEarly: false });
-  if (validResult.error) { return sendResponse(res, httpCodes.BadRequest()); }
+  let validResult = createGroupValidator.validate(req.body, {abortEarly: false});
+  if (validResult.error) {
+    return sendResponse(res, httpCodes.BadRequest());
+  }
 
   let response = await createGroup(req.session.userData.userID, validResult.value);
   return sendResponse(res, response);
@@ -81,8 +97,10 @@ router.get("/:id/edit", function (req, res) {
  * @param {function} callback - Function handler for endpoint.
  */
 router.post("/:id/edit", isLoggedIn, paramValidator(groupParamsValidator), async (req, res) => {
-  let validResult = editGroupValidator.validate(req.body, { abortEarly: false });
-  if (validResult.error) { return sendResponse(res, httpCodes.BadRequest()); }
+  let validResult = editGroupValidator.validate(req.body, {abortEarly: false});
+  if (validResult.error) {
+    return sendResponse(res, httpCodes.BadRequest());
+  }
 
   let response = await editGroup(req.params.id, req.session.userData.userID, validResult.value);
   return sendResponse(res, response);
@@ -113,7 +131,8 @@ router.get("/:id/delete", function (req, res) {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/delete", isLoggedIn, paramValidator(groupParamsValidator), async (req, res) => {//use router.delete??
+router.post("/:id/delete", isLoggedIn, paramValidator(groupParamsValidator), async (req, res) => {
+  //use router.delete??
   let response = await deleteGroup(req.params.id, req.session.userData.userID);
   return sendResponse(res, response);
 });
@@ -364,8 +383,10 @@ router.get("/:id/promote", async (req, res) => {
 });
 
 router.post("/:id/promote", isLoggedIn, paramValidator(groupParamsValidator), async (req, res) => {
-  let validResult = promoteUserValidator.validate(req.body, { abortEarly: false });
-  if (validResult.error) { return sendResponse(res, httpCodes.BadRequest()); }
+  let validResult = promoteUserValidator.validate(req.body, {abortEarly: false});
+  if (validResult.error) {
+    return sendResponse(res, httpCodes.BadRequest());
+  }
 
   let response = await promoteUser(req.params.id, req.session.userData.userID, validResult.value);
   return sendResponse(res, response);
@@ -376,8 +397,10 @@ router.get("/:id/demote", async (req, res) => {
 });
 
 router.post("/:id/demote", isLoggedIn, paramValidator(groupParamsValidator), async (req, res) => {
-  let validResult = demoteUserValidator.validate(req.body, { abortEarly: false });
-  if (validResult.error) { return sendResponse(res, httpCodes.BadRequest()); }
+  let validResult = demoteUserValidator.validate(req.body, {abortEarly: false});
+  if (validResult.error) {
+    return sendResponse(res, httpCodes.BadRequest());
+  }
 
   let response = await demoteUser(req.params.id, req.session.userData.userID, validResult.value);
   return sendResponse(res, response);
@@ -392,7 +415,7 @@ router.post("/:id/demote", isLoggedIn, paramValidator(groupParamsValidator), asy
  */
 
 function checkUserPermission(userID, groupID) { // TODO: add checks to make sure IDs are valid
-  let users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id":0, "Users":1})[0].Users; //get list of users
+  let users = mongoConnection.getDB().collection("groups").find({"_id": groupID}, {"_id": 0, "Users": 1})[0].Users; //get list of users
   for (let user in users) {
     if (user === userID) { //check for existence
       return true; //true if userID is found
@@ -400,8 +423,6 @@ function checkUserPermission(userID, groupID) { // TODO: add checks to make sure
   }
   return false; //false if userID is not found
 }
-
-
 
 
 module.exports = router;

@@ -565,7 +565,7 @@ describe("/api/groups/:id/demote", () => {
         expect(res.Members[0].toString()).toEqual(toDemoteUser.insertedId.toString());
       });
   });
-  
+
   it("POST: demote/kick member as admin", async () => {
     let user = await createUser();
     let toDemoteUser = await createUser();
@@ -601,7 +601,7 @@ describe("/api/groups/:id/demote", () => {
         expect(response.body.result).toBe("failure");
       });
   });
-  
+
   it("POST: demote nonexistent as admin", async () => {
     let user = await createUser();
     let toDemoteUser = await createUser();
