@@ -7,6 +7,7 @@ const {
   isGroupMemberByGroup
 } = require("../modules/modelUtils");
 const {objectID} = require("../modules/validatorUtils");
+const bson = require("bson");
 
 const validators = {
   name: Joi.string().min(3).max(30),
@@ -23,7 +24,10 @@ const groupSchema = {
 };
 
 const groupParamsValidator = Joi.object({
-  id: Joi.custom(objectID).required(),
+  //id: Joi.custom(objectID).required(),
+  id: Joi.alternatives().conditional('id', 
+    { is: Joi.string().length(6), 
+      then: Joi.string().required(), otherwise: Joi.custom(objectID).required() }),
 });
 
 const createGroupValidator = Joi.object({
@@ -44,10 +48,9 @@ const demoteUserValidator = Joi.object({
   userID: Joi.custom(objectID).required(),
 });
 
-//add get group by code function maybe
-
 const getGroup = async function (groupID, userID) {
   try {
+
     const group = await getGroupInternal(groupID);
     if (!group) {
       return httpCodes.NotFound();
@@ -67,7 +70,6 @@ const getGroup = async function (groupID, userID) {
     return httpCodes.InternalServerError();
   }
 };
-
 const createGroup = async function (userID, groupData) {
   try {
     let group = createModel(groupSchema, {
