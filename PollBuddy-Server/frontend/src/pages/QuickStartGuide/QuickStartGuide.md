@@ -1,6 +1,5 @@
 # **Welcome to Poll Buddy!**
-
-An affordable and compatible in-class quizzing platform.
+# An affordable and compatible in-class quizzing platform.
 
 ***STUDENTS:***
 If you are a student, please ask your instructor for a link, or "Poll Code" in order to join their group and starting answering polls!
@@ -21,7 +20,5 @@ If you are a teacher using our platform for the first time, here are a few tips 
 **6.** Finally, invite your students to answer the poll questions by providing them with the poll code. You can get this poll code from the url in your group or edit page... 
 
 Here is an example of a url from a poll buddy group:
-
 *https://pollbuddy.app/polls/**62a392e5e6344863715ee44f***
-
 After the last slash, the 24 segment of letters and numbers is your group ID. (The bolded segment!)
