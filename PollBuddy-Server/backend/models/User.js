@@ -176,6 +176,6 @@ module.exports = {
   userParamsValidator,
   getUser,
   getUserGroups,
-  editUser,
-  getUserPolls
+  getUserPolls,
+  editUser
 };

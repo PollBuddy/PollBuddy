@@ -9,6 +9,7 @@ class UserPolls extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      name: "",
       polls: [],
       doneLoading: false,
       showError: null
@@ -17,50 +18,22 @@ class UserPolls extends Component {
 
   componentDidMount() {
     this.props.updateTitle(this.state.name);
-    // fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id, {
-    //   method: "GET"
-    // })
-    //   .then((response) => response.json())
-    //   .then((response) => {
-    //     if (response.result === "success") {
-    //       this.props.updateTitle(response.data.name);
-    //       if (response.data.isMember || response.data.isAdmin ) {
-    //         this.setState({
-    //           name: response.data.name,
-    //           description: response.data.description,
-    //           isMember: response.data.isMember,
-    //           isAdmin: response.data.isAdmin,
-    //           doneLoading: true
-    //         });
-    //       } else {
-    //         this.setState({
-    //           showError: true,
-    //         });
-    //       }
-    //     } else {
-    //       this.setState({
-    //         showError: true,
-    //       });
-    //     }
-    //   });
-
-    fetch(process.env.REACT_APP_BACKEND_URL + "/me/polls", {
+    fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/polls", {
       method: "GET"
     })
       .then((response) => response.json())
       .then((response) => {
-        console.log(response);
         if (response.result === "success") {
           this.setState({
             polls: response.data,
-            doneLoading: true,
+            doneLoading: true
           });
         } else {
             this.setState({
                 showError: true,
             });
         }
-      });
+    });
   }
 
   pollButtonClick = (pollID) => {

@@ -8,7 +8,7 @@ const rpi = require("../modules/rpi");
 
 const { isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
 const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups,
-  editUser, userParamsValidator } = require("../models/User.js");
+  getUserPolls, editUser, userParamsValidator } = require("../models/User.js");
 const {paramValidator} = require("../modules/validatorUtils");
 
 const {send} = require("../modules/email.js");
@@ -670,14 +670,13 @@ router.post("/me/groups", function (req, res) {
  * @getdata {void} None
  * @postdata {void} None
  * @returns {void} On success: Status 200
- * On failure: Status 500: { "result": "failure", "error": "Error: Unable to retrieve groups from database" }
+ * On failure: Status 500: { "result": "failure", "error": "Error: Unable to retrieve user polls from database" }
  * @name backend/users/me/polls_GET
  * @param {string} path - Express path
  * @param {callback} callback - function handler for route
  */
 router.get("/me/polls", isLoggedIn, async function (req, res) {
   let response = await getUserPolls(req.session.userData.userID);
-  console.log("/me/polls data retrieved");
   return sendResponse(res, response);
 });
 
