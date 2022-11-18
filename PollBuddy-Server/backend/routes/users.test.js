@@ -300,7 +300,7 @@ describe("/api/users/register", () => {
       });
   });
 
-  it("POST: register failure duplicate email", async () => {
+  it("POST: register failure duplicate email and username", async () => {
 
     // Create unique indexes
     mongoConnection.getDB().collection("users").createIndex({"Email": 1}, {name: "email", unique: true});
