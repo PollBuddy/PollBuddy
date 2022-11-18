@@ -2,8 +2,8 @@ const Joi = require("joi");
 const bcrypt = require("bcrypt");
 
 const mongoConnection = require("../modules/mongoConnection.js");
-const { getResultErrors, isEmpty } = require("../modules/utils");
-const { httpCodes } = require("../modules/httpCodes.js");
+const {getResultErrors, isEmpty} = require("../modules/utils");
+const {httpCodes} = require("../modules/httpCodes.js");
 const {getUserInternal} = require("../modules/modelUtils");
 const {objectID} = require("../modules/validatorUtils");
 
@@ -45,10 +45,12 @@ const userSchema = {
   SchoolAffiliation: "",
 };
 
-const getUser = async function(userID) {
+const getUser = async function (userID) {
   try {
     const user = await getUserInternal(userID);
-    if (!user) { return httpCodes.BadRequest(); }
+    if (!user) {
+      return httpCodes.BadRequest();
+    }
     return httpCodes.Ok({
       firstName: user.FirstName,
       firstNameLocked: user.FirstNameLocked,
@@ -60,36 +62,38 @@ const getUser = async function(userID) {
       emailLocked: user.EmailLocked,
       schoolAffiliation: user.SchoolAffiliation
     });
-  } catch(err) {
+  } catch (err) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
 };
 
-const getUserGroups = async function(userID) {
+const getUserGroups = async function (userID) {
   try {
     const user = await getUserInternal(userID);
-    if (!user) { return httpCodes.BadRequest(); }
+    if (!user) {
+      return httpCodes.BadRequest();
+    }
     let groups = {
       admin: [],
       member: [],
     };
     await mongoConnection.getDB().collection("groups")
-      .find({ Admins: user._id.toString() }).forEach((group) => {
+      .find({Admins: user._id.toString()}).forEach((group) => {
         groups.admin.push({
           id: group._id,
           name: group.Name,
         });
       });
     await mongoConnection.getDB().collection("groups")
-      .find({ Members: user._id.toString() }).forEach((group) => {
+      .find({Members: user._id.toString()}).forEach((group) => {
         groups.member.push({
           id: group._id,
           name: group.Name,
         });
       });
     return httpCodes.Ok(groups);
-  } catch(err) {
+  } catch (err) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
@@ -114,10 +118,12 @@ const getUserPolls = async function(userID) {
   }
 };
 
-const editUser = async function(userID, jsonContent) {
+const editUser = async function (userID, jsonContent) {
   try {
     const user = await getUserInternal(userID);
-    if (!user) { return httpCodes.BadRequest(); }
+    if (!user) {
+      return httpCodes.BadRequest();
+    }
 
     const updatedUser = Joi.object({
       UserName: validators.userName,
@@ -143,7 +149,7 @@ const editUser = async function(userID, jsonContent) {
     Object.keys(updatedUser.value).forEach((key) => {
       if (!Object.prototype.hasOwnProperty.call(userSchema, key) || updatedUser.value[key] === undefined) {
         delete updatedUser.value[key];
-      } else if(user[key + "Locked"]) {
+      } else if (user[key + "Locked"]) {
         errors[key] = key + " locked.";
       }
     });
@@ -157,12 +163,14 @@ const editUser = async function(userID, jsonContent) {
       }
     }
 
-    if (!isEmpty(errors)) { return httpCodes.BadRequest("Validation Failed"); }
+    if (!isEmpty(errors)) {
+      return httpCodes.BadRequest("Validation Failed");
+    }
 
-    mongoConnection.getDB().collection("users").updateOne({ "_id": user._id }, { "$set": updatedUser.value });
+    mongoConnection.getDB().collection("users").updateOne({"_id": user._id}, {"$set": updatedUser.value});
 
     return getUser(user._id);
-  } catch(err) {
+  } catch (err) {
     console.error(err);
     return httpCodes.InternalServerError();
   }

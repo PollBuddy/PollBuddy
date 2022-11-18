@@ -10,7 +10,7 @@ const emailSigHTML =
   "<br /><img src='https://github.com/PollBuddy/Resources/raw/main/Branding/Poll%20Buddy%20Logo.png' width='240px' alt='Poll Buddy Logo'/>";
 
 const nodemailer = require("nodemailer");
-const { google } = require("googleapis");
+const {google} = require("googleapis");
 const OAuth2 = google.auth.OAuth2;
 
 let oauth2Client;
@@ -21,9 +21,9 @@ let enabled;
 module.exports = {
 
   // This function sets up the emailing system (or not if the env variables aren't set)
-  initialize: function() {
+  initialize: function () {
     // Test to make sure all the env details have been provided before enabling the email system.
-    if(process.env.EMAIL_ADDRESS_INTERNAL === "NONE" || process.env.EMAIL_ADDRESS_EXTERNAL === "NONE" ||
+    if (process.env.EMAIL_ADDRESS_INTERNAL === "NONE" || process.env.EMAIL_ADDRESS_EXTERNAL === "NONE" ||
       process.env.EMAIL_CLIENT_ID === "NONE" || process.env.EMAIL_CLIENT_SECRET === "NONE" ||
       process.env.EMAIL_REFRESH_TOKEN === "NONE") {
       console.log("Email system is not configured, emails will be logged to the console instead of sent.");
@@ -69,8 +69,9 @@ module.exports = {
   // Omitting the callback function will ignore any results.
   // If the email system is not configured via the .env file, messages will be logged to console and always succeed.
   // eslint-disable-next-line no-unused-vars
-  send: async function (destination, subject, body, callback = function(success, messages){}) {
-    if(enabled) {
+  send: async function (destination, subject, body, callback = function (success, messages) {
+  }) {
+    if (enabled) {
       // Create our email
       const mailOptions = {
         from: process.env.EMAIL_ADDRESS_EXTERNAL,
