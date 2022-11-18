@@ -112,7 +112,7 @@ const getUserPolls = async function(userID) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
-}
+};
 
 const editUser = async function(userID, jsonContent) {
   try {

@@ -11,6 +11,14 @@ const mongoConnection = require("../modules/mongoConnection.js");
 const usersRouter = require("./users");
 const {testUser, testUser2, testGroup, createUser, createGroup} = require("../modules/testingUtils.js");
 const {testGroup2} = require("../modules/testingUtils");
+const {
+  createPoll,
+  testPoll,
+  testPoll2,
+  sampleQuestion,
+  sampleQuestion2,
+} = require("../modules/testingUtils");
+
 
 let mockApp = express();
 let session = {};

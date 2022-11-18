@@ -24,20 +24,6 @@ class UserPollsSettings extends Component{
     this.props.router.navigate("/polls/new");
   };
 
-//   handleLeaveGroup = async () => {
-//     await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/leave", {
-//       method: "POST",
-//     });
-//     this.props.router.navigate("/groups");
-//   };
-
-//   handleDeleteGroup = async () => {
-//     await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/delete", {
-//       method: "POST",
-//     });
-//     this.props.router.navigate("/groups");
-//   };
-
   render(){
     return (
     <MDBContainer className="box">
