@@ -80,6 +80,7 @@ function LoggedInMenu(props) {
       <a href="/account">Account</a>
       <a href="/code">Enter Poll Code</a>
       <a href="/groups">Groups</a>
+      <a href="/polls">My Polls</a>
       <a href="/guide">Quick Start Guide</a>
       <a href="#" id="logout">Logout</a>
     </div>
