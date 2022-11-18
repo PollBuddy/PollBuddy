@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import {MDBContainer} from "mdbreact";
-import UserPollsSettings from "../../components/UserPollsSettings/UserPollsSettings";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 
@@ -39,6 +38,10 @@ class UserPolls extends Component {
   pollButtonClick = (pollID) => {
     this.props.router.navigate("/polls/" + pollID + "/edit");
   };
+  
+  createNewPoll = async () => {
+    this.props.router.navigate("/polls/new");
+  };
 
   render() {
     if (this.state.showError) {
@@ -61,7 +64,16 @@ class UserPolls extends Component {
       return (
         <MDBContainer className="page">
           <MDBContainer className="two-box">
-            <UserPollsSettings state={this.state}/>
+            <MDBContainer className="box">
+              <p className="fontSizeLarge">
+              Creator Settings
+              </p>
+              <button style={{width: "17em"}}
+              className="button"
+              onClick={this.createNewPoll}
+              >Create New Poll
+              </button>
+            </MDBContainer>
             <MDBContainer className="box">
               <p className="fontSizeLarge">
                 My Polls
