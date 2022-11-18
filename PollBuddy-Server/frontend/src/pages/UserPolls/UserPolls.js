@@ -28,11 +28,11 @@ class UserPolls extends Component {
             doneLoading: true
           });
         } else {
-            this.setState({
-                showError: true,
-            });
+          this.setState({
+            showError: true,
+          });
         }
-    });
+      });
   }
 
   pollButtonClick = (pollID) => {
@@ -69,8 +69,8 @@ class UserPolls extends Component {
               Creator Settings
               </p>
               <button style={{width: "17em"}}
-              className="button"
-              onClick={this.createNewPoll}
+                className="button"
+                onClick={this.createNewPoll}
               >Create New Poll
               </button>
             </MDBContainer>
