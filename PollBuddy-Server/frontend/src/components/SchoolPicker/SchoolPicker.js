@@ -1,6 +1,7 @@
 import React from "react";
-import Autocomplete from "react-autocomplete-pollbuddy";
 import { MDBContainer } from "mdbreact";
+import Autocomplete from './Autocomplete';
+// import Autocomplete from 'react-autocomplete-pollbuddy';
 import "mdbreact/dist/css/mdb.css";
 
 const BACKEND = process.env.REACT_APP_BACKEND_URL;
@@ -23,12 +24,14 @@ function shouldItemRender(item, value2) {
   return item.label.toLowerCase().indexOf(value2.toLowerCase()) >= 0;
 }
 
-function SchoolPicker({ schoolInfo, onDoneLoading, value, onSelect, onChange }) {
-  const [ info, setInfo ] = React.useState(schoolInfo ?? { schools: [], schoolLinkDict: {} });
+const useAsyncEffect = (func, deps) => React.useEffect(() => { func() }, deps);
 
-  React.useEffect(() => void (async () => {
-    if (schoolInfo != null) {
-      onDoneLoading?.(this.state.schoolInfo);
+function SchoolPicker({ schoolInfo, onDoneLoading, value, onSelect, onChange }) {
+  const [ info, setInfo ] = React.useState(schoolInfo);
+
+  useAsyncEffect(async () => {
+    if (info != null) {
+      onDoneLoading?.(info);
       return;
     }
 
@@ -46,18 +49,21 @@ function SchoolPicker({ schoolInfo, onDoneLoading, value, onSelect, onChange }) 
       schoolLinkDict[data[i][0]] = data[i][1];
     }
 
-    setInfo({ schools, schoolLinkDict });
-    onDoneLoading?.(this.state.schoolInfo);
-  }), [ onDoneLoading, info, setInfo ]);
+    const result = { schools, schoolLinkDict };
+    setInfo(result);
+    onDoneLoading?.(result);
+  }, [ onDoneLoading, info, setInfo ]);
 
   const renderDropdownItem = React.useCallback(item => (
     <div key={item.key} className="auto_comp">{item.label}</div>
   ), [ ]);
 
+  const items = info?.schools ?? [];
+
   return (
     <MDBContainer className="form-group">
       <Autocomplete
-        items={info.schools}
+        items={items}
         sortItems={sortItems}
         getItemValue={item => item.label}
         shouldItemRender={shouldItemRender}
