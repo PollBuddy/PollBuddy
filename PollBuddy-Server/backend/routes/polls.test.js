@@ -170,6 +170,32 @@ describe("/api/polls/:pollID", () => {
       });
   });
 
+  it("GET: user not logged in, but poll is part of a group", async () => {
+    let group = await createGroup();
+    let poll = await createPoll({
+      Creator: new bson.ObjectID(),
+      Group: group.insertedId,
+      OpenTime: Date.now() - (24 * 60 * 60 * 1000),
+      CloseTime: Date.now() + (24 * 60 * 60 * 1000),
+      RequiresLogin: false,
+    });
+    await app
+      .get("/api/polls/" + poll.insertedId)
+      .expect(403)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("GET: invalid poll id", async () => {
+    await app
+      .get("/api/polls/" + (new bson.ObjectID()).toString())
+      .expect(404)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
   it("POST: route unavailable", async () => {
     await app
       .post("/api/polls/0")
@@ -224,6 +250,29 @@ describe("/api/polls/:id/results", () => {
                 expect(response.body.data.description).toBe(testPoll.Description);
               });
           });
+      });
+  });
+
+  it("GET: invalid poll id", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+    await app
+      .get("/api/polls/" + (new bson.ObjectID()).toString() + "/results")
+      .expect(404)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("GET: user not admin, failure", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+    let poll = await createPoll({});
+    await app
+      .get("/api/polls/" + poll.insertedId + "/results")
+      .expect(401)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
       });
   });
 });
@@ -309,6 +358,22 @@ describe("/api/polls/new", () => {
         group: group.insertedId,
       })
       .expect(401)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("POST: create group poll with invalid group id, failure", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+    await app
+      .post("/api/polls/new")
+      .send({
+        title: testPoll.Title,
+        description: testPoll.Description,
+        group: new bson.ObjectID(),
+      })
+      .expect(400)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });
@@ -406,6 +471,26 @@ describe("/api/polls/:pollID/edit", () => {
         expect(response.body.result).toBe("failure");
       });
   });
+
+  it("POST: invalid poll id, failure", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+
+    let openTime = Date.now() - 24 * 60 * 60 * 1000;
+    let closeTime = Date.now() + 24 * 60 * 60 * 1000;
+    await app
+      .post("/api/polls/" + (new bson.ObjectID()).toString() + "/edit")
+      .send({
+        title: testPoll2.Title,
+        description: testPoll2.Description,
+        openTime: openTime,
+        closeTime: closeTime,
+      })
+      .expect(404)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
 });
 
 describe("/api/polls/:pollID/delete", () => {
@@ -478,6 +563,17 @@ describe("/api/polls/:pollID/delete", () => {
         expect(response.body.result).toBe("failure");
       });
   });
+
+  it("POST: invalid poll id, failure", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+    await app
+      .post("/api/polls/" + (new bson.ObjectID()).toString() + "/delete")
+      .expect(404)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
 });
 
 describe("/api/polls/:pollID/createQuestion", () => {
@@ -538,6 +634,40 @@ describe("/api/polls/:pollID/createQuestion", () => {
             "Questions._id": new bson.ObjectID(response.body.data.id),
           });
         expect(questionRes).not.toBeNull();
+      });
+  });
+
+  it("POST: invalid poll id, failure", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+    await app
+      .post("/api/polls/" + (new bson.ObjectID()).toString() + "/createQuestion")
+      .send({
+        text: "sample.question",
+        answers: [{text: "sample.answer", correct: true}],
+        maxAllowedChoices: 1,
+      })
+      .expect(404)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("POST: create question as member, failure", async () => {
+    let user = await createUser();
+    let group = await createGroup({Members: [user.insertedId]});
+    let poll = await createPoll({Group: group.insertedId});
+    session = {userData: {userID: user.insertedId}};
+    await app
+      .post("/api/polls/" + poll.insertedId + "/createQuestion")
+      .send({
+        text: "sample.question",
+        answers: [{text: "sample.answer", correct: true}],
+        maxAllowedChoices: 1,
+      })
+      .expect(401)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
       });
   });
 });
@@ -720,4 +850,143 @@ describe("/api/polls/:pollID/editQuestion", () => {
         expect(response.body.result).toBe("failure");
       });
   });
+
+  it("POST: invalid poll id, failure", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+    await app
+      .post("/api/polls/" + (new bson.ObjectID()).toString() + "/editQuestion")
+      .expect(404)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("POST: invalid question id, failure", async () => {
+    let user = await createUser();
+    let group = await createGroup({Admins: [user.insertedId]});
+    let poll = await createPoll({Group: group.insertedId});
+    session = {userData: {userID: user.insertedId}};
+    await app
+      .post("/api/polls/" + poll.insertedId + "/editQuestion")
+      .send({
+        id: new bson.ObjectID(),
+        text: "sample.question",
+        answers: [{text: "sample.answer", correct: true}],
+        maxAllowedChoices: 1,
+      })
+      .expect(400)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+});
+
+describe("/api/polls/:pollID/submitQuestion", () => {
+  it("POST: invalid poll id, failure", async () => {
+    let user = await createUser();
+    let poll = await createPoll({Creator: user.insertedId});
+    session = {userData: {userID: user.insertedId}};
+    await app.post("/api/polls/" + poll.insertedId + "/createQuestion")
+      .send({
+        text: "sample.question",
+        answers: [{text: "sample.answer", correct: true}],
+        maxAllowedChoices: 1,
+      })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        let questionRes = await mongoConnection.getDB().collection("polls").findOne({
+          "_id": poll.insertedId,
+          "Questions._id": new bson.ObjectID(response.body.data.id),
+        });
+        expect(questionRes).not.toBeNull();
+
+        await app.post("/api/polls/" + poll.insertedId + "/submitQuestion")
+          .send({
+            id: questionRes.Questions[0]._id,
+            answers: [{answer: true}]
+          })
+          .expect(200);
+      });
+    });
+
+  it("POST: invalid poll id, failure", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+    await app.post("/api/polls/" + (new bson.ObjectID()).toString() + "/submitQuestion")
+      .send({
+        id: new bson.ObjectID(),
+        answers: [{answer: true}]
+      })
+      .expect(404)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+    });
+
+  it("POST: poll it not open, failure", async () => {
+    let user = await createUser();
+    let poll = await createPoll({
+      Creator: user.insertedId,
+      OpenTime: Date.now() + (24 * 60 * 60 * 1000)
+    });
+    session = {userData: {userID: user.insertedId}};
+    await app.post("/api/polls/" + poll.insertedId + "/createQuestion")
+      .send({
+        text: "sample.question",
+        answers: [{text: "sample.answer", correct: true}],
+        maxAllowedChoices: 1,
+      })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        let questionRes = await mongoConnection.getDB().collection("polls").findOne({
+          "_id": poll.insertedId,
+          "Questions._id": new bson.ObjectID(response.body.data.id),
+        });
+        expect(questionRes).not.toBeNull();
+
+        await app.post("/api/polls/" + poll.insertedId + "/submitQuestion")
+          .send({
+            id: questionRes.Questions[0]._id,
+            answers: [{answer: true}]
+          })
+          .expect(400)
+          .then(async (response) => {
+            expect(response.body.result).toBe("failure");
+          });
+      });
+    });
+
+  it("POST: question does not exist, failure", async () => {
+    let user = await createUser();
+    let poll = await createPoll({Creator: user.insertedId});
+    session = {userData: {userID: user.insertedId}};
+    await app.post("/api/polls/" + poll.insertedId + "/createQuestion")
+      .send({
+        text: "sample.question",
+        answers: [{text: "sample.answer", correct: true}],
+        maxAllowedChoices: 1,
+      })
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        let questionRes = await mongoConnection.getDB().collection("polls").findOne({
+          "_id": poll.insertedId,
+          "Questions._id": new bson.ObjectID(response.body.data.id),
+        });
+        expect(questionRes).not.toBeNull();
+
+        await app.post("/api/polls/" + poll.insertedId + "/submitQuestion")
+          .send({
+            id: new bson.ObjectID(),
+            answers: [{answer: true}]
+          })
+          .expect(400)
+          .then(async (response) => {
+            expect(response.body.result).toBe("failure");
+          });
+      });
+    });
 });
