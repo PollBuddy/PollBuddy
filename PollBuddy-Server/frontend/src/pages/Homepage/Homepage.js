@@ -66,7 +66,7 @@ export default class Homepage extends Component {
             <div class="start-row">
               <div>Join Group:</div>
               <Link to={"/groups/join"}>
-                <button className = "button">Enter Group Poll</button>
+                <button className = "button">Enter Group Code</button>
               </Link>
             </div>
           </MDBContainer>

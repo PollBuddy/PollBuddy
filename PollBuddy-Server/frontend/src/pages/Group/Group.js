@@ -273,7 +273,7 @@ class Group extends Component {
                     Cancel
                   </button>
                   <button id="descriptionBtn" className="button pollButton" onClick={this.handleDeleteGroup}>
-                    Delete&nbsp;Poll
+                    Delete&nbsp;Group
                   </button>
                 </div>
               </MDBContainer>
