@@ -11,7 +11,8 @@ class GroupJoin extends Component {
       groupCode: groupCode || "",
       showConfirm: false,
       name: "",
-      description: ""
+      description: "",
+      joinError: null,
     };
   }
 
@@ -20,6 +21,7 @@ class GroupJoin extends Component {
   }
 
   handleEnterCode = () => {
+    this.setState({ joinError: null });
     fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.groupCode, {
       method: "GET"
     })
@@ -32,7 +34,7 @@ class GroupJoin extends Component {
             description: response.data.description,
           });
         } else {
-          this.props.router.navigate("/groups");
+          this.setState({ joinError: "Invalid group code. Did you type it in correctly?" })
         }
       });
   };
@@ -84,6 +86,9 @@ class GroupJoin extends Component {
               <label>Please enter your group code:</label>
               <input className="form-control textBox" type="text" name="groupCode" value={this.state.groupCode}
                 onChange={this.handleChange}/>
+              {this.state.joinError &&
+                <p style={{color: "red"}}>{ this.state.joinError.toString() }</p>
+              }
               <input onClick={this.handleEnterCode} className="button float-right" type="submit" value="OK"/>
             </MDBContainer>
           }

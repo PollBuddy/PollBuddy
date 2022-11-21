@@ -19,6 +19,7 @@ class Group extends Component {
       showError: null,
       nameInput: "",
       descriptionInput: "",
+      hideDialog: true,
     };
   }
 
@@ -231,12 +232,12 @@ class Group extends Component {
                 <Link to={"/groups/" + this.state.id + "/edit"}>
                   <button style={{width: "17em"}}
                     className="button"
-                  >Edit Group
+                  >Change Member Status
                   </button>
                 </Link>
                 <button style={{width: "17em"}}
                   className="button"
-                  onClick={this.handleDeleteGroup}
+                  onClick={() => this.setState({ hideDialog: false })}
                 >Delete this Group
                 </button>
               </MDBContainer>
@@ -259,10 +260,41 @@ class Group extends Component {
               )}
             </MDBContainer>
           </MDBContainer>
+          <div style={{ display: this.state.hideDialog ? "none" : "contents" }}>
+            <div style={DIALOG_OUTER}>
+              <MDBContainer className="box" style={DIALOG_INNER}>
+                Are you sure you want to delete this group?
+                <div style={{ display: "flex" }}>
+                  <button id="descriptionBtn" className="button pollButton" onClick={() => this.setState({ hideDialog: true })}>
+                    Cancel
+                  </button>
+                  <button id="descriptionBtn" className="button pollButton" onClick={this.handleDeleteGroup}>
+                    Delete&nbsp;Poll
+                  </button>
+                </div>
+              </MDBContainer>
+            </div>
+          </div>
         </MDBContainer>
       );
     }
   }
 }
+
+const DIALOG_OUTER = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100vw",
+  height: "100vh",
+  backgroundColor: "#0008",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
+const DIALOG_INNER = {
+  backgroundColor: "var(--dark-purple-main-background)",
+};
 
 export default withRouter(Group);

@@ -3,3 +3,11 @@
   width: calc(100% - 2 * var(--box-margin));
   height: auto;
 }
+
+.start-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
