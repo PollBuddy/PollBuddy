@@ -218,6 +218,10 @@ class Group extends Component {
                     value={this.state.descriptionInput}
                     onInput={this.onInput}
                   />
+                  <p className="fontSizeLarge">
+                    Group Code
+                  </p>
+                  {this.state.id}<br/><br/>
                 </MDBContainer>
                 {this.checkError()}
                 <button style={{width: "17em"}}

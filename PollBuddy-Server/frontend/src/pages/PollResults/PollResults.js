@@ -98,7 +98,7 @@ class PollResults extends Component {
             id="downloadBtn" className="button"
             href={process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.router.params.pollID + "/csv"}
           >
-            Download full results CSV
+            Download Results
           </a>
         </MDBContainer>
       );
