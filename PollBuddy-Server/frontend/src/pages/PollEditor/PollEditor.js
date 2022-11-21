@@ -69,6 +69,23 @@ class PollEditor extends Component {
           loadingPollData: false,
         });
       });
+    window.addEventListener("keydown", event => {
+      if (this.state.currAns == null) return;
+      if (event.key == "Tab" || event.key == "Enter" || event.key == "Return") {
+        if (this.state.currAns == this.state.currentAnswers.length) this.addAnswer();
+        try {
+          document.getElementById(`questionAnswer-${this.state.currAns + 1}`)?.focus();
+        } catch (err) { }
+      } else if (event.key == "ArrowUp") {
+        try {
+          document.getElementById(`questionAnswer-${this.state.currAns - 1}`)?.focus();
+        } catch (err) { }
+      } else if (event.key == "ArrowDown") {
+        try {
+          document.getElementById(`questionAnswer-${this.state.currAns + 1}`)?.focus();
+        } catch (err) { }
+      }
+    }, true);
   }
 
   handleRandomize() {
@@ -498,6 +515,8 @@ class PollEditor extends Component {
                                   name={index}
                                   value={value.text}
                                   onInput={this.onAnswerInput}
+                                  onFocus={() => this.setState({ currAns: index })}
+                                  onBlur={() => this.setState({ currAns: null })}
                                 />
                                 <input
                                   type="checkbox"

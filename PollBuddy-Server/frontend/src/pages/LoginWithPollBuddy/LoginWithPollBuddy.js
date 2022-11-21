@@ -102,17 +102,18 @@ class LoginWithPollBuddy extends Component {
     return (
       <MDBContainer className="page">
         <MDBContainer className="box">
+          <form action="#" method="get" onSubmit={this.handleLogin}>
           <MDBContainer className="form-group">
             <label htmlFor="userNameEmail">Username or Email:</label>
             <input type="userNameEmail" placeholder="Your username or email" className="form-control textBox" id="userNameEmail"
-              onChange={(evt) => { this.setState({userNameEmail: evt.target.value}); }}/>
+              onChange={(evt) => { this.setState({userNameEmail: evt.target.value}); }} required/>
             <label htmlFor="password">Password:</label>
             <input type="password" placeholder="••••••••••••" className="form-control textBox" id="password"
-              onChange={(evt) => { this.setState({password: evt.target.value}); }}/>
-          </MDBContainer>
-
-          <p style={{color: "red"}}>{ this.state.error }</p>
+              onChange={(evt) => { this.setState({password: evt.target.value}); }} required/>
+              <p style={{color: "red"}}>{ this.state.error }</p>
           <button className = "button" onClick={this.handleLogin}>Submit</button>
+          </MDBContainer>
+          </form>
 
           <a className="Login-link" href = "/register">
             Register

@@ -112,8 +112,6 @@ class Group extends Component {
     });
   };
 
-<<<<<<< Updated upstream
-=======
   copyCode = (e) => {
     navigator.clipboard.writeText(this.state.code);
     e.target.textContent = "Copied!";
@@ -122,7 +120,6 @@ class Group extends Component {
     }, 5000);
   }
 
->>>>>>> Stashed changes
   onSubmit = () => {
     this.setState({doneLoading: false});
     fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/edit", {
@@ -231,12 +228,8 @@ class Group extends Component {
                     value={this.state.descriptionInput}
                     onInput={this.onInput}
                   />
-                  <p className="fontSizeLarge">
+                  <span className="fontSizeLarge">
                     Group Code
-<<<<<<< Updated upstream
-                  </p>
-                  {this.state.id}<br/><br/>
-=======
                   </span>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                     {this.state.code}
@@ -244,7 +237,6 @@ class Group extends Component {
                   </div>
                   <br/>
                   <br/>
->>>>>>> Stashed changes
                 </MDBContainer>
                 {this.checkError()}
                 <button style={{width: "17em"}}
