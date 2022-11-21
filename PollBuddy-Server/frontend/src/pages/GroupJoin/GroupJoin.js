@@ -22,7 +22,7 @@ class GroupJoin extends Component {
 
   handleEnterCode = () => {
     this.setState({ joinError: null });
-    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.groupCode, {
+    fetch(process.env.REACT_APP_BACKEND_URL + "/groups/code/" + this.state.groupCode, {
       method: "GET"
     })
       .then((response) => response.json())
@@ -32,6 +32,7 @@ class GroupJoin extends Component {
             showConfirm: true,
             name: response.data.name,
             description: response.data.description,
+            groupID: response.data.id,
           });
         } else {
           this.setState({ joinError: "Invalid group code. Did you type it in correctly?" })

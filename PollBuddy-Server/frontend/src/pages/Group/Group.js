@@ -10,6 +10,7 @@ class Group extends Component {
     super(props);
     this.state = {
       id: props.router.params.groupID,
+      code: "",
       name: "",
       description: "",
       isMember: false,
@@ -41,6 +42,7 @@ class Group extends Component {
               isMember: !response.data.isAdmin && response.data.isMember,
               isAdmin: response.data.isAdmin,
               doneLoading: true,
+              code: response.data.code,
             });
           } else {
             this.setState({
@@ -110,6 +112,17 @@ class Group extends Component {
     });
   };
 
+<<<<<<< Updated upstream
+=======
+  copyCode = (e) => {
+    navigator.clipboard.writeText(this.state.code);
+    e.target.textContent = "Copied!";
+    setTimeout(() => {
+      e.target.textContent = "Copy";
+    }, 5000);
+  }
+
+>>>>>>> Stashed changes
   onSubmit = () => {
     this.setState({doneLoading: false});
     fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/edit", {
@@ -220,8 +233,18 @@ class Group extends Component {
                   />
                   <p className="fontSizeLarge">
                     Group Code
+<<<<<<< Updated upstream
                   </p>
                   {this.state.id}<br/><br/>
+=======
+                  </span>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    {this.state.code}
+                    <button className="button" onClick={this.copyCode}>Copy</button>
+                  </div>
+                  <br/>
+                  <br/>
+>>>>>>> Stashed changes
                 </MDBContainer>
                 {this.checkError()}
                 <button style={{width: "17em"}}
