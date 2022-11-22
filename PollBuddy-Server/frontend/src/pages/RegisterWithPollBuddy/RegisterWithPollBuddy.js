@@ -26,6 +26,7 @@ export default class RegisterWithPollBuddy extends Component {
       registrationSuccessful: false,
       showPassword: false,
       showConfrm: false,
+      error: null,
     };
 
     this.showPassword = this.showPassword.bind(this);
@@ -48,7 +49,17 @@ export default class RegisterWithPollBuddy extends Component {
     this.props.updateTitle("Register with Poll Buddy");
   }
 
-  handleRegister() {
+  checkPswd(pswd) {
+    this.setState({
+      req1: /^.{10,256}$/.test(pswd),
+      req2: /^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$/.test(pswd),
+      req3: /^.*[0-9].*$/.test(pswd),
+      req4: /^.*[A-Z].*$/.test(pswd),
+    });
+  }
+
+  handleRegister(event) {
+    event.preventDefault();
     // do input validation
     const schema = Joi.object({
       username: Joi.string()
@@ -93,11 +104,12 @@ export default class RegisterWithPollBuddy extends Component {
       firstnameValid: firstnameValid,
       lastnameValid: lastnameValid,
       confValid: confirmValid,
+      error: null,
     });
 
 
     if (userValid.error || emailValid.error || passValid.error || lastnameValid.error || firstnameValid.error || confirmValid.error) {
-      return;
+      return false;
     }
 
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/register", {
@@ -118,11 +130,16 @@ export default class RegisterWithPollBuddy extends Component {
         // TODO: firstName, lastName, and userName are returned. They should probably be stored.
       } else {
         // TODO: This needs to be handled
+        response.json().then(({ error }) => {
+          this.setState({ error });
+        });
       }
     }).catch(err => {
-      console.log(err);
+      // console.log(err);
       this.setState({error: "An error occurred during login. Please try again"});
     });
+
+    return false;
   }
 
   render() {
@@ -137,7 +154,7 @@ export default class RegisterWithPollBuddy extends Component {
     return (
       <MDBContainer fluid className="page">
         <MDBContainer fluid className="box">
-          <form action="#" method="get" onSubmit={this.handleRegister}>
+          <form action="#" method="post" onSubmit={this.handleRegister}>
           <p className="fontSizeLarge">
             Register with Poll Buddy
           </p>
@@ -173,27 +190,32 @@ export default class RegisterWithPollBuddy extends Component {
               <p style={{color: "red"}}> A user with this email already exists. </p>
             }
             <label htmlFor="passwordText">Password:</label>
-            Must contain 10 or more characters, at least 1 uppercase letter, and at least 1 number. Cannot have 4 of the same characters in a row.
             <p class="password_container">
               <input type={this.state.showPassword ? "text" : "password"} placeholder="••••••••••••" className="form-control textBox" id="passwordText"
-                tabIndex="5" onChange= {(evt) => { this.setState({password: evt.target.value}); }} required/>
+                tabIndex="5" onChange= {(evt) => { this.setState({password: evt.target.value}); this.checkPswd(evt.target.value); }} required/>
               <i class="fas fa-eye" onClick={this.showPassword}>{this.state.showPassword ? "Hide" : "Show"}</i>
             </p>
-            {this.state.passValid.error &&
-              <p style={{color: "red"}}>{ this.state.passValid.error.toString() }</p>
-            }
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "start", marginLeft: "20px" }}>
+              <label style={{ fontWeight: "normal", margin: "0", border: "0", padding: "0", pointerEvents: "none" }}><input type="checkbox" checked={this.state.req1}/>&nbsp;&nbsp;Must be alteast 10 characters long.</label>
+              <label style={{ fontWeight: "normal", margin: "0", border: "0", padding: "0", pointerEvents: "none" }}><input type="checkbox" checked={this.state.req2}/>&nbsp;&nbsp;Must not have 4 same characters in row.</label>
+              <label style={{ fontWeight: "normal", margin: "0", border: "0", padding: "0", pointerEvents: "none" }}><input type="checkbox" checked={this.state.req3}/>&nbsp;&nbsp;Must contain a digit.</label>
+              <label style={{ fontWeight: "normal", margin: "0", border: "0", padding: "0", pointerEvents: "none" }}><input type="checkbox" checked={this.state.req4}/>&nbsp;&nbsp;Must contain a capital number.</label>
+            </div>
 
-            <label htmlFor="passwordText">Confirm Password:</label>
+            <label htmlFor="confirmText">Confirm Password:</label>
             <p class="password_container">
-              <input type={this.state.showConfirm ? "text" : "password"} placeholder="••••••••••••" className="form-control textBox" id="passwordText"
+              <input type={this.state.showConfirm ? "text" : "password"} placeholder="••••••••••••" className="form-control textBox" id="confirmText"
                 tabIndex="6" onChange= {(evt) => { this.setState({confirm: evt.target.value}); }} required/>
               <i class="fas fa-eye" onClick={this.showConfirm}>{this.state.showConfirm ? "Hide" : "Show"}</i>
             </p>
             {this.state.confValid.error &&
               <p style={{color: "red"}}>{ this.state.confValid.error.toString() }</p>
             }
+            <button className="button" onClick={this.handleRegister}>Submit</button>
+            {this.state.error &&
+              <p style={{color: "red"}}>{ this.state.error.toString() }</p>
+            }
           </MDBContainer>
-          <button className="button" onClick={this.handleRegister}>Submit</button>
           </form>
         </MDBContainer>
       </MDBContainer>

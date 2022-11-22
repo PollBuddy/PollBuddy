@@ -284,13 +284,20 @@ class PollEditor extends Component {
 
   onMaxAllowedChoices = (choice) => {
     this.setState({
-      maxAllowedChoices: +choice.target.value,
+      maxAllowedChoices: choice.target.value,
     });
   };
 
   clampMaxAllowedChoices = () => {
+    let MAC = this.state.maxAllowedChoices;
+    if (isNaN(MAC)) MAC = 0;
+    let diff = MAC - this.state.currentAnswers.length;
+    const nextAns = [ ...this.state.currentAnswers ];
+    while (diff --> 0) nextAns.push({ text: "", correct: false });
+
     this.setState({
-      maxAllowedChoices: Math.min(Math.max(this.state.maxAllowedChoices, 0), this.state.currentAnswers.length),
+      maxAllowedChoices: MAC,
+      currentAnswers: nextAns,
     });
   }
 
@@ -471,19 +478,18 @@ class PollEditor extends Component {
                         </MDBContainer>
                         <div className="maxAllowedChoices">
                           <p>
-                            Max Allowed Choices
+                            Max Allowed Choices&nbsp;&nbsp;&nbsp;
                           </p>
-                          <input type="number" min="0"
-                            max={this.state.currentAnswers.length}
+                          <input type="text" size="3"
                             className="fontSizeLarge"
                             value={this.state.maxAllowedChoices}
-                            inputMode="numeric" pattern="\d*"
+                            inputMode="numeric"
                             onChange={this.onMaxAllowedChoices}
                             onBlur={this.clampMaxAllowedChoices}
                             defaultValue="0" />
                         </div>
                         <p className="fontSizeLarge">
-                          Answers
+                          Answers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Correct?
                         </p>
                         {this.state.currentAnswers.length === 0 ? (
                           <p>Sorry, this question has no answers.</p>
@@ -528,7 +534,7 @@ class PollEditor extends Component {
                             type="submit" className="button"
                             onClick={this.submitQuestion}
                           >
-                            {this.state.displayNewQuestion ? "Create Question" : "Save Question"}
+                            Save Question
                           </button>
                           <button
                             type="submit" className="button"
