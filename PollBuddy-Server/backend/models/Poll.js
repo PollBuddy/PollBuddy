@@ -559,6 +559,7 @@ const editQuestion = async function (userID, pollID, questionData) {
         }
       }
     );
+
     let updatedQuestion = await getQuestionInternal(poll._id, questionData.id);
     return httpCodes.Ok(getQuestion(updatedQuestion, true));
   } catch (err) {
@@ -573,7 +574,6 @@ const deleteQuestion = async function (userID, pollID, questionID) {
     if (!poll) {
       return httpCodes.NotFound("Invalid Poll: Poll does not exist.");
     }
-
     let isUserPollAdmin = await isPollAdmin(userID, pollID);
     if (!isUserPollAdmin) {
       return httpCodes.Unauthorized("Unauthorized: Cannot Delete Question");
@@ -582,8 +582,10 @@ const deleteQuestion = async function (userID, pollID, questionID) {
     await mongoConnection.getDB().collection("polls").updateOne(
       {_id: poll._id},
       {
-        "$pull": {
-          "Questions.$._id": questionID.id,
+        $pull: {
+          "Questions": {
+            _id: questionID.id
+          },
         }
       }
     );
@@ -593,6 +595,7 @@ const deleteQuestion = async function (userID, pollID, questionID) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
+
 };
 
 const submitQuestion = async function (userID, pollID, submitData) {

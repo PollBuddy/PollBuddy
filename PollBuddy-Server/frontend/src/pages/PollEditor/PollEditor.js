@@ -230,6 +230,7 @@ class PollEditor extends Component {
   };
 
   cancelQuestion = () => {
+
     this.setState({
       displayNewQuestion: false,
       displayEditQuestion: false,
@@ -244,6 +245,18 @@ class PollEditor extends Component {
         maxAllowedChoices: this.state.maxAllowedChoices,
       })
     });
+    let currentQuestions = [...this.state.questions];
+    let currentQuestionIndex = -1;
+    for (let questionIndex in currentQuestions) {
+      if (currentQuestions[questionIndex].id === this.state.currentQuestion.id) {
+          currentQuestionIndex = questionIndex;
+          break;
+      }
+    }
+    currentQuestions.splice(currentQuestionIndex, 1);
+    this.setState({
+      questions: currentQuestions,
+    })
   };
 
   addAnswer = () => {
