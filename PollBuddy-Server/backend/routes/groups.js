@@ -9,6 +9,7 @@ const {
   leaveGroup,
   deleteGroup,
   editGroup,
+  getCodeGroup,
   promoteUser,
   demoteUser,
   editGroupValidator,
@@ -19,7 +20,8 @@ const {
   getGroupAdmins,
   groupParamsValidator,
   demoteUserValidator,
-  promoteUserValidator
+  promoteUserValidator,
+  groupParamsCodeValidator,
 } = require("../models/Group");
 const {paramValidator} = require("../modules/validatorUtils");
 
@@ -202,6 +204,15 @@ router.get("/:id", isLoggedIn, paramValidator(groupParamsValidator), async (req,
   return sendResponse(res, response);
 });
 
+/*----------------------------------------------------------------------------*/
+
+router.get("/code/:id", isLoggedIn, paramValidator(groupParamsCodeValidator), async (req, res) => {
+  let response = await getCodeGroup(req.params.id, req.session.userData.userID);
+  return sendResponse(res, response);
+});
+
+/*----------------------------------------------------------------------------*/
+
 /**
  * This route is not used.
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#post-id
@@ -341,7 +352,8 @@ router.get("/:id/join", async (req, res) => {
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
-router.post("/:id/join", isLoggedIn, paramValidator(groupParamsValidator), async (req, res) => {
+router.post("/:id/join", isLoggedIn, paramValidator(groupParamsCodeValidator), async (req, res) => {
+  console.log(req.params.id);
   let response = await joinGroup(req.params.id, req.session.userData.userID);
   return sendResponse(res, response);
 });

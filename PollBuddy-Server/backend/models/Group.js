@@ -4,9 +4,9 @@ const mongoConnection = require("../modules/mongoConnection.js");
 const {httpCodes} = require("../modules/httpCodes.js");
 const {
   getGroupInternal, getPollInternal, getUserInternal, isGroupAdminByGroup, isGroupUserByGroup,
-  isGroupMemberByGroup
+  isGroupMemberByGroup, getGroupCodeInternal
 } = require("../modules/modelUtils");
-const {objectID} = require("../modules/validatorUtils");
+const {objectID, codeID} = require("../modules/validatorUtils");
 
 const validators = {
   name: Joi.string().min(3).max(30),
@@ -19,10 +19,15 @@ const groupSchema = {
   Admins: [],
   Polls: [],
   Members: [],
+  Id: "",
 };
 
 const groupParamsValidator = Joi.object({
   id: Joi.custom(objectID).required(),
+});
+
+const groupParamsCodeValidator = Joi.object({
+  id: Joi.custom(codeID).required(),
 });
 
 const createGroupValidator = Joi.object({
@@ -43,9 +48,16 @@ const demoteUserValidator = Joi.object({
   userID: Joi.custom(objectID).required(),
 });
 
+const getCodeGroup = async function (groupID, userID) {
+  const group = (await getGroupCodeInternal(groupID)).toString();
+  const resp =  getGroup(group, userID);
+  resp.id = group;
+  return resp;
+}
+
 const getGroup = async function (groupID, userID) {
   try {
-    const group = await getGroupInternal(groupID);
+    let group = await getGroupInternal(groupID);
     if (!group) {
       return httpCodes.NotFound();
     }
@@ -58,6 +70,7 @@ const getGroup = async function (groupID, userID) {
       description: group.Description,
       isMember: isMember,
       isAdmin: isAdmin,
+      code: group.Id,
     });
   } catch (err) {
     console.error(err);
@@ -71,10 +84,11 @@ const createGroup = async function (userID, groupData) {
       Name: groupData.name,
       Description: groupData.description,
       Admins: [userID],
+      Id: Date.now().toString(),
     });
     const result = await mongoConnection.getDB().collection("groups").insertOne(group);
     return httpCodes.Ok({
-      id: result.insertedId
+      id: result.insertedId,
     });
   } catch (err) {
     console.error(err);
@@ -197,7 +211,7 @@ const getGroupPolls = async function (userID, groupID) {
 
 const joinGroup = async function (groupID, userID) {
   try {
-    const group = await getGroupInternal(groupID);
+    const group = await getGroupInternal((await getGroupCodeInternal(groupID)).toString());
     if (!group) {
       return httpCodes.NotFound();
     }
@@ -386,5 +400,7 @@ module.exports = {
   editGroupValidator,
   groupParamsValidator,
   promoteUserValidator,
-  demoteUserValidator
+  demoteUserValidator,
+  groupParamsCodeValidator,
+  getCodeGroup
 };
