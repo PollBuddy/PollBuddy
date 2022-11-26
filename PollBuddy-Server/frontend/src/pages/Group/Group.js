@@ -11,6 +11,7 @@ class Group extends Component {
     this.state = {
       id: props.router.params.groupID,
       name: "",
+      code: "",
       description: "",
       isMember: false,
       isAdmin: false,
@@ -41,6 +42,7 @@ class Group extends Component {
               isMember: !response.data.isAdmin && response.data.isMember,
               isAdmin: response.data.isAdmin,
               doneLoading: true,
+              code: response.data.code,
             });
           } else {
             this.setState({
@@ -111,7 +113,7 @@ class Group extends Component {
   };
 
   copyCode = (e) => {
-    navigator.clipboard.writeText(this.state.id);
+    navigator.clipboard.writeText(this.state.code);
     e.target.textContent = "Copied!";
     setTimeout(() => {
       e.target.textContent = "Copy";
@@ -230,7 +232,7 @@ class Group extends Component {
                     Group Code
                   </span>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                    {this.state.id}
+                    {this.state.code}
                     <button className="button" onClick={this.copyCode}>Copy</button>
                   </div>
                   <br/>
