@@ -3,6 +3,7 @@ const {userSchema} = require("../models/User.js");
 const mongoConnection = require("../modules/mongoConnection.js");
 const {groupSchema} = require("../models/Group.js");
 const {pollSchema} = require("../models/Poll");
+const ShortUniqueId = require("short-unique-id");
 
 const testGroup = {
   Name: "test.group",
@@ -79,9 +80,11 @@ let createUser = async function (update) {
 };
 
 let createGroup = async function (update) {
+  const uid = new ShortUniqueId({ length: 6 });
   let groupData = {
     Name: testGroup.Name,
     Description: testGroup.Description,
+    Code: uid(),
   };
 
   if (update) {

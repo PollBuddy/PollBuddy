@@ -32,7 +32,8 @@
     "nanoid": "^4.0.0",
     "nodemailer": "^6.7.5",
     "promise-retry": "^2.0.1",
-    "sanitize-filename": "^1.6.3"
+    "sanitize-filename": "^1.6.3",
+    "short-unique-id": "^4.4.4"
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^3.0.1",

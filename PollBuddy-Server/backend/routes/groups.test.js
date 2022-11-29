@@ -72,6 +72,21 @@ describe("/api/groups/:id", () => {
       });
   });
 
+  it("GET: get group as non-member with code", async () => {
+    let user = await createUser();
+    let group = await createGroup();
+    console.log(group)
+    session = {userData: {userID: user.insertedId}};
+    await app.get("/api/groups/" + group.insertedId)
+        .expect(200)
+        .then(async (response) => {
+          expect(response.body.result).toBe("success");
+          expect(response.body.data.name).toBe(testGroup.Name);
+          expect(response.body.data.isAdmin).toBe(false);
+          expect(response.body.data.isMember).toBe(false);
+        });
+  });
+
   it("GET: get group as member", async () => {
     let user = await createUser();
     let group = await createGroup({Members: [user.insertedId]});
@@ -138,6 +153,7 @@ describe("/api/groups/new", () => {
         expect(res).toBeTruthy();
         expect(response.body.data.id.toString()).toEqual(res._id.toString());
         expect(res.Admins[0].toString()).toEqual(user.insertedId.toString());
+        expect(res.Code.toString().length).toBe(6);
       });
   });
 

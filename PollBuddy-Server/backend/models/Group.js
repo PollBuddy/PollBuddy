@@ -8,6 +8,7 @@ const {
 } = require("../modules/modelUtils");
 const {objectID} = require("../modules/validatorUtils");
 const bson = require("bson");
+const ShortUniqueId = require("short-unique-id");
 
 const validators = {
   name: Joi.string().min(3).max(30),
@@ -20,7 +21,7 @@ const groupSchema = {
   Admins: [],
   Polls: [],
   Members: [],
-  //Code: "",
+  Code: "",
 };
 
 const groupParamsValidator = Joi.object({
@@ -72,11 +73,12 @@ const getGroup = async function (groupID, userID) {
 };
 const createGroup = async function (userID, groupData) {
   try {
+    const uid = new ShortUniqueId({ length: 6 });
     let group = createModel(groupSchema, {
       Name: groupData.name,
       Description: groupData.description,
       Admins: [userID],
-      //Code: generate code here
+      Code: uid(),
     });
     const result = await mongoConnection.getDB().collection("groups").insertOne(group);
     return httpCodes.Ok({
