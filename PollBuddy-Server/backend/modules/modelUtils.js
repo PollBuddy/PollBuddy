@@ -7,7 +7,7 @@ const getID = function (ID) {
 
 const getGroupInternal = async function (groupID) {
   if(groupID.length === 6){
-    return await mongoConnection.getDB().collection("groups").findOne({"code": groupID});
+    return await mongoConnection.getDB().collection("groups").findOne({"Code": groupID});
   } else {
     let idCode = new bson.ObjectID(groupID);
     return await mongoConnection.getDB().collection("groups").findOne({"_id": idCode});
