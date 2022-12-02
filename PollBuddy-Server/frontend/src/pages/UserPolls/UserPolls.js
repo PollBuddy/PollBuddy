@@ -34,10 +34,6 @@ class UserPolls extends Component {
         }
       });
   }
-
-  pollButtonClick = (pollID) => {
-    this.props.router.navigate("/polls/" + pollID + "/edit");
-  };
   
   createNewPoll = async () => {
     this.props.router.navigate("/polls/new");
