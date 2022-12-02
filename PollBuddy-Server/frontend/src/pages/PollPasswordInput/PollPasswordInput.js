@@ -15,7 +15,7 @@ class PollPasswordInput extends Component{
         this.state = {
             loadingPollData: false,
             pollID: "",
-            pollTitle: ""
+            pollTitle: "",
             pollPassword: "",
             inputPassword: "",
         }
@@ -51,13 +51,17 @@ class PollPasswordInput extends Component{
         if (this.state.loadingPollData) {
             return (
                 <MDBContainer fluid className="page">
-                    <LoadingWheel/>
+                    <p>
+                        That shit broke
+                    </p>
                 </MDBContainer>
             );
         } else {
             return (
                 <MDBContainer fluid className="page">
-                    <LoadingWheel/>
+                    <p>
+                        Not Loading
+                    </p>
                 </MDBContainer>
             );
         }
