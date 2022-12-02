@@ -1,0 +1,96 @@
+import React, {Component} from "react";
+import {Link} from "react-router-dom";
+import {MDBContainer} from "mdbreact";
+import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
+import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
+
+class UserPolls extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: "",
+      polls: [],
+      doneLoading: false,
+      showError: null
+    };
+  }
+
+  componentDidMount() {
+    this.props.updateTitle(this.state.name);
+    fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/polls", {
+      method: "GET"
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        if (response.result === "success") {
+          this.setState({
+            polls: response.data,
+            doneLoading: true
+          });
+        } else {
+          this.setState({
+            showError: true,
+          });
+        }
+      });
+  }
+  
+  createNewPoll = async () => {
+    this.props.router.navigate("/polls/new");
+  };
+
+  render() {
+    if (this.state.showError) {
+      return (
+        <MDBContainer fluid className="page">
+          <MDBContainer fluid className="box">
+            <p className="fontSizeLarge">
+              Error loading data! Please try again.
+            </p>
+          </MDBContainer>
+        </MDBContainer>
+      );
+    } else if (!this.state.doneLoading) {
+      return (
+        <MDBContainer className="page">
+          <LoadingWheel/>
+        </MDBContainer>
+      );
+    } else {
+      return (
+        <MDBContainer className="page">
+          <MDBContainer className="two-box">
+            <MDBContainer className="box">
+              <p className="fontSizeLarge">
+              Creator Settings
+              </p>
+              <button style={{width: "17em"}}
+                className="button"
+                onClick={this.createNewPoll}
+              >Create New Poll
+              </button>
+            </MDBContainer>
+            <MDBContainer className="box">
+              <p className="fontSizeLarge">
+                My Polls
+              </p>
+              {this.state.polls.length === 0 ? (
+                <p>You don't have any polls available at this time.<br/> <br/></p>
+              ) : (
+                <React.Fragment>
+                  {this.state.polls.map((poll, index) => (
+                    <Link to={"/polls/" + poll.id + "/edit"} style={{width: "17em"}}>
+                      <button style={{  width: "20em" }} className="button">{"Poll " + (index + 1) + ": " + poll.title}</button>
+                    </Link>
+                  ))}
+                </React.Fragment>
+              )}
+            </MDBContainer>
+          </MDBContainer>
+        </MDBContainer>
+      );
+    }
+  }
+}
+
+export default withRouter(UserPolls);

@@ -11,6 +11,14 @@ const mongoConnection = require("../modules/mongoConnection.js");
 const usersRouter = require("./users");
 const {testUser, testUser2, testGroup, createUser, createGroup} = require("../modules/testingUtils.js");
 const {testGroup2} = require("../modules/testingUtils");
+const {
+  createPoll,
+  testPoll,
+  testPoll2,
+  sampleQuestion,
+  sampleQuestion2,
+} = require("../modules/testingUtils");
+
 
 let mockApp = express();
 let session = {};
@@ -871,6 +879,40 @@ describe("/api/users/:id/groups", () => {
       .expect(405)
       .then((response) => {
         expect(response.body.result).toBe("failure");
+      });
+  });
+
+  
+});
+
+describe("/me/polls", () => {
+  it("GET: route unavailable", async () => {
+    await app.get("/me/polls")
+      .expect(405)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("GET: get group polls as creator", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+    let poll1 = await createPoll();
+    let poll2 = await createPoll();
+    let poll3 = await createPoll();
+    await app.get("/me/polls")
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+
+        expect(response.body.data[0].id.toString()).toEqual(poll1.insertedId.toString());
+        expect(response.body.data[0].title).toEqual(testPoll.Title);
+
+        expect(response.body.data[1].id.toString()).toEqual(poll2.insertedId.toString());
+        expect(response.body.data[1].title).toEqual(testPoll.Title);
+
+        expect(response.body.data[2].id.toString()).toEqual(poll3.insertedId.toString());
+        expect(response.body.data[2].title).toEqual(testPoll.Title);
       });
   });
 

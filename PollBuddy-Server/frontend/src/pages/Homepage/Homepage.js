@@ -47,6 +47,9 @@ export default class Homepage extends Component {
                 <Link to={"/groups"}>
                   <button className = "button">My Groups</button>
                 </Link>
+                <Link to={"/polls"}>
+                  <button className = "button">My Polls</button>
+                </Link>
               </MDBContainer>
             }
           </MDBContainer>

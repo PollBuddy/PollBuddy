@@ -6,11 +6,11 @@ const mongoConnection = require("../modules/mongoConnection.js");
 const {httpCodes, sendResponse} = require("../modules/httpCodes.js");
 const rpi = require("../modules/rpi");
 
-const {isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
-const {
-  userLoginValidator, userInformationValidator, userRegisterValidator, userSchema, getUser, getUserGroups,
-  editUser, userParamsValidator
-} = require("../models/User.js");
+
+const { isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
+const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups,
+  getUserPolls, editUser, userParamsValidator } = require("../models/User.js");
+
 const {paramValidator} = require("../modules/validatorUtils");
 
 const {send} = require("../modules/email.js");
@@ -679,6 +679,21 @@ router.get("/me/groups", isLoggedIn, async function (req, res) {
 // eslint-disable-next-line no-unused-vars
 router.post("/me/groups", function (req, res) {
   return sendResponse(res, httpCodes.MethodNotAllowed("POST is not available for this route. Use GET."));
+});
+
+/**
+ * This route is used to retrieve all the UserPolls this user owns
+ * @getdata {void} None
+ * @postdata {void} None
+ * @returns {void} On success: Status 200
+ * On failure: Status 500: { "result": "failure", "error": "Error: Unable to retrieve user polls from database" }
+ * @name backend/users/me/polls_GET
+ * @param {string} path - Express path
+ * @param {callback} callback - function handler for route
+ */
+router.get("/me/polls", isLoggedIn, async function (req, res) {
+  let response = await getUserPolls(req.session.userData.userID);
+  return sendResponse(res, response);
 });
 
 /**

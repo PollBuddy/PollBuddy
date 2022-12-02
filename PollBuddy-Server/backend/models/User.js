@@ -99,6 +99,24 @@ const getUserGroups = async function (userID) {
   }
 };
 
+const getUserPolls = async function(userID) {
+  try {
+    const user = await getUserInternal(userID);
+    if (!user) { return httpCodes.BadRequest(); }
+    let userPolls = [];
+    await mongoConnection.getDB().collection("polls")
+      .find({ Creator: user._id.toString() }).forEach((poll) => {
+        userPolls.push({
+          id: poll._id,
+          title: poll.Title,
+        });
+      });
+    return httpCodes.Ok(userPolls);
+  } catch(err) {
+    console.error(err);
+    return httpCodes.InternalServerError();
+  }
+};
 
 const editUser = async function (userID, jsonContent) {
   try {
@@ -166,5 +184,6 @@ module.exports = {
   userParamsValidator,
   getUser,
   getUserGroups,
+  getUserPolls,
   editUser
 };
