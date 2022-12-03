@@ -3,6 +3,7 @@ const express = require("express");
 const supertest = require("supertest");
 const bcrypt = require("bcrypt");
 const mongo = require("mongodb");
+const bson = require("bson");
 const MongoClient = mongo.MongoClient;
 
 const {userSchema} = require("../models/User.js");
@@ -728,7 +729,7 @@ describe("/api/users/:id", () => {
   });
 
   it("GET: invalid userID", async () => {
-    await app.get("/api/users/0")
+    await app.get("/api/users/" + (new bson.ObjectID()).toString())
       .expect(400)
       .then((response) => {
         expect(response.body.result).toBe("failure");
@@ -831,7 +832,7 @@ describe("/api/users/:id/edit", () => {
   });
 
   it("POST: invalid userID", async () => {
-    await app.post("/api/users/0/edit")
+    await app.post("/api/users/" + (new bson.ObjectID()).toString() + "/edit")
       .expect(400)
       .then((response) => {
         expect(response.body.result).toBe("failure");
@@ -859,7 +860,7 @@ describe("/api/users/:id/groups", () => {
   });
 
   it("GET: invalid userID", async () => {
-    await app.get("/api/users/0/groups")
+    await app.get("/api/users/" + (new bson.ObjectID()).toString() + "/groups")
       .expect(400)
       .then((response) => {
         expect(response.body.result).toBe("failure");

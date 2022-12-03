@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const supertest = require("supertest");
 const mongo = require("mongodb");
+const bson = require("bson");
 const MongoClient = mongo.MongoClient;
 
 const mongoConnection = require("../modules/mongoConnection.js");
@@ -97,6 +98,16 @@ describe("/api/groups/:id", () => {
         expect(response.body.data.name).toBe(testGroup.Name);
         expect(response.body.data.isAdmin).toBe(true);
         expect(response.body.data.isMember).toBe(false);
+      });
+  });
+
+  it("GET: invalid id, failure", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+    await app.get("/api/groups/" + (new bson.ObjectID()).toString())
+      .expect(404)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
       });
   });
 
@@ -200,6 +211,16 @@ describe("/api/groups/:id/edit", () => {
       });
   });
 
+  it("GET: invalid id, failure", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+    await app.post("/api/groups/" + (new bson.ObjectID()).toString() + "/edit")
+      .expect(404)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
 });
 
 describe("/api/groups/:id/admins", () => {
@@ -236,6 +257,16 @@ describe("/api/groups/:id/admins", () => {
       });
   });
 
+  it("GET: invalid id, failure", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+    await app.get("/api/groups/" + (new bson.ObjectID()).toString() + "/admins")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
 });
 
 describe("/api/groups/:id/members", () => {
@@ -267,6 +298,16 @@ describe("/api/groups/:id/members", () => {
   it("POST: route unavailable", async () => {
     await app.post("/api/groups/0/members")
       .expect(405)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("GET: invalid id, failure", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+    await app.get("/api/groups/" + (new bson.ObjectID()).toString() + "/members")
+      .expect(404)
       .then((response) => {
         expect(response.body.result).toBe("failure");
       });
@@ -367,6 +408,16 @@ describe("/api/groups/:id/polls", () => {
       });
   });
 
+  it("GET: invalid id, failure", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+    await app.get("/api/groups/" + (new bson.ObjectID()).toString() + "/polls")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
 });
 
 describe("/api/groups/:id/join", () => {
@@ -406,6 +457,16 @@ describe("/api/groups/:id/join", () => {
       });
   });
 
+  it("GET: invalid id, failure", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+    await app.post("/api/groups/" + (new bson.ObjectID()).toString() + "/join")
+      .expect(404)
+      .then((response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
 });
 
 describe("/api/groups/:id/leave", () => {
@@ -435,11 +496,21 @@ describe("/api/groups/:id/leave", () => {
 
   it("POST: leave group as non member", async () => {
     let user = await createUser();
-    let group = await createGroup({Admins: [user.insertedId]});
+    let group = await createGroup();
     session = {userData: {userID: user.insertedId}};
-    await app.post("/api/groups/" + group.insertedId + "/join")
+    await app.post("/api/groups/" + group.insertedId + "/leave")
       .expect(403)
       .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("GET: invalid id, failure", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+    await app.post("/api/groups/" + (new bson.ObjectID()).toString() + "/leave")
+      .expect(404)
+      .then((response) => {
         expect(response.body.result).toBe("failure");
       });
   });
@@ -478,6 +549,16 @@ describe("/api/groups/:id/delete", () => {
     await app.post("/api/groups/" + group.insertedId + "/delete")
       .expect(403)
       .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("POST: invalid id, failure", async () => {
+    let user = await createUser();
+    session = {userData: {userID: user.insertedId}};
+    await app.post("/api/groups/" + (new bson.ObjectID()).toString() + "/delete")
+      .expect(404)
+      .then((response) => {
         expect(response.body.result).toBe("failure");
       });
   });
