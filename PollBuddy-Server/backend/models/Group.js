@@ -65,6 +65,7 @@ const getGroup = async function (groupID, userID) {
       description: group.Description,
       isMember: isMember,
       isAdmin: isAdmin,
+      code: group.Code,
     });
   } catch (err) {
     console.error(err);

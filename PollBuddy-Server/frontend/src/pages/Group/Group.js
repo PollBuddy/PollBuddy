@@ -10,6 +10,7 @@ class Group extends Component {
     super(props);
     this.state = {
       id: props.router.params.groupID,
+      code: "",
       name: "",
       description: "",
       isMember: false,
@@ -39,8 +40,10 @@ class Group extends Component {
               descriptionInput: response.data.description,
               isMember: !response.data.isAdmin && response.data.isMember,
               isAdmin: response.data.isAdmin,
+              code: response.data.code,
               doneLoading: true,
             });
+            console.log(this.state.code);
           } else {
             this.setState({
               showError: true,
@@ -179,6 +182,16 @@ class Group extends Component {
           <MDBContainer className="two-box">
             {this.state.isMember &&
               <MDBContainer className="box">
+                {!(typeof this.state.code === "undefined") &&
+                    <>
+                      <p className="fontSizeLarge">
+                        Group Code
+                      </p>
+                      <p className="fontSizeMedium">
+                        {this.state.code}
+                      </p>
+                    </>
+                }
                 <p className="fontSizeLarge">
                   Group Name
                 </p>
@@ -197,6 +210,16 @@ class Group extends Component {
             {this.state.isAdmin &&
               <MDBContainer className="box">
                 <MDBContainer className="form-group">
+                  {!(typeof this.state.code === "undefined") &&
+                      <>
+                        <p className="fontSizeLarge">
+                          Group Code
+                        </p>
+                        <p className="fontSizeMedium">
+                          {this.state.code}
+                        </p>
+                      </>
+                  }
                   <p className="fontSizeLarge">
                     Group Name
                   </p>
