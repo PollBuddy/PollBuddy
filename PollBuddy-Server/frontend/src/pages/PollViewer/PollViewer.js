@@ -4,6 +4,7 @@ import { MDBContainer } from "mdbreact";
 import Question from "../../components/Question/Question";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import { withRouter } from "../../components/PropsWrapper/PropsWrapper";
+import {Link} from "react-router-dom";
 import "./PollViewer.scss";
 import Timer from "../../components/Timer/Timer";
 
