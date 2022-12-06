@@ -188,7 +188,7 @@ class PollViewer extends Component {
             <p className="fontSizeLarge">
               You've reached the end of the poll. Thanks for submitting!
             </p>
-            <Link to={process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/edit"}>
+            <Link to={"/polls/" + this.state.pollID + "/edit"}>
               <button className = "button">Back to editor</button>
             </Link>
           </MDBContainer>
