@@ -34,6 +34,7 @@
 
 .pollButton {
   width: 100%;
+  align-items: center;
 }
 
 .textBox {
@@ -67,5 +68,11 @@
 
 .maxAllowedChoices {
   display: flex;
+  align-items: center;
+}
+
+.question-group {
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
