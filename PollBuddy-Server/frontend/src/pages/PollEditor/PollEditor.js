@@ -104,20 +104,11 @@ class PollEditor extends Component {
     };
   };
 
-  generateNewPassword = () => {
-    this.state.pollPassword = "";
-    for(let i = 0; i < 5; i++){
-      this.state.pollPassword += Math.floor(Math.random() * 10);
-    }
-  }
-
   changePassword = () => {
     if (this.state.requiresPassword){
-      // true -> false
       this.state.requiresPassword = false;
       return;
     }
-    // false -> true
     this.state.requiresPassword = true;
   };
 
@@ -426,12 +417,6 @@ class PollEditor extends Component {
                   <Link to={"/polls/" + this.state.pollID + "/view"} className="button pollButton">
                     Open viewer
                   </Link>
-                  <button
-                      id="descriptionBtn" className="button pollButton"
-                      onClick={this.generateNewPassword}
-                  >
-                    Test dat boi
-                  </button>
                 </div>
                 <div className={"pollButtons"}>
                   <Link to={"/polls/" + this.state.pollID + "/results"} className="button pollButton">
