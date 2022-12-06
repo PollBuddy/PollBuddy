@@ -130,6 +130,10 @@ class PollViewer extends Component {
     this.setState({ pollTimeLeft: false });
   };
 
+  backToEditor = () => {
+
+  };
+
   render() {
     let pollTimer = () => {
       /* Check to see if there's < 100 days left and only show if there is. This is maybe to hide a visual bug lol,
@@ -183,7 +187,7 @@ class PollViewer extends Component {
             <p className="fontSizeLarge">
               You've reached the end of the poll. Thanks for submitting!
             </p>
-            <Link to={"/edit"}>
+            <Link to={process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/edit"}>
               <button className = "button">Back to editor</button>
             </Link>
           </MDBContainer>
