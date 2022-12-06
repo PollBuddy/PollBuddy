@@ -27,9 +27,11 @@ class PollPasswordInput extends Component{
     // getPollInformation
     // *from MongoDB*
 
-    onInput = () => {
-        return;
-    }
+    onInput = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+    };
 
     onSubmit = async () => {
         return false;
