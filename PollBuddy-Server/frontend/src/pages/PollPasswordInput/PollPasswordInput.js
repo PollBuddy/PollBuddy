@@ -26,7 +26,6 @@ class PollPasswordInput extends Component{
 
     // getPollInformation
     // *from MongoDB*
-    //
 
     onInput = () => {
         return;
@@ -35,16 +34,15 @@ class PollPasswordInput extends Component{
     onSubmit = async () => {
         return false;
     }
-    //
+
     // checkPassword
-    //
+
     // displayWrong
     // *checkPassword -> false*
-    //
+
     // routeToViewer
     // *checkPassword -> true*
-    //
-    // ?
+
 
     render(){
         const defaultMaterialTheme = createTheme({
