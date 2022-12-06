@@ -63,6 +63,8 @@ class Group extends Component {
           this.setState({
             polls: response.data,
           });
+        } else {
+          this.props.router.navigate("/groups/" + this.state.id);
         }
       });
   }
