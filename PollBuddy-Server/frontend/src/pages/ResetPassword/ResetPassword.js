@@ -50,7 +50,7 @@ class ResetPassword extends Component {
             "password" : this.state.newPassword,
           })
         });
-        const value = response.json();
+        const value = await response.json();
         if(value.result === "success"){
           const {router} = this.props;
           router.navigate("/");
