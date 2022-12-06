@@ -189,7 +189,7 @@ class PollViewer extends Component {
               You've reached the end of the poll. Thanks for submitting!
             </p>
             <Link to={"/polls/" + this.state.pollID + "/edit"}>
-              <button className = "button">Back to editor</button>
+              <button className = "button">Back</button>
             </Link>
           </MDBContainer>
         </MDBContainer>
