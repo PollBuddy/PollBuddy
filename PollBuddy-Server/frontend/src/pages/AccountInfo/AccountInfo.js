@@ -47,59 +47,58 @@ class AccountInfo extends Component {
   }
 
 
-  componentDidMount(){
+  async componentDidMount() {
     this.props.updateTitle("Account Info");
 
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/me", {
+    const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/me", {
       method: "GET"
-    }).then(response => response.json())
-      .then(data => {
-        console.log(data);
-        // Load states from database values
-        data = data.data;
-        if(data.userName) {
-          this.setState({
-            userName: data.userName,
-            userNameLoaded: true,
-            userNameLocked: data.userNameLocked
-          });
-        }
-        if(data.firstName) {
-          this.setState({
-            firstName: data.firstName,
-            firstNameLoaded: true,
-            firstNameLocked: data.firstNameLocked
-          });
-        }
-        if(data.lastName) {
-          this.setState({
-            lastName: data.lastName,
-            lastNameLoaded: true,
-            lastNameLocked: data.lastNameLocked
-          });
-        }
-        if(data.email) {
-          this.setState({
-            email: data.email,
-            emailLoaded: true,
-            emailLocked: data.emailLocked
-          });
-        }
-        if(data.schoolAffiliation) {
-          this.setState({
-            school: data.schoolAffiliation,
-            passwordLocked: true
-          });
-        }
-        if(data.logOutEverywhere) {
-          this.setState({
-            logOutEverywhere: data.logOutEverywhere
-          });
-        }
-        this.setState({
-          doneLoading: true
-        });
+    });
+    let data = await response.json();
+    console.log(data);
+    // Load states from database values
+    data = data.data;
+    if(data.userName) {
+      this.setState({
+        userName: data.userName,
+        userNameLoaded: true,
+        userNameLocked: data.userNameLocked
       });
+    }
+    if(data.firstName) {
+      this.setState({
+        firstName: data.firstName,
+        firstNameLoaded: true,
+        firstNameLocked: data.firstNameLocked
+      });
+    }
+    if(data.lastName) {
+      this.setState({
+        lastName: data.lastName,
+        lastNameLoaded: true,
+        lastNameLocked: data.lastNameLocked
+      });
+    }
+    if(data.email) {
+      this.setState({
+        email: data.email,
+        emailLoaded: true,
+        emailLocked: data.emailLocked
+      });
+    }
+    if(data.schoolAffiliation) {
+      this.setState({
+        school: data.schoolAffiliation,
+        passwordLocked: true
+      });
+    }
+    if(data.logOutEverywhere) {
+      this.setState({
+        logOutEverywhere: data.logOutEverywhere
+      });
+    }
+    this.setState({
+      doneLoading: true
+    });
   }
 
   handleToggleClick() {
@@ -118,7 +117,7 @@ class AccountInfo extends Component {
     });
   }
 
-  saveChanges(){
+  async saveChanges(){
     const schema = Joi.object({
       username: Joi.string()
         .pattern(new RegExp("^(?=.{3,32}$)[a-zA-Z0-9-._]+$"))
@@ -204,8 +203,8 @@ class AccountInfo extends Component {
       }
       passwordInput = passwordValid.value.password;
     }
-    
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
+
+    const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({
@@ -216,11 +215,9 @@ class AccountInfo extends Component {
         password: this.state.passwordLocked ? undefined : passwordInput,
         logOutEverywhere: this.state.logOutEverywhere
       })
-    })
-      .then(response => response.json())
-      .then(response => {
-        console.log(response);
-      });
+    });
+    const response = await httpResponse.json();
+    console.log(response);
     this.setState({done: true});
   }
 
@@ -228,20 +225,19 @@ class AccountInfo extends Component {
     this.setState(state => ({showPassword: !state.showPassword}));
   }
 
-  handleLogOutEverywhere(){
+  async handleLogOutEverywhere(){
     this.setState(state => ({
       logOutEverywhere: !state.logOutEverywhere
     }));
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
+    const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/me/edit", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: {
         password: this.state.password, // TODO: needs to be verified to function
         logOutEverywhere: this.state.logOutEverywhere
       }
-    }).then(response => {
-      console.log(response);
     });
+    console.log(response);
   }
 
   render() {

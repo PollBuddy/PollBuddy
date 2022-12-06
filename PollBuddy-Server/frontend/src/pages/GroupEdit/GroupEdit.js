@@ -22,30 +22,43 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
     this.loadMembers();
   }
 
-  loadAdmins = () => {
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}/admins`)
-      .then((response => response.json()))
-      .then((response) => {
-        if (response.result === "success") {
-          this.setState({
-            admins: response.data,
-            loadingAdmins: false,
-          });
-        }
+  loadGroup = async () => {
+    const httpResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}`);
+    const response = await httpResponse.json();
+    fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}`)
+    if (response.result === "success") {
+      this.setState({
+        name: response.data.name,
+        nameInput: response.data.name,
+        description: response.data.description,
+        descriptionInput: response.data.description,
+        loadingGroupData: false,
       });
+    } else {
+      this.props.router.navigate("/groups");
+    }
   };
 
-  loadMembers = () => {
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}/members`)
-      .then((response => response.json()))
-      .then((response) => {
-        if (response.result === "success") {
-          this.setState({
-            members: response.data,
-            loadingMembers: false,
-          });
-        }
+  loadAdmins = async () => {
+    const httpResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}/admins`);
+    const response = await httpResponse.json();
+    if (response.result === "success") {
+      this.setState({
+        admins: response.data,
+        loadingAdmins: false,
       });
+    }
+  };
+
+  loadUsers = async () => {
+    const httpResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/groups/${this.state.id}/members`);
+    const response = await httpResponse.json()
+    if (response.result === "success") {
+      this.setState({
+        users: response.data,
+        loadingUsers: false,
+      });
+    }
   };
 
   handleDemoteAdmin = async (demoteId) => {
@@ -67,20 +80,33 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
       });
     }
   };
-  handleDemoteMember = async (demoteId) => {
-    let httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/demote", {
+
+  getGroupData = () => {
+    return {
+      name: this.state.nameInput,
+      description: this.state.descriptionInput,
+    };
+  };
+
+  onSubmit = async () => {
+    this.setState({ loadingGroupData: true });
+    const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.id + "/edit", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userID: demoteId.id
-      })
+      headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+      body: JSON.stringify(this.getGroupData())
     });
-    let response = await httpResponse.json();
-    if(response.result === "success") {
-      this.setState((prevState) => {
-        const index = prevState.members.indexOf(demoteId);
-        prevState.members.splice(index, 1);
-        return {members: [...prevState.members]};
+    const response = await httpResponse.json();
+    if (response.result === "success") {
+      this.setState({
+        showError: false,
+        name: this.state.nameInput,
+        description: this.state.descriptionInput,
+        loadingGroupData: false,
+      });
+    } else {
+      this.setState({
+        showError: true,
+        loadingGroupData: false,
       });
     }
   };

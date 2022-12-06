@@ -18,29 +18,27 @@ class PollResults extends Component {
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.props.updateTitle("Poll Results");
-    fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.router.params.pollID + "/results", {
+    const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.router.params.pollID + "/results", {
       method: "GET"
-    })
-      .then(response => response.json())
-      .then(response => {
-        if (response.result === "success") {
-          this.setState({
-            doneLoading: true,
-            questions: response.data.questions,
-          });
-        } else {
-          this.setState({
-            showError: true,
-          });
-          for(let i = 0; i < this.state.questionData.CorrectAnswers.length-1; i++){
-            this.setState({correctAnswers : this.state.correctAnswers + this.state.questionData.CorrectAnswers[i] + ", "});
-          }
-          this.setState({correctAnswers: this.state.correctAnswers + this.state.questionData.CorrectAnswers[this.state.questionData.CorrectAnswers.length-1]});
-          this.setState({"doneLoading": true});
-        }
+    });
+    const response = await httpResponse.json();
+    if (response.result === "success") {
+      this.setState({
+        doneLoading: true,
+        questions: response.data.questions,
       });
+    } else {
+      this.setState({
+        showError: true,
+      });
+      for(let i = 0; i < this.state.questionData.CorrectAnswers.length-1; i++){
+        this.setState({correctAnswers : this.state.correctAnswers + this.state.questionData.CorrectAnswers[i] + ", "});
+      }
+      this.setState({correctAnswers: this.state.correctAnswers + this.state.questionData.CorrectAnswers[this.state.questionData.CorrectAnswers.length-1]});
+      this.setState({"doneLoading": true});
+    }
   }
 
   displayQuestion = (index) => {

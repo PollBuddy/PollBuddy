@@ -11,10 +11,10 @@ export default class Privacy extends Component {
     this.state = {terms: null};
   }
 
-  componentWillMount() {
-    fetch(privacyMdPath).then((response) => response.text()).then((text) => {
-      this.setState({terms: text});
-    });
+  async componentWillMount() {
+    const response = await fetch(privacyMdPath);
+    const text = await response.text();
+    this.setState({terms: text});
   }
 
   componentDidMount() {

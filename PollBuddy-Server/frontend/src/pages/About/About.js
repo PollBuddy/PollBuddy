@@ -13,10 +13,10 @@ export default class About extends Component {
     this.state = {terms: null};
   }
 
-  componentWillMount() {
-    fetch(aboutMdPath).then((response) => response.text()).then((text) => {
-      this.setState({terms: text});
-    });
+  async componentWillMount() {
+    const response = await fetch(aboutMdPath);
+    const text = await response.text();
+    this.setState({terms: text});
   }
 
   componentDidMount() {

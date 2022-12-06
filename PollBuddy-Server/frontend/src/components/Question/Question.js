@@ -123,15 +123,13 @@ export default class Question extends Component {
   };
 
   submitQuestion = async () => {
-    await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/submitQuestion/", {
+    const httpResponse = await fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/submitQuestion/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(this.getSubmitData())
     })
-      .then(response => response.json())
-      .then(response => {
-        console.log(response);
-      });
+    const response = await httpResponse.json();
+    console.log(response);
     this.props.nextQuestion();
   };
 

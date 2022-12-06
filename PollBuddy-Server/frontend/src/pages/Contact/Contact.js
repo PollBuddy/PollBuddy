@@ -14,14 +14,7 @@ export default class Contact extends Component {
 
   constructor(props) {
     super(props);
-    fetch(process.env.REACT_APP_BACKEND_URL + "/users/me", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
-    }).then(response => response.json())
-      // handle response
-      .then(data => {
-        this.setState({fullName: data.data.FirstName+ " " +data.data.LastName, value: data.data.SchoolAffiliation, email: data.data.Email});
-      });
+    this.init();
     this.state = {
       formUp: false,
       done: false,
@@ -31,6 +24,15 @@ export default class Contact extends Component {
       descriptionOfIssue: ""
     };
   }
+
+  async init() {
+    const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/me", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },//HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+    });
+    const data = await response.json();
+    this.setState({fullName: data.data.FirstName+ " " +data.data.LastName, value: data.data.SchoolAffiliation, email: data.data.Email});
+  };
 
   handleSendTicket() {
     this.setState({ formUp: false, done : true });

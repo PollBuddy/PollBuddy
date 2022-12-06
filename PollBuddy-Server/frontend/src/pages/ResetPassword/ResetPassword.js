@@ -35,31 +35,31 @@ class ResetPassword extends Component {
     this.setState({errorText:text});
   }
 
-  attemptPasswordReset(){
+  async attemptPasswordReset(){
     this.setState({errorText:""});
 
     if(this.state.newPassword === this.state.confirmedPassword){
-      fetch(process.env.REACT_APP_BACKEND_URL + "/users/forgotpassword/change", {
-        method: "POST",
-        //HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          "resetPasswordToken" : this.state.resetCode,
-          "username" : this.state.userName,
-          "password" : this.state.newPassword,
-        })
-      }).then(response => response.json())
-        .then(
-          value => {
-            if(value.result === "success"){
-              const {router} = this.props;
-              router.navigate("/");
-            }else{
-              this.setState({errorText:value.error});
-            }
-          },
-          err => {this.setState({errorText:err});}
-        );
+      try {
+        const response = await fetch(process.env.REACT_APP_BACKEND_URL + "/users/forgotpassword/change", {
+          method: "POST",
+          //HEADERS LIKE SO ARE NECESSARY for some reason https://stackoverflow.com/questions/39842013/fetch-post-with-body-data-not-working-params-empty
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            "resetPasswordToken" : this.state.resetCode,
+            "username" : this.state.userName,
+            "password" : this.state.newPassword,
+          })
+        });
+        const value = await response.json();
+        if(value.result === "success"){
+          const {router} = this.props;
+          router.navigate("/");
+        }else{
+          this.setState({errorText:value.error});
+        }
+      } catch(e) {
+        this.setState({errorText:err});
+      }
     }else {
       this.setState({errorText:"New and confirmed passwords do not match."});
     }
