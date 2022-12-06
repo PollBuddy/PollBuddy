@@ -27,8 +27,14 @@ class PollPasswordInput extends Component{
     // getPollInformation
     // *from MongoDB*
     //
-    // submitPassword
-    // *from user*
+
+    onInput = () => {
+        return;
+    }
+
+    onSubmit = async () => {
+        return false;
+    }
     //
     // checkPassword
     //
@@ -51,17 +57,26 @@ class PollPasswordInput extends Component{
         if (this.state.loadingPollData) {
             return (
                 <MDBContainer fluid className="page">
-                    <p>
-                        That shit broke
-                    </p>
+                    <LoadingWheel/>
                 </MDBContainer>
             );
         } else {
             return (
                 <MDBContainer fluid className="page">
-                    <p>
-                        Not Loading
-                    </p>
+                    <MDBContainer class="box">
+                        <MDBContainer class="form-group">
+                            <input
+                                name="password"
+                                id="pollPassword"
+                                className="form-control textBox"
+                                onInput={this.onInput}
+                            />
+                        </MDBContainer>
+                        {this.checkError()}
+                        <button className="button" onClick={this.onSubmit}>
+                            Enter Password
+                        </button>
+                    </MDBContainer>
                 </MDBContainer>
             );
         }
