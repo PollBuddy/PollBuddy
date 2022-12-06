@@ -38,6 +38,13 @@ class PollPasswordInput extends Component{
     }
 
     // checkPassword
+    checkPassword = () => {
+        if (this.state.pollPassword == this.state.inputPassword) {
+            this.displayWrong();
+            return;
+        }
+        this.routeToViewer();
+    }
 
     // displayWrong
     // *checkPassword -> false*
