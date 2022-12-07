@@ -139,6 +139,7 @@ input.textBox:focus, textarea.textBox:focus {
 input:read-only.textBox, textarea:read-only.textBox {
   background-color: var(--light-gray-readonly-text);
 }
+
 input:read-only.textBox:focus, textarea:read-only.textBox:focus {
   border-color: var(--light-red-readonly-text);
 }
@@ -316,23 +317,23 @@ a {
 }
 
 a.button {
- font-style: normal;
+  font-style: normal;
 }
 
 a:hover {
-color: var(--white-most-text) !important;
-text-decoration: underline;
+  color: var(--white-most-text) !important;
+  text-decoration: underline;
 }
 
 ::selection {
-color: var(--darkest-purple-header-color);
-background: var(--light-purple-logo-text);
+  color: var(--darkest-purple-header-color);
+  background: var(--light-purple-logo-text);
 }
 
 .float-right {
-float: right;
+  float: right;
 }
 
 .float-left {
-float: left;
+  float: left;
 }

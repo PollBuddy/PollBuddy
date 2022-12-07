@@ -1,14 +1,14 @@
 import React, {Component} from "react";
-import { MDBContainer } from "mdbreact";
+import {MDBContainer} from "mdbreact";
 import autosize from "autosize";
 import "./PollEditor.scss";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
-import TextField from '@mui/material/TextField';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DateTimePicker from '@mui/lab/DateTimePicker';
-import { purple } from '@mui/material/colors';
+import TextField from "@mui/material/TextField";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DateTimePicker from "@mui/lab/DateTimePicker";
+import {purple} from "@mui/material/colors";
 import {createTheme, ThemeProvider} from "@mui/material";
 import {Link} from "react-router-dom";
 
@@ -105,7 +105,7 @@ class PollEditor extends Component {
     });
     fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/edit", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify(this.getPollData())
     })
       .then(response => response.json())
@@ -159,7 +159,7 @@ class PollEditor extends Component {
     if (this.state.displayNewQuestion) {
       fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/createQuestion", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
           text: this.state.questionTextInput,
           answers: this.state.currentAnswers,
@@ -188,7 +188,7 @@ class PollEditor extends Component {
     } else if (this.state.displayEditQuestion) {
       fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/editQuestion", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
           id: this.state.currentQuestion.id,
           text: this.state.questionTextInput,
@@ -284,12 +284,12 @@ class PollEditor extends Component {
   }
 
   moveQuestionUp(index) {
-    let reorderedQuestions = this.move(index, index-1);
+    let reorderedQuestions = this.move(index, index - 1);
     this.setState({questions: reorderedQuestions});
   }
 
   moveQuestionDown(index) {
-    let reorderedQuestions = this.move(index, index+1);
+    let reorderedQuestions = this.move(index, index + 1);
     this.setState({questions: reorderedQuestions});
   }
 
@@ -304,10 +304,10 @@ class PollEditor extends Component {
     return this.state.questions;
   }
 
-  onOpenTimeChange = (e) =>{
+  onOpenTimeChange = (e) => {
     this.setState({openTime: Date.parse(e)});
   };
-  onCloseTimeChange = (e) =>{
+  onCloseTimeChange = (e) => {
     this.setState({closeTime: Date.parse(e)});
   };
 
@@ -336,7 +336,8 @@ class PollEditor extends Component {
                 </p>
                 <p>Poll Title</p>
                 <input
-                  type="GroupName" placeholder="Poll title" className="form-control textBox" id="pollTitle" maxLength="100"
+                  type="GroupName" placeholder="Poll title" className="form-control textBox" id="pollTitle"
+                  maxLength="100"
                   name="pollTitle"
                   value={this.state.pollTitle}
                   onChange={this.onInput}/>
@@ -353,9 +354,9 @@ class PollEditor extends Component {
                       value={this.state.openTime}
                       onChange={this.onOpenTimeChange}
                       renderInput={(props) => <TextField {...props} sx={{
-                        svg: { color },
-                        input: { color },
-                        label: { color }
+                        svg: {color},
+                        input: {color},
+                        label: {color}
                       }}
                       />}
                     />
@@ -365,9 +366,9 @@ class PollEditor extends Component {
                   <ThemeProvider theme={defaultMaterialTheme}>
                     <DateTimePicker
                       renderInput={(props) => <TextField {...props} sx={{
-                        svg: { color },
-                        input: { color },
-                        label: { color }
+                        svg: {color},
+                        input: {color},
+                        label: {color}
                       }}
                       />}
                       label="Poll Close Time"
@@ -376,7 +377,7 @@ class PollEditor extends Component {
                     />
                   </ThemeProvider>
                 </LocalizationProvider>
-                <div className={"pollButtons"}>
+                <MDBContainer>
                   <button
                     id="descriptionBtn" className="button pollButton"
                     onClick={this.savePoll}
@@ -389,61 +390,68 @@ class PollEditor extends Component {
                   >
                     Delete Poll
                   </button>
-                </div>
-                <div className={"pollButtons"}>
-                  <Link to={"/polls/" + this.state.pollID + "/view"} className="button pollButton">
-                    Open viewer
+                  <Link to={"/polls/" + this.state.pollID + "/view"} style={{width: "100%"}}>
+                    <button
+                      id="descriptionBtn" className="button pollButton"
+                    >
+                      Open viewer
+                    </button>
                   </Link>
-                </div>
-                <div className={"pollButtons"}>
-                  <Link to={"/polls/" + this.state.pollID + "/results"} className="button pollButton">
-                    Open results graph
+                  <Link to={"/polls/" + this.state.pollID + "/results"} style={{width: "100%"}}>
+                    <button
+                      id="descriptionBtn" className="button pollButton"
+                    >
+                      Open results graph
+                    </button>
                   </Link>
+
                   <a
-                    id="downloadBtn" className="button pollButton"
                     href={process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/csv"}
+                    style={{width: "100%"}}
                   >
-                    Download results CSV
+                    <button
+                      id="downloadBtn" className="button pollButton"
+                    >
+                      Download results CSV
+                    </button>
                   </a>
-                </div>
+                </MDBContainer>
               </MDBContainer>
+
               <MDBContainer className="Poll_Editor_box box">
                 <p className="fontSizeLarge">
                   Poll Questions
                 </p>
-
                 {this.state.loadingPollQuestions ?
                   <MDBContainer>
                     <LoadingWheel/>
                   </MDBContainer> :
                   <>
-                    { !(this.state.displayEditQuestion || this.state.displayNewQuestion) &&
-                      <div id="poll_questions" className="Poll_Editor_center">
+                    {!(this.state.displayEditQuestion || this.state.displayNewQuestion) &&
+                      <>
                         {this.state.questions.length === 0 && !this.state.displayNewQuestion ? (
                           <p>Sorry, you don't have any questions.</p>
                         ) : (
                           <React.Fragment>
                             {this.state.questions.map((question, index) => (
-                              <div id={"question-" + (index+1)}>
-                                <button
-                                  style={{  width: "17em" }} className="button"
-                                  onClick={() => this.editQuestion(question)}
-                                >
-                                  {"Question " + (index+1) + ": " + question.text}
-                                </button>
-                              </div>
+                              <button
+                                className="button pollButton"
+                                onClick={() => this.editQuestion(question)}
+                              >
+                                {"Question " + (index + 1) + ": " + question.text}
+                              </button>
                             ))}
                           </React.Fragment>
                         )}
                         <button
-                          type="submit" id="newQuestionBtn" className="button"
+                          type="submit" id="newQuestionBtn" className="button pollButton"
                           onClick={this.createQuestion}
                         >
                           New Question
                         </button>
-                      </div>
+                      </>
                     }
-                    { (this.state.displayEditQuestion || this.state.displayNewQuestion) &&
+                    {(this.state.displayEditQuestion || this.state.displayNewQuestion) &&
                       <>
                         <MDBContainer className="form-group">
                           <input
@@ -460,7 +468,9 @@ class PollEditor extends Component {
                           </p>
                           <button
                             type="submit" className="button"
-                            onClick={() => { this.incrementMaxAllowedChoices(1); }}
+                            onClick={() => {
+                              this.incrementMaxAllowedChoices(1);
+                            }}
                           >
                             +
                           </button>
@@ -469,7 +479,9 @@ class PollEditor extends Component {
                           </p>
                           <button
                             type="submit" className="button"
-                            onClick={() => { this.incrementMaxAllowedChoices(-1); }}
+                            onClick={() => {
+                              this.incrementMaxAllowedChoices(-1);
+                            }}
                           >
                             -
                           </button>
@@ -482,14 +494,15 @@ class PollEditor extends Component {
                         ) : (
                           <React.Fragment>
                             {this.state.currentAnswers.map((value, index) => (
-                              <div className="questionAnswer">
+                              <div className="questionAnswer form-group">
                                 <input
                                   id={"questionAnswer-" + (index)}
                                   className="form-control textBox"
-                                  placeholder={"Answer " + (index+1)}
+                                  placeholder={"Answer " + (index + 1)}
                                   name={index}
                                   value={value.text}
                                   onInput={this.onAnswerInput}
+                                  style={{width: "100%"}}
                                 />
                                 <input
                                   type="checkbox"
@@ -500,7 +513,9 @@ class PollEditor extends Component {
                                 />
                                 <button
                                   type="submit" className="button"
-                                  onClick={() => { this.deleteAnswer(index); }}
+                                  onClick={() => {
+                                    this.deleteAnswer(index);
+                                  }}
                                 >
                                   Delete
                                 </button>
@@ -509,26 +524,23 @@ class PollEditor extends Component {
                           </React.Fragment>
                         )}
                         <button
-                          type="submit" className="button"
+                          type="submit" className="button pollButton"
                           onClick={this.addAnswer}
                         >
                           Add Answer
                         </button>
-
-                        <MDBContainer className="form-group">
-                          <button
-                            type="submit" className="button"
-                            onClick={this.submitQuestion}
-                          >
-                            {this.state.displayNewQuestion ? "Create" : "Save"}
-                          </button>
-                          <button
-                            type="submit" className="button"
-                            onClick={this.cancelQuestion}
-                          >
-                            Cancel
-                          </button>
-                        </MDBContainer>
+                        <button
+                          type="submit" className="button pollButton"
+                          onClick={this.submitQuestion}
+                        >
+                          {this.state.displayNewQuestion ? "Create" : "Save"}
+                        </button>
+                        <button
+                          type="submit" className="button pollButton"
+                          onClick={this.cancelQuestion}
+                        >
+                          Cancel
+                        </button>
                       </>
                     }
                   </>
