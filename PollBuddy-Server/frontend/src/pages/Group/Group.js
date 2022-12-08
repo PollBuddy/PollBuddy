@@ -250,10 +250,15 @@ class Group extends Component {
               ) : (
                 <React.Fragment>
                   {this.state.polls.map((poll, index) => (
+                    <div>
+                    <button className = "button">↑</button>
                     <Link to={"/polls/" + poll.id + (this.state.isAdmin ? "/edit" : "/view")} style={{width: "17em"}}>
-                      <button style={{width: "20em"}}
+                      <button style={{width: "10em"}}
                         className="button">{"Poll " + (index + 1) + ": " + poll.title}</button>
                     </Link>
+                    <button className = "button">↓</button>
+
+                    </div>
                   ))}
                 </React.Fragment>
               )}
