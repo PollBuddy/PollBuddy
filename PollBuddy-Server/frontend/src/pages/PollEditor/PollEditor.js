@@ -47,6 +47,7 @@ class PollEditor extends Component {
       maxAllowedChoices: 1,
 
       loadingPollData: true,
+      showDelete: false
     };
   }
 
@@ -73,6 +74,10 @@ class PollEditor extends Component {
   handleRandomize() {
     this.setState({randomQuestions: !this.state.randomQuestions});
   }
+
+  confirmDelete = () => {
+    this.setState({showDelete: true});
+  };
 
   askQuestion() {
     this.setState(prevState => ({
@@ -325,6 +330,18 @@ class PollEditor extends Component {
           <LoadingWheel/>
         </MDBContainer>
       );
+    } else if (this.state.showDelete) {
+      return (
+        <MDBContainer fluid className="page">
+          <MDBContainer className="form-group">
+            <p>Are you sure you want to delete this poll?</p>
+            <input onClick={this.props.router.navigate("/groups")} className="button float-left"
+              type="submit" value="No"/>
+            <input onClick={this.deletePoll} className="button float-right"
+              type="submit" value="Yes"/>
+          </MDBContainer>
+        </MDBContainer>
+      );
     } else {
       return (
         <MDBContainer>
@@ -383,9 +400,15 @@ class PollEditor extends Component {
                   >
                     Save Changes
                   </button>
+<<<<<<< Updated upstream
                   <button
+=======
+                </div>
+                <div className={"pollButtons"}>
+                  <button 
+>>>>>>> Stashed changes
                     id="descriptionBtn" className="button pollButton"
-                    onClick={this.deletePoll}
+                    onClick={this.confirmDelete}
                   >
                     Delete Poll
                   </button>
