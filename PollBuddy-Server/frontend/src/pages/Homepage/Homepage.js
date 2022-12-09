@@ -50,7 +50,26 @@ export default class Homepage extends Component {
               </MDBContainer>
             }
           </MDBContainer>
-          <PollCode/>
+          <MDBContainer className="box">
+            <div class="start-row">
+              <div>Get Started:</div>
+              <Link to={"/guide"}>
+                <button className = "button">Quick Start Guide</button>
+              </Link>
+            </div>
+            <div class="start-row">
+              <div>Join Poll:</div>
+              <Link to={"/code"}>
+                <button className = "button">Enter Poll Code</button>
+              </Link>
+            </div>
+            <div class="start-row">
+              <div>Join Group:</div>
+              <Link to={"/groups/join"}>
+                <button className = "button">Enter Group Code</button>
+              </Link>
+            </div>
+          </MDBContainer>
         </MDBContainer>
       </MDBContainer>
     );

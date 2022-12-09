@@ -11,6 +11,7 @@ class Group extends Component {
     this.state = {
       id: props.router.params.groupID,
       name: "",
+      code: "",
       description: "",
       isMember: false,
       isAdmin: false,
@@ -19,6 +20,7 @@ class Group extends Component {
       showError: null,
       nameInput: "",
       descriptionInput: "",
+      hideDialog: true,
     };
   }
 
@@ -40,6 +42,7 @@ class Group extends Component {
               isMember: !response.data.isAdmin && response.data.isMember,
               isAdmin: response.data.isAdmin,
               doneLoading: true,
+              code: response.data.code,
             });
           } else {
             this.setState({
@@ -108,6 +111,14 @@ class Group extends Component {
       [e.target.name]: e.target.value
     });
   };
+
+  copyCode = (e) => {
+    navigator.clipboard.writeText(this.state.code);
+    e.target.textContent = "Copied!";
+    setTimeout(() => {
+      e.target.textContent = "Copy";
+    }, 5000);
+  }
 
   onSubmit = () => {
     this.setState({doneLoading: false});
@@ -217,6 +228,15 @@ class Group extends Component {
                     value={this.state.descriptionInput}
                     onInput={this.onInput}
                   />
+                  <span className="fontSizeLarge">
+                    Group Code
+                  </span>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    {this.state.code}
+                    <button className="button" onClick={this.copyCode}>Copy</button>
+                  </div>
+                  <br/>
+                  <br/>
                 </MDBContainer>
                 {this.checkError()}
                 <button style={{width: "17em"}}
@@ -231,12 +251,12 @@ class Group extends Component {
                 <Link to={"/groups/" + this.state.id + "/edit"}>
                   <button style={{width: "17em"}}
                     className="button"
-                  >Edit Group
+                  >Manage Members
                   </button>
                 </Link>
                 <button style={{width: "17em"}}
                   className="button"
-                  onClick={this.handleDeleteGroup}
+                  onClick={() => this.setState({ hideDialog: false })}
                 >Delete this Group
                 </button>
               </MDBContainer>
@@ -259,10 +279,41 @@ class Group extends Component {
               )}
             </MDBContainer>
           </MDBContainer>
+          <div style={{ display: this.state.hideDialog ? "none" : "contents" }}>
+            <div style={DIALOG_OUTER}>
+              <MDBContainer className="box" style={DIALOG_INNER}>
+                Are you sure you want to delete this group?
+                <div style={{ display: "flex" }}>
+                  <button id="descriptionBtn" className="button pollButton" onClick={() => this.setState({ hideDialog: true })}>
+                    Cancel
+                  </button>
+                  <button id="descriptionBtn" className="button pollButton" onClick={this.handleDeleteGroup}>
+                    Delete&nbsp;Group
+                  </button>
+                </div>
+              </MDBContainer>
+            </div>
+          </div>
         </MDBContainer>
       );
     }
   }
 }
+
+const DIALOG_OUTER = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100vw",
+  height: "100vh",
+  backgroundColor: "#0008",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
+const DIALOG_INNER = {
+  backgroundColor: "var(--dark-purple-main-background)",
+};
 
 export default withRouter(Group);

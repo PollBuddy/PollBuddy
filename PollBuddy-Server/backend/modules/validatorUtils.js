@@ -2,6 +2,18 @@ const {sendResponse, httpCodes} = require("./httpCodes");
 const Joi = require("joi");
 const bson = require("bson");
 
+const codeID = (value, helpers) => {
+  let validate = Joi.string().hex().length(13).validate(value);
+  if (validate.error) {
+    return helpers.error("any.invalid");
+  }
+  try {
+    return value;
+  } catch (err) {
+    return helpers.error("any.invalid");
+  }
+};
+
 const objectID = (value, helpers) => {
   let validate = Joi.string().hex().length(24).validate(value);
   if (validate.error) {
@@ -44,4 +56,5 @@ module.exports = {
   paramValidator,
   bodyValidator,
   objectID,
+  codeID,
 };

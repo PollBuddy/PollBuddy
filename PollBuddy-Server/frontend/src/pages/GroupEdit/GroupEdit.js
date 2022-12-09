@@ -123,7 +123,7 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
                         <button
                           type="submit" className="button"
                           onClick={() => { this.handleDemoteAdmin(admin); }}
-                        >-</button>
+                        >Demote</button>
                       </div>
                     ))}
                   </React.Fragment>
@@ -143,14 +143,14 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
                   <React.Fragment>
                     {this.state.members.map((user) => (
                       <div>
+                        <button style={{  width: "12em" }} className="button">{user.userName}</button>
                         <button type="submit" className="button"
                           onClick={() => { this.handlePromoteMember(user); }}
-                        >+</button>
-                        <button style={{  width: "12em" }} className="button">{user.userName}</button>
+                        >Promote</button>
                         <button
                           type="submit" className="button"
                           onClick={() => { this.handleDemoteMember(user); }}
-                        >-</button>
+                        >Remove</button>
                       </div>
                     ))}
                   </React.Fragment>

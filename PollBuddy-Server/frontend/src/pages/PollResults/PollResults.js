@@ -94,12 +94,15 @@ class PollResults extends Component {
               );
             }
           })}
-          <a
-            id="downloadBtn" className="button"
-            href={process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.router.params.pollID + "/csv"}
-          >
-            Download full results CSV
-          </a>
+          <div style={{ display: "flex" }}>
+            <a
+              id="downloadBtn" className="button"
+              href={process.env.REACT_APP_BACKEND_URL + "/polls/" + this.props.router.params.pollID + "/csv"}
+            >
+              Download Results
+            </a>
+            <button className = "button" onClick={() => this.props.router.navigate(-1)}>Return to Poll</button>
+          </div>
         </MDBContainer>
       );
     }

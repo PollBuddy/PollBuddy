@@ -5,6 +5,11 @@ const getID = function (ID) {
   return new bson.ObjectID(ID);
 };
 
+const getGroupCodeInternal = async function (Id) {
+  const group = await mongoConnection.getDB().collection("groups").findOne({ Id });
+  return group?._id;
+}
+
 const getGroupInternal = async function (groupID) {
   let idCode = new bson.ObjectID(groupID);
   return await mongoConnection.getDB().collection("groups").findOne({"_id": idCode});
@@ -106,4 +111,5 @@ module.exports = {
   isGroupAdminByGroup,
   isGroupMemberByGroup,
   isGroupUserByGroup,
+  getGroupCodeInternal,
 };

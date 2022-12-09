@@ -21,11 +21,16 @@ export default class RegisterWithPollBuddy extends Component {
       passValid: true,
       firstnameValid: true,
       lastnameValid: true,
+      confirm: "",
+      confValid: true,
       registrationSuccessful: false,
-      showPassword: false
+      showPassword: false,
+      showConfrm: false,
+      error: null,
     };
 
     this.showPassword = this.showPassword.bind(this);
+    this.showConfirm = this.showConfirm.bind(this);
   }
 
   showPassword() {
@@ -34,11 +39,27 @@ export default class RegisterWithPollBuddy extends Component {
     });
   }
 
+  showConfirm() {
+    this.setState({
+      showConfirm: !this.state.showConfirm
+    });
+  }
+
   componentDidMount() {
     this.props.updateTitle("Register with Poll Buddy");
   }
 
-  handleRegister() {
+  checkPswd(pswd) {
+    this.setState({
+      req1: /^.{10,256}$/.test(pswd),
+      req2: /^(?=.{10,256})(?:(.)(?!\\1\\1\\1))*$/.test(pswd),
+      req3: /^.*[0-9].*$/.test(pswd),
+      req4: /^.*[A-Z].*$/.test(pswd),
+    });
+  }
+
+  handleRegister(event) {
+    event.preventDefault();
     // do input validation
     const schema = Joi.object({
       username: Joi.string()
@@ -62,6 +83,9 @@ export default class RegisterWithPollBuddy extends Component {
         .allow("")
         .max(256)
         .error(new Error("Last name must be less than 256 characters.")),
+      confirm: Joi.string()
+        .equal(this.state.password)
+        .error(new Error("The confirmation password must equal the password.")),
     });
 
     const userValid = schema.validate({username: this.state.username});
@@ -69,6 +93,7 @@ export default class RegisterWithPollBuddy extends Component {
     const passValid = schema.validate({ password: this.state.password });
     const firstnameValid = schema.validate({ firstname: this.state.firstname});
     const lastnameValid = schema.validate({ lastname: this.state.lastname});
+    const confirmValid = schema.validate({ confirm: this.state.confirm});
 
     // update component's state
     this.setState({
@@ -77,12 +102,14 @@ export default class RegisterWithPollBuddy extends Component {
       emailExists: false,
       passValid: passValid,
       firstnameValid: firstnameValid,
-      lastnameValid: lastnameValid
+      lastnameValid: lastnameValid,
+      confValid: confirmValid,
+      error: null,
     });
 
 
-    if (userValid.error || emailValid.error || passValid.error || lastnameValid.error || firstnameValid.error) {
-      return;
+    if (userValid.error || emailValid.error || passValid.error || lastnameValid.error || firstnameValid.error || confirmValid.error) {
+      return false;
     }
 
     fetch(process.env.REACT_APP_BACKEND_URL + "/users/register", {
@@ -103,11 +130,16 @@ export default class RegisterWithPollBuddy extends Component {
         // TODO: firstName, lastName, and userName are returned. They should probably be stored.
       } else {
         // TODO: This needs to be handled
+        response.json().then(({ error }) => {
+          this.setState({ error });
+        });
       }
     }).catch(err => {
-      console.log(err);
+      // console.log(err);
       this.setState({error: "An error occurred during login. Please try again"});
     });
+
+    return false;
   }
 
   render() {
@@ -122,6 +154,7 @@ export default class RegisterWithPollBuddy extends Component {
     return (
       <MDBContainer fluid className="page">
         <MDBContainer fluid className="box">
+          <form action="#" method="post" onSubmit={this.handleRegister}>
           <p className="fontSizeLarge">
             Register with Poll Buddy
           </p>
@@ -131,25 +164,25 @@ export default class RegisterWithPollBuddy extends Component {
           <MDBContainer className="form-group">
             <label htmlFor="firstnameText">First Name:</label>
             <input placeholder="Your first name" className="form-control textBox" id="firstnameText"
-              onChange={(evt) => { this.setState({firstname: evt.target.value}); }}/>
+              tabIndex="1" onChange={(evt) => { this.setState({firstname: evt.target.value}); }} required/>
             {this.state.firstnameValid.error &&
               <p style={{color: "red"}}>{ this.state.firstnameValid.error.toString() }</p>
             }
             <label htmlFor="lastnameText">Last Name:</label>
             <input placeholder="Your last name" className="form-control textBox" id="lastnameText"
-              onChange={(evt) => { this.setState({lastname: evt.target.value}); }}/>
+              tabIndex="2" onChange={(evt) => { this.setState({lastname: evt.target.value}); }} required/>
             {this.state.lastnameValid.error &&
               <p style={{color: "red"}}>{ this.state.lastnameValid.error.toString() }</p>
             }
             <label htmlFor="usernameText">Username:</label>
             <input placeholder="Your username" className="form-control textBox" id="usernameText"
-              onChange={(evt) => { this.setState({username: evt.target.value}); }}/>
+              tabIndex="3" onChange={(evt) => { this.setState({username: evt.target.value}); }} required/>
             {this.state.userValid.error &&
               <p style={{color: "red"}}>{ this.state.userValid.error.toString() }</p>
             }
             <label htmlFor="emailText">Email:</label>
             <input placeholder="Your email address" className="form-control textBox" id="emailText"
-              onChange={(evt) => { this.setState({email: evt.target.value}); }}/>
+              tabIndex="4" onChange={(evt) => { this.setState({email: evt.target.value}); }} required/>
             {this.state.emailValid.error &&
               <p style={{color: "red"}}>{ this.state.emailValid.error.toString() }</p>
             }
@@ -159,15 +192,31 @@ export default class RegisterWithPollBuddy extends Component {
             <label htmlFor="passwordText">Password:</label>
             <p class="password_container">
               <input type={this.state.showPassword ? "text" : "password"} placeholder="••••••••••••" className="form-control textBox" id="passwordText"
-                onChange= {(evt) => { this.setState({password: evt.target.value}); }}/>
-              <i class="fas fa-eye" onClick={this.showPassword}></i>
+                tabIndex="5" onChange= {(evt) => { this.setState({password: evt.target.value}); this.checkPswd(evt.target.value); }} required/>
+              <i class="fas fa-eye" onClick={this.showPassword}>{this.state.showPassword ? "Hide" : "Show"}</i>
             </p>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "start", marginLeft: "20px" }}>
+              <label style={{ fontWeight: "normal", margin: "0", border: "0", padding: "0", pointerEvents: "none" }}><input type="checkbox" checked={this.state.req1}/>&nbsp;&nbsp;Must be alteast 10 characters long.</label>
+              <label style={{ fontWeight: "normal", margin: "0", border: "0", padding: "0", pointerEvents: "none" }}><input type="checkbox" checked={this.state.req2}/>&nbsp;&nbsp;Must not have 4 same characters in row.</label>
+              <label style={{ fontWeight: "normal", margin: "0", border: "0", padding: "0", pointerEvents: "none" }}><input type="checkbox" checked={this.state.req3}/>&nbsp;&nbsp;Must contain a digit.</label>
+              <label style={{ fontWeight: "normal", margin: "0", border: "0", padding: "0", pointerEvents: "none" }}><input type="checkbox" checked={this.state.req4}/>&nbsp;&nbsp;Must contain a capital number.</label>
+            </div>
 
-            {this.state.passValid.error &&
-              <p style={{color: "red"}}>{ this.state.passValid.error.toString() }</p>
+            <label htmlFor="confirmText">Confirm Password:</label>
+            <p class="password_container">
+              <input type={this.state.showConfirm ? "text" : "password"} placeholder="••••••••••••" className="form-control textBox" id="confirmText"
+                tabIndex="6" onChange= {(evt) => { this.setState({confirm: evt.target.value}); }} required/>
+              <i class="fas fa-eye" onClick={this.showConfirm}>{this.state.showConfirm ? "Hide" : "Show"}</i>
+            </p>
+            {this.state.confValid.error &&
+              <p style={{color: "red"}}>{ this.state.confValid.error.toString() }</p>
+            }
+            <button className="button" onClick={this.handleRegister}>Submit</button>
+            {this.state.error &&
+              <p style={{color: "red"}}>{ this.state.error.toString() }</p>
             }
           </MDBContainer>
-          <button className="button" onClick={this.handleRegister}>Submit</button>
+          </form>
         </MDBContainer>
       </MDBContainer>
     );

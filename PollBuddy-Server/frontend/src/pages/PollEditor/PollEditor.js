@@ -44,9 +44,10 @@ class PollEditor extends Component {
       displayNewQuestion: false,
       displayEditQuestion: false,
       questionTextInput: "",
-      maxAllowedChoices: 1,
+      maxAllowedChoices: 0,
 
       loadingPollData: true,
+      hideDialog: true,
     };
   }
 
@@ -137,7 +138,7 @@ class PollEditor extends Component {
       currentAnswers: [],
       questionTextInput: "",
       displayNewQuestion: true,
-      maxAllowedChoices: 1,
+      maxAllowedChoices: 0,
     });
   };
 
@@ -215,7 +216,7 @@ class PollEditor extends Component {
               showQuestionError: false,
               currentQuestion: false,
               currentAnswers: [],
-              maxAllowedChoices: 1,
+              maxAllowedChoices: 0,
               loadingPollQuestions: false,
               displayEditQuestion: false,
             });
@@ -250,6 +251,7 @@ class PollEditor extends Component {
     currentAnswers.splice(answerIndex, 1);
     this.setState({
       currentAnswers: currentAnswers,
+      maxAllowedChoices: Math.min(this.state.maxAllowedChoices, this.state.currentAnswers.length - 1)
     });
   };
 
@@ -271,13 +273,33 @@ class PollEditor extends Component {
 
   incrementMaxAllowedChoices = (increment) => {
     let maxAllowedChoices = this.state.maxAllowedChoices + increment;
-    if (maxAllowedChoices <= 0) {
-      maxAllowedChoices = 1;
+    if (maxAllowedChoices < 0) {
+      maxAllowedChoices = 0;
     }
+ 
     this.setState({
-      maxAllowedChoices: maxAllowedChoices,
+      maxAllowedChoices: Math.min(maxAllowedChoices, this.state.currentAnswers.length),
     });
   };
+
+  onMaxAllowedChoices = (choice) => {
+    this.setState({
+      maxAllowedChoices: choice.target.value,
+    });
+  };
+
+  clampMaxAllowedChoices = () => {
+    let MAC = this.state.maxAllowedChoices;
+    if (isNaN(MAC)) MAC = 0;
+    let diff = MAC - this.state.currentAnswers.length;
+    const nextAns = [ ...this.state.currentAnswers ];
+    while (diff --> 0) nextAns.push({ text: "", correct: false });
+
+    this.setState({
+      maxAllowedChoices: MAC,
+      currentAnswers: nextAns,
+    });
+  }
 
   reorderQuestions() {
     this.setState({reorderQuestions: !this.state.reorderQuestions});
@@ -385,25 +407,25 @@ class PollEditor extends Component {
                   </button>
                   <button
                     id="descriptionBtn" className="button pollButton"
-                    onClick={this.deletePoll}
+                    onClick={() => this.setState({ hideDialog: false })}
                   >
                     Delete Poll
                   </button>
                 </div>
                 <div className={"pollButtons"}>
                   <Link to={"/polls/" + this.state.pollID + "/view"} className="button pollButton">
-                    Open viewer
+                    Answer Poll
                   </Link>
                 </div>
                 <div className={"pollButtons"}>
                   <Link to={"/polls/" + this.state.pollID + "/results"} className="button pollButton">
-                    Open results graph
+                    Results graph
                   </Link>
                   <a
                     id="downloadBtn" className="button pollButton"
                     href={process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/csv"}
                   >
-                    Download results CSV
+                    Download Results
                   </a>
                 </div>
               </MDBContainer>
@@ -456,26 +478,18 @@ class PollEditor extends Component {
                         </MDBContainer>
                         <div className="maxAllowedChoices">
                           <p>
-                            Max Allowed Choices
+                            Max Allowed Choices&nbsp;&nbsp;&nbsp;
                           </p>
-                          <button
-                            type="submit" className="button"
-                            onClick={() => { this.incrementMaxAllowedChoices(1); }}
-                          >
-                            +
-                          </button>
-                          <p className="fontSizeLarge">
-                            {this.state.maxAllowedChoices}
-                          </p>
-                          <button
-                            type="submit" className="button"
-                            onClick={() => { this.incrementMaxAllowedChoices(-1); }}
-                          >
-                            -
-                          </button>
+                          <input type="text" size="3"
+                            className="fontSizeLarge"
+                            value={this.state.maxAllowedChoices}
+                            inputMode="numeric"
+                            onChange={this.onMaxAllowedChoices}
+                            onBlur={this.clampMaxAllowedChoices}
+                            defaultValue="0" />
                         </div>
                         <p className="fontSizeLarge">
-                          Answers
+                          Answers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Correct?
                         </p>
                         {this.state.currentAnswers.length === 0 ? (
                           <p>Sorry, this question has no answers.</p>
@@ -520,7 +534,7 @@ class PollEditor extends Component {
                             type="submit" className="button"
                             onClick={this.submitQuestion}
                           >
-                            {this.state.displayNewQuestion ? "Create" : "Save"}
+                            Save Question
                           </button>
                           <button
                             type="submit" className="button"
@@ -536,10 +550,41 @@ class PollEditor extends Component {
               </MDBContainer>
             </MDBContainer>
           </MDBContainer>
+          <div style={{ display: this.state.hideDialog ? "none" : "contents" }}>
+            <div style={DIALOG_OUTER}>
+              <MDBContainer className="box" style={DIALOG_INNER}>
+                Are you sure you want to delete this poll?
+                <div style={{ display: "flex" }}>
+                  <button id="descriptionBtn" className="button pollButton" onClick={() => this.setState({ hideDialog: true })}>
+                    Cancel
+                  </button>
+                  <button id="descriptionBtn" className="button pollButton" onClick={this.deletePoll}>
+                    Delete&nbsp;Poll
+                  </button>
+                </div>
+              </MDBContainer>
+            </div>
+          </div>
         </MDBContainer>
       );
     }
   }
 }
+
+const DIALOG_OUTER = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  width: "100vw",
+  height: "100vh",
+  backgroundColor: "#0008",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
+const DIALOG_INNER = {
+  backgroundColor: "var(--dark-purple-main-background)",
+};
 
 export default withRouter(PollEditor);

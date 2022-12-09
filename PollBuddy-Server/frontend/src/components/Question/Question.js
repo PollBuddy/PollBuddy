@@ -180,7 +180,7 @@ export default class Question extends Component {
           */ }
         <MDBContainer>
           {(this.state.timeLeft) &&
-           <button className="button" onClick={this.submitQuestion}>Save</button>}
+           <button className="button" onClick={this.submitQuestion}>Next</button>}
         </MDBContainer>
       </MDBContainer>
     );

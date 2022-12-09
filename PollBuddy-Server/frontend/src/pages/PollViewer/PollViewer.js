@@ -6,6 +6,7 @@ import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import { withRouter } from "../../components/PropsWrapper/PropsWrapper";
 import "./PollViewer.scss";
 import Timer from "../../components/Timer/Timer";
+import { Link } from 'react-router-dom';
 
 class PollViewer extends Component {
   constructor(props) {
@@ -167,6 +168,7 @@ class PollViewer extends Component {
         <MDBContainer fluid className="page">
           <MDBContainer fluid className="box">
             <p className="fontSizeLarge">{this.state.errorMessage}</p>
+            <button className = "button" onClick={() => this.props.router.navigate(-1)}>Exit Poll</button>
           </MDBContainer>
         </MDBContainer>
       );
@@ -183,6 +185,7 @@ class PollViewer extends Component {
             <p className="fontSizeLarge">
               You've reached the end of the poll. Thanks for submitting!
             </p>
+            <button className = "button" onClick={() => this.props.router.navigate(-1)}>Exit Poll</button>
           </MDBContainer>
         </MDBContainer>
       );
