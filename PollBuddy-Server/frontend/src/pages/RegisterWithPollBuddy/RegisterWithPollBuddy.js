@@ -102,7 +102,9 @@ export default class RegisterWithPollBuddy extends Component {
         this.setState({registrationSuccessful: true});
         // TODO: firstName, lastName, and userName are returned. They should probably be stored.
       } else {
-        // TODO: This needs to be handled
+        if (response.status === 400) {
+          response.json().then(body => alert(body.error));
+        }
       }
     }).catch(err => {
       console.log(err);
