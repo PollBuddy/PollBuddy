@@ -65,6 +65,10 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
           members: [...prevState.members, demoteId],
         };
       });
+    } else {
+      if(response.status === "Forbidden") {
+        alert(response.error);
+      }
     }
   };
   handleDemoteMember = async (demoteId) => {
