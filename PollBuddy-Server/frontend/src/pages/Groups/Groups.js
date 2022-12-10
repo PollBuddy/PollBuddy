@@ -66,11 +66,11 @@ class Groups extends Component {
               <p className="fontSizeLarge">
                 Group Management
               </p>
-              <Link to={"/groups/new"}>
-                <button style={{width: "20em"}} className="button">Create New Group</button>
+              <Link to={"/groups/new"} style={{width: "100%"}}>
+                <button className="button groupsButton">Create New Group</button>
               </Link>
-              <Link to={"/groups/join"}>
-                <button style={{width: "20em"}} className="button">Join Group</button>
+              <Link to={"/groups/join"} style={{width: "100%"}}>
+                <button className="button groupsButton">Join Group</button>
               </Link>
             </MDBContainer>
             <MDBContainer className="box">
@@ -85,8 +85,8 @@ class Groups extends Component {
               ) : (
                 <React.Fragment>
                   {this.state.adminGroups.map((e) => (
-                    <Link to={"/groups/" + e.id}>
-                      <button style={{width: "20em"}} className="button">{e.name}</button>
+                    <Link to={"/groups/" + e.id} style={{width: "100%"}}>
+                      <button className="button groupsButton">{e.name}</button>
                     </Link>
                   ))}
                 </React.Fragment>

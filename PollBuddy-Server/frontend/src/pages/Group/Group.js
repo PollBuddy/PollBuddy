@@ -4,6 +4,7 @@ import {MDBContainer} from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import ErrorText from "../../components/ErrorText/ErrorText";
+import "./Group.scss";
 
 class Group extends Component {
   constructor(props) {
@@ -74,16 +75,6 @@ class Group extends Component {
       this.props.router.navigate("/polls/" + pollID + "/view");
     }
   };
-
-  toggleTextBox(elementId, selector, text) {
-    if (document.getElementById(elementId).style.display === "block") {
-      document.getElementById(elementId).style.display = "none";
-      document.querySelector(selector).textContent = text;
-    } else {
-      document.getElementById(elementId).style.display = "block";
-      document.querySelector(selector).textContent = "Submit";
-    }
-  }
 
   createNewPoll = async () => {
     this.props.router.navigate("/polls/new?groupID=" + this.state.id);
@@ -219,23 +210,24 @@ class Group extends Component {
                   />
                 </MDBContainer>
                 {this.checkError()}
-                <button style={{width: "17em"}}
-                  className="button" onClick={this.onSubmit}>
+                <button
+                  className="button groupButton" onClick={this.onSubmit}>
                   Save Changes
                 </button>
-                <button style={{width: "17em"}}
-                  className="button"
+                <button
+                  className="button groupButton"
                   onClick={this.createNewPoll}
                 >Create New Poll
                 </button>
-                <Link to={"/groups/" + this.state.id + "/edit"}>
-                  <button style={{width: "17em"}}
-                    className="button"
-                  >Edit Group
+                <Link to={"/groups/" + this.state.id + "/edit"} style={{width: "100%"}}>
+                  <button
+                    className="button groupButton"
+                  >
+                    Edit Group
                   </button>
                 </Link>
-                <button style={{width: "17em"}}
-                  className="button"
+                <button
+                  className="button groupButton"
                   onClick={this.handleDeleteGroup}
                 >Delete this Group
                 </button>
@@ -250,9 +242,8 @@ class Group extends Component {
               ) : (
                 <React.Fragment>
                   {this.state.polls.map((poll, index) => (
-                    <Link to={"/polls/" + poll.id + (this.state.isAdmin ? "/edit" : "/view")} style={{width: "17em"}}>
-                      <button style={{width: "20em"}}
-                        className="button">{"Poll " + (index + 1) + ": " + poll.title}</button>
+                    <Link to={"/polls/" + poll.id + (this.state.isAdmin ? "/edit" : "/view")} style={{width: "100%"}}>
+                      <button className="button groupButton">{"Poll " + (index + 1) + ": " + poll.title}</button>
                     </Link>
                   ))}
                 </React.Fragment>
