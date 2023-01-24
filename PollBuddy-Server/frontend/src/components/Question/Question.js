@@ -2,12 +2,7 @@ import React, { Component } from "react";
 import "./Question.scss";
 import {
   MDBContainer,
-  MDBIcon
 } from "mdbreact";
-
-import {Navigate} from "react-router-dom";
-import Timer from "../Timer/Timer.js";
-
 
 export default class Question extends Component {
   choiceOrder;
@@ -56,11 +51,15 @@ export default class Question extends Component {
       timeLeft: true,
       closeTime: closeTime,
       pollCloseTime: props.data.pollCloseTime,
+      canChoose: true
     };
   }
 
   onTimeEnd(){
-    this.state.canChoose = false;
+    this.setState(prevState => ({
+      ...prevState,
+      canChoose: false,
+    }));
   }
 
 

@@ -7,7 +7,7 @@ const {
   isGroupMemberByGroup
 } = require("../modules/modelUtils");
 const {objectID} = require("../modules/validatorUtils");
-const bson = require("bson");
+require("bson");
 const ShortUniqueId = require("short-unique-id");
 
 const validators = {
@@ -26,7 +26,7 @@ const groupSchema = {
 
 const groupParamsValidator = Joi.object({
   //id: Joi.custom(objectID).required(),
-  id: Joi.alternatives().conditional('id', 
+  id: Joi.alternatives().conditional("id",
     { is: Joi.string().length(6), 
       then: Joi.string().required(), otherwise: Joi.custom(objectID).required() }),
 });

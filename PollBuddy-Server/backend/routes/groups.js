@@ -378,7 +378,7 @@ router.post("/:id/leave", isLoggedIn, paramValidator(groupParamsValidator), asyn
   return sendResponse(res, response);
 });
 
-router.get("/:id/promote", async (req, res) => {
+router.get("/:id/promote", async (_, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
@@ -392,7 +392,7 @@ router.post("/:id/promote", isLoggedIn, paramValidator(groupParamsValidator), as
   return sendResponse(res, response);
 });
 
-router.get("/:id/demote", async (req, res) => {
+router.get("/:id/demote", async (_, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 

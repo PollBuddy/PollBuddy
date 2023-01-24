@@ -74,7 +74,7 @@ describe("/api/groups/:id", () => {
 
   it("GET: get group as non-member with code", async () => {
     let user = await createUser();
-    let group = await createGroup({Code: "123456"});
+    await createGroup({Code: "123456"});
     session = {userData: {userID: user.insertedId}};
     await app.get("/api/groups/123456")
       .expect(200)
@@ -102,7 +102,7 @@ describe("/api/groups/:id", () => {
 
   it("GET: get group as member with code", async () => {
     let user = await createUser();
-    let group = await createGroup({Members: [user.insertedId], Code: "123456"});
+    await createGroup({Members: [user.insertedId], Code: "123456"});
     session = {userData: {userID: user.insertedId}};
     await app.get("/api/groups/123456")
       .expect(200)
