@@ -153,9 +153,9 @@ export default class Question extends Component {
         <MDBContainer>
           {this.state.question.answers.map((answer, index) => {
             return (
-              <btn className={"question-btn-and-text"} onClick={() => {
+              <button className={"question-btn-and-text"} onClick={() => {
                 this.selectAnswer(answer.id);
-              }}>
+              }} key={index}>
                 <MDBContainer
                   // className="question-label-bubble"
                   className={
@@ -167,7 +167,7 @@ export default class Question extends Component {
                   {this.choiceOrder[index]}
                 </MDBContainer>
                 {answer.text}
-              </btn>
+              </button>
             );
           })}
         </MDBContainer>

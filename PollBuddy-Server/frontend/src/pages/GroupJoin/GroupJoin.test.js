@@ -1,17 +1,18 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import { render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+// import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+
 import GroupJoin from "./GroupJoin";
 
 function updateTitle() {
   return false;
 }
 
-// Create basic render test
-it("renders without crashing", () => {
-  // Create div element
-  const div = document.createElement("div");
-  // Render about on the div
-  ReactDOM.render(<GroupJoin updateTitle={updateTitle}/>, div);
-  // Clean unmount
-  ReactDOM.unmountComponentAtNode(div);
+describe("The GroupJoin page:", () => {
+  it("Loads correctly.", async () => {
+    // Just make sure it can load.
+    render(<BrowserRouter><GroupJoin updateTitle={updateTitle}/></BrowserRouter>);
+  });
 });

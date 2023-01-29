@@ -1,5 +1,9 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import { render, screen, waitFor, /*screen, act*/ } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+// import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+
 import About from "./About";
 
 jest.mock("react-markdown", () => (props) => {
@@ -12,12 +16,15 @@ function updateTitle() {
   return false;
 }
 
+global.fetch = jest.fn(() => Promise.resolve({
+  text: () => Promise.resolve("TEST")
+}));
+
 // Create basic render test
-it("renders without crashing", () => {
-  // Create div element
-  const div = document.createElement("div");
-  // Render about on the div
-  ReactDOM.render(<About updateTitle={updateTitle}/>, div);
-  // Clean unmount
-  ReactDOM.unmountComponentAtNode(div);
+describe("The About page:", () => {
+  it("Loads correctly.", async () => {
+    // Just make sure it can load.
+    render(<BrowserRouter><About updateTitle={updateTitle}/></BrowserRouter>);
+    await waitFor(() => expect(screen.getByText("TEST")));
+  });
 });
