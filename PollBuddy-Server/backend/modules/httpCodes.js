@@ -191,8 +191,7 @@ for (let httpCode of HTTP_CODES) {
 }
 
 function sendResponse(res, response) {
-  res.status(response.statusCode).json(response);
-  return;
+  return res.status(response.statusCode).json(response);
 }
 
 module.exports = {

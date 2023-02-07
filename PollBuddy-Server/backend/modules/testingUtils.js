@@ -49,17 +49,17 @@ let testUser2 = {
 
 const sampleQuestion = {
   Text: "sample.question",
-  Answers: [{ Text: "sample.answer", Correct: true }],
+  Answers: [{Text: "sample.answer", Correct: true}],
   MaxAllowedChoices: 1,
 };
 
 const sampleQuestion2 = {
   Text: "sample.question2",
-  Answers: [{ Text: "sample.answer", Correct: true }, { Text: "sample.answer2", Correct: false }],
+  Answers: [{Text: "sample.answer", Correct: true}, {Text: "sample.answer2", Correct: false}],
   MaxAllowedChoices: 1,
 };
 
-let createUser = async function(update) {
+let createUser = async function (update) {
   let userData = {
     UserName: testUser.UserName,
     Email: testUser.Email,
@@ -78,7 +78,7 @@ let createUser = async function(update) {
   return await mongoConnection.getDB().collection("users").insertOne(user);
 };
 
-let createGroup = async function(update) {
+let createGroup = async function (update) {
   let groupData = {
     Name: testGroup.Name,
     Description: testGroup.Description,
@@ -95,7 +95,7 @@ let createGroup = async function(update) {
   return res;
 };
 
-let createPoll = async function(update) {
+let createPoll = async function (update) {
   let pollData = {
     Title: testPoll.Title,
     Description: testPoll.Description,
@@ -112,10 +112,12 @@ let createPoll = async function(update) {
 
   if (poll.Group) {
     await mongoConnection.getDB().collection("groups").updateOne(
-      { _id: poll.Group, },
-      {"$addToSet": {
-        "Polls": pollInsert.insertedId,
-      }}
+      {_id: poll.Group,},
+      {
+        "$addToSet": {
+          "Polls": pollInsert.insertedId,
+        }
+      }
     );
   }
   return pollInsert;

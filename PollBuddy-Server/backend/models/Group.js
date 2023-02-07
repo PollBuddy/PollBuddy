@@ -35,6 +35,14 @@ const editGroupValidator = Joi.object({
   description: validators.description,
 });
 
+const promoteUserValidator = Joi.object({
+  userID: Joi.custom(objectID).required(),
+});
+
+const demoteUserValidator = Joi.object({
+  userID: Joi.custom(objectID).required(),
+});
+
 const getGroup = async function (groupID, userID) {
   try {
     const group = await getGroupInternal(groupID);
@@ -261,6 +269,106 @@ const deleteGroup = async function (groupID, userID) {
   }
 };
 
+const promoteUser = async function (groupID, userID, toPromoteID) {
+  try {
+    const group = await getGroupInternal(groupID);
+    if (!group) {
+      return httpCodes.NotFound();
+    }
+
+    const isAdmin = isGroupAdminByGroup(group, userID);
+    if (!isAdmin) {
+      return httpCodes.Forbidden();
+    }
+
+    const isMember = isGroupMemberByGroup(group, toPromoteID.userID);
+    if (!isMember) {
+      return httpCodes.Forbidden();
+    }
+
+    const isPromoteAdmin = isGroupAdminByGroup(group, toPromoteID.userID);
+    if (isPromoteAdmin) {
+      return httpCodes.Forbidden();
+    }
+
+    await mongoConnection.getDB().collection("groups").updateOne(
+      {_id: group._id,},
+      {
+        "$pull": {
+          "Members": toPromoteID.userID.toString(),
+        }
+      }
+    );
+    await mongoConnection.getDB().collection("groups").updateOne(
+      {_id: group._id,},
+      {
+        "$addToSet": {
+          "Admins": toPromoteID.userID.toString(),
+        }
+      }
+    );
+    return httpCodes.Ok();
+  } catch (err) {
+    console.log(err);
+    return httpCodes.InternalServerError();
+  }
+};
+
+const demoteUser = async function (groupID, userID, toDemoteID) {
+  try {
+    const group = await getGroupInternal(groupID);
+    if (!group) {
+      return httpCodes.NotFound();
+    }
+
+    const isAdmin = isGroupAdminByGroup(group, userID);
+    if (!isAdmin) {
+      return httpCodes.Forbidden();
+    }
+
+    if (userID.toString() === toDemoteID.userID.toString()) {
+      return httpCodes.Forbidden();
+    }
+
+    const isMember = isGroupMemberByGroup(group, toDemoteID.userID);
+    if (!isMember) {
+      const isDemoteAdmin = isGroupAdminByGroup(group, toDemoteID.userID);
+      if (!isDemoteAdmin) {
+        return httpCodes.Forbidden();
+      }
+      await mongoConnection.getDB().collection("groups").updateOne(
+        {_id: group._id,},
+        {
+          "$pull": {
+            "Admins": toDemoteID.userID.toString(),
+          }
+        }
+      );
+      await mongoConnection.getDB().collection("groups").updateOne(
+        {_id: group._id,},
+        {
+          "$addToSet": {
+            "Members": toDemoteID.userID.toString(),
+          }
+        }
+      );
+    } else {
+      await mongoConnection.getDB().collection("groups").updateOne(
+        {_id: group._id,},
+        {
+          "$pull": {
+            "Members": toDemoteID.userID.toString(),
+          }
+        }
+      );
+    }
+    return httpCodes.Ok();
+  } catch (err) {
+    console.log(err);
+    return httpCodes.InternalServerError();
+  }
+};
+
 module.exports = {
   createGroupValidator,
   groupSchema,
@@ -273,6 +381,10 @@ module.exports = {
   leaveGroup,
   deleteGroup,
   editGroup,
+  promoteUser,
+  demoteUser,
   editGroupValidator,
-  groupParamsValidator
+  groupParamsValidator,
+  promoteUserValidator,
+  demoteUserValidator
 };
