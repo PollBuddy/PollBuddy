@@ -882,29 +882,29 @@ describe("/api/users/:id/groups", () => {
       });
   });
 
-  
+
 });
 
 describe("/me/polls", () => {
   it("GET: route unavailable", async () => {
-    await app.get("/me/polls")
+    await app.get("/api/users/me/polls")
       .expect(405)
       .then((response) => {
         expect(response.body.result).toBe("failure");
       });
   });
 
-  it("GET: get group polls as creator", async () => {
+  it("GET: get user polls", async () => {
     let user = await createUser();
     session = {userData: {userID: user.insertedId}};
-    let poll1 = await createPoll();
-    let poll2 = await createPoll();
-    let poll3 = await createPoll();
-    await app.get("/me/polls")
+    let poll1 = await createPoll({Creator: user.insertedId});
+    let poll2 = await createPoll({Creator: user.insertedId});
+    let poll3 = await createPoll({Creator: user.insertedId});
+    await app.get("/api/users/me/polls")
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
-
+        console.log(response.body);
         expect(response.body.data[0].id.toString()).toEqual(poll1.insertedId.toString());
         expect(response.body.data[0].title).toEqual(testPoll.Title);
 

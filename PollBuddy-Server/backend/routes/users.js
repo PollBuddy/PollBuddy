@@ -7,9 +7,11 @@ const {httpCodes, sendResponse} = require("../modules/httpCodes.js");
 const rpi = require("../modules/rpi");
 
 
-const { isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
-const { userLoginValidator, userInformationValidator, userRegisterValidator,  userSchema, getUser, getUserGroups,
-  getUserPolls, editUser, userParamsValidator } = require("../models/User.js");
+const {isEmpty, getResultErrors, createModel, isLoggedIn, debugRoute} = require("../modules/utils"); // object destructuring, only import desired functions
+const {
+  userLoginValidator, userInformationValidator, userRegisterValidator, userSchema, getUser, getUserGroups,
+  getUserPolls, editUser, userParamsValidator
+} = require("../models/User.js");
 
 const {paramValidator} = require("../modules/validatorUtils");
 
@@ -726,7 +728,6 @@ router.post("/forgotpassword/", function (req, res) {
 
 /**
  * This route is not used. It is simply there to have some response to /api/users/forgotpassword/submit when using GET
- * @getdata {void} None
  * @postdata {void} None
  * @returns {void} Status 405 { "result": "failure", "error": "GET is not available for this route. Use POST."}
  * @name backend/users/forgotpassword/submit_GET

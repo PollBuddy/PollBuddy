@@ -60,6 +60,7 @@ const editPollValidator = Joi.object({
   description: pollValidators.description.required(),
   openTime: Joi.date().required(),
   closeTime: Joi.date().required(),
+  requiresLogin: Joi.boolean().required(),
 });
 
 const createQuestionValidator = Joi.object({
@@ -124,6 +125,7 @@ const getPoll = async function (userID, pollID) {
     if (userID) {
       isUserPollAdmin = await isPollAdmin(userID, pollID);
     }
+    
     if (!isUserPollAdmin) {
       if (Date.now() > poll.OpenTime && Date.now() < poll.CloseTime) {
         if (userID) {
@@ -136,13 +138,13 @@ const getPoll = async function (userID, pollID) {
               });
             }
           }
-        } else {    //user is not logged in, but if poll is part of a group they shouldn't access it
+        } else {
           if (poll.RequiresLogin) {
             return httpCodes.Unauthorized({
               errorCode: 102,
               errorMessage: "Poll requires logging in"
             });
-          } else if (poll.Group) { //user not logged in and poll is part of a group
+          } else if (poll.Group) {
             return httpCodes.Forbidden({
               errorCode: 101,
               errorMessage: "User is not part of group"
@@ -161,18 +163,22 @@ const getPoll = async function (userID, pollID) {
     for (let question of poll.Questions) {
       questions.push(getQuestion(question, isUserPollAdmin));
     }
-    let pollAnswers = await mongoConnection.getDB().collection("poll_answers")
-      .findOne({PollID: poll._id, UserID: userID});
-    if (pollAnswers) {
-      for (let question of questions) {
-        let questionAnswers = pollAnswers.Questions.find((e) => {
-          return e.QuestionID.toString() === question.id.toString();
-        });
-        if (questionAnswers) {
-          question.selectedAnswers = questionAnswers.Answers;
+
+    if (userID) {
+      let pollAnswers = await mongoConnection.getDB().collection("poll_answers")
+        .findOne({PollID: poll._id, UserID: userID});
+      if (pollAnswers) {
+        for (let question of questions) {
+          let questionAnswers = pollAnswers.Questions.find((e) => {
+            return e.QuestionID.toString() === question.id.toString();
+          });
+          if (questionAnswers) {
+            question.selectedAnswers = questionAnswers.Answers;
+          }
         }
       }
     }
+
     return httpCodes.Ok({
       title: poll.Title,
       description: poll.Description,
@@ -412,6 +418,12 @@ const editPoll = async function (userID, pollID, pollData) {
       return httpCodes.Unauthorized("Unauthorized: Cannot Edit Poll");
     }
 
+    if (!pollData.requiresLogin) {
+      if (poll.Group) {
+        return httpCodes.Forbidden("Forbidden: Group Poll");
+      }
+    }
+
     await mongoConnection.getDB().collection("polls").updateOne(
       {_id: poll._id},
       {
@@ -420,6 +432,7 @@ const editPoll = async function (userID, pollID, pollData) {
           Description: pollData.description,
           OpenTime: pollData.openTime.valueOf(),
           CloseTime: pollData.closeTime.valueOf(),
+          RequiresLogin: pollData.requiresLogin,
         }
       }
     );

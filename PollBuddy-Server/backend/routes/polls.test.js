@@ -327,7 +327,7 @@ describe("/api/polls/:pollID/edit", () => {
       });
   });
 
-  it("POST: edit group poll as admin", async () => {
+  it("POST: edit group poll time as admin", async () => {
     let user = await createUser();
     let group = await createGroup({Admins: [user.insertedId]});
     let poll = await createPoll({Group: group.insertedId});
@@ -343,6 +343,7 @@ describe("/api/polls/:pollID/edit", () => {
         description: testPoll2.Description,
         openTime: openTime,
         closeTime: closeTime,
+        requiresLogin: true,
       })
       .expect(200)
       .then(async (response) => {
@@ -358,7 +359,7 @@ describe("/api/polls/:pollID/edit", () => {
       });
   });
 
-  it("POST: edit non-group poll as creator", async () => {
+  it("POST: edit non-group poll time as creator", async () => {
     let user = await createUser();
     let poll = await createPoll({Creator: user.insertedId});
     session = {userData: {userID: user.insertedId}};
@@ -373,6 +374,7 @@ describe("/api/polls/:pollID/edit", () => {
         description: testPoll2.Description,
         openTime: openTime,
         closeTime: closeTime,
+        requiresLogin: true,
       })
       .expect(200)
       .then(async (response) => {
@@ -387,7 +389,7 @@ describe("/api/polls/:pollID/edit", () => {
       });
   });
 
-  it("POST: edit poll as non-admin", async () => {
+  it("POST: edit poll time as non-admin", async () => {
     let user = await createUser();
     let poll = await createPoll();
     session = {userData: {userID: user.insertedId}};
@@ -402,8 +404,33 @@ describe("/api/polls/:pollID/edit", () => {
         description: testPoll2.Description,
         openTime: openTime,
         closeTime: closeTime,
+        requiresLogin: true,
       })
       .expect(401)
+      .then(async (response) => {
+        expect(response.body.result).toBe("failure");
+      });
+  });
+
+  it("POST: edit group poll requires login to false as admin", async () => {
+    let user = await createUser();
+    let group = await createGroup({Admins: [user.insertedId]});
+    let poll = await createPoll({Group: group.insertedId});
+    session = {userData: {userID: user.insertedId}};
+
+    let openTime = Date.now() - 24 * 60 * 60 * 1000;
+    let closeTime = Date.now() + 24 * 60 * 60 * 1000;
+
+    await app
+      .post("/api/polls/" + poll.insertedId + "/edit")
+      .send({
+        title: testPoll2.Title,
+        description: testPoll2.Description,
+        openTime: openTime,
+        closeTime: closeTime,
+        requiresLogin: false,
+      })
+      .expect(403)
       .then(async (response) => {
         expect(response.body.result).toBe("failure");
       });
