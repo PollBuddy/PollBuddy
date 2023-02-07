@@ -13,7 +13,7 @@ export default class QuickStartGuide extends Component {
     this.state = {terms: null};
   }
 
-  componentWillMount() {
+  componentDidMount() {
     fetch(quickStartGuide).then((response) => response.text()).then((text) => {
       this.setState({terms: text});
     });

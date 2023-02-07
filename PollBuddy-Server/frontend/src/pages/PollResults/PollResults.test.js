@@ -1,17 +1,25 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+// import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+
 import PollResults from "./PollResults";
 
 function updateTitle() {
   return false;
 }
 
-// Create basic render test
-it("renders without crashing", () => {
-  // Create div element
-  const div = document.createElement("div");
-  // Render about on the div
-  ReactDOM.render(<PollResults updateTitle={updateTitle}/>, div);
-  // Clean unmount
-  ReactDOM.unmountComponentAtNode(div);
+global.fetch = jest.fn(() => Promise.resolve({
+  json: () => Promise.resolve({ result: "success", data: { questions: [ ] } })
+}));
+
+global.alert = () => {};
+
+describe("The PollResults page:", () => {
+  it("Loads correctly.", async () => {
+    // Just make sure it can load.
+    render(<BrowserRouter><PollResults updateTitle={updateTitle}/></BrowserRouter>);
+    await waitFor(() => expect(screen.getByText("Download full results CSV")));
+  });
 });

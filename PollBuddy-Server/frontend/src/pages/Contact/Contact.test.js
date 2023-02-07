@@ -1,23 +1,30 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+// import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+
 import Contact from "./Contact";
 
 function updateTitle() {
   return false;
 }
 
-// Create basic render test
-it("renders without crashing", () => {
-  fetch.mockResponseOnce(JSON.stringify({data: {data: {
+global.fetch = jest.fn(() => Promise.resolve({
+  json: () => Promise.resolve({ data: {
     FirstName: "John",
     LastName: "Doe",
     SchoolAffiliation: "RPI",
-    email: "johndoe@rpi.edu"
-  }}}));
-  // Create div element
-  const div = document.createElement("div");
-  // Render about on the div
-  ReactDOM.render(<Contact updateTitle={updateTitle}/>, div);
-  // Clean unmount
-  ReactDOM.unmountComponentAtNode(div);
+    Email: "johndoe@rpi.edu"
+  } })
+}));
+
+describe("The Contact page:", () => {
+  it("Loads correctly.", async () => {
+    // Just make sure it can load.
+    render(<BrowserRouter><Contact updateTitle={updateTitle} onDoneLoading={() => {}}/></BrowserRouter>);
+    await waitFor(() =>
+      expect(screen.getByDisplayValue.bind(null, "John Doe")).not.toThrow()
+    );
+  });
 });

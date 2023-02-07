@@ -1,21 +1,19 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import { render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+// import userEvent from '@testing-library/user-event';
+import '@testing-library/jest-dom';
+
 import AnswerRecorded from "./AnswerRecorded";
-import { BrowserRouter } from "react-router-dom";
 
 function updateTitle() {
   return false;
 }
 
 // Create basic render test
-it("renders without crashing", () => {
-  // Create div element
-  const div = document.createElement("div");
-  // Render about on the div
-  ReactDOM.render(
-    <BrowserRouter>
-      <AnswerRecorded updateTitle={updateTitle}/>
-    </BrowserRouter>, div);
-  // Clean unmount
-  ReactDOM.unmountComponentAtNode(div);
+describe("The AnswerRecorded page:", () => {
+  it("Loads correctly.", async () => {
+    // Just make sure it can load.
+    render(<BrowserRouter><AnswerRecorded updateTitle={updateTitle}/></BrowserRouter>);
+  });
 });

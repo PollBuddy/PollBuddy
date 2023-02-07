@@ -11,7 +11,7 @@ export default class FAQ extends Component {
     this.state = {questions: null};
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     fetch(faqFile).then((response) => response.text()).then((text) => {
       this.setState({questions: text});
     });
