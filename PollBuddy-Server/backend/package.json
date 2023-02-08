@@ -8,7 +8,7 @@
     "test": "npx jest --coverage"
   },
   "dependencies": {
-    "@sideway/formula": "^3.0.0",
+    "@sideway/formula": "^3.0.1",
     "@sinonjs/commons": "^1.8.3",
     "bcrypt": "^5.0.1",
     "bson": "^4.6.4",
