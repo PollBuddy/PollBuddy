@@ -91,6 +91,28 @@
     margin-bottom: 1rem;
 }
 
+.popup2-modal-options .popup2-choice-button {
+    font-size: 1rem;
+    border: none;
+    background: #7f6491;
+    border-radius: 2rem;
+    width: 30%;
+    color: white;
+    right: 0;
+    cursor: pointer;
+    padding: .4rem;
+    margin-top: 1rem;
+    font-family: var(--main-font);
+    font-weight: 700;
+}
+
+.popup2-modal-options {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
 .popup2-modal-guts {
     display: flex;
     flex-direction: column;

@@ -4,6 +4,8 @@ import {MDBContainer} from "mdbreact";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
 import ErrorText from "../../components/ErrorText/ErrorText";
+import Popup2 from "../../components/Popup2/Popup2";
+import Popup from "../../components/Popup/Popup";
 
 class Group extends Component {
   constructor(props) {
@@ -19,6 +21,7 @@ class Group extends Component {
       showError: null,
       nameInput: "",
       descriptionInput: "",
+      popupShowing: false,
     };
   }
 
@@ -94,6 +97,11 @@ class Group extends Component {
       method: "POST",
     });
     this.props.router.navigate("/groups");
+  };
+
+  togglePopup = () => {
+    console.log("toggling popup")
+    this.setState({popupShowing: !this.state.popupShowing});
   };
 
   handleDeleteGroup = async () => {
@@ -177,6 +185,7 @@ class Group extends Component {
       return (
         <MDBContainer className="page">
           <MDBContainer className="two-box">
+            {this.state.popupShowing && <Popup2 text={"Are you sure you want to delete this group?"} twoOptions={true} handleDeny={this.togglePopup} dim={true} handleConfirm={this.handleDeleteGroup} confirmText={"Yes"} denyText={"No"}/>}
             {this.state.isMember &&
               <MDBContainer className="box">
                 <p className="fontSizeLarge">
@@ -236,7 +245,7 @@ class Group extends Component {
                 </Link>
                 <button style={{width: "17em"}}
                   className="button"
-                  onClick={this.handleDeleteGroup}
+                  onClick={this.togglePopup}
                 >Delete this Group
                 </button>
               </MDBContainer>
