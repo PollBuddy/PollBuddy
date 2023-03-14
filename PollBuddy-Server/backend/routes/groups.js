@@ -176,7 +176,7 @@ router.get("/", isDevelopmentMode, async (req, res) => {
 router.post("/", isDevelopmentMode, function (req, res) {
   res.status(405).send(createResponse(null, "POST is not available for this route. Use GET."));
 });
-
+//add route to call get group by code
 /**
  * Get all group information
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Groups)#get-id
@@ -378,7 +378,7 @@ router.post("/:id/leave", isLoggedIn, paramValidator(groupParamsValidator), asyn
   return sendResponse(res, response);
 });
 
-router.get("/:id/promote", async (req, res) => {
+router.get("/:id/promote", async (_, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 
@@ -392,7 +392,7 @@ router.post("/:id/promote", isLoggedIn, paramValidator(groupParamsValidator), as
   return sendResponse(res, response);
 });
 
-router.get("/:id/demote", async (req, res) => {
+router.get("/:id/demote", async (_, res) => {
   return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
 });
 

@@ -7,6 +7,8 @@ const {
   isGroupMemberByGroup
 } = require("../modules/modelUtils");
 const {objectID} = require("../modules/validatorUtils");
+require("bson");
+const ShortUniqueId = require("short-unique-id");
 
 const validators = {
   name: Joi.string().min(3).max(30),
@@ -19,10 +21,14 @@ const groupSchema = {
   Admins: [],
   Polls: [],
   Members: [],
+  Code: "",
 };
 
 const groupParamsValidator = Joi.object({
-  id: Joi.custom(objectID).required(),
+  //id: Joi.custom(objectID).required(),
+  id: Joi.alternatives().conditional("id",
+    { is: Joi.string().length(6), 
+      then: Joi.string().required(), otherwise: Joi.custom(objectID).required() }),
 });
 
 const createGroupValidator = Joi.object({
@@ -45,6 +51,7 @@ const demoteUserValidator = Joi.object({
 
 const getGroup = async function (groupID, userID) {
   try {
+
     const group = await getGroupInternal(groupID);
     if (!group) {
       return httpCodes.NotFound();
@@ -58,19 +65,21 @@ const getGroup = async function (groupID, userID) {
       description: group.Description,
       isMember: isMember,
       isAdmin: isAdmin,
+      code: group.Code,
     });
   } catch (err) {
     console.error(err);
     return httpCodes.InternalServerError();
   }
 };
-
 const createGroup = async function (userID, groupData) {
   try {
+    const uid = new ShortUniqueId({ length: 6 });
     let group = createModel(groupSchema, {
       Name: groupData.name,
       Description: groupData.description,
       Admins: [userID],
+      Code: uid(),
     });
     const result = await mongoConnection.getDB().collection("groups").insertOne(group);
     return httpCodes.Ok({

@@ -58,7 +58,7 @@ beforeEach(async () => {
 
 describe("/api/groups/:id", () => {
 
-  it("GET: get group as non-member", async () => {
+  it("GET: get group as non-member with ID", async () => {
     let user = await createUser();
     let group = await createGroup();
     session = {userData: {userID: user.insertedId}};
@@ -72,7 +72,21 @@ describe("/api/groups/:id", () => {
       });
   });
 
-  it("GET: get group as member", async () => {
+  it("GET: get group as non-member with code", async () => {
+    let user = await createUser();
+    await createGroup({Code: "123456"});
+    session = {userData: {userID: user.insertedId}};
+    await app.get("/api/groups/123456")
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        expect(response.body.data.name).toBe(testGroup.Name);
+        expect(response.body.data.isAdmin).toBe(false);
+        expect(response.body.data.isMember).toBe(false);
+      });
+  });
+
+  it("GET: get group as member with ID", async () => {
     let user = await createUser();
     let group = await createGroup({Members: [user.insertedId]});
     session = {userData: {userID: user.insertedId}};
@@ -86,11 +100,39 @@ describe("/api/groups/:id", () => {
       });
   });
 
-  it("GET: get group as admin", async () => {
+  it("GET: get group as member with code", async () => {
+    let user = await createUser();
+    await createGroup({Members: [user.insertedId], Code: "123456"});
+    session = {userData: {userID: user.insertedId}};
+    await app.get("/api/groups/123456")
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        expect(response.body.data.name).toBe(testGroup.Name);
+        expect(response.body.data.isAdmin).toBe(false);
+        expect(response.body.data.isMember).toBe(true);
+      });
+  });
+
+  it("GET: get group as admin with ID", async () => {
     let user = await createUser();
     let group = await createGroup({Admins: [user.insertedId]});
     session = {userData: {userID: user.insertedId}};
     await app.get("/api/groups/" + group.insertedId)
+      .expect(200)
+      .then(async (response) => {
+        expect(response.body.result).toBe("success");
+        expect(response.body.data.name).toBe(testGroup.Name);
+        expect(response.body.data.isAdmin).toBe(true);
+        expect(response.body.data.isMember).toBe(false);
+      });
+  });
+
+  it("GET: get group as admin with code", async () => {
+    let user = await createUser();
+    let group = await createGroup({Admins: [user.insertedId], Code: "123456"});
+    session = {userData: {userID: user.insertedId}};
+    await app.get("/api/groups/123456")
       .expect(200)
       .then(async (response) => {
         expect(response.body.result).toBe("success");
@@ -138,6 +180,7 @@ describe("/api/groups/new", () => {
         expect(res).toBeTruthy();
         expect(response.body.data.id.toString()).toEqual(res._id.toString());
         expect(res.Admins[0].toString()).toEqual(user.insertedId.toString());
+        expect(res.Code.toString().length).toBe(6);
       });
   });
 
