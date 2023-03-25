@@ -100,7 +100,6 @@ class Group extends Component {
   };
 
   togglePopup = () => {
-    console.log("toggling popup")
     this.setState({popupShowing: !this.state.popupShowing});
   };
 
@@ -184,8 +183,12 @@ class Group extends Component {
     } else {
       return (
         <MDBContainer className="page">
+          {this.state.popupShowing &&
+          <Popup2 text={"Are you sure you want to delete this group?"}
+                  twoOptions={false} handleDeny={this.togglePopup}
+                  handleConfirm={this.handleDeleteGroup}
+                  confirmText={"Yes"} denyText={"No"}/>}
           <MDBContainer className="two-box">
-            {this.state.popupShowing && <Popup2 text={"Are you sure you want to delete this group?"} twoOptions={true} handleDeny={this.togglePopup} dim={true} handleConfirm={this.handleDeleteGroup} confirmText={"Yes"} denyText={"No"}/>}
             {this.state.isMember &&
               <MDBContainer className="box">
                 <p className="fontSizeLarge">
