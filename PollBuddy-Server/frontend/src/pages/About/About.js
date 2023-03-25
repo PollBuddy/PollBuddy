@@ -13,7 +13,7 @@ export default class About extends Component {
     this.state = {terms: null};
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     fetch(aboutMdPath).then((response) => response.text()).then((text) => {
       this.setState({terms: text});
     });

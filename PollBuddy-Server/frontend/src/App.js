@@ -24,8 +24,6 @@ import PollCreation from "./pages/PollCreation/PollCreation";
 import PollViewer from "./pages/PollViewer/PollViewer";
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
 import PollResults from "./pages/PollResults/PollResults";
-import PollManager from "./pages/PollManager/PollManager";
-import PollHistory from "./pages/PollHistory/PollHistory";
 import Contact from "./pages/Contact/Contact";
 import About from "./pages/About/About";
 import QuestionEnded from "./pages/QuestionEnded/QuestionEnded";
@@ -121,12 +119,6 @@ export default class App extends React.Component {
 
             {/* --- Poll Pages --- */}
 
-            {/* My Poll Histories Page */}
-            {/* This route (and any others that route through /polls/that are not polls)
-                need to be listed BEFORE the Poll ID Redirect to ensure they are not
-                treated like a :pollID */}
-            <Route exact path="/polls/history" element={<PrivateComponent state = {true} element={<PollHistory updateTitle={this.updateTitle} />}/>}/>
-
             {/* Poll Creation */}
             <Route exact path="/polls/new" element={<PollCreation updateTitle={this.updateTitle} />}/>
 
@@ -140,9 +132,6 @@ export default class App extends React.Component {
 
             {/* Poll Editor Page */}
             <Route exact path="/polls/:pollID/edit" element={<PrivateComponent state = {true} element={<PollEditor updateTitle={this.updateTitle} />}/>}/>
-
-            {/* Poll Manager Page */}
-            <Route exact path="/polls/:pollID/manage" element={<PrivateComponent state = {true} element={<PollManager updateTitle={this.updateTitle} />}/>}/>
 
             {/* Poll Results Page */}
             {/*use the render function so that we can retrieve :groupID from inside the component*/}

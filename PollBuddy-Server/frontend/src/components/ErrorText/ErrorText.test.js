@@ -1,13 +1,30 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import ErrorText from "./ErrorText";
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
+import '@testing-library/jest-dom';
 
-// Create basic render test
-it("renders without crashing", () => {
-  // Create div element
-  const div = document.createElement("div");
-  // Render about on the div
-  ReactDOM.render(<ErrorText />, div);
-  // Clean unmount
-  ReactDOM.unmountComponentAtNode(div);
+import ErrorText from './ErrorText';
+
+describe("The ErrorText component:", () => {
+  it("Loads correctly.", () => {
+    // Just make sure it can load.
+    render(<BrowserRouter><ErrorText show/></BrowserRouter>);
+  });
+
+  it("Doesn't load if not show=false.", () => {
+    render(<BrowserRouter><ErrorText /></BrowserRouter>);
+    expect(screen.getByText.bind(this, /An error has occurred./));
+  });
+
+  it("Shows ambiguous text when not given specific error.", () => {
+    // Give no error and see it show ambiguous warning.
+    render(<BrowserRouter><ErrorText show/></BrowserRouter>);
+    expect(screen.getByText.bind(this, /An error has occurred./)).not.toThrow();
+  });
+
+  it("Shows error when given it.", () => {
+    // Give error and see if it displays it.
+    render(<BrowserRouter><ErrorText show text="YOUR MOM."/></BrowserRouter>);
+    expect(screen.getByText.bind(this, /ERROR: YOUR MOM./)).not.toThrow();
+  });
 });
