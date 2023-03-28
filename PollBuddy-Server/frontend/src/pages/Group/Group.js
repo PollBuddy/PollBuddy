@@ -185,7 +185,7 @@ class Group extends Component {
         <MDBContainer className="page">
           {this.state.popupShowing &&
           <Popup2 text={"Are you sure you want to delete this group?"}
-                  twoOptions={false} handleDeny={this.togglePopup}
+                  twoOptions={true} handleDeny={this.togglePopup}
                   handleConfirm={this.handleDeleteGroup}
                   confirmText={"Yes"} denyText={"No"}/>}
           <MDBContainer className="two-box">

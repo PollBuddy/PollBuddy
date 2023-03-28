@@ -339,7 +339,7 @@ class PollEditor extends Component {
             {this.state.popupShowing &&
             <Popup2 text={"Are you sure you want to delete this poll?"}
                     twoOptions={true} handleDeny={this.togglePopup}
-                    dim={true} handleConfirm={this.deletePoll}
+                    handleConfirm={this.deletePoll}
                     confirmText={"Yes"} denyText={"No"}/>}
             <MDBContainer className="two-box">
               <MDBContainer className="Poll_Editor_box box">
