@@ -7,11 +7,17 @@ class GroupJoin extends Component {
   constructor(props) {
     super(props);
     let groupCode = props.router.searchParams.get("code");
+    let params = {};
+    if(groupCode === null) {
+      params = JSON.parse(localStorage.getItem("urlParams"));
+      groupCode = params["code"];
+    }
     this.state = {
       groupCode: groupCode || "",
       showConfirm: false,
       name: "",
-      description: ""
+      description: "",
+      params: params,
     };
   }
 
@@ -20,6 +26,10 @@ class GroupJoin extends Component {
   }
 
   handleEnterCode = () => {
+    let params = this.state.params;
+    params["code"] = "";
+    localStorage.setItem("urlParams", JSON.stringify(params));
+    this.setState({params: params});
     fetch(process.env.REACT_APP_BACKEND_URL + "/groups/" + this.state.groupCode, {
       method: "GET"
     })
