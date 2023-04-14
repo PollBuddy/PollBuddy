@@ -7,9 +7,6 @@ import { withRouter } from "../PropsWrapper/PropsWrapper";
 // Pass in state = {false} if the user needs to be logged out to access a route.
 // If it doesn't matter whether the user is logged in or not, don't use PrivateComponent.
 class PrivateComponent extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     let isLoggedIn = localStorage.getItem("loggedIn") === "true";

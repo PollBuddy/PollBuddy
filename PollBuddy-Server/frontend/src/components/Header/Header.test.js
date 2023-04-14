@@ -1,10 +1,9 @@
-import React from 'react';
-import { render, screen, /*act*/ } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-// import userEvent from '@testing-library/user-event';
-import '@testing-library/jest-dom';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
+import "@testing-library/jest-dom";
 
-import Header from './Header';
+import Header from "./Header";
 
 const USER_INFO = { sessionIdentifier: "" };
 
@@ -16,7 +15,8 @@ describe("The Header component:", () => {
 
   it("Contains logo that links to home.", () => {
     render(<BrowserRouter><Header userInfo={USER_INFO}/></BrowserRouter>);
-
+    // TODO: Fix this code so it no longer throws a linting error.
+    // eslint-disable-next-line testing-library/no-node-access
     expect(screen.getByAltText("logo").parentNode).toHaveAttribute("href", "/");
   });
 
