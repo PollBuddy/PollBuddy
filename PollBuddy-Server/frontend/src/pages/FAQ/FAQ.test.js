@@ -1,12 +1,13 @@
-import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-// import userEvent from '@testing-library/user-event';
-import '@testing-library/jest-dom';
+import React from "react";
+import { render, screen, waitFor } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
+import "@testing-library/jest-dom";
 
 import FAQ from "./FAQ";
 
 jest.mock("react-markdown", () => (props) => {
+  // TODO: Fix this code so it no longer throws a linting error.
+  // eslint-disable-next-line testing-library/no-node-access
   return <>{props.children}</>;
 });
 

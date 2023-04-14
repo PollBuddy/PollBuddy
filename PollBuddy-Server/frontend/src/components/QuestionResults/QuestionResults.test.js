@@ -1,9 +1,9 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import '@testing-library/jest-dom';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
+import "@testing-library/jest-dom";
 
-import QuestionResults from './QuestionResults';
+import QuestionResults from "./QuestionResults";
 
 const DATA = {
   questionNumber: 123,
@@ -36,6 +36,8 @@ describe("The QuestionResults component:", () => {
 
   it("Shows bar canvas.", () => {
     const { baseElement } = render(<BrowserRouter><QuestionResults data={DATA}/></BrowserRouter>);
+    // TODO: Fix this code so it no longer throws a linting error.
+    // eslint-disable-next-line testing-library/no-node-access
     expect(baseElement.getElementsByTagName("canvas")).toHaveLength(1);
   });
 });

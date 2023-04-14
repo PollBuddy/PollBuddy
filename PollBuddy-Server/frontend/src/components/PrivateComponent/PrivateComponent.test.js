@@ -1,10 +1,10 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { BrowserRouter, Link, Outlet, Route, Routes } from 'react-router-dom';
-import userEvent from '@testing-library/user-event';
-import '@testing-library/jest-dom';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import { BrowserRouter, Link, Outlet, Route, Routes } from "react-router-dom";
+import userEvent from "@testing-library/user-event";
+import "@testing-library/jest-dom";
 
-import PrivateComponent from './PrivateComponent';
+import PrivateComponent from "./PrivateComponent";
 
 describe("The PrivateComponent component:", () => {
   it("Loads correctly.", async () => {

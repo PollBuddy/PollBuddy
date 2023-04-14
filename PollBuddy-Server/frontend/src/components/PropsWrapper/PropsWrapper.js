@@ -7,6 +7,7 @@ export function withRouter(C) {
     let location = useLocation();
     let navigate = useNavigate();
     let params = useParams();
+    // eslint-disable-next-line no-unused-vars
     const [searchParams, setSearchParams] = useSearchParams();
     return (<C {...props} router={{ location, navigate, params, searchParams }} />);
   }

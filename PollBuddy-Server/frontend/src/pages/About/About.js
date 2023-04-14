@@ -4,8 +4,6 @@ import {MDBContainer} from "mdbreact";
 import ReactMarkdown from "react-markdown";
 import aboutMdPath from "./About.md";
 
-
-
 export default class About extends Component {
 
   constructor(props) {
@@ -13,6 +11,7 @@ export default class About extends Component {
     this.state = {terms: null};
   }
 
+  // eslint-disable-next-line camelcase
   UNSAFE_componentWillMount() {
     fetch(aboutMdPath).then((response) => response.text()).then((text) => {
       this.setState({terms: text});

@@ -4,8 +4,6 @@ import {MDBContainer} from "mdbreact";
 import ReactMarkdown from "react-markdown";
 import quickStartGuide from "./QuickStartGuide.md";
 
-
-
 export default class QuickStartGuide extends Component {
 
   constructor(props) {
@@ -14,13 +12,10 @@ export default class QuickStartGuide extends Component {
   }
 
   componentDidMount() {
+    this.props.updateTitle("QuickStartGuide");
     fetch(quickStartGuide).then((response) => response.text()).then((text) => {
       this.setState({terms: text});
     });
-  }
-
-  componentDidMount() {
-    this.props.updateTitle("QuickStartGuide");
   }
 
   render() {
