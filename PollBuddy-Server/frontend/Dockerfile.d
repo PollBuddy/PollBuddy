@@ -18,12 +18,15 @@ COPY package*.json ./
 # Note: --legacy-peer-deps has been added due to a conflict with React versions
 RUN npm ci --only=production --legacy-peer-deps
 
+# Update the browser list: https://github.com/browserslist/update-db#why-you-need-to-call-it-regularly
+RUN npx browserslist@latest --update-db
+
 # Bundle app source
 # Folders
 COPY public ./public
 COPY src ./src
 # Files
-# copy both the example file and any existing custom .env 
+# copy both the example file and any existing custom .env
 COPY .env* ./
 # attempt to move the example .env to the name ".env"
 # if .env is already there, this fails and the custom instance is used

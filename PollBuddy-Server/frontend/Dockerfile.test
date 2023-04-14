@@ -13,6 +13,9 @@ COPY package*.json ./
 # Install all dependencies
 RUN npm install
 
+# Update the browser list: https://github.com/browserslist/update-db#why-you-need-to-call-it-regularly
+RUN npx browserslist@latest --update-db
+
 # Bundle app source
 # Folders
 COPY public ./public
