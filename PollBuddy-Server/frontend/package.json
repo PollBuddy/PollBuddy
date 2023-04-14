@@ -25,6 +25,14 @@
     "react-scripts": "^5.0.1",
     "sass": "^1.52.3"
   },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.4.3",
+    "jest-fetch-mock": "^3.0.3",
+    "jquery": "^3.6.0",
+    "react-test-renderer": "^18.2.0"
+  },
   "scripts": {
     "start": "node ./hotreload-fix && react-scripts start",
     "docker-start": "CI=true react-scripts start",
@@ -44,10 +52,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "jest-fetch-mock": "^3.0.3",
-    "jquery": "^3.6.0",
-    "react-test-renderer": "^18.2.0"
   }
 }
