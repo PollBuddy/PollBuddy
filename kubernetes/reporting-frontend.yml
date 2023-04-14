@@ -8,11 +8,11 @@ metadata:
     app.kubernetes.io/name: poll-buddy-reporting-service-master
     app.kubernetes.io/component: reporting
     app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
+    app.kubernetes.io/instance: "master"
     app: poll-buddy-reporting
     environment: production
     dev_instance_type: no-type
-    dev_instance_id: no-id
+    dev_instance_id: "no-id"
 spec:
   ports:
     - port: 3000
@@ -22,11 +22,11 @@ spec:
     app.kubernetes.io/name: poll-buddy-reporting
     app.kubernetes.io/component: reporting
     app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
+    app.kubernetes.io/instance: "master"
     app: poll-buddy-reporting
     environment: production
     dev_instance_type: no-type
-    dev_instance_id: no-id
+    dev_instance_id: "no-id"
   type: ClusterIP
 
 # Create a deployment to run in
@@ -39,11 +39,11 @@ metadata:
     app.kubernetes.io/name: poll-buddy-reporting
     app.kubernetes.io/component: reporting
     app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
+    app.kubernetes.io/instance: "master"
     app: poll-buddy-reporting
     environment: production
     dev_instance_type: no-type
-    dev_instance_id: no-id
+    dev_instance_id: "no-id"
 spec:
   replicas: 1
   selector:
@@ -51,11 +51,11 @@ spec:
       app.kubernetes.io/name: poll-buddy-reporting
       app.kubernetes.io/component: reporting
       app.kubernetes.io/part-of: poll-buddy
-      app.kubernetes.io/instance: master
+      app.kubernetes.io/instance: "master"
       app: poll-buddy-reporting
       environment: production
       dev_instance_type: no-type
-      dev_instance_id: no-id
+      dev_instance_id: "no-id"
   strategy:
     type: RollingUpdate
   template:
@@ -64,11 +64,11 @@ spec:
         app.kubernetes.io/name: poll-buddy-reporting
         app.kubernetes.io/component: reporting
         app.kubernetes.io/part-of: poll-buddy
-        app.kubernetes.io/instance: master
+        app.kubernetes.io/instance: "master"
         app: poll-buddy-reporting
         environment: production
         dev_instance_type: no-type
-        dev_instance_id: no-id
+        dev_instance_id: "no-id"
     spec:
       restartPolicy: Always
       containers:

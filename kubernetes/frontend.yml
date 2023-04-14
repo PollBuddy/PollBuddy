@@ -8,11 +8,11 @@ metadata:
     app.kubernetes.io/name: poll-buddy-frontend-service-master
     app.kubernetes.io/component: frontend
     app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
+    app.kubernetes.io/instance: "master"
     app: poll-buddy-frontend
     environment: production
     dev_instance_type: no-type
-    dev_instance_id: no-id
+    dev_instance_id: "no-id"
 spec:
   ports:
     - port: 80
@@ -22,11 +22,11 @@ spec:
     app.kubernetes.io/name: poll-buddy-frontend
     app.kubernetes.io/component: frontend
     app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
+    app.kubernetes.io/instance: "master"
     app: poll-buddy-frontend
     environment: production
     dev_instance_type: no-type
-    dev_instance_id: no-id
+    dev_instance_id: "no-id"
   type: NodePort
 
 # Create a deployment to run in
@@ -38,11 +38,11 @@ metadata:
     app.kubernetes.io/name: poll-buddy-frontend
     app.kubernetes.io/component: frontend
     app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
+    app.kubernetes.io/instance: "master"
     app: poll-buddy-frontend
     environment: production
     dev_instance_type: no-type
-    dev_instance_id: no-id
+    dev_instance_id: "no-id"
   name: poll-buddy-frontend-deployment-master
 spec:
   replicas: 1
@@ -51,11 +51,11 @@ spec:
       app.kubernetes.io/name: poll-buddy-frontend
       app.kubernetes.io/component: frontend
       app.kubernetes.io/part-of: poll-buddy
-      app.kubernetes.io/instance: master
+      app.kubernetes.io/instance: "master"
       app: poll-buddy-frontend
       environment: production
       dev_instance_type: no-type
-      dev_instance_id: no-id
+      dev_instance_id: "no-id"
   strategy:
     type: RollingUpdate
   template:
@@ -64,11 +64,11 @@ spec:
         app.kubernetes.io/name: poll-buddy-frontend
         app.kubernetes.io/component: frontend
         app.kubernetes.io/part-of: poll-buddy
-        app.kubernetes.io/instance: master
+        app.kubernetes.io/instance: "master"
         app: poll-buddy-frontend
         environment: production
         dev_instance_type: no-type
-        dev_instance_id: no-id
+        dev_instance_id: "no-id"
     spec:
       restartPolicy: Always
       containers:
