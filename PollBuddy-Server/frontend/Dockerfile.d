@@ -2,7 +2,7 @@
 # dev mode. This grants us a few optimizations desirable in a production environment.
 
 # Build Stage 1 - Used to transpile and minimize
-FROM node:16 AS builder
+FROM node:18 AS builder
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -18,12 +18,15 @@ COPY package*.json ./
 # Note: --legacy-peer-deps has been added due to a conflict with React versions
 RUN npm ci --only=production --legacy-peer-deps
 
+# Update the browser list: https://github.com/browserslist/update-db#why-you-need-to-call-it-regularly
+RUN npx browserslist@latest --update-db
+
 # Bundle app source
 # Folders
 COPY public ./public
 COPY src ./src
 # Files
-# copy both the example file and any existing custom .env 
+# copy both the example file and any existing custom .env
 COPY .env* ./
 # attempt to move the example .env to the name ".env"
 # if .env is already there, this fails and the custom instance is used

@@ -1,9 +1,9 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import '@testing-library/jest-dom';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
+import "@testing-library/jest-dom";
 
-import ErrorText from './ErrorText';
+import ErrorText from "./ErrorText";
 
 describe("The ErrorText component:", () => {
   it("Loads correctly.", () => {
@@ -13,7 +13,7 @@ describe("The ErrorText component:", () => {
 
   it("Doesn't load if not show=false.", () => {
     render(<BrowserRouter><ErrorText /></BrowserRouter>);
-    expect(screen.getByText.bind(this, /An error has occurred./));
+    expect(screen.getByText.bind(this, /An error has occurred./)).not.toThrow();
   });
 
   it("Shows ambiguous text when not given specific error.", () => {

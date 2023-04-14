@@ -1,6 +1,6 @@
 # This dockerfile is merely to launch a lint test. The app will not run afterwards.
 
-FROM node:16
+FROM node:18
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -13,6 +13,9 @@ COPY package*.json ./
 # Install all dependencies
 RUN npm install
 
+# Update the browser list: https://github.com/browserslist/update-db#why-you-need-to-call-it-regularly
+RUN npx browserslist@latest --update-db
+
 # Bundle app source
 # Folders
 COPY public ./public
@@ -20,7 +23,7 @@ COPY src ./src
 # Files
 COPY .eslint* ./
 
-# copy both the example file and any existing custom .env 
+# copy both the example file and any existing custom .env
 COPY .env* ./
 # attempt to move the example .env to the name ".env"
 # if .env is already there, this fails and the custom instance is used

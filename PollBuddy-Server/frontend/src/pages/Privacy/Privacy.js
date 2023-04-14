@@ -11,6 +11,7 @@ export default class Privacy extends Component {
     this.state = {terms: null};
   }
 
+  // eslint-disable-next-line camelcase
   UNSAFE_componentWillMount() {
     fetch(privacyMdPath).then((response) => response.text()).then((text) => {
       this.setState({terms: text});

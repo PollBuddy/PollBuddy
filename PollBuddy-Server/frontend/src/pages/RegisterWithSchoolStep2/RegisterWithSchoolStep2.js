@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {MDBContainer} from "mdbreact";
 import "mdbreact/dist/css/mdb.css";
-import {Navigate} from "react-router-dom";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import {withRouter} from "../../components/PropsWrapper/PropsWrapper";
@@ -16,7 +15,7 @@ class RegisterWithSchoolStep2 extends Component {
     // TODO: Some of this should probably be in a try/catch or something for robustness
     if(this.props.router.location.search) {
       console.log("Getting things");
-      var data = JSON.parse(new URLSearchParams(this.props.router.location.search).get("data"));
+      let data = JSON.parse(new URLSearchParams(this.props.router.location.search).get("data"));
       var firstName = data["firstName"];
       var firstNamePrefilled = true;
       var lastName = data["lastName"];
@@ -75,10 +74,10 @@ class RegisterWithSchoolStep2 extends Component {
         .max(256)
         .error(new Error("Last name must be less than 256 characters.")),
     });
-    var userNameValid = schema.validate({ username: this.state.username });
-    var emailValid = schema.validate({ email: this.state.email });
-    var firstNameValid = schema.validate({ firstname: this.state.firstname});
-    var lastNameValid = schema.validate({ lastname: this.state.lastname});
+    let userNameValid = schema.validate({ username: this.state.username });
+    let emailValid = schema.validate({ email: this.state.email });
+    let firstNameValid = schema.validate({ firstname: this.state.firstname});
+    let lastNameValid = schema.validate({ lastname: this.state.lastname});
 
 
     // Update component's state

@@ -1,10 +1,10 @@
-import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import userEvent from '@testing-library/user-event';
-import '@testing-library/jest-dom';
+import React from "react";
+import { render, screen, waitFor } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
+import userEvent from "@testing-library/user-event";
+import "@testing-library/jest-dom";
 
-import Popup2 from './Popup2';
+import Popup2 from "./Popup2";
 
 describe("The Popup2 component:", () => {
   it("Loads correctly.", () => {

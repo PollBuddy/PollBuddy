@@ -11,6 +11,7 @@ export default class FAQ extends Component {
     this.state = {questions: null};
   }
 
+  // eslint-disable-next-line camelcase
   UNSAFE_componentWillMount() {
     fetch(faqFile).then((response) => response.text()).then((text) => {
       this.setState({questions: text});

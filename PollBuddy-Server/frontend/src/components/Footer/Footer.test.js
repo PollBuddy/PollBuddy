@@ -1,9 +1,9 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import '@testing-library/jest-dom';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
+import "@testing-library/jest-dom";
 
-import Footer from './Footer';
+import Footer from "./Footer";
 
 describe("The Footer component:", () => {
   it("Loads correctly.", () => {
@@ -24,14 +24,18 @@ describe("The Footer component:", () => {
     expect(screen.getByText("Contact")).toHaveAttribute("href", "/contact");
     expect(screen.getByText("FAQ")).toHaveAttribute("href", "/faq");
     expect(screen.getByText("Privacy")).toHaveAttribute("href", "/privacy");
-  
+
   });
 
   it("Has correct secondary links.", async () => {
     render(<BrowserRouter><Footer /></BrowserRouter>);
     // Check if secondary links work too.
+    // TODO: Fix this code so it no longer throws a linting error.
+    // eslint-disable-next-line testing-library/no-node-access
     const aRCOS = (await screen.findByAltText("RCOS")).parentElement;
     expect(aRCOS).toHaveAttribute("href", "https://rcos.io/");
+    // TODO: Fix this code so it no longer throws a linting error.
+    // eslint-disable-next-line testing-library/no-node-access
     const aGITHUB = (await screen.findByAltText("Github")).parentElement;
     expect(aGITHUB).toHaveAttribute("href", "https://github.com/PollBuddy/PollBuddy");
   });

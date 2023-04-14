@@ -31,7 +31,7 @@ export default class SchoolPicker extends Component {
         .then(data => {
           let schools = this.state.schoolInfo.schools;
           let schoolLinkDict = this.state.schoolInfo.schoolLinkDict;
-          for (var i = 0; i < data.length; i++) {
+          for (let i = 0; i < data.length; i++) {
             schools.push({ key: i, label: data[i][0] });
             schoolLinkDict[data[i][0]] = data[i][1];
           }

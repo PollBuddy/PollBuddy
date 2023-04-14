@@ -1,9 +1,9 @@
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import '@testing-library/jest-dom';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import { BrowserRouter } from "react-router-dom";
+import "@testing-library/jest-dom";
 
-import { withRouter } from './PropsWrapper';
+import { withRouter } from "./PropsWrapper";
 
 const TestLocation = withRouter(({ router: { location } }) => {
   return <div>{location && "GOOD"}</div>;
