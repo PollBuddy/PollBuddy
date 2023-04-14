@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:18
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -21,7 +21,7 @@ COPY routes ./routes
 COPY app.js ./
 COPY .eslint* ./
 
-# copy both the example file and any existing custom .env 
+# copy both the example file and any existing custom .env
 COPY .env* ./
 # attempt to move the example .env to the name ".env"
 # if .env is already there, this fails and the custom instance is used

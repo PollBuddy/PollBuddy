@@ -1,6 +1,6 @@
 # Production Dockerfile
 
-FROM node:16-alpine
+FROM node:18-alpine
 
 # Install curl
 RUN apk --no-cache add curl
@@ -26,7 +26,7 @@ COPY public ./public
 COPY routes ./routes
 # Files
 COPY app.js ./
-# copy both the example file and any existing custom .env 
+# copy both the example file and any existing custom .env
 COPY .env* ./
 # attempt to move the example .env to the name ".env"
 # if .env is already there, this fails and the custom instance is used
