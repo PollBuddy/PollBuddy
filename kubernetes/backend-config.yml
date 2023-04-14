@@ -8,10 +8,10 @@ metadata:
     app.kubernetes.io/name: poll-buddy-backend
     app.kubernetes.io/component: backend
     app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
+    app.kubernetes.io/instance: "master"
     app: poll-buddy-backend
     environment: production
     dev_instance_type: no-type
-    dev_instance_id: no-id
+    dev_instance_id: "no-id"
 data:
   frontend_url: http://localhost:7655

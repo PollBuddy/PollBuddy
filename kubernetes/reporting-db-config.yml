@@ -8,11 +8,11 @@ metadata:
     app.kubernetes.io/name: poll-buddy-reporting
     app.kubernetes.io/component: reporting
     app.kubernetes.io/part-of: poll-buddy
-    app.kubernetes.io/instance: master
+    app.kubernetes.io/instance: "master"
     app: poll-buddy-reporting
     environment: production
     dev_instance_type: no-type
-    dev_instance_id: no-id
+    dev_instance_id: "no-id"
 data:
   reporting_db_name: pollbuddy
   reporting_db_admin_username: root

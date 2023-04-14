@@ -11,7 +11,7 @@ metadata:
     app: poll-buddy-db
     environment: production
     dev_instance_type: no-type
-    dev_instance_id: no-id
+    dev_instance_id: "no-id"
 data:
   db_name: pollbuddy
   db_admin_username: root
