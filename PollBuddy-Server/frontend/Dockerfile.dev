@@ -1,7 +1,7 @@
 # This dockerfile is considered "development ready" so we're running in development mode instead of a full build.
 # This allows for a few beneficial things like faster rebuilds, live code updating, etc.
 
-FROM node:16
+FROM node:18
 
 # Create app directory
 WORKDIR /usr/src/app

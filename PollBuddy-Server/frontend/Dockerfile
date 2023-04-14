@@ -2,7 +2,7 @@
 # dev mode. This grants us a few optimizations desirable in a production environment.
 
 # Build Stage 1 - Used to transpile and minimize
-FROM node:16 AS builder
+FROM node:18 AS builder
 
 # Create app directory
 WORKDIR /usr/src/app

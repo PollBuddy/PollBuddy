@@ -1,6 +1,6 @@
 # This dockerfile is merely to launch a code test. The app will not run afterwards.
 
-FROM node:16
+FROM node:18
 
 # Create app directory
 WORKDIR /usr/src/app
