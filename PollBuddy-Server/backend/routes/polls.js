@@ -13,7 +13,7 @@ const {
 const {sendResponse, httpCodes} = require("../modules/httpCodes.js");
 const {
   createPoll, getPoll, editPoll, createPollValidator, editPollValidator, createQuestionValidator, createQuestion,
-  editQuestionValidator, editQuestion, submitQuestionValidator, submitQuestion, getPollResults, getPollResultsCSV,
+  editQuestionValidator, editQuestion, deleteQuestionValidator, deleteQuestion, submitQuestionValidator, submitQuestion, getPollResults, getPollResultsCSV,
   deletePoll, pollParamsValidator
 } = require("../models/Poll");
 const {paramValidator} = require("../modules/validatorUtils");
@@ -119,7 +119,7 @@ router.post("/:id/edit", isLoggedIn, paramValidator(pollParamsValidator), async 
  * This route is not used.
  * For full documentation see the wiki https://github.com/PollBuddy/PollBuddy/wiki/Specifications-%E2%80%90-Backend-Routes-(Polls)#get-idsubmit
  * @throws 405 - Route not used
- * @name GET api/polls/{id}/submit
+ * @name GET api/polls/{id}/submi
  * @param {string} path - Express path.
  * @param {function} callback - Function handler for endpoint.
  */
@@ -161,6 +161,23 @@ router.post("/:id/editQuestion", isLoggedIn, paramValidator(pollParamsValidator)
   let response = await editQuestion(req.session.userData.userID, req.params.id, validResult.value);
   return sendResponse(res, response);
 });
+
+router.get("/:id/deleteQuestion", async (req, res) => {
+  return sendResponse(res, httpCodes.MethodNotAllowed("GET is not available for this route. Use POST."));
+})
+
+router.post("/:id/deleteQuestion", async (req, res) => {
+  let validResult = deleteQuestionValidator.validate(req.body, {abortEarly: false});
+
+  let errors = getResultErrors(validResult);
+  if(!isEmpty(errors)) {
+    return sendResponse(res, httpCodes.badRequest(errors));
+  }
+  let response = await deleteQuestion(req.session.userData.userID, req.params.id, validResult.value);
+  return sendResponse(res, response);
+})
+
+
 
 // eslint-disable-next-line no-unused-vars
 router.get("/:id/submitQuestion", async (req, res) => {
