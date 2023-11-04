@@ -11,6 +11,7 @@ import DateTimePicker from "@mui/lab/DateTimePicker";
 import { purple } from "@mui/material/colors";
 import {createTheme, ThemeProvider} from "@mui/material";
 import {Link} from "react-router-dom";
+import Popup2 from "../../components/Popup2/Popup2";
 
 class PollEditor extends Component {
   constructor(props) {
@@ -47,6 +48,8 @@ class PollEditor extends Component {
       maxAllowedChoices: 1,
 
       loadingPollData: true,
+
+      popupShowing: false,
     };
   }
 
@@ -73,6 +76,10 @@ class PollEditor extends Component {
   handleRandomize() {
     this.setState({randomQuestions: !this.state.randomQuestions});
   }
+
+  togglePopup = () => {
+    this.setState({popupShowing: !this.state.popupShowing});
+  };
 
   askQuestion() {
     this.setState(prevState => ({
@@ -329,6 +336,11 @@ class PollEditor extends Component {
       return (
         <MDBContainer>
           <MDBContainer className="page">
+            {this.state.popupShowing &&
+            <Popup2 text={"Are you sure you want to delete this poll?"}
+                    twoOptions={true} handleDeny={this.togglePopup}
+                    handleConfirm={this.deletePoll}
+                    confirmText={"Yes"} denyText={"No"}/>}
             <MDBContainer className="two-box">
               <MDBContainer className="Poll_Editor_box box">
                 <p className="fontSizeLarge">
@@ -385,7 +397,7 @@ class PollEditor extends Component {
                   </button>
                   <button
                     id="descriptionBtn" className="button pollButton"
-                    onClick={this.deletePoll}
+                    onClick={this.togglePopup}
                   >
                     Delete Poll
                   </button>
