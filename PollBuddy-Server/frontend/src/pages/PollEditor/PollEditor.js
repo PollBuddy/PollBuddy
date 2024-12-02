@@ -47,6 +47,7 @@ class PollEditor extends Component {
       maxAllowedChoices: 1,
 
       loadingPollData: true,
+      creatorViewBool: false,
     };
   }
 
@@ -102,6 +103,7 @@ class PollEditor extends Component {
   savePoll = () => {
     this.setState({
       loadingPollData: true,
+      creatorViewBool: false,
     });
     fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/edit", {
       method: "POST",
@@ -114,10 +116,12 @@ class PollEditor extends Component {
           this.setState({
             showError: false,
             loadingPollData: false,
+            creatorViewBool: true,
           });
         } else {
           this.setState({
             showError: true,
+            creatorViewBool: false,
             loadingPollData: false,
           });
         }
@@ -138,6 +142,7 @@ class PollEditor extends Component {
       questionTextInput: "",
       displayNewQuestion: true,
       maxAllowedChoices: 1,
+      creatorViewBool: true,
     });
   };
 
@@ -148,6 +153,7 @@ class PollEditor extends Component {
       questionTextInput: question.text,
       maxAllowedChoices: question.maxAllowedChoices,
       displayEditQuestion: true,
+      creatorViewBool: true,
     });
   };
 
@@ -155,6 +161,7 @@ class PollEditor extends Component {
     this.setState({
       showQuestionError: false,
       loadingPollQuestions: true,
+      creatorViewBool: false,
     });
     if (this.state.displayNewQuestion) {
       fetch(process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/createQuestion", {
@@ -233,6 +240,7 @@ class PollEditor extends Component {
     this.setState({
       displayNewQuestion: false,
       displayEditQuestion: false,
+      creatorViewBool: false,
     });
   };
 
@@ -329,7 +337,8 @@ class PollEditor extends Component {
       return (
         <MDBContainer>
           <MDBContainer className="page">
-            <MDBContainer className="two-box">
+            {! this.state.creatorViewBool ? 
+              <MDBContainer className="two-box">
               <MDBContainer className="Poll_Editor_box box">
                 <p className="fontSizeLarge">
                   Poll Details
@@ -417,35 +426,41 @@ class PollEditor extends Component {
                     <LoadingWheel/>
                   </MDBContainer> :
                   <>
-                    { !(this.state.displayEditQuestion || this.state.displayNewQuestion) &&
-                      <div id="poll_questions" className="Poll_Editor_center">
-                        {this.state.questions.length === 0 && !this.state.displayNewQuestion ? (
-                          <p>Sorry, you don't have any questions.</p>
-                        ) : (
-                          <React.Fragment>
-                            {this.state.questions.map((question, index) => (
-                              <div id={"question-" + (index+1)}>
-                                <button
-                                  style={{  width: "17em" }} className="button"
-                                  onClick={() => this.editQuestion(question)}
-                                >
-                                  {"Question " + (index+1) + ": " + question.text}
-                                </button>
-                              </div>
-                            ))}
-                          </React.Fragment>
-                        )}
-                        <button
-                          type="submit" id="newQuestionBtn" className="button"
-                          onClick={this.createQuestion}
-                        >
-                          New Question
-                        </button>
-                      </div>
-                    }
-                    { (this.state.displayEditQuestion || this.state.displayNewQuestion) &&
-                      <>
-                        <MDBContainer className="form-group">
+                    
+                    <div id="poll_questions" className="Poll_Editor_center">
+                      {this.state.questions.length === 0 && !this.state.displayNewQuestion ? (
+                        <p>Sorry, you don't have any questions.</p>
+                      ) : (
+                        <React.Fragment>
+                          {this.state.questions.map((question, index) => (
+                            <div id={"question-" + (index+1)}>
+                              <button
+                                style={{  width: "17em" }} className="button"
+                                onClick={() => this.editQuestion(question)}
+                              >
+                                {"Question " + (index+1) + ": " + question.text}
+                              </button>
+                            </div>
+                          ))}
+                        </React.Fragment>
+                      )}
+                      <button
+                        type="submit" id="newQuestionBtn" className="button"
+                        onClick={this.createQuestion}
+                      >
+                        New Question
+                      </button>
+                    </div>
+
+                
+                  </>
+                }
+              </MDBContainer>
+            </MDBContainer>
+            : 
+            <MDBContainer className="box">
+              <MDBContainer className="question-group">
+              <MDBContainer className="form-group question-group">
                           <input
                             className="form-control textBox"
                             placeholder="Question"
@@ -509,32 +524,36 @@ class PollEditor extends Component {
                           </React.Fragment>
                         )}
                         <button
-                          type="submit" className="button"
+                          type="submit" className="button" style={{width: "20em"}}
                           onClick={this.addAnswer}
                         >
                           Add Answer
                         </button>
-
-                        <MDBContainer className="form-group">
+                        
+                        
                           <button
-                            type="submit" className="button"
+                            type="submit" className="button" style={{width: "20em"}}
                             onClick={this.submitQuestion}
+
                           >
                             {this.state.displayNewQuestion ? "Create" : "Save"}
                           </button>
                           <button
-                            type="submit" className="button"
-                            onClick={this.cancelQuestion}
-                          >
-                            Cancel
-                          </button>
-                        </MDBContainer>
-                      </>
-                    }
-                  </>
-                }
+                          type="submit" className="button" style={{width: "20em"}}
+                          onClick={this.cancelQuestion }
+                        > 
+                        Cancel
+                        </button>
+                          
+
+
+                          
+                  
+                      </MDBContainer>
               </MDBContainer>
-            </MDBContainer>
+        
+             }              
+            
           </MDBContainer>
         </MDBContainer>
       );
