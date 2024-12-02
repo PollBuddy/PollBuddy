@@ -47,6 +47,8 @@ class PollEditor extends Component {
       maxAllowedChoices: 1,
 
       loadingPollData: true,
+
+      confirmDelete: false,
     };
   }
 
@@ -130,6 +132,12 @@ class PollEditor extends Component {
     });
     this.props.router.navigate("/groups");
   };
+
+  toggleConfirmDelete = async (value) => {
+    this.setState({
+      confirmDelete: value,
+    })
+  }
 
   createQuestion = () => {
     this.setState({
@@ -325,6 +333,20 @@ class PollEditor extends Component {
           <LoadingWheel/>
         </MDBContainer>
       );
+    } else if (this.state.confirmDelete) {
+      return (
+      <MDBContainer fluid className="page">
+        <MDBContainer className="box">
+          <MDBContainer className="form-group">
+            <p>Are you sure you want to delete this poll?</p>
+            <input onClick={() => this.toggleConfirmDelete(false)} className="button float-left"
+              type="submit" value="No"/>
+            <input onClick={this.deletePoll} className="button float-right"
+              type="submit" value="Yes"/>
+          </MDBContainer>
+        </MDBContainer>
+      </MDBContainer>
+    );
     } else {
       return (
         <MDBContainer>
@@ -385,7 +407,7 @@ class PollEditor extends Component {
                   </button>
                   <button
                     id="descriptionBtn" className="button pollButton"
-                    onClick={this.deletePoll}
+                    onClick={() => this.toggleConfirmDelete(true)}
                   >
                     Delete Poll
                   </button>
