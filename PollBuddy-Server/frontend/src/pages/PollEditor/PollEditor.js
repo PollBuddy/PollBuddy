@@ -383,7 +383,9 @@ class PollEditor extends Component {
                   >
                     Save Changes
                   </button>
-                  <button
+                </div>
+                <div className={"pollButtons"}>
+                  <button style = {{width:"20em"}}
                     id="descriptionBtn" className="button pollButton"
                     onClick={this.deletePoll}
                   >
@@ -399,6 +401,8 @@ class PollEditor extends Component {
                   <Link to={"/polls/" + this.state.pollID + "/results"} className="button pollButton">
                     Open results graph
                   </Link>
+                </div>
+                <div className={"pollButtons"}>
                   <a
                     id="downloadBtn" className="button pollButton"
                     href={process.env.REACT_APP_BACKEND_URL + "/polls/" + this.state.pollID + "/csv"}
