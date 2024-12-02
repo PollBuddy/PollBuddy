@@ -4,6 +4,7 @@ import { MDBContainer } from "mdbreact";
 import Question from "../../components/Question/Question";
 import LoadingWheel from "../../components/LoadingWheel/LoadingWheel";
 import { withRouter } from "../../components/PropsWrapper/PropsWrapper";
+import {Link} from "react-router-dom";
 import "./PollViewer.scss";
 import Timer from "../../components/Timer/Timer";
 
@@ -130,6 +131,10 @@ class PollViewer extends Component {
     this.setState({ pollTimeLeft: false });
   };
 
+  backToEditor = () => {
+
+  };
+
   render() {
     let pollTimer = () => {
       /* Check to see if there's < 100 days left and only show if there is. This is maybe to hide a visual bug lol,
@@ -183,6 +188,9 @@ class PollViewer extends Component {
             <p className="fontSizeLarge">
               You've reached the end of the poll. Thanks for submitting!
             </p>
+            <Link to={"/polls/" + this.state.pollID + "/edit"}>
+              <button className = "button">Back</button>
+            </Link>
           </MDBContainer>
         </MDBContainer>
       );
