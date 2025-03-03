@@ -323,18 +323,18 @@ const demoteUser = async function (groupID, userID, toDemoteID) {
 
     const isAdmin = isGroupAdminByGroup(group, userID);
     if (!isAdmin) {
-      return httpCodes.Forbidden();
+      return httpCodes.Forbidden("Not an admin!");
     }
 
     if (userID.toString() === toDemoteID.userID.toString()) {
-      return httpCodes.Forbidden();
+      return httpCodes.Forbidden("Admin cannot remove self!");
     }
 
     const isMember = isGroupMemberByGroup(group, toDemoteID.userID);
     if (!isMember) {
       const isDemoteAdmin = isGroupAdminByGroup(group, toDemoteID.userID);
       if (!isDemoteAdmin) {
-        return httpCodes.Forbidden();
+        return httpCodes.Forbidden("Not an admin!");
       }
       await mongoConnection.getDB().collection("groups").updateOne(
         {_id: group._id,},
