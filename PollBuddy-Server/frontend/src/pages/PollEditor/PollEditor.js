@@ -12,6 +12,7 @@ import { purple } from "@mui/material/colors";
 import {createTheme, ThemeProvider} from "@mui/material";
 import {Link} from "react-router-dom";
 
+
 class PollEditor extends Component {
   constructor(props) {
     super(props);
@@ -28,8 +29,9 @@ class PollEditor extends Component {
       pollQuestionValue: "",
       reorderQuestions: false,
       randomQuestions: false,
-
+      
       pollID: props.router.params.pollID,
+      //groupID: props.router.params.groupID,
       doneLoading: false,
       questions: [],
       pollTitle: "",
@@ -389,6 +391,11 @@ class PollEditor extends Component {
                   >
                     Delete Poll
                   </button>
+                </div>
+                <div className={"pollButtons"}>
+                  <Link to={"/groups/"} className="button pollButton">
+                    Return to Group
+                  </Link>
                 </div>
                 <div className={"pollButtons"}>
                   <Link to={"/polls/" + this.state.pollID + "/view"} className="button pollButton">
