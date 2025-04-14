@@ -31,6 +31,8 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
             admins: response.data,
             loadingAdmins: false,
           });
+        } else {
+          this.props.router.navigate("/groups/" + this.state.id);
         }
       });
   };
@@ -44,6 +46,8 @@ class GroupEdit extends Component {//this class will likely need to call Groups/
             members: response.data,
             loadingMembers: false,
           });
+        } else {
+          this.props.router.navigate("/groups/" + this.state.id);
         }
       });
   };
